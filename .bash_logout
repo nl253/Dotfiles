@@ -1,0 +1,1 @@
+/home/norbert/Dropbox/Mackup/.bash_logout
