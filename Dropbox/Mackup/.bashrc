@@ -243,10 +243,8 @@ torrent(){
 
 restore-system(){
 
-if [ ! -x /usr/bin/pacman ] ; then
-  echo -e "This script is preconfigured ONLY for Arch Linux."
-  #statements
-fi
+[ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux."
+
 local NEED_TO_BE_INSTALLED=("git" "git-imerge" "git-extras" \
   "intellij-idea-community-edition" \
   "lshw" "less" "nvim" "spotify" "sncli" \
@@ -269,7 +267,8 @@ local NEED_TO_BE_INSTALLED=("git" "git-imerge" "git-extras" \
   "google-chrome" "coreutils" "hub" "htop" "jdk-8" \
   "wget" "curl" "wordnet" "xclip" \
   "upower" "npm" "ruby" "gem" "timeshift" "thinkfan" \
-  "xclip" "bashlint" "alsa-utils" "curl" "dos2unix" "pdftotext" \
+  "xclip" "bashlint" "alsa-utils" \
+  "curl" "dos2unix" "pdftotext" \
   "perl" "shellcheck" "zsh")
 
 for i in $NEED_TO_BE_INSTALLED; do
@@ -381,7 +380,6 @@ else
 
 fi
 
-
 # check if ZSH is set up correctly
 if [ -x /usr/bin/zsh ] ; then
 
@@ -395,83 +393,95 @@ if [ -x /usr/bin/zsh ] ; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
     # custom plugins
-    [ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
-    [ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" "${ZSH_CUSTOM}/plugins/zsh-completions"
-    [ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+    
+    [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" "~/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" "~/.oh-my-zsh/custom/plugins/zsh-completions"
+    [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+
+    # source it
+    zsh -c ~/.zshrc
 
   fi
-  
+
 fi
 
 # if ALACRITTY is not set up rust will be needed
-# not sure about this one ...
 if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
-  echo -e "RUST AND ALACRITTY NOT INSTALLED\nINITALISING RUSTUP\n"
+  echo -e "RUST and ALACRITTY not installed\ninitalising rustup"
   sudo curl https://sh.rustup.rs -sSf | sh
-  echo -e "CLONING ALACRITTY REPO FROM GIT"
+  echo -e "cloning ALACRITTY repo from GIT"
   git clone https://github.com/jwilm/alacritty.git ~
-  echo -e "CHANGING RUSTUP TOOLCHAIN TO STABLE"
+  echo -e "changing RUSTUP TOOLCHAIN to STABLE"
   sudo rustup override set stable
   sudo rustup update stable
   sudo rustup default stable
   echo -e "cd to ${HOME}/alacritty\nBUILDING ALACRITTY ... "
-  cd ~/alacritty && sudo cargo build --release 
+  cd ~/alacritty && sudo cargo build --release
 fi
 
 # NEO-VIM
 # I chose the plugins dir to check if nvim is correctly set up, if not - clone it
-if [ -x /usr/bin/nvim ] && [ ! -d "~/.config/nvim/plugins" ] && [ ! -d "~/.local/share/nvim/plugged" ]; then
-  echo -e "NEOVIM NOT nINITALISED\nCLONING FROM GIT"
+if [ -x /usr/bin/nvim ] && [ ! -d "~/.local/share/nvim/site/autoload/plug.vim" ]; then
+  echo -e "NEOVIM not initalised with vim-plug\ncloning from GIT"
   # use tmp to force-write the files
-  mkdir -p /tmp/nvim/ && git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/"
+
+  mkdir -p /tmp/nvim/
+  git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/"
+
   # git won't let you overwrite anything - use cp
   cp -R /tmp/nvim/* ~/.config/nvim/
+
   # from vim-plug [github]
-  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+  # here the init.vim file will be sourced to initialise the whole setup
+  # nvim -c "~/.config/nvim/init.vim"
+  # not sure if it's a good idea ...
+
 elif [ ! -x "/usr/bin/nvim" ] ; then
-  echo "make sure neovim is installed"
+
+  echo "neovim not detected on the filesystem.\n the installation will continue\nbut you will have to make sure neovim is installed to use plugins"
 
 fi
 
 # TMUX
 # check if tmux plugin manager dir is present
 if [ -x /usr/bin/tmux ] && [ ! -d "~/.tmux/plugins/tpm" ] ; then
-  echo -e "TMUX PLUGIN MANAGER NOT PRESENT\nINITALISING ..."
+
+  echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
   git clone "https://github.com/tmux-plugins/tpm" "~/.tmux/plugins/tpm"
+
 else
-  echo "make sure tmux is installed"
+
+  echo "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
+
+  sleep 5
+
 fi
 
 # at this point variables will need to be reset
 echo "RESOURCING BASHRC"
 source ~/.bashrc
 
-for i in $NEED_TO_BE_INSTALLED; do
-  # make sure all pacman packages are installed
-  if [ ! -x $(which $i) ]; then
-    echo -e $i" NOT PROPERLY INSTALLED\nQUITTING"
-    return 1
-  fi
-done
-
 if [ -x "/usr/bin/dropbox" ] && [ -d "~/Dropbox" ] ; then
 
-  # this won't work
   if [ -x $(which mackup) ] && [ -L "~/.bashrc" ] && [ -L "~/.inputrc" ] ; then
+
     mackup restore
+
   else
+
     echo -e "you need to set up MACKUP.\nquitting."
     return 1
-    # DEAL WITH DOTFILES
+
   fi
+
 elif [ ! -x "/usr/bin/dropbox" ] && [ ! -d "~/Dropbox" ] ; then
+
   echo -e "make sure DROPBOX is set up"
   return 1
-fi
-#
-# TODO REMOVE USELESS SOFTWARE from Manjaro [get that from their wiki]
 
+fi
 
 }
 
