@@ -1,3 +1,4 @@
+
 # ~/.bashrc
 
 # Bash File Testing
@@ -198,6 +199,10 @@ alias http-server="python3 -m http.server"
 # NOTE
 # coreutils programs will not be considered dependencies
 # as they are preinstalled on practically every UNIX system
+
+tis(){ tig status }
+til(){ tig log }
+tib(){ tig blame -C }
 
 # ===============
 # shorthand for `tree` with hidden files and color enabled,
@@ -586,15 +591,15 @@ fi
 
 stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
 
-if [ -z ${ZSH+x} ]; then
+if [ ! -n "${ZSH+2}" ]; then
   complete -cf sudo
-
   shopt -s histappend     # Append each session's history to $HISTFILE
   shopt -s histverify     # Edit a recalled history line before executing
   shopt -s extglob        # Enable extended pattern-matching features
   shopt -s expand_aliases # Expand aliases
   shopt -s dirspell       # correct minor spelling errors
   shopt -s direxpand
+  shopt -s expand_aliases
   shopt -s globstar       # ** becomes a recursive wildstar
   shopt -s cdspell        # correct minor spelling errors
   shopt -s dotglob        # Include dotfiles in pathname expansion

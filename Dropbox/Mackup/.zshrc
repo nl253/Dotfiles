@@ -1,7 +1,9 @@
 #
-# THIS ZSHRC SOURCES MY BASHRC, 
+# THIS ZSHRC SOURCES MY BASHRC,
 # where I do all I can to make is compatible with zsh
 #
+
+
 HISTFILE=~/.zsh_history
 HISTSIZE=10000                          # expand history size
 SAVEHIST=10000
@@ -17,7 +19,7 @@ setopt EXTENDED_HISTORY                 # add timestamps to history
 setopt PROMPT_SUBST
 setopt CORRECT
 setopt COMPLETE_IN_WORD
-setopt IGNORE_EOF
+#setopt IGNORE_EOF
 
 setopt APPEND_HISTORY                   # adds history
 setopt INC_APPEND_HISTORY SHARE_HISTORY # adds history incrementally and share it across sessions
@@ -72,16 +74,53 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # too many plugins slow down shell startup.
 
-# ADDITONAL PLUGINS FROM GITHUB 
+# ADDITONAL PLUGINS FROM GITHUB
 # https://github.com/zsh-users/zsh-syntax-highlighting
+#
 
-plugins=(zsh-syntax-highlighting zsh-autosuggestions git tmux tig rsync python pip \
-        npm man gem systemd sudo history gitignore globalias \
-        gnu-utils git-prompt git-extras cp copyfile colorize archlinux autopep8)
+plugins=(zsh-syntax-highlighting \
+        zsh-autosuggestions \
+        git \
+        compleat \
+        dircycle \ 
+        tmuxinator \
+        pyenv urltools\
+        rsync python pip \
+        npm man gem \
+        systemd sudo \
+        history gitignore \
+        taskwarrior \
+        globalias \
+        gnu-utils git-prompt \
+        git-extras \
+        cp copyfile \
+        colorize \
+        archlinux \
+        autopep8)
 # look into it:
 # git-flow git-hubflow
 
 source $ZSH/oh-my-zsh.sh
+
+
+if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ]] ; then
+        git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+fi
+if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]] ; then
+        git clone "https://github.com/zsh-users/zsh-completions" "${ZSH_CUSTOM}/plugins/zsh-completions"
+fi
+if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
+        git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+fi
+if [[ ! -x /usr/bin/hstr ]] ; then
+        sudo pacman -S "hstr-git"
+fi
+
+if [[ ! -x ~/.autojump/bin/autojump ]] ; then
+        mkdir -p /tmp/autojump
+        git clone git://github.com/joelthelion/autojump.git /tmp/autojump/
+        /tmp/autojump/install.py
+fi
 
 # User configuration
 
@@ -112,6 +151,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source ~/.bashrc
 
-# # # # # # # # # # # # # # # # # # # # # # # # # 
+source ~/.bashrc
+#emulate sh -c 'source ~/.bashrc'
+
+# # # # # # # # # # # # # # # # # # # # # # # # #
+[[ -s /home/norbert/.autojump/etc/profile.d/autojump.sh ]] && source /home/norbert/.autojump/etc/profile.d/autojump.sh
+
