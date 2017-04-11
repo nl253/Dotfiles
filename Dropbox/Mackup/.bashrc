@@ -237,139 +237,241 @@ torrent(){
 }
 # ========
 # FUNCTION :: restore the system
+# The aim of the script is to do nothing when the system is OK
+# and restore the whole system when it's just been reinstalled.
+#
 
 restore-system(){
+
 if [ ! -x /usr/bin/pacman ] ; then
-  echo -e "Sorry, this is only preconfigured for Arch Linux."
-  return 1
+  echo -e "This script is preconfigured ONLY for Arch Linux."
   #statements
-else
-
-  local NEED_TO_BE_INSTALLED=(git "git-imerge" "git-extras" \
-    python tig pip apacman yaourt tmux aria2c cronie fdupes ddupes \
-    thermald dropbox "python3-pip" "google-chrome" coreutils hub htop "jdk-8" \
-    "intellij-idea-community-edition" lshw less nvim spotify sncli \
-    wget curl wordnet xclip upower npm ruby gem pip timeshift thinkfan \
-    csslint thinkfinger "the_silver_searcher" sed pandoc openssh openvpn "p7zip" astyle \
-    aspell bluej bashmount bmenu ghc-mod cabal node gawk "i3" xmonad autojump php \
-    rofi "stylish-haskell" tidy tree "xf86-input-keyboard" "xf86-input-libinput" \
-    "xf86-input-mouse" "xf86-input-synaptics" "xf86-input-void" "xf86-video-intel" \
-    "xmonad-contrib" "xmonad-utils" acpid "aspell-en" "ca-certificates" ctags \
-    crontab psysh emacs cmake "freetype2" fontconfig pkg-config make \
-    xclip curl "dos2unix" pdftotext perl shellcheck zsh)
-
-  for i in $NEED_TO_BE_INSTALLED; do
-    if [ ! -x "/usr/bin/$i" ]; then
-      sudo pacman -S $i
-    fi
-  done
 fi
+local NEED_TO_BE_INSTALLED=("git" "git-imerge" "git-extras" \
+  "intellij-idea-community-edition" \
+  "lshw" "less" "nvim" "spotify" "sncli" \
+  "xf86-input-mouse" "xf86-input-synaptics" \
+  "xf86-input-void" "xf86-video-intel" \
+  "xmonad-contrib" "xmonad-utils" "acpid" \
+  "aspell-en" "ca-certificates" "ctags" \
+  "aspell" "bluej" "bashmount" "bmenu" \
+  "ghc-mod" "cabal" "node" "gawk" "i3" \
+  "xmonad" "autojump" "php" \
+  "crontab" "psysh" "emacs" "cmake" \
+  "freetype2" "fontconfig" "pkg-config" "make" \
+  "csslint" "thinkfinger" "the_silver_searcher" \
+  "sed" "pandoc" "openssh" "openvpn" "p7zip" "astyle" \
+  "python" "tig"  "apacman" "yaourt" "tmux" \
+  "aria2c" "cronie" "fdupes" "ddupes" \
+  "rofi" "stylish-haskell" "tidy" "tree" \
+  "xf86-input-keyboard" "xf86-input-libinput" \
+  "thermald" "dropbox" "python-pip" \
+  "google-chrome" "coreutils" "hub" "htop" "jdk-8" \
+  "wget" "curl" "wordnet" "xclip" \
+  "upower" "npm" "ruby" "gem" "timeshift" "thinkfan" \
+  "xclip" "bashlint" "alsa-utils" "curl" "dos2unix" "pdftotext" \
+  "perl" "shellcheck" "zsh")
+
+for i in $NEED_TO_BE_INSTALLED; do
+  [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed $i
+done
+
+echo -e "checking PACMAN packages"
+for i in $NEED_TO_BE_INSTALLED; do
+  # check and give feedback on what's missing
+  [ ! -x $(which $i) ] && echo -e $i" :: not found on the filesystem despite installation"
+done
 
 # PYTHON
-if [ ! -x /usr/bin/pip ] ; then
+# it is crucial that python is correctly set up
+# mackup is dependent on it as well as things like ranger
 
-  echo "make sure pip is installed to install python packages"
+echo -e "PYTHON"
+
+if [ ! -x /usr/bin/pip ] && [ ! -x "/usr/bin/pip3" ] ; then
+  echo "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
   return 1
-
-else
-
-  echo -e "PYTHON AND PIP DETECTED\nINSTALLING PYTHON PACKAGES"
-
-  local PY=(mackup ranger pudb neovim jedi mypy xonsh "xontrib-z" psutil nltk pytest ipython \
-    "you-get" pandas spacy sumy fuzzywuzzy tensorflow numpy requests scrapy)
-
-  for i in $PY; do
-    sudo pip install $i
-  done
 fi
 
-# set up virtual env
-[ ! -d '~/.pyenv' ] && echo -e "PYENV NOT DETECTED\nINITIATING ... " && git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+echo -e "PYTHON and PIP detected\ninstalling PYTHON packages"
 
-# RUBY
-if [ ! -x /usr/bin/gem ] ; then
+local PY=("mackup" "ranger" \
+  "pudb" "neovim" "jedi" \
+  "mypy" "xonsh" "xontrib-z" \
+  "psutil" "nltk" "pytest" "ipython" \
+  "you-get" "pandas" \
+  "spacy" "sumy" "fuzzywuzzy" \
+  "tensorflow" "numpy" \
+  "requests" "scrapy")
 
-  echo "make sure gem is installed to install ruby packages"
-  return 0
+for i in $PY; do
+  # configuration for scripts
+  # if it exists, ignore
+  sudo pip install --quiet --exists-action i $i
+done
+
+echo -e "checking PIP packages"
+
+for i in $PY; do
+  [ ! -x $(which $i) ] && echo -e $i" :: not present on the system"
+done
+
+# python virtual env
+echo -e "checking virtual env"
+
+if [ ! -d '~/.pyenv' ] ; then
+  echo -e "PYENV not detected\ninitiating ... "
+  git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+  pyenv global "3.5.0"
+  echo -e 'global python 3.5.0 activated'
+else
+  echo -e "PYENV detected continuing ..."
+fi
+
+echo -e "RUBY"
+
+# ruby
+if [ ! -x /usr/bin/gem ] || [ ! -x /usr/bin/ruby ] ; then
+
+  echo -e "either RUBY or GEM was not detected on this filesystem"
+  echo -e "make sure GEM is installed to install RUBY packages"
+  echo -e "becasue RUBY is not cructial the script will continue"
+  sleep 5
 
 else
-  echo -e "RUBY AND GEM DETECTED\nINSTALLING RUBY GEMS"
-  local RB=(mdl rubocop)
+
+  echo -e "RUBY and GEM detected\ninstalling RUBY gems"
+
+  local RB=(mdl sqlint rubocop)
+
   for i in $RB; do
-    if [ ! -x $(which $i) ]; then
-      sudo gem install $i
-    fi
+    [ ! -x $(which $i) ] && sudo gem install $i
   done
+
+  # check and give feedback on what's missing
+  echo -e "checking RUBY gems"
+
+  for i in $RB; do
+    [ ! -x $(which $i) ] && echo -e $i" :: not present on the system"
+  done
+
 fi
 
-
-# JAVASCRIPT
+# javascript
 if [ ! -x /usr/bin/npm ] ; then
-  echo "make sure npm is installed to install javscript packages" && return 1
+
+  echo "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages"
+  echo "because NPM and JAVASCRIPT aren't crucial, the script will continue "
+  sleep 5
 
 else
 
-  echo -e "NODE AND NPM DETECTED\nINSTALLING NODE PACKAGES"
-  local JS=("write-good" textlint "git-standup" "git-stats" jsonlint tern "git-fire" "js-beautify" textlint)
+  echo -e "NODE and NPM detected\ninstalling NODE packages"
+
+  local JS=("write-good" textlint \
+    "git-standup" "git-stats" \
+    jsonlint tern "git-fire" \
+    "js-beautify" textlint)
 
   for i in $JS; do
     if [ ! -x $(which $i) ]; then
       sudo npm install $i -g
     fi
   done
+
 fi
 
+
 # check if ZSH is set up correctly
-[ -x /usr/bin/zsh ] && [ -x /usr/bin/curl ] && [ ! -d "~/.oh-my-zsh" ] && echo "OH-MY-ZSH NOT DETECTED\nINITIATING ..." && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+if [ -x /usr/bin/zsh ] ; then
+
+  echo -e 'zsh detected on your filesystem ... '
+
+  if  [ ! -d "~/.oh-my-zsh" ] ; then
+
+    echo "OH-MY-ZSH not detected\ninitiating ..."
+
+    # from oh-my-zsh [github]
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+    # custom plugins
+    [ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+    [ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" "${ZSH_CUSTOM}/plugins/zsh-completions"
+    [ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+
+  fi
+  
+fi
 
 # if ALACRITTY is not set up rust will be needed
+# not sure about this one ...
 if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
   echo -e "RUST AND ALACRITTY NOT INSTALLED\nINITALISING RUSTUP\n"
-  curl https://sh.rustup.rs -sSf | sh
+  sudo curl https://sh.rustup.rs -sSf | sh
   echo -e "CLONING ALACRITTY REPO FROM GIT"
   git clone https://github.com/jwilm/alacritty.git ~
   echo -e "CHANGING RUSTUP TOOLCHAIN TO STABLE"
   sudo rustup override set stable
   sudo rustup update stable
   sudo rustup default stable
-  sudo rustup override set stable
-  echo -e "BUILDING ALACRITTY"
-  cargo build --release ~/alacritty
+  echo -e "cd to ${HOME}/alacritty\nBUILDING ALACRITTY ... "
+  cd ~/alacritty && sudo cargo build --release 
 fi
 
 # NEO-VIM
-# I chose the layers dir to check if nvim is correctly set up, otherwise clone it
-[ -x /usr/bin/nvim ] && [ ! -d "~/.config/nvim/layers" ] && echo -e "NEOVIM NOT nINITALISED\nCLONING FROM GIT"  && mkdir -p /tmp/nvim/ && git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/" && cp -R /tmp/nvim/* ~/.config/nvim/ || echo "make sure neovim is installed"
+# I chose the plugins dir to check if nvim is correctly set up, if not - clone it
+if [ -x /usr/bin/nvim ] && [ ! -d "~/.config/nvim/plugins" ] && [ ! -d "~/.local/share/nvim/plugged" ]; then
+  echo -e "NEOVIM NOT nINITALISED\nCLONING FROM GIT"
+  # use tmp to force-write the files
+  mkdir -p /tmp/nvim/ && git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/"
+  # git won't let you overwrite anything - use cp
+  cp -R /tmp/nvim/* ~/.config/nvim/
+  # from vim-plug [github]
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+elif [ ! -x "/usr/bin/nvim" ] ; then
+  echo "make sure neovim is installed"
+
+fi
 
 # TMUX
 # check if tmux plugin manager dir is present
-[ -x /usr/bin/tmux ] && [ ! -d "~/.tmux/plugins/tpm" ] &&  echo -e "TMUX PLUGIN MANAGER NOT PRESENT\nINITALISING ..." && git clone "https://github.com/tmux-plugins/tpm" "~/.tmux/plugins/tpm" || echo "make sure tmux is installed"
+if [ -x /usr/bin/tmux ] && [ ! -d "~/.tmux/plugins/tpm" ] ; then
+  echo -e "TMUX PLUGIN MANAGER NOT PRESENT\nINITALISING ..."
+  git clone "https://github.com/tmux-plugins/tpm" "~/.tmux/plugins/tpm"
+else
+  echo "make sure tmux is installed"
+fi
 
+# at this point variables will need to be reset
 echo "RESOURCING BASHRC"
-
 source ~/.bashrc
 
 for i in $NEED_TO_BE_INSTALLED; do
+  # make sure all pacman packages are installed
   if [ ! -x $(which $i) ]; then
     echo -e $i" NOT PROPERLY INSTALLED\nQUITTING"
     return 1
   fi
 done
 
-if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] ; then
+if [ -x "/usr/bin/dropbox" ] && [ -d "~/Dropbox" ] ; then
 
-  if [ -x $(which mackup) ] && [ $(read -e "MACKUP RESTORE ? [y/n] ") == "y" ] ; then
+  # this won't work
+  if [ -x $(which mackup) ] && [ -L "~/.bashrc" ] && [ -L "~/.inputrc" ] ; then
     mackup restore
-
   else
-    echo -e "YOU NEED TO SET UP MACKUP.\nQUITTING."
+    echo -e "you need to set up MACKUP.\nquitting."
     return 1
     # DEAL WITH DOTFILES
   fi
-else
-  echo -e "MAKE SURE DROPBOX IS SET UP"
+elif [ ! -x "/usr/bin/dropbox" ] && [ ! -d "~/Dropbox" ] ; then
+  echo -e "make sure DROPBOX is set up"
   return 1
 fi
+#
+# TODO REMOVE USELESS SOFTWARE from Manjaro [get that from their wiki]
+
 
 }
 
@@ -379,10 +481,10 @@ fi
 # if so, then show what it points to, otherwise echo "FALSE"
 is-symlink(){
 if [ $# == 1 ]; then
-  if [ $(readlink -f $1) == $(realpath -s $1) ]; then
+  if [ $(readlink -f $1) -eq $(realpath -s $1) ]; then
     echo "FALSE"
     return 1
-  elif [ $(readlink -f $1) != $(realpath -s $1) ]; then
+  elif [ $(readlink -f $1) -ne $(realpath -s $1) ]; then
     #echo -e "${GREEN}TRUE${DEFCOLOR}"
     echo -e "${CYAN}$(realpath -s $1) ${DEFCOLOR}-> ${YELLOW}$(readlink -f $1)${DEFCOLOR}"
     return 0
