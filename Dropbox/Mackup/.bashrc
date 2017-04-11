@@ -1,4 +1,4 @@
-
+﻿
 # ~/.bashrc
 
 # Bash File Testing
@@ -318,7 +318,7 @@ done
 # python virtual env
 echo -e "checking virtual env"
 
-if [ ! -d '~/.pyenv' ] ; then
+if [ ! -d ${HOME}/'.pyenv' ] && [ ! -x $(which pyenv) ]; then
   echo -e "PYENV not detected\ninitiating ... "
   git clone https://github.com/pyenv/pyenv.git ~/.pyenv
   pyenv global "3.5.0"
@@ -385,7 +385,7 @@ if [ -x /usr/bin/zsh ] ; then
 
   echo -e 'zsh detected on your filesystem ... '
 
-  if  [ ! -d "~/.oh-my-zsh" ] ; then
+  if  [ ! -f "~/.oh-my-zsh/oh-my-zsh.sh" ] ; then
 
     echo "OH-MY-ZSH not detected\ninitiating ..."
 
@@ -393,7 +393,7 @@ if [ -x /usr/bin/zsh ] ; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
     # custom plugins
-    
+
     [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" "~/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" "~/.oh-my-zsh/custom/plugins/zsh-completions"
     [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
@@ -421,7 +421,7 @@ fi
 
 # NEO-VIM
 # I chose the plugins dir to check if nvim is correctly set up, if not - clone it
-if [ -x /usr/bin/nvim ] && [ ! -d "~/.local/share/nvim/site/autoload/plug.vim" ]; then
+if [ -x /usr/bin/nvim ] && [ ! -f "~/.local/share/nvim/site/autoload/plug.vim" ]; then
   echo -e "NEOVIM not initalised with vim-plug\ncloning from GIT"
   # use tmp to force-write the files
 
