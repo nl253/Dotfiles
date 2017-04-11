@@ -77,59 +77,6 @@
 #
 # "\C-x\C-v": display-shell-version
 #
-# "\C-xA": do-lowercase-version
-# "\C-xB": do-lowercase-version
-# "\C-xC": do-lowercase-version
-# "\C-xD": do-lowercase-version
-# "\C-xE": do-lowercase-version
-# "\C-xF": do-lowercase-version
-# "\C-xG": do-lowercase-version
-# "\C-xH": do-lowercase-version
-# "\C-xI": do-lowercase-version
-# "\C-xJ": do-lowercase-version
-# "\C-xK": do-lowercase-version
-# "\C-xL": do-lowercase-version
-# "\C-xM": do-lowercase-version
-# "\C-xN": do-lowercase-version
-# "\C-xO": do-lowercase-version
-# "\C-xP": do-lowercase-version
-# "\C-xQ": do-lowercase-version
-# "\C-xR": do-lowercase-version
-# "\C-xS": do-lowercase-version
-# "\C-xT": do-lowercase-version
-# "\C-xU": do-lowercase-version
-# "\C-xV": do-lowercase-version
-# "\C-xW": do-lowercase-version
-# "\C-xX": do-lowercase-version
-# "\C-xY": do-lowercase-version
-# "\C-xZ": do-lowercase-version
-# "\eA": do-lowercase-version
-# "\eB": do-lowercase-version
-# "\eC": do-lowercase-version
-# "\eD": do-lowercase-version
-# "\eE": do-lowercase-version
-# "\eF": do-lowercase-version
-# "\eG": do-lowercase-version
-# "\eH": do-lowercase-version
-# "\eI": do-lowercase-version
-# "\eJ": do-lowercase-version
-# "\eK": do-lowercase-version
-# "\eL": do-lowercase-version
-# "\eM": do-lowercase-version
-# "\eN": do-lowercase-version
-# "\eP": do-lowercase-version
-# "\eQ": do-lowercase-version
-# "\eR": do-lowercase-version
-# "\eS": do-lowercase-version
-# "\eT": do-lowercase-version
-# "\eU": do-lowercase-version
-# "\eV": do-lowercase-version
-# "\eW": do-lowercase-version
-# "\eX": do-lowercase-version
-# "\eY": do-lowercase-version
-# "\eZ": do-lowercase-version
-#
-# "\el": downcase-word
 # "\e\C-i": dynamic-complete-history
 # "\C-x\C-e": edit-and-execute-command
 # "\C-x)": end-kbd-macro
@@ -183,33 +130,93 @@
 # "\eOA": previous-history
 # "\e[A": previous-history
 #
+# USELESS:
+# --------
+# "\C-xA": do-lowercase-version
+# "\C-xB": do-lowercase-version
+# "\C-xC": do-lowercase-version
+# "\C-xD": do-lowercase-version
+# "\C-xE": do-lowercase-version
+# "\C-xF": do-lowercase-version
+# "\C-xG": do-lowercase-version
+# "\C-xH": do-lowercase-version
+# "\C-xI": do-lowercase-version
+# "\C-xJ": do-lowercase-version
+# "\C-xK": do-lowercase-version
+# "\C-xL": do-lowercase-version
+# "\C-xM": do-lowercase-version
+# "\C-xN": do-lowercase-version
+# "\C-xO": do-lowercase-version
+# "\C-xP": do-lowercase-version
+# "\C-xQ": do-lowercase-version
+# "\C-xR": do-lowercase-version
+# "\C-xS": do-lowercase-version
+# "\C-xT": do-lowercase-version
+# "\C-xU": do-lowercase-version
+# "\C-xV": do-lowercase-version
+# "\C-xW": do-lowercase-version
+# "\C-xX": do-lowercase-version
+# "\C-xY": do-lowercase-version
+# "\C-xZ": do-lowercase-version
+# "\eA": do-lowercase-version
+# "\eB": do-lowercase-version
+# "\eC": do-lowercase-version
+# "\eD": do-lowercase-version
+# "\eE": do-lowercase-version
+# "\eF": do-lowercase-version
+# "\eG": do-lowercase-version
+# "\eH": do-lowercase-version
+# "\eI": do-lowercase-version
+# "\eJ": do-lowercase-version
+# "\eK": do-lowercase-version
+# "\eL": do-lowercase-version
+# "\eM": do-lowercase-version
+# "\eN": do-lowercase-version
+# "\eP": do-lowercase-version
+# "\eQ": do-lowercase-version
+# "\eR": do-lowercase-version
+# "\eS": do-lowercase-version
+# "\eT": do-lowercase-version
+# "\eU": do-lowercase-version
+# "\eV": do-lowercase-version
+# "\eW": do-lowercase-version
+# "\eX": do-lowercase-version
+# "\eY": do-lowercase-version
+# "\eZ": do-lowercase-version
+#
+
 # "\C-q": quoted-insert
 # "\C-v": quoted-insert
 # "\e[2~": quoted-insert
+# "\C-_": undo
 #
 # "\e[0n": redraw-current-line
 # "\er": redraw-current-line
 #
-# "\C-x\C-r": re-read-init-file
 # "\e\C-r": revert-line
 #
 # "\C-@": set-mark
-# "\e ": set-mark
 #
 # "\e\C-e": shell-expand-line
 # "\C-x(": start-kbd-macro
 # "\e&": tilde-expand
-# "\et": transpose-words
-# "\C-x\C-u": undo
-# "\C-_": undo
-# "\C-u": unix-line-discard
-# "\C-w": unix-word-rubout
-# "\eu": upcase-word
 # "\C-y": yank
 # "\e.": yank-last-arg
 # "\e_": yank-last-arg
 # "\e\C-y": yank-nth-arg
 # "\ey": yank-pop
+#
+# USEFUL
+# -------
+# "\eu": upcase-word
+# "\el": downcase-word
+# "\C-u": unix-line-discard
+# "\C-w": unix-word-rubout
+# "\e ": set-mark
+# "\C-x\C-u": undo
+# "\et": transpose-words
+#
+# "\C-x\C-r": re-read-init-file
 
 # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
 set meta-flag on
@@ -271,11 +278,6 @@ $if mode=vi
     "\C-n": history-search-forward
     "\C-l": clear-screen
 
-    "i": emacs-editing-mode
-
-    ## Shortcut for inserting a grep pipeline at eol
-    "\C-g": "\e$a | grep "
-
     "\M-f": forward-word
     #Meta-f : forward-word
     "\M-b": backward-word
@@ -295,8 +297,6 @@ $if mode=vi
     "gg": beginning-of-history
     "G": end-of-history
 
-    # Shortcut for inserting a grep pipeline at eol
-    #"\C-g": "$a | grep "
 
     # Ctrl+left/right for word movement
     #"\e\e[C": forward-word
@@ -330,7 +330,9 @@ $if mode=emacs
     "\C-e": end-of-line
     
     # Shortcut for inserting a grep pipeline at eol
-    "\C-g": "\e$ | grep "
+    "\C-x\C-g": "\e$ | grep "
+    "\C-x\C-v": "\e$ | $EDITOR - "
+    "\C-x\C-f": "\e$ | fzf -x --bind 'enter:execute($EDITOR {})'"
     
     # This example prefixes the line with sudo , if Alt+S is pressed. 
     # It won't input the Enter key.
