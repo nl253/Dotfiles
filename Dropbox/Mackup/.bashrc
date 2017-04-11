@@ -189,13 +189,22 @@ alias show-keybingings="bind -p | grep -v '^#\|self-insert\|^$'"
 
 alias f="find-extension"
 
-# ========
+# ===============
 # SCRIPTS
 #
 # NOTE
 # coreutils programs will not be considered dependencies
 # as they are preinstalled on practically every UNIX system
-#
+
+# ===============
+# FUNCTION :: aria2 convenience configuration 
+# REQUIRES :: aria2c
+# USAGE :: torrent <file|URL|magnet ... >
+torrent(){
+  [ ! -d ~/Downloads/Torrents ] && mkdir -p "~/Downloads/Torrents"
+  [ ! -f ~/Downloads/Torrents] && touch "~/Downloads/Torrents/aria2.log"
+  aria2c --continue --dir=~/Downloads/Torrents  --log="~/Downloads/Torrents/aria2.log" $1
+}
 # ========
 # FUNCTION
 # show if the current file is a symbolic link
