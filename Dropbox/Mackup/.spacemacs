@@ -217,7 +217,7 @@
    dotspacemacs-enable-paste-transient-state nil
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
-   dotspacemacs-which-key-delay 0.4
+   dotspacemacs-which-key-delay 0.6
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
@@ -302,16 +302,17 @@
  before packages are loaded. If you are unsure, you should try in setting them in
  `dotspacemacs/user-config' first."
   (custom-set-variables
+
+   '(spacemacs/toggle-centered-point-globally-on)
+   '(vc-follow-symlinks)
+
    '(spacemacs-theme-custom-colors
-     '(
-       (bg1 . "#000000")
+     '((bg1 . "#000000")
        (comment-bg . "#000000")
        (const . "#ffff00")
        (type . "#AA00FF")
        (func . "#ffa600")
-       (highlight . "#403D3D")
-       )
-     )
+       (highlight . "#403D3D")))
    )
   )
 
@@ -351,6 +352,7 @@
  '(package-selected-packages
    (quote
     (insert-shebang fish-mode company-shell yaml-mode xterm-color ws-butler winum which-key volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org spaceline smeargle shell-pop restart-emacs ranger rainbow-delimiters popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav dumb-jump drupal-mode diff-hl define-word dactyl-mode company-statistics column-enforce-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+ '(paradox-github-token t)
  '(spacemacs-theme-custom-colors
    (quote
     ((bg1 . "#000000")
@@ -358,7 +360,9 @@
      (const . "#ffff00")
      (type . "#AA00FF")
      (func . "#ffa600")
-     (highlight . "#403D3D")))))
+     (highlight . "#403D3D"))))
+ '(spacemacs/toggle-centered-point-globally-on nil)
+ '(vc-follow-symlinks nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
