@@ -67,9 +67,9 @@ export GREP_COLOR='1;33'
 
 #export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 if [ -x /usr/bin/less ]; then
-  export PAGER=less 
-  export LESS=' -R ' 
-  [ -f "/usr/bin/source-highlight-esc.sh" ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s" 
+  export PAGER=less
+  export LESS=' -R '
+  [ -f "/usr/bin/source-highlight-esc.sh" ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 else
   export PAGER=more
 fi
@@ -150,6 +150,7 @@ alias le="ls -lo"
 alias ll='ls -l --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 
+
 alias launcher='find /bin/ ~/.cargo/bin/ ~/.gem/ruby/2.4.0/bin/ ~/.npm/ -executable -type f -exec basename {} \; 2>/dev/null | fzf  --multi -x --bind "enter:execute({}&)"'
 
 alias -- -='cd -'        # Go back
@@ -189,6 +190,8 @@ alias show-keybingings="bind -p | grep -v '^#\|self-insert\|^$'"
 
 alias f="find-extension"
 
+alias http-server="python3 -m http.server"
+
 # ===============
 # SCRIPTS
 #
@@ -197,7 +200,16 @@ alias f="find-extension"
 # as they are preinstalled on practically every UNIX system
 
 # ===============
-# FUNCTION :: aria2 convenience configuration 
+# shorthand for `tree` with hidden files and color enabled,
+# ignoring `.git` directory, listing directories first.
+# The output gets piped into `less` with options to preserve color and line numbers,
+# unless the output is small enough for one screen.
+tre(){
+  tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
+}
+
+# ===============
+# FUNCTION :: aria2 convenience configuration
 # REQUIRES :: aria2c
 # USAGE :: torrent <file|URL|magnet ... >
 torrent(){
@@ -205,6 +217,81 @@ torrent(){
   [ ! -f ~/Downloads/Torrents] && touch "~/Downloads/Torrents/aria2.log"
   aria2c --continue --dir=~/Downloads/Torrents  --log="~/Downloads/Torrents/aria2.log" $1
 }
+# ========
+# FUNCTION :: restore the system
+restore-system(){
+[ ! -x /usr/bin/pacman ] && echo -e "Sorry, this is only preconfigured for Arch Linux." && return 1
+NEED_TO_BE_INSTALLED=(git "git-imerge" "git-extras" \
+  python tig pip apacman yaourt tmux aria2c cronie fdupes ddupes \
+  thermald dropbox "python3-pip" "google-chrome" coreutils hub htop "jdk-8" \
+  "intellij-idea-community-edition" lshw less nvim spotify sncli \
+  wget curl wordnet xclip upower npm ruby gem pip timeshift thinkfan \
+  csslint thinkfinger "the_silver_searcher" sed pandoc openssh openvpn p7zip astyle \
+  aspell bluej bashmount bmenu ghc-mod cabal node gawk "i3" xmonad autojump php \
+  rofi "stylish-haskell" tidy tree "xf86-input-keyboard" "xf86-input-libinput" \
+  "xf86-input-mouse" "xf86-input-synaptics" "xf86-input-void" "xf86-video-intel" \
+  "xmonad-contrib" "xmonad-utils" acpid "aspell-en" "ca-certificates" ctags \
+  crontab psysh emacs cmake freetype2 fontconfig pkg-config make \
+  xclip curl dos2unix pdftotext perl shellcheck zsh)
+
+for i in $NEED_TO_BE_INSTALLED; do
+  if [ ! -x "/usr/bin/$i" ]; then
+    sudo pacman -S $i
+  fi
+done
+
+# PYTHON
+[ ! -x /usr/bin/pip ] && echo "make sure pip is installed to install python packages" && return 0
+PY=(mackup ranger pudb neovim jedi mypy xonsh "xontrib-z" psutil nltk pytest ipython \
+  mycli vint fn "better_exceptions" pythonpy "youtube-dl" "git-sweep" faker \
+  "you-get" pandas spacy sumy fuzzywuzzy tensorflow numpy requests scrapy)
+
+for i in $PY; do
+  sudo pip install $i
+done
+
+# set up virtual env
+[ ! -d '~/.pyenv' ] && git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+# RUBY
+[ ! -x /usr/bin/gem ] && echo "make sure gem is installed to install ruby packages" && return 0
+RB=(mdl rubocop)
+
+for i in $RB; do
+  sudo pip install $i
+done
+
+# JAVASCRIPT
+[ ! -x /usr/bin/npm ] && echo "make sure npm is installed to install javscript packages" && return 0
+JS=("write-good" textlint "git-standup" "git-stats" jsonlint tern "git-fire" "js-beautify" textlint)
+
+for i in $JS; do
+  sudo npm install $i -g
+done
+
+# check if ZSH is set up correctly
+[ -x /usr/bin/curl ] && [ ! -d "~/.oh-my-zsh" ] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+# if ALACRITTY is not set up rust will be needed
+if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
+  curl https://sh.rustup.rs -sSf | sh
+  git clone https://github.com/jwilm/alacritty.git ~
+  sudo rustup override set stable
+  sudo rustup update stable
+  sudo rustup default stable
+  cargo build --release ~/alacritty
+fi
+
+# NEO-VIM
+# I chose the layers dir to check if nvim is correctly set up, otherwise clone it
+[ -x /usr/bin/nvim ] && [ ! -d "~/.config/nvim/layers" ] && git clone --recursive "https://github.com/nl253/VimScript/tree/working" "~/.config/nvim/"
+
+# TMUX
+# check if tmux plugin manager dir is present
+[ -x /usr/bin/tmux ] && [ ! -d "~/.tmux/plugins/tpm" ] &&  git clone "https://github.com/tmux-plugins/tpm" "~/.tmux/plugins/tpm"
+
+}
+
 # ========
 # FUNCTION
 # show if the current file is a symbolic link
@@ -381,7 +468,7 @@ dict-generator -n 2000 -l 4 -m 12 -p lower $(ag  -g "" --$1 / 2>/dev/null | xarg
 # on f just list files in the CWD
 # on f {filetype such as java,python,vim etc} list all files of this type from CWD recursively
 # on f {filetype such as java,python,vim etc} [query] list all files of this type from CWD recursively that match the pattern
-# multiple patterns can be specified 
+# multiple patterns can be specified
 
 find-extension(){
 # with no args will all files in CWD
@@ -454,7 +541,7 @@ if [ $# -ge 1 ] ; then
     less)
       local REGEX=".*\.less$"
       ;;
-    ts | typescript | tscript | tyscript | typscript) 
+    ts | typescript | tscript | tyscript | typscript)
       local REGEX=".*\.ts$"
       ;;
     css )
@@ -469,48 +556,50 @@ if [ $# -ge 1 ] ; then
     mark* | md )
       local REGEX=".*\.md$"
       ;;
-    esac
+  esac
 
-    # if 1 arg
-    [ $# == 1 ] && find -L . -maxdepth $DEPTH -type f -iregex "${REGEX}" | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0 
-    
-    # if more
+  # if 1 arg
+  [ $# == 1 ] && find -L . -maxdepth $DEPTH -type f -iregex "${REGEX}" | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
 
-    # make a temporary variable
-    local RE=""
+  # if more
 
-    #loop omitting the first arg which will be the filetype
-    # format (*this.*)|(.*that.*)|(.*other.*) ...
+  # make a temporary variable
+  local RE=""
 
-    for i in ${@:2}; do
-      RE="${RE}\(.*${i}.*\)\|"
-    done
+  #loop omitting the first arg which will be the filetype
+  # format (*this.*)|(.*that.*)|(.*other.*) ...
 
-    # for that trailing pipeline
-    RE="${RE}\(ssdfdklflkjlk\)"
+  for i in ${@:2}; do
+    RE="${RE}\(.*${i}.*\)\|"
+  done
 
-    # at the end append extension regex from the previous case statement
-    find -L . -maxdepth 15 -type f -iregex "\("${RE}$"\)"${REGEX} | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
+  # for that trailing pipeline
+  RE="${RE}\(ssdfdklflkjlk\)"
 
-  fi
+  # at the end append extension regex from the previous case statement
+  find -L . -maxdepth 15 -type f -iregex "\("${RE}$"\)"${REGEX} | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
+
+fi
 }
 
 # ==========================================
 
 stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
 
-complete -cf sudo
+if [ -z ${ZSH+x} ]; then
+  complete -cf sudo
 
-shopt -s histappend     # Append each session's history to $HISTFILE
-shopt -s histverify     # Edit a recalled history line before executing
-shopt -s extglob        # Enable extended pattern-matching features
-shopt -s expand_aliases # Expand aliases
-shopt -s dirspell       # correct minor spelling errors
-shopt -s direxpand
-shopt -s globstar       # ** becomes a recursive wildstar
-shopt -s cdspell        # correct minor spelling errors
-shopt -s dotglob        # Include dotfiles in pathname expansion
-shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
+  shopt -s histappend     # Append each session's history to $HISTFILE
+  shopt -s histverify     # Edit a recalled history line before executing
+  shopt -s extglob        # Enable extended pattern-matching features
+  shopt -s expand_aliases # Expand aliases
+  shopt -s dirspell       # correct minor spelling errors
+  shopt -s direxpand
+  shopt -s globstar       # ** becomes a recursive wildstar
+  shopt -s cdspell        # correct minor spelling errors
+  shopt -s dotglob        # Include dotfiles in pathname expansion
+  shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
+fi
 
 # ADDITIONAL
 
@@ -616,3 +705,4 @@ shopt -s checkwinsize   # update the value of LINES and COLUMNS after each comma
 #alias grm='git rm'
 #alias gsu='git submodule update --init --recursive'
 #alias gus='git reset HEAD'
+
