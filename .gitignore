@@ -41,7 +41,7 @@
 .gtkrc-2.0
 .i3status.conf
 .i3/config
-.ssh/config
+.ssh
 .xmonad/xmonad.hs
 .icons
 .ideavimrc
@@ -68,7 +68,6 @@
 .semantic-highlight-cache
 .simplenoterc
 .spacemacs
-.ssh/environment*
 .task/backlog*
 .task/vim_tw*
 .taskrc
