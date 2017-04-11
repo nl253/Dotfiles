@@ -51,7 +51,15 @@
 .java
 .jupyter
 .lesshst
+.autojump
+.git-stats
+.pyenv
+.xonsh*
 Dropbox/Backup/external-dotfiles/external-bashrc.sh
+.git-templates
+.gitsomeconfig
+.sncli/sncli.log
+.snclirc
 .local
 .macromedia
 .moc
@@ -97,6 +105,7 @@ Dropbox/Backup/external-dotfiles/external-bashrc.sh
 .zcompdump*
 .zcompdump_capture
 .zsh-update
+.zshenv
 .zsh/zsh-auto*
 .zsh_his*
 .zshrc

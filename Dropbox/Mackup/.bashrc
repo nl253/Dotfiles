@@ -120,8 +120,12 @@ if [ -x /usr/bin/pacman ]; then
   [ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
 
+# OTHER SHELLS
+[ -x /usr/bin/zsh ] && alias z=zsh
+[ -x $(which xonsh) ] && alias x=xonsh
+
 # ---------
-#  Git
+#  GIT
 # ---------
 [ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
 [ -x /usr/bin/tig ] && alias t=tig
@@ -150,7 +154,6 @@ alias la='ls -la --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --colo
 alias le="ls -lo"
 alias ll='ls -l --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
-
 
 alias launcher='find /bin/ ~/.cargo/bin/ ~/.gem/ruby/2.4.0/bin/ ~/.npm/ -executable -type f -exec basename {} \; 2>/dev/null | fzf  --multi -x --bind "enter:execute({}&)"'
 
@@ -200,10 +203,20 @@ alias http-server="python3 -m http.server"
 # coreutils programs will not be considered dependencies
 # as they are preinstalled on practically every UNIX system
 
-tis(){ tig status }
-til(){ tig log }
-tib(){ tig blame -C }
+# ===============
+# FUNCTION :: aliases for multi-word tig commands
+# REQUIRES :: aria2c
+tis(){
+  tig status
+}
 
+til(){
+  tig log
+}
+
+tib(){
+  tig blame -C
+}
 # ===============
 # shorthand for `tree` with hidden files and color enabled,
 # ignoring `.git` directory, listing directories first.
@@ -224,76 +237,139 @@ torrent(){
 }
 # ========
 # FUNCTION :: restore the system
-restore-system(){
-[ ! -x /usr/bin/pacman ] && echo -e "Sorry, this is only preconfigured for Arch Linux." && return 1
-NEED_TO_BE_INSTALLED=(git "git-imerge" "git-extras" \
-  python tig pip apacman yaourt tmux aria2c cronie fdupes ddupes \
-  thermald dropbox "python3-pip" "google-chrome" coreutils hub htop "jdk-8" \
-  "intellij-idea-community-edition" lshw less nvim spotify sncli \
-  wget curl wordnet xclip upower npm ruby gem pip timeshift thinkfan \
-  csslint thinkfinger "the_silver_searcher" sed pandoc openssh openvpn p7zip astyle \
-  aspell bluej bashmount bmenu ghc-mod cabal node gawk "i3" xmonad autojump php \
-  rofi "stylish-haskell" tidy tree "xf86-input-keyboard" "xf86-input-libinput" \
-  "xf86-input-mouse" "xf86-input-synaptics" "xf86-input-void" "xf86-video-intel" \
-  "xmonad-contrib" "xmonad-utils" acpid "aspell-en" "ca-certificates" ctags \
-  crontab psysh emacs cmake freetype2 fontconfig pkg-config make \
-  xclip curl dos2unix pdftotext perl shellcheck zsh)
 
-for i in $NEED_TO_BE_INSTALLED; do
-  if [ ! -x "/usr/bin/$i" ]; then
-    sudo pacman -S $i
-  fi
-done
+restore-system(){
+if [ ! -x /usr/bin/pacman ] ; then
+  echo -e "Sorry, this is only preconfigured for Arch Linux."
+  return 1
+  #statements
+else
+
+  local NEED_TO_BE_INSTALLED=(git "git-imerge" "git-extras" \
+    python tig pip apacman yaourt tmux aria2c cronie fdupes ddupes \
+    thermald dropbox "python3-pip" "google-chrome" coreutils hub htop "jdk-8" \
+    "intellij-idea-community-edition" lshw less nvim spotify sncli \
+    wget curl wordnet xclip upower npm ruby gem pip timeshift thinkfan \
+    csslint thinkfinger "the_silver_searcher" sed pandoc openssh openvpn "p7zip" astyle \
+    aspell bluej bashmount bmenu ghc-mod cabal node gawk "i3" xmonad autojump php \
+    rofi "stylish-haskell" tidy tree "xf86-input-keyboard" "xf86-input-libinput" \
+    "xf86-input-mouse" "xf86-input-synaptics" "xf86-input-void" "xf86-video-intel" \
+    "xmonad-contrib" "xmonad-utils" acpid "aspell-en" "ca-certificates" ctags \
+    crontab psysh emacs cmake "freetype2" fontconfig pkg-config make \
+    xclip curl "dos2unix" pdftotext perl shellcheck zsh)
+
+  for i in $NEED_TO_BE_INSTALLED; do
+    if [ ! -x "/usr/bin/$i" ]; then
+      sudo pacman -S $i
+    fi
+  done
+fi
 
 # PYTHON
-[ ! -x /usr/bin/pip ] && echo "make sure pip is installed to install python packages" && return 0
-PY=(mackup ranger pudb neovim jedi mypy xonsh "xontrib-z" psutil nltk pytest ipython \
-  mycli vint fn "better_exceptions" pythonpy "youtube-dl" "git-sweep" faker \
-  "you-get" pandas spacy sumy fuzzywuzzy tensorflow numpy requests scrapy)
+if [ ! -x /usr/bin/pip ] ; then
 
-for i in $PY; do
-  sudo pip install $i
-done
+  echo "make sure pip is installed to install python packages"
+  return 1
+
+else
+
+  echo -e "PYTHON AND PIP DETECTED\nINSTALLING PYTHON PACKAGES"
+
+  local PY=(mackup ranger pudb neovim jedi mypy xonsh "xontrib-z" psutil nltk pytest ipython \
+    "you-get" pandas spacy sumy fuzzywuzzy tensorflow numpy requests scrapy)
+
+  for i in $PY; do
+    sudo pip install $i
+  done
+fi
 
 # set up virtual env
-[ ! -d '~/.pyenv' ] && git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+[ ! -d '~/.pyenv' ] && echo -e "PYENV NOT DETECTED\nINITIATING ... " && git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
 # RUBY
-[ ! -x /usr/bin/gem ] && echo "make sure gem is installed to install ruby packages" && return 0
-RB=(mdl rubocop)
+if [ ! -x /usr/bin/gem ] ; then
 
-for i in $RB; do
-  sudo pip install $i
-done
+  echo "make sure gem is installed to install ruby packages"
+  return 0
+
+else
+  echo -e "RUBY AND GEM DETECTED\nINSTALLING RUBY GEMS"
+  local RB=(mdl rubocop)
+  for i in $RB; do
+    if [ ! -x $(which $i) ]; then
+      sudo gem install $i
+    fi
+  done
+fi
+
 
 # JAVASCRIPT
-[ ! -x /usr/bin/npm ] && echo "make sure npm is installed to install javscript packages" && return 0
-JS=("write-good" textlint "git-standup" "git-stats" jsonlint tern "git-fire" "js-beautify" textlint)
+if [ ! -x /usr/bin/npm ] ; then
+  echo "make sure npm is installed to install javscript packages" && return 1
 
-for i in $JS; do
-  sudo npm install $i -g
-done
+else
+
+  echo -e "NODE AND NPM DETECTED\nINSTALLING NODE PACKAGES"
+  local JS=("write-good" textlint "git-standup" "git-stats" jsonlint tern "git-fire" "js-beautify" textlint)
+
+  for i in $JS; do
+    if [ ! -x $(which $i) ]; then
+      sudo npm install $i -g
+    fi
+  done
+fi
 
 # check if ZSH is set up correctly
-[ -x /usr/bin/curl ] && [ ! -d "~/.oh-my-zsh" ] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+[ -x /usr/bin/zsh ] && [ -x /usr/bin/curl ] && [ ! -d "~/.oh-my-zsh" ] && echo "OH-MY-ZSH NOT DETECTED\nINITIATING ..." && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # if ALACRITTY is not set up rust will be needed
 if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
+  echo -e "RUST AND ALACRITTY NOT INSTALLED\nINITALISING RUSTUP\n"
   curl https://sh.rustup.rs -sSf | sh
+  echo -e "CLONING ALACRITTY REPO FROM GIT"
   git clone https://github.com/jwilm/alacritty.git ~
+  echo -e "CHANGING RUSTUP TOOLCHAIN TO STABLE"
   sudo rustup override set stable
   sudo rustup update stable
   sudo rustup default stable
+  sudo rustup override set stable
+  echo -e "BUILDING ALACRITTY"
   cargo build --release ~/alacritty
 fi
 
 # NEO-VIM
 # I chose the layers dir to check if nvim is correctly set up, otherwise clone it
-[ -x /usr/bin/nvim ] && [ ! -d "~/.config/nvim/layers" ] && git clone --recursive "https://github.com/nl253/VimScript/tree/working" "~/.config/nvim/"
+[ -x /usr/bin/nvim ] && [ ! -d "~/.config/nvim/layers" ] && echo -e "NEOVIM NOT nINITALISED\nCLONING FROM GIT"  && mkdir -p /tmp/nvim/ && git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/" && cp -R /tmp/nvim/* ~/.config/nvim/ || echo "make sure neovim is installed"
 
 # TMUX
 # check if tmux plugin manager dir is present
-[ -x /usr/bin/tmux ] && [ ! -d "~/.tmux/plugins/tpm" ] &&  git clone "https://github.com/tmux-plugins/tpm" "~/.tmux/plugins/tpm"
+[ -x /usr/bin/tmux ] && [ ! -d "~/.tmux/plugins/tpm" ] &&  echo -e "TMUX PLUGIN MANAGER NOT PRESENT\nINITALISING ..." && git clone "https://github.com/tmux-plugins/tpm" "~/.tmux/plugins/tpm" || echo "make sure tmux is installed"
+
+echo "RESOURCING BASHRC"
+
+source ~/.bashrc
+
+for i in $NEED_TO_BE_INSTALLED; do
+  if [ ! -x $(which $i) ]; then
+    echo -e $i" NOT PROPERLY INSTALLED\nQUITTING"
+    return 1
+  fi
+done
+
+if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] ; then
+
+  if [ -x $(which mackup) ] && [ $(read -e "MACKUP RESTORE ? [y/n] ") == "y" ] ; then
+    mackup restore
+
+  else
+    echo -e "YOU NEED TO SET UP MACKUP.\nQUITTING."
+    return 1
+    # DEAL WITH DOTFILES
+  fi
+else
+  echo -e "MAKE SURE DROPBOX IS SET UP"
+  return 1
+fi
 
 }
 
@@ -710,4 +786,3 @@ fi
 #alias grm='git rm'
 #alias gsu='git submodule update --init --recursive'
 #alias gus='git reset HEAD'
-
