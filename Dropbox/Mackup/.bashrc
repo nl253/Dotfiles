@@ -88,18 +88,18 @@ fi
 export PATH="$PATH:$RUBY_BINS:$RUST_BINS:$MY_BINS:$GO_BINS:$PHP_BINS"
 
 [ -x /usr/bin/ranger ] && [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
+  
+[ -x $(which emacs) ] && export EDITOR="/usr/bin/emacs -nw"
 
 if [ -x /usr/bin/nvim ]; then
-  export EDITOR=/usr/bin/nvim
-  export MANPAGER="nvim -c 'set ft=man' -"
-  export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  # export MANPAGER="nvim -c 'set ft=man' -"
+  # export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
   alias vi=/usr/bin/nvim
   alias vim=/usr/bin/nvim
 else # if not nvim check if vim
   if [ -x /usr/bin/vim ]; then
     alias vi=/usr/bin/vim
-    export MANPAGER="vim -c 'set ft=man' -"
-    export EDITOR=/usr/bin/vim
+    # export EDITOR=/usr/bin/vim
     alias nvim=/usr/bin/vim
   fi
 fi
