@@ -1,0 +1,14 @@
+{
+    "rules": {
+        "common-misspellings": {
+            "ignore": []
+        },
+        "plugins": [
+            "rst",
+            "asciidoc-loose",
+            "markdown",
+            "txt",
+            "html"
+        ]
+    }
+}
