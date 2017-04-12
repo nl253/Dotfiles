@@ -47,8 +47,6 @@ echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loa
 # prompt
 export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] "
 
-[ -d ~/bash_it ] && [ -f ~/bash_it/.bash_it.sh ] && source ~/bash_it/bash_it.sh    # Load Bash-It
-
 unset MAILCHECK                         # Don't check mail when opening terminal.
 export SCM_CHECK=true                   # Set this to false to turn off version control status checking within the prompt for all themes
 export SHORT_HOSTNAME=$(hostname -s)    # Set Xterm/screen/Tmux title with only a short hostname
@@ -56,8 +54,12 @@ export SHORT_HOSTNAME=$(hostname -s)    # Set Xterm/screen/Tmux title with only 
 export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups
-export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
+export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear" # a colon separated list of items to ignore 
+
+# default to irssi and fall back on hexchat
 [ -x /usr/bin/irssi ] && export IRC_CLIENT='irssi'
+[ ! -x /usr/bin/irssi ] && [ -x /usr/bin/hexchat ] && export IRC_CLIENT='hexchat'
+
 export GREP_COLOR='1;33'
 
 ## Summary for args to less:
@@ -67,25 +69,21 @@ export GREP_COLOR='1;33'
 #   -F (-F or --quit-if-one-screen) Auto exit if <1 screen
 #   -X (-X or --no-init) Disable termcap init & deinit
 
+# wrapper around man which adds coloring 
 man(){
-    LESS_TERMCAP_md=$'\e[01;31m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[01;44;33m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[01;32m' \
-    command man "$@"
+	LESS_TERMCAP_md=$'\e[01;31m' \
+		LESS_TERMCAP_me=$'\e[0m' \
+		LESS_TERMCAP_se=$'\e[0m' \
+		LESS_TERMCAP_so=$'\e[01;44;33m' \
+		LESS_TERMCAP_ue=$'\e[0m' \
+		LESS_TERMCAP_us=$'\e[01;32m' \
+		command man "$@"
 }
 
-#export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
-
-if [ -x /usr/bin/less ]; then
-    export PAGER=less
-    export LESS=' -R '
-    [ -f "/usr/bin/source-highlight-esc.sh" ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
-else
-    export PAGER=more
-fi
+# if available enable syntax highlighting
+[ -f /usr/bin/source-highlight-esc.sh ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
+[ -x /usr/bin/less ] && alias less='less -x4RFsX' && export PAGER=less
+[ ! -x /usr/bin/less ] && [ -x /usr/bin/more ] && export PAGER=more && alias less=more
 
 [ -x "/usr/bin/bash" ] && export SHELL=/usr/bin/bash || export SHELL=/usr/bin/sh
 [ -x "/usr/bin/google-chrome-stable" ] && export BROWSER='/usr/bin/google-chrome-stable'
@@ -126,22 +124,22 @@ fi
 [ -x /usr/bin/emacs ] && [ ! -x /usr/bin/vim ] && [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vi ] && export EDITOR="/usr/bin/emacs -nw"
 
 if [ -x "/usr/bin/fzf" ]; then
-    alias p=$(which FZFpkill)
-    export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
-    [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-    alias launcher='find /bin/ ~/.cargo/bin/ ~/.gem/ruby/2.4.0/bin/ ~/.npm/ -executable -type f -exec basename {} \; 2>/dev/null | fzf  --multi -x --bind "enter:execute({}&)"'
+	alias p=$(which FZFpkill)
+	export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
+	[ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+	alias launcher='find /bin/ ~/.cargo/bin/ ~/.gem/ruby/2.4.0/bin/ ~/.npm/ -executable -type f -exec basename {} \; 2>/dev/null | fzf  --multi -x --bind "enter:execute({}&)"'
 
-    alias recent-files='find ~ -amin -10 -type f | grep -P -v ".*C|cache.*" | sed -E "s/^\.\///" | fzf'
+	alias recent-files='find ~ -amin -10 -type f | grep -P -v ".*C|cache.*" | sed -E "s/^\.\///" | fzf'
 fi
 
 # Pacman
 if [ -x "/usr/bin/pacman" ]; then
-    [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
-    [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
-    alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
-    alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
-    alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
-    [ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+	[ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
+	[ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
+	alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
+	alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
+	alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
+	[ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
 
 # OTHER SHELLS
@@ -198,6 +196,7 @@ alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \
 
 [ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 [ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor"
+[ -x /usr/bin/mosh ] && alias ssh=mosh
 [ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"
 [ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"
 [ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2.log\""
@@ -230,15 +229,15 @@ alias http-server="python3 -m http.server"
 # FUNCTION :: aliases for multi-word tig commands
 # REQUIRES :: tig
 tis(){
-    tig status
+	tig status
 }
 
 til(){
-    tig log
+	tig log
 }
 
 tib(){
-    tig blame -C
+	tig blame -C
 }
 # ===============
 # shorthand for `tree` with hidden files and color enabled,
@@ -247,7 +246,7 @@ tib(){
 # unless the output is small enough for one screen.
 # REQUIRES :: tree
 T(){
-    tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
+	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
 
 # ===============
@@ -255,9 +254,9 @@ T(){
 # REQUIRES :: aria2c
 # USAGE :: torrent <file|URL|magnet ... >
 torrent(){
-    [ ! -d ~/Downloads/Torrents ] && mkdir -p ~/Downloads/Torrents
-    [ ! -f ~/Downloads/Torrents/aria2.log ] && touch ~/Downloads/Torrents/aria2.log
-    aria2c --continue --dir=~/Downloads/Torrents --log=~/Downloads/Torrents/aria2.log "$1"
+	[ ! -d ~/Downloads/Torrents ] && mkdir -p ~/Downloads/Torrents
+	[ ! -f ~/Downloads/Torrents/aria2.log ] && touch ~/Downloads/Torrents/aria2.log
+	aria2c --continue --dir=~/Downloads/Torrents --log=~/Downloads/Torrents/aria2.log "$1"
 }
 # ========
 # FUNCTION :: restore the system
@@ -267,245 +266,245 @@ torrent(){
 
 restore-system(){
 
-    [ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux."
-
-    local NEED_TO_BE_INSTALLED=("git" "git-imerge" "git-extras" \
-                                      "intellij-idea-community-edition" \
-                                      "lshw" "less" "nvim" "spotify" "sncli" \
-                                      "xf86-input-mouse" "xf86-input-synaptics" \
-                                      "xf86-input-void" "xf86-video-intel" \
-                                      "xmonad-contrib" "xmonad-utils" "acpid" \
-                                      "aspell-en" "ca-certificates" "ctags" \
-                                      "aspell" "bluej" "bashmount" "bmenu" \
-                                      "ghc-mod" "cabal" "node" "gawk" "i3" \
-                                      "xmonad" "autojump" "php" \
-                                      "crontab" "psysh" "emacs" "cmake" \
-                                      "freetype2" "fontconfig" "pkg-config" "make" \
-                                      "csslint" "thinkfinger" "the_silver_searcher" \
-                                      "sed" "pandoc" "openssh" "openvpn" "p7zip" "astyle" \
-                                      "python" "tig"  "apacman" "yaourt" "tmux" \
-                                      "aria2c" "cronie" "fdupes" "ddupes" \
-                                      "rofi" "stylish-haskell" "tidy" "tree" \
-                                      "xf86-input-keyboard" "xf86-input-libinput" \
-                                      "thermald" "dropbox" "python-pip" \
-                                      "google-chrome" "coreutils" "hub" "htop" "jdk-8" \
-                                      "wget" "curl" "wordnet" "xclip" \
-                                      "upower" "npm" "ruby" "gem" "timeshift" "thinkfan" \
-                                      "xclip" "bashlint" "alsa-utils" \
-                                      "curl" "dos2unix" "pdftotext" \
-                                      "perl" "shellcheck" "zsh")
-
-    for i in ${NEED_TO_BE_INSTALLED[*]}; do
-        [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed "$i"
-    done
-
-    echo -e "checking PACMAN packages"
-    for i in ${NEED_TO_BE_INSTALLED[*]}; do
-        # check and give feedback on what's missing
-        [ ! -x "$(which $i)" ] && echo -e "$i :: not found on the filesystem despite installation"
-    done
-
-    # PYTHON
-    # it is crucial that python is correctly set up
-    # mackup is dependent on it as well as things like ranger
-
-    echo -e "PYTHON"
-
-    if [ ! -x "/usr/bin/pip" ] && [ ! -x "/usr/bin/pip3" ] ; then
-        echo -e "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
-        return 1
-    fi
-
-    echo -e "PYTHON and PIP detected\ninstalling PYTHON packages"
-
-    local PY=("mackup" "ranger" \
-                       "pudb" "neovim" "jedi" \
-                       "mypy" "xonsh" "xontrib-z" \
-                       "psutil" "nltk" "pytest" "ipython" \
-                       "you-get" "pandas" \
-                       "spacy" "sumy" "fuzzywuzzy" \
-                       "tensorflow" "numpy" \
-                       "requests" "scrapy")
-
-    for i in ${PY[*]}; do
-        # configuration for scripts
-        # if it exists, ignore
-        sudo pip install --quiet --exists-action i "$i"
-    done
-
-    echo -e "checking PIP packages"
-
-    for i in ${PY[*]}; do
-        [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
-    done
-
-    # python virtual env
-    echo -e "checking virtual env"
-
-    if [ ! -d ~/.pyenv ] && [ ! -x "$(which pyenv)" ]; then
-        echo -e "PYENV not detected\ninitiating ... "
-        git clone "https://github.com/pyenv/pyenv.git" ~/.pyenv
-        pyenv global "3.5.0"
-        echo -e 'global python 3.5.0 activated'
-    else
-        echo -e "PYENV detected continuing ..."
-    fi
-
-    echo -e "RUBY"
-
-    # ruby
-    if [ ! -x "/usr/bin/gem" ] || [ ! -x "/usr/bin/ruby" ] ; then
-
-        echo -e "either RUBY or GEM was not detected on this filesystem"
-        echo -e "make sure GEM is installed to install RUBY packages"
-        echo -e "becasue RUBY is not cructial the script will continue"
-        sleep 5
-
-    else
-
-        echo -e "RUBY and GEM detected\ninstalling RUBY gems"
-
-        local RB=(mdl sqlint rubocop)
-
-        for i in ${RB[*]}; do
-            [ ! -x "$(which $i)" ] && sudo gem install "$i"
-        done
+[ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux."
+
+local NEED_TO_BE_INSTALLED=("git" "git-imerge" "git-extras" \
+	"intellij-idea-community-edition" \
+	"lshw" "less" "nvim" "spotify" "sncli" \
+	"xf86-input-mouse" "xf86-input-synaptics" \
+	"xf86-input-void" "xf86-video-intel" \
+	"xmonad-contrib" "xmonad-utils" "acpid" \
+	"aspell-en" "ca-certificates" "ctags" \
+	"aspell" "bluej" "bashmount" "bmenu" \
+	"ghc-mod" "cabal" "node" "gawk" "i3" \
+	"xmonad" "autojump" "php" \
+	"crontab" "psysh" "emacs" "cmake" \
+	"freetype2" "fontconfig" "pkg-config" "make" \
+	"csslint" "thinkfinger" "the_silver_searcher" \
+	"sed" "pandoc" "openssh" "openvpn" "p7zip" "astyle" \
+	"python" "tig"  "apacman" "yaourt" "tmux" \
+	"aria2c" "cronie" "fdupes" "ddupes" \
+	"rofi" "stylish-haskell" "tidy" "tree" \
+	"xf86-input-keyboard" "xf86-input-libinput" \
+	"thermald" "dropbox" "python-pip" \
+	"google-chrome" "coreutils" "hub" "htop" "jdk-8" \
+	"wget" "curl" "wordnet" "xclip" \
+	"upower" "npm" "ruby" "gem" "timeshift" "thinkfan" \
+	"xclip" "bashlint" "alsa-utils" \
+	"curl" "dos2unix" "pdftotext" \
+	"perl" "shellcheck" "zsh")
+
+for i in ${NEED_TO_BE_INSTALLED[*]}; do
+	[ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed "$i"
+done
+
+echo -e "checking PACMAN packages"
+for i in ${NEED_TO_BE_INSTALLED[*]}; do
+	# check and give feedback on what's missing
+	[ ! -x "$(which $i)" ] && echo -e "$i :: not found on the filesystem despite installation"
+done
+
+# PYTHON
+# it is crucial that python is correctly set up
+# mackup is dependent on it as well as things like ranger
+
+echo -e "PYTHON"
+
+if [ ! -x "/usr/bin/pip" ] && [ ! -x "/usr/bin/pip3" ] ; then
+	echo -e "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
+	return 1
+fi
+
+echo -e "PYTHON and PIP detected\ninstalling PYTHON packages"
+
+local PY=("mackup" "ranger" \
+	"pudb" "neovim" "jedi" \
+	"mypy" "xonsh" "xontrib-z" \
+	"psutil" "nltk" "pytest" "ipython" \
+	"you-get" "pandas" \
+	"spacy" "sumy" "fuzzywuzzy" \
+	"tensorflow" "numpy" \
+	"requests" "scrapy")
+
+for i in ${PY[*]}; do
+	# configuration for scripts
+	# if it exists, ignore
+	sudo pip install --quiet --exists-action i "$i"
+done
+
+echo -e "checking PIP packages"
+
+for i in ${PY[*]}; do
+	[ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
+done
+
+# python virtual env
+echo -e "checking virtual env"
+
+if [ ! -d ~/.pyenv ] && [ ! -x "$(which pyenv)" ]; then
+	echo -e "PYENV not detected\ninitiating ... "
+	git clone "https://github.com/pyenv/pyenv.git" ~/.pyenv
+	pyenv global "3.5.0"
+	echo -e 'global python 3.5.0 activated'
+else
+	echo -e "PYENV detected continuing ..."
+fi
+
+echo -e "RUBY"
+
+# ruby
+if [ ! -x "/usr/bin/gem" ] || [ ! -x "/usr/bin/ruby" ] ; then
+
+	echo -e "either RUBY or GEM was not detected on this filesystem"
+	echo -e "make sure GEM is installed to install RUBY packages"
+	echo -e "becasue RUBY is not cructial the script will continue"
+	sleep 5
+
+else
+
+	echo -e "RUBY and GEM detected\ninstalling RUBY gems"
+
+	local RB=(mdl sqlint rubocop)
+
+	for i in ${RB[*]}; do
+		[ ! -x "$(which $i)" ] && sudo gem install "$i"
+	done
 
-        # check and give feedback on what's missing
-        echo -e "checking RUBY gems"
+	# check and give feedback on what's missing
+	echo -e "checking RUBY gems"
 
-        for i in ${RB[*]}; do
-            [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
-        done
+	for i in ${RB[*]}; do
+		[ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
+	done
 
-    fi
+fi
 
-    # javascript
-    if [ ! -x /usr/bin/npm ] ; then
+# javascript
+if [ ! -x /usr/bin/npm ] ; then
 
-        echo -e "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages"
-        echo -e "because NPM and JAVASCRIPT aren't crucial, the script will continue "
-        sleep 5
+	echo -e "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages"
+	echo -e "because NPM and JAVASCRIPT aren't crucial, the script will continue "
+	sleep 5
 
-    else
+else
 
-        echo -e "NODE and NPM detected\ninstalling NODE packages"
+	echo -e "NODE and NPM detected\ninstalling NODE packages"
 
-        local JS=("write-good" textlint \
-                               "git-standup" "git-stats" \
-                               jsonlint tern "git-fire" \
-                               "js-beautify" textlint)
+	local JS=("write-good" textlint \
+		"git-standup" "git-stats" \
+		jsonlint tern "git-fire" \
+		"js-beautify" textlint)
 
-        for i in ${JS[*]}; do
-            if [ ! -x "$(which $i)" ]; then
-                sudo npm install "$i" -g
-            fi
-        done
+	for i in ${JS[*]}; do
+		if [ ! -x "$(which $i)" ]; then
+			sudo npm install "$i" -g
+		fi
+	done
 
-    fi
+fi
 
-    # check if ZSH is set up correctly
-    if [ -x /usr/bin/zsh ] ; then
+# check if ZSH is set up correctly
+if [ -x /usr/bin/zsh ] ; then
 
-        echo -e 'zsh detected on your filesystem ... '
+	echo -e 'zsh detected on your filesystem ... '
 
-        if  [ ! -f "${HOME}/.oh-my-zsh/oh-my-zsh.sh" ] ; then
+	if  [ ! -f "${HOME}/.oh-my-zsh/oh-my-zsh.sh" ] ; then
 
-            echo -e "OH-MY-ZSH not detected\ninitiating ..."
+		echo -e "OH-MY-ZSH not detected\ninitiating ..."
 
-            # from oh-my-zsh [github]
-            sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+		# from oh-my-zsh [github]
+		sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-            # custom plugins
+		# custom plugins
 
-            [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-            [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
-            [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+		[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+		[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
+		[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
-            # source it
-            zsh -c ~/.zshrc
+		# source it
+		zsh -c ~/.zshrc
 
-        fi
+	fi
 
-    fi
+fi
 
-    # if ALACRITTY is not set up rust will be needed
-    if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
-        echo -e "RUST and ALACRITTY not installed\ninitalising rustup"
-        sudo curl https://sh.rustup.rs -sSf | sh
-        echo -e "cloning ALACRITTY repo from GIT"
-        git clone https://github.com/jwilm/alacritty.git ~
-        echo -e "changing RUSTUP TOOLCHAIN to STABLE"
-        sudo rustup override set stable
-        sudo rustup update stable
-        sudo rustup default stable
-        echo -e "cd to ${HOME}/alacritty\nBUILDING ALACRITTY ... "
-        cd ~/alacritty && sudo cargo build --release
-    fi
+# if ALACRITTY is not set up rust will be needed
+if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
+	echo -e "RUST and ALACRITTY not installed\ninitalising rustup"
+	sudo curl https://sh.rustup.rs -sSf | sh
+	echo -e "cloning ALACRITTY repo from GIT"
+	git clone https://github.com/jwilm/alacritty.git ~
+	echo -e "changing RUSTUP TOOLCHAIN to STABLE"
+	sudo rustup override set stable
+	sudo rustup update stable
+	sudo rustup default stable
+	echo -e "cd to ${HOME}/alacritty\nBUILDING ALACRITTY ... "
+	cd ~/alacritty && sudo cargo build --release
+fi
 
-    # NEO-VIM
-    # I chose the plugins dir to check if nvim is correctly set up, if not - clone it
-    if [ -x /usr/bin/nvim ] && [ ! -f "${HOME}/.local/share/nvim/site/autoload/plug.vim" ]; then
-        echo -e "NEOVIM not initalised with vim-plug\ncloning from GIT"
-        # use tmp to force-write the files
+# NEO-VIM
+# I chose the plugins dir to check if nvim is correctly set up, if not - clone it
+if [ -x /usr/bin/nvim ] && [ ! -f "${HOME}/.local/share/nvim/site/autoload/plug.vim" ]; then
+	echo -e "NEOVIM not initalised with vim-plug\ncloning from GIT"
+	# use tmp to force-write the files
 
-        mkdir -p /tmp/nvim/
-        git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/"
+	mkdir -p /tmp/nvim/
+	git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/"
 
-        # git won't let you overwrite anything - use cp
-        cp -R /tmp/nvim/* ~/.config/nvim/
+	# git won't let you overwrite anything - use cp
+	cp -R /tmp/nvim/* ~/.config/nvim/
 
-        # from vim-plug [github]
-        curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+	# from vim-plug [github]
+	curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 
-        # here the init.vim file will be sourced to initialise the whole setup
-        # nvim -c "~/.config/nvim/init.vim"
-        # not sure if it's a good idea ...
+	# here the init.vim file will be sourced to initialise the whole setup
+	# nvim -c "~/.config/nvim/init.vim"
+	# not sure if it's a good idea ...
 
-    elif [ ! -x "/usr/bin/nvim" ] ; then
+elif [ ! -x "/usr/bin/nvim" ] ; then
 
-        echo -e "neovim not detected on the filesystem.\n the installation will continue\nbut you will have to make sure neovim is installed to use plugins"
+	echo -e "neovim not detected on the filesystem.\n the installation will continue\nbut you will have to make sure neovim is installed to use plugins"
 
-    fi
+fi
 
-    # TMUX
-    # check if tmux plugin manager dir is present
-    if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ] ; then
+# TMUX
+# check if tmux plugin manager dir is present
+if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ] ; then
 
-        echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
-        git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
+	echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
+	git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
 
-    else
+else
 
-        echo -e "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
+	echo -e "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
 
-        sleep 5
+	sleep 5
 
-    fi
+fi
 
-    # at this point variables will need to be reset
-    echo "RESOURCING BASHRC"
-    source ~/.bashrc
+# at this point variables will need to be reset
+echo "RESOURCING BASHRC"
+source ~/.bashrc
 
-    if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] ; then
+if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] ; then
 
-        if [ -x $(which mackup) ] && [ -L ~/.bashrc ] && [ -L ~/.inputrc ] ; then
+	if [ -x $(which mackup) ] && [ -L ~/.bashrc ] && [ -L ~/.inputrc ] ; then
 
-            mackup restore
+		mackup restore
 
-        else
+	else
 
-            echo -e "you need to set up MACKUP.\nquitting."
-            return 1
+		echo -e "you need to set up MACKUP.\nquitting."
+		return 1
 
-        fi
+	fi
 
-    elif [ ! -x "/usr/bin/dropbox" ] && [ ! -d ~/Dropbox ] ; then
+elif [ ! -x "/usr/bin/dropbox" ] && [ ! -d ~/Dropbox ] ; then
 
-        echo -e "make sure DROPBOX is set up"
-        return 1
+	echo -e "make sure DROPBOX is set up"
+	return 1
 
-    fi
+fi
 
 }
 
@@ -514,43 +513,43 @@ restore-system(){
 # show if the current file is a symbolic link
 # if so, then show what it points to, otherwise echo "FALSE"
 is-symlink(){
-    if [ $# == 1 ]; then
-        if [ $(readlink -f $1) -eq $(realpath -s $1) ]; then
-            echo "FALSE"
-            return 1
-        elif [ $(readlink -f $1) -ne $(realpath -s $1) ]; then
-            #echo -e "${GREEN}TRUE${DEFCOLOR}"
-            echo -e "${CYAN}$(realpath -s $1) ${DEFCOLOR}-> ${YELLOW}$(readlink -f $1)${DEFCOLOR}"
-            return 0
-        fi
-    else
-        echo 'ONLY 1 ARGUMENT IS REQURED'
-        return 1
-    fi
+if [ $# == 1 ]; then
+	if [ $(readlink -f $1) -eq $(realpath -s $1) ]; then
+		echo "FALSE"
+		return 1
+	elif [ $(readlink -f $1) -ne $(realpath -s $1) ]; then
+		#echo -e "${GREEN}TRUE${DEFCOLOR}"
+		echo -e "${CYAN}$(realpath -s $1) ${DEFCOLOR}-> ${YELLOW}$(readlink -f $1)${DEFCOLOR}"
+		return 0
+	fi
+else
+	echo 'ONLY 1 ARGUMENT IS REQURED'
+	return 1
+fi
 }
 # ==============================
 # FUNCTION
 # print in a JSON format a dict with your IP
 # and other details about the network you are on
 ipif(){
-    if grep -P "(([1-9]\d{0,2})\.){3}(?2)" <<< "$1"; then
-        curl ipinfo.io/"$1"
-    else
-        ipawk=($(hostname "$1" | awk '/address/ { print $NF }'))
-        curl ipinfo.io/${ipawk[1]}
-    fi
+	if grep -P "(([1-9]\d{0,2})\.){3}(?2)" <<< "$1"; then
+		curl ipinfo.io/"$1"
+	else
+		ipawk=($(hostname "$1" | awk '/address/ { print $NF }'))
+		curl ipinfo.io/${ipawk[1]}
+	fi
 }
 # ==============================
 # FUNCTION  :: prints the 256 colors with their corresponding numbers
 show-colors()
 {
-    (x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done)
+	(x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done)
 }
 # ==============================
 # FUNCTION  :: shows terminal capabilities
 show-term-capabilities()
 {
-    infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80
+	infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80
 }
 # ==============================
 # FUNCTION  :: general purpose archive extracting
@@ -558,38 +557,38 @@ show-term-capabilities()
 # REQUIRES :: pygmentize (can be optional) :: ag for find-shell
 ex ()
 {
-    if [ -f $1 ] && [ $# == 1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xjf $1   ;;
-            *.tar.gz)    tar xzf $1   ;;
-            *.bz2)       bunzip2 $1   ;;
-            *.rar)       unrar x $1   ;;
-            *.gz)        gunzip $1    ;;
-            *.tar)       tar xf $1    ;;
-            *.tbz2)      tar xjf $1   ;;
-            *.tgz)       tar xzf $1   ;;
-            *.zip)       unzip $1     ;;
-            *.Z)         uncompress $1;;
-            *.7z)        7z x $1      ;;
-            *)           echo "'$1' cannot be extracted via ex()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file or you supplied to many args"
-    fi
+	if [ -f $1 ] && [ $# == 1 ] ; then
+		case $1 in
+			*.tar.bz2)   tar xjf $1   ;;
+			*.tar.gz)    tar xzf $1   ;;
+			*.bz2)       bunzip2 $1   ;;
+			*.rar)       unrar x $1   ;;
+			*.gz)        gunzip $1    ;;
+			*.tar)       tar xf $1    ;;
+			*.tbz2)      tar xjf $1   ;;
+			*.tgz)       tar xzf $1   ;;
+			*.zip)       unzip $1     ;;
+			*.Z)         uncompress $1;;
+			*.7z)        7z x $1      ;;
+			*)           echo "'$1' cannot be extracted via ex()" ;;
+		esac
+	else
+		echo "'$1' is not a valid file or you supplied to many args"
+	fi
 }
 # ==============================
 # FUNCTION  :: ls + cd combined
 # USAGE: jump-list <directory>
 jump-list()
 {
-    [ $# -gt 1 ] && echo 'A MAX OF 1 ARGS IS ACCEPTED' && return 1 # if more than 1 dirs are provided then return
-    local dir="$1"
-    local dir="${dir:=$HOME}"
-    if [[ -d "$dir" ]]; then
-        cd "$dir" >/dev/null; ls
-    else
-        echo "bash: jump-list: $dir: Directory not found"
-    fi
+	[ $# -gt 1 ] && echo 'A MAX OF 1 ARGS IS ACCEPTED' && return 1 # if more than 1 dirs are provided then return
+	local dir="$1"
+	local dir="${dir:=$HOME}"
+	if [[ -d "$dir" ]]; then
+		cd "$dir" >/dev/null; ls
+	else
+		echo "bash: jump-list: $dir: Directory not found"
+	fi
 }
 # ==============================
 # FUNCTION  :: finds and lists 12 files with size of more than 6kb on the whole system
@@ -597,12 +596,12 @@ jump-list()
 # COMMENTS :: it will literally list random file so it is useful to specify the extension
 find-large()
 {
-    [ $# -gt 1 ] && echo 'PROVIDE 0 or 1 ARGS' && return 1
-    if [ $# -eq 0 ]; then
-        find / -type f -size +6k -iregex ".*" 2>/dev/null | head -n 12
-    else
-        find / -type f -size +6k -iregex ".*\.$1" 2>/dev/null | head -n 12
-    fi
+	[ $# -gt 1 ] && echo 'PROVIDE 0 or 1 ARGS' && return 1
+	if [ $# -eq 0 ]; then
+		find / -type f -size +6k -iregex ".*" 2>/dev/null | head -n 12
+	else
+		find / -type f -size +6k -iregex ".*\.$1" 2>/dev/null | head -n 12
+	fi
 }
 # ==============================
 # FUNCTION  :: backup utility
@@ -615,44 +614,44 @@ find-large()
 #
 backup-all-dotfiles()
 {
-    local BACKUP="$HOME/Dropbox/Backup/"
-    local BACKUP_DOTFILES=(".Xclients" \
-                               ".Xresources" \
-                               ".bash_logout" \
-                               ".bash_profile" \
-                               ".bashrc" \
-                               ".dir_colors.256_dark" \
-                               ".extend.bashrc" \
-                               ".extend.xinitrc" \
-                               ".fzf.bash" \
-                               ".gitconfig" \
-                               ".httpie/config.json" \
-                               ".ideavimrc" \
-                               ".inputrc" \
-                               ".moc/config" \
-                               ".myclirc" \
-                               ".netrc" \
-                               ".profile" \
-                               ".spacemacs" \
-                               ".tigrc" \
-                               ".tmux.conf" \
-                               ".w3m/config" \
-                               ".xbindkeysrc" \
-                               ".xinitrc" \
-                               ".xmonad/xmonad.hs" \
-                               ".xonshrc" \
-                               ".xprofile" \
-        )
-    local BACKUP_CONFIG="$BACKUP.config/"
-    local BACKUP_CONFIG_DOTFILES=("xonsh/config.py" "http-prompt/config.py" "alacritty/alacritty.yml")
-    for i in ${BACKUP_DOTFILES[*]}; do
-        mkdir -p `dirname "${HOME}/${i}"` # attempt to make parent dir
-        cp -i `readlink -f "${HOME}/${i}"` "${BACKUP}${i}"
-    done
-    for i in ${BACKUP_CONFIG_DOTFILES[*]}; do
-        mkdir -p $(dirname ~/.config/$i) # attempt to make parent dir
-        cp -i  $(readlink -f ~/.config/$i) "${BACKUP_CONFIG}${i}"
-    done
+	local BACKUP="$HOME/Dropbox/Backup/"
+	local BACKUP_DOTFILES=(".Xclients" \
+		".Xresources" \
+		".bash_logout" \
+		".bash_profile" \
+		".bashrc" \
+		".dir_colors.256_dark" \
+		".extend.bashrc" \
+		".extend.xinitrc" \
+		".fzf.bash" \
+		".gitconfig" \
+		".httpie/config.json" \
+		".ideavimrc" \
+		".inputrc" \
+		".moc/config" \
+		".myclirc" \
+		".netrc" \
+		".profile" \
+		".spacemacs" \
+		".tigrc" \
+		".tmux.conf" \
+		".w3m/config" \
+		".xbindkeysrc" \
+		".xinitrc" \
+		".xmonad/xmonad.hs" \
+		".xonshrc" \
+		".xprofile" \
+		)
+	local BACKUP_CONFIG="$BACKUP.config/"
+	local BACKUP_CONFIG_DOTFILES=("xonsh/config.py" "http-prompt/config.py" "alacritty/alacritty.yml")
+	for i in ${BACKUP_DOTFILES[*]}; do
+		mkdir -p `dirname "${HOME}/${i}"` # attempt to make parent dir
+		cp -i `readlink -f "${HOME}/${i}"` "${BACKUP}${i}"
+	done
+	for i in ${BACKUP_CONFIG_DOTFILES[*]}; do
+		mkdir -p $(dirname ~/.config/$i) # attempt to make parent dir
+		cp -i  $(readlink -f ~/.config/$i) "${BACKUP_CONFIG}${i}"
+	done
 }
 # ==========================================
 # FUNCTION  ::
@@ -667,12 +666,12 @@ backup-all-dotfiles()
 #
 # ==========================================
 generate-dictionary-from-files(){
-    # depends on ag [can be replaced with grep and regexp]
-    # the args needed:
-    # 1 : the file type
-    # 2 : output location
-    dict-generator -n 2000 -l 4 -m 12 -p upper $(ag  -g "" --$1 / 2>/dev/null | xargs) >> $2
-    dict-generator -n 2000 -l 4 -m 12 -p lower $(ag  -g "" --$1 / 2>/dev/null | xargs) >> $2
+# depends on ag [can be replaced with grep and regexp]
+# the args needed:
+# 1 : the file type
+# 2 : output location
+dict-generator -n 2000 -l 4 -m 12 -p upper $(ag  -g "" --$1 / 2>/dev/null | xargs) >> $2
+dict-generator -n 2000 -l 4 -m 12 -p lower $(ag  -g "" --$1 / 2>/dev/null | xargs) >> $2
 }
 # ==========================================
 # FUNCTION
@@ -682,115 +681,115 @@ generate-dictionary-from-files(){
 # multiple patterns can be specified
 
 find-extension(){
-    # with no args will all files in CWD
-    [ $# == 0 ] && find -L . -maxdepth 1 -type f | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
+# with no args will all files in CWD
+[ $# == 0 ] && find -L . -maxdepth 1 -type f | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
 
-    if [ $# -ge 1 ] ; then
+if [ $# -ge 1 ] ; then
 
-        # default depth
-        local DEPTH="15"
+	# default depth
+	local DEPTH="15"
 
-        # check for the first (and only) arg
-        case $1 in
-            js | javas* | jscript | jvscirpt)
-                local REGEX=".*\.js$"
-                ;;
-            java | jva)
-                local REGEX=".*\.java$"
-                ;;
-            vi*)
-                local REGEX=".*\.vim$"
-                ;;
-            erl | erlang | erlg)
-                local REGEX=".*\.erl$"
-                ;;
-            py | python | pthn | pythn | pyth | pyt)
-                local REGEX=".*\.py$"
-                ;;
-            lisp | ls)
-                local REGEX=".*\.\(lisp\)\|\(cl\)$"
-                ;;
-            c)
-                local REGEX=".*\.\(c\)\|\(h\)$"
-                ;;
-            cpp | c++)
-                local REGEX=".*\.cpp$"
-                ;;
-            elisp | el)
-                local REGEX=".*\.el$"
-                ;;
-            rb | ruby | rby)
-                local REGEX=".*\.rb$"
-                ;;
-            html | HTML )
-                local REGEX=".*\.html$"
-                ;;
-            xhtml | XHTML )
-                local REGEX=".*\.xhtml$"
-                ;;
-            shell | sh | bash | zsh )
-                local REGEX=".*\.\(sh\)\|\(zsh\)$"
-                ;;
-            json | jsn)
-                local REGEX=".*\.json$"
-                ;;
-            sass | scss )
-                local REGEX=".*\(sass\)\|\(scss\)$"
-                ;;
-            yml | yaml | yl)
-                local REGEX=".*\.yml$"
-                ;;
-            xml | xm)
-                local REGEX=".*\.xml$"
-                ;;
-            cof* | cffee)
-                local REGEX=".*\.coffee$"
-                ;;
-            hs | hask* )
-                local REGEX=".*\.hs$"
-                ;;
-            less)
-                local REGEX=".*\.less$"
-                ;;
-            ts | typescript | tscript | tyscript | typscript)
-                local REGEX=".*\.ts$"
-                ;;
-            css )
-                local REGEX=".*\.css$"
-                ;;
-            org )
-                local REGEX=".*\.org$"
-                ;;
-            rst | restr* )
-                local REGEX=".*\.rst$"
-                ;;
-            mark* | md )
-                local REGEX=".*\.md$"
-                ;;
-        esac
+	# check for the first (and only) arg
+	case $1 in
+		js | javas* | jscript | jvscirpt)
+			local REGEX=".*\.js$"
+			;;
+		java | jva)
+			local REGEX=".*\.java$"
+			;;
+		vi*)
+			local REGEX=".*\.vim$"
+			;;
+		erl | erlang | erlg)
+			local REGEX=".*\.erl$"
+			;;
+		py | python | pthn | pythn | pyth | pyt)
+			local REGEX=".*\.py$"
+			;;
+		lisp | ls)
+			local REGEX=".*\.\(lisp\)\|\(cl\)$"
+			;;
+		c)
+			local REGEX=".*\.\(c\)\|\(h\)$"
+			;;
+		cpp | c++)
+			local REGEX=".*\.cpp$"
+			;;
+		elisp | el)
+			local REGEX=".*\.el$"
+			;;
+		rb | ruby | rby)
+			local REGEX=".*\.rb$"
+			;;
+		html | HTML )
+			local REGEX=".*\.html$"
+			;;
+		xhtml | XHTML )
+			local REGEX=".*\.xhtml$"
+			;;
+		shell | sh | bash | zsh )
+			local REGEX=".*\.\(sh\)\|\(zsh\)$"
+			;;
+		json | jsn)
+			local REGEX=".*\.json$"
+			;;
+		sass | scss )
+			local REGEX=".*\(sass\)\|\(scss\)$"
+			;;
+		yml | yaml | yl)
+			local REGEX=".*\.yml$"
+			;;
+		xml | xm)
+			local REGEX=".*\.xml$"
+			;;
+		cof* | cffee)
+			local REGEX=".*\.coffee$"
+			;;
+		hs | hask* )
+			local REGEX=".*\.hs$"
+			;;
+		less)
+			local REGEX=".*\.less$"
+			;;
+		ts | typescript | tscript | tyscript | typscript)
+			local REGEX=".*\.ts$"
+			;;
+		css )
+			local REGEX=".*\.css$"
+			;;
+		org )
+			local REGEX=".*\.org$"
+			;;
+		rst | restr* )
+			local REGEX=".*\.rst$"
+			;;
+		mark* | md )
+			local REGEX=".*\.md$"
+			;;
+	esac
 
-        # if 1 arg
-        [ $# = 1 ] && find -L . -maxdepth $DEPTH -type f -iregex "${REGEX}" | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
+	# if 1 arg
+	[ $# = 1 ] && find -L . -maxdepth $DEPTH -type f -iregex "${REGEX}" | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
 
-        # if more
+	# if more
 
-        # make a temporary variable
-        local RE=""
+	# make a temporary variable
+	local RE=""
 
-        #loop omitting the first arg which will be the filetype
-        # format (*this.*)|(.*that.*)|(.*other.*) ...
+	#loop omitting the first arg which will be the filetype
+	# format (*this.*)|(.*that.*)|(.*other.*) ...
 
-        for i in ${@:2}; do
-            RE="${RE}\(.*${i}.*\)\|"
-        done
+	for i in ${@:2}; do
+		RE="${RE}\(.*${i}.*\)\|"
+	done
 
-        # for that trailing pipeline
-        RE="${RE}\(ssdfdklflkjlk\)"
+	# for that trailing pipeline
+	RE="${RE}\(ssdfdklflkjlk\)"
 
-        # at the end append extension regex from the previous case statement
-        find -L . -maxdepth 15 -type f -iregex "\("${RE}$"\)"${REGEX} | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
+	# at the end append extension regex from the previous case statement
+	find -L . -maxdepth 15 -type f -iregex "\("${RE}$"\)"${REGEX} | sed -E 's/^\.\///' | grep -P -v '(%.+%.+)|(.*\d{4,}$)|(.*~$)|(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)' && return 0
 
-    fi
+fi
 }
 
 # ==========================================
@@ -798,18 +797,18 @@ find-extension(){
 # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
 
 if [ ! -n "${ZSH+2}" ]; then
-    complete -cf sudo
-    shopt -s histappend     # Append each session's history to $HISTFILE
-    shopt -s histverify     # Edit a recalled history line before executing
-    shopt -s extglob        # Enable extended pattern-matching features
-    shopt -s expand_aliases # Expand aliases
-    shopt -s dirspell       # correct minor spelling errors
-    shopt -s direxpand
-    shopt -s expand_aliases
-    shopt -s globstar       # ** becomes a recursive wildstar
-    shopt -s cdspell        # correct minor spelling errors
-    shopt -s dotglob        # Include dotfiles in pathname expansion
-    shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
+	complete -cf sudo
+	shopt -s histappend     # Append each session's history to $HISTFILE
+	shopt -s histverify     # Edit a recalled history line before executing
+	shopt -s extglob        # Enable extended pattern-matching features
+	shopt -s expand_aliases # Expand aliases
+	shopt -s dirspell       # correct minor spelling errors
+	shopt -s direxpand
+	shopt -s expand_aliases
+	shopt -s globstar       # ** becomes a recursive wildstar
+	shopt -s cdspell        # correct minor spelling errors
+	shopt -s dotglob        # Include dotfiles in pathname expansion
+	shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
 fi
 
 # ADDITIONAL
