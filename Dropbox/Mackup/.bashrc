@@ -48,9 +48,9 @@ echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loa
 # prompt
 export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] "
 
-[ -f "~/.fzf.bash" ] && source "~/.fzf.bash" # initialise fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash # initialise fzf
 
-[ -d "~/bash_it" ] && [ -f "~/bash_it/.bash_it.sh" ] && source "~/bash_it/bash_it.sh"    # Load Bash-It
+[ -d ~/bash_it ] && [ -f ~/bash_it/.bash_it.sh ] && source ~/bash_it/bash_it.sh    # Load Bash-It
 
 unset MAILCHECK                         # Don't check mail when opening terminal.
 export SCM_CHECK=true                   # Set this to false to turn off version control status checking within the prompt for all themes
@@ -82,23 +82,24 @@ fi
 [ -x "/usr/bin/google-chrome-stable" ] && export BROWSER='/usr/bin/google-chrome-stable'
 [ -x "/usr/bin/alacritty" ] && export TERMINAL='/usr/bin/alacritty' || [ -x "/usr/bin/xterm" ] && export TERMINAL='/usr/bin/xterm'
 [ -d  "/usr/lib/jvm/java-8-openjdk" ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
-[ -x "/usr/bin/ruby" ] && RUBY_BINS='~/.gem/ruby/2.4.0/bin' || RUBY_BINS=''
-[ -x "/usr/bin/rustc" ] && RUST_BINS='~/.cargo/bin' || RUST_BINS=''
-[ -x "/usr/bin/php" ] && PHP_BINS='~/.config/composer/vendor/bin' || PHP_BINS=""
-[ -d '~/go/bin' ] && GO_BINS='~/go/bin' || GO_BINS=''
-[ -d '~/bin' ] && MY_BINS='~/bin' || MY_BINS=''
+[ -x "/usr/bin/ruby" ] && RUBY_BINS=${HOME}'/.gem/ruby/2.4.0/bin' || RUBY_BINS=''
+[ -x "/usr/bin/rustc" ] && RUST_BINS=${HOME}'/.cargo/bin' || RUST_BINS=''
+[ -x "/usr/bin/php" ] && PHP_BINS=${HOME}'/.config/composer/vendor/bin' || PHP_BINS=""
+[ -d ~/go/bin ] && GO_BINS=${HOME}'/go/bin' || GO_BINS=''
+[ -d ~/bin ] && MY_BINS=${HOME}'/bin' || MY_BINS=''
 
 
 # this is ok because if these don't exist strings will be empty
 export PATH="${PATH}:${RUBY_BINS}:${RUST_BINS}:${MY_BINS}:${GO_BINS}:${PHP_BINS}"
 
-[ -x "/usr/bin/ranger" ] && [ -f "~/.config/ranger/rc.conf" ] && export RANGER_LOAD_DEFAULT_RC=false
+[ -x "/usr/bin/ranger" ] && [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 
 [ -x $(which emacs) ] && export EDITOR="/usr/bin/emacs -nw"
 
 if [ -x "/usr/bin/nvim" ]; then
     # export MANPAGER="nvim -c 'set ft=man' -"
     # export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+    # export EDITOR=/usr/bin/nvim
     alias vi=/usr/bin/nvim
     alias vim=/usr/bin/nvim
 else # if not nvim check if vim
@@ -111,15 +112,18 @@ fi
 
 
 if [ -x "/usr/bin/fzf" ]; then
-    [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-    export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
     alias p=FZFpkill
+    export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
+    [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+    alias launcher='find /bin/ ~/.cargo/bin/ ~/.gem/ruby/2.4.0/bin/ ~/.npm/ -executable -type f -exec basename {} \; 2>/dev/null | fzf  --multi -x --bind "enter:execute({}&)"'
+
+    alias recent-files='find ~ -amin -10 -type f | grep -P -v ".*C|cache.*" | sed -E "s/^\.\///" | fzf'
 fi
 
 # Pacman
 if [ -x "/usr/bin/pacman" ]; then
-    alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
-    alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
+    [ -x $(which expac) ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
+    [ -x $(which expac) ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
     alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
     alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
     alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
@@ -140,7 +144,7 @@ setxkbmap -layout gb -option ctrl:nocaps # Caps Lock is Control on a GB keyboard
 
 #setxkbmap -option ctrl:swapcaps # for US
 
-echo -e "${MAGENTA}capslock remapped to ctrl"
+echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"
 
 
 # expands bang combinations and variables to their values - remember !$ last arg / !^ first arg / !* all args
@@ -163,8 +167,6 @@ alias ll='ls -l --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 
 
-alias launcher='find /bin/ ~/.cargo/bin/ ~/.gem/ruby/2.4.0/bin/ ~/.npm/ -executable -type f -exec basename {} \; 2>/dev/null | fzf  --multi -x --bind "enter:execute({}&)"'
-
 alias -- -='cd -'        # Go back
 alias ..="cd .."
 alias ...="cd ..."
@@ -179,15 +181,14 @@ alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-alias recent-files='find ~ -amin -10 -type f | grep -P -v ".*C|cache.*" | sed -E "s/^\.\///" | fzf'
 alias symlinks-at-home="find ~ -type l 2>/dev/null"
 alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
 
-[ ! -x "/usr/bin/tree" ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
-[ -x "/usr/bin/sshfs" ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks 'nl253@raptor.kent.ac.uk:' '~/Raptor'"
-[ -x "/usr/bin/dmenu_run" ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"
-[ -x "/usr/bin/aria2c" ] && alias aria2c="aria2c --dir='~/Downloads/Torrent/'"
-[ -x "/usr/bin/aspell" ] && alias aspell="aspell -c -l 'en_GB'"
+[ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+[ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor"
+[ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"
+[ -x /usr/bin/aria2c ] && alias aria2c="aria2c --dir=~/Downloads/Torrent/"
+[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
@@ -196,7 +197,7 @@ alias logout="pkill -KILL -u "
 alias h=history
 alias untar='tar xvf'
 
-alias show-scripts-in-bashrc='grep -P "^\S+?\(\)" ~/.bashrc | sed  "s/(//g" | sed "s/{//" | sed "s/)//g"'
+alias show-scripts-in-bashrc="grep -P '^\S+?\(\)' ~/.bashrc | sed  's/(//g' | sed 's/{//' | sed 's/)//g'"
 #
 # Readline
 alias show-keybingings="bind -p | grep -v '^#\|self-insert\|^$'"
@@ -214,7 +215,7 @@ alias http-server="python3 -m http.server"
 
 # ===============
 # FUNCTION :: aliases for multi-word tig commands
-# REQUIRES :: aria2c
+# REQUIRES :: tig
 tis(){
     tig status
 }
@@ -231,6 +232,7 @@ tib(){
 # ignoring `.git` directory, listing directories first.
 # The output gets piped into `less` with options to preserve color and line numbers,
 # unless the output is small enough for one screen.
+# REQUIRES :: tree
 tre(){
     tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
@@ -239,15 +241,11 @@ tre(){
 # FUNCTION :: aria2 convenience configuration
 # REQUIRES :: aria2c
 # USAGE :: torrent <file|URL|magnet ... >
-
-
 torrent(){
-
-    [ ! -d "~/Downloads/Torrents" ] && mkdir -p "~/Downloads/Torrents"
-    [ ! -f ${HOME}"/Downloads/Torrents/aria2.log" ] && touch ${HOME}"/Downloads/Torrents/aria2.log"
-    aria2c --continue --dir="~/Downloads/Torrents" --log="~/Downloads/Torrents/aria2.log" $1
+    [ ! -d ~/Downloads/Torrents ] && mkdir -p ~/Downloads/Torrents
+    [ ! -f ~/Downloads/Torrents/aria2.log ] && touch ~/Downloads/Torrents/aria2.log
+    aria2c --continue --dir=~/Downloads/Torrents --log=~/Downloads/Torrents/aria2.log "$1"
 }
-
 # ========
 # FUNCTION :: restore the system
 # The aim of the script is to do nothing when the system is OK
@@ -291,7 +289,7 @@ restore-system(){
     echo -e "checking PACMAN packages"
     for i in ${NEED_TO_BE_INSTALLED[*]}; do
         # check and give feedback on what's missing
-        [ ! -x "$(which \"$i\")" ] && echo -e "$i :: not found on the filesystem despite installation"
+        [ ! -x "$(which $i)" ] && echo -e "$i :: not found on the filesystem despite installation"
     done
 
     # PYTHON
@@ -301,7 +299,7 @@ restore-system(){
     echo -e "PYTHON"
 
     if [ ! -x "/usr/bin/pip" ] && [ ! -x "/usr/bin/pip3" ] ; then
-        echo "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
+        echo -e "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
         return 1
     fi
 
@@ -319,21 +317,21 @@ restore-system(){
     for i in ${PY[*]}; do
         # configuration for scripts
         # if it exists, ignore
-        sudo pip install --quiet --exists-action i $i
+        sudo pip install --quiet --exists-action i "$i"
     done
 
     echo -e "checking PIP packages"
 
     for i in ${PY[*]}; do
-        [ ! -x "$(which \"$i\")" ] && echo -e "$i :: not present on the system"
+        [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
     done
 
     # python virtual env
     echo -e "checking virtual env"
 
-    if [ ! -d ${HOME}/'.pyenv' ] && [ ! -x "$(which pyenv)" ]; then
+    if [ ! -d ~/.pyenv ] && [ ! -x "$(which pyenv)" ]; then
         echo -e "PYENV not detected\ninitiating ... "
-        git clone "https://github.com/pyenv/pyenv.git" "${HOME}/.pyenv"
+        git clone "https://github.com/pyenv/pyenv.git" ~/.pyenv
         pyenv global "3.5.0"
         echo -e 'global python 3.5.0 activated'
     else
@@ -357,14 +355,14 @@ restore-system(){
         local RB=(mdl sqlint rubocop)
 
         for i in ${RB[*]}; do
-            [ ! -x "$(which \"$i\")" ] && sudo gem install "$i"
+            [ ! -x "$(which $i)" ] && sudo gem install "$i"
         done
 
         # check and give feedback on what's missing
         echo -e "checking RUBY gems"
 
         for i in ${RB[*]}; do
-            [ ! -x "$(which \"$i\")" ] && echo -e "$i :: not present on the system"
+            [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
         done
 
     fi
@@ -386,7 +384,7 @@ restore-system(){
                                "js-beautify" textlint)
 
         for i in ${JS[*]}; do
-            if [ ! -x "$(which \"$i\")" ]; then
+            if [ ! -x "$(which $i)" ]; then
                 sudo npm install "$i" -g
             fi
         done
@@ -407,9 +405,9 @@ restore-system(){
 
             # custom plugins
 
-            [ ! -d "${HOME}/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" "${HOME}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-            [ ! -d "${HOME}/.oh-my-zsh/custom/plugins/zsh-completions" ] && git clone "https://github.com/zsh-users/zsh-completions" "${HOME}/.oh-my-zsh/custom/plugins/zsh-completions"
-            [ ! -d "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${HOME}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+            [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+            [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
+            [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
             # source it
             zsh -c ~/.zshrc
@@ -445,7 +443,7 @@ restore-system(){
         cp -R /tmp/nvim/* ~/.config/nvim/
 
         # from vim-plug [github]
-        curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+        curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 
         # here the init.vim file will be sourced to initialise the whole setup
         # nvim -c "~/.config/nvim/init.vim"
@@ -453,20 +451,20 @@ restore-system(){
 
     elif [ ! -x "/usr/bin/nvim" ] ; then
 
-        echo "neovim not detected on the filesystem.\n the installation will continue\nbut you will have to make sure neovim is installed to use plugins"
+        echo -e "neovim not detected on the filesystem.\n the installation will continue\nbut you will have to make sure neovim is installed to use plugins"
 
     fi
 
     # TMUX
     # check if tmux plugin manager dir is present
-    if [ -x /usr/bin/tmux ] && [ ! -d "~/.tmux/plugins/tpm" ] ; then
+    if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ] ; then
 
         echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
-        git clone "https://github.com/tmux-plugins/tpm" "~/.tmux/plugins/tpm"
+        git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
 
     else
 
-        echo "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
+        echo -e "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
 
         sleep 5
 
@@ -476,9 +474,9 @@ restore-system(){
     echo "RESOURCING BASHRC"
     source ~/.bashrc
 
-    if [ -x "/usr/bin/dropbox" ] && [ -d "~/Dropbox" ] ; then
+    if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] ; then
 
-        if [ -x $(which mackup) ] && [ -L "~/.bashrc" ] && [ -L "~/.inputrc" ] ; then
+        if [ -x $(which mackup) ] && [ -L ~/.bashrc ] && [ -L ~/.inputrc ] ; then
 
             mackup restore
 
@@ -489,7 +487,7 @@ restore-system(){
 
         fi
 
-    elif [ ! -x "/usr/bin/dropbox" ] && [ ! -d "~/Dropbox" ] ; then
+    elif [ ! -x "/usr/bin/dropbox" ] && [ ! -d ~/Dropbox ] ; then
 
         echo -e "make sure DROPBOX is set up"
         return 1
@@ -639,8 +637,8 @@ backup-all-dotfiles()
         cp -i `readlink -f "${HOME}/${i}"` "${BACKUP}${i}"
     done
     for i in ${BACKUP_CONFIG_DOTFILES[*]}; do
-        mkdir -p $(dirname "${HOME}/.config/${i}") # attempt to make parent dir
-        cp -i  $(readlink -f "${HOME}/.config/${i}") "${BACKUP_CONFIG}${i}"
+        mkdir -p $(dirname ~/.config/$i) # attempt to make parent dir
+        cp -i  $(readlink -f ~/.config/$i) "${BACKUP_CONFIG}${i}"
     done
 }
 # ==========================================
