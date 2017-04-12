@@ -13,7 +13,7 @@
 # -w filename - Check if file is writable
 # -x filename - Check if file is executable
 #
-#       -b filename - Block special file
+# 	-b filename - Block special file
 #       -S filename - Check if file is socket
 #       -s filename - Check if file is nonzero size
 #       -c filename - Special character file
@@ -42,13 +42,10 @@ DARKYELLOW="\e[33m"
 GREY="\e[37m"
 DARKGREY="\e[90m"
 
-
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
 # prompt
 export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] "
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash # initialise fzf
 
 [ -d ~/bash_it ] && [ -f ~/bash_it/.bash_it.sh ] && source ~/bash_it/bash_it.sh    # Load Bash-It
 
@@ -70,7 +67,18 @@ export GREP_COLOR='1;33'
 #   -F (-F or --quit-if-one-screen) Auto exit if <1 screen
 #   -X (-X or --no-init) Disable termcap init & deinit
 
+man(){
+    LESS_TERMCAP_md=$'\e[01;31m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;44;33m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[01;32m' \
+    command man "$@"
+}
+
 #export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+
 if [ -x /usr/bin/less ]; then
     export PAGER=less
     export LESS=' -R '
@@ -78,6 +86,7 @@ if [ -x /usr/bin/less ]; then
 else
     export PAGER=more
 fi
+
 [ -x "/usr/bin/bash" ] && export SHELL=/usr/bin/bash || export SHELL=/usr/bin/sh
 [ -x "/usr/bin/google-chrome-stable" ] && export BROWSER='/usr/bin/google-chrome-stable'
 [ -x "/usr/bin/alacritty" ] && export TERMINAL='/usr/bin/alacritty' || [ -x "/usr/bin/xterm" ] && export TERMINAL='/usr/bin/xterm'
@@ -88,28 +97,33 @@ fi
 [ -d ~/go/bin ] && GO_BINS=${HOME}'/go/bin' || GO_BINS=''
 [ -d ~/bin ] && MY_BINS=${HOME}'/bin' || MY_BINS=''
 
-
 # this is ok because if these don't exist strings will be empty
 export PATH="${PATH}:${RUBY_BINS}:${RUST_BINS}:${MY_BINS}:${GO_BINS}:${PHP_BINS}"
 
-[ -x "/usr/bin/ranger" ] && [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
+# ranger 
+[ -x /usr/bin/ranger ] && alias r='ranger'
+[ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false 
 
-[ -x $(which emacs) ] && export EDITOR="/usr/bin/emacs -nw"
-
-if [ -x "/usr/bin/nvim" ]; then
-    # export MANPAGER="nvim -c 'set ft=man' -"
-    # export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-    # export EDITOR=/usr/bin/nvim
-    alias vi=/usr/bin/nvim
-    alias vim=/usr/bin/nvim
-else # if not nvim check if vim
-    if [ -x "/usr/bin/vim" ]; then
-        alias vi=/usr/bin/vim
-        # export EDITOR=/usr/bin/vim
-        alias nvim=/usr/bin/vim
-    fi
+if [ -x /usr/bin/nvim ]; then # if neovim 
+	# export MANPAGER="nvim -c 'set ft=man' -"
+	# export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+	export EDITOR=/usr/bin/nvim
+	alias vim=/usr/bin/nvim
+	alias vi=/usr/bin/nvim
+else # if not neovim check if vim
+	if [ -x /usr/bin/vim ]; then # if vim but not neovim
+		alias nvim=/usr/bin/vim
+		alias vi=/usr/bin/vim
+		export EDITOR=/usr/bin/vim
+	elif [ -x /usr/bin/vi ] ; then # if not neovim and not vim then fall back on vi
+		export EDITOR=/usr/bin/vi
+		alias vim=vi
+		alias nvim=vi
+	fi
 fi
 
+# fall back on emacs if not vi and not vim and not neovim
+[ -x /usr/bin/emacs ] && [ ! -x /usr/bin/vim ] && [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vi ] && export EDITOR="/usr/bin/emacs -nw"
 
 if [ -x "/usr/bin/fzf" ]; then
     alias p=$(which FZFpkill)
@@ -132,7 +146,7 @@ fi
 
 # OTHER SHELLS
 [ -x "/usr/bin/zsh" ] && alias z=zsh
-[ -x $(which xonsh) ] && alias x=xonsh
+alias x=xonsh
 
 # ---------
 #  GIT
@@ -151,7 +165,6 @@ echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"
 #bind Space:magic-space # also combine these with :h (head) or :t (tail) to get path selective path expansion -> !$:h
 
 [ -x "/usr/bin/ag" ] && alias ag='ag --hidden --pager="less -MIRFX"'  # search with dotfiles
-[ -x "/usr/bin/ranger" ] && alias r='ranger'
 
 # =======
 # ALIASES
@@ -165,7 +178,6 @@ alias la='ls -la --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --colo
 alias le="ls -lo"
 alias ll='ls -l --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
-
 
 alias -- -='cd -'        # Go back
 alias ..="cd .."
@@ -187,8 +199,9 @@ alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \
 [ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 [ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor"
 [ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"
-[ -x /usr/bin/aria2c ] && alias aria2c="aria2c --dir=~/Downloads/Torrent/"
 [ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"
+[ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2.log\""
+
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
@@ -233,7 +246,7 @@ tib(){
 # The output gets piped into `less` with options to preserve color and line numbers,
 # unless the output is small enough for one screen.
 # REQUIRES :: tree
-tre(){
+T(){
     tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
 

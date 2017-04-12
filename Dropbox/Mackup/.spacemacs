@@ -2,10 +2,10 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
-(defun dotspacemacs/layers ()
+(defun Dotspacemacs/layers ()
   "Configuration Layers declaration.
  You should not put any user code in this function besides modifying the variable
- values."
+ valuesjjjSDLKF"
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
@@ -38,31 +38,23 @@
      ;; ----------------------------------------------------------------
 
      helm
-     ranger
      syntax-checking
      auto-completion
      better-defaults
-
-     pandoc
      markdown
      org
      yaml
-
      vimscript
      emacs-lisp
      python
-
      shell-scripts
-
      git
      github
      version-control
      shell
-
      html
      javascript
      php
-
      ;; spell-checking
      (shell :variables
             shell-default-height 30
@@ -276,11 +268,11 @@
    dotspacemacs-folding-method 'evil
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
-   dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-smartparens-strict-mode t
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc…
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
-   dotspacemacs-smart-closing-parenthesis nil
+   dotspacemacs-smart-closing-parenthesis t
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
@@ -314,12 +306,12 @@
   (custom-set-variables
 
    '(spacemacs/toggle-centered-point-globally-on)
-   '(vc-follow-symlinks)
+   ;; '(vc-follow-symlinks)
 
    '(spacemacs-theme-custom-colors
      '((bg1 . "#000000")
        (comment-bg . "#000000")
-       (const . "#ffff00")
+a      (const . "#ffff00")
        (type . "#AA00FF")
        (func . "#ffa600")
        (highlight . "#403D3D")))
@@ -350,10 +342,11 @@
   (spacemacs/set-leader-keys "8" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-8)
   (spacemacs/set-leader-keys "9" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-9)
   (spacemacs/set-leader-keys "0" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-0)
+
   ;; auto-save sessions
   (desktop-save-mode)
   ;; automatically read the last session
-  (desktop-read)
+  ;; (desktop-read)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -365,7 +358,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yapfify web-mode web-beautify tagedit slim-mode scss-mode sass-mode pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pandoc-mode ox-pandoc livid-mode skewer-mode simple-httpd live-py-mode less-css-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode helm-pydoc helm-css-scss haml-mode emmet-mode cython-mode company-web web-completion-data company-tern dash-functional tern company-anaconda coffee-mode anaconda-mode pythonic magit-gh-pulls github-search github-clone github-browse-file gist gh marshal logito pcache ht intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode insert-shebang fish-mode company-shell yaml-mode xterm-color ws-butler winum which-key volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org spaceline smeargle shell-pop restart-emacs ranger rainbow-delimiters popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav dumb-jump drupal-mode diff-hl define-word dactyl-mode company-statistics column-enforce-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (projectile f helm helm-core avy yapfify web-mode web-beautify tagedit slim-mode scss-mode sass-mode pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pandoc-mode ox-pandoc livid-mode skewer-mode simple-httpd live-py-mode less-css-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode helm-pydoc helm-css-scss haml-mode emmet-mode cython-mode company-web web-completion-data company-tern dash-functional tern company-anaconda coffee-mode anaconda-mode pythonic magit-gh-pulls github-search github-clone github-browse-file gist gh marshal logito pcache ht intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode insert-shebang fish-mode company-shell yaml-mode xterm-color ws-butler winum which-key volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org spaceline smeargle shell-pop restart-emacs ranger rainbow-delimiters popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav dumb-jump drupal-mode diff-hl define-word dactyl-mode company-statistics column-enforce-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(paradox-github-token t)
  '(spacemacs-theme-custom-colors
    (quote
