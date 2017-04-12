@@ -112,7 +112,7 @@ fi
 
 
 if [ -x "/usr/bin/fzf" ]; then
-    alias p=FZFpkill
+    alias p=$(which FZFpkill)
     export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
     [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
     alias launcher='find /bin/ ~/.cargo/bin/ ~/.gem/ruby/2.4.0/bin/ ~/.npm/ -executable -type f -exec basename {} \; 2>/dev/null | fzf  --multi -x --bind "enter:execute({}&)"'
@@ -122,8 +122,8 @@ fi
 
 # Pacman
 if [ -x "/usr/bin/pacman" ]; then
-    [ -x $(which expac) ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
-    [ -x $(which expac) ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
+    [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
+    [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
     alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
     alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
     alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"

@@ -31,36 +31,44 @@
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     haskell
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
 
-     yaml
-     vimscript
      helm
-     php
+     ranger
+     syntax-checking
      auto-completion
      better-defaults
-     emacs-lisp
-     ;; colors :variables colors-colorize-identifiers 'all
-     git
+
+     pandoc
      markdown
      org
-     shell
+     yaml
+
+     vimscript
+     emacs-lisp
+     python
+
      shell-scripts
-     syntax-checking
+
+     git
+     github
      version-control
      shell
-     ;; spell-checking
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
 
-     ;; auto-completion
-     ;; better-defaults
+     html
+     javascript
+     php
+
+     ;; spell-checking
+     (shell :variables
+            shell-default-height 30
+            shell-default-shell 'shell
+            shell-default-position 'full)
+
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -143,7 +151,7 @@
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '("monospace"
                                :size 18
                                :weight normal
                                :width normal
@@ -330,7 +338,7 @@
   (spacemacs/set-leader-keys "am" 'man)
   (define-key evil-normal-state-map (kbd "C-l") 'split-window-right)
   (global-set-key (kbd "C-x C-f") 'helm-locate)
-  (global-set-key (kbd "C-x C-a") 'helm-do-ag)
+  (global-set-key (kbd "C-x C-a") 'helm-do-ag-project-root)
   (spacemacs/set-leader-keys "/" 'helm-swoop)
   (spacemacs/set-leader-keys "1" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-1)
   (spacemacs/set-leader-keys "2" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-2)
@@ -342,6 +350,10 @@
   (spacemacs/set-leader-keys "8" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-8)
   (spacemacs/set-leader-keys "9" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-9)
   (spacemacs/set-leader-keys "0" 'spacemacs/layouts-transient-state/spacemacs/persp-switch-to-0)
+  ;; auto-save sessions
+  (desktop-save-mode)
+  ;; automatically read the last session
+  (desktop-read)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -353,7 +365,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode insert-shebang fish-mode company-shell yaml-mode xterm-color ws-butler winum which-key volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org spaceline smeargle shell-pop restart-emacs ranger rainbow-delimiters popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav dumb-jump drupal-mode diff-hl define-word dactyl-mode company-statistics column-enforce-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
+    (yapfify web-mode web-beautify tagedit slim-mode scss-mode sass-mode pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pandoc-mode ox-pandoc livid-mode skewer-mode simple-httpd live-py-mode less-css-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode helm-pydoc helm-css-scss haml-mode emmet-mode cython-mode company-web web-completion-data company-tern dash-functional tern company-anaconda coffee-mode anaconda-mode pythonic magit-gh-pulls github-search github-clone github-browse-file gist gh marshal logito pcache ht intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode insert-shebang fish-mode company-shell yaml-mode xterm-color ws-butler winum which-key volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org spaceline smeargle shell-pop restart-emacs ranger rainbow-delimiters popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav dumb-jump drupal-mode diff-hl define-word dactyl-mode company-statistics column-enforce-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(paradox-github-token t)
  '(spacemacs-theme-custom-colors
    (quote
