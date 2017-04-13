@@ -13,11 +13,16 @@
 # -w filename - Check if file is writable
 # -x filename - Check if file is executable
 #
+# TODO 
+# separate vimrc and init.vim files in that bash function 
+# {{{
 [ -z "$PS1" ] && return   #  If not running interactively, don't do anything
 
 [[ $- != *i* ]] && return   #  If not running interactively, don't do anything
 
-# set variables to produce colored output later
+# }}}
+
+# set variables to produce colored output later {{{
 RED="\e[31m"
 CYAN="\e[96m"
 DARKMAGENTA="\e[35m"
@@ -49,15 +54,15 @@ export HISTCONTROL=ignoredups
 # The pattern is tested against the line after the checks specified by HISTCONTROL are applied. 
 # In addition to the normal shell pattern matching characters, `&' matches the previous  history  line. 
 # The pattern  matching honors the setting of the extglob shell option.
-export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:jobs" # a colon separated list of items to ignore 
+export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:jobs" # a colon separated list of items to ignore  }}}
 
-# $IRC_CLIENT default to irssi and fall back on hexchat
+# $IRC_CLIENT default to irssi and fall back on hexchat {{{
 [ -x /usr/bin/irssi ] && export IRC_CLIENT='irssi'
-[ ! -x /usr/bin/irssi ] && [ -x /usr/bin/hexchat ] && export IRC_CLIENT='hexchat'
+[ ! -x /usr/bin/irssi ] && [ -x /usr/bin/hexchat ] && export IRC_CLIENT='hexchat' # }}}
 
 export GREP_COLOR='1;33'
 
-# LESS
+# LESS {{{
 
 #   -M (-M or --LONG-PROMPT) Prompt very verbosely
 #   -I (-I or --IGNORE-CASE) Searches with '/' ignore case
@@ -69,8 +74,9 @@ export GREP_COLOR='1;33'
 [ -f /usr/bin/source-highlight-esc.sh ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 [ -x /usr/bin/less ] && alias less='less -x4RFsX' && export PAGER=less
 [ ! -x /usr/bin/less ] && [ -x /usr/bin/more ] && export PAGER=more && alias less=more
+# }}}
 
-# REALINE aka INPUTRC # generate if not present and add configuration
+# REALINE aka INPUTRC # generate if not present and add configuration {{{
 if [ ! -f ~/.inputrc ] ; then 
     cat /etc/inputrc >> ~/.inputrc
     echo "set expand-tilde on" >> ~/.inputrc
@@ -85,15 +91,21 @@ if [ ! -f ~/.inputrc ] ; then
     echo "set show-all-if-unmodified on" >> ~/.inputrc
     echo "set colored-completion-prefix on" >> ~/.inputrc
 fi
+# }}}
 
-# $BROWSER 
-[ -x /usr/bin/google-chrome-stable ] && export BROWSER='/usr/bin/google-chrome-stable'
+# $PATH {{{
 
-# $PATH 
 [ -d  /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
-[ -x /usr/bin/ruby ] && RUBY_BINS=${HOME}'/.gem/ruby/2.4.0/bin' || RUBY_BINS=''
+[ -d ~/.gem/rubu/2.4.0/bin ] && export PATH=${PATH}:"/.gem/ruby/2.4.0/bin"
+[ -d ~/.cargo/bin ] && export PATH=${PATH}:"/.cargo/bin"
+[ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"/.config/composer/vendor/bin"
+[ -d ~/go/bin ] && export PATH=${PATH}:"/go/bin"
+[ -d ~/bin ] && export PATH=${PATH}:"/bin"
 
-# ranger 
+# }}}
+
+# ranger {{{
+
 if [ ! -x /usr/bin/ranger ] ; then 
     [ ! -f /tmp/nl253/ranger/ranger.py ] && mkdir -p /tmp/nl253/ranger && git clone 'https://github.com/ranger/ranger' /tmp/nl253/ranger 
     alias ranger='/tmp/nl253/ranger/ranger.py'
@@ -101,16 +113,7 @@ if [ ! -x /usr/bin/ranger ] ; then
 fi
 [ -x /usr/bin/ranger ] && alias r='ranger'
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false 
-
-# PATH 
-[ -d /.cargo/bin ] && RUST_BINS=${HOME}'/.cargo/bin' || RUST_BINS=''
-[ -d /.config/composer/vendor/bin ] && PHP_BINS=${HOME}'/.config/composer/vendor/bin' || PHP_BINS=""
-[ -d ~/go/bin ] && GO_BINS=${HOME}'/go/bin' || GO_BINS=''
-[ -d ~/bin ] && MY_BINS=${HOME}'/bin' || MY_BINS=''
-
-# this is ok because if these don't exist strings will be empty
-export PATH="${PATH}:${RUBY_BINS}:${RUST_BINS}:${MY_BINS}:${GO_BINS}:${PHP_BINS}"
-
+# }}}
 
 # $EDITOR 
 
@@ -118,11 +121,24 @@ if [ -x /usr/bin/nvim ]; then # if neovim
     export EDITOR=/usr/bin/nvim
     alias vim=/usr/bin/nvim
     alias vi=/usr/bin/nvim
+
+    # set up vim plugins
+    if [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] ; then 
+	curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+	    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    fi
+
 else # if not neovim check if vim
     if [ -x /usr/bin/vim ]; then # if vim but not neovim
+	export EDITOR=/usr/bin/vim
 	alias nvim=/usr/bin/vim
 	alias vi=/usr/bin/vim
-	export EDITOR=/usr/bin/vim
+    # set up vim plugins
+    if [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] ; then 
+	curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+	    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    fi
+
     elif [ -x /usr/bin/vi ] ; then # if not neovim and not vim then fall back on vi
 	export EDITOR=/usr/bin/vi
 	alias vim=vi
@@ -132,71 +148,20 @@ fi
 
 # generate vimrc and add all the necessary configuration
 
-if [ ! -f ~/.vimrc ] ; then 
+# if [ ! -f ~/.vimrc ] && [ ! -f ~/.config/nvim/init.vim ]; then 
     # make a dotfile if missing
-    touch ~/.vimrc
-    # make a link if there isn't any configuration / a link 
-    [ -x /usr/bin/nvim ] && [ ! -e ~/.config/nvim/init.vim ] && ln -s ~/.vimrc ~/.config/nvim/init.vim
-    echo 'set clipboard=unnamed,unnamedplus' >> ~/.vimrc
-    echo 'set path+=~/,./**,/*' >> ~/.vimrc
-    [ -d ${HOME}"/nl253" ] && echo 'set path+=~/nl253/' >> ~/.vimrc
-    echo 'let loaded_matchit = 1' >> ~/.vimrc
-    echo 'let mapleader = " "' >> ~/.vimrc
+    # use BOTH init.vim and vimrc with the majority being stored in init.vim and vim sourcing it later
+    # touch ~/.vimrc
+    # mkdir -p ~/.config/nvim 
+    # touch ~/.config/nvim/init.vim
+    # echo 'set clipboard=unnamed,unnamedplus path+=~/**' >> ~/.config/nvim/init.vim
+    # echo 'let loaded_matchit = 1' >>  ~/.config/nvim/init.vim # loads addtional % functionality
+    # echo 'let mapleader = " "' >> ~/.config/nvim/init.vim
     # echo 'set grepformat=%f:%l:%c:%m,%f:%l:%m' >> ~/.vimrc
-    [ -d /usr/share/dict/ ] && [ ! ~/.vim-dict ] && cat /usr/share/dict/* | sort | uniq > ~/.vim-dict && echo 'set dictionary=~/.vim-dict' >> ~/.vimrc
-    echo 'set complete=.,w' >> ~/.vimrc
-    echo 'set foldmethod=marker' >> ~/.vimrc
-    echo 'set completeopt=menuone,longest,preview,noinsert' >> ~/.vimrc
-    echo 'set diffopt=filler,vertical,iwhite' >> ~/.vimrc
-    echo 'set bufhidden=hide' >> ~/.vimrc
-    echo 'set autowriteall undofile hidden' >> ~/.vimrc
-    echo 'set shiftwidth=4' >> ~/.vimrc
-    echo 'set mps+=<:>' >> ~/.vimrc
-    echo 'aug VIM' >> ~/.vimrc
-    # echo 'au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif' >> ~/.vimrc # issues with parsing
-    echo 'au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif' >> ~/.vimrc
-    echo 'au FileType * if exists("+completefunc") && &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif' >> ~/.vimrc
-    echo 'au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry' >> ~/.vimrc
-    echo 'aug END' >> ~/.vimrc
-    echo 'nnoremap <Leader>j :jumps<CR>' >> ~/.vimrc
-    echo 'nnoremap <Leader>r :registers<CR>' >> ~/.vimrc
-    echo 'nnoremap <Leader>t :tags<CR>' >> ~/.vimrc
-    echo 'nnoremap <Leader>c :changes<CR>' >> ~/.vimrc
-    echo 'nnoremap <Leader>m :marks<CR>' >> ~/.vimrc
-    echo 'cnoremap <C-E> <End>' >> ~/.vimrc
-    echo 'cnoremap <C-A> <Home>' >> ~/.vimrc
-    echo 'inoremap <C-A> <Home>' >> ~/.vimrc
-    echo 'inoremap <C-E> <End>' >> ~/.vimrc
+   # [ -d /usr/share/dict/ ] && [ ! ~/.vim-dict ] && cat /usr/share/dict/* | sort | uniq > ~/.vim-dict && echo 'set dictionary=~/.vim-dict' >> ~/.vimrc
 
-    if [ ! -x /usr/bin/nvim ] ; then 
-	# set neovim defaults 
-	echo 'set nocompatible' >> ~/.vimrc
-	echo 'set filetype=on' >> ~/.vimrc
-	echo 'set magic' >> ~/.vimrc
-	echo 'set syntax=on' >> ~/.vimrc
-	echo 'syntax enable' >> ~/.vimrc
-	echo 'filetype plugin indent on' >> ~/.vimrc
-	echo 'set encoding=utf8' >> ~/.vimrc
-	echo 'set autoindent incsearch tags ttyfast viminfo hlsearch autoread' >> ~/.vimrc
-	echo 'set display=lastline' >> ~/.vimrc
-	echo 'set tabpagemax=50' >> ~/.vimrc
-	echo 'set nrformats=bin,hex' >> ~/.vimrc
-	echo 'set formatoptions=tcqj' >> ~/.vimrc
-	echo 'set complete-=i' >> ~/.vimrc
-    fi
-
-    # initialise colorscheme
-    if [ -e /usr/bin/nvim ] ; then  
-	[ ! -d ~/.vim/ ] && mkdir -p ~/.vim
-	[ ! -f ~/.vim/colors/antares.vim ] && git clone "https://github.com/flazz/vim-colorschemes.git" ~/.vim
-	[ -f ~/.vim/colors/antares.vim ] && echo 'source ~/.vim/colors/antares.vim' >> ~/.vimrc && echo 'set termguicolors' >> ~/.vimrc
-	[ -x /usr/bin/nvim ] && echo 'tnoremap <Esc> <C-\><C-n>' >> ~/.vimrc
-    fi
-fi
-
-
-if [ -x /usr/bin/fzf ]; then
-    alias p=$(which FZFpkill)
+if [ -x /usr/bin/fzf ]; then # {{{
+    alias p=FZFpkill
     export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
     [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
     alias recent-files='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v ".dropbox" | grep -v "%" | fzf '
@@ -204,7 +169,9 @@ else
     alias recent-files='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v ".dropbox" | grep -v "%"'
 fi
 
-# pacman
+# }}}
+
+# pacman {{{
 if [ -x /usr/bin/pacman ]; then
     [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
     [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
@@ -213,16 +180,20 @@ if [ -x /usr/bin/pacman ]; then
     alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
     [ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
+# }}}
 
-# ZSH
+# ZSH {{{
 [ -x /usr/bin/zsh ] && alias z=zsh
 alias x=xonsh
+# }}}
 
 # ---------
-#  GIT
+#  GIT {{{
 # ---------
 [ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
 [ -x /usr/bin/tig ] && alias t=tig
+
+# }}}
 
 # Caps Lock is Control on a GB keyboard #setxkbmap -option ctrl:swapcaps # for US
 setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}" 
@@ -231,7 +202,7 @@ setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped
 
 # =======
 # ALIASES
-# =======
+# =======  {{{ 
 
 alias e=$EDITOR
 alias l='ls -CFa'
@@ -277,7 +248,7 @@ alias f="find-extension"
 
 alias http-server="python3 -m http.server"
 
-# ===============
+# =============== }}}
 # SCRIPTS
 #
 # NOTE
@@ -286,7 +257,7 @@ alias http-server="python3 -m http.server"
 
 # ===============
 # FUNCTION :: aliases for multi-word tig commands
-# REQUIRES :: tig
+# REQUIRES :: tig {{{
 tis(){
     tig status
 }
@@ -298,8 +269,8 @@ til(){
 tib(){
     tig blame -C
 }
-# ========
-# FUNCTION :: restore the system
+# ======== }}}
+# FUNCTION :: restore the system {{{
 # The aim of the script is to do nothing when the system is OK
 # and restore the whole system when it's just been reinstalled.
 #
@@ -548,7 +519,7 @@ fi
 
 }
 
-# ==============================
+# ============================== }}}
 # FUNCTION {{{
 # print in a JSON format a dict with your IP
 # and other details about the network you are on
@@ -560,19 +531,18 @@ else
     curl ipinfo.io/${ipawk[1]}
 fi
 }
-# }}}
-# ==============================
-# FUNCTION  :: prints the 256 colors with their corresponding numbers
+# ============================== }}}
+# FUNCTION  :: prints the 256 colors with their corresponding numbers {{{
 show-colors(){
 (x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done)
 }
-# ==============================
-# FUNCTION  :: shows terminal capabilities
+# ============================== }}}
+# FUNCTION  :: shows terminal capabilities {{{
 show-term-capabilities(){
 infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80
 }
-# ==============================
-# FUNCTION  :: general purpose archive extracting
+# ============================== }}}
+# FUNCTION  :: general purpose archive extracting {{{
 # USAGE: ex <file>
 # REQUIRES :: pygmentize (can be optional) :: ag for find-shell
 ex (){
@@ -596,11 +566,11 @@ ex (){
     fi
 }
 
-# ==============================
+# ============================== }}}
 
 # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
 
-# make sure zsh isn't able to source it
+# make sure zsh isn't able to source it {{{
 if [ ! -n "${ZSH+2}" ]; then
     complete -cf sudo
     shopt -s autocd        
@@ -616,4 +586,5 @@ if [ ! -n "${ZSH+2}" ]; then
     shopt -s histappend     # Append each session's history to $HISTFILE
     shopt -s histverify     # Edit a recalled history line before executing
 fi
+# }}}
 

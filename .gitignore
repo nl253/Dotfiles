@@ -121,7 +121,6 @@ Dropbox/Backup/.ipython/profile_default/db/dhist
 Dropbox/Backup/.ipython/profile_default/his*
 Dropbox/Backup/.vim
 Dropbox/Backup/UltiSnips
-Dropbox/Backup/external-dotfiles/external-bashrc.sh
 Dropbox/Backup/installed-at-raptor.txt
 Dropbox/BackupUtils
 Dropbox/CrispyLand
@@ -132,6 +131,7 @@ Dropbox/Mackup/.oh-my-zsh
 Dropbox/Mackup/.vim
 Dropbox/gitignore
 Dropbox/nl253
+# Main folders 
 IdeaProjects
 Pictures
 Raptor
