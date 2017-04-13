@@ -15,14 +15,12 @@
 #
 # TODO 
 # separate vimrc and init.vim files in that bash function 
-# {{{
-[ -z "$PS1" ] && return   #  If not running interactively, don't do anything
-
-[[ $- != *i* ]] && return   #  If not running interactively, don't do anything
-
+# {{{  #  If not running interactively, don't do anything
+[ -z "$PS1" ] && return 
+[[ $- != *i* ]] && return   
 # }}}
 
-# set variables to produce colored output later {{{
+# COLORS # set variables to produce colored output later {{{
 RED="\e[31m"
 CYAN="\e[96m"
 DARKMAGENTA="\e[35m"
@@ -35,6 +33,7 @@ YELLOW="\e[93m"
 DARKYELLOW="\e[33m"
 GREY="\e[37m"
 DARKGREY="\e[90m"
+# }}}
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
@@ -44,6 +43,7 @@ export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput seta
 unset MAILCHECK                         # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s)    # Set Xterm/screen/Tmux title with only a short hostname
 
+# HISTORY {{{
 export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups
@@ -60,7 +60,7 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:jobs" # a colon separated 
 [ -x /usr/bin/irssi ] && export IRC_CLIENT='irssi'
 [ ! -x /usr/bin/irssi ] && [ -x /usr/bin/hexchat ] && export IRC_CLIENT='hexchat' # }}}
 
-export GREP_COLOR='1;33'
+export GREP_COLOR='1;33' # makes it yellow # by default red 
 
 # LESS {{{
 
@@ -106,7 +106,7 @@ fi
 
 # ranger {{{
 
-if [ ! -x /usr/bin/ranger ] ; then 
+if [ ! -x /usr/bin/ranger ] ; then # check if ranger is installed, if not use a git-workaround 
    [ ! -f /tmp/nl253/ranger/ranger.py ] && mkdir -p /tmp/nl253/ranger && git clone 'https://github.com/ranger/ranger' /tmp/nl253/ranger 
    alias ranger='/tmp/nl253/ranger/ranger.py'
    alias r='/tmp/nl253/ranger/ranger.py'
@@ -116,7 +116,7 @@ fi
 # }}}
 
 # $EDITOR 
-# initialise vim / nvim / vi # set aliases # set $EDITOR
+# initialise vim / nvim / vi # set aliases {{{
 
 if [ -x /usr/bin/nvim ]; then # if neovim 
    export EDITOR=/usr/bin/nvim
@@ -146,14 +146,17 @@ else # if not neovim check if vim
       alias nvim=vi
    fi
 fi
+# }}}
 
-if [ -x /usr/bin/fzf ]; then # {{{
+
+if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
    alias p=FZFpkill
    export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
    [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-   alias recent-files='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v ".dropbox" | grep -v "%" | fzf '
+   # list recent
+   alias lr='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v ".dropbox" | grep -v "%" | fzf '
 else
-   alias recent-files='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v ".dropbox" | grep -v "%"'
+   alias lr='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v ".dropbox" | grep -v "%"'
 fi
 
 # }}}
@@ -187,9 +190,7 @@ setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped
 
 [ -x "/usr/bin/ag" ] && alias ag='ag --hidden --pager="less -MIRFX"'  # search with dotfiles
 
-# =======
-# ALIASES
-# =======  {{{ 
+# ALIASES {{{ 
 
 alias e=$EDITOR
 alias l='ls -CFa'
@@ -213,10 +214,11 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
 
-[ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
-[ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor"
-[ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"
-[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"
+[ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system 
+[ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
+[ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white" # dmenu # a good alternative to rofi
+[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB" 
+# set up logging and a default location for download of Torrents :: ~/Downloads/Torrents/
 [ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2.log\""
 
 alias df='df --human-readable --si'
@@ -236,6 +238,7 @@ alias f="find-extension"
 alias http-server="python3 -m http.server"
 
 # =============== }}}
+
 # SCRIPTS
 #
 # NOTE
@@ -243,8 +246,9 @@ alias http-server="python3 -m http.server"
 # as they are preinstalled on practically every UNIX system
 
 # ===============
-# FUNCTION :: aliases for multi-word tig commands
-# REQUIRES :: tig {{{
+# FUNCTION :: TIG :: aliases for multi-word tig commands {{{ 
+
+# REQUIRES :: 
 tis(){
    tig status
 }
@@ -257,6 +261,7 @@ tib(){
    tig blame -C
 }
 # ======== }}}
+
 # FUNCTION :: restore the system {{{
 # The aim of the script is to do nothing when the system is OK
 # and restore the whole system when it's just been reinstalled.
@@ -266,40 +271,38 @@ restore-system(){
 
 [ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux."
 
-local NEED_TO_BE_INSTALLED=("git" "git-imerge" "git-extras" \
-   "intellij-idea-community-edition" \
-   "lshw" "less" "nvim" "spotify" "sncli" \
+local NEED_TO_BE_INSTALLED=(\ # list of pacman packages 
+   "aria2c" "cronie" "fdupes" "ddupes" \
+   "aspell" "bluej" "bashmount" "bmenu" \
+   "aspell-en" "ca-certificates" "ctags" \
+   "crontab" "psysh" "emacs" "cmake" \
+   "csslint" "thinkfinger" "the_silver_searcher" \
+   "curl" "dos2unix" "pdftotext" "make" \
+   "freetype2" "fontconfig" "pkg-config" \
+   "ghc-mod" "cabal" "node" "gawk" "i3" \
+   "git" "git-imerge" "git-extras" "thinkfan" \
+   "google-chrome" "coreutils" "hub" "htop"
+   "intellij-idea-community-edition" "jdk-8" \
+   "lshw" "less" "nvim" "spotify" "astyle" \
+   "python" "tig"  "apacman" "yaourt" "tmux" \
+   "rofi" "stylish-haskell" "tidy" "tree" \
+   "sed" "pandoc" "openssh" "openvpn" "p7zip"
+   "thermald" "dropbox" "python-pip" "alsa-utils" \
+   "upower" "npm" "ruby" "gem" "timeshift" 
+   "wget" "curl" "wordnet" "xclip" "xclip"
+   "xf86-input-keyboard" "xf86-input-libinput" \
    "xf86-input-mouse" "xf86-input-synaptics" \
    "xf86-input-void" "xf86-video-intel" \
+   "xmonad" "autojump" "php" "sncli" "bashlint" \
    "xmonad-contrib" "xmonad-utils" "acpid" \
-   "aspell-en" "ca-certificates" "ctags" \
-   "aspell" "bluej" "bashmount" "bmenu" \
-   "ghc-mod" "cabal" "node" "gawk" "i3" \
-   "xmonad" "autojump" "php" \
-   "crontab" "psysh" "emacs" "cmake" \
-   "freetype2" "fontconfig" "pkg-config" "make" \
-   "csslint" "thinkfinger" "the_silver_searcher" \
-   "sed" "pandoc" "openssh" "openvpn" "p7zip" "astyle" \
-   "python" "tig"  "apacman" "yaourt" "tmux" \
-   "aria2c" "cronie" "fdupes" "ddupes" \
-   "rofi" "stylish-haskell" "tidy" "tree" \
-   "xf86-input-keyboard" "xf86-input-libinput" \
-   "thermald" "dropbox" "python-pip" \
-   "google-chrome" "coreutils" "hub" "htop" "jdk-8" \
-   "wget" "curl" "wordnet" "xclip" \
-   "upower" "npm" "ruby" "gem" "timeshift" "thinkfan" \
-   "xclip" "bashlint" "alsa-utils" \
-   "curl" "dos2unix" "pdftotext" \
    "perl" "shellcheck" "zsh")
 
-for i in ${NEED_TO_BE_INSTALLED[*]}; do
+for i in ${NEED_TO_BE_INSTALLED[*]}; do # quite mode # won't give feedback # won't install if already present and up-to-date
+   echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
    [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed "$i"
-done
-
-echo -e "checking PACMAN packages"
-for i in ${NEED_TO_BE_INSTALLED[*]}; do
-   # check and give feedback on what's missing
-   [ ! -x "$(which $i)" ] && echo -e "$i :: not found on the filesystem despite installation"
+   # echo -e "${MAGENTA}checking if installed ${DEFCOLOR}" # check if successfully installed
+   # [ ! -x "$(which $i)" ] && echo -e "$i :: not found on the filesystem despite installation"
+   # TODO this won't work becasue sometimes packages will have a different name then executables
 done
 
 # PYTHON
@@ -308,61 +311,55 @@ done
 
 echo -e "PYTHON"
 
-if [ ! -x "/usr/bin/pip" ] && [ ! -x "/usr/bin/pip3" ] ; then
+if [ ! -x /usr/bin/pip ] && [ ! -x /usr/bin/pip3 ] ; then # necessary for mackup
    echo -e "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
    return 1
 fi
 
 echo -e "PYTHON and PIP detected\ninstalling PYTHON packages"
 
-local PY=("mackup" "ranger" \
-   "pudb" "neovim" "jedi" \
-   "mypy" "xonsh" "xontrib-z" \
-   "psutil" "nltk" "pytest" "ipython" \
-   "you-get" "pandas" \
-   "spacy" "sumy" "fuzzywuzzy" \
-   "tensorflow" "numpy" \
-   "requests" "scrapy")
+local PY=("mackup" "ranger"  "requests" "scrapy" \
+   "pudb" "neovim" "jedi" "mypy" "spacy" "xonsh" "xontrib-z" \
+   "psutil" "nltk" "pytest" "ipython" "sumy" "fuzzywuzzy" \
+   "you-get" "pandas" "tensorflow" "numpy")
 
-for i in ${PY[*]}; do
-   # configuration for scripts
-   # if it exists, ignore
+for i in ${PY[*]}; do # iterate over pip packages install if not present
+   echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
    sudo pip install --quiet --exists-action i "$i"
-done
-
-echo -e "checking PIP packages"
-
-for i in ${PY[*]}; do
-   [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
+   # echo -e "checking PIP packages"
+   # [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
+   # TODO checking won't work becasue not all packages produce exectuables
 done
 
 # python virtual env
 echo -e "checking virtual env"
 
-if [ ! -d ~/.pyenv ] && [ ! -x "$(which pyenv)" ]; then
+if [ ! -x /usr/bin/pyenv ] && [ ! -x ~/.pyenv/bin/pyenv ] ; then
    echo -e "PYENV not detected\ninitiating ... "
    git clone "https://github.com/pyenv/pyenv.git" ~/.pyenv
+   pyenv install "3.5.0"
    pyenv global "3.5.0"
    echo -e 'global python 3.5.0 activated'
-else
+elif [ -x /usr/bin/pyenv ] || [ -x ~/.pyenv/bin/pyenv ] ; then 
+   # if pyenv present on system initiate python 3.5.0
    echo -e "PYENV detected continuing ..."
+   local PYENV_VERSION=$(pyenv version-name)
+   [ ! "${PYENV_VERSION}" = "3.5.0" ] && pyenv install "3.5.0" && pyenv global "3.5.0"
 fi
 
-echo -e "RUBY"
+echo -e "${RED}RUBY${DEFCOLOR}"
 
 # ruby
-if [ ! -x "/usr/bin/gem" ] || [ ! -x "/usr/bin/ruby" ] ; then
-
+if [ ! -x /usr/bin/gem ] || [ ! -x /usr/bin/ruby ] ; then
    echo -e "either RUBY or GEM was not detected on this filesystem"
    echo -e "make sure GEM is installed to install RUBY packages"
    echo -e "becasue RUBY is not cructial the script will continue"
-   sleep 5
-
-else
+   sleep 5 # sleep for long enough to see
+else # if both gem and ruby found
 
    echo -e "RUBY and GEM detected\ninstalling RUBY gems"
 
-   local RB=(mdl sqlint rubocop)
+   local RB=(mdl sqlint rubocop) # ruby gems
 
    for i in ${RB[*]}; do
       [ ! -x "$(which $i)" ] && sudo gem install "$i"
@@ -378,7 +375,7 @@ else
 fi
 
 # javascript
-if [ ! -x /usr/bin/npm ] ; then
+if [ ! -x /usr/bin/npm ] ; then 
 
    echo -e "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages"
    echo -e "because NPM and JAVASCRIPT aren't crucial, the script will continue "
@@ -521,7 +518,7 @@ fi
 # ============================== }}}
 # FUNCTION  :: prints the 256 colors with their corresponding numbers {{{
 show-colors(){
-(x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done)
+(x=$(tput op) y=$(printf %76s);for i in {0..256};do o=00"$i";echo -e ${o:${#o}-3:3} $(tput setaf "$i";tput setab "$i")${y// /=}"$x";done)
 }
 # ============================== }}}
 # FUNCTION  :: shows terminal capabilities {{{
@@ -533,19 +530,19 @@ infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc
 # USAGE: ex <file>
 # REQUIRES :: pygmentize (can be optional) :: ag for find-shell
 ex (){
-   if [ -f $1 ] && [ $# == 1 ] ; then
+   if [ -f "$1" ] && [ $# == 1 ] ; then
       case $1 in
-	 *.tar.bz2)   tar xjf $1   ;;
-	 *.tar.gz)    tar xzf $1   ;;
-	 *.bz2)       bunzip2 $1   ;;
-	 *.rar)       unrar x $1   ;;
-	 *.gz)        gunzip $1    ;;
-	 *.tar)       tar xf $1    ;;
-	 *.tbz2)      tar xjf $1   ;;
-	 *.tgz)       tar xzf $1   ;;
-	 *.zip)       unzip $1     ;;
-	 *.Z)         uncompress $1;;
-	 *.7z)        7z x $1      ;;
+	 *.tar.bz2)   tar xjf "$1"   	;;
+	 *.tar.gz)    tar xzf "$1"   	;;
+	 *.bz2)       bunzip2 "$1"   	;;
+	 *.rar)       unrar x "$1"   	;;
+	 *.gz)        gunzip "$1"    	;;
+	 *.tar)       tar xf "$1"    	;;
+	 *.tbz2)      tar xjf "$1"   	;;
+	 *.tgz)       tar xzf "$1"   	;;
+	 *.zip)       unzip "$1"     	;;
+	 *.Z)         uncompress "$1" 	;;
+	 *.7z)        7z x "$1"      	;;
 	 *)           echo "'$1' cannot be extracted via ex()" ;;
       esac
    else
