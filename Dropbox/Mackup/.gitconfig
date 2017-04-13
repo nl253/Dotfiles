@@ -59,28 +59,10 @@
 [alias]
 	# form tpope
 	cherry-lick = !sh -c 'hub checkout HEAD^{} -- && hub cherry-pick \"$@\"' _
-	ctags = "!sh -c '[ -f .git/hooks/ctags ] || git init; .git/hooks/ctags' git-ctags"
 	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
 
-	# ADD
-	# -------------------
-	a = add 
-	aa = add -A :/
-	au = add -u
-
-	b = branch
-	# -------------------
-	branches = branch -a
-	bd = branch -D
-	br = branch -r
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"   # Switch to a branch, creating it if necessary
-
-	# COMMIT
-	c = commit
-	# -------------------
-	ca = !git add -A && git commit -av # Commit all changes
-	cm = commit -m
-	;ci = commit
+	
 	contributors = shortlog --summary --numbered  # List contributors with number of commits
 	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"  # Credit an author on the latest commit
 
@@ -88,10 +70,6 @@
 	# -------------------
 	cl = clone --recursive  # Clone a repository including all submodules
 	
-	# CHECKOUT
-	# -------------------
-	co = checkout
-
 	# DIFF
 	# -------------------
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"   # Show the diff between the latest commit and the current state
@@ -129,29 +107,11 @@
 		fi \
 	}; f"
 
-	# MERGE
-	# -------------------
-	m = merge
-
 	# PUSH
 	# -------------------
-	p = push 
 	remotes = remote -vu = pull --rebase upstream master
-	;pf = push -f origin HEAD
-
 	reb = "!r() { git rebase -i HEAD~$1; }; r"  # Interactive rebase with the given number of latest commits
-
 	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r" # Remove the old tag with this name and tag the latest commit with it.
-	
-	# PULL
-	# -------------------
-	#uh = pull --rebase origin HEAD
-	#up = pull --rebase origin master
-
-	# STATUS
-	# -------------------
-	s = status 
-	#utags = tag -l
 
 [github]
 	password = Kruszynka96**

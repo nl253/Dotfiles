@@ -41,12 +41,6 @@
 # ===============   EOF  ==================
 #
 
-# Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
-set meta-flag on
-set input-meta on
-set convert-meta off
-set output-meta on
-#
 # do not bell on tab-completion
 set bell-style none 
 set expand-tilde on
@@ -57,7 +51,7 @@ set visible-stats on
 set echo-control-characters off
 set colored-stats on
 set completion-query-items 250
-set skip-completed-text On
+set skip-completed-text on
 set mark-symlinked-directories on
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
