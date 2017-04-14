@@ -73,7 +73,13 @@
 .sncli/sncli.log
 .snclirc
 .spacemacs
-.ssh
+.fehbg
+.dmenurc
+local-path.txt
+raptor-path.txt
+.ssh/
+.myclirc
+.ssh/*
 .task/backlog*
 .task/vim_tw*
 .taskrc
