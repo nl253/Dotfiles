@@ -64,8 +64,7 @@ Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
 if filereadable('~/.config/nvim/dicts/frequent.dict') | set dictionary=~/.config/nvim/dicts/frequent.dict | endif
 if filereadable('~/.config/nvim/thesaurus.txt') | set thesaurus=~/.config/nvim/thesaurus.txt | endif
 
-if executable('vint') | let g:neomake_vim_enabled_makers = ['vint'] | endif
-if executable('tidy') | let g:syntastic_html_checkers = ['tidy'] | endif
+" if executable('tidy') | let g:syntastic_html_checkers = ['tidy'] | endif
 if executable('jsonlint') | let g:syntastic_json_checkers = ['jsonlint'] | endif
 let g:neomake_markdown_enabled_makers = [ 'mdl', 'textlint', 'writegood', 'proselint' ]
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOff', 'DittoOn', 'DittoSent',
@@ -76,9 +75,15 @@ Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 Plug 'vim-scripts/utl.vim'
 
 Plug 'dhruvasagar/vim-table-mode', { 'on': [ 'TableModeToggle', 'TableModeDisable', 'TableModeEnable', 'Tableize' ]}
+let g:table_mode_disable_mappings = 1
+
+
 
 Plug 'vim-scripts/utl.vim'
 Plug 'jceb/vim-orgmode', {'for' : 'org'}
+
+let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING']
+let g:org_heading_shade_leading_stars = 0
 
 " Markdown
 " ==========
@@ -136,8 +141,6 @@ Plug 'chrisbra/Colorizer', { 'for': [
 
 let g:emmet_html5 = 1
 
-
-
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 
 Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'coffee', 'html',
@@ -146,23 +149,26 @@ Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'coffee', 'html'
 call plug#end()
 let loaded_matchit = 1
 let mapleader = " "
-set foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set complete=.,w noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus path+=~/**
+let maplocalleader = ","
+set smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
+set mouse= complete=.,w noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus path+=~/**
 set wildignore+=/home/norbert/.bashrc,/home/norbert/.tmuxinator,/home/norbert/.config/nvim/init.vim,*.git,*.class,*.svn
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg
 
 aug VIMENTER
   au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
   au FileType * if exists("+completefunc") && &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
-  au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-  au FileType markdown setl ft=ghmarkdown
-  au FileType gitcommit setl spell
-  au FileType man setl nowrap
+  au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
   au CursorHold  * silent!  checktime
   au FocusLost   * silent!  wall
   au CmdwinEnter * setlocal updatetime=2000
   au CmdwinLeave * setlocal updatetime=200
+  au BufReadPost,BufNew *.md,*.mmd let g:table_mode_corner = '|'  | TableModeEnable
+  au BufReadPost,BufNew *.org let g:table_mode_corner = '+' 
+  au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
+  au FileType gitcommit setl spell
+  au FileType man setl nowrap
 aug END
 if executable('pdftotext') 
   au! BufRead *.pdf execute '!pdftotext ' . expand('%:p') . ' ' . expand('%:p:r') .   '.txt' | execute 'enew ' . expand('%:p:r') . '.txt'
@@ -178,6 +184,10 @@ endif
 
 colorscheme antares
 
+if has('nvim')
+  nnoremap <Leader>fed    :e $MYVIMRC<CR>
+  nnoremap <Leader>fer    :so $MYVIMRC<CR>
+endif
 nnoremap <Leader>gA 	:GHActivity<CR>
 nnoremap <Leader>ga 	:GHActivity<Space>
 nnoremap <Leader>gb 	:Gblame<CR>

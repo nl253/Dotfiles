@@ -25,7 +25,7 @@ log_level = INFO
 
 # Log every query and its results to a file. Enable this by uncommenting the
 # line below.
-audit_log = ~/.mycli-audit.log
+# audit_log = ~/.mycli-audit.log
 
 # Timing of sql statments and table rendering.
 timing = True
@@ -33,7 +33,7 @@ timing = True
 # Table format. Possible values: psql, plain, simple, grid, fancy_grid, pipe,
 # orgtbl, rst, mediawiki, html, latex, latex_booktabs, tsv.
 # Recommended: psql, fancy_grid and grid.
-table_format = orgtbl
+table_format = psql
 
 # Syntax coloring style. Possible values (many support the "-dark" suffix):
 # manni, igor, xcode, vim, autumn, vs, rrt, native, perldoc, borland, tango, emacs,
@@ -60,10 +60,14 @@ prompt = '\t \u@\h:\d> '
 prompt_continuation = '-> '
 
 # Skip intro info on startup and outro info on exit
-less_chatty = True
+less_chatty = False
 
 # Use alias from --login-path instead of host name in prompt
 login_path_as_host = False
+
+# Cause result sets to be displayed vertically if they are too wide for the current window,
+# and using normal tabular format otherwise. (This applies to statements terminated by ; or \G.) 
+auto_vertical_output = False
 
 # Custom colors for the completion menu, toolbar, etc.
 [colors]
