@@ -73,12 +73,16 @@ Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOff', 'DittoOn', 'DittoSe
 
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 
+Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'python', 'javascript']}
+let b:easytags_auto_highlight = 1
+let g:easytags_events = ['BufReadPost']
+let g:easytags_always_enabled = 1
+let g:easytags_resolve_links = 1
+
 Plug 'vim-scripts/utl.vim'
 
 Plug 'dhruvasagar/vim-table-mode', { 'on': [ 'TableModeToggle', 'TableModeDisable', 'TableModeEnable', 'Tableize' ]}
 let g:table_mode_disable_mappings = 1
-
-
 
 Plug 'vim-scripts/utl.vim'
 Plug 'jceb/vim-orgmode', {'for' : 'org'}
@@ -90,7 +94,6 @@ let g:org_heading_shade_leading_stars = 0
 " ==========
 Plug 'tpope/vim-markdown', { 'for': ['markdown', 'ghmarkdown']}
 Plug 'jtratner/vim-flavored-markdown', { 'for': ['markdown', 'ghmarkdown']}
-
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown', 'ghmarkdown']}
 
 let g:vim_markdown_no_default_key_mappings = 1
@@ -152,7 +155,7 @@ let loaded_matchit = 1
 let mapleader = " "
 let maplocalleader = ","
 set smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus path+=~/**
+set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus path+=~/**
 set wildignore+=/home/norbert/.bashrc,/home/norbert/.tmuxinator,/home/norbert/.config/nvim/init.vim,*.git,*.class,*.svn
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg
 
@@ -165,7 +168,7 @@ aug VIMENTER
   au FocusLost   * silent!  wall
   au CmdwinEnter * setlocal updatetime=2000
   au CmdwinLeave * setlocal updatetime=200
-  au BufReadPost,BufNew *.md,*.mmd setlocal ft=ghmarkdown.markdown | let g:table_mode_corner = '|'  | TableModeEnable
+  au Filetype markdown setlocal ft=ghmarkdown.markdown | let g:table_mode_corner = '|'  | TableModeEnable
   au BufReadPost,BufNew *.org let g:table_mode_corner = '+' | TableModeEnable
   au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
   au FileType gitcommit setl spell

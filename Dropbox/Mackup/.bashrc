@@ -2,23 +2,12 @@
 #
 # ~/.bashrc
 #
-# Bash File Testing (main bits)
-#
-# -e filename - Check for file existence, regardless of type (node, directory, socket, etc.)
-# -f filename - Check for regular file existence not a directory
-# -d directoryname - Check for directory Existence
-# -L filename - Symbolic link
-#
-# -r filename - Check if file is a readable
-# -w filename - Check if file is writable
-# -x filename - Check if file is executable
-#
 # {{{  #  If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 [[ $- != *i* ]] && return
 # }}}
 
-# COLORS # set variables to produce colored output later {{{
+# colors # set variables to produce colored output later {{{
 RED="\e[31m"
 CYAN="\e[96m"
 DARKMAGENTA="\e[35m"
@@ -35,13 +24,25 @@ DARKGREY="\e[90m"
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
-# prompt
+# $PS1 # prompt
 export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] "
 
 unset MAILCHECK                         # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s)    # Set Xterm/screen/Tmux title with only a short hostname
 
-[ -x /usr/bin/google-chrome-stable ] && export BROWSER=google-chrome-stable || export BROWSER=elinks
+# $BROWSER {{{
+
+if [ -x /usr/bin/google-chrome-stable ] ; then
+  export BROWSER=google-chrome-stable
+elif [ -x /usr/bin/elinks ] ; then
+  export BROWSER=elinks
+elif [ -x /usr/bin/lynx ] ; then
+  export BROWSER=lynx
+elif [ -x /usr/bin/w3m ] ; then
+  export BROWSER=w3m
+fi
+
+# }}}
 
 # HISTORY {{{
 export HISTSIZE=20000
@@ -62,21 +63,18 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:jobs" # a colon separated 
 
 export GREP_COLOR='1;33' # makes it yellow # by default red
 
-# LESS {{{
-
-#   -M (-M or --LONG-PROMPT) Prompt very verbosely
-#   -I (-I or --IGNORE-CASE) Searches with '/' ignore case
-#   -R (-R or --RAW-CONTROL-CHARS) For handling ANSI colors
-#   -F (-F or --quit-if-one-screen) Auto exit if <1 screen
-#   -X (-X or --no-init) Disable termcap init & deinit
+# $PAGER less {{{
 
 # if available enable syntax highlighting # fall back on more if less not available
+
 [ -f /usr/bin/source-highlight-esc.sh ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 [ -x /usr/bin/less ] && alias less='less -x4RFsX' && export PAGER=less
 [ ! -x /usr/bin/less ] && [ -x /usr/bin/more ] && export PAGER=more && alias less=more
+
 # }}}
 
-# REALINE aka INPUTRC # generate if not present and add configuration {{{
+# realine aka inputrc # generate if not present and add configuration {{{
+generate-inputrc(){
 if [ ! -f ~/.inputrc ] ; then
   cat /etc/inputrc >> ~/.inputrc
   echo "set expand-tilde on" >> ~/.inputrc
@@ -90,11 +88,15 @@ if [ ! -f ~/.inputrc ] ; then
   echo "set show-all-if-ambiguous on" >> ~/.inputrc
   echo "set show-all-if-unmodified on" >> ~/.inputrc
   echo "set colored-completion-prefix on" >> ~/.inputrc
+else 
+  return 1
 fi
+}
+
 # }}}
 
 # $PATH {{{
-
+[ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 [ -d  /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
 [ -d ~/.gem/rubu/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin"
 [ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin"
@@ -105,51 +107,24 @@ fi
 
 # }}}
 
-# ranger {{{
-
-if [ ! -x /usr/bin/ranger ] ; then # check if ranger is installed, if not use a git-workaround
-  [ ! -f /tmp/nl253/ranger/ranger.py ] && mkdir -p /tmp/nl253/ranger && git clone 'https://github.com/ranger/ranger' /tmp/nl253/ranger
-  alias ranger='/tmp/nl253/ranger/ranger.py'
-  alias r='/tmp/nl253/ranger/ranger.py'
-fi
-[ -x /usr/bin/ranger ] && alias r='ranger'
-[ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
-# }}}
-
-# $EDITOR
-# initialise vim / nvim / vi # set aliases {{{
-
-
+# $EDITOR  {{{
 if [ -x /usr/bin/nvim ]; then # if neovim
   export EDITOR=/usr/bin/nvim
   alias vim=/usr/bin/nvim
   alias vi=/usr/bin/nvim
 
+elif [ -x /usr/bin/vim ]; then # if vim but not neovim
+  export EDITOR=/usr/bin/vim
+  alias nvim=/usr/bin/vim
+  alias vi=/usr/bin/vim
   # set up vim plugins
-  if [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] ; then # check if already present
-    curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  fi
-
-else # if not neovim check if vim
-  if [ -x /usr/bin/vim ]; then # if vim but not neovim
-    export EDITOR=/usr/bin/vim
-    alias nvim=/usr/bin/vim
-    alias vi=/usr/bin/vim
-    # set up vim plugins
-    if [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] ; then # check if already present
-      curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    fi
-
-  elif [ -x /usr/bin/vi ] ; then # if not neovim and not vim then fall back on vi
-    export EDITOR=/usr/bin/vi
-    alias vim=vi
-    alias nvim=vi
-  fi
+elif [ -x /usr/bin/vi ] ; then # if not neovim and not vim then fall back on vi
+  export EDITOR=/usr/bin/vi
+  alias vim=vi
+  alias nvim=vi
 fi
-# }}}
 
+# }}}
 
 if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
   export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
@@ -177,49 +152,36 @@ cd ~
 [ -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash" | fzf --bind "enter:execute: $EDITOR {} \;"
 }
 
-
-FZFopen-from-anywhere() {
-local files
-
-files=(${(f)"$(locate -Ai -0 $@ | grep -z -vE '~$' | fzf --read0 -0 -1 -m)"})
-
-if [[ -n $files ]]
-then
-  vim -- $files
-  print -l $files[1]
-fi
-}
-
 FZFcheckout-branch-tag() {
-local tags branches target
-tags=$(
-git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
-branches=$(
-git branch --all | grep -v HEAD             |
-sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
-sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
-target=$(
-(echo "$tags"; echo "$branches") |
-fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
-git checkout $(echo "$target" | awk '{print $2}')
-   }
+  local tags branches target
+  tags=$(
+  git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
+  branches=$(
+  git branch --all | grep -v HEAD             |
+  sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
+  sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
+  target=$(
+  (echo "$tags"; echo "$branches") |
+  fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
+  git checkout $(echo "$target" | awk '{print $2}')
+ }
 
-   FZFcommits(){
-     git log --graph --color=always \
-       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-     fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-       --bind "ctrl-m:execute:
-     (grep -o '[a-f0-9]\{7\}' | head -1 |
-     xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
-     {}
-     FZF-EOF"
-   }
+ FZFcommits(){
+   git log --graph --color=always \
+     --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+     --bind "ctrl-m:execute:
+   (grep -o '[a-f0-9]\{7\}' | head -1 |
+   xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+   {}
+   FZF-EOF"
+ }
 
-   FZFcommit-sha(){
-   local commits commit
-   commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
-     commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
-     echo -n -e $(echo "$commit" | sed "s/ .*//")
+FZFcommit-sha(){
+  local commits commit
+  commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
+  commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
+  echo -n -e $(echo "$commit" | sed "s/ .*//")
  }
 
  # FZFstash - list of your stashes
@@ -265,11 +227,11 @@ git checkout $(echo "$target" | awk '{print $2}')
      -c "silent tag $(cut -f2 <<< "$line")"
  }
 
- FZFcheckout-commit(){
+FZFcheckout-commit(){
  local commits commit
  commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
-   commit=$(echo "$commits" | fzf --tac +s +m -e) &&
-   git checkout $(echo "$commit" | sed "s/ .*//")
+ commit=$(echo "$commits" | fzf --tac +s +m -e) &&
+ git checkout $(echo "$commit" | sed "s/ .*//")
 }
 
 alias l=FZFlocate
@@ -287,7 +249,6 @@ alias lr='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep
 else # non fzf solution
   alias lr='find ~ -cmin -10 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v ".dropbox" | grep -v "%"'
   [ -x /usr/bin/htop ] && alias p=htop || alias p=top # process management
-  # alias f=  # TODO provide an alternative if fzf is not available
   # alias gc=  # TODO provide an alternative if fzf is not available
   # alias gs=  # TODO provide an alternative if fzf is not available
   # alias gcs=  # TODO provide an alternative if fzf is not available
@@ -310,35 +271,34 @@ if [ -x /usr/bin/pacman ]; then
 fi
 # }}}
 
-# ZSH {{{
+# zsh {{{
 [ -x /usr/bin/zsh ] && alias z=zsh
 alias x=xonsh
 # }}}
 
-# ---------
-#  GIT {{{
-# ---------
+# git {{{
 [ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
 [ -x /usr/bin/tig ] && alias t=tig
 
 # }}}
 
+# remap-capslock {{{
 # Caps Lock is Control on a GB keyboard #setxkbmap -option ctrl:swapcaps # for US
 setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"
+# }}}
 
-[ -x "/usr/bin/ag" ] && alias ag='ag --hidden --pager="less -MIRFX"'  # search with dotfiles
+[ -x "/usr/bin/ag" ] && alias ag='ag --hidden --pager="less -MIRFX"'  # search with dotfiles page to less with colors
 
 # ALIASES {{{
 
-
-alias e=$EDITOR
+alias e="$EDITOR"
 alias todo=todo-detect
 
 #alias l='ls -CFa'
 alias le="ls -lo"
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
-alias f=find-approx 
+alias f=find-approx
 
 alias -- -='cd -'        # Go back
 alias ..="cd .."
@@ -355,6 +315,7 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
+alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
 [ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system
 [ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
@@ -369,89 +330,147 @@ alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
 alias logout="pkill -KILL -u "
 #alias j=jobs # used by autojump
 alias untar='tar -xvf'
-
 alias scripts-in-bashrc="grep -P '^\S+?\(\)' ~/.bashrc | sed  's/(//g' | sed 's/{//' | sed 's/)//g'"
-#
-# Readline
-alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'"
-
+alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # Readline
 alias http-server="python3 -m http.server"
 
 # =============== }}}
 
-# SCRIPTS
+# SCRIPTS {{{
 #
 # NOTE
 # coreutils programs will not be considered dependencies
 # as they are preinstalled on practically every UNIX system
 
-# ===============
-# FUNCTION :: TIG :: aliases for multi-word tig commands {{{
+# =============== }}}
 
-# REQUIRES ::
-tis(){
-  tig status
-}
-
-til(){
-  tig log
-}
-
-tib(){
-  tig blame -C
-}
-# ======== }}}
-
-# FUNCTION :: transfer all the necessary files to a remote server # {{{
-# ARGS
-# 1 : [ssh address in the style nl253@raptor.kent.ac.uk:]
-
-# TODO check, if it is possible to install npm, gem and pip packages without using sudo
-# TODO use ranger(sftp) to transfer dotfiles remotely and when you log in have bashrc trigger installation of pip, gem and npm packages
-# TODO find a way to init vim and plugins
-# TODO transfer .gitconfig .bashrc (.inputrc sorted)
-# TODO install ranger vint(?) shellcheck
-
+# install-packages {{{
 install-packages(){
-    local PIP=(flake8)
-    local NPM=(jsonlint csslint tidy proselint writegood)
-    local GEM=()
-    local CAB=(ShellCheck)
-    for i in ${PIP[*]} ; do
-	pip install --user --quiet --exists-action i "$i"
-    done
-    for i in ${GEM[*]} ; do
-	gem install "$i"
-    done
-   
-    cabal update
-    
-    for i in ${CAB[*]} ; do
-	[ ! -e "$HOME/.cabal/bin/$i" ] && cabal install
-    done
-    for i in ${NPM[*]} ; do
-	npm install "$i"
-    done
-}
+local PIP=(flake8 vint)
+local NPM=(jsonlint csslint tidy proselint writegood)
+local GEM=()
+local CAB=(ShellCheck)
+for i in ${PIP[*]} ; do
+  pip install --user --quiet --exists-action i "$i"
+done
+for i in ${GEM[*]} ; do
+  gem install "$i"
+done
 
-install-dropbox(){
-  cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
-}
+cabal update
 
-remote-setup(){ 
-  install-packages
-  install-dropbox
-  # transfer .gitignore 
-  # transfer .bashrc
-  # transfer init.vim
-  # transfer .spacemacs  # in case vim fails
-  # initialise ranger into ~/.ranger
-  # dropbox 
+for i in ${CAB[*]} ; do
+  [ ! -e "$HOME/.cabal/bin/$i" ] && cabal install
+done
+for i in ${NPM[*]} ; do
+  npm install "$i"
+done
 }
 
 # }}}
 
-# FUNCTION :: detects 'TODO's in recently modified files {{{
+# install-alacritty {{{
+install-alacritty(){
+if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
+  echo -e "RUST and ALACRITTY not installed\ninitalising rustup"
+  sudo curl https://sh.rustup.rs -sSf | sh
+  echo -e "cloning ALACRITTY repo from GIT"
+  git clone https://github.com/jwilm/alacritty.git ~
+  echo -e "changing RUSTUP TOOLCHAIN to STABLE"
+  sudo rustup override set stable
+  sudo rustup update stable
+  sudo rustup default stable
+  echo -e "cd to ${HOME}/alacritty\nBUILDING ALACRITTY ... "
+  cd ~/alacritty && sudo cargo build --release
+else 
+  return 1
+fi
+}
+
+# }}}
+
+# tmux {{{
+# check if tmux plugin manager dir is present
+install-tmux-plugs(){
+if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ] ; then
+  echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
+  git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
+else
+  return 1
+  echo -e "either tmux is not installed or it is and so is tpm"
+  sleep 5
+fi
+} # }}}
+
+# dropbox {{{
+install-dropbox(){
+cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+} # }}}
+
+# ranger {{{
+
+install-ranger(){
+if [ ! -x /usr/bin/ranger ] && [ ! -e ~/.ranger ] ; then # check if ranger is installed, if not use a git-workaround
+  [ ! -f ~/.ranger/ranger.py ] && mkdir -p ~/.ranger && git clone 'https://github.com/ranger/ranger' ~/.ranger/
+  alias ranger='~/.ranger/ranger.py'
+  alias r='~/.ranger/ranger.py'
+else
+  alias r='ranger'
+fi # if present set up an alias
+} # }}}
+
+# vim plugins {{{
+install-vim-plug(){
+if [ -x /usr/bin/nvim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+elif [ -x /usr/bin/vim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] ; then # if vim but not neovim
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+else
+  return 1
+fi
+}
+
+install-vim-plug
+
+# }}}
+
+# transfer-dotfiles {{{
+# FUNCTION :: transfer the necessary {dot}files to a remote machine (sftp server)
+# NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
+transfer-dotfiles(){
+[ ! $# = 1 ] && return 1
+# format must compliant with rsync eg nl253@raptor (no colon)
+rsync ~/.bashrc "$1:.bashrc"
+rsync ~/.gitconfig "$1:.gitconfig"
+if [ -x /usr/bin/nvim ] ; then  # covers vim and neo-vim
+  rsync ~/.config/nvim/init.vim "$1:.vimrc"
+  rsync ~/.config/nvim/init.vim "$1:.config/nvim/init.vim"
+elif [ -x /usr/bin/vim ] ; then
+  rsync ~/.vimrc "$1:.vimrc"
+  rsync ~/.vimrc "$1:.config/nvim/init.vim"
+fi
+}
+# }}}
+
+# remote-setup {{{
+remote-setup(){
+install-packages
+install-dropbox
+install-ranger
+install-vim-plug
+# transfer .gitignore
+# transfer .bashrc
+# transfer init.vim
+# transfer .spacemacs  # in case vim fails
+# initialise ranger into ~/.ranger
+# dropbox
+} # }}}
+
+# todo-detect {{{
+# FUNCTION :: detects 'TODO's in recently modified files
 # avoids chrome .dropbox % (backup) .git vim/plugged (where the plugins are stored)
 # DEPENDENCIES :: ag
 todo-detect(){
@@ -460,9 +479,30 @@ for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | gr
 }
 # }}}
 
-# FUNCTION :: restore the system {{{
+# TODO system restore script
+# restore-system {{{
+# FUNCTION
 # The aim of the script is to do nothing when the system is OK
 # and restore the whole system when it's just been reinstalled.
+
+setup-onedrive(){
+  if [ -x /usr/bin/onedrive ] ; then  
+    systemctl --user enable onedrive
+    systemctl --user start onedrive
+    touch ~/.config/onedrive/sync_list
+  else
+    echo -e "You need to install onedrive-git \nAborting."
+    return 1
+  fi
+}
+
+setup-dropbox(){
+  if [ ! -x /usr/bin/dropbox ] || [ ! -x /usr/bin/dropbox-cli ]; then  
+    echo -e "You need to install dropbox and dropbox-cli.\nAborting."
+    return 1
+  fi
+  dropbox-cli autostart y
+}
 
 restore-system(){
 
@@ -470,21 +510,21 @@ restore-system(){
 
 local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
 "aria2c" "cronie" "fdupes" "ddupes" \
-  "aspell" "bluej" "bashmount" "bmenu" \
-  "aspell-en" "ca-certificates" "ctags" \
+  "aspell" "bluej" "ctags" "bashmount" "bmenu" \
+  "aspell-en" "ca-certificates" \
   "crontab" "psysh" "emacs" "cmake" \
   "csslint" "thinkfinger" "the_silver_searcher" \
   "curl" "dos2unix" "pdftotext" "make" \
   "freetype2" "fontconfig" "pkg-config" \
   "ghc-mod" "cabal" "node" "gawk" "i3" \
-  "git" "git-imerge" "git-extras" "thinkfan" \
+  "git" "expac" "onedrive-git" "git-imerge" "git-extras" "thinkfan" \
   "google-chrome" "coreutils" "hub" "htop"
 "intellij-idea-community-edition" "jdk-8" \
   "lshw" "less" "nvim" "spotify" "astyle" \
   "python" "tig"  "apacman" "yaourt" "tmux" \
   "rofi" "stylish-haskell" "tidy" "tree" \
   "sed" "pandoc" "openssh" "openvpn" "p7zip"
-"thermald" "dropbox" "python-pip" "alsa-utils" \
+"thermald" "dropbox" "dropbox-cli" "python-pip" "alsa-utils" \
   "upower" "npm" "ruby" "gem" "timeshift" \
   "wget" "curl" "wordnet" "xclip" "xclip" \
   "xf86-input-keyboard" "xf86-input-libinput" \
@@ -588,7 +628,7 @@ else
     "js-beautify" textlint)
 
   for i in ${JS[*]}; do
-      sudo npm install "$i" -g
+    sudo npm install "$i" -g
   done
 
 fi
@@ -619,18 +659,7 @@ if [ -x /usr/bin/zsh ] ; then
 fi
 
 # if ALACRITTY is not set up rust will be needed
-if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
-  echo -e "RUST and ALACRITTY not installed\ninitalising rustup"
-  sudo curl https://sh.rustup.rs -sSf | sh
-  echo -e "cloning ALACRITTY repo from GIT"
-  git clone https://github.com/jwilm/alacritty.git ~
-  echo -e "changing RUSTUP TOOLCHAIN to STABLE"
-  sudo rustup override set stable
-  sudo rustup update stable
-  sudo rustup default stable
-  echo -e "cd to ${HOME}/alacritty\nBUILDING ALACRITTY ... "
-  cd ~/alacritty && sudo cargo build --release
-fi
+install-alacritty
 
 # NEO-VIM
 # I chose the plugins dir to check if nvim is correctly set up, if not - clone it
@@ -657,20 +686,7 @@ elif [ ! -x "/usr/bin/nvim" ] ; then
 
 fi
 
-# TMUX
-# check if tmux plugin manager dir is present
-if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ] ; then
-
-  echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
-  git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
-
-else
-
-  echo -e "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
-
-  sleep 5
-
-fi
+install-tmux-plugs || echo -e "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
 
 # at this point variables will need to be reset
 echo "RESOURCING BASHRC"
@@ -699,7 +715,9 @@ fi
 }
 
 # ============================== }}}
-# FUNCTION {{{
+
+# show-ip {{{
+# FUNCTION
 # print in a JSON format a dict with your IP
 # and other details about the network you are on
 show-ip(){
@@ -711,60 +729,62 @@ else
 fi
 }
 # ============================== }}}
-# FUNCTION  :: prints the 256 colors with their corresponding numbers {{{
+
+# show-colors {{{
+# FUNCTION  :: prints the 256 colors with their corresponding numbers
 show-colors(){
 (x=$(tput op) y=$(printf %76s);for i in {0..256};do o=00"$i";echo -e ${o:${#o}-3:3} $(tput setaf "$i";tput setab "$i")${y// /=}"$x";done)
 }
 # ============================== }}}
-# FUNCTION  :: shows terminal capabilities {{{
-show-term-capabilities(){
-infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80
-}
-# ============================== }}}
-# FUNCTION  :: general purpose archive extracting {{{
+
+# ex {{{
+# FUNCTION  :: general purpose archive extracting
 # USAGE: ex <file>
 # REQUIRES :: pygmentize (can be optional) :: ag for find-shell
 ex (){
   if [ -f "$1" ] && [ $# == 1 ] ; then
     case $1 in
-      *.tar.bz2)   tar xjf "$1"	;;
-      *.tar.gz)    tar xzf "$1"	;;
-      *.bz2)       bunzip2 "$1"	;;
-      *.rar)       unrar x "$1"	;;
-      *.gz)        gunzip "$1"	;;
-      *.tar)       tar xf "$1"	;;
-      *.tbz2)      tar xjf "$1"	;;
-      *.tgz)       tar xzf "$1"	;;
-      *.zip)       unzip "$1"	;;
-      *.Z)         uncompress "$1"	;;
-      *.7z)        7z x "$1"		;;
+      *.tar.bz2)   tar xjf "$1" ;;
+      *.tar.gz)    tar xzf "$1" ;;
+      *.bz2)       bunzip2 "$1" ;;
+      *.rar)       unrar x "$1" ;;
+      *.gz)        gunzip "$1"  ;;
+      *.tar)       tar xf "$1"  ;;
+      *.tbz2)      tar xjf "$1" ;;
+      *.tgz)       tar xzf "$1" ;;
+      *.zip)       unzip "$1"   ;;
+      *.Z)         uncompress "$1"      ;;
+      *.7z)        7z x "$1"            ;;
       *)           echo "'$1' cannot be extracted via ex()" ;;
     esac
   else
     echo "'$1' is not a valid file or you supplied to many args"
   fi
 }
-
 # ============================== }}}
 
+# SHOPTS and COMPLETE {{{
 # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
-
 # make sure zsh isn't able to source it {{{
-if [ ! -n "${ZSH+2}" ]; then
-  shopt -s autocd
-  complete -cf sudo
-  complete -d cd
-  shopt -s cdspell        # correct minor spelling errors
-  shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
-  shopt -s direxpand      # replaces directory names with expansion when <tab>
-  shopt -s dirspell       # correct minor spelling errors
-  shopt -s dotglob        # Include dotfiles in pathname expansion
-  shopt -s checkjobs      # Include dotfiles in pathname expansion
-  shopt -s extglob        # Enable extended pattern-matching features
-  shopt -s nullglob
-  shopt -s globstar       # ** becomes a recursive wildstar
-  shopt -s histappend     # Append each session's history to $HISTFILE
-  shopt -s histverify     # Edit a recalled history line before executing
-fi
+
+set-shopts(){
+complete -cf sudo
+complete -d cd
+shopt -s autocd
+shopt -s cdspell        # correct minor spelling errors
+shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
+shopt -s direxpand      # replaces directory names with expansion when <tab>
+shopt -s dirspell       # correct minor spelling errors
+shopt -s dotglob        # Include dotfiles in pathname expansion
+shopt -s checkjobs      # Include dotfiles in pathname expansion
+shopt -s extglob        # Enable extended pattern-matching features
+shopt -s nullglob
+shopt -s globstar       # ** becomes a recursive wildstar
+shopt -s histappend     # Append each session's history to $HISTFILE
+shopt -s histverify     # Edit a recalled history line before executing
+}
+
+[ ! -n "${ZSH+2}" ] && set-shopts
+
 # }}}
 

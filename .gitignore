@@ -89,7 +89,10 @@ raptor-path.txt
 .tmuxinator
 .vim/
 .vim/*
+.proselint/
+.proselint/*
 .vim/ftdet*
+.vimtags
 .vim/indent
 .vim/syntax
 .viminfo
