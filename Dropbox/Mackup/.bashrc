@@ -7,6 +7,8 @@
 [[ $- != *i* ]] && return
 # }}}
 
+echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
+
 # colors # set variables to produce colored output later {{{
 RED="\e[31m"
 CYAN="\e[96m"
@@ -22,10 +24,8 @@ GREY="\e[37m"
 DARKGREY="\e[90m"
 # }}}
 
-echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
-
-# $PS1 # prompt
-export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] "
+# $PS1 # prompt {{{ 
+export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] " # }}}
 
 unset MAILCHECK                         # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s)    # Set Xterm/screen/Tmux title with only a short hostname
@@ -73,10 +73,10 @@ export GREP_COLOR='1;33' # makes it yellow # by default red
 
 # }}}
 
-# realine aka inputrc # generate if not present and add configuration {{{
-generate-inputrc(){
-if [ ! -f ~/.inputrc ] ; then
-  cat /etc/inputrc >> ~/.inputrc
+generate-inputrc(){ # generate if not present and add configuration {{{
+  [ -f ~/.inputrc ] && echo "Inputrc already exists in ~/.inputrc.\nNothing to do.\nAborting." && return 1
+  echo "Inputrc not detecting.\nGenerating ..." 
+  cat /etc/inputrc >> ~/.inputrc # copy defaults 
   echo "set expand-tilde on" >> ~/.inputrc
   echo "set skip-completed-text on" >> ~/.inputrc
   echo "set echo-control-characters off" >> ~/.inputrc
@@ -88,9 +88,6 @@ if [ ! -f ~/.inputrc ] ; then
   echo "set show-all-if-ambiguous on" >> ~/.inputrc
   echo "set show-all-if-unmodified on" >> ~/.inputrc
   echo "set colored-completion-prefix on" >> ~/.inputrc
-else 
-  return 1
-fi
 }
 
 # }}}
@@ -104,7 +101,6 @@ fi
 [ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin"
 [ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin"
 [ -d ~/bin/ ] && export PATH="${PATH}:~/bin"
-
 # }}}
 
 # $EDITOR  {{{
@@ -123,7 +119,6 @@ elif [ -x /usr/bin/vi ] ; then # if not neovim and not vim then fall back on vi
   alias vim=vi
   alias nvim=vi
 fi
-
 # }}}
 
 if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
@@ -153,17 +148,17 @@ cd ~
 }
 
 FZFcheckout-branch-tag() {
-  local tags branches target
-  tags=$(
-  git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
-  branches=$(
-  git branch --all | grep -v HEAD             |
-  sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
-  sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
-  target=$(
-  (echo "$tags"; echo "$branches") |
-  fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
-  git checkout $(echo "$target" | awk '{print $2}')
+local tags branches target
+tags=$(
+git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
+branches=$(
+git branch --all | grep -v HEAD             |
+sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
+sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
+target=$(
+(echo "$tags"; echo "$branches") |
+fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
+git checkout $(echo "$target" | awk '{print $2}')
  }
 
  FZFcommits(){
@@ -177,11 +172,11 @@ FZFcheckout-branch-tag() {
    FZF-EOF"
  }
 
-FZFcommit-sha(){
-  local commits commit
-  commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
-  commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
-  echo -n -e $(echo "$commit" | sed "s/ .*//")
+ FZFcommit-sha(){
+ local commits commit
+ commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
+   commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
+   echo -n -e $(echo "$commit" | sed "s/ .*//")
  }
 
  # FZFstash - list of your stashes
@@ -227,11 +222,11 @@ FZFcommit-sha(){
      -c "silent tag $(cut -f2 <<< "$line")"
  }
 
-FZFcheckout-commit(){
+ FZFcheckout-commit(){
  local commits commit
  commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
- commit=$(echo "$commits" | fzf --tac +s +m -e) &&
- git checkout $(echo "$commit" | sed "s/ .*//")
+   commit=$(echo "$commits" | fzf --tac +s +m -e) &&
+   git checkout $(echo "$commit" | sed "s/ .*//")
 }
 
 alias l=FZFlocate
@@ -271,15 +266,16 @@ if [ -x /usr/bin/pacman ]; then
 fi
 # }}}
 
-# zsh {{{
-[ -x /usr/bin/zsh ] && alias z=zsh
-alias x=xonsh
-# }}}
-
 # git {{{
 [ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
 [ -x /usr/bin/tig ] && alias t=tig
 
+setup-git(){
+  [ -x /usr/bin/git-extras ] && git extras update
+  #[ ! -x /usr/bin/git-fire ] && 
+  #[ ! -x /usr/bin/git-imerge ] && 
+  #[ ! -x /usr/bin/git-stats ] && 
+}
 # }}}
 
 # remap-capslock {{{
@@ -293,6 +289,7 @@ setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped
 
 alias e="$EDITOR"
 alias todo=todo-detect
+alias x=xonsh
 
 #alias l='ls -CFa'
 alias le="ls -lo"
@@ -334,44 +331,133 @@ alias untar='tar -xvf'
 alias scripts-in-bashrc="grep -P '^\S+?\(\)' ~/.bashrc | sed  's/(//g' | sed 's/{//' | sed 's/)//g'"
 alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # Readline
 alias http-server="python3 -m http.server"
+# }}}
 
-# =============== }}}
+setup-pyvirtualenv(){ # {{{
 
-# SCRIPTS {{{
-#
-# NOTE
-# coreutils programs will not be considered dependencies
-# as they are preinstalled on practically every UNIX system
+# python virtual env
+echo -e "checking virtual env"
 
-# =============== }}}
+if [ ! -x /usr/bin/pyenv ] && [ ! -x ~/.pyenv/bin/pyenv ] ; then
+  echo -e "PYENV not detected\ninitiating ... "
+  git clone "https://github.com/pyenv/pyenv.git" ~/.pyenv
+  pyenv install "3.5.0"
+  pyenv global "3.5.0"
+  echo -e 'global python 3.5.0 activated'
 
-# install-packages {{{
-install-packages(){
-local PIP=(flake8 vint)
-local NPM=(jsonlint csslint tidy proselint writegood)
-local GEM=()
-local CAB=(ShellCheck)
+elif [ -x /usr/bin/pyenv ] || [ -x ~/.pyenv/bin/pyenv ] ; then
+  # if pyenv present on system initiate python 3.5.0
+  echo -e "PYENV detected continuing ..."
+  local PYENV_VERSION=$(pyenv version-name)
+  [ ! "${PYENV_VERSION}" = "3.5.0" ] && pyenv install "3.5.0" && pyenv global "3.5.0"
+fi
+
+} # }}}
+
+setup-zsh(){ # {{{
+  [ ! -x /usr/bin/zsh ] && echo echo -e 'zsh not detected on your filesystem ... \nAborting' && return 1
+
+  echo -e 'zsh detected on your filesystem ... \nSetting up z alias and checking for oh-my-zsh'
+  
+  alias z=zsh
+
+  [ -f "${HOME}/.oh-my-zsh/oh-my-zsh.sh" ] && echo -e 'oh-my-zsh detected.\nNothing to be done.\nAborting.' && return 1
+
+  echo -e "OH-MY-ZSH not detected\ninitiating ..."
+
+  # from oh-my-zsh [github]
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+  # custom plugins
+  [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+  [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
+  [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+  # source it
+  zsh -c ~/.zshrc
+
+} # }}}
+
+install-pip-packages(){ # {{{
+
+# PYTHON
+# it is crucial that python is correctly set up
+# mackup is dependent on it as well as things like ranger
+
+echo -e "${YELLOW}PYTHON${DEFCOLOR}"
+if [ ! -x /usr/bin/pip ] && [ ! -x /usr/bin/pip3 ] ; then # necessary for mackup
+  echo -e "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
+  return 1
+fi
+
+echo -e "PYTHON and PIP detected\ninstalling PYTHON packages"
+
+local PIP=(\
+  "mackup" "ranger"  "requests" "scrapy" \
+  "pudb" "neovim" "jedi" "mypy" "spacy" "xonsh" "xontrib-z" \
+  "psutil" "nltk" "pytest" "ipython" "sumy" "fuzzywuzzy" \
+  "you-get" "pandas" "tensorflow" "numpy" "flake8" "vint")
+
 for i in ${PIP[*]} ; do
   pip install --user --quiet --exists-action i "$i"
 done
-for i in ${GEM[*]} ; do
-  gem install "$i"
-done
+} # }}}
+
+install-npm-packages(){ # {{{
+
+  [ ! -x /usr/bin/npm ] && echo -e "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages" && return 1
+
+  echo -e "NODE and NPM detected\ninstalling NODE packages"
+
+  local NPM=(proselint \
+    "write-good" textlint \
+    "git-standup" "git-stats" \
+    jsonlint tern "git-fire" \
+    "js-beautify" textlint \
+    jsonlint csslint tidy writegood)
+
+  for i in ${NPM[*]} ; do
+    npm install "$i"
+  done
+
+} # }}}
+
+install-gem-packages(){ # {{{
+local GEM=()
+
+local CAB=(ShellCheck)
+
+echo -e "${RED}RUBY${DEFCOLOR}"
+
+# RUBY
+if [ ! -x /usr/bin/gem ] || [ ! -x /usr/bin/ruby ] ; then
+  echo -e "either RUBY or GEM was not detected on this filesystem"
+  echo -e "make sure GEM is installed to install RUBY packages"
+  echo -e "becasue RUBY is not cructial the script will continue"
+  sleep 5 # sleep for long enough to see
+
+else # if both gem and ruby found
+
+  echo -e "RUBY and GEM detected\ninstalling RUBY gems"
+
+  local RB=(mdl sqlint rubocop) # ruby gems
+
+  for i in ${GEM[*]} ; do
+    gem install "$i"
+  done
+fi
 
 cabal update
 
 for i in ${CAB[*]} ; do
   [ ! -e "$HOME/.cabal/bin/$i" ] && cabal install
 done
-for i in ${NPM[*]} ; do
-  npm install "$i"
-done
+
 }
 
 # }}}
 
-# install-alacritty {{{
-install-alacritty(){
+install-alacritty(){ # {{{
 if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/rustup ] ; then
   echo -e "RUST and ALACRITTY not installed\ninitalising rustup"
   sudo curl https://sh.rustup.rs -sSf | sh
@@ -383,34 +469,32 @@ if [ ! -x /usr/bin/alacritty ] && [ ! -x /usr/bin/rustup ]  && [ ! -x /usr/bin/r
   sudo rustup default stable
   echo -e "cd to ${HOME}/alacritty\nBUILDING ALACRITTY ... "
   cd ~/alacritty && sudo cargo build --release
-else 
+else
   return 1
 fi
 }
-
 # }}}
 
-# tmux {{{
+install-tmux-plugs(){ # {{{
 # check if tmux plugin manager dir is present
-install-tmux-plugs(){
 if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ] ; then
   echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
   git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
-else
+elif [ -x /usr/bin/tmux ] && [ -d ~/.tmux/plugins/tpm ] ; then
+  echo -e "TMUX detected along with TMUX PLUGIN MANAGER\nNothing to do.\nAborting."
+elif [ ! -x /usr/bin/tmux ] ; then 
   return 1
-  echo -e "either tmux is not installed or it is and so is tpm"
+  echo -e "Tmux is not installed.\nAborting."
   sleep 5
 fi
 } # }}}
 
-# dropbox {{{
+# dropbox {{{ # TODO chech what it actually does
 install-dropbox(){
 cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 } # }}}
 
-# ranger {{{
-
-install-ranger(){ # TODO test 
+install-ranger(){ # TODO test # ranger {{{
 if [ ! -x /usr/bin/ranger ] && [ ! -e ~/.ranger ] ; then # check if ranger is installed, if not use a git-workaround
   [ ! -f ~/.ranger/ranger.py ] && mkdir -p ~/.ranger && git clone 'https://github.com/ranger/ranger' ~/.ranger/
   alias ranger='~/.ranger/ranger.py'
@@ -420,8 +504,7 @@ else
 fi # if present set up an alias
 } # }}}
 
-# vim plugins {{{
-install-vim-plug(){
+install-vim-plug(){ # vim plugins {{{
 if [ -x /usr/bin/nvim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -434,11 +517,9 @@ else
 fi
 }
 
-install-vim-plug
-
 # }}}
 
-# transfer-dotfiles {{{ # TODO test with --dry-run 
+# transfer-dotfiles {{{ # TODO test with --dry-run
 # FUNCTION :: transfer the necessary {dot}files to a remote machine (sftp server)
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
 transfer-dotfiles(){
@@ -453,39 +534,37 @@ elif [ -x /usr/bin/vim ] ; then
   rsync -L ~/.vimrc "$1:.vimrc"
   rsync -L ~/.vimrc "$1:.config/nvim/init.vim"
 fi
-}
+} # }}}
 
-# }}}
-
-transfer-personal(){
+transfer-personal(){ # {{{
   rsync -L ~/nl253 "$1:nl253"
-}
+} # }}}
 
-transfer-scripts(){
+transfer-scripts(){   # {{{
   rsync -L ~/bin "$1:bin"
-}
+}  # }}}
 
 # remote-setup {{{
 # FUNCTION :: a high level function that aims setup everything on a remote machine
 # NARGS = 1 :: the address compliant with rsync and ssh standard
-# data will be transfered via sftp using rsync 
-# files that are symlinked by default will be followed TODO check how it works in rsync man pages 
+# data will be transfered via sftp using rsync
+# files that are symlinked by default will be followed TODO check how it works in rsync man pages
 remote-setup(){
   install-packages $1
-  install-dropbox $1
+  install-dropbox
   install-ranger $1
   install-vim-plug $1
-  setup-dropbox $1
-  setup-gdrive $1
-  setup-onedrive $1
   transfer-scripts $1
   transfer-personal $1
+  setup-dropbox
+  setup-gdrive
+  setup-onedrive
 } # }}}
 
 # todo-detect {{{
 # ---------------
 # FUNCTION :: detects 'TODO's in recently modified files [24h]
-# avoids chrome .dropbox % (backup) .git vim/plugged (where vim plugins are stored) and {c,C}ache 
+# avoids chrome .dropbox % (backup) .git vim/plugged (where vim plugins are stored) and {c,C}ache
 # sed abbreviates /home/norbert to ~ to make the output shorter
 # that seemingly redundant grep at the end highlights 'TODO' output
 # ---------------
@@ -494,256 +573,106 @@ remote-setup(){
 alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
 # }}}
 
+setup-onedrive(){ # {{{
+if [ -x /usr/bin/onedrive ] ; then
+  systemctl --user enable onedrive
+  systemctl --user start onedrive
+  [ ! -d ~/.config/onedrive ] && mkdir -p ~/.config/onedrive
+  [ ! -f ~/.config/onedrive/config ] && cp ./config ~/.config/onedrive/config
+  touch ~/.config/onedrive/sync_list
+  # sync_dir: directory where the files will be synced
+  # skip_file: any files or directories that match this pattern will be skipped during sync
+else
+  echo -e "You need to install onedrive-git \nAborting."
+  return 1
+fi
+} # }}}
+
+setup-dropbox(){ # {{{
+if [ ! -x /usr/bin/dropbox ] || [ ! -x /usr/bin/dropbox-cli ]; then
+  echo -e "You need to install dropbox and dropbox-cli.\nAborting."
+  return 1
+else
+  dropbox-cli autostart y
+fi
+} # }}}
+
+mackup-restore(){ # {{{
+  if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] && [ -x /usr/bin/mackup ] ; then
+    mackup restore
+  else
+    echo -e "You need to install and set up MACKUP.\nAborting."
+    return 1
+  fi
+} # }}}
+
+setup-gdrive(){ # {{{
+if [ ! -x /usr/bin/gdrive ]; then
+  echo -e "You need to install gdrive.\nAborting."
+  return 1
+else
+  [ ! -d ~/GDrive ] && mkdir -p ~/GDrive
+  [ ! -f ~/GDrive/.gdriveignore ] && touch ~/GDrive/.gdriveignore
+fi
+} # }}}
+
+install-pacman-packages(){ # {{{
+
+  [ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux.\nYou don't appear to have pacman.\nAborting." && return 1
+
+  local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
+  "aria2c" "cronie" "fdupes" "ddupes" \
+    "aspell" "bluej" "ctags" "bashmount" "bmenu" \
+    "aspell-en" "gdrive" "ca-certificates" \
+    "crontab" "psysh" "emacs" "cmake" \
+    "csslint" "thinkfinger" "the_silver_searcher" \
+    "curl" "dos2unix" "pdftotext" "make" \
+    "freetype2" "fontconfig" "pkg-config" \
+    "ghc-mod" "cabal" "node" "gawk" "i3" \
+    "git" "expac" "onedrive-git" "git-imerge" "git-extras" "thinkfan" \
+    "google-chrome" "coreutils" "hub" "htop"
+  "intellij-idea-community-edition" "jdk-8" \
+    "lshw" "less" "nvim" "spotify" "astyle" \
+    "python" "tig"  "apacman" "yaourt" "tmux" \
+    "rofi" "stylish-haskell" "tidy" "tree" \
+    "sed" "pandoc" "openssh" "openvpn" "p7zip"
+  "thermald" "dropbox" "dropbox-cli" "python-pip" "alsa-utils" \
+    "upower" "npm" "ruby" "gem" "timeshift" \
+    "wget" "curl" "wordnet" "xclip" "xclip" \
+    "xf86-input-keyboard" "xf86-input-libinput" \
+    "xf86-input-mouse" "xf86-input-synaptics" \
+    "xf86-input-void" "xf86-video-intel" \
+    "xmonad" "autojump" "php" "sncli" "bashlint" \
+    "xmonad-contrib" "xmonad-utils" "acpid" \
+    "perl" "shellcheck" "zsh")
+
+  for i in ${NEED_TO_BE_INSTALLED[*]}; do # quite mode # won't give feedback # won't install if already present and up-to-date
+    echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
+    [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed "$i"
+  done
+} # }}}
+
 # TODO system restore script
-# restore-system {{{
+# restore-system 
 # FUNCTION
 # The aim of the script is to do nothing when the system is OK
 # and restore the whole system when it's just been reinstalled.
 
-setup-onedrive(){
-  if [ -x /usr/bin/onedrive ] ; then  
-    systemctl --user enable onedrive
-    systemctl --user start onedrive
-    [ ! -d ~/.config/onedrive ] && mkdir -p ~/.config/onedrive
-    [ ! -f ~/.config/onedrive/config ] && cp ./config ~/.config/onedrive/config
-    touch ~/.config/onedrive/sync_list  
-    # sync_dir: directory where the files will be synced
-    # skip_file: any files or directories that match this pattern will be skipped during sync
-  else
-    echo -e "You need to install onedrive-git \nAborting."
-    return 1
-  fi
-}
-
-setup-dropbox(){
-  if [ ! -x /usr/bin/dropbox ] || [ ! -x /usr/bin/dropbox-cli ]; then  
-    echo -e "You need to install dropbox and dropbox-cli.\nAborting."
-    return 1
-  else
-    dropbox-cli autostart y
-  fi
-}
-
-setup-gdrive(){
-  if [ ! -x /usr/bin/gdrive ]; then  
-    echo -e "You need to install gdrive.\nAborting."
-    return 1
-  else
-    [ ! -d ~/GDrive ] && mkdir -p ~/GDrive 
-    [ ! -f ~/GDrive/.gdriveignore ] && touch ~/GDrive/.gdriveignore
-  fi
-}
-
-restore-system(){
-[ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux."
-
-local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
-"aria2c" "cronie" "fdupes" "ddupes" \
-  "aspell" "bluej" "ctags" "bashmount" "bmenu" \
-  "aspell-en" "gdrive" "ca-certificates" \
-  "crontab" "psysh" "emacs" "cmake" \
-  "csslint" "thinkfinger" "the_silver_searcher" \
-  "curl" "dos2unix" "pdftotext" "make" \
-  "freetype2" "fontconfig" "pkg-config" \
-  "ghc-mod" "cabal" "node" "gawk" "i3" \
-  "git" "expac" "onedrive-git" "git-imerge" "git-extras" "thinkfan" \
-  "google-chrome" "coreutils" "hub" "htop"
-"intellij-idea-community-edition" "jdk-8" \
-  "lshw" "less" "nvim" "spotify" "astyle" \
-  "python" "tig"  "apacman" "yaourt" "tmux" \
-  "rofi" "stylish-haskell" "tidy" "tree" \
-  "sed" "pandoc" "openssh" "openvpn" "p7zip"
-"thermald" "dropbox" "dropbox-cli" "python-pip" "alsa-utils" \
-  "upower" "npm" "ruby" "gem" "timeshift" \
-  "wget" "curl" "wordnet" "xclip" "xclip" \
-  "xf86-input-keyboard" "xf86-input-libinput" \
-  "xf86-input-mouse" "xf86-input-synaptics" \
-  "xf86-input-void" "xf86-video-intel" \
-  "xmonad" "autojump" "php" "sncli" "bashlint" \
-  "xmonad-contrib" "xmonad-utils" "acpid" \
-  "perl" "shellcheck" "zsh")
-
-for i in ${NEED_TO_BE_INSTALLED[*]}; do # quite mode # won't give feedback # won't install if already present and up-to-date
-  echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
-  [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed "$i"
-  # echo -e "${MAGENTA}checking if installed ${DEFCOLOR}" # check if successfully installed
-  # [ ! -x "$(which $i)" ] && echo -e "$i :: not found on the filesystem despite installation"
-  # TODO this won't work becasue sometimes packages will have a different name then executables
-done
-
-# PYTHON
-# it is crucial that python is correctly set up
-# mackup is dependent on it as well as things like ranger
-
-echo -e "PYTHON"
-
-if [ ! -x /usr/bin/pip ] && [ ! -x /usr/bin/pip3 ] ; then # necessary for mackup
-  echo -e "PIP and PYTHON are necessary to make this work.\nThe script will terminate, \nmake sure pip is installed to proceed"
-  return 1
-fi
-
-echo -e "PYTHON and PIP detected\ninstalling PYTHON packages"
-
-local PY=("mackup" "ranger"  "requests" "scrapy" \
-  "pudb" "neovim" "jedi" "mypy" "spacy" "xonsh" "xontrib-z" \
-  "psutil" "nltk" "pytest" "ipython" "sumy" "fuzzywuzzy" \
-  "you-get" "pandas" "tensorflow" "numpy")
-
-for i in ${PY[*]}; do # iterate over pip packages install if not present
-  echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
-  sudo pip install --quiet --exists-action i "$i"
-  # echo -e "checking PIP packages"
-  # [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
-  # TODO checking won't work becasue not all packages produce exectuables
-done
-
-# python virtual env
-echo -e "checking virtual env"
-
-if [ ! -x /usr/bin/pyenv ] && [ ! -x ~/.pyenv/bin/pyenv ] ; then
-  echo -e "PYENV not detected\ninitiating ... "
-  git clone "https://github.com/pyenv/pyenv.git" ~/.pyenv
-  pyenv install "3.5.0"
-  pyenv global "3.5.0"
-  echo -e 'global python 3.5.0 activated'
-elif [ -x /usr/bin/pyenv ] || [ -x ~/.pyenv/bin/pyenv ] ; then
-  # if pyenv present on system initiate python 3.5.0
-  echo -e "PYENV detected continuing ..."
-  local PYENV_VERSION=$(pyenv version-name)
-  [ ! "${PYENV_VERSION}" = "3.5.0" ] && pyenv install "3.5.0" && pyenv global "3.5.0"
-fi
-
-echo -e "${RED}RUBY${DEFCOLOR}"
-
-# ruby
-if [ ! -x /usr/bin/gem ] || [ ! -x /usr/bin/ruby ] ; then
-  echo -e "either RUBY or GEM was not detected on this filesystem"
-  echo -e "make sure GEM is installed to install RUBY packages"
-  echo -e "becasue RUBY is not cructial the script will continue"
-  sleep 5 # sleep for long enough to see
-else # if both gem and ruby found
-
-  echo -e "RUBY and GEM detected\ninstalling RUBY gems"
-
-  local RB=(mdl sqlint rubocop) # ruby gems
-
-  for i in ${RB[*]}; do
-    sudo gem install "$i"
-  done
-
-  # check and give feedback on what's missing
-  echo -e "checking RUBY gems"
-
-  for i in ${RB[*]}; do
-    [ ! -x "$(which $i)" ] && echo -e "$i :: not present on the system"
-  done
-
-fi
-
-# javascript
-if [ ! -x /usr/bin/npm ] ; then
-
-  echo -e "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages"
-  echo -e "because NPM and JAVASCRIPT aren't crucial, the script will continue "
-  sleep 5
-
-else
-
-  echo -e "NODE and NPM detected\ninstalling NODE packages"
-
-  local JS=("write-good" textlint \
-    "git-standup" "git-stats" \
-    jsonlint tern "git-fire" \
-    "js-beautify" textlint)
-
-  for i in ${JS[*]}; do
-    sudo npm install "$i" -g
-  done
-
-fi
-
-# check if ZSH is set up correctly
-if [ -x /usr/bin/zsh ] ; then
-
-  echo -e 'zsh detected on your filesystem ... '
-
-  if  [ ! -f "${HOME}/.oh-my-zsh/oh-my-zsh.sh" ] ; then
-
-    echo -e "OH-MY-ZSH not detected\ninitiating ..."
-
-    # from oh-my-zsh [github]
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-    # custom plugins
-
-    [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-    [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
-    [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-
-    # source it
-    zsh -c ~/.zshrc
-
-  fi
-
-fi
-
-# if ALACRITTY is not set up rust will be needed
-install-alacritty
-
-# NEO-VIM
-# I chose the plugins dir to check if nvim is correctly set up, if not - clone it
-if [ -x /usr/bin/nvim ] && [ ! -f "${HOME}/.local/share/nvim/site/autoload/plug.vim" ]; then
-  echo -e "NEOVIM not initalised with vim-plug\ncloning from GIT"
-  # use tmp to force-write the files
-
-  mkdir -p /tmp/nvim/
-  git clone --recursive "https://github.com/nl253/VimScript" "/tmp/nvim/"
-
-  # git won't let you overwrite anything - use cp
-  cp -R /tmp/nvim/* ~/.config/nvim/
-
-  # from vim-plug [github]
-  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-
-  # here the init.vim file will be sourced to initialise the whole setup
-  # nvim -c "~/.config/nvim/init.vim"
-  # not sure if it's a good idea ...
-
-elif [ ! -x "/usr/bin/nvim" ] ; then
-
-  echo -e "neovim not detected on the filesystem.\n the installation will continue\nbut you will have to make sure neovim is installed to use plugins"
-
-fi
-
-install-tmux-plugs || echo -e "tmux was not detected on this filesystem\nthe script will continue\nyou will need to make sure tmux is installed"
+restore-system(){ # {{{
+  install-pacman-packages
+  install-alacritty
+  install-vim-plug
+  install-tmux-plugs 
+  setup-dropbox
+  mackup-restore
+  setup-onedrive
+  setup-gdrive
 
 # at this point variables will need to be reset
 echo "RESOURCING BASHRC"
 source ~/.bashrc
 
-if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] ; then
-
-  if [ -x $(which mackup) ] && [ -L ~/.bashrc ] && [ -L ~/.inputrc ] ; then
-
-    mackup restore
-
-  else
-
-    echo -e "you need to set up MACKUP.\nquitting."
-    return 1
-
-  fi
-
-elif [ ! -x "/usr/bin/dropbox" ] && [ ! -d ~/Dropbox ] ; then
-
-  echo -e "make sure DROPBOX is set up"
-  return 1
-
-fi
-
-}
-
-# ============================== }}}
+} # }}}
 
 # show-ip {{{
 # FUNCTION
@@ -769,7 +698,6 @@ show-colors(){
 # ex {{{
 # FUNCTION  :: general purpose archive extracting
 # USAGE: ex <file>
-# REQUIRES :: pygmentize (can be optional) :: ag for find-shell
 ex (){
   if [ -f "$1" ] && [ $# == 1 ] ; then
     case $1 in
@@ -792,11 +720,8 @@ ex (){
 }
 # ============================== }}}
 
-# SHOPTS and COMPLETE {{{
+set-shopts(){ # {{{
 # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
-# make sure zsh isn't able to source it {{{
-
-set-shopts(){
 complete -cf sudo
 complete -d cd
 shopt -s autocd
@@ -813,7 +738,6 @@ shopt -s histappend     # Append each session's history to $HISTFILE
 shopt -s histverify     # Edit a recalled history line before executing
 }
 
-[ ! -n "${ZSH+2}" ] && set-shopts
-
-# }}}
+# make sure zsh isn't able to source it 
+[ ! -n "${ZSH+2}" ] && set-shopts # }}}
 
