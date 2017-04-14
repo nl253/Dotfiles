@@ -41,6 +41,8 @@ export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput seta
 unset MAILCHECK                         # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s)    # Set Xterm/screen/Tmux title with only a short hostname
 
+[ -x /usr/bin/google-chrome-stable ] && export BROWSER=google-chrome-stable || export BROWSER=elinks
+
 # HISTORY {{{
 export HISTSIZE=20000
 export HISTFILESIZE=20000
@@ -96,6 +98,7 @@ fi
 [ -d  /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
 [ -d ~/.gem/rubu/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin"
 [ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin"
+[ -d ~/.cabal/bin ] && export PATH="$HOME/.cabal/bin:$PATH"
 [ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin"
 [ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin"
 [ -d ~/bin/ ] && export PATH="${PATH}:~/bin"
@@ -165,6 +168,15 @@ if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliase
     git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 
+# FUNCTION :: vague file find use agrep
+# DEPENDENCIES :: agrep
+find-approx(){
+[ $# = 0 ] && return 1
+cd ~
+[ ! -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash"
+[ -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash" | fzf --bind "enter:execute: $EDITOR {} \;"
+}
+
 
 FZFopen-from-anywhere() {
 local files
@@ -207,7 +219,7 @@ git checkout $(echo "$target" | awk '{print $2}')
    local commits commit
    commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
      commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
-     echo -n $(echo "$commit" | sed "s/ .*//")
+     echo -n -e $(echo "$commit" | sed "s/ .*//")
  }
 
  # FZFstash - list of your stashes
@@ -241,7 +253,6 @@ git checkout $(echo "$target" | awk '{print $2}')
  FZFcd(){ # quickly change dir
    local dir
    dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
-   cd "$dir"
  }
 
  FZFctags() { # search ctags
@@ -261,7 +272,6 @@ git checkout $(echo "$target" | awk '{print $2}')
    git checkout $(echo "$commit" | sed "s/ .*//")
 }
 
-alias f='fzf --bind "enter:execute($EDITOR {})"' # [F]IND # TODO needs filetering regexp from grep
 alias l=FZFlocate
 alias p=FZFpkill # [P]ROCESS
 alias c=FZFcd # [C]D
@@ -328,7 +338,7 @@ alias todo=todo-detect
 alias le="ls -lo"
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
-
+alias f=find-approx 
 
 alias -- -='cd -'        # Go back
 alias ..="cd .."
@@ -392,27 +402,63 @@ tib(){
 }
 # ======== }}}
 
-# FUNCTION :: transfer all the necessary files to a remote server
+# FUNCTION :: transfer all the necessary files to a remote server # {{{
 # ARGS
 # 1 : [ssh address in the style nl253@raptor.kent.ac.uk:]
 
 # TODO check, if it is possible to install npm, gem and pip packages without using sudo
-# TODO use sftp to transfer dotfiles remotely and when you log in have bashrc trigger installation of pip, gem and npm packages
+# TODO use ranger(sftp) to transfer dotfiles remotely and when you log in have bashrc trigger installation of pip, gem and npm packages
 # TODO find a way to init vim and plugins
 # TODO transfer .gitconfig .bashrc (.inputrc sorted)
 # TODO install ranger vint(?) shellcheck
-#remote-setup(){
 
-#}
+install-packages(){
+    local PIP=(flake8)
+    local NPM=(jsonlint csslint tidy proselint writegood)
+    local GEM=()
+    local CAB=(ShellCheck)
+    for i in ${PIP[*]} ; do
+	pip install --user --quiet --exists-action i "$i"
+    done
+    for i in ${GEM[*]} ; do
+	gem install "$i"
+    done
+   
+    cabal update
+    
+    for i in ${CAB[*]} ; do
+	[ ! -e "$HOME/.cabal/bin/$i" ] && cabal install
+    done
+    for i in ${NPM[*]} ; do
+	npm install "$i"
+    done
+}
 
-# FUNCTION :: detects 'TODO's in recently modified files
+install-dropbox(){
+  cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+}
+
+remote-setup(){ 
+  install-packages
+  install-dropbox
+  # transfer .gitignore 
+  # transfer .bashrc
+  # transfer init.vim
+  # transfer .spacemacs  # in case vim fails
+  # initialise ranger into ~/.ranger
+  # dropbox 
+}
+
+# }}}
+
+# FUNCTION :: detects 'TODO's in recently modified files {{{
 # avoids chrome .dropbox % (backup) .git vim/plugged (where the plugins are stored)
 # DEPENDENCIES :: ag
-
 todo-detect(){
 for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO
 
 }
+# }}}
 
 # FUNCTION :: restore the system {{{
 # The aim of the script is to do nothing when the system is OK
@@ -513,7 +559,7 @@ else # if both gem and ruby found
   local RB=(mdl sqlint rubocop) # ruby gems
 
   for i in ${RB[*]}; do
-    [ ! -x "$(which $i)" ] && sudo gem install "$i"
+    sudo gem install "$i"
   done
 
   # check and give feedback on what's missing
@@ -542,9 +588,7 @@ else
     "js-beautify" textlint)
 
   for i in ${JS[*]}; do
-    if [ ! -x "$(which $i)" ]; then
       sudo npm install "$i" -g
-    fi
   done
 
 fi
@@ -707,8 +751,9 @@ ex (){
 
 # make sure zsh isn't able to source it {{{
 if [ ! -n "${ZSH+2}" ]; then
-  complete -cf sudo
   shopt -s autocd
+  complete -cf sudo
+  complete -d cd
   shopt -s cdspell        # correct minor spelling errors
   shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
   shopt -s direxpand      # replaces directory names with expansion when <tab>

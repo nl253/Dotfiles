@@ -87,6 +87,8 @@ raptor-path.txt
 .tmux.conf
 .tmux/plugins
 .tmuxinator
+.vim/
+.vim/*
 .vim/ftdet*
 .vim/indent
 .vim/syntax

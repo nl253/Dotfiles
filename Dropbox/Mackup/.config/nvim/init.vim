@@ -60,13 +60,14 @@ Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
 Plug 'reedes/vim-textobj-sentence'
 Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
+let g:neomake_ghmarkdown_enabled_makers = ['writegood', 'proselint']
+let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 
-if filereadable('~/.config/nvim/dicts/frequent.dict') | set dictionary=~/.config/nvim/dicts/frequent.dict | endif
-if filereadable('~/.config/nvim/thesaurus.txt') | set thesaurus=~/.config/nvim/thesaurus.txt | endif
+if filereadable(glob('~/.config/nvim/dicts/frequent.dict')) | execute 'set dictionary=' . glob('~/.config/nvim/dicts/frequent.dict') | endif
+if filereadable(glob('~/.config/nvim/thesaurus.txt')) | execute 'set thesaurus=' . glob('~/.config/nvim/thesaurus.txt') | endif
 
 " if executable('tidy') | let g:syntastic_html_checkers = ['tidy'] | endif
 if executable('jsonlint') | let g:syntastic_json_checkers = ['jsonlint'] | endif
-let g:neomake_markdown_enabled_makers = [ 'mdl', 'textlint', 'writegood', 'proselint' ]
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOff', 'DittoOn', 'DittoSent',
       \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn']}
 
@@ -164,8 +165,8 @@ aug VIMENTER
   au FocusLost   * silent!  wall
   au CmdwinEnter * setlocal updatetime=2000
   au CmdwinLeave * setlocal updatetime=200
-  au BufReadPost,BufNew *.md,*.mmd let g:table_mode_corner = '|'  | TableModeEnable
-  au BufReadPost,BufNew *.org let g:table_mode_corner = '+' 
+  au BufReadPost,BufNew *.md,*.mmd setlocal ft=ghmarkdown.markdown | let g:table_mode_corner = '|'  | TableModeEnable
+  au BufReadPost,BufNew *.org let g:table_mode_corner = '+' | TableModeEnable
   au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
   au FileType gitcommit setl spell
   au FileType man setl nowrap
@@ -184,10 +185,9 @@ endif
 
 colorscheme antares
 
-if has('nvim')
-  nnoremap <Leader>fed    :e $MYVIMRC<CR>
-  nnoremap <Leader>fer    :so $MYVIMRC<CR>
-endif
+if !has('nvim') | execute 'let $MYVIMRC=' . glob('~/.vimrc') | endif
+nnoremap <Leader>fed    :e $MYVIMRC<CR>
+nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>gA 	:GHActivity<CR>
 nnoremap <Leader>ga 	:GHActivity<Space>
 nnoremap <Leader>gb 	:Gblame<CR>
