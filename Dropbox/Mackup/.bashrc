@@ -328,6 +328,7 @@ alias df='df --human-readable --si'
 alias info='info --vi-keys'
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
 alias logout="pkill -KILL -u "
+alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
 #alias j=jobs # used by autojump
 alias untar='tar -xvf'
 alias scripts-in-bashrc="grep -P '^\S+?\(\)' ~/.bashrc | sed  's/(//g' | sed 's/{//' | sed 's/)//g'"
@@ -409,7 +410,7 @@ cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 
 # ranger {{{
 
-install-ranger(){
+install-ranger(){ # TODO test 
 if [ ! -x /usr/bin/ranger ] && [ ! -e ~/.ranger ] ; then # check if ranger is installed, if not use a git-workaround
   [ ! -f ~/.ranger/ranger.py ] && mkdir -p ~/.ranger && git clone 'https://github.com/ranger/ranger' ~/.ranger/
   alias ranger='~/.ranger/ranger.py'
@@ -437,46 +438,60 @@ install-vim-plug
 
 # }}}
 
-# transfer-dotfiles {{{
+# transfer-dotfiles {{{ # TODO test with --dry-run 
 # FUNCTION :: transfer the necessary {dot}files to a remote machine (sftp server)
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
 transfer-dotfiles(){
 [ ! $# = 1 ] && return 1
 # format must compliant with rsync eg nl253@raptor (no colon)
-rsync ~/.bashrc "$1:.bashrc"
-rsync ~/.gitconfig "$1:.gitconfig"
+rsync -L ~/.bashrc "$1:.bashrc"
+rsync -L ~/.gitconfig "$1:.gitconfig"
 if [ -x /usr/bin/nvim ] ; then  # covers vim and neo-vim
-  rsync ~/.config/nvim/init.vim "$1:.vimrc"
-  rsync ~/.config/nvim/init.vim "$1:.config/nvim/init.vim"
+  rsync -L ~/.config/nvim/init.vim "$1:.vimrc"
+  rsync -L ~/.config/nvim/init.vim "$1:.config/nvim/init.vim"
 elif [ -x /usr/bin/vim ] ; then
-  rsync ~/.vimrc "$1:.vimrc"
-  rsync ~/.vimrc "$1:.config/nvim/init.vim"
+  rsync -L ~/.vimrc "$1:.vimrc"
+  rsync -L ~/.vimrc "$1:.config/nvim/init.vim"
 fi
 }
+
 # }}}
 
+transfer-personal(){
+  rsync -L ~/nl253 "$1:nl253"
+}
+
+transfer-scripts(){
+  rsync -L ~/bin "$1:bin"
+}
+
 # remote-setup {{{
+# FUNCTION :: a high level function that aims setup everything on a remote machine
+# NARGS = 1 :: the address compliant with rsync and ssh standard
+# data will be transfered via sftp using rsync 
+# files that are symlinked by default will be followed TODO check how it works in rsync man pages 
 remote-setup(){
-install-packages
-install-dropbox
-install-ranger
-install-vim-plug
-# transfer .gitignore
-# transfer .bashrc
-# transfer init.vim
-# transfer .spacemacs  # in case vim fails
-# initialise ranger into ~/.ranger
-# dropbox
+  install-packages $1
+  install-dropbox $1
+  install-ranger $1
+  install-vim-plug $1
+  setup-dropbox $1
+  setup-gdrive $1
+  setup-onedrive $1
+  transfer-scripts $1
+  transfer-personal $1
 } # }}}
 
 # todo-detect {{{
-# FUNCTION :: detects 'TODO's in recently modified files
-# avoids chrome .dropbox % (backup) .git vim/plugged (where the plugins are stored)
+# ---------------
+# FUNCTION :: detects 'TODO's in recently modified files [24h]
+# avoids chrome .dropbox % (backup) .git vim/plugged (where vim plugins are stored) and {c,C}ache 
+# sed abbreviates /home/norbert to ~ to make the output shorter
+# that seemingly redundant grep at the end highlights 'TODO' output
+# ---------------
 # DEPENDENCIES :: ag
-todo-detect(){
-for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO
-
-}
+# ---------------
+alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
 # }}}
 
 # TODO system restore script
@@ -489,7 +504,11 @@ setup-onedrive(){
   if [ -x /usr/bin/onedrive ] ; then  
     systemctl --user enable onedrive
     systemctl --user start onedrive
-    touch ~/.config/onedrive/sync_list
+    [ ! -d ~/.config/onedrive ] && mkdir -p ~/.config/onedrive
+    [ ! -f ~/.config/onedrive/config ] && cp ./config ~/.config/onedrive/config
+    touch ~/.config/onedrive/sync_list  
+    # sync_dir: directory where the files will be synced
+    # skip_file: any files or directories that match this pattern will be skipped during sync
   else
     echo -e "You need to install onedrive-git \nAborting."
     return 1
@@ -500,18 +519,28 @@ setup-dropbox(){
   if [ ! -x /usr/bin/dropbox ] || [ ! -x /usr/bin/dropbox-cli ]; then  
     echo -e "You need to install dropbox and dropbox-cli.\nAborting."
     return 1
+  else
+    dropbox-cli autostart y
   fi
-  dropbox-cli autostart y
+}
+
+setup-gdrive(){
+  if [ ! -x /usr/bin/gdrive ]; then  
+    echo -e "You need to install gdrive.\nAborting."
+    return 1
+  else
+    [ ! -d ~/GDrive ] && mkdir -p ~/GDrive 
+    [ ! -f ~/GDrive/.gdriveignore ] && touch ~/GDrive/.gdriveignore
+  fi
 }
 
 restore-system(){
-
 [ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux."
 
 local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
 "aria2c" "cronie" "fdupes" "ddupes" \
   "aspell" "bluej" "ctags" "bashmount" "bmenu" \
-  "aspell-en" "ca-certificates" \
+  "aspell-en" "gdrive" "ca-certificates" \
   "crontab" "psysh" "emacs" "cmake" \
   "csslint" "thinkfinger" "the_silver_searcher" \
   "curl" "dos2unix" "pdftotext" "make" \
