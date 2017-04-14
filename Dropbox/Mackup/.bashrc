@@ -154,7 +154,7 @@ if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliase
 
   FZFlocate(){
     [ $# = 0 ] && return 1
-    locate $1 2>/dev/null |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v -i "chrome" | grep -v -i "timeshift" | fzf --bind "enter:execute($EDITOR {})" 
+    locate $1 2>/dev/null |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v -i "chrome" | grep -v -i "timeshift" | fzf --bind "enter:execute($EDITOR {})"
   }
 
   FZFcheckout-branches-sorted(){  # checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
@@ -392,24 +392,25 @@ tib(){
 }
 # ======== }}}
 
-# FUNCTION :: transfer all the necessary files to a remote server 
+# FUNCTION :: transfer all the necessary files to a remote server
 # ARGS
 # 1 : [ssh address in the style nl253@raptor.kent.ac.uk:]
 
-
-# TODO check, if it is possible to install npm, gem and pip packages without using sudo 
-# TODO install ranger vint(?) shellcheck 
-# TODO transfer 
+# TODO check, if it is possible to install npm, gem and pip packages without using sudo
+# TODO use sftp to transfer dotfiles remotely and when you log in have bashrc trigger installation of pip, gem and npm packages
+# TODO find a way to init vim and plugins
+# TODO transfer .gitconfig .bashrc (.inputrc sorted)
+# TODO install ranger vint(?) shellcheck
 #remote-setup(){
 
 #}
 
 # FUNCTION :: detects 'TODO's in recently modified files
 # avoids chrome .dropbox % (backup) .git vim/plugged (where the plugins are stored)
-# DEPENDENCIES :: ag 
+# DEPENDENCIES :: ag
 
 todo-detect(){
-  for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO 
+for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO
 
 }
 
@@ -438,9 +439,9 @@ local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
   "rofi" "stylish-haskell" "tidy" "tree" \
   "sed" "pandoc" "openssh" "openvpn" "p7zip"
 "thermald" "dropbox" "python-pip" "alsa-utils" \
-  "upower" "npm" "ruby" "gem" "timeshift"
-"wget" "curl" "wordnet" "xclip" "xclip"
-"xf86-input-keyboard" "xf86-input-libinput" \
+  "upower" "npm" "ruby" "gem" "timeshift" \
+  "wget" "curl" "wordnet" "xclip" "xclip" \
+  "xf86-input-keyboard" "xf86-input-libinput" \
   "xf86-input-mouse" "xf86-input-synaptics" \
   "xf86-input-void" "xf86-video-intel" \
   "xmonad" "autojump" "php" "sncli" "bashlint" \
