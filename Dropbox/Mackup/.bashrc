@@ -545,6 +545,12 @@ download-bashrc(){ # download from the master branch  {{{
   [ ! -f ~/.bashrc ] && curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc >> ~/.bashrc || echo -e "An existing bashrc detected.\nRemove and backup old bashrc.\nAborting."
 } # }}}
 
+download-gitconfig(){ # {{{
+  [ ! -x /usr/bin/git ] && echo -e 'Git not detected on this system.\nAborting.' && return 1
+  [ -f ~/.gitconfig ] && echo -e 'Detected an existing gitconfig.\nYou will have to remove or back it up.\nAborting' && return 1 
+  curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig >> ~/.gitconfig
+} # }}}
+
 # transfer-dotfiles {{{ # TODO test with --dry-run
 # FUNCTION :: transfer the necessary {dot}files to a remote machine (sftp server)
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]

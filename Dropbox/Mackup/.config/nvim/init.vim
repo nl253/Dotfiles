@@ -136,7 +136,7 @@ let g:pymode_syntax_all = 1
 let g:pymode_syntax_print_as_function = 1
 let g:pymode_trim_whitespaces = 1
 
-if (has('python') || has('python3')) && has('lambda') && has('timers') && has('job')
+if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
   Plug 'maralla/completor.vim'
   let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
   let g:completor_completion_delay = 1
