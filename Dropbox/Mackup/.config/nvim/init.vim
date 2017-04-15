@@ -200,11 +200,11 @@ if has('nvim')
         PythonSupportInitPython3 
     endif
     if ! filereadable(glob('~/.config/nvim/dicts/frequent.dict'))
-        !curl  --create-dirs https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict >>  ~/.config/nvim/dicts/frequent.dict
+        !curl  -o --create-dirs ~/.config/nvim/dicts/frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict
     endif
     execute 'set dictionary=' . glob('~/.config/nvim/dicts/frequent.dict')
     if ! filereadable(glob('~/.config/nvim/thesaurus.txt'))
-        !curl --create-dirs https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt >>  ~/.config/nvim/thesaurus.txt
+        !curl -o --create-dirs ~/.config/nvim/thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt
     endif
     execute 'set thesaurus=' . glob('~/.config/nvim/thesaurus.txt')
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
@@ -221,11 +221,11 @@ if has('nvim')
 else
     let $MYVIMRC = glob('~/.vimrc')
     if ! filereadable(glob('~/.vim/dicts/frequent.dict'))
-        !curl --create-dirs https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict >>  ~/.vim/dicts/frequent.dict
+        !curl -o --create-dirs ~/.vim/dicts/frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict 
     endif
     execute 'set dictionary=' . glob('~/.vim/dicts/frequent.dict')
     if ! filereadable(glob('~/.vim/thesaurus.txt'))
-        !curl --create-dirs https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt >>  ~/.vim/thesaurus.txt
+        !curl -o --create-dirs ~/.vim/thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt 
     endif
     execute 'set thesaurus=' . glob('~/.vim/thesaurus.txt')
     syntax enable

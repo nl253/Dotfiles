@@ -544,7 +544,7 @@ install-ranger() { # {{{
 
 install-vim-plug() { # vim plugins {{{
         if [ -x /usr/bin/nvim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
-                curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+               curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
                         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         elif [ -x /usr/bin/vim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
                 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -563,9 +563,9 @@ download-vimrc() { # download from the master branch  {{{
                 mv ~/.config/nvim/init.vim ~/.config/nvim/init.vim.backup && echo -e 'Detected an existing .init.vim file.\nIt was moved to ~/.config/nvim/init.vim.backup.'
         fi
         if [ -x /usr/bin/nvim ] && [ ! -f /.config/nvim/init.vim ]; then # if vim but not neovim
-                curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >>~/.config/nvim/init.vim
+                curl -o --create-dirs ~/.config/nvim/init.vim https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >> 
         elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ]; then # if vim but not neovim
-                curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >>~/.vimrc
+                curl -o --create-dirs ~/.vimrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
         else
                 [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vim ] && echo -e "Neither vim nor neovim is installed on the system.\nAborting." && return 1
         fi
@@ -576,7 +576,7 @@ download-bashrc() { # download from the master branch  {{{
                 mv ~/.bashrc ~/.bashrc.backup  || echo -e "Something went wrong" && return 1
                 echo -e "Existing .bashrc was detected on the system.\nIt was moved to ~/.bashrc.backup." 
         fi
-        [ ! -e ~/.bashrc ] && curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc >> ~/.bashrc 
+        [ ! -e ~/.bashrc ] && curl -o --create-dirs ~/.bashrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc
 } # }}}
 
 download-gitconfig() { # {{{
@@ -585,7 +585,7 @@ download-gitconfig() { # {{{
                 mv ~/.gitconfig ~/.gitconfig.backup  || echo -e "Something went wrong" && return 1
                 echo -e "Existing .gitconfig was detected on the system.\nIt was moved to ~/.gitconfig.backup." 
         fi
-        [ ! -f ~/.gitconfig ] && curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig >> ~/.gitconfig
+        [ ! -f ~/.gitconfig ] && curl -o --create-dirs  ~/.gitconfig https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig
 } # }}}
 
 # transfer-dotfiles {{{ # TODO test with --dry-run
