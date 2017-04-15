@@ -87,6 +87,12 @@ Plug 'tpope/vim-markdown', { 'for': ['markdown', 'ghmarkdown']}
 Plug 'jtratner/vim-flavored-markdown', { 'for': ['markdown', 'ghmarkdown']}
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown', 'ghmarkdown']}
 
+let g:vim_markdown_fenced_languages = [
+        \'sh', 'java', 'python',
+            \'html', 'css', 'php',
+            \'javascript', 'haskell']
+<
+
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_folding_level = 2
@@ -185,7 +191,7 @@ aug VIMENTER
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
     au FileType * if index(g:MARKUP, &filetype) < 0 | setl complete=.,w,t, | else | setl complete=.,w,k,s | endif
-    au Filetype markdown setlocal ft=ghmarkdown.markdown | let g:table_mode_corner = '|'
+    au Filetype markdown setlocal ft=ghmarkdown | let g:table_mode_corner = '|'
     au BufReadPost,BufNew *.org let g:table_mode_corner = '+'
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     au FileType gitcommit setl spell
@@ -221,7 +227,7 @@ if has('nvim')
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
-    Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
+    Plug 'sbdchd/neoformat'
     if executable('ranger')
         Plug 'airodactyl/neovim-ranger'
     endif

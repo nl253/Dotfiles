@@ -82,7 +82,7 @@ export GREP_COLOR='1;33' # makes it yellow # by default red
 [ ! -x /usr/bin/less ] && [ -x /usr/bin/more ] && export PAGER=more && alias less=more
 # }}}
 
-generate-inputrc() {  # generate if not present and add configuration removes the need for external transfer {{{
+generate-inputrc() { # generate if not present and add configuration removes the need for external transfer {{{
         [ -f ~/.inputrc ] && echo -e "Inputrc already exists in ~/.inputrc.\nNothing to do.\nAborting." && return 1
         echo "Inputrc not detecting.\nGenerating ..."
         cat /etc/inputrc >>~/.inputrc # copy defaults
@@ -147,9 +147,9 @@ open-it() {
 
         if [ -f "$1" ]; then
                 if [ -x /usr/bin/rifle ]; then
-                        rifle "$1" 
+                        rifle "$1"
                 else
-                        $EDITOR "$1" 
+                        $EDITOR "$1"
                 fi
         elif [ -d "$1" ]; then
                 [ -x /usr/bin/ranger ] && ranger "$1"
@@ -158,7 +158,7 @@ open-it() {
 } # }}}
 
 # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
-if [ -x /usr/bin/fzf ]; then 
+if [ -x /usr/bin/fzf ]; then
         [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
         export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
         [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
@@ -331,11 +331,11 @@ fi
 setup-git() {
         download-gitconfig
         if [ -x /usr/bin/pacman ]; then
-                [ ! -x /usr/bin/apacman ] && sudo pacman -S apacman 
-                sudo pacman -S git-imerge 
-                sudo pacman -S git-fire 
-                sudo pacman -S git-stats 
-                sudo pacman -S git-extras 
+                [ ! -x /usr/bin/apacman ] && sudo pacman -S apacman
+                sudo pacman -S git-imerge
+                sudo pacman -S git-fire
+                sudo pacman -S git-stats
+                sudo pacman -S git-extras
         fi
         [ ! -x /usr/bin/git-extras ] && curl -sSL http://git.io/git-extras-setup | sudo bash /dev/stdin
         [ -x /usr/bin/git-extras ] && git extras update
@@ -370,7 +370,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 [ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system
 [ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"        # dmenu # a good alternative to rofi
-[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"                                   
+[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
 [ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2c.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2c.log\"" # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
@@ -408,16 +408,16 @@ setup-pyvirtualenv() { # {{{
 } # }}}
 
 setup-zsh() { # {{{ to be run on a remote machine while logged in without superuser privilidges. 
-# if of-my-zsh is not present it will install it along with plugins (also checked for)
-# if it is present then it will simply replace ~/.zshrc with a newer version pulled from my git Dot-files repo.
-# becasue oh-my-zsh automatically backups your zshrc, the replacing of ~/.zshrc will have to take place at the end 
-# first deal with oh-my-zsh
+        # if of-my-zsh is not present it will install it along with plugins (also checked for)
+        # if it is present then it will simply replace ~/.zshrc with a newer version pulled from my git Dot-files repo.
+        # becasue oh-my-zsh automatically backups your zshrc, the replacing of ~/.zshrc will have to take place at the end 
+        # first deal with oh-my-zsh
 
         [ ! -x /usr/bin/zsh ] && echo echo -e 'zsh not detected on your filesystem ... \nAborting' && return 1
 
         echo -e 'zsh detected on your filesystem ... \nProceeding...'
 
-        [ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.' 
+        [ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.'
 
         [ ! -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e "OH-MY-ZSH not detected\ninitiating ..." && echo -e 'Downloading oh-my-zsh' && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && echo -e 'if you had one, oh-my-zsh replaced your .zshrc with its own version and backed it up to ~/.zshrc.pre-oh-my-zsh.\nThis script will replace it with my preconfigured zshrc and move this to ~/.zshrc.backup'
 
@@ -429,7 +429,7 @@ setup-zsh() { # {{{ to be run on a remote machine while logged in without superu
         [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
         [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
-        curl -o ~/.zshrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.zshrc  
+        curl -o ~/.zshrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.zshrc
 
         # source it
         echo -e 'resourcing .zshrc.'
@@ -443,14 +443,14 @@ setup-zsh() { # {{{ to be run on a remote machine while logged in without superu
 install-go-packages() { # {{{
         local GO=("github.com/mvdan/sh/cmd/shfmt")
 
-        for i in $GO ; do
+        for i in $GO; do
                 go get -u "$i"
         done
 } # }}}
 
 install-cabal-packages() { # {{{
         local CAB=(ShellCheck)
-        
+
         cabal update
 
         for i in ${CAB[*]}; do
@@ -497,7 +497,7 @@ install-npm-packages() { # {{{
                 "write-good" "remark" "remark-cli" textlint
                 "git-standup" "git-stats" "git-extras"
                 tern "git-fire"
-                "js-beautify" 
+                "js-beautify"
                 jsonlint csslint tidy writegood)
 
         for i in ${NPM[*]}; do
@@ -510,7 +510,6 @@ install-npm-packages() { # {{{
 
 install-gem-packages() { # {{{
         local GEM=()
-
 
         echo -e "${RED}RUBY${DEFCOLOR}"
 
@@ -531,7 +530,6 @@ install-gem-packages() { # {{{
                         gem install "$i"
                 done
         fi
-
 
 }
 
@@ -581,7 +579,7 @@ install-ranger() { # {{{
 
 install-vim-plug() { # vim plugins {{{
         if [ -x /usr/bin/nvim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
-               curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+                curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
                         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         elif [ -x /usr/bin/vim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
                 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -594,35 +592,35 @@ install-vim-plug() { # vim plugins {{{
 } # }}}
 
 download-vimrc() { # download from the master branch  {{{
-        if [ -e ~/.vimrc ] && [ ! -x /usr/bin/nvim ] ; then  
+        if [ -e ~/.vimrc ] && [ ! -x /usr/bin/nvim ]; then
                 mv ~/.vimrc ~/.vimrc.backup && echo -e 'Detected an existing .vimrc file.\nIt was moved to ~/.vimrc.backup.'
-        elif [ -e ~/.config/nvim/init.vim ] && [ -x /usr/bin/nvim ] ; then 
+        elif [ -e ~/.config/nvim/init.vim ] && [ -x /usr/bin/nvim ]; then
                 mv ~/.config/nvim/init.vim ~/.config/nvim/init.vim.backup && echo -e 'Detected an existing .init.vim file.\nIt was moved to ~/.config/nvim/init.vim.backup.'
         fi
         if [ -x /usr/bin/nvim ] && [ ! -f /.config/nvim/init.vim ]; then # if vim but not neovim
                 [ ! -d ~/.config/nvim/ ] && mkdir -p ~/.config/nvim
-                curl -o ~/.config/nvim/init.vim https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
+                curl -o ~/.config/nvim/init.vim https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim
         elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ]; then # if vim but not neovim
-                curl -o ~/.vimrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
+                curl -o ~/.vimrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim
         else
                 [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vim ] && echo -e "Neither vim nor neovim is installed on the system.\nAborting." && return 1
         fi
 } # }}}
 
 download-bashrc() { # download from the master branch  {{{ # to be run by bash 
-        if [ -f ~/.bashrc ] ; then 
-                mv ~/.bashrc ~/.bashrc.backup  
-                echo -e "Existing .bashrc was detected on the system.\nIt was moved to ~/.bashrc.backup." 
+        if [ -f ~/.bashrc ]; then
+                mv ~/.bashrc ~/.bashrc.backup
+                echo -e "Existing .bashrc was detected on the system.\nIt was moved to ~/.bashrc.backup."
         fi
         [ ! -e ~/.bashrc ] && curl -o ~/.bashrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc
-        source ~/.bashrc 
+        source ~/.bashrc
 } # }}}
 
 download-gitconfig() { # {{{
         [ ! -x /usr/bin/git ] && echo -e 'Git not detected on this system.\nAborting.' && return 1
-        if [ -e ~/.gitconfig ] ; then 
-                mv ~/.gitconfig ~/.gitconfig.backup  || echo -e "Something went wrong" && return 1
-                echo -e "Existing .gitconfig was detected on the system.\nIt was moved to ~/.gitconfig.backup." 
+        if [ -e ~/.gitconfig ]; then
+                mv ~/.gitconfig ~/.gitconfig.backup || echo -e "Something went wrong" && return 1
+                echo -e "Existing .gitconfig was detected on the system.\nIt was moved to ~/.gitconfig.backup."
         fi
         [ ! -f ~/.gitconfig ] && curl -o ~/.gitconfig https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig
 } # }}}
@@ -685,7 +683,7 @@ alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v
 # ---------------
 # REQUIRES :: onedrive-git
 # --------------
-setup-onedrive() { 
+setup-onedrive() {
         if [ -x /usr/bin/onedrive ] && [ -x /usr/bin/systemctl ]; then
                 systemctl --user enable onedrive
                 systemctl --user start onedrive
@@ -706,7 +704,7 @@ setup-onedrive() {
 # ---------------
 # REQUIRES :: dropbox-cli dropbox
 # --------------
-setup-dropbox() { 
+setup-dropbox() {
         if [ ! -x /usr/bin/dropbox ] || [ ! -x /usr/bin/dropbox-cli ]; then
                 echo -e "You need to install dropbox and dropbox-cli.\nAborting."
                 return 1
@@ -724,7 +722,7 @@ setup-dropbox() {
 # --------------
 # DEPENDENCIES :: dropbox-cli dropbox mackup python
 # --------------
-mackup-restore() { 
+mackup-restore() {
         if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] && [ -x /usr/bin/mackup ]; then
                 mackup restore
         else
@@ -740,7 +738,7 @@ mackup-restore() {
 # DEPENDENCIES :: systemctl cronie thermald
 # -----------------
 setup-systemd() {
-        if [ ! -x /usr/bin/systemctl ] || [ ! -x /usr/bin/crontab ] || [ ! -x /usr/bin/thermald ]; then 
+        if [ ! -x /usr/bin/systemctl ] || [ ! -x /usr/bin/crontab ] || [ ! -x /usr/bin/thermald ]; then
                 echo -e 'This script requires systemd.\nNothing to do on this system.\nAborting.' && return 1
         fi
         sudo systemctl enable thermald
@@ -755,7 +753,7 @@ setup-systemd() {
 # -----------------
 # REQUIRES :: browser access to authenticate
 # -----------------
-setup-gdrive() { 
+setup-gdrive() {
         if [ ! -x /usr/bin/gdrive ]; then
                 echo -e "You need to install gdrive.\nAborting."
                 return 1
@@ -773,14 +771,15 @@ setup-gdrive() {
 # -----------------
 # REQUIRES :: root access, internet connection 
 # -----------------
-install-pacman-packages() { 
+install-pacman-packages() {
 
         [ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux.\nYou don't appear to have pacman.\nAborting." && return 1
 
         local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
                 "aria2c" "cronie" "fdupes" "ddupes"
                 "aspell" "bluej" "ctags" "bashmount" "bmenu"
-                "aspell-en" "gdrive" "ca-certificates"
+                "aspell-en" "gdrive" "tmux-bash-completion" "bash-completion"
+                "bash-completion-pandoc-git" "ca-certificates"
                 "crontab" "psysh" "emacs" "cmake"
                 "csslint" "thinkfinger" "the_silver_searcher"
                 "curl" "dos2unix" "pdftotext" "make"
@@ -911,9 +910,11 @@ set-shopts() { # {{{
         shopt -s direxpand    # replaces directory names with expansion when <tab>
         shopt -s dirspell     # correct minor spelling errors
         shopt -s dotglob      # Include dotfiles in pathname expansion
-        shopt -s checkjobs    # Include dotfiles in pathname expansion
+        shopt -s checkjobs    # Bash lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted
         shopt -s extglob      # Enable extended pattern-matching features
         shopt -s nullglob
+        shopt -s nocaseglob  # matches filenames in a case-insensitive fashion when performing pathname expansion.
+
         shopt -s globstar   # ** becomes a recursive wildstar
         shopt -s histappend # Append each session's history to $HISTFILE
         shopt -s histverify # Edit a recalled history line before executing
