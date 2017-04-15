@@ -569,12 +569,13 @@ download-vimrc() { # download from the master branch  {{{
         fi
 } # }}}
 
-download-bashrc() { # download from the master branch  {{{
+download-bashrc() { # download from the master branch  {{{ # to be run by bash 
         if [ -f ~/.bashrc ] ; then 
                 mv ~/.bashrc ~/.bashrc.backup  
                 echo -e "Existing .bashrc was detected on the system.\nIt was moved to ~/.bashrc.backup." 
         fi
         [ ! -e ~/.bashrc ] && curl -o ~/.bashrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc
+        source ~/.bashrc 
 } # }}}
 
 download-gitconfig() { # {{{
