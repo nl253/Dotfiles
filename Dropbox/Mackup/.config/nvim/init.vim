@@ -211,7 +211,7 @@ endif
 if has('nvim') 
   tnoremap <Esc> <C-\><C-n> 
 else
-  execute 'let $MYVIMRC=' . glob('~/.vimrc')
+  let $MYVIMRC = glob('~/.vimrc')
   syntax enable
   filetype plugin indent on
   set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch tags ttyfast

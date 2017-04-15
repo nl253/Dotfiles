@@ -74,7 +74,7 @@ export GREP_COLOR='1;33' # makes it yellow # by default red
 # }}}
 
 generate-inputrc(){ # generate if not present and add configuration {{{
-  [ -f ~/.inputrc ] && echo "Inputrc already exists in ~/.inputrc.\nNothing to do.\nAborting." && return 1
+  [ -f ~/.inputrc ] && echo -e "Inputrc already exists in ~/.inputrc.\nNothing to do.\nAborting." && return 1
   echo "Inputrc not detecting.\nGenerating ..." 
   cat /etc/inputrc >> ~/.inputrc # copy defaults 
   echo "set expand-tilde on" >> ~/.inputrc
@@ -125,8 +125,9 @@ open-it(){ # {{{
 [ ! -r "$1" ] && return 1
  if [ -f "$1" ] ; then 
    $EDITOR "$1"
- elif [ -d "$1" ] && [ -x /usr/bin/ranger ] ; then 
-   ranger "$1"
+ elif [ -d "$1" ] ; then
+   [ -x /usr/bin/ranger ] && ranger "$1"
+   [ -x ~/.ranger/ranger.py ]  && ~/.ranger/ranger.py "$1"
  fi
 } # }}}
 
@@ -137,7 +138,7 @@ if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliase
 
   FZFlocate(){
     [ $# = 0 ] && return 1
-    locate $1 2>/dev/null | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri)|(~)|(\d{4,})$" | grep -P -v -i ".*\%|(cache)|(chrome)|(timeshift).*" | fzf --bind "enter:execute($EDITOR {})"
+    locate $@ 2>/dev/null | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri)|(~)|(\d{4,})$" | grep -P -v -i ".*\%|(cache)|(chrome)|(timeshift).*" | fzf --bind "enter:execute($EDITOR {})"
   }
 
   FZFcheckout-branches-sorted(){  # checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
@@ -151,10 +152,10 @@ if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliase
 # FUNCTION :: vague file find use agrep
 # DEPENDENCIES :: agrep
 find-approx(){
-[ $# = 0 ] && return 1
-cd ~
-[ ! -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash"
-[ -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash" | fzf --bind "enter:execute: $EDITOR {} \;"
+  [ $# = 0 ] && echo -e "You have to provide 1 argument.\nAborting." && return 1
+  cd ~
+  [ ! -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash"
+  [ -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash" | fzf --bind "enter:execute: $EDITOR {} \;"
 }
 
 FZFcheckout-branch-tag() {
@@ -556,8 +557,8 @@ download-gitconfig(){ # {{{
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
 
 download-scripts(){
-  [ ! -d ~/nl253 ] && mkdir -p ~/nl253
-  git clone --recursive https://github.com/nl253/Notes ~/nl253
+  [ ! -d ~/bin ] && mkdir -p ~/bin
+  git clone --recursive https://github.com/nl253/Scripts ~/bin/
 }
 
 download-personal(){
@@ -578,6 +579,7 @@ remote-setup(){
   install-ranger
   install-vim-plug 
   download-dotfiles
+  download-Scripts
   generate-inputrc
   setup-zsh
 } # }}}
