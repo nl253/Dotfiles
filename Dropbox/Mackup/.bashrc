@@ -395,7 +395,7 @@ setup-zsh() { # {{{ # to be run on a remote machine while logged in without supe
         echo -e 'Moving oh-my-zsh preconfigured zshrc to ~/.zshrc-oh-my-zsh-preconfigured-defaults.\nReplacing with my custom .zshrc.'
         mv ~/.zshrc ~/.zshrc-oh-my-zsh-preconfigured-defaults
 
-        curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.zshrc >>~/.zshrc
+        curl -o ~/.zshrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.zshrc  
 
         # source it
         echo -e 'resourcing .zshrc.'
@@ -565,7 +565,7 @@ download-vimrc() { # download from the master branch  {{{
         if [ -x /usr/bin/nvim ] && [ ! -f /.config/nvim/init.vim ]; then # if vim but not neovim
                 curl -o --create-dirs ~/.config/nvim/init.vim https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >> 
         elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ]; then # if vim but not neovim
-                curl -o --create-dirs ~/.vimrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
+                curl -o ~/.vimrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
         else
                 [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vim ] && echo -e "Neither vim nor neovim is installed on the system.\nAborting." && return 1
         fi
@@ -576,7 +576,7 @@ download-bashrc() { # download from the master branch  {{{
                 mv ~/.bashrc ~/.bashrc.backup  || echo -e "Something went wrong" && return 1
                 echo -e "Existing .bashrc was detected on the system.\nIt was moved to ~/.bashrc.backup." 
         fi
-        [ ! -e ~/.bashrc ] && curl -o --create-dirs ~/.bashrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc
+        [ ! -e ~/.bashrc ] && curl -o ~/.bashrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc
 } # }}}
 
 download-gitconfig() { # {{{
@@ -585,7 +585,7 @@ download-gitconfig() { # {{{
                 mv ~/.gitconfig ~/.gitconfig.backup  || echo -e "Something went wrong" && return 1
                 echo -e "Existing .gitconfig was detected on the system.\nIt was moved to ~/.gitconfig.backup." 
         fi
-        [ ! -f ~/.gitconfig ] && curl -o --create-dirs  ~/.gitconfig https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig
+        [ ! -f ~/.gitconfig ] && curl -o ~/.gitconfig https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig
 } # }}}
 
 # transfer-dotfiles {{{ # TODO test with --dry-run
