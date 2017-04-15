@@ -73,6 +73,8 @@ Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOff', 'DittoOn', 'DittoSe
 
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 
+if has('nvim') | Plug 'sbdchd/neoformat' | endif
+
 Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'python', 'javascript']}
 let b:easytags_auto_highlight = 1
 let g:easytags_events = ['BufReadPost']

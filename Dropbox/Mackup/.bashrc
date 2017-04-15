@@ -24,7 +24,7 @@ DARKGREY="\e[90m"
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
-# $PS1 # prompt just for bash {{{ 
+# $PS1 # prompt just for bash {{{
 [ ! -n "${ZSH+2}" ] && export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] " # }}}
 
 unset MAILCHECK                         # Don't check mail when opening terminal.
@@ -74,20 +74,20 @@ export GREP_COLOR='1;33' # makes it yellow # by default red
 # }}}
 
 generate-inputrc(){ # generate if not present and add configuration {{{
-  [ -f ~/.inputrc ] && echo -e "Inputrc already exists in ~/.inputrc.\nNothing to do.\nAborting." && return 1
-  echo "Inputrc not detecting.\nGenerating ..." 
-  cat /etc/inputrc >> ~/.inputrc # copy defaults 
-  echo "set expand-tilde on" >> ~/.inputrc
-  echo "set skip-completed-text on" >> ~/.inputrc
-  echo "set echo-control-characters off" >> ~/.inputrc
-  echo "set completion-query-items 250" >> ~/.inputrc
-  echo "set page-completions off" >> ~/.inputrc
-  echo "set mark-symlinked-directories on" >> ~/.inputrc
-  echo "set bell-style none " >> ~/.inputrc
-  echo "set colored-stats on" >> ~/.inputrc
-  echo "set show-all-if-ambiguous on" >> ~/.inputrc
-  echo "set show-all-if-unmodified on" >> ~/.inputrc
-  echo "set colored-completion-prefix on" >> ~/.inputrc
+[ -f ~/.inputrc ] && echo -e "Inputrc already exists in ~/.inputrc.\nNothing to do.\nAborting." && return 1
+echo "Inputrc not detecting.\nGenerating ..."
+cat /etc/inputrc >> ~/.inputrc # copy defaults
+echo "set expand-tilde on" >> ~/.inputrc
+echo "set skip-completed-text on" >> ~/.inputrc
+echo "set echo-control-characters off" >> ~/.inputrc
+echo "set completion-query-items 250" >> ~/.inputrc
+echo "set page-completions off" >> ~/.inputrc
+echo "set mark-symlinked-directories on" >> ~/.inputrc
+echo "set bell-style none " >> ~/.inputrc
+echo "set colored-stats on" >> ~/.inputrc
+echo "set show-all-if-ambiguous on" >> ~/.inputrc
+echo "set show-all-if-unmodified on" >> ~/.inputrc
+echo "set colored-completion-prefix on" >> ~/.inputrc
 }
 
 # }}}
@@ -123,12 +123,12 @@ fi
 
 open-it(){ # {{{
 [ ! -r "$1" ] && return 1
- if [ -f "$1" ] ; then 
-   $EDITOR "$1"
- elif [ -d "$1" ] ; then
-   [ -x /usr/bin/ranger ] && ranger "$1"
-   [ -x ~/.ranger/ranger.py ]  && ~/.ranger/ranger.py "$1"
- fi
+if [ -f "$1" ] ; then
+  $EDITOR "$1"
+elif [ -d "$1" ] ; then
+  [ -x /usr/bin/ranger ] && ranger "$1"
+  [ -x ~/.ranger/ranger.py ]  && ~/.ranger/ranger.py "$1"
+fi
 } # }}}
 
 if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
@@ -152,10 +152,10 @@ if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliase
 # FUNCTION :: vague file find use agrep
 # DEPENDENCIES :: agrep
 find-approx(){
-  [ $# = 0 ] && echo -e "You have to provide 1 argument.\nAborting." && return 1
-  cd ~
-  [ ! -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash"
-  [ -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash" | fzf --bind "enter:execute: $EDITOR {} \;"
+[ $# = 0 ] && echo -e "You have to provide 1 argument.\nAborting." && return 1
+cd ~
+[ ! -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash"
+[ -x /usr/bin/fzf ] &&  find ~ -readable -type f 2>/dev/null | agrep $1 |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v elpa | grep -v -i "chrome" | grep -v IdeaIC | grep -v -i "timeshift" | sort | uniq | sed "s/\/home\/norbert\///" | grep -v -i "Trash" | fzf --bind "enter:execute: $EDITOR {} \;"
 }
 
 FZFcheckout-branch-tag() {
@@ -223,14 +223,14 @@ git checkout $(echo "$target" | awk '{print $2}')
    dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
  }
 
-FZFctags() { # search ctags
- local line
- [ -e tags ] &&
-   line=$(
- awk 'BEGIN { FS="\t" } !/^!/ {print toupper($4)"\t"$1"\t"$2"\t"$3}' tags |
- cut -c1-80 | fzf --nth=1,2
- ) && ${EDITOR:-vim} $(cut -f3 <<< "$line") -c "set nocst" \
-   -c "silent tag $(cut -f2 <<< "$line")"
+ FZFctags() { # search ctags
+   local line
+   [ -e tags ] &&
+     line=$(
+   awk 'BEGIN { FS="\t" } !/^!/ {print toupper($4)"\t"$1"\t"$2"\t"$3}' tags |
+   cut -c1-80 | fzf --nth=1,2
+   ) && ${EDITOR:-vim} $(cut -f3 <<< "$line") -c "set nocst" \
+     -c "silent tag $(cut -f2 <<< "$line")"
  }
 
  FZFcheckout-commit(){
@@ -282,10 +282,10 @@ fi
 [ -x /usr/bin/tig ] && alias t=tig
 
 setup-git(){
-  [ -x /usr/bin/git-extras ] && git extras update
-  #[ ! -x /usr/bin/git-fire ] && 
-  #[ ! -x /usr/bin/git-imerge ] && 
-  #[ ! -x /usr/bin/git-stats ] && 
+[ -x /usr/bin/git-extras ] && git extras update
+#[ ! -x /usr/bin/git-fire ] &&
+  #[ ! -x /usr/bin/git-imerge ] &&
+  #[ ! -x /usr/bin/git-stats ] &&
 }
 # }}}
 
@@ -364,38 +364,38 @@ fi
 setup-zsh(){ # {{{ # to be run on a remote machine while logged in without superuser privilidges.
 
 
-  [ ! -x /usr/bin/zsh ] && echo echo -e 'zsh not detected on your filesystem ... \nAborting' && return 1
+[ ! -x /usr/bin/zsh ] && echo echo -e 'zsh not detected on your filesystem ... \nAborting' && return 1
 
-  echo -e 'zsh detected on your filesystem ... \nSetting up z alias and checking for oh-my-zsh'
-  
-  [ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.\nAborting.' && return 1
+echo -e 'zsh detected on your filesystem ... \nSetting up z alias and checking for oh-my-zsh'
 
-  echo -e "OH-MY-ZSH not detected\ninitiating ..."
-  [ -e ~/.zshrc ] && echo -e ".zshrc and oh-my-zsh wasn't downloaded becuse an existing .zshrc is in your home directory.\nEither delete or backup.\nAborting." && return 1 
+[ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.\nAborting.' && return 1
+
+echo -e "OH-MY-ZSH not detected\ninitiating ..."
+[ -e ~/.zshrc ] && echo -e ".zshrc and oh-my-zsh wasn't downloaded becuse an existing .zshrc is in your home directory.\nEither delete or backup.\nAborting." && return 1
 
 
-  echo -e 'Downloading oh-my-zsh'
+echo -e 'Downloading oh-my-zsh'
 
-  # from oh-my-zsh [github]
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  
-  echo -e 'oh-my-zsh replaced your .zshrc with its own version and backed it up to ~/.zshrc.pre-oh-my-zsh.\nThis script will replace it with my preconfigured zshrc and move this to ~/.zshrc-oh-my-zsh-preconfigured-defaults.'
+# from oh-my-zsh [github]
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-  # custom plugins
-  echo -e 'Attempting to download custom plugins for oh-my-zsh.'
-  [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-  [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
-  [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+echo -e 'oh-my-zsh replaced your .zshrc with its own version and backed it up to ~/.zshrc.pre-oh-my-zsh.\nThis script will replace it with my preconfigured zshrc and move this to ~/.zshrc-oh-my-zsh-preconfigured-defaults.'
 
-  echo -e 'Moving oh-my-zsh preconfigured zshrc to ~/.zshrc-oh-my-zsh-preconfigured-defaults.\nReplacing with my custom .zshrc.'
-  mv ~/.zshrc ~/.zshrc-oh-my-zsh-preconfigured-defaults
+# custom plugins
+echo -e 'Attempting to download custom plugins for oh-my-zsh.'
+[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && git clone "git://github.com/zsh-users/zsh-autosuggestions" ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
+[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
-  curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.zshrc >> ~/.zshrc 
-  
-  # source it
-  echo -e 'resourcing .zshrc.'
-  zsh -c ~/.zshrc
-} 
+echo -e 'Moving oh-my-zsh preconfigured zshrc to ~/.zshrc-oh-my-zsh-preconfigured-defaults.\nReplacing with my custom .zshrc.'
+mv ~/.zshrc ~/.zshrc-oh-my-zsh-preconfigured-defaults
+
+curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.zshrc >> ~/.zshrc
+
+# source it
+echo -e 'resourcing .zshrc.'
+zsh -c ~/.zshrc
+}
 alias z=zsh
 # }}}
 
@@ -424,26 +424,26 @@ for i in ${PIP[*]} ; do
 done
 
 # set up bash completion for pip if it doesn't exist
-[ ! -e /etc/bash_completion.d/pip ] && sudo pip completion --bash >> /etc/bash_completion.d/pip # sudo won't work for redirects
+# [ ! -e /etc/bash_completion.d/pip ] && sudo pip completion --bash >> /etc/bash_completion.d/pip # sudo won't work for redirects
 
 } # }}}
 
 install-npm-packages(){ # {{{
 
-  [ ! -x /usr/bin/npm ] && echo -e "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages" && return 1
+[ ! -x /usr/bin/npm ] && echo -e "NPM not deteceted on the filesystem\nmake sure NPM is installed to install JAVSCRIPT packages" && return 1
 
-  echo -e "NODE and NPM detected\ninstalling NODE packages"
+echo -e "NODE and NPM detected\ninstalling NODE packages"
 
-  local NPM=(proselint \
-    "write-good" textlint \
-    "git-standup" "git-stats" \
-    jsonlint tern "git-fire" \
-    "js-beautify" textlint \
-    jsonlint csslint tidy writegood)
+local NPM=(proselint \
+  "write-good" textlint \
+  "git-standup" "git-stats" \
+  jsonlint tern "git-fire" \
+  "js-beautify" textlint \
+  jsonlint csslint tidy writegood)
 
-  for i in ${NPM[*]} ; do
-    npm install "$i"
-  done
+for i in ${NPM[*]} ; do
+  npm install "$i"
+done
 
 } # }}}
 
@@ -507,7 +507,7 @@ if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ] ; then
   git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
 elif [ -x /usr/bin/tmux ] && [ -d ~/.tmux/plugins/tpm ] ; then
   echo -e "TMUX detected along with TMUX PLUGIN MANAGER\nNothing to do.\nAborting."
-elif [ ! -x /usr/bin/tmux ] ; then 
+elif [ ! -x /usr/bin/tmux ] ; then
   return 1
   echo -e "Tmux is not installed.\nAborting."
   sleep 5
@@ -523,7 +523,7 @@ install-ranger(){ # {{{
 if [ ! -x /usr/bin/ranger ] && [ ! -e ~/.ranger ] ; then # check if ranger is installed, if not use a git-workaround
   [ ! -f ~/.ranger/ranger.py ] && mkdir -p ~/.ranger && git clone 'https://github.com/ranger/ranger' ~/.ranger/
 fi # if present set up an alias
-} 
+}
 
 [ -x /usr/bin/ranger ] && alias r='ranger'
 [ -x ~/.ranger/ranger.py ] && alias r=~/.ranger/ranger.py && alias ranger=~/.ranger/ranger.py
@@ -539,7 +539,7 @@ elif [ -x /usr/bin/vim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] 
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 else
   [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vim ] && echo -e "Neither vim nor neovim is installed on the system.\nAborting." && return 1
-  echo -e "Vim-plug already set up.\nNothing to do here." 
+  echo -e "Vim-plug already set up.\nNothing to do here."
   return 1
 fi
 } # }}}
@@ -551,19 +551,19 @@ elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ] ; then # if vim but not neovim
   curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >> ~/.vimrc
 else
   [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vim ] && echo -e "Neither vim nor neovim is installed on the system.\nAborting." && return 1
-  echo -e "Failed downloading vimrc / init.vim becuse there already is a vim dotfile on the system.\nAborting." 
+  echo -e "Failed downloading vimrc / init.vim becuse there already is a vim dotfile on the system.\nAborting."
   return 1
 fi
 } # }}}
 
 download-bashrc(){ # download from the master branch  {{{
-  [ ! -f ~/.bashrc ] && curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc >> ~/.bashrc || echo -e "An existing bashrc detected.\nRemove and backup old bashrc.\nAborting."
+[ ! -f ~/.bashrc ] && curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc >> ~/.bashrc || echo -e "An existing bashrc detected.\nRemove and backup old bashrc.\nAborting."
 } # }}}
 
 download-gitconfig(){ # {{{
-  [ ! -x /usr/bin/git ] && echo -e 'Git not detected on this system.\nAborting.' && return 1
-  [ -f ~/.gitconfig ] && echo -e 'Detected an existing gitconfig.\nYou will have to remove or back it up.\nAborting' && return 1 
-  curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig >> ~/.gitconfig
+[ ! -x /usr/bin/git ] && echo -e 'Git not detected on this system.\nAborting.' && return 1
+[ -f ~/.gitconfig ] && echo -e 'Detected an existing gitconfig.\nYou will have to remove or back it up.\nAborting' && return 1
+curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig >> ~/.gitconfig
 } # }}}
 
 # transfer-dotfiles {{{ # TODO test with --dry-run
@@ -571,31 +571,31 @@ download-gitconfig(){ # {{{
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
 
 download-scripts(){
-  [ ! -d ~/Scripts ] && mkdir -p ~/Scripts
-  git clone --recursive https://github.com/nl253/Scripts ~/Scripts/
+[ ! -d ~/Scripts ] && mkdir -p ~/Scripts
+git clone --recursive https://github.com/nl253/Scripts ~/Scripts/
 }
 
 download-personal(){
-  [ ! -d ~/nl253 ] && mkdir -p ~/nl253
-  git clone --recursive https://github.com/nl253/Notes ~/nl253
+[ ! -d ~/nl253 ] && mkdir -p ~/nl253
+git clone --recursive https://github.com/nl253/Notes ~/nl253
 }
 
 download-dotfiles(){ # to be run on a remote machine, on a local machine it would be called from a sys-restore script
-  download-bashrc
-  download-gitconfig
-  download-vimrc
+download-bashrc
+download-gitconfig
+download-vimrc
 } # }}}
 
 # remote-setup {{{
 # FUNCTION :: a high level function that aims setup everything on a remote machine
 # You must be logged into that machine to run it.
 remote-setup(){
-  install-ranger
-  install-vim-plug 
-  download-dotfiles
-  download-scripts
-  generate-inputrc
-  setup-zsh
+install-ranger
+install-vim-plug
+download-dotfiles
+download-scripts
+generate-inputrc
+setup-zsh
 } # }}}
 
 # todo-detect {{{
@@ -635,17 +635,17 @@ fi
 } # }}}
 
 mackup-restore(){ # {{{
-  if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] && [ -x /usr/bin/mackup ] ; then
-    mackup restore
-  else
-    echo -e "You need to install and set up MACKUP.\nAborting."
-    return 1
-  fi
+if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] && [ -x /usr/bin/mackup ] ; then
+  mackup restore
+else
+  echo -e "You need to install and set up MACKUP.\nAborting."
+  return 1
+fi
 } # }}}
 
 setup-systemd(){ # {{{
-  sudo systemctl enable thermald
-  sudo systemctl enable cronie
+sudo systemctl enable thermald
+sudo systemctl enable cronie
 } # }}}
 
 setup-gdrive(){ # {{{
@@ -660,38 +660,38 @@ fi
 
 install-pacman-packages(){ # {{{
 
-  [ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux.\nYou don't appear to have pacman.\nAborting." && return 1
+[ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux.\nYou don't appear to have pacman.\nAborting." && return 1
 
-  local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
-  "aria2c" "cronie" "fdupes" "ddupes" \
-    "aspell" "bluej" "ctags" "bashmount" "bmenu" \
-    "aspell-en" "gdrive" "ca-certificates" \
-    "crontab" "psysh" "emacs" "cmake" \
-    "csslint" "thinkfinger" "the_silver_searcher" \
-    "curl" "dos2unix" "pdftotext" "make" \
-    "freetype2" "fontconfig" "pkg-config" \
-    "ghc-mod" "cabal" "node" "gawk" "i3" \
-    "git" "expac" "onedrive-git" "git-imerge" "git-extras" "thinkfan" \
-    "google-chrome" "coreutils" "hub" "htop"
-  "intellij-idea-community-edition" "jdk-8" \
-    "lshw" "less" "nvim" "spotify" "astyle" \
-    "python" "tig"  "apacman" "yaourt" "tmux" \
-    "rofi" "stylish-haskell" "tidy" \
-    "sed" "pandoc" "openssh" "openvpn" "p7zip"
-  "thermald" "dropbox" "dropbox-cli" "python-pip" "alsa-utils" \
-    "upower" "npm" "ruby" "gem" "timeshift" \
-    "wget" "curl" "wordnet" "xclip" "xclip" \
-    "xf86-input-keyboard" "xf86-input-libinput" \
-    "xf86-input-mouse" "xf86-input-synaptics" \
-    "xf86-input-void" "xf86-video-intel" \
-    "xmonad" "autojump" "php" "sncli" "bashlint" \
-    "xmonad-contrib" "xmonad-utils" "acpid" \
-    "perl" "shellcheck" "zsh")
+local NEED_TO_BE_INSTALLED=(\ # list of pacman packages
+"aria2c" "cronie" "fdupes" "ddupes" \
+  "aspell" "bluej" "ctags" "bashmount" "bmenu" \
+  "aspell-en" "gdrive" "ca-certificates" \
+  "crontab" "psysh" "emacs" "cmake" \
+  "csslint" "thinkfinger" "the_silver_searcher" \
+  "curl" "dos2unix" "pdftotext" "make" \
+  "freetype2" "fontconfig" "pkg-config" \
+  "ghc-mod" "cabal" "node" "gawk" "i3" \
+  "git" "expac" "onedrive-git" "git-imerge" "git-extras" "thinkfan" \
+  "google-chrome" "coreutils" "hub" "htop"
+"intellij-idea-community-edition" "jdk-8" \
+  "lshw" "less" "nvim" "spotify" "astyle" \
+  "python" "tig"  "apacman" "yaourt" "tmux" \
+  "rofi" "stylish-haskell" "tidy" \
+  "sed" "pandoc" "openssh" "openvpn" "p7zip"
+"thermald" "dropbox" "dropbox-cli" "python-pip" "alsa-utils" \
+  "upower" "npm" "ruby" "gem" "timeshift" \
+  "wget" "curl" "wordnet" "xclip" "xclip" \
+  "xf86-input-keyboard" "xf86-input-libinput" \
+  "xf86-input-mouse" "xf86-input-synaptics" \
+  "xf86-input-void" "xf86-video-intel" \
+  "xmonad" "autojump" "php" "sncli" "bashlint" \
+  "xmonad-contrib" "xmonad-utils" "acpid" \
+  "perl" "shellcheck" "zsh")
 
-  for i in ${NEED_TO_BE_INSTALLED[*]}; do # quite mode # won't give feedback # won't install if already present and up-to-date
-    echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
-    [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed "$i"
-  done
+for i in ${NEED_TO_BE_INSTALLED[*]}; do # quite mode # won't give feedback # won't install if already present and up-to-date
+  echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
+  [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet  --noconfirm --needed "$i"
+done
 } # }}}
 
 # TODO restore-system {{{
@@ -700,17 +700,17 @@ install-pacman-packages(){ # {{{
 # and restore the whole system when it's just been reinstalled.
 # to be run on own machine with administrative privilidges
 
-restore-system(){ 
-  install-pacman-packages
-  #setup-dropbox
-  download-dotfiles
-  install-vim-plug
-  install-tmux-plugs 
-  # mackup-restore # needs authentication so won't work # TODO find a way to get Dropbox to work from a script
-  setup-onedrive # needs authentication so won't work 
-  setup-gdrive # needs authentication so won't work 
-  install-alacritty 
-  setup-systemd
+restore-system(){
+install-pacman-packages
+#setup-dropbox
+download-dotfiles
+install-vim-plug
+install-tmux-plugs
+# mackup-restore # needs authentication so won't work # TODO find a way to get Dropbox to work from a script
+setup-onedrive # needs authentication so won't work
+setup-gdrive # needs authentication so won't work
+install-alacritty
+setup-systemd
 
 # at this point variables will need to be reset
 echo "RESOURCING BASHRC"
@@ -765,25 +765,25 @@ ex (){
 # ============================== }}}
 
 set-shopts(){ # {{{
-  # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
-  complete -cf sudo
-  complete -d cd
-  [ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
-  shopt -s autocd
-  shopt -s cdspell        # correct minor spelling errors
-  shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
-  shopt -s direxpand      # replaces directory names with expansion when <tab>
-  shopt -s dirspell       # correct minor spelling errors
-  shopt -s dotglob        # Include dotfiles in pathname expansion
-  shopt -s checkjobs      # Include dotfiles in pathname expansion
-  shopt -s extglob        # Enable extended pattern-matching features
-  shopt -s nullglob
-  shopt -s globstar       # ** becomes a recursive wildstar
-  shopt -s histappend     # Append each session's history to $HISTFILE
-  shopt -s histverify     # Edit a recalled history line before executing
+# stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
+complete -cf sudo
+complete -d cd
+[ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
+shopt -s autocd
+shopt -s cdspell        # correct minor spelling errors
+shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
+shopt -s direxpand      # replaces directory names with expansion when <tab>
+shopt -s dirspell       # correct minor spelling errors
+shopt -s dotglob        # Include dotfiles in pathname expansion
+shopt -s checkjobs      # Include dotfiles in pathname expansion
+shopt -s extglob        # Enable extended pattern-matching features
+shopt -s nullglob
+shopt -s globstar       # ** becomes a recursive wildstar
+shopt -s histappend     # Append each session's history to $HISTFILE
+shopt -s histverify     # Edit a recalled history line before executing
 }
 
-# make sure zsh isn't able to source it 
+# make sure zsh isn't able to source it
 [ ! -n "${ZSH+2}" ] && set-shopts # }}}
 
 
