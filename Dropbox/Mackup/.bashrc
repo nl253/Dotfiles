@@ -2,12 +2,13 @@
 #
 # ~/.bashrc
 #
-# {{{  #  If not running interactively, don't do anything
+# {{{ If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 [[ $- != *i* ]] && return
 # }}}
 
-# colors # set variables to produce colored output later {{{
+# $COLORS {{{
+# set variables to produce colored output later 
 RED="\e[31m"
 CYAN="\e[96m"
 DARKMAGENTA="\e[35m"
@@ -24,14 +25,20 @@ DARKGREY="\e[90m"
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
-# $PS1 # prompt just for bash {{{
+# $PS1 {{{
+# ----------------------------------------------------------
+# prompt just for bash this should prevent zsh from reading
+# ----------------------------------------------------------
 [ ! -n "${ZSH+2}" ] && export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] " # }}}
 
 unset MAILCHECK                      # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a short hostname
 
 # $BROWSER {{{
-
+# -------------------------------------------------
+# uses google chrome if available ie if running on a gui 
+# fall back on 1. elinks 2. lynx 3. w3m
+# -------------------------------------------------
 if [ -x /usr/bin/google-chrome-stable ]; then
         export BROWSER=google-chrome-stable
 elif [ -x /usr/bin/elinks ]; then
@@ -41,7 +48,6 @@ elif [ -x /usr/bin/lynx ]; then
 elif [ -x /usr/bin/w3m ]; then
         export BROWSER=w3m
 fi
-
 # }}}
 
 # HISTORY {{{
@@ -50,6 +56,7 @@ export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups
 
 # HISTIGNORE
+# -----------
 # A colon-separated list of patterns used to decide which command lines should be saved on the history list.
 # It must match the complete line (no implicit `*' is appended).
 # The pattern is tested against the line after the checks specified by HISTCONTROL are applied.
@@ -57,23 +64,25 @@ export HISTCONTROL=ignoredups
 # The pattern  matching honors the setting of the extglob shell option.
 export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:jobs" # a colon separated list of items to ignore  }}}
 
-# $IRC_CLIENT default to irssi and fall back on hexchat {{{
+# $IRC_CLIENT  {{{
+# default to irssi and fall back on hexchat
 [ -x /usr/bin/irssi ] && export IRC_CLIENT='irssi'
 [ ! -x /usr/bin/irssi ] && [ -x /usr/bin/hexchat ] && export IRC_CLIENT='hexchat' # }}}
 
 export GREP_COLOR='1;33' # makes it yellow # by default red
 
-# $PAGER less {{{
-
+# $PAGER {{{
+# ------------------------------------------------------------------
 # if available enable syntax highlighting # fall back on more if less not available
-
+# tries to set default pager as less and add coloring to the output if possible
+# falls back on more if available
+# ------------------------------------------------------------------
 [ -f /usr/bin/source-highlight-esc.sh ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 [ -x /usr/bin/less ] && alias less='less -x4RFsX' && export PAGER=less
 [ ! -x /usr/bin/less ] && [ -x /usr/bin/more ] && export PAGER=more && alias less=more
-
 # }}}
 
-generate-inputrc() { # generate if not present and add configuration {{{
+generate-inputrc() {  # generate if not present and add configuration removes the need for external transfer {{{
         [ -f ~/.inputrc ] && echo -e "Inputrc already exists in ~/.inputrc.\nNothing to do.\nAborting." && return 1
         echo "Inputrc not detecting.\nGenerating ..."
         cat /etc/inputrc >>~/.inputrc # copy defaults
@@ -93,6 +102,9 @@ generate-inputrc() { # generate if not present and add configuration {{{
 # }}}
 
 # $PATH (and JAVA_HOME and JRE_HOME) {{{
+# ------------------------------------------------------------------------
+# FUNCTION :: add packages from all package managers to path if these paths exist along with my own scripts in ~/Scripts/
+# ------------------------------------------------------------------------
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 [ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
 [ -d ~/.gem/rubu/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin"
@@ -104,6 +116,9 @@ generate-inputrc() { # generate if not present and add configuration {{{
 # }}}
 
 # $EDITOR  {{{
+# ---------------------------------------------------------------------- 
+# attempt to set to neo-vim if available, fall back on vim and then vi
+# ----------------------------------------------------------------------
 if [ -x /usr/bin/nvim ]; then # if neovim
         export EDITOR=/usr/bin/nvim
         alias vim=/usr/bin/nvim
@@ -121,17 +136,29 @@ elif [ -x /usr/bin/vi ]; then # if not neovim and not vim then fall back on vi
 fi
 # }}}
 
-open-it() { # {{{
-        [ ! -r "$1" ] && return 1
+# open-it() :: open in a specific application depending on what it is (dir or file) {{{
+# ------------------------------------------------------------
+# DEPENDENCIES :: ranger (file manager built in python) rifle (ships with ranger, it detects best apps for a given filetype) 
+# ------------------------------------------------------------
+# REQUIRES :: $EDITOR needs to be set up properly
+# ------------------------------------------------------------
+open-it() {
+        [ ! -r "$1" ] && echo -e "it's not readable.\nAborting." && return 1
+
         if [ -f "$1" ]; then
-                $EDITOR "$1"
+                if [ -x /usr/bin/rifle ]; then
+                        rifle "$1" 
+                else
+                        $EDITOR "$1" 
+                fi
         elif [ -d "$1" ]; then
                 [ -x /usr/bin/ranger ] && ranger "$1"
                 [ -x ~/.ranger/ranger.py ] && ~/.ranger/ranger.py "$1"
         fi
 } # }}}
 
-if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
+# {{{ FZF init # chech if on system # set up aliases in case it is and isn't
+if [ -x /usr/bin/fzf ]; then 
         [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
         export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
         [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
@@ -272,7 +299,10 @@ fi
 
 # }}}
 
-# pacman {{{
+# pacman aliases, yaourt colors {{{
+# -----------------------------------
+# REQUIRES :: pacman yaourt expac 
+# -----------------------------------
 if [ -x /usr/bin/pacman ]; then
         [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
         [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
@@ -283,16 +313,32 @@ if [ -x /usr/bin/pacman ]; then
 fi
 # }}}
 
-# git {{{
+# setup-git() and github intergration {{{ # to be used on own machine
+# -------------------------------------------
+# FUNCTION 
+# -------------------------------------------
+# installs some extra utils for working with git 
+# such as git-extra git-imerge git-fire git-stats 
+# also makes sure there is a gitconfig file 
+# -------------------------------------------
+# REQUIRES :: root access
+# -------------------------------------------
+# DEPENDENCIES :: pacman 
+# -------------------------------------------
 [ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
 [ -x /usr/bin/tig ] && alias t=tig
 
 setup-git() {
-        [ -x /usr/bin/git-extras ] && git extras update
+        download-gitconfig
+        if [ -x /usr/bin/pacman ]; then
+                [ ! -x /usr/bin/apacman ] && sudo pacman -S apacman 
+                sudo pacman -S git-imerge 
+                sudo pacman -S git-fire 
+                sudo pacman -S git-stats 
+                sudo pacman -S git-extras 
+        fi
         [ ! -x /usr/bin/git-extras ] && curl -sSL http://git.io/git-extras-setup | sudo bash /dev/stdin
-        #[ ! -x /usr/bin/git-fire ] &&
-        #[ ! -x /usr/bin/git-imerge ] &&
-        #[ ! -x /usr/bin/git-stats ] &&
+        [ -x /usr/bin/git-extras ] && git extras update
 }
 # }}}
 
@@ -316,31 +362,24 @@ alias f=find-approx
 
 alias -- -='cd -' # Go back
 alias ..="cd .."
-alias ...="cd ..."
-alias ....="cd ...."
-alias .....="cd ....."
-alias ......="cd ....."
-alias .......="cd ......"
-alias ........="cd ......."
-alias .........="cd ......."
-alias ..........="cd ........."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 [ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system
 [ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"        # dmenu # a good alternative to rofi
-[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"                                   # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
+[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"                                   
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
-[ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2c.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2c.log\""
+[ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2c.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2c.log\"" # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
 alias logout="pkill -KILL -u "
 alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
 alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 #alias j=jobs # used by autojump
-alias untar='tar -xvf'
 alias scripts-in-bashrc="grep -P '^\S+?\(\)' ~/.bashrc | sed  's/(//g' | sed 's/{//' | sed 's/)//g'"
 alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # Readline
 alias http-server="python3 -m http.server"
@@ -368,7 +407,7 @@ setup-pyvirtualenv() { # {{{
 
 } # }}}
 
-setup-zsh() { # {{{ # to be run on a remote machine while logged in without superuser privilidges. 
+setup-zsh() { # {{{ to be run on a remote machine while logged in without superuser privilidges. 
 # if of-my-zsh is not present it will install it along with plugins (also checked for)
 # if it is present then it will simply replace ~/.zshrc with a newer version pulled from my git Dot-files repo.
 # becasue oh-my-zsh automatically backups your zshrc, the replacing of ~/.zshrc will have to take place at the end 
@@ -417,7 +456,7 @@ install-cabal-packages() { # {{{
         for i in ${CAB[*]}; do
                 [ ! -e "$HOME/.cabal/bin/$i" ] && cabal install
         done
-}
+} # }}}
 
 install-pip-packages() { # {{{
 
@@ -464,6 +503,8 @@ install-npm-packages() { # {{{
         for i in ${NPM[*]}; do
                 npm install "$i"
         done
+
+        # set up completion is you are a superuser
 
 } # }}}
 
@@ -516,15 +557,14 @@ install-alacritty() { # {{{
 
 install-tmux-plugs() { # {{{
         # check if tmux plugin manager dir is present
+        [ ! -e ~/.tmux.conf ] && curl -o ~/.tmux.conf https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.tmux.conf && echo -e "tmux.conf not detected.\nThe script has downloaded one from github and placed it in ~/.tmux.conf."
         if [ -x /usr/bin/tmux ] && [ ! -d ~/.tmux/plugins/tpm ]; then
                 echo -e "TMUX detected but TMUX PLUGIN MANAGER not present\ninitalising ..."
                 git clone "https://github.com/tmux-plugins/tpm" ~/.tmux/plugins/tpm
         elif [ -x /usr/bin/tmux ] && [ -d ~/.tmux/plugins/tpm ]; then
                 echo -e "TMUX detected along with TMUX PLUGIN MANAGER\nNothing to do.\nAborting."
         elif [ ! -x /usr/bin/tmux ]; then
-                return 1
-                echo -e "Tmux is not installed.\nAborting."
-                sleep 5
+                echo -e 'Tmux not installed.\nAborting.'
         fi
 } # }}}
 
@@ -587,7 +627,7 @@ download-gitconfig() { # {{{
         [ ! -f ~/.gitconfig ] && curl -o ~/.gitconfig https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.gitconfig
 } # }}}
 
-# transfer-dotfiles {{{ # TODO test with --dry-run
+# download-dotfiles {{{ # TODO test with --dry-run
 # FUNCTION :: transfer the necessary {dot}files to a remote machine (sftp server)
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
 
@@ -607,32 +647,46 @@ download-dotfiles() { # to be run on a remote machine, on a local machine it wou
         download-vimrc
 } # }}}
 
-# remote-setup {{{
-# FUNCTION :: a high level function that aims setup everything on a remote machine
-# You must be logged into that machine to run it.
+# remote-setup {{{  a high level function that aims setup everything on a remote machine
+# --------------------------------
+# this function aims to safely, (by checking for existence) bring all the necessary dotfiles onto a remote machine. 
+# This includes setting up {neo}vim, vim-plug, ranger (file manager) and zsh including oh-my-zsh in case bash default configuration is awful.
+# It also gets my python and shell sripts from github.
+# -----------------------------------------------------------
+# NOTE :: You must be logged into that machine to run it.
+# -----------------------------------------------------------
+# DEPENDENCIES :: zsh 
+# -----------------------------------------------------------
+# REQUIRES :: internet connection
+# -----------------------------------------------------------
 remote-setup() {
-        install-ranger
-        install-vim-plug
         download-dotfiles
-        download-scripts
         generate-inputrc
+        install-vim-plug
+        install-ranger
+        download-scripts
         setup-zsh
 } # }}}
 
-# todo-detect {{{
-# ---------------
-# FUNCTION :: detects 'TODO's in recently modified files [24h]
+# todo-detect() {{{ detects 'TODO's in recently modified files [24h]
+# ----------
 # avoids chrome .dropbox % (backup) .git vim/plugged (where vim plugins are stored) and {c,C}ache
 # sed abbreviates /home/norbert to ~ to make the output shorter
 # that seemingly redundant grep at the end highlights 'TODO' output
 # ---------------
-# DEPENDENCIES :: ag
+# DEPENDENCIES :: ag (gives a nice output with details about lines and files)
 # ---------------
 alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | grep -v "*.local/lib/*" | sed -E -r "/^.{,7}$/d" ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
 # }}}
 
-setup-onedrive() { # {{{
-        if [ -x /usr/bin/onedrive ]; then
+# setup-onedrive # {{{ to be run on own machine 
+# ---------------
+# FUNCTION :: sets up onedrive if it is installed by creating a systemd hook 
+# ---------------
+# REQUIRES :: onedrive-git
+# --------------
+setup-onedrive() { 
+        if [ -x /usr/bin/onedrive ] && [ -x /usr/bin/systemctl ]; then
                 systemctl --user enable onedrive
                 systemctl --user start onedrive
                 [ ! -d ~/.config/onedrive ] && mkdir -p ~/.config/onedrive
@@ -646,16 +700,31 @@ setup-onedrive() { # {{{
         fi
 } # }}}
 
-setup-dropbox() { # {{{
+# setup-dropbox() # {{{ to be run on own machine 
+# ---------------
+# FUNCTION :: sets up dropbox if it is installed by createing a systemd hook 
+# ---------------
+# REQUIRES :: dropbox-cli dropbox
+# --------------
+setup-dropbox() { 
         if [ ! -x /usr/bin/dropbox ] || [ ! -x /usr/bin/dropbox-cli ]; then
                 echo -e "You need to install dropbox and dropbox-cli.\nAborting."
                 return 1
-        else
-                dropbox-cli autostart y
         fi
+        dropbox-cli autostart y
+        dropbox-cli start
+        dropbox-cli status
 } # }}}
 
-mackup-restore() { # {{{
+# mackup-restore() # {{{ to be run on own machine
+# ---------------------------
+# FUNCTION :: restores dotfiles using a dropbox connection 
+# ---------------
+# REQUIRES :: internet connection, browser for authentication
+# --------------
+# DEPENDENCIES :: dropbox-cli dropbox mackup python
+# --------------
+mackup-restore() { 
         if [ -x /usr/bin/dropbox ] && [ -d ~/Dropbox ] && [ -x /usr/bin/mackup ]; then
                 mackup restore
         else
@@ -664,12 +733,29 @@ mackup-restore() { # {{{
         fi
 } # }}}
 
-setup-systemd() { # {{{
+# setup-systemd() {{{ to be run on own machine 
+# -----------------
+# FUNCTION :: sets up systemd hooks for deamons 
+# -----------------
+# DEPENDENCIES :: systemctl cronie thermald
+# -----------------
+setup-systemd() {
+        if [ ! -x /usr/bin/systemctl ] || [ ! -x /usr/bin/crontab ] || [ ! -x /usr/bin/thermald ]; then 
+                echo -e 'This script requires systemd.\nNothing to do on this system.\nAborting.' && return 1
+        fi
         sudo systemctl enable thermald
         sudo systemctl enable cronie
 } # }}}
 
-setup-gdrive() { # {{{
+# setup-gdrive() {{{ to be run on own machine 
+# -----------------
+# FUNCTION :: sets up gdrive (a google drive client) 
+# -----------------
+# DEPENDENCIES :: systemctl cronie thermald
+# -----------------
+# REQUIRES :: browser access to authenticate
+# -----------------
+setup-gdrive() { 
         if [ ! -x /usr/bin/gdrive ]; then
                 echo -e "You need to install gdrive.\nAborting."
                 return 1
@@ -679,7 +765,15 @@ setup-gdrive() { # {{{
         fi
 } # }}}
 
-install-pacman-packages() { # {{{
+# install-pacman-packages() {{{ to be run on own machine-
+# ------------------
+# FUNCTION :: install pacman packages that I activatly use, part of restore-system()
+# -----------------
+# DEPENDENCIES :: pacman 
+# -----------------
+# REQUIRES :: root access, internet connection 
+# -----------------
+install-pacman-packages() { 
 
         [ ! -x /usr/bin/pacman ] && echo -e "This script is preconfigured ONLY for Arch Linux.\nYou don't appear to have pacman.\nAborting." && return 1
 
@@ -716,12 +810,18 @@ install-pacman-packages() { # {{{
 
 } # }}}
 
-# TODO restore-system {{{
+# restore-system() {{{ to be run on own machine
+# -----------
 # FUNCTION
+# -----------------------------------------------------------
 # The aim of the script is to do nothing when the system is OK
 # and restore the whole system when it's just been reinstalled.
 # to be run on own machine with administrative privilidges
-
+# -----------------------------------------------------------
+# the function is designed to be modular and call pre-written 
+# pieces of code to get the system up and running
+# -----------------------------------------------------------
+# REQUIRES :: pacman, internet connection, root access, systemctl
 restore-system() {
         install-pacman-packages
         #setup-dropbox
@@ -740,10 +840,12 @@ restore-system() {
 
 } # }}}
 
-# show-ip {{{
-# FUNCTION
-# print in a JSON format a dict with your IP
-# and other details about the network you are on
+# show-ip() {{{ details about the network you are on (including IP)
+# --------------------------------
+# REQUIRES :: internet connection
+# --------------------------------
+# DEPENDENCIES :: ipawk 
+# --------------------------------
 show-ip() {
         if grep -P "(([1-9]\d{0,2})\.){3}(?2)" <<<"$1"; then
                 curl ipinfo.io/"$1"
@@ -752,10 +854,10 @@ show-ip() {
                 curl ipinfo.io/${ipawk[1]}
         fi
 }
-# ============================== }}}
+# }}}
 
-# show-colors {{{
-# FUNCTION  :: prints the 256 colors with their corresponding numbers
+# show-colors() {{{ prints the 256 terminal colors with their corresponding numbers
+# -------------------------------------
 show-colors() {
         (
                 x=$(tput op) y=$(printf %76s)
@@ -768,11 +870,14 @@ show-colors() {
                 done
         )
 }
-# ============================== }}}
+#  }}}
 
-# ex {{{
-# FUNCTION  :: general purpose archive extracting
-# USAGE: ex <file>
+# ex() {{{ general purpose archive extracting
+# -------------------------------------
+# USAGE: ex <archive>
+# -------------------------------------
+# DEPENDENCIES :: unrar p7zip tar gunzip uncompress
+# -------------------------------------
 ex() {
         if [ -f "$1" ] && [ $# == 1 ]; then
                 case $1 in
@@ -793,7 +898,7 @@ ex() {
                 echo "'$1' is not a valid file or you supplied to many args"
         fi
 }
-# ============================== }}}
+#  }}}
 
 set-shopts() { # {{{
         # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators

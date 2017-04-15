@@ -84,7 +84,7 @@ plugins=(zsh-syntax-highlighting \
         compleat \
         dircycle \ 
         tmuxinator \
-        pyenv urltools\
+        urltools\
         rsync python pip \
         npm man gem \
         systemd sudo \
@@ -99,6 +99,7 @@ plugins=(zsh-syntax-highlighting \
         autopep8)
 # look into it:
 # git-flow git-hubflow
+# pyenv :: taken out becasue it's not as popular on other systems and causes errors
 
 source $ZSH/oh-my-zsh.sh
 
