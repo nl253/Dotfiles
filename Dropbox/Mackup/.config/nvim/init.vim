@@ -231,7 +231,7 @@ else
     syntax enable
     filetype plugin indent on
     set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
-    set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch viminfo
+    set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch 
     if has('tags')
         set tags
     endif
