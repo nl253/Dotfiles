@@ -24,8 +24,8 @@ DARKGREY="\e[90m"
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
-# $PS1 # prompt {{{ 
-export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] " # }}}
+# $PS1 # prompt just for bash {{{ 
+[ ! -n "${ZSH+2}" ] && export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] " # }}}
 
 unset MAILCHECK                         # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s)    # Set Xterm/screen/Tmux title with only a short hostname
@@ -92,7 +92,7 @@ generate-inputrc(){ # generate if not present and add configuration {{{
 
 # }}}
 
-# $PATH {{{
+# $PATH (and JAVA_HOME and JRE_HOME) {{{
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 [ -d  /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
 [ -d ~/.gem/rubu/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin"
@@ -100,7 +100,7 @@ generate-inputrc(){ # generate if not present and add configuration {{{
 [ -d ~/.cabal/bin ] && export PATH="$HOME/.cabal/bin:$PATH"
 [ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin"
 [ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin"
-[ -d ~/bin/ ] && export PATH="${PATH}:~/bin"
+[ -d ~/Scripts/ ] && export PATH="${PATH}:~/Scripts"
 # }}}
 
 # $EDITOR  {{{
@@ -558,8 +558,8 @@ download-gitconfig(){ # {{{
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
 
 download-scripts(){
-  [ ! -d ~/bin ] && mkdir -p ~/bin
-  git clone --recursive https://github.com/nl253/Scripts ~/bin/
+  [ ! -d ~/Scripts ] && mkdir -p ~/Scripts
+  git clone --recursive https://github.com/nl253/Scripts ~/Scripts/
 }
 
 download-personal(){
@@ -580,7 +580,7 @@ remote-setup(){
   install-ranger
   install-vim-plug 
   download-dotfiles
-  download-Scripts
+  download-scripts
   generate-inputrc
   setup-zsh
 } # }}}
