@@ -7,6 +7,7 @@
 
 [diff]
 	renames = copies  # Detect copies as well as renames
+	tool = vimdiff
 
 [merge]
 	log = true  # Include summaries of merged commits in newly created merge commit messages
@@ -72,7 +73,7 @@
 	
 	# DIFF
 	# -------------------
-	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"   # Show the diff between the latest commit and the current state
+	d = difftool
 	;dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"  # Remove branches that have already been merged with master # a.k.a. ‘delete merged’
 
 	# FIND
@@ -138,3 +139,5 @@
 
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"interactive = auto
+[difftool]
+	prompt = false

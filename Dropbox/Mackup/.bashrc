@@ -7,8 +7,6 @@
 [[ $- != *i* ]] && return
 # }}}
 
-echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
-
 # colors # set variables to produce colored output later {{{
 RED="\e[31m"
 CYAN="\e[96m"
@@ -23,6 +21,8 @@ DARKYELLOW="\e[33m"
 GREY="\e[37m"
 DARKGREY="\e[90m"
 # }}}
+
+echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
 # $PS1 # prompt {{{ 
 export PS1="$(tput setaf 1)\w\n\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 5)\]\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$\[$(tput sgr0)\] " # }}}
@@ -121,13 +121,23 @@ elif [ -x /usr/bin/vi ] ; then # if not neovim and not vim then fall back on vi
 fi
 # }}}
 
+open-it(){ # {{{
+[ ! -r "$1" ] && return 1
+ if [ -f "$1" ] ; then 
+   $EDITOR "$1"
+ elif [ -d "$1" ] && [ -x /usr/bin/ranger ] ; then 
+   ranger "$1"
+ fi
+} # }}}
+
+
 if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
   export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
   [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
   FZFlocate(){
     [ $# = 0 ] && return 1
-    locate $1 2>/dev/null |  grep -P -v "(\d{4,}$)|(~$)" | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.((png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" | grep -v "%" | grep -v -i "cache" | grep -v -i "chrome" | grep -v -i "timeshift" | fzf --bind "enter:execute($EDITOR {})"
+    locate $1 2>/dev/null | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri)|(~)|(\d{4,})$" | grep -P -v -i ".*\%|(cache)|(chrome)|(timeshift).*" | fzf --bind "enter:execute($EDITOR {})"
   }
 
   FZFcheckout-branches-sorted(){  # checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
@@ -212,14 +222,14 @@ git checkout $(echo "$target" | awk '{print $2}')
    dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
  }
 
- FZFctags() { # search ctags
-   local line
-   [ -e tags ] &&
-     line=$(
-   awk 'BEGIN { FS="\t" } !/^!/ {print toupper($4)"\t"$1"\t"$2"\t"$3}' tags |
-   cut -c1-80 | fzf --nth=1,2
-   ) && ${EDITOR:-vim} $(cut -f3 <<< "$line") -c "set nocst" \
-     -c "silent tag $(cut -f2 <<< "$line")"
+FZFctags() { # search ctags
+ local line
+ [ -e tags ] &&
+   line=$(
+ awk 'BEGIN { FS="\t" } !/^!/ {print toupper($4)"\t"$1"\t"$2"\t"$3}' tags |
+ cut -c1-80 | fzf --nth=1,2
+ ) && ${EDITOR:-vim} $(cut -f3 <<< "$line") -c "set nocst" \
+   -c "silent tag $(cut -f2 <<< "$line")"
  }
 
  FZFcheckout-commit(){
@@ -311,26 +321,23 @@ alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
-alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
-
 [ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system
-[ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
 [ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white" # dmenu # a good alternative to rofi
-[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"
-# set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
-[ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2c.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2c.log\""
-
+[ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB" # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
+[ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2c.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2c.log\""
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
 alias logout="pkill -KILL -u "
 alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
+alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
+alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 #alias j=jobs # used by autojump
 alias untar='tar -xvf'
 alias scripts-in-bashrc="grep -P '^\S+?\(\)' ~/.bashrc | sed  's/(//g' | sed 's/{//' | sed 's/)//g'"
 alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # Readline
 alias http-server="python3 -m http.server"
+[ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
 # }}}
 
 setup-pyvirtualenv(){ # {{{
@@ -401,6 +408,10 @@ local PIP=(\
 for i in ${PIP[*]} ; do
   pip install --user --quiet --exists-action i "$i"
 done
+
+# set up bash completion for pip if it doesn't exist
+[ ! -e /etc/bash_completion.d/pip ] && sudo pip completion --bash >> /etc/bash_completion.d/pip # sudo won't work for redirects
+
 } # }}}
 
 install-npm-packages(){ # {{{
@@ -504,6 +515,8 @@ else
 fi # if present set up an alias
 } # }}}
 
+alias r='ranger'
+
 install-vim-plug(){ # vim plugins {{{
 if [ -x /usr/bin/nvim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
@@ -515,16 +528,33 @@ elif [ -x /usr/bin/vim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] 
 else
   return 1
 fi
-}
+} # }}}
 
-# }}}
+setup-vimrc(){ # download from the master branch  {{{
+if [ -x /usr/bin/nvim ] && [ ! -f /.config/nvim/init.vim ] ; then # if vim but not neovim
+  curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >> ~/.config/nvim/init.vim
+elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ] ; then # if vim but not neovim
+  curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >> ~/.vimrc
+else
+  echo -e "Neither neovim nor vim was detected.\nAborting." 
+  return 1
+fi
+} # }}}
+
+setup-bashrc(){ # download from the master branch  {{{
+  [ ! -f ~/.bashrc ] && curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc >> ~/.bashrc || echo -e "An existing bashrc detected.\nRemove and backup old bashrc.\nAborting."
+} # }}}
 
 # transfer-dotfiles {{{ # TODO test with --dry-run
 # FUNCTION :: transfer the necessary {dot}files to a remote machine (sftp server)
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
 transfer-dotfiles(){
-[ ! $# = 1 ] && return 1
+
+[ ! $# = 1 ] && echo "Please provide 1 argument in the form nl253@server.co.uk" && return 1
+
 # format must compliant with rsync eg nl253@raptor (no colon)
+#-L When  symlinks  are  encountered, the item that they point to (the referent) is copied, rather than the symlink.
+
 rsync -L ~/.bashrc "$1:.bashrc"
 rsync -L ~/.gitconfig "$1:.gitconfig"
 if [ -x /usr/bin/nvim ] ; then  # covers vim and neo-vim
@@ -540,7 +570,7 @@ transfer-personal(){ # {{{
   rsync -L ~/nl253 "$1:nl253"
 } # }}}
 
-transfer-scripts(){   # {{{
+transfer-scripts(){   # {{{ aka ~/bin/*
   rsync -L ~/bin "$1:bin"
 }  # }}}
 
@@ -550,12 +580,11 @@ transfer-scripts(){   # {{{
 # data will be transfered via sftp using rsync
 # files that are symlinked by default will be followed TODO check how it works in rsync man pages
 remote-setup(){
-  install-packages $1
-  install-dropbox
-  install-ranger $1
-  install-vim-plug $1
-  transfer-scripts $1
-  transfer-personal $1
+  # install-dropbox ?
+  install-ranger "$1"
+  install-vim-plug "$1"
+  transfer-scripts "$1" # ~/bin/
+  transfer-personal "$1" # ~/nl253/
   setup-dropbox
   setup-gdrive
   setup-onedrive
@@ -570,7 +599,7 @@ remote-setup(){
 # ---------------
 # DEPENDENCIES :: ag
 # ---------------
-alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
+alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | grep -v "*.local/lib/*" | sed -E -r "/^.{,7}$/d" ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
 # }}}
 
 setup-onedrive(){ # {{{
@@ -670,7 +699,7 @@ restore-system(){ # {{{
 
 # at this point variables will need to be reset
 echo "RESOURCING BASHRC"
-source ~/.bashrc
+source "~/.bashrc"
 
 } # }}}
 
@@ -724,6 +753,7 @@ set-shopts(){ # {{{
 # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
 complete -cf sudo
 complete -d cd
+[ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
 shopt -s autocd
 shopt -s cdspell        # correct minor spelling errors
 shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
@@ -740,4 +770,6 @@ shopt -s histverify     # Edit a recalled history line before executing
 
 # make sure zsh isn't able to source it 
 [ ! -n "${ZSH+2}" ] && set-shopts # }}}
+
+alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
 

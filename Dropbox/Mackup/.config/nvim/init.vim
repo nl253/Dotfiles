@@ -81,7 +81,7 @@ let g:easytags_resolve_links = 1
 
 Plug 'vim-scripts/utl.vim'
 
-Plug 'dhruvasagar/vim-table-mode', { 'on': [ 'TableModeToggle', 'TableModeDisable', 'TableModeEnable', 'Tableize' ]}
+Plug 'dhruvasagar/vim-table-mode', { 'for': ['markdown', 'ghmardown', 'org'] }
 let g:table_mode_disable_mappings = 1
 
 Plug 'vim-scripts/utl.vim'
@@ -101,6 +101,7 @@ let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_folding_level = 2
 
 Plug 'klen/python-mode', { 'for': 'python' } " Python mode
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
@@ -135,29 +136,57 @@ let g:pymode_syntax_all = 1
 let g:pymode_syntax_print_as_function = 1
 let g:pymode_trim_whitespaces = 1
 
+Plug 'maralla/completor.vim'
+
+let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
+
+let g:completor_completion_delay = 1
+
+inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+
+Plug 'SirVer/ultisnips' " Track the engine.
+Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
+
+let g:UltiSnipsExpandTrigger="<tab>"
+
+let g:UltiSnipsEditSplit="vertical"
+
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
 Plug 'othree/html5-syntax.vim'
 Plug 'mattn/emmet-vim', { 'for': [ 'scss', 'xml', 'html', 'xhtml', 'css', 'sass' ]}
 
 Plug 'chrisbra/Colorizer', { 'for': [
-      \ 'css', 'html', 'javascript', 'json', 'less', 'markdown',
+      \ 'css', 'html', 'javascript', 'json', 'markdown',
       \ 'org', 'sass', 'ghmarkdown', 'pandoc', 'scss', 'xhtml', 'yaml']}
 
 let g:emmet_html5 = 1
 
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 
-Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'coffee', 'html',
-      \'xhtml', 'xml', 'css', 'sass', 'scss', 'less'] }
+Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
+      \'xhtml', 'xml', 'css', 'sass', 'scss'] }
+
+Plug 'wellle/targets.vim'
 
 call plug#end()
+
 let loaded_matchit = 1
 let mapleader = " "
 let maplocalleader = ","
+
 set smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus path+=~/**
-set wildignore+=/home/norbert/.bashrc,/home/norbert/.tmuxinator,/home/norbert/.config/nvim/init.vim,*.git,*.class,*.svn
-set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg
+set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus
+set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
+execute 'set path+=' . glob('~') . '/**'
+
+let g:MARKUP = [
+      \'markdown', 
+      \'ghmarkdown', 
+      \'org', 
+      \'gitcommit', 
+      \'markdown.ghmardown', 
+      \'ghmarkdown.markdown']
 
 aug VIMENTER
   au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
@@ -168,18 +197,21 @@ aug VIMENTER
   au FocusLost   * silent!  wall
   au CmdwinEnter * setlocal updatetime=2000
   au CmdwinLeave * setlocal updatetime=200
-  au Filetype markdown setlocal ft=ghmarkdown.markdown | let g:table_mode_corner = '|'  | TableModeEnable
-  au BufReadPost,BufNew *.org let g:table_mode_corner = '+' | TableModeEnable
+  au FileType * if index(g:MARKUP, &filetype) < 0 | setl complete=.,w,t, | else | setl complete=.,w,k,s | endif
+  au Filetype markdown setlocal ft=ghmarkdown.markdown | let g:table_mode_corner = '|'  
+  au BufReadPost,BufNew *.org let g:table_mode_corner = '+' 
   au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
   au FileType gitcommit setl spell
   au FileType man setl nowrap
 aug END
 if executable('pdftotext') 
-  au! BufRead *.pdf execute '!pdftotext ' . expand('%:p') . ' ' . expand('%:p:r') .   '.txt' | execute 'enew ' . expand('%:p:r') . '.txt'
+  au! BufReadPre *.pdf execute '!pdftotext ' . expand('%:p') . ' ' . expand('%:p:r') .   '.txt' | execute 'enew ' . expand('%:p:r') . '.txt'
 endif
-try | tnoremap <Esc> <C-\><C-n> | catch /.*/ | endtry
 
-if ! has('nvim')
+if has('nvim') 
+  tnoremap <Esc> <C-\><C-n> 
+else
+  execute 'let $MYVIMRC=' . glob('~/.vimrc')
   syntax enable
   filetype plugin indent on
   set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch tags ttyfast
@@ -188,7 +220,6 @@ endif
 
 colorscheme antares
 
-if !has('nvim') | execute 'let $MYVIMRC=' . glob('~/.vimrc') | endif
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>gA 	:GHActivity<CR>
