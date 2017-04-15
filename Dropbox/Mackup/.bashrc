@@ -165,7 +165,7 @@ if [ -x /usr/bin/fzf ]; then
 
         FZFlocate() {
                 [ $# = 0 ] && return 1
-                locate $@ 2>/dev/null | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri)|(~)|(\d{4,})$" | grep -P -v -i ".*\%|(cache)|(chrome)|(timeshift).*" | fzf --bind "enter:execute($EDITOR {})"
+                locate "$@" 2>/dev/null | grep -P -v "^/(dev)|(tmp)|(mnt)|(root)" | grep -P -v "\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri)|(~)|(\d{4,})$" | grep -P -v -i ".*\%|(cache)|(chrome)|(timeshift).*" | fzf --bind "enter:execute($EDITOR {})"
         }
 
         FZFcheckout-branches-sorted() { # checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches

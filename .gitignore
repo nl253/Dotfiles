@@ -16,7 +16,7 @@
 .bash_it
 .bash_logout
 .bash_profile
-.bashrc
+cbashrc
 .bluej
 .cabal
 .cache
