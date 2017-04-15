@@ -88,7 +88,7 @@ Plug 'jtratner/vim-flavored-markdown', { 'for': ['markdown', 'ghmarkdown']}
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown', 'ghmarkdown']}
 
 let g:vim_markdown_fenced_languages = [
-        \'sh', 'java', 'python',
+            \'sh', 'java', 'python',
             \'html', 'css', 'php',
             \'javascript', 'haskell']
 <
@@ -162,7 +162,6 @@ Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
 
 Plug 'wellle/targets.vim'
 
-call plug#end()
 
 let loaded_matchit = 1
 let mapleader = " "
@@ -205,29 +204,15 @@ endif
 
 if has('nvim')
     Plug 'roxma/python-support.nvim', {'on' : ['PythonSupportInitPython2', 'PythonSupportInitPython3']}
-    if ! has('python') 
-        PythonSupportInitPython2 
-    endif
-    if ! has('python3') 
-        PythonSupportInitPython3 
-    endif
-    if ! filereadable(glob('~/.config/nvim/dicts/frequent.dict'))
-        !mkdir -p ~/.config/nvim/dicts
-        !curl  -o ~/.config/nvim/dicts/frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict
-    endif
-    execute 'set dictionary=' . glob('~/.config/nvim/dicts/frequent.dict')
-    if ! filereadable(glob('~/.config/nvim/thesaurus.txt'))
-        !mkdir -p ~/.config/nvim
-        !curl -o ~/.config/nvim/thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt
-    endif
-    execute 'set thesaurus=' . glob('~/.config/nvim/thesaurus.txt')
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
     nnoremap <expr> <M-CR> index(g:MARKUP, &filetype) < 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
     vnoremap <expr> <M-CR> index(g:MARKUP, &filetype) < 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
+
     Plug 'sbdchd/neoformat'
+
     if executable('ranger')
         Plug 'airodactyl/neovim-ranger'
     endif
@@ -236,21 +221,23 @@ else
     let $MYVIMRC = glob('~/.vimrc')
     if ! filereadable(glob('~/.vim/dicts/frequent.dict'))
         !mkdir -p ~/.vim/dicts
-        !curl -o ~/.vim/dicts/frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict 
+        !curl -o ~/.vim/dicts/frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict
     endif
     execute 'set dictionary=' . glob('~/.vim/dicts/frequent.dict')
     if ! filereadable(glob('~/.vim/thesaurus.txt'))
-        !curl -o ~/.vim/thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt 
+        !curl -o ~/.vim/thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt
     endif
     execute 'set thesaurus=' . glob('~/.vim/thesaurus.txt')
     syntax enable
     filetype plugin indent on
     set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
-    set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch 
+    set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch
     if has('tags')
         set tags
     endif
 endif
+
+call plug#end()
 
 colorscheme antares
 
