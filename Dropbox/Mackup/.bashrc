@@ -368,23 +368,21 @@ setup-pyvirtualenv() { # {{{
 
 } # }}}
 
-setup-zsh() { # {{{ # to be run on a remote machine while logged in without superuser privilidges.
+setup-zsh() { # {{{ # to be run on a remote machine while logged in without superuser privilidges. 
+# if of-my-zsh is not present it will install it along with plugins (also checked for)
+# if it is present then it will simply replace ~/.zshrc with a newer version pulled from my git Dot-files repo.
+# becasue oh-my-zsh automatically backups your zshrc, the replacing of ~/.zshrc will have to take place at the end 
+# first deal with oh-my-zsh
 
         [ ! -x /usr/bin/zsh ] && echo echo -e 'zsh not detected on your filesystem ... \nAborting' && return 1
 
-        echo -e 'zsh detected on your filesystem ... \nSetting up z alias and checking for oh-my-zsh'
+        echo -e 'zsh detected on your filesystem ... \nProceeding...'
 
-        [ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.\nAborting.' && return 1
+        [ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.' 
 
-        echo -e "OH-MY-ZSH not detected\ninitiating ..."
-        [ -e ~/.zshrc ] && echo -e ".zshrc and oh-my-zsh wasn't downloaded becuse an existing .zshrc is in your home directory.\nEither delete or backup.\nAborting." && return 1
+        [ ! -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e "OH-MY-ZSH not detected\ninitiating ..." && echo -e 'Downloading oh-my-zsh' && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" && echo -e 'if you had one, oh-my-zsh replaced your .zshrc with its own version and backed it up to ~/.zshrc.pre-oh-my-zsh.\nThis script will replace it with my preconfigured zshrc and move this to ~/.zshrc.backup'
 
-        echo -e 'Downloading oh-my-zsh'
-
-        # from oh-my-zsh [github]
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-        echo -e 'oh-my-zsh replaced your .zshrc with its own version and backed it up to ~/.zshrc.pre-oh-my-zsh.\nThis script will replace it with my preconfigured zshrc and move this to ~/.zshrc-oh-my-zsh-preconfigured-defaults.'
+        [ -e ~/.zshrc ] && mv ~/.zshrc ~/.zshrc.backup && echo -e "Existing .zshrc detected in your home directory.\nIt was renamed to .zshrc.backup."
 
         # custom plugins
         echo -e 'Attempting to download custom plugins for oh-my-zsh.'
@@ -392,16 +390,15 @@ setup-zsh() { # {{{ # to be run on a remote machine while logged in without supe
         [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-completions ] && git clone "https://github.com/zsh-users/zsh-completions" ~/.oh-my-zsh/custom/plugins/zsh-completions
         [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
-        echo -e 'Moving oh-my-zsh preconfigured zshrc to ~/.zshrc-oh-my-zsh-preconfigured-defaults.\nReplacing with my custom .zshrc.'
-        mv ~/.zshrc ~/.zshrc-oh-my-zsh-preconfigured-defaults
-
         curl -o ~/.zshrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.zshrc  
 
         # source it
         echo -e 'resourcing .zshrc.'
         zsh -c ~/.zshrc
 }
-alias z=zsh
+
+[ -x /usr/bin/zsh ] && alias z=zsh
+
 # }}}
 
 install-go-packages() { # {{{
