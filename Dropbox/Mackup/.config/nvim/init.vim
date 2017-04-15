@@ -8,6 +8,12 @@ if executable('pandoc')
     command! TOxhtml execute '!pandoc -s -o ' expand('%:p:r') . '.xhtml  -t xhtml ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.xhtml'
 endif
 
+if has('nvim') && ! filereadable(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+    !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+elseif ! has('nvim') && ! filereadable(glob('~/.vim/autoload/plug.vim'))
+    !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
 if has('nvim') | call plug#begin('~/.local/share/nvim/plugged/') | else | call plug#begin('~/.vim/plugged') | endif
 
 " Place plugins here

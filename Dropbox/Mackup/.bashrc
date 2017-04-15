@@ -804,7 +804,7 @@ install-pacman-packages() {
                 "perl" "shellcheck" "zsh")
 
         for i in ${NEED_TO_BE_INSTALLED[*]}; do # quite mode # won't give feedback # won't install if already present and up-to-date
-                echo -e "${MAGENTA}installing ${i} ${DEFCOLOR}" # what is to be installed
+                echo -e "installing ${MAGENTA} ${i} ${DEFCOLOR}" # what is to be installed
                 [ ! -x "/usr/bin/$i" ] && sudo pacman -S --quiet --noconfirm --needed "$i"
         done
 

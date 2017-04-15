@@ -16,7 +16,8 @@
 .bash_it
 .bash_logout
 .bash_profile
-cbashrc
+.bashrc
+.config/ranger/rc.conf
 .bluej
 .cabal
 .cache
