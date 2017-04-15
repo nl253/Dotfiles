@@ -366,8 +366,6 @@ setup-zsh(){ # {{{
 
   echo -e 'zsh detected on your filesystem ... \nSetting up z alias and checking for oh-my-zsh'
   
-  alias z=zsh
-
   [ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.\nAborting.' && return 1
 
   echo -e "OH-MY-ZSH not detected\ninitiating ..."
@@ -383,7 +381,10 @@ setup-zsh(){ # {{{
   # source it
   zsh -c ~/.zshrc
 
-} # }}}
+} 
+alias z=zsh
+# }}}
+
 
 install-pip-packages(){ # {{{
 
