@@ -130,8 +130,8 @@ open-it(){ # {{{
  fi
 } # }}}
 
-
 if [ -x /usr/bin/fzf ]; then # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
+  [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
   export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
   [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
@@ -301,7 +301,6 @@ alias e="$EDITOR"
 alias todo=todo-detect
 alias x=xonsh
 
-#alias l='ls -CFa'
 alias le="ls -lo"
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
@@ -368,7 +367,7 @@ setup-zsh(){ # {{{
   
   alias z=zsh
 
-  [ -f "${HOME}/.oh-my-zsh/oh-my-zsh.sh" ] && echo -e 'oh-my-zsh detected.\nNothing to be done.\nAborting.' && return 1
+  [ -f ~/.oh-my-zsh/oh-my-zsh.sh ] && echo -e 'oh-my-zsh detected.\nNothing to be done.\nAborting.' && return 1
 
   echo -e "OH-MY-ZSH not detected\ninitiating ..."
 
@@ -505,89 +504,76 @@ install-dropbox(){
 cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 } # }}}
 
-install-ranger(){ # TODO test # ranger {{{
+install-ranger(){ # {{{
 if [ ! -x /usr/bin/ranger ] && [ ! -e ~/.ranger ] ; then # check if ranger is installed, if not use a git-workaround
   [ ! -f ~/.ranger/ranger.py ] && mkdir -p ~/.ranger && git clone 'https://github.com/ranger/ranger' ~/.ranger/
-  alias ranger='~/.ranger/ranger.py'
-  alias r='~/.ranger/ranger.py'
-else
-  alias r='ranger'
 fi # if present set up an alias
-} # }}}
+} 
 
-alias r='ranger'
+[ -x /usr/bin/ranger ] && alias r='ranger'
+[ -x ~/.ranger/ranger.py ] && alias r=~/.ranger/ranger.py && alias ranger=~/.ranger/ranger.py
+
+# }}}
 
 install-vim-plug(){ # vim plugins {{{
 if [ -x /usr/bin/nvim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then # if vim but not neovim
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
 elif [ -x /usr/bin/vim ] && [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ] ; then # if vim but not neovim
   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 else
+  [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vim ] && echo -e "Neither vim nor neovim is installed on the system.\nAborting." && return 1
+  echo -e "Vim-plug already set up.\nNothing to do here." 
   return 1
 fi
 } # }}}
 
-setup-vimrc(){ # download from the master branch  {{{
+download-vimrc(){ # download from the master branch  {{{
 if [ -x /usr/bin/nvim ] && [ ! -f /.config/nvim/init.vim ] ; then # if vim but not neovim
   curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >> ~/.config/nvim/init.vim
 elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ] ; then # if vim but not neovim
   curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim >> ~/.vimrc
 else
-  echo -e "Neither neovim nor vim was detected.\nAborting." 
+  [ ! -x /usr/bin/nvim ] && [ ! -x /usr/bin/vim ] && echo -e "Neither vim nor neovim is installed on the system.\nAborting." && return 1
+  echo -e "Failed downloading vimrc / init.vim becuse there already is a vim dotfile on the system.\nAborting." 
   return 1
 fi
 } # }}}
 
-setup-bashrc(){ # download from the master branch  {{{
+download-bashrc(){ # download from the master branch  {{{
   [ ! -f ~/.bashrc ] && curl https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc >> ~/.bashrc || echo -e "An existing bashrc detected.\nRemove and backup old bashrc.\nAborting."
 } # }}}
 
 # transfer-dotfiles {{{ # TODO test with --dry-run
 # FUNCTION :: transfer the necessary {dot}files to a remote machine (sftp server)
 # NARGS 1 : [ssh address in the style nl253@raptor.kent.ac.uk]
-transfer-dotfiles(){
 
-[ ! $# = 1 ] && echo "Please provide 1 argument in the form nl253@server.co.uk" && return 1
+download-scripts(){
+  [ ! -d ~/nl253 ] && mkdir -p ~/nl253
+  git clone --recursive https://github.com/nl253/Notes ~/nl253
+}
 
-# format must compliant with rsync eg nl253@raptor (no colon)
-#-L When  symlinks  are  encountered, the item that they point to (the referent) is copied, rather than the symlink.
+download-personal(){
+  [ ! -d ~/nl253 ] && mkdir -p ~/nl253
+  git clone --recursive https://github.com/nl253/Notes ~/nl253
+}
 
-rsync -L ~/.bashrc "$1:.bashrc"
-rsync -L ~/.gitconfig "$1:.gitconfig"
-if [ -x /usr/bin/nvim ] ; then  # covers vim and neo-vim
-  rsync -L ~/.config/nvim/init.vim "$1:.vimrc"
-  rsync -L ~/.config/nvim/init.vim "$1:.config/nvim/init.vim"
-elif [ -x /usr/bin/vim ] ; then
-  rsync -L ~/.vimrc "$1:.vimrc"
-  rsync -L ~/.vimrc "$1:.config/nvim/init.vim"
-fi
+download-dotfiles(){ # to be run on a remote machine, on a local machine it would be called from a sys-restore script
+  download-bashrc
+  download-gitconfig
+  download-vimrc
 } # }}}
-
-transfer-personal(){ # {{{
-  rsync -L ~/nl253 "$1:nl253"
-} # }}}
-
-transfer-scripts(){   # {{{ aka ~/bin/*
-  rsync -L ~/bin "$1:bin"
-}  # }}}
 
 # remote-setup {{{
 # FUNCTION :: a high level function that aims setup everything on a remote machine
-# NARGS = 1 :: the address compliant with rsync and ssh standard
-# data will be transfered via sftp using rsync
-# files that are symlinked by default will be followed TODO check how it works in rsync man pages
+# You must be logged into that machine to run it.
 remote-setup(){
-  # install-dropbox ?
-  install-ranger "$1"
-  install-vim-plug "$1"
-  transfer-scripts "$1" # ~/bin/
-  transfer-personal "$1" # ~/nl253/
-  setup-dropbox
-  setup-gdrive
-  setup-onedrive
+  install-ranger
+  install-vim-plug 
+  download-dotfiles
+  generate-inputrc
+  setup-zsh
 } # }}}
 
 # todo-detect {{{
@@ -635,6 +621,11 @@ mackup-restore(){ # {{{
   fi
 } # }}}
 
+setup-systemd(){ # {{{
+  sudo systemctl enable thermald
+  sudo systemctl enable cronie
+} # }}}
+
 setup-gdrive(){ # {{{
 if [ ! -x /usr/bin/gdrive ]; then
   echo -e "You need to install gdrive.\nAborting."
@@ -663,7 +654,7 @@ install-pacman-packages(){ # {{{
   "intellij-idea-community-edition" "jdk-8" \
     "lshw" "less" "nvim" "spotify" "astyle" \
     "python" "tig"  "apacman" "yaourt" "tmux" \
-    "rofi" "stylish-haskell" "tidy" "tree" \
+    "rofi" "stylish-haskell" "tidy" \
     "sed" "pandoc" "openssh" "openvpn" "p7zip"
   "thermald" "dropbox" "dropbox-cli" "python-pip" "alsa-utils" \
     "upower" "npm" "ruby" "gem" "timeshift" \
@@ -681,21 +672,23 @@ install-pacman-packages(){ # {{{
   done
 } # }}}
 
-# TODO system restore script
-# restore-system 
+# TODO restore-system {{{
 # FUNCTION
 # The aim of the script is to do nothing when the system is OK
 # and restore the whole system when it's just been reinstalled.
+# to be run on own machine with administrative privilidges
 
-restore-system(){ # {{{
+restore-system(){ 
   install-pacman-packages
-  install-alacritty
+  #setup-dropbox
+  download-dotfiles
   install-vim-plug
   install-tmux-plugs 
-  setup-dropbox
-  mackup-restore
-  setup-onedrive
-  setup-gdrive
+  # mackup-restore # needs authentication so won't work # TODO find a way to get Dropbox to work from a script
+  setup-onedrive # needs authentication so won't work 
+  setup-gdrive # needs authentication so won't work 
+  install-alacritty 
+  setup-systemd
 
 # at this point variables will need to be reset
 echo "RESOURCING BASHRC"
@@ -750,26 +743,25 @@ ex (){
 # ============================== }}}
 
 set-shopts(){ # {{{
-# stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
-complete -cf sudo
-complete -d cd
-[ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
-shopt -s autocd
-shopt -s cdspell        # correct minor spelling errors
-shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
-shopt -s direxpand      # replaces directory names with expansion when <tab>
-shopt -s dirspell       # correct minor spelling errors
-shopt -s dotglob        # Include dotfiles in pathname expansion
-shopt -s checkjobs      # Include dotfiles in pathname expansion
-shopt -s extglob        # Enable extended pattern-matching features
-shopt -s nullglob
-shopt -s globstar       # ** becomes a recursive wildstar
-shopt -s histappend     # Append each session's history to $HISTFILE
-shopt -s histverify     # Edit a recalled history line before executing
+  # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
+  complete -cf sudo
+  complete -d cd
+  [ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
+  shopt -s autocd
+  shopt -s cdspell        # correct minor spelling errors
+  shopt -s checkwinsize   # update the value of LINES and COLUMNS after each command if altered
+  shopt -s direxpand      # replaces directory names with expansion when <tab>
+  shopt -s dirspell       # correct minor spelling errors
+  shopt -s dotglob        # Include dotfiles in pathname expansion
+  shopt -s checkjobs      # Include dotfiles in pathname expansion
+  shopt -s extglob        # Enable extended pattern-matching features
+  shopt -s nullglob
+  shopt -s globstar       # ** becomes a recursive wildstar
+  shopt -s histappend     # Append each session's history to $HISTFILE
+  shopt -s histverify     # Edit a recalled history line before executing
 }
 
 # make sure zsh isn't able to source it 
 [ ! -n "${ZSH+2}" ] && set-shopts # }}}
 
-alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
 

@@ -136,21 +136,21 @@ let g:pymode_syntax_all = 1
 let g:pymode_syntax_print_as_function = 1
 let g:pymode_trim_whitespaces = 1
 
-Plug 'maralla/completor.vim'
-
-let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
-
-let g:completor_completion_delay = 1
+if (has('python') || has('python3')) && has('lambda') && has('timers') && has('job')
+  Plug 'maralla/completor.vim'
+  let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
+  let g:completor_completion_delay = 1
+endif
 
 inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
-Plug 'SirVer/ultisnips' " Track the engine.
-Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
-
-let g:UltiSnipsExpandTrigger="<tab>"
-
-let g:UltiSnipsEditSplit="vertical"
+if has('python') || has('python3')
+  Plug 'SirVer/ultisnips' " Track the engine.
+  Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsEditSplit="vertical"
+endif
 
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
 Plug 'othree/html5-syntax.vim'
