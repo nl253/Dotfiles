@@ -563,6 +563,7 @@ download-vimrc() { # download from the master branch  {{{
                 mv ~/.config/nvim/init.vim ~/.config/nvim/init.vim.backup && echo -e 'Detected an existing .init.vim file.\nIt was moved to ~/.config/nvim/init.vim.backup.'
         fi
         if [ -x /usr/bin/nvim ] && [ ! -f /.config/nvim/init.vim ]; then # if vim but not neovim
+                mkdir -p ~/.config/nvim
                 curl -o --create-dirs ~/.config/nvim/init.vim https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
         elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ]; then # if vim but not neovim
                 curl -o ~/.vimrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
@@ -702,7 +703,7 @@ install-pacman-packages() { # {{{
                 "sed" "pandoc" "openssh" "openvpn" "p7zip"
                 "thermald" "dropbox" "dropbox-cli" "python-pip" "alsa-utils"
                 "upower" "npm" "ruby" "gem" "timeshift"
-                "wget" "curl" "wordnet" "xclip" "xclip"
+                "wget" "wordnet" "xclip" "xclip"
                 "xf86-input-keyboard" "xf86-input-libinput"
                 "xf86-input-mouse" "xf86-input-synaptics"
                 "xf86-input-void" "xf86-video-intel"
