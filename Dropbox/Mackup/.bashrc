@@ -563,8 +563,8 @@ download-vimrc() { # download from the master branch  {{{
                 mv ~/.config/nvim/init.vim ~/.config/nvim/init.vim.backup && echo -e 'Detected an existing .init.vim file.\nIt was moved to ~/.config/nvim/init.vim.backup.'
         fi
         if [ -x /usr/bin/nvim ] && [ ! -f /.config/nvim/init.vim ]; then # if vim but not neovim
-                mkdir -p ~/.config/nvim
-                curl -o --create-dirs ~/.config/nvim/init.vim https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
+                [ ! -d ~/.config/nvim/ ] && mkdir -p ~/.config/nvim
+                curl -o ~/.config/nvim/init.vim https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
         elif [ -x /usr/bin/vim ] && [ ! -f ~/.vimrc ]; then # if vim but not neovim
                 curl -o ~/.vimrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.config/nvim/init.vim 
         else
@@ -573,8 +573,8 @@ download-vimrc() { # download from the master branch  {{{
 } # }}}
 
 download-bashrc() { # download from the master branch  {{{
-        if [ -e ~/.bashrc ] ; then 
-                mv ~/.bashrc ~/.bashrc.backup  || echo -e "Something went wrong" && return 1
+        if [ -f ~/.bashrc ] ; then 
+                mv ~/.bashrc ~/.bashrc.backup  
                 echo -e "Existing .bashrc was detected on the system.\nIt was moved to ~/.bashrc.backup." 
         fi
         [ ! -e ~/.bashrc ] && curl -o ~/.bashrc https://raw.githubusercontent.com/nl253/Dot-files/master/Dropbox/Mackup/.bashrc
