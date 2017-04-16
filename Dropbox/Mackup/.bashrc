@@ -130,20 +130,27 @@ fi
 if [ -x /usr/bin/fzf ]; then
         [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
         export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
-        [ -x "/usr/bin/ag" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+        if [ -x "/usr/bin/ag" ]; then
+                export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+        else
+                export FZF_DEFAULT_COMMAND='
+                (git ls-tree -r --name-only HEAD ||
+                        find . -path "*/\.*" -prune -o -type f -print -o -type l -print |
+                sed s/^..//) 2> /dev/null'
+        fi
         alias l=fzf-locate.sh
-        alias p=fzf-pkill.sh                      # [P]ROCESS
+        alias fh=fzf-search-home.sh                # [F]IND [H]OME
         alias c=fzf-cd.sh                         # [C]D
         alias gl=fzf-commits.sh                   # [G]IT [L]OG
         alias gcs=fzf-commit-sha.sh               # [G]IT [C]OMMIT [S]HA
         alias gc=fzf-checkout-commit.sh           # [G]IT [C]HECKOUT
         alias gcb=fzf-checkout-branches-sorted.sh # [G]IT [C]HECKOUT [B]RANCHES
         alias gcbt=fzf-checkout-branch-tag.sh     # [G]IT [C]HECKOUT [B]RANCH [T]AG
-        alias gt=fzf-search-tags.sh                     # [G]IT [T]AGS
+        alias gt=fzf-search-tags.sh               # [G]IT [T]AGS
         alias gs=fzf-stash.sh                     # [G]IT [S]TASH
         # [L]IST [R]ECENT
-else # non fzf solution
-        [ -x /usr/bin/htop ] && alias p=htop || alias p=top # process management
+else                     # non fzf solution
+        [ -x /usr/bin/htop ] && alias p=htop || alias p=top                     # process management
         # alias gc=  # TODO provide an alternative if fzf is not available
         # alias gs=  # TODO provide an alternative if fzf is not available
         # alias gcs=  # TODO provide an alternative if fzf is not available
@@ -190,7 +197,7 @@ alias x=xonsh
 alias le="ls -lo"
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
-alias f=find-approx
+alias f=find-approx.sh
 
 alias -- -='cd -' # Go back
 alias ..="cd .."
@@ -232,7 +239,7 @@ set-shopts() { # {{{
         shopt -s checkjobs    # Bash lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted
         shopt -s extglob      # Enable extended pattern-matching features
         shopt -s nullglob
-        shopt -s nocaseglob  # matches filenames in a case-insensitive fashion when performing pathname expansion.
+        shopt -s nocaseglob # matches filenames in a case-insensitive fashion when performing pathname expansion.
 
         shopt -s globstar   # ** becomes a recursive wildstar
         shopt -s histappend # Append each session's history to $HISTFILE

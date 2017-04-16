@@ -78,12 +78,12 @@
 
 	# FIND
 	# -------------------
-	fb = "!f() { git branch -a --contains $1; }; f"  # Find branches containing commit
-	ft = "!f() { git describe --always --contains $1; }; f"  # Find tags containing commit
+	find-branch = "!f() { git branch -a --contains $1; }; f"  # Find branches containing commit
+	find-tag = "!f() { git describe --always --contains $1; }; f"  # Find tags containing commit
 	# Find commits by source code
-	fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+	find-commit = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
 	# Find commits by commit message
-	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+	find-message = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 	
 	# LOG
 	# -------------------

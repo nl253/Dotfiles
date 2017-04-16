@@ -34,7 +34,7 @@ else
     if empty(g:DICTDIR)
         !mkdir -p ~/.vim/dicts
     endif
-syntax enable
+    syntax enable
     filetype plugin indent on
     set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
     set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch
@@ -226,11 +226,12 @@ endfunction
 command! Scratch call Scratch()
 nnoremap <BS> :Scratch<CR>
 vnoremap <BS> :yank<CR>:Scratch<CR>p
-nnoremap gt :edit ~/nl253/todo.org<CR>``
+nnoremap <Leader><BS> :edit ~/nl253/todo.org<CR>``
 
 aug VIMENTER
     au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     au FileType * if exists("+completefunc") && &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
+    au FileType * if index(g:MARKUP, &filetype) < 0 | setlocal nospell | endif
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     au CursorHold  * silent!  checktime
@@ -275,8 +276,10 @@ if has('nvim')
     if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
 endif
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+if executable('fzf')
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
+endif
 
 call plug#end()
 
@@ -287,15 +290,15 @@ endif
 if ! filereadable(g:VIMDIR .'thesaurus.txt')
     execute '!curl -o ' . g:VIMDIR . 'thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt'
 endif
-execute 'set thesaurus=' . glob('~/.config/nvim/thesaurus.txt')
+execute 'set thesaurus=' . g:VIMDIR . 'thesaurus.txt'
 if ! filereadable(g:DICTDIR .'css.dict')
     execute '!curl -o ' . g:DICTDIR . 'css.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/css.dict'
 endif
-au! FileType css execute 'setlocal dictionary=' . glob('~/.config/nvim/dicts/css.dict')
+au! FileType css execute 'setlocal dictionary=' . g:DICTDIR . 'css.dict'
 if ! filereadable(g:DICTDIR .'mysql.txt')
-    execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/VimScript/master/dicts/css.dict'
+    execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/VimScript/master/dicts/mysql.txt'
 endif
-au! FileType css execute 'setlocal dictionary=' . glob('~/.config/nvim/dicts/mysql.txt')
+au! FileType sql,mysql execute 'setlocal dictionary=' . g:DICTDIR . 'mysql.txt'
 
 colorscheme antares
 
@@ -307,14 +310,14 @@ if executable('pandoc')
     command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
     command! TOxhtml execute '!pandoc -s -o ' expand('%:p:r') . '.xhtml  -t xhtml ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.xhtml'
 endif
- 
+
 if executable('dos2unix')
-     command! Dos2Unix !dos2unix -F -n %:p %:p | edit
+    command! Dos2Unix !dos2unix -F -n %:p %:p | edit
 endif
 
 command! DeleteEmptyLines execute 'g/^\s*$/d'
 
-command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! `` 
+command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 
 inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
@@ -348,30 +351,33 @@ nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
 if executable('fzf')
-    let g:PREVIEW = ' --preview "(coderay {} || cat {}) 2> /dev/null | head -' . &lines . '"'
+    let g:PREVIEW = ' --preview "head -n 20 {} " '
     let g:IGNORE_REGEXP = "grep -P -v \"(\d{4,}$)|(~$)|".
                 \"(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)".
-                \"|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
-    let g:DIR_IGNORE_REGEXP = "grep -P -v \"^/(dev)|(tmp)|(mnt)|(root)\""
+                \"|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
+    let g:DIR_IGNORE_REGEXP = 'grep -P -v "^/(dev)|(tmp)|(mnt)|(root)"'
+
     command! FZFMru call fzf#run(fzf#wrap({
                 \'source':  v:oldfiles,
-                \'options': g:FZF_COLORS . '--multi -x +s' . g:PREVIEW,
-                \'up':    '40%'
+                \'options': g:FZF_COLORS . '--multi -x +s --preview "head -n 30 {}"',
+                \'up':    '50%'
                 \}))
+
+    command! FZFFileAnchor call fzf#run(fzf#wrap({
+                \'source': ' (git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | ' . g:IGNORE_REGEXP . ' | sed s/^..//) 2> /dev/null',
+                \'options': '-x +s --reverse --preview "head -n 38 {}"',
+                \'up': '80%',
+                \}))
+
     command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
-                \'source': "find . -maxdepth 12 -type f 2>/dev/null | " . g:IGNORE_REGEXP,
-                \'options': g:FZF_COLORS . ' --multi -x --reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all  ' . g:PREVIEW,
-                \'up': '100%'
+\'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
+                \'options': '-x +s --reverse --preview "head -n 38 {}"',
+                \'up': '80%',
                 \}))
-    command! FZFRecFilesFileAnchor execute 'lcd ' . expand("%:p:h") | call fzf#run(fzf#wrap({
-                \'source': "find  * -maxdepth 12 -type f  2>/dev/null | " . g:IGNORE_REGEXP,
-                \'options':  g:FZF_COLORS . ' --multi -x --reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all ' . g:PREVIEW,
-            \'up': '100%'
-                \}))
+    nnoremap <C-v> :FZFFileAnchor<CR>
+    nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
+    nnoremap <C-x><C-r> :FZFMru<CR>
 endif
 
-nnoremap <C-x><C-x> :FZFRecFilesFileAnchor<CR>
-nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
-nnoremap <C-x><C-r> :FZFMru<CR>
 nnoremap <C-x><C-a> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
 
