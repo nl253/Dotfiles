@@ -1,12 +1,17 @@
 
-if executable('pandoc')
-    command! TOman execute '!pandoc -s -o ' expand('%:p:r') . '.1  -t man ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.1'
-    command! TOmarkdown execute '!pandoc -s -o ' expand('%:p:r') . '.md  -t markdown_github ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.md'
-    command! TOrst execute '!pandoc -s -o ' expand('%:p:r') . '.rst  -t rst ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.rst'
-    command! TOtex execute '!pandoc -s -o ' expand('%:p:r') . '.tex  -t tex ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.tex'
-    command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
-    command! TOxhtml execute '!pandoc -s -o ' expand('%:p:r') . '.xhtml  -t xhtml ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.xhtml'
-endif
+let g:MARKUP = [ 'markdown', 'ghmarkdown', 'org',
+            \'gitcommit', 'markdown.ghmardown', 'ghmarkdown.markdown']
+let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sh', 'zsh' ]
+let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
+
+let loaded_matchit = 1
+let mapleader = " "
+let maplocalleader = ","
+
+set smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
+set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus
+set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
+execute 'set path+=' . glob('~') . '/**'
 
 if has('nvim') && ! filereadable(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -14,7 +19,30 @@ elseif ! has('nvim') && ! filereadable(glob('~/.vim/autoload/plug.vim'))
     !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
-if has('nvim') | call plug#begin('~/.local/share/nvim/plugged/') | else | call plug#begin('~/.vim/plugged') | endif
+if has('nvim')
+    let g:VIMDIR = glob('~/.config/nvim/')
+    let g:DICTDIR = glob('~/.config/nvim/dicts/')
+    tnoremap <Esc> <C-\><C-n>
+    if empty(g:DICTDIR)
+        !mkdir -p ~/.config/nvim/dicts
+    endif
+    call plug#begin('~/.local/share/nvim/plugged/')
+else
+    let $MYVIMRC = glob('~/.vimrc')
+    let g:VIMDIR = glob('~/.vim/')
+    let g:DICTDIR = glob('~/.vim/dicts/')
+    if empty(g:DICTDIR)
+        !mkdir -p ~/.vim/dicts
+    endif
+syntax enable
+    filetype plugin indent on
+    set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
+    set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch
+    if has('tags')
+        set tags
+    endif
+    call plug#begin('~/.vim/plugged')
+endif
 
 " Place plugins here
 Plug 'Haron-Prime/Antares'
@@ -33,12 +61,8 @@ let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff', '&
 
 if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let g:session_directory = '~/.vim/session' | endif
 
-Plug 'mattn/webapi-vim'
-Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
-Plug 'airblade/vim-gitgutter', { 'on' : [ 'GitGutterDisable', 'GitGutterToggle', 'GitGutterEnable',
-            \'GitGutterLineHighlightToggle', 'GitGutterLineHighlightsToggle']}
 
 let g:gitgutter_map_keys = 0
 let g:gitgutter_diff_args = '-w'
@@ -59,12 +83,12 @@ let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 
 " if executable('tidy') | let g:syntastic_html_checkers = ['tidy'] | endif
 if executable('jsonlint') | let g:syntastic_json_checkers = ['jsonlint'] | endif
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOff', 'DittoOn', 'DittoSent',
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
             \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn']}
 
-Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
+Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' , 'do' : 'npm install -g writegood proselint'}
 
-Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'python', 'javascript']}
+Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
 let b:easytags_auto_highlight = 1
 let g:easytags_events = ['BufReadPost']
 let g:easytags_always_enabled = 1
@@ -77,9 +101,16 @@ let g:table_mode_disable_mappings = 1
 
 Plug 'vim-scripts/utl.vim'
 Plug 'jceb/vim-orgmode', {'for' : 'org'}
-
 let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING', 'URGENT', 'SOON']
 let g:org_heading_shade_leading_stars = 0
+
+Plug 'xolox/vim-notes'
+
+if empty(glob("~/nl253/vim-notes"))
+    !mkdir -p ~/nl253/vim-notes
+endif
+
+let g:notes_directories = ['~/Dropbox/nl253/vim-notes/']
 
 " Markdown
 " ==========
@@ -134,7 +165,11 @@ let g:pymode_trim_whitespaces = 1
 
 if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
     Plug 'maralla/completor.vim'
-    let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
+    if filereadable(glob('~/.pyenv/versions/3.5.0/bin/python3.5'))
+        let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
+    else
+        let g:completor_python_binary = '/usr/bin/python'
+    endif
     let g:completor_completion_delay = 1
 endif
 
@@ -147,38 +182,51 @@ endif
 
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
 Plug 'othree/html5-syntax.vim'
-Plug 'mattn/emmet-vim', { 'for': [ 'scss', 'xml', 'html', 'xhtml', 'css', 'sass' ]}
+Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
 
 Plug 'chrisbra/Colorizer', { 'for': [
             \ 'css', 'html', 'javascript', 'json', 'markdown',
-            \ 'org', 'sass', 'ghmarkdown', 'pandoc', 'scss', 'xhtml', 'yaml']}
+            \ 'org', 'ghmarkdown', 'xhtml', 'yaml']}
 
 let g:emmet_html5 = 1
 
 Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 
 Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
-            \'xhtml', 'xml', 'css', 'sass', 'scss'] }
+            \'xhtml', 'xml', 'css'] }
 
 Plug 'wellle/targets.vim'
 
-
-let loaded_matchit = 1
-let mapleader = " "
-let maplocalleader = ","
-
-set smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus
-set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
-execute 'set path+=' . glob('~') . '/**'
-
-let g:MARKUP = [
-            \'markdown',
-            \'ghmarkdown',
-            \'org',
-            \'gitcommit',
-            \'markdown.ghmardown',
-            \'ghmarkdown.markdown']
+function! Scratch()
+    if index(['netrw', 'terminal','gitcommit'], &filetype) >= 0  " blacklist
+        return 1
+    endif
+    if index(g:PROGRAMMING, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0
+        execute 'vnew ' . '~/nl253/scratch.' . expand('%:e')
+        execute 'setl ft=' . &filetype
+    elseif index(g:MARKUP, &filetype) >= 0
+        vnew ~/nl253/scratch
+        setl ft=note
+    elseif &filetype == 'help'
+        vnew ~/nl253/scratch.vim
+        setl ft=vim
+    elseif &filetype == 'man'
+        vnew ~/nl253/scratch.sh
+        setl ft=sh
+    else
+        vnew ~/nl253/scratch
+        setl ft=note
+    endif
+    vertical resize 60
+    write
+    nnoremap <buffer> <BS> :close!<CR>
+    nnoremap <buffer> q :close!<CR>
+    vnoremap <buffer> <BS> <Nop>
+endfunction
+command! Scratch call Scratch()
+nnoremap <BS> :Scratch<CR>
+vnoremap <BS> :yank<CR>:Scratch<CR>p
+nnoremap gt :edit ~/nl253/todo.org<CR>``
 
 aug VIMENTER
     au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
@@ -195,6 +243,9 @@ aug VIMENTER
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     au FileType gitcommit setl spell
     au FileType man setl nowrap
+    au FileType org setlocal foldlevel=2
+    au FileType help nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <CR> <C-]> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u>
+    au FileType qf nnoremap <buffer> <C-n> j<CR><C-w><C-w> | nnoremap <buffer> <C-p> k<CR><C-w><C-w> | nnoremap q :cclose<CR>
 aug END
 
 if executable('pdftotext')
@@ -204,47 +255,69 @@ endif
 
 if has('nvim')
     Plug 'roxma/python-support.nvim', {'on' : ['PythonSupportInitPython2', 'PythonSupportInitPython3']}
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'yapf')
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'pep8')
+    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'flake8')
+    if ! has('python')
+        PythonSupportInitPython2
+    endif
+    if ! has('python3')
+        PythonSupportInitPython3
+    endif
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
-    nnoremap <expr> <M-CR> index(g:MARKUP, &filetype) < 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
-    vnoremap <expr> <M-CR> index(g:MARKUP, &filetype) < 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
+    nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
+    vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
-
-    Plug 'sbdchd/neoformat'
-
-    if executable('ranger')
-        Plug 'airodactyl/neovim-ranger'
-    endif
-    tnoremap <Esc> <C-\><C-n>
-else
-    let $MYVIMRC = glob('~/.vimrc')
-    if ! filereadable(glob('~/.vim/dicts/frequent.dict'))
-        !mkdir -p ~/.vim/dicts
-        !curl -o ~/.vim/dicts/frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict
-    endif
-    execute 'set dictionary=' . glob('~/.vim/dicts/frequent.dict')
-    if ! filereadable(glob('~/.vim/thesaurus.txt'))
-        !curl -o ~/.vim/thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt
-    endif
-    execute 'set thesaurus=' . glob('~/.vim/thesaurus.txt')
-    syntax enable
-    filetype plugin indent on
-    set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
-    set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch
-    if has('tags')
-        set tags
-    endif
+    Plug 'sbdchd/neoformat', {'on' : 'Neoformat'}
+    if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
 endif
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 call plug#end()
 
+if ! filereadable(g:DICTDIR . 'frequent.dict')
+    execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict'
+    execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
+endif
+if ! filereadable(g:VIMDIR .'thesaurus.txt')
+    execute '!curl -o ' . g:VIMDIR . 'thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt'
+endif
+execute 'set thesaurus=' . glob('~/.config/nvim/thesaurus.txt')
+if ! filereadable(g:DICTDIR .'css.dict')
+    execute '!curl -o ' . g:DICTDIR . 'css.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/css.dict'
+endif
+au! FileType css execute 'setlocal dictionary=' . glob('~/.config/nvim/dicts/css.dict')
+if ! filereadable(g:DICTDIR .'mysql.txt')
+    execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/VimScript/master/dicts/css.dict'
+endif
+au! FileType css execute 'setlocal dictionary=' . glob('~/.config/nvim/dicts/mysql.txt')
+
 colorscheme antares
+
+if executable('pandoc')
+    command! TOman execute '!pandoc -s -o ' expand('%:p:r') . '.1  -t man ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.1'
+    command! TOmarkdown execute '!pandoc -s -o ' expand('%:p:r') . '.md  -t markdown_github ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.md'
+    command! TOrst execute '!pandoc -s -o ' expand('%:p:r') . '.rst  -t rst ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.rst'
+    command! TOtex execute '!pandoc -s -o ' expand('%:p:r') . '.tex  -t tex ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.tex'
+    command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
+    command! TOxhtml execute '!pandoc -s -o ' expand('%:p:r') . '.xhtml  -t xhtml ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.xhtml'
+endif
+ 
+if executable('dos2unix')
+     command! Dos2Unix !dos2unix -F -n %:p %:p | edit
+endif
+
+command! DeleteEmptyLines execute 'g/^\s*$/d'
+
+command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! `` 
 
 inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-
-nnoremap <C-x><C-a> :execute 'grep ' . expand('<cword>') . " * "<CR>
 
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
@@ -273,4 +346,32 @@ nnoremap <C-s>d         :DeleteSession<Space>
 nnoremap <C-s><C-d>     :DeleteSession!<CR>
 nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
+
+if executable('fzf')
+    let g:PREVIEW = ' --preview "(coderay {} || cat {}) 2> /dev/null | head -' . &lines . '"'
+    let g:IGNORE_REGEXP = "grep -P -v \"(\d{4,}$)|(~$)|".
+                \"(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)".
+                \"|(bak)|(pdf)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
+    let g:DIR_IGNORE_REGEXP = "grep -P -v \"^/(dev)|(tmp)|(mnt)|(root)\""
+    command! FZFMru call fzf#run(fzf#wrap({
+                \'source':  v:oldfiles,
+                \'options': g:FZF_COLORS . '--multi -x +s' . g:PREVIEW,
+                \'up':    '40%'
+                \}))
+    command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
+                \'source': "find . -maxdepth 12 -type f 2>/dev/null | " . g:IGNORE_REGEXP,
+                \'options': g:FZF_COLORS . ' --multi -x --reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all  ' . g:PREVIEW,
+                \'up': '100%'
+                \}))
+    command! FZFRecFilesFileAnchor execute 'lcd ' . expand("%:p:h") | call fzf#run(fzf#wrap({
+                \'source': "find  * -maxdepth 12 -type f  2>/dev/null | " . g:IGNORE_REGEXP,
+                \'options':  g:FZF_COLORS . ' --multi -x --reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all ' . g:PREVIEW,
+            \'up': '100%'
+                \}))
+endif
+
+nnoremap <C-x><C-x> :FZFRecFilesFileAnchor<CR>
+nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
+nnoremap <C-x><C-r> :FZFMru<CR>
+nnoremap <C-x><C-a> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
 
