@@ -1,5 +1,11 @@
 ﻿*.bluej
 *.class
+setup-pyenv.sh
+PyComLine
+.fzf/
+.bashrc.backup
+OneDrive/
+generate-inputrc.sh
 *.ctxt
 *.ppt
 *.pptx
