@@ -46,13 +46,13 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 # fall back on 1. elinks 2. lynx 3. w3m
 # -------------------------------------------------
 if [ -x /usr/bin/google-chrome-stable ]; then
-        export BROWSER=google-chrome-stable
+  export BROWSER=google-chrome-stable
 elif [ -x /usr/bin/elinks ]; then
-        export BROWSER=elinks
+  export BROWSER=elinks
 elif [ -x /usr/bin/lynx ]; then
-        export BROWSER=lynx
+  export BROWSER=lynx
 elif [ -x /usr/bin/w3m ]; then
-        export BROWSER=w3m
+  export BROWSER=w3m
 fi
 # }}}
 
@@ -62,21 +62,18 @@ export HISTFILESIZE=20000
 export HISTCONTROL="ignoreboth:erasedups"
 export HISTTIMEFORMAT='%s'
 
-
 source_bash_completion() {
   local f
   [[ $BASH_COMPLETION ]] && return 0
   for f in /{etc,usr/share/bash-completion}/bash_completion; do
     if [[ -r $f ]]; then
       . "$f"
-      return 0;
+      return 0
     fi
   done
 }
 
 source_bash_completion
-
-
 
 # HISTIGNORE
 # -----------
@@ -127,50 +124,50 @@ export GREP_COLOR='1;33' # makes it yellow # by default red
 # attempt to set to neo-vim if available, fall back on vim and then vi
 # ----------------------------------------------------------------------
 if [ -x /usr/bin/nvim ]; then # if neovim
-        export EDITOR=/usr/bin/nvim
-        alias vim=/usr/bin/nvim
-        alias vi=/usr/bin/nvim
+  export EDITOR=/usr/bin/nvim
+  alias vim=/usr/bin/nvim
+  alias vi=/usr/bin/nvim
 
 elif [ -x /usr/bin/vim ]; then # if vim but not neovim
-        export EDITOR=/usr/bin/vim
-        alias nvim=/usr/bin/vim
-        alias vi=/usr/bin/vim
-        # set up vim plugins
+  export EDITOR=/usr/bin/vim
+  alias nvim=/usr/bin/vim
+  alias vi=/usr/bin/vim
+  # set up vim plugins
 elif [ -x /usr/bin/vi ]; then # if not neovim and not vim then fall back on vi
-        export EDITOR=/usr/bin/vi
-        alias vim=vi
-        alias nvim=vi
+  export EDITOR=/usr/bin/vi
+  alias vim=vi
+  alias nvim=vi
 fi
 # }}}
 
 # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
 if [ -x /usr/bin/fzf ]; then
-        export FZF_DEFAULT_OPTS='--bind="alt-e:execute($EDITOR {}),alt-r:execute([ -x/usr/bin/rifle ] && rifle {} || [ -x /usr/bin/mc ] && mc {}),ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview" --no-mouse --multi --black --margin 3% --prompt=" >> " --reverse --tiebreak=end,length --color "hl:117,hl+:1,bg+:232,fg:240,fg+:246" --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
-        export FZF_DEFAULT_COMMAND='
+  export FZF_DEFAULT_OPTS='--bind="alt-e:execute($EDITOR {}),alt-r:execute([ -x/usr/bin/rifle ] && rifle {} || [ -x /usr/bin/mc ] && mc {}),ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview" --no-mouse --multi --black --margin 3% --prompt=" >> " --reverse --tiebreak=end,length --color "hl:117,hl+:1,bg+:232,fg:240,fg+:246" --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
+  export FZF_DEFAULT_COMMAND='
         (git ls-tree -r --name-only HEAD ||
           find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print |
         sed s/^..//) 2> /dev/null'
-        alias l=fzf-locate.sh
-        alias fh=fzf-search-home.sh                # [F]IND [H]OME
-        alias c=fzf-cd.sh                         # [C]D
-        alias gl=fzf-commits.sh                   # [G]IT [L]OG
-        alias gcs=fzf-commit-sha.sh               # [G]IT [C]OMMIT [S]HA
-        alias gc=fzf-checkout-commit.sh           # [G]IT [C]HECKOUT
-        alias gcb=fzf-checkout-branches-sorted.sh # [G]IT [C]HECKOUT [B]RANCHES
-        alias gcbt=fzf-checkout-branch-tag.sh     # [G]IT [C]HECKOUT [B]RANCH [T]AG
-        alias gt=fzf-search-tags.sh               # [G]IT [T]AGS
-        alias gs=fzf-stash.sh                     # [G]IT [S]TASH
-        # [L]IST [R]ECENT
-        [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
-else                     # non fzf solution
-        [ -x /usr/bin/htop ] && alias p=htop || alias p=top                     # process management
-        # alias gc=  # TODO provide an alternative if fzf is not available
-        # alias gs=  # TODO provide an alternative if fzf is not available
-        # alias gcs=  # TODO provide an alternative if fzf is not available
-        # alias gt=  # TODO provide an alternative if fzf is not available
-        # alias c=  # TODO provide an alternative if fzf is not available
-        # alias gcb=  # TODO provide an alternative if fzf is not available
-        alias gl='git log --pretty=format:"%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d" --decorate --date=relative'
+  alias l=fzf-locate.sh
+  alias fh=fzf-search-home.sh               # [F]IND [H]OME
+  alias c=fzf-cd.sh                         # [C]D
+  alias gl=fzf-commits.sh                   # [G]IT [L]OG
+  alias gcs=fzf-commit-sha.sh               # [G]IT [C]OMMIT [S]HA
+  alias gc=fzf-checkout-commit.sh           # [G]IT [C]HECKOUT
+  alias gcb=fzf-checkout-branches-sorted.sh # [G]IT [C]HECKOUT [B]RANCHES
+  alias gcbt=fzf-checkout-branch-tag.sh     # [G]IT [C]HECKOUT [B]RANCH [T]AG
+  alias gt=fzf-search-tags.sh               # [G]IT [T]AGS
+  alias gs=fzf-stash.sh                     # [G]IT [S]TASH
+  # [L]IST [R]ECENT
+  [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
+else # non fzf solution
+  [ -x /usr/bin/htop ] && alias p=htop || alias p=top # process management
+  # alias gc=  # TODO provide an alternative if fzf is not available
+  # alias gs=  # TODO provide an alternative if fzf is not available
+  # alias gcs=  # TODO provide an alternative if fzf is not available
+  # alias gt=  # TODO provide an alternative if fzf is not available
+  # alias c=  # TODO provide an alternative if fzf is not available
+  # alias gcb=  # TODO provide an alternative if fzf is not available
+  alias gl='git log --pretty=format:"%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d" --decorate --date=relative'
 fi
 
 # }}}
@@ -180,12 +177,12 @@ fi
 # REQUIRES :: pacman yaourt expac 
 # -----------------------------------
 if [ -x /usr/bin/pacman ]; then
-        [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
-        [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
-        alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
-        alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
-        alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
-        [ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+  [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
+  [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
+  alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
+  alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
+  alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
+  [ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi # }}}
 
 [ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
@@ -204,11 +201,11 @@ alias e="$EDITOR"
 alias todo="git grep -n --word-regexp --break --recurse-submodules --heading TODO"
 alias x=xonsh
 [ -x /usr/bin/zsh ] && alias z=zsh
-if [ -x /usr/bin/ranger ]; then 
+if [ -x /usr/bin/ranger ]; then
   alias r='ranger'
-elif [ -x ~/.ranger/ranger.py ] ; then
+elif [ -x ~/.ranger/ranger.py ]; then
   alias ranger=~/.ranger/ranger.py
-  alias r=~/.ranger/ranger.py 
+  alias r=~/.ranger/ranger.py
 fi
 
 alias mapcaps='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
@@ -219,7 +216,6 @@ alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --co
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
 alias lr=recent-files.sh
 alias f=find-approx.sh
-
 
 alias -- -='cd -' # Go back
 alias ..="cd .."
@@ -248,25 +244,35 @@ alias http-server="python3 -m http.server"
 # }}}
 
 set-shopts() { # {{{
-        stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
-        stty -ctlecho           # turn off control character echoing
-        complete -cf sudo
-        complete -d cd
-        [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
-        shopt -s autocd
-        shopt -s cdspell      # correct minor spelling errors
-        shopt -s checkwinsize # update the value of LINES and COLUMNS after each command if altered
-        shopt -s direxpand    # replaces directory names with expansion when <tab>
-        shopt -s dirspell     # correct minor spelling errors
-        shopt -s dotglob      # Include dotfiles in pathname expansion
-        shopt -s checkjobs    # Bash lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted
-        shopt -s extglob      # Enable extended pattern-matching features
-        shopt -s nullglob
-        shopt -s nocaseglob # matches filenames in a case-insensitive fashion when performing pathname expansion.
+  stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
+  stty -ctlecho # turn off control character echoing
+  complete -cf sudo
+  complete -d cd
+  [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
-        shopt -s globstar   # ** becomes a recursive wildstar
-        shopt -s histappend # Append each session's history to $HISTFILE
-        shopt -s histverify # Edit a recalled history line before executing
+  # enable bash completion in interactive shells
+  if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+      . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+      . /etc/bash_completion
+    fi
+  fi
+
+  shopt -s autocd
+  shopt -s cdspell      # correct minor spelling errors
+  shopt -s checkwinsize # update the value of LINES and COLUMNS after each command if altered
+  shopt -s direxpand    # replaces directory names with expansion when <tab>
+  shopt -s dirspell     # correct minor spelling errors
+  shopt -s dotglob      # Include dotfiles in pathname expansion
+  shopt -s checkjobs    # Bash lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted
+  shopt -s extglob      # Enable extended pattern-matching features
+  shopt -s nullglob
+  shopt -s nocaseglob # matches filenames in a case-insensitive fashion when performing pathname expansion.
+
+  shopt -s globstar   # ** becomes a recursive wildstar
+  shopt -s histappend # Append each session's history to $HISTFILE
+  shopt -s histverify # Edit a recalled history line before executing
 }
 
 # make sure zsh isn't able to source it
