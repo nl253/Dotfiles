@@ -59,7 +59,24 @@ fi
 # HISTORY {{{
 export HISTSIZE=20000
 export HISTFILESIZE=20000
-export HISTCONTROL=ignoredups
+export HISTCONTROL="ignoreboth:erasedups"
+export HISTTIMEFORMAT='%s'
+
+
+source_bash_completion() {
+  local f
+  [[ $BASH_COMPLETION ]] && return 0
+  for f in /{etc,usr/share/bash-completion}/bash_completion; do
+    if [[ -r $f ]]; then
+      . "$f"
+      return 0;
+    fi
+  done
+}
+
+source_bash_completion
+
+
 
 # HISTIGNORE
 # -----------
@@ -188,11 +205,18 @@ setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped
 # ALIASES {{{
 
 alias e="$EDITOR"
-alias todo=todo-detect
+alias todo="git grep -n --word-regexp --break --recurse-submodules --heading TODO"
 alias x=xonsh
 [ -x /usr/bin/zsh ] && alias z=zsh
-[ -x /usr/bin/ranger ] && alias r='ranger'
-[ -x ~/.ranger/ranger.py ] && alias r=~/.ranger/ranger.py && alias ranger=~/.ranger/ranger.py
+if [ -x /usr/bin/ranger ]; then 
+  alias r='ranger'
+elif [ -x ~/.ranger/ranger.py ] ; then
+  alias ranger=~/.ranger/ranger.py
+  alias r=~/.ranger/ranger.py 
+fi
+
+alias mapcaps='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
+alias unmapcaps='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
 
 alias le="ls -lo"
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
@@ -212,10 +236,9 @@ alias egrep='egrep --color=auto'
 [ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB"
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
-[ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p \"${HOME}/Downloads/Torrents/\" ; touch \"${HOME}/Downloads/Torrents/aria2c.log\" ; aria2c --continue --dir=\"${HOME}/Downloads/Torrents\" --log=\"${HOME}/Downloads/Torrents/aria2c.log\"" # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
+[ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p ${HOME}/Downloads/Torrents/ ; touch ${HOME}/Downloads/Torrents/aria2c.log ; aria2c --continue --dir=${HOME}/Downloads/Torrents --log=${HOME}/Downloads/Torrents/aria2c.log" # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
 alias logout="pkill -KILL -u "
-alias todo-detect='for i in $( find ~ -mtime -1 -type f 2>/dev/null | grep -P -v ".*C|cache.*" | grep -v chrome | grep -v "bash_history" | grep -v ".dropbox" | grep -v "%" | grep -v ".git" | grep -v "vim/plugged" | sed -E -r '/^.{,7}$/d' ); do ag --vimgrep TODO $i ; done | sed "s/\/home\/norbert/~/" | grep TODO'
 alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 #alias j=jobs # used by autojump
@@ -226,7 +249,8 @@ alias http-server="python3 -m http.server"
 # }}}
 
 set-shopts() { # {{{
-        # stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
+        stty -ixon              # enable inc search <C-s> which is often disabled by terminal emulators
+        stty -ctlecho           # turn off control character echoing
         complete -cf sudo
         complete -d cd
         [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion

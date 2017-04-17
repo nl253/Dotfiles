@@ -141,3 +141,5 @@
 	insteadOf = "gist:"interactive = auto
 [difftool]
 	prompt = false
+[gg]
+	username = nl253

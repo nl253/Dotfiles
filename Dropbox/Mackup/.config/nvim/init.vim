@@ -242,6 +242,8 @@ aug VIMENTER
     au Filetype markdown setlocal ft=ghmarkdown | let g:table_mode_corner = '|'
     au BufReadPost,BufNew *.org let g:table_mode_corner = '+'
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
+    au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
+au FileType markdown,ghmardown nnoremap <buffer> <Leader>me :execute '!pandoc -f markdown_github -t html -o /tmp/' . expand('%') . '.html'<CR>:execute '!$BROWSER /tmp/' . expand('%') . '.html'<CR>
     au FileType gitcommit setl spell
     au FileType man setl nowrap
     au FileType org setlocal foldlevel=2
@@ -308,7 +310,6 @@ if executable('pandoc')
     command! TOrst execute '!pandoc -s -o ' expand('%:p:r') . '.rst  -t rst ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.rst'
     command! TOtex execute '!pandoc -s -o ' expand('%:p:r') . '.tex  -t tex ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.tex'
     command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
-    command! TOxhtml execute '!pandoc -s -o ' expand('%:p:r') . '.xhtml  -t xhtml ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.xhtml'
 endif
 
 if executable('dos2unix')
