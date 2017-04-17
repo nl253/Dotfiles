@@ -1,14 +1,25 @@
 
 # Dot-files 
 
-### [Tmux](https://github.com/tmux/tmux) with [alacritty](https://github.com/jwilm/alacritty) and [neovim](https://neovim.io/) and a few plugins.
+### [Alt text](https://github.com/tmux/tmux) with [alacritty](https://github.com/jwilm/alacritty) and [neovim](https://neovim.io/) and a few plugins.
+
+![Alt text](Pictures/tmux-nvim.png?raw=true "Tmux Setup")
+
+### Chrome and neovim
+
+![Alt text](Pictures/chrome-nvim.png?raw=true "Tmux Setup")
+
+### Desktop 
+
+![Alt text](Pictures/desktop.png?raw=true "Tmux Setup")
+
+(sadly I don't rememeber who I stole this wallpaper from)
 
 ### Current focus : 
 
 - .bashrc
 - init.vim aka neovim vimrc
 
-![Alt text](Pictures/2017-04-17_1920x1080.png?raw=true "Tmux Setup")
 
 #### [Collection of scripts](https://github.com/nl253/Scripts)
 
