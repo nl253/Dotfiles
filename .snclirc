@@ -1,0 +1,15 @@
+
+[sncli]
+cfg_sn_username = norbertlogiewa96@gmail.com
+cfg_sn_password = Kruszynka96*
+
+# see http://urwid.org/manual/userinput.html for examples of more key combinations
+kb_edit_note = e
+kb_page_down = ctrl d
+kb_page_up = ctrl u
+
+# note that values must not be quoted
+#clr_note_focus_bg = light yellow
+
+# the EDITOR env variable overrides the value below
+cfg_editor = nvim
