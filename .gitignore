@@ -58,6 +58,12 @@ nl253
 .config/enchant/
 .config/ranger/tagged
 .config/composer/
+.ghc/
+.cabal/
+*~
+node_modules/
+.wget*
+*.backup
 .config/google-chrome/
 .gem/
 .local/lib/
