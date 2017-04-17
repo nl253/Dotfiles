@@ -244,11 +244,11 @@ alias http-server="python3 -m http.server"
 # }}}
 
 set-shopts() { # {{{
+
   stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
   stty -ctlecho # turn off control character echoing
   complete -cf sudo
   complete -d cd
-  [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
   # enable bash completion in interactive shells
   if ! shopt -oq posix; then
