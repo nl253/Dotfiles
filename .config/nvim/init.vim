@@ -338,6 +338,7 @@ command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), 
 
 inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+nnoremap <Leader>mS :Neomake<CR>:SyntasticCheck<CR>
 
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>

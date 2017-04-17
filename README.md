@@ -13,7 +13,7 @@
 
 ![Alt text](Pictures/desktop.png?raw=true "desktop") 
 
-(sadly I don't rememeber who I stole this wallpaper from)
+(sadly I don't remember who I stole this wallpaper from)
 
 ### Current focus : 
 
@@ -29,7 +29,9 @@
 
 #### [A dictionary generator that I wrote because I needed dictionaries for vim completion](https://github.com/nl253/DictGen)
 
-#### [An abandoned vimscript repo with a lot of messy code](https://github.com/nl253/VimScript) :: recommended just to get the thesaurus and dicts for different filetypes 
+#### [An abandoned vimscript repo with a lot of messy code](https://github.com/nl253/VimScript)
+
+> I recommended getting the thesaurus and dicts for different filetypes 
 
 #### [My uni notes](https://github.com/nl253/Notes) :: for easy access across repos
  
