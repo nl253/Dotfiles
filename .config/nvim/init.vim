@@ -340,6 +340,11 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 nnoremap <Leader>mS :Neomake<CR>:SyntasticCheck<CR>
 
+" Move by screen lines instead of file lines.
+" http://vim.wikia.com/wiki/Moving_by_screen_lines_instead_of_file_lines
+noremap k gk
+noremap j gj
+
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>gA     :GHActivity<CR>

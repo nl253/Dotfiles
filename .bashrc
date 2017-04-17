@@ -188,11 +188,6 @@ fi # }}}
 [ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
 [ -x /usr/bin/tig ] && alias t=tig
 
-# remap-capslock {{{
-# Caps Lock is Control on a GB keyboard #setxkbmap -option ctrl:swapcaps # for US
-setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"
-# }}}
-
 [ -x "/usr/bin/ag" ] && alias ag='ag --hidden --pager="less -MIRFX"' # search with dotfiles page to less with colors
 
 # ALIASES {{{
