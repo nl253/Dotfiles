@@ -109,11 +109,11 @@ let g:org_heading_shade_leading_stars = 0
 
 Plug 'xolox/vim-notes'
 
-if empty(glob("~/nl253/vim-notes"))
-    !mkdir -p ~/nl253/vim-notes
+if empty(glob("~/Notes/vim-notes"))
+    !mkdir -p ~/Notes/vim-notes
 endif
 
-let g:notes_directories = ['~/nl253/vim-notes/']
+let g:notes_directories = ['~/Notes/vim-notes/']
 
 " Markdown
 " ==========
@@ -206,19 +206,19 @@ function! Scratch()
         return 1
     endif
     if index(g:PROGRAMMING, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0
-        execute 'vnew ' . '~/nl253/scratch.' . expand('%:e')
+        execute 'vnew ' . '~/Notes/scratch.' . expand('%:e')
         execute 'setl ft=' . &filetype
     elseif index(g:MARKUP, &filetype) >= 0
-        vnew ~/nl253/scratch
+        vnew ~/Notes/scratch
         setl ft=note
     elseif &filetype == 'help'
-        vnew ~/nl253/scratch.vim
+        vnew ~/Notes/scratch.vim
         setl ft=vim
     elseif &filetype == 'man'
-        vnew ~/nl253/scratch.sh
+        vnew ~/Notes/scratch.sh
         setl ft=sh
     else
-        vnew ~/nl253/scratch
+        vnew ~/Notes/scratch
         setl ft=note
     endif
     vertical resize 60
@@ -230,7 +230,7 @@ endfunction
 command! Scratch call Scratch()
 nnoremap <BS> :Scratch<CR>
 vnoremap <BS> :yank<CR>:Scratch<CR>p
-nnoremap <Leader><BS> :edit ~/nl253/todo.org<CR>``
+nnoremap <Leader><BS> :edit ~/Notes/todo.org<CR>``
 
 function! Init()
     if index(g:MARKUP, &filetype) < 0 
@@ -302,7 +302,7 @@ endif
 call plug#end()
 
 if ! filereadable(g:DICTDIR . 'frequent.dict')
-    execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict'
+execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict'
     execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
 endif
 if ! filereadable(g:VIMDIR .'thesaurus.txt')
@@ -351,6 +351,7 @@ nnoremap <Leader>gd     :Gdiff<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
 nnoremap <Leader>gf     :Gfetch<Space>
 nnoremap <Leader>gm     :Gmove<Space>
+nnoremap <Leader>gp     :Gpush<CR>
 nnoremap <Leader>gh     :GHDashboard<CR>
 nnoremap <Leader>gV     :Gitv!<CR>
 nnoremap <Leader>gv     :Gitv<CR>

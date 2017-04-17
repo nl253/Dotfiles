@@ -243,31 +243,37 @@ alias http-server="python3 -m http.server"
 [ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
 # }}}
 
-stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
-stty -ctlecho # turn off control character echoing
-complete -cf sudo
-complete -d cd
+set-shopts() { # {{{
+  
+  stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
+  stty -ctlecho # turn off control character echoing
+  complete -cf sudo
+  complete -d cd
 
-# enable bash completion in interactive shells
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+  # enable bash completion in interactive shells
+  if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+      . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+      . /etc/bash_completion
+    fi
   fi
-fi
 
-shopt -s autocd
-shopt -s cdspell      # correct minor spelling errors
-shopt -s checkwinsize # update the value of LINES and COLUMNS after each command if altered
-shopt -s direxpand    # replaces directory names with expansion when <tab>
-shopt -s dirspell     # correct minor spelling errors
-shopt -s dotglob      # Include dotfiles in pathname expansion
-shopt -s checkjobs    # Bash lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted
-shopt -s extglob      # Enable extended pattern-matching features
-shopt -s nullglob
-shopt -s nocaseglob # matches filenames in a case-insensitive fashion when performing pathname expansion.
+  shopt -s autocd
+  shopt -s cdspell      # correct minor spelling errors
+  shopt -s checkwinsize # update the value of LINES and COLUMNS after each command if altered
+  shopt -s direxpand    # replaces directory names with expansion when <tab>
+  shopt -s dirspell     # correct minor spelling errors
+  shopt -s dotglob      # Include dotfiles in pathname expansion
+  shopt -s checkjobs    # Bash lists the status of any stopped and running jobs before exiting an interactive shell. If any jobs are running, this causes the exit to be deferred until a second exit is attempted
+  shopt -s extglob      # Enable extended pattern-matching features
+  shopt -s nullglob
+  shopt -s nocaseglob # matches filenames in a case-insensitive fashion when performing pathname expansion.
 
-shopt -s globstar   # ** becomes a recursive wildstar
-shopt -s histappend # Append each session's history to $HISTFILE
-shopt -s histverify # Edit a recalled history line before executing
+  shopt -s globstar   # ** becomes a recursive wildstar
+  shopt -s histappend # Append each session's history to $HISTFILE
+  shopt -s histverify # Edit a recalled history line before executing
+}
+
+# make sure zsh isn't able to source it
+[ ! -n "${ZSH+2}" ] && set-shopts # }}}
