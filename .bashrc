@@ -145,16 +145,11 @@ fi
 
 # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
 if [ -x /usr/bin/fzf ]; then
-        [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
-        export FZF_DEFAULT_OPTS='--reverse --color hl:117,hl+:1,bg+:232,fg:240,fg+:246 '
-        if [ -x "/usr/bin/ag" ]; then
-                export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-        else
-                export FZF_DEFAULT_COMMAND='
-                (git ls-tree -r --name-only HEAD ||
-                        find . -path "*/\.*" -prune -o -type f -print -o -type l -print |
-                sed s/^..//) 2> /dev/null'
-        fi
+        export FZF_DEFAULT_OPTS='--bind="alt-e:execute($EDITOR {}),alt-r:execute([ -x/usr/bin/rifle ] && rifle {} || [ -x /usr/bin/mc ] && mc {}),ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview" --no-mouse --multi --black --margin 3% --prompt=" >> " --reverse --tiebreak=end,length --color "hl:117,hl+:1,bg+:232,fg:240,fg+:246" --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
+        export FZF_DEFAULT_COMMAND='
+        (git ls-tree -r --name-only HEAD ||
+          find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print |
+        sed s/^..//) 2> /dev/null'
         alias l=fzf-locate.sh
         alias fh=fzf-search-home.sh                # [F]IND [H]OME
         alias c=fzf-cd.sh                         # [C]D
@@ -166,6 +161,7 @@ if [ -x /usr/bin/fzf ]; then
         alias gt=fzf-search-tags.sh               # [G]IT [T]AGS
         alias gs=fzf-stash.sh                     # [G]IT [S]TASH
         # [L]IST [R]ECENT
+        [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
 else                     # non fzf solution
         [ -x /usr/bin/htop ] && alias p=htop || alias p=top                     # process management
         # alias gc=  # TODO provide an alternative if fzf is not available
@@ -221,7 +217,9 @@ alias unmapcaps='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = C
 alias le="ls -lo"
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
+alias lr=recent-files.sh
 alias f=find-approx.sh
+
 
 alias -- -='cd -' # Go back
 alias ..="cd .."
@@ -239,10 +237,11 @@ alias info='info --vi-keys'
 [ -x /usr/bin/aria2c ] && alias aria2c="mkdir -p ${HOME}/Downloads/Torrents/ ; touch ${HOME}/Downloads/Torrents/aria2c.log ; aria2c --continue --dir=${HOME}/Downloads/Torrents --log=${HOME}/Downloads/Torrents/aria2c.log" # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30'
 alias logout="pkill -KILL -u "
-alias symlinks-pretty='for i in $(find -type l -exec echo {} \;); do echo -e " \e[36m$i  \e[39m->  \e[91m$(readlink -f $i)" ; done'
+alias symlinks-pretty='for i in $(find -type l 2>/dev/null | sed -E "s/^\.\///" ); do echo -e " \e[36m$i \e[39m-> \e[91m$(readlink -f $i)" ; done'
+alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'
+alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 #alias j=jobs # used by autojump
-alias scripts-in-bashrc="grep -P '^\S+?\(\)' ~/.bashrc | sed  's/(//g' | sed 's/{//' | sed 's/)//g'"
 alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # Readline
 alias http-server="python3 -m http.server"
 [ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive

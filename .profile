@@ -9,6 +9,4 @@ echo "~/.profile loaded"
 [[ -f ~/.extend.profile ]] && . ~/.extend.profile
 
 
-#export PATH="$HOME/.cargo/bin:$PATH" # already in .bashrc
-
 setxkbmap -layout gb -option ctrl:nocaps # Caps Lock is Control on a GB keyboard
