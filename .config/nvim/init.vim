@@ -1,6 +1,5 @@
 
-let g:MARKUP = [ 'markdown', 'ghmarkdown', 'org',
-            \'gitcommit', 'markdown.ghmardown', 'ghmarkdown.markdown']
+let g:MARKUP = [ 'markdown', 'org', 'gitcommit']
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sh', 'zsh' ]
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
 
@@ -63,10 +62,6 @@ if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let 
 
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
-
-let g:gitgutter_map_keys = 0
-let g:gitgutter_diff_args = '-w'
-
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'Konfekt/FastFold' " more efficient folds
 Plug 'scrooloose/nerdcommenter'
@@ -77,14 +72,22 @@ Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
 Plug 'reedes/vim-textobj-sentence'
 Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
-let g:neomake_ghmarkdown_enabled_makers = ['writegood', 'proselint']
 let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 
+Plug 'vim-syntastic/syntastic', { 'on' : [ 'SyntasticInfo', 'SyntasticCheck', 'SyntasticToggleMode']}
 
-" if executable('tidy') | let g:syntastic_html_checkers = ['tidy'] | endif
-if executable('jsonlint') | let g:syntastic_json_checkers = ['jsonlint'] | endif
+let g:syntastic_vim_checkers = []
+let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
+let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
+let g:syntastic_markdown_checkers = ['proselint', 'mdl', 'textlint']
+let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
+let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
+let g:syntastic_javascript_checkers = ['jshint', 'eslint']
+"let g:syntastic_css_checkers = []
+
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
-            \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn']}
+            \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn'],
+            \'for' : g:MARKUP}
 
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' , 'do' : 'npm install -g writegood proselint'}
 
@@ -96,12 +99,12 @@ let g:easytags_resolve_links = 1
 
 Plug 'vim-scripts/utl.vim'
 
-Plug 'dhruvasagar/vim-table-mode', { 'for': ['markdown', 'ghmardown', 'org'] }
+Plug 'dhruvasagar/vim-table-mode', { 'for': ['mardown', 'org'], 'on': ['TableModeEnable'] }
 let g:table_mode_disable_mappings = 1
 
 Plug 'vim-scripts/utl.vim'
 Plug 'jceb/vim-orgmode', {'for' : 'org'}
-let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING', 'URGENT', 'SOON']
+let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING', 'URGENT', 'SOON', 'WAITING', 'IN_PROGRESS']
 let g:org_heading_shade_leading_stars = 0
 
 Plug 'xolox/vim-notes'
@@ -114,19 +117,20 @@ let g:notes_directories = ['~/nl253/vim-notes/']
 
 " Markdown
 " ==========
-Plug 'tpope/vim-markdown', { 'for': ['markdown', 'ghmarkdown']}
-Plug 'jtratner/vim-flavored-markdown', { 'for': ['markdown', 'ghmarkdown']}
-Plug 'plasticboy/vim-markdown', { 'for': ['markdown', 'ghmarkdown']}
+Plug 'jtratner/vim-flavored-markdown'
+Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
 
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_emphasis_multiline = 1
+let g:vim_markdown_new_list_item_indent = 4
 let g:vim_markdown_fenced_languages = [
-            \'sh', 'java', 'python',
-            \'html', 'css', 'php',
-            \'javascript', 'haskell']
+            \'sh=shell', 'java', 'python=py',
+            \'html=xhtml', 'css', 'php',
+            \'javascript=js']
 <
-
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_folding_level = 2
+let g:vim_markdown_folding_level = 1
 
 Plug 'klen/python-mode', { 'for': 'python' } " Python mode
 
@@ -185,8 +189,8 @@ Plug 'othree/html5-syntax.vim'
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
 
 Plug 'chrisbra/Colorizer', { 'for': [
-            \ 'css', 'html', 'javascript', 'json', 'markdown',
-            \ 'org', 'ghmarkdown', 'xhtml', 'yaml']}
+            \ 'css', 'html', 'javascript', 'json',
+            \ 'org', 'markdown', 'xhtml', 'yaml']}
 
 let g:emmet_html5 = 1
 
@@ -228,10 +232,22 @@ nnoremap <BS> :Scratch<CR>
 vnoremap <BS> :yank<CR>:Scratch<CR>p
 nnoremap <Leader><BS> :edit ~/nl253/todo.org<CR>``
 
+function! Init()
+    if index(g:MARKUP, &filetype) < 0 
+        setlocal nospell 
+    elseif index(g:MARKUP, &filetype) >= 0 
+        setlocal spell 
+        if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
+            TableModeEnable
+        endif
+        nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
+        nnoremap <buffer> <Leader>me :execute '!pandoc -o /tmp/' . expand('%') . '.html'<CR>:execute '!$BROWSER /tmp/' . expand('%') . '.html'<CR> 
+    endif
+endfunction
+
 aug VIMENTER
     au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     au FileType * if exists("+completefunc") && &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
-    au FileType * if index(g:MARKUP, &filetype) < 0 | setlocal nospell | endif
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     au CursorHold  * silent!  checktime
@@ -239,12 +255,12 @@ aug VIMENTER
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
     au FileType * if index(g:MARKUP, &filetype) < 0 | setl complete=.,w,t, | else | setl complete=.,w,k,s | endif
-    au Filetype markdown setlocal ft=ghmarkdown | let g:table_mode_corner = '|'
+    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown.markdown conceallevel=3
+    au FileType * call Init()
+    au Filetype markdown let g:table_mode_corner = '|'
     au BufReadPost,BufNew *.org let g:table_mode_corner = '+'
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
-au FileType markdown,ghmardown nnoremap <buffer> <Leader>me :execute '!pandoc -f markdown_github -t html -o /tmp/' . expand('%') . '.html'<CR>:execute '!$BROWSER /tmp/' . expand('%') . '.html'<CR>
-    au FileType gitcommit setl spell
     au FileType man setl nowrap
     au FileType org setlocal foldlevel=2
     au FileType help nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <CR> <C-]> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u>

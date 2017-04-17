@@ -9,9 +9,9 @@
 
 ![Alt text](Pictures/chrome-nvim-tmux.png?raw=true "Chrome and neovim")
 
-### Desktop 
+### Desktop (xmonad)
 
-![Alt text](Pictures/desktop.png?raw=true "desktop")
+![Alt text](Pictures/desktop.png?raw=true "desktop") 
 
 (sadly I don't rememeber who I stole this wallpaper from)
 
@@ -19,6 +19,10 @@
 
 - .bashrc
 - init.vim aka neovim vimrc
+
+--------------------------------------------------------------------
+
+#### Links
 
 
 #### [Collection of scripts](https://github.com/nl253/Scripts)
