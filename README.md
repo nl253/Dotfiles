@@ -5,13 +5,13 @@
 
 ![Alt text](Pictures/tmux-nvim.png?raw=true "Tmux Setup")
 
-### Chrome and neovim
+### Chrome, tmux and neovim
 
-![Alt text](Pictures/chrome-nvim.png?raw=true "Tmux Setup")
+![Alt text](Pictures/chrome-nvim-tmux.png?raw=true "Chrome and neovim")
 
 ### Desktop 
 
-![Alt text](Pictures/desktop.png?raw=true "Tmux Setup")
+![Alt text](Pictures/desktop.png?raw=true "desktop")
 
 (sadly I don't rememeber who I stole this wallpaper from)
 
