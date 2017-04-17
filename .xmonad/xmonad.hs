@@ -118,7 +118,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0, 0x1008ff12), spawn "amixer -q set Master toggle; notify-send \" Toggle Volume \"")
     , ((0, 0x1008ff13), spawn "amixer -q set Master 5%+; notify-send \" Volume Up + 5\"")
     , ((0, 0x1008ff11), spawn "amixer -q set Master 5%-; notify-send \" Volume Down - 5\"")
-    , ((0, xK_Print),   spawn "sleep 0.2; scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/' ; notify-send \"Print Screen Saved to ~/Pictures\"")
+    , ((0, xK_Print),   spawn "sleep 0.2; scrot '%Y-%m-%d_%H-%M_$wx$h.png' -e 'mv $f ~/Pictures/' ; notify-send \"Print Screen Saved to ~/Pictures\"")
 
     -- Resize viewed windows to the correct size
     , ((modm,               xK_n     ), refresh)
