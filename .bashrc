@@ -204,17 +204,19 @@ alias x=xonsh
 if [ -x /usr/bin/ranger ]; then
   alias r='ranger'
 elif [ -x ~/.ranger/ranger.py ]; then
-  alias ranger=~/.ranger/ranger.py
-  alias r=~/.ranger/ranger.py
+  alias ranger="${HOME}/.ranger/ranger.py"
+  alias r="${HOME}/.ranger/ranger.py"
 fi
 
-alias mapcaps='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
-alias unmapcaps='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
+alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
+alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
+
+alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
 
 alias le="ls -lo"
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 alias ls='LC_COLLATE=C ls --color=auto --group-directories-first'
-alias lr=recent-files.sh
+alias lr=recent-files.sh # list recent
 alias f=find-approx.sh
 
 alias -- -='cd -' # Go back

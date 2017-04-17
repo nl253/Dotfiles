@@ -8,5 +8,4 @@ echo "~/.profile loaded"
 
 [[ -f ~/.extend.profile ]] && . ~/.extend.profile
 
-
 setxkbmap -layout gb -option ctrl:nocaps # Caps Lock is Control on a GB keyboard
