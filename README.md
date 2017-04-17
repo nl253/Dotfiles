@@ -8,7 +8,7 @@
 
 ### [Tmux](https://github.com/tmux/tmux) with [alacritty](https://github.com/jwilm/alacritty)
 
-![Alt text](2017-04-17_1920x1080.png?raw=true "Tmux Setup")
+![Alt text](Pictures/2017-04-17_1920x1080.png?raw=true "Tmux Setup")
 
 #### [My (and others') Scripts](https://github.com/nl253/Scripts)
 
