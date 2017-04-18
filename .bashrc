@@ -34,7 +34,7 @@ echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loa
 # $PS1 {{{
 
 # default (non-git) prompt
-export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;40m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;31m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \n\[$(tput sgr0)\]\[\033[38;5;241m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;88m\]>\[$(tput sgr0)\]\[\033[38;5;89m\]>\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
+export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;40m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;31m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \n\[$(tput sgr0)\]\[\033[38;5;241m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;88m\]>\[$(tput sgr0)\]\[\033[38;5;89m\]>\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]" # }}}
 
 export TERM=xterm-256color
 unset MAILCHECK                      # Don't check mail when opening terminal.
@@ -46,8 +46,8 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 # ------------------------------------------------------------------------
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 [ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
-[ -d ~/.gem/rubu/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin"
-[ -d ~/.gem/rubu/2.3.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.3.0/bin"
+[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin"
+[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.3.0/bin"
 [ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin"
 [ -d ~/.cabal/bin ] && export PATH="$HOME/.cabal/bin:$PATH"
 [ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin"
@@ -72,6 +72,7 @@ source_bash_completion() {
     fi
   done
 }
+
 source_bash_completion
 
 # enable bash completion in interactive shells
@@ -181,24 +182,6 @@ fi
 
 # }}}
 
-# pacman aliases, yaourt colors {{{
-# -----------------------------------
-# REQUIRES :: pacman yaourt expac 
-# -----------------------------------
-if [ -x /usr/bin/pacman ]; then
-  [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
-  [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
-  alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
-  alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
-  alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
-  [ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
-fi # }}}
-
-[ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
-[ -x /usr/bin/tig ] && alias t=tig
-
-[ -x "/usr/bin/ag" ] && alias ag='ag --hidden --pager="less -MIRFX"' # search with dotfiles page to less with colors
-
 # ALIASES {{{
 env() { if [ ! $# = 0 ]; then command env $@; else command env | sort; fi; } # by default if no args provided sort env output
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date' # stopwatch
@@ -206,8 +189,8 @@ alias sudo='sudo '                                                              
 alias e="$EDITOR"
 alias todo="git grep -n --word-regexp --break --recurse-submodules --heading TODO"
 alias path='echo -e ${PATH//:/\\n}' # split path on ":"
-alias x=xonsh
-[ -x /usr/bin/zsh ] && alias z=zsh
+alias x=xonsh # quicker access
+[ -x /usr/bin/zsh ] && alias z=zsh # quicker access
 if [ -x /usr/bin/ranger ]; then
   alias r='ranger'
 elif [ -x ~/.ranger/ranger.py ]; then
@@ -243,14 +226,32 @@ alias info='info --vi-keys'
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30' # frequent entries from history
 alias logout="pkill -KILL -u " 
  # shows links that don't point to anything
-alias symlinks-pretty='for i in $(find -type l 2>/dev/null | sed -E "s/^\.\///" ); do echo -e " \e[36m$i \e[39m-> \e[91m$(readlink -f $i)" ; done' 
+alias symlinks-pretty='for i in $(find -type l 2>/dev/null | sed -E "s/^\.\///" ); do echo -e " \e[36m$i \e[39m-> \e[91m$(readlink -e $i)" ; done' 
 alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"' # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"' # list recursively just dirs 
+alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"' # list recursively just dirs 
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # keybingings for readline
 alias http-server="python3 -m http.server" # open using 0.0.0.0:{PORT}
 [ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
 # }}}
+
+# pacman aliases, yaourt colors {{{
+# -----------------------------------
+# REQUIRES :: pacman yaourt expac 
+# -----------------------------------
+if [ -x /usr/bin/pacman ]; then
+  [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
+  [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
+  alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
+  alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
+  alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
+  [ -x /usr/bin/yaourt ] && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+fi # }}}
+
+[ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
+[ -x /usr/bin/tig ] && alias t=tig
+[ -x "/usr/bin/ag" ] && alias ag='ag --hidden --pager="less -MIRFX"' # search with dotfiles page to less with colors
 
 stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
 stty -ctlecho # turn off control character echoing
