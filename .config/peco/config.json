@@ -1,0 +1,30 @@
+ {
+         "Prompt": "[peco]",
+         "InitialFilter": "Fuzzy",
+         "StickySelection": true,
+         "StickySelection": true,
+
+         "Keymap": {
+                 "C-u": "peco.ScrollPageUp",
+                 "C-d": "peco.ScrollPageDown",
+                 "Esc,C-c": "peco.Cancel",
+                 "C-a": "peco.BeginningOfLine",
+                 "C-e": "peco.EndOfLine",
+                 "M-b": "peco.BackwardWord",
+                 "M-f": "peco.ForwardWord",
+                 "C-b": "peco.BackwardChar",
+                 "C-f": "peco.ForwardChar",
+                 "C-k": "peco.KillEndOfLine",
+                 "M-BS": "peco.DeleteBackwardWord",
+                 "M-d": "peco.DeleteForwardWord",
+                 "C-w": "peco.DeleteBackwardWord",
+                 "Tab": "peco.ToggleSelectionAndSelectNext"
+         },
+         "Style": {
+                 "Basic": ["on_default", "default"],
+                 "SavedSelection": ["bold", "on_blue", "white"],
+                 "Selected": ["on_yellow", "black"],
+                 "Query": ["blue", "bold", "on_default"],
+                 "Matched": ["red", "bold", "on_default"]
+         }
+ }

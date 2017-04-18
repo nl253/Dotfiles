@@ -60,7 +60,8 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTCONTROL="ignoreboth:erasedups"
-export HISTTIMEFORMAT='%s'
+export HISTTIMEFORMAT="%T "
+export HH_CONFIG=hicolor         # get more colors
 
 source_bash_completion() {
   local f
@@ -151,7 +152,7 @@ fi
 
 # {{{ FZF init # chech if on system # set up aliases in case it is and isn't
 if [ -x /usr/bin/fzf ]; then
-  export FZF_DEFAULT_OPTS="--bind='alt-e:execute($EDITOR {}),alt-r:execute([ -x/usr/bin/rifle ] && rifle {} || [ -x /usr/bin/mc ] && mc {}),ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:117,hl+:1,bg+:232,fg:240,fg+:246'"
+  export FZF_DEFAULT_OPTS="--bind='enter:execute( [ -f {} ] && $EDITOR {} || rifle {}),alt-y:execute(echo {} | xclip -selection clipboard),alt-r:execute([ -x/usr/bin/rifle ] && rifle {} || [ -x /usr/bin/mc ] && mc {}),ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:117,hl+:1,bg+:232,fg:240,fg+:246'"
   alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
   export FZF_DEFAULT_COMMAND='
         (git ls-tree -r --name-only HEAD ||
@@ -187,6 +188,9 @@ env() { if [ ! $# = 0 ]; then command env $@; else command env | sort; fi; } # b
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date' # stopwatch
 alias sudo='sudo '                                                                # Enable aliases to be sudo’ed
 alias e="$EDITOR"
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+[ -x /usr/bin/hh ] && alias h=hh # quicker access 
 alias todo="git grep -n --word-regexp --break --recurse-submodules --heading TODO"
 alias path='echo -e ${PATH//:/\\n}' # split path on ":"
 alias x=xonsh # quicker access
@@ -198,9 +202,8 @@ elif [ -x ~/.ranger/ranger.py ]; then
   alias r="${HOME}/.ranger/ranger.py"
 fi
 
-alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
-alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
-alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
+[ -x /usr/bin/xmodmap ] && alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"' && alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
+[ -x /usr/bin/setxkbmap ] && alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
 
 alias le="ls -lo" # list everything 
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F' # long listing
@@ -226,10 +229,9 @@ alias info='info --vi-keys'
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30' # frequent entries from history
 alias logout="pkill -KILL -u " 
  # shows links that don't point to anything
-alias symlinks-pretty='for i in $(find -type l 2>/dev/null | sed -E "s/^\.\///" ); do echo -e " \e[36m$i \e[39m-> \e[91m$(readlink -e $i)" ; done' 
 alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"' # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"' # list recursively just dirs 
-alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"' # list recursively just dirs 
+alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"' # list recursively just files 
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # keybingings for readline
 alias http-server="python3 -m http.server" # open using 0.0.0.0:{PORT}
