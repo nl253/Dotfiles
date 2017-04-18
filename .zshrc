@@ -34,9 +34,10 @@ setopt HIST_REDUCE_BLANKS
 export ZSH=~/.oh-my-zsh
 
 # Theme to load. 
+# DECENT :: jonathan half-life refined pygmalion
 # Optionally, if you set this to "random"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="pygmalion"
+ZSH_THEME="jonathan"
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -74,24 +75,17 @@ plugins=(zsh-syntax-highlighting \
         compleat \
         dircycle \ 
         tmuxinator \
-        urltools\
         rsync python pip \
         npm man gem \
-        systemd sudo \
+        sudo \
         history gitignore \
         globalias \
         gnu-utils git-prompt \
         git-extras \
         cp copyfile \
-        colorize \
-        archlinux)
-
-# look into it:
-# git-flow git-hubflow
-# pyenv :: taken out becasue it's not as popular on other systems and causes errors
+        colorize)
 
 source $ZSH/oh-my-zsh.sh
-
 
 if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ]] ; then
         git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
@@ -148,4 +142,4 @@ for file in ~/.zsh/* ; do
   [[ -f $file ]] && source $file
 done
 
-[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
+#[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
