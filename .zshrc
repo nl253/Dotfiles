@@ -1,7 +1,12 @@
+#!/usr/bin/env zsh
 #
 # THIS ZSHRC SOURCES MY BASHRC,
 # where I do all I can to make is compatible with zsh
 #
+
+# try to install oh-my-zsh using curl, fall back on wget
+[[ -x /bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+[[ -x /bin/wget ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000                          # expand history size
@@ -28,35 +33,25 @@ setopt HIST_REDUCE_BLANKS
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
+# Theme to load. 
+# Optionally, if you set this to "random"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="pygmalion"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+# CASE_SENSITIVE="true" # Use case-sensitive completion.
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Hyphen-insensitive completion. Case sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# DISABLE_AUTO_UPDATE="true" # Disable bi-weekly auto-update checks.
 
-# Uncomment the following line to change how often to auto-update (in days).
-export UPDATE_ZSH_DAYS=7
+export UPDATE_ZSH_DAYS=7 # How often to auto-update (in days).
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+# DISABLE_AUTO_TITLE="true" # Disable auto-setting terminal title.
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+ENABLE_CORRECTION="true" # Enable command auto-correction.
 
-# Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -73,10 +68,6 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # too many plugins slow down shell startup.
 
-# ADDITONAL PLUGINS FROM GITHUB
-# https://github.com/zsh-users/zsh-syntax-highlighting
-#
-
 plugins=(zsh-syntax-highlighting \
         zsh-autosuggestions \
         git \
@@ -88,14 +79,13 @@ plugins=(zsh-syntax-highlighting \
         npm man gem \
         systemd sudo \
         history gitignore \
-        taskwarrior \
         globalias \
         gnu-utils git-prompt \
         git-extras \
         cp copyfile \
         colorize \
-        archlinux \
-        autopep8)
+        archlinux)
+
 # look into it:
 # git-flow git-hubflow
 # pyenv :: taken out becasue it's not as popular on other systems and causes errors
@@ -112,9 +102,9 @@ fi
 if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
         git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 fi
-if [[ ! -x /usr/bin/hstr ]] ; then
-        sudo pacman -S "hstr-git"
-fi
+# if [[ ! -x /usr/bin/hstr ]] ; then
+        # sudo pacman -S "hstr-git"
+# fi
 
 if [[ ! -x ~/.autojump/bin/autojump ]] ; then
         mkdir -p /tmp/autojump
@@ -149,5 +139,13 @@ fi
 #
 
 # # # # # # # # # # # # # # # # # # # # # # # # #
-[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
+for file in ~/.shells/* ; do
+  [[ -f $file ]] && source $file
+done
+
+for file in ~/.zsh/* ; do
+  [[ -f $file ]] && source $file
+done
+
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh

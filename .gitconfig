@@ -84,6 +84,12 @@
 	find-tag = "!f() { git describe --always --contains $1; }; f"  # Find tags containing commit
 	# Find commits by source code
 	find-commit = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+	fzf-commits = "!${HOME}/Scripts/fzf-commits.sh"
+	fzf-commit-sha = "!${HOME}/Scripts/fzf-commit-sha.sh"
+	fzf-checkout-branch-sorted = "!${HOME}/Scripts/fzf-checkout-branch-sorted.sh"
+	fzf-checkout-branch-tag = "!${HOME}/Scripts/fzf-checkout-branch-tag.sh"
+	fzf-checkout-commit = "!${HOME}/Scripts/fzf-checkout-commit.sh"
+	fzf-stash = "!${HOME}/Scripts/fzf-stash.sh"
 	# Find commits by commit message
 	find-message = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 	
