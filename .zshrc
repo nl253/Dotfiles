@@ -3,7 +3,6 @@
 # where I do all I can to make is compatible with zsh
 #
 
-
 HISTFILE=~/.zsh_history
 HISTSIZE=10000                          # expand history size
 SAVEHIST=10000
@@ -148,13 +147,6 @@ fi
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-
-source ~/.bashrc
-#emulate sh -c 'source ~/.bashrc'
 
 # # # # # # # # # # # # # # # # # # # # # # # # #
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh

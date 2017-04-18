@@ -8,9 +8,14 @@ let mapleader = " "
 let maplocalleader = ","
 
 set smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile hidden clipboard=unnamed,unnamedplus
+set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
 execute 'set path+=' . glob('~') . '/**'
+set nostartofline " Don't reset cursor to start of line when moving around
+set splitbelow " New window goes below
+set virtualedit=all 
+
+set shortmess=atI " Don't show the intro message when starting vim
 
 if has('nvim') && ! filereadable(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -35,7 +40,7 @@ else
     endif
     syntax enable
     filetype plugin indent on
-    set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
+    set encoding=utf7 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
     set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch
     if has('tags')
         set tags
@@ -75,7 +80,10 @@ Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
 let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 
 Plug 'vim-syntastic/syntastic', { 'on' : [ 'SyntasticInfo', 'SyntasticCheck', 'SyntasticToggleMode']}
-
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_enable_signs = 1
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
 let g:syntastic_vim_checkers = []
 let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
 let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
@@ -106,14 +114,6 @@ Plug 'vim-scripts/utl.vim'
 Plug 'jceb/vim-orgmode', {'for' : 'org'}
 let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING', 'URGENT', 'SOON', 'WAITING', 'IN_PROGRESS']
 let g:org_heading_shade_leading_stars = 0
-
-Plug 'xolox/vim-notes'
-
-if empty(glob("~/Notes/vim-notes"))
-    !mkdir -p ~/Notes/vim-notes
-endif
-
-let g:notes_directories = ['~/Notes/vim-notes/']
 
 " Markdown
 " ==========
@@ -394,7 +394,7 @@ if executable('fzf')
                 \}))
 
     command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
-\'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
+                \'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
                 \'options': '-x +s --reverse --preview "head -n 38 {}"',
                 \'up': '80%',
                 \}))

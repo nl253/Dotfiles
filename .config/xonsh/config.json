@@ -1,0 +1,14 @@
+{
+ "foreign_shells": [
+  {
+   "shell": "bash"
+  }
+ ],
+ "xontribs": [
+  "bashisms",
+  "coreutils",
+  "jedi",
+  "scrapy_tabcomplete",
+  "xonda"
+ ]
+}
