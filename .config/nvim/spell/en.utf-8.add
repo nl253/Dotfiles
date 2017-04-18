@@ -75,3 +75,5 @@ wireshark
 ngrep
 tcpdump
 cpp
+curlrc
+xonshrc
