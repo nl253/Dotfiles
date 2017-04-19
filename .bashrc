@@ -15,10 +15,15 @@ for file in ~/.bash/*; do
   [[ -f $file ]] && source "$file" # source all in ~/.bash/ # bash-specific configuration
 done
 
-if [[ -x /usr/bin/git ]] && [[ ! -e ~/Scripts ]]; then
+# BY HERE $PATH AND VARIABLES HAVE BEEN SET !
+
+if [[ -x /usr/bin/git ]] && [[ ! -e ~/Scripts ]]; then 
   echo -e "PULLING from https://github.com/nl253/Scripts master\n" # Pull Scripts if not present already
   git clone --recursive https://github.com/nl253/Scripts ~
 fi
+
+# BY HERE WE HAVE ALL THE SCRIPTS AND VARIABLES ARE SET !
+setup-vim.sh
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
@@ -35,8 +40,8 @@ export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]
 stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
 stty -ctlecho # turn off control character echoing
 complete -cf sudo
-complete -d cd
-complete -d cd pushd
+# complete -d cd
+complete -d pushd
 
 # {{{ SHELL OPTIONS
 shopt -s autocd

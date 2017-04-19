@@ -34,6 +34,13 @@ $if mode=emacs
 # for freebsd console
 "\e[H": beginning-of-line
 "\e[F": end-of-line
+
+# smart completion, list all options once and then cycle through them
+Tab: menu-complete 
+
+# Shift-Tab
+"\e[Z": "\e-1\C-i" 
+
 $endif
 set expand-tilde on
 # Be more intelligent when autocompleting by also looking at the text after

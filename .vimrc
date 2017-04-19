@@ -19,8 +19,12 @@ set shortmess=atI " Don't show the intro message when starting vim
 
 if has('nvim') && ! filereadable(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    source ~/.config/nvim/init.vim
+    PlugInstall
 elseif ! has('nvim') && ! filereadable(glob('~/.vim/autoload/plug.vim'))
     !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    source ~/.vimrc
+    PlugInstall
 endif
 
 if has('nvim')
@@ -265,10 +269,10 @@ aug VIMENTER
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
     au FileType man setl nowrap
-    au FileType gitcommit setl virtualedit=block spell 
+au FileType gitcommit setl virtualedit=block spell 
     au FileType gitcommit WordyWordy 
     au FileType org setlocal foldlevel=2
-    au FileType help nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <CR> <C-]> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u>
+    au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <CR> <C-]> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u>
     au FileType qf nnoremap <buffer> <C-n> j<CR><C-w><C-w> | nnoremap <buffer> <C-p> k<CR><C-w><C-w> | nnoremap q :cclose<CR>
 aug END
 
