@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 
 # try to install oh-my-zsh using curl, fall back on wget
-[[ -x /bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-[[ -x /bin/wget ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+[[ -x /usr/bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+[[ -x /usr/bin/wget ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000                          # expand history size
@@ -133,5 +133,5 @@ fi
 # [[ ! -e ~/.qfc/bin/ ]] && git clone https://github.com/pindexis/qfc $HOME/.qfc
 # [[ -s "${HOME}/.qfc/bin/qfc.sh" ]] && source "${HOME}/.qfc/bin/qfc.sh"
 
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+

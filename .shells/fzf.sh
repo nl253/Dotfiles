@@ -19,7 +19,7 @@ if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/install] ; then
   alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"' # [FZF] with [P]REVIEW
 
   alias l=fzf-locate.sh       # [L]OCATE
-  alias fh=fzf-search-home.sh # [F]IND [H]OME
+  # alias fh=fzf-search-home.sh # [F]IND [H]OME
   alias c=fzf-cd.sh           # [C]D
   alias p=fzf-pkill.sh        # [P]ROCESSES 
 
