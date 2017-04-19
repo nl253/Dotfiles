@@ -1,4 +1,9 @@
 ﻿*.bluej
+.xiki/
+.task/
+.qfc/
+xiki-project/
+xiki/
 *.class
 *.ctxt
 Notes/

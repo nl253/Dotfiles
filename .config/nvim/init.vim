@@ -40,7 +40,7 @@ else
     endif
     syntax enable
     filetype plugin indent on
-    set encoding=utf7 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
+    set encoding=utf8 syntax=on filetype=on autoindent nocompatible magic incsearch ttyfast
     set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch
     if has('tags')
         set tags
@@ -358,7 +358,9 @@ nnoremap <Leader>gd     :Gdiff<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
 nnoremap <Leader>gf     :Gfetch<Space>
 nnoremap <Leader>gm     :Gmove<Space>
-nnoremap <Leader>gp     :Gpush<CR>
+if len($TMUX) > 1
+    nnoremap <Leader>gp     :Gpush<CR>
+endif
 nnoremap <Leader>gh     :GHDashboard<CR>
 nnoremap <Leader>gV     :Gitv!<CR>
 nnoremap <Leader>gv     :Gitv<CR>
@@ -376,34 +378,33 @@ nnoremap <C-s><C-d>     :DeleteSession!<CR>
 nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
-if executable('fzf')
-    let g:PREVIEW = ' --preview "head -n 20 {} " '
-    let g:IGNORE_REGEXP = "grep -P -v \"(\d{4,}$)|(~$)|".
-                \"(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)".
-                \"|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
-    let g:DIR_IGNORE_REGEXP = 'grep -P -v "^/(dev)|(tmp)|(mnt)|(root)"'
+let g:PREVIEW = ' --preview "head -n 20 {} " '
+let g:IGNORE_REGEXP = "grep -P -v \"(\d{4,}$)|(~$)|".
+            \"(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)".
+            \"|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
+let g:DIR_IGNORE_REGEXP = 'grep -P -v "^/(dev)|(tmp)|(mnt)|(root)"'
 
-    command! FZFMru call fzf#run(fzf#wrap({
-                \'source':  v:oldfiles,
-                \'options': g:FZF_COLORS . '--multi -x +s --preview "head -n 30 {}"',
-                \'up':    '50%'
-                \}))
+command! FZFMru call fzf#run(fzf#wrap({
+            \'source':  v:oldfiles,
+            \'options': g:FZF_COLORS . '--multi -x +s --preview "head -n 30 {}"',
+            \'up':    '50%'
+            \}))
 
-    command! FZFFileAnchor call fzf#run(fzf#wrap({
-                \'source': ' (git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | ' . g:IGNORE_REGEXP . ' | sed s/^..//) 2> /dev/null',
-                \'options': '-x +s --reverse --preview "head -n 38 {}"',
-                \'up': '80%',
-                \}))
+command! FZFFileAnchor call fzf#run(fzf#wrap({
+            \'source': ' (git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | ' . g:IGNORE_REGEXP . ' | sed s/^..//) 2> /dev/null',
+            \'options': '-x +s --reverse --preview "head -n 38 {}"',
+            \'up': '80%',
+            \}))
 
-    command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
-                \'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
-                \'options': '-x +s --reverse --preview "head -n 38 {}"',
-                \'up': '80%',
-                \}))
-    nnoremap <C-v> :FZFFileAnchor<CR>
-    nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
-    nnoremap <C-x><C-r> :FZFMru<CR>
-endif
+command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
+            \'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
+            \'options': '-x +s --reverse --preview "head -n 38 {}"',
+            \'up': '80%',
+            \}))
+
+nnoremap <C-v> :FZFFileAnchor<CR>
+nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
+nnoremap <C-x><C-r> :FZFMru<CR>
 
 nnoremap <C-x><C-a> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
 
