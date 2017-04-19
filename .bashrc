@@ -5,6 +5,10 @@
 # {{{ If not running interactively, don't do anything.
 [[ -z "$PS1" ]] && return 0
 [[ $- != *i* ]] && return 0
+
+# export SHELL=$(which zsh) # set shell to zsh
+# zsh
+
 # }}}
 
 for file in ~/.shells/*; do

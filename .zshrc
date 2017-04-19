@@ -66,7 +66,7 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 
 plugins=(zsh-syntax-highlighting \
         zsh-autosuggestions \
-        compleat python pip \
+        compleat k python pip \
         npm sudo history gitignore \
         globalias gnu-utils git-prompt \
         git-extras cp copyfile colorize)
@@ -81,6 +81,9 @@ if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]] ; then
 fi
 if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
         git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+fi
+if [[ ! -e ${ZSH_CUSTOM}/plugins/k ]] ; then
+  git clone https://github.com/supercrabtree/k $HOME/.oh-my-zsh/custom/plugins/k # git dir lisitng with `k`
 fi
 
 #
