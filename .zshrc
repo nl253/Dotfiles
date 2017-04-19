@@ -132,13 +132,12 @@ for file in ~/.zsh/* ; do
 done
 
 if [[ ! -x ~/.autojump/bin/autojump ]] ; then
-        mkdir -p /tmp/autojump
-        git clone git://github.com/joelthelion/autojump.git /tmp/autojump/
-        /tmp/autojump/install.py
+  git clone git://github.com/joelthelion/autojump.git
+  cd autojump
+  ./install.py
 fi
 
-[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
-
+[[ -e ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
 source ~/.xsh
 
