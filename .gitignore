@@ -4,6 +4,15 @@
 .qfc/
 xiki-project/
 xiki/
+.zsh/zsh-autosuggestions
+.zshrc.pre-oh-my-zsh
+.fzf/
+.config/epdfview/main.conf
+.config/mimeapps.list
+.oh-my-zsh/
+.homesick/
+.icons/
+.tmux/
 *.class
 *.ctxt
 Notes/

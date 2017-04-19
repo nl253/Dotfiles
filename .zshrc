@@ -118,7 +118,7 @@ for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
   [[ -f $file ]] && source $file
 done
 
-if [[ ! -x ~/.autojump/bin/autojump ]] ; then # download if missing
+if [[ ! -e ~/.autojump/bin/autojump ]] ; then # download if missing
   git clone git://github.com/joelthelion/autojump.git
   cd autojump
   ./install.py
