@@ -153,3 +153,5 @@
 	prompt = false
 [gg]
 	username = nl253
+[credential]
+	helper = cache
