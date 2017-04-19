@@ -63,6 +63,8 @@
 	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
 
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"   # Switch to a branch, creating it if necessary
+
+	qq = "!git add -u ; git commit -m \"Quick commit. Nothing important ...\" ; git push -u" # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
 	
 	contributors = shortlog --summary --numbered  # List contributors with number of commits
 	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"  # Credit an author on the latest commit

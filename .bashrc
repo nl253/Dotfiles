@@ -39,9 +39,9 @@ export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]
 
 stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
 stty -ctlecho # turn off control character echoing
-complete -cf sudo
-# complete -d cd
-complete -d pushd
+# complete -cf sudo
+complete -d cd
+# complete -d pushd
 
 # {{{ SHELL OPTIONS
 shopt -s autocd
