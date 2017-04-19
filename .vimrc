@@ -65,6 +65,7 @@ let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff', '&
 
 if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let g:session_directory = '~/.vim/session' | endif
 
+Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
@@ -118,7 +119,7 @@ let g:org_heading_shade_leading_stars = 0
 " Markdown
 " ==========
 "
-Plug 'blindFS/vim-taskwarrior'
+Plug 'blindFS/vim-taskwarrior', {'on' : 'TW'}
 Plug 'jtratner/vim-flavored-markdown'
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
 
@@ -144,7 +145,7 @@ let g:pymode_lint = 0 " Neomake is better
 let g:pymode_motion = 1
 let g:pymode_options = 1
 let g:pymode_options_colorcolumn = 1
-let g:pymode_paths = ['~/Scripts/']
+let g:pymode_paths = [glob('~/Scripts/')]
 let g:pymode_python = 'python3'
 let g:pymode_rope = 1
 let g:pymode_rope_autoimport = 1

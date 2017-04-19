@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 # ~/.bash_profile
+ 
+#export SHELL=/bin/zsh # Uncomment both lines to change shell to zsh
+#exec /bin/zsh -l
 
 echo "~/.bash_profile loaded"
 
@@ -44,5 +47,3 @@ fi
 # UTF-8 all the way.
 export LC_ALL='en_GB.UTF-8'
 export LANG='en_GB'
-
-source ~/.xsh

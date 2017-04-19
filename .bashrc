@@ -8,15 +8,15 @@
 # }}}
 
 for file in ~/.shells/*; do
-  [[ -f $file ]] && source "$file"
+  [[ -f $file ]] && source "$file" # source all in ~/.shells/
 done
 
 for file in ~/.bash/*; do
-  [[ -f $file ]] && source "$file"
+  [[ -f $file ]] && source "$file" # source all in ~/.bash/
 done
 
 if [[ -x /usr/bin/git ]] && [[ ! -e ~/Scripts ]]; then
-  echo -e "PULLING from https://github.com/nl253/Scripts master\n"
+  echo -e "PULLING from https://github.com/nl253/Scripts master\n" # Pull Scripts if not present already
   git clone --recursive https://github.com/nl253/Scripts ~
 fi
 
@@ -53,3 +53,5 @@ shopt -s histverify # History expansions will be verified before execution.
 shopt -s histreedit # Allow use to re-edit a faild history substitution.
 # }}}
 bind Space:magic-space # Expand "!" history when pressing space
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
