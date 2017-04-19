@@ -1,6 +1,6 @@
-# ~/.tmuxinator/commit.yml
+# ~/.tmuxinator/todo.yml
 
-name: commit
+name: todo
 root: ~/
 
 # Optional tmux socket
@@ -28,19 +28,15 @@ root: ~/
 # attach: false
 
 # Runs after everything. Use it to attach to tmux with custom options etc.
-# post: tmux -CC attach -t commit
+# post: tmux -CC attach -t todo
 
 windows:
   - editor:
-      layout: tiled
+      layout: main-vertical
       # Synchronize all panes of this window, can be enabled before or after the pane commands run.
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
       # synchronize: after
       panes:
-        - $EDITOR
-        - tig status
-        - git branches
-        - git fzf-commits
-  - server: bundle exec rails s
-  - logs: tail -f log/development.log
-
+        - $EDITOR ~/Notes/todo.org
+        - cd Scripts ; todo-detector.sh
+        - task list

@@ -63,6 +63,7 @@ alias http-server="python3 -m http.server" # open using 0.0.0.0:{PORT}
 # REQUIRES :: pacman yaourt expac 
 # -----------------------------------
 if [ -x /usr/bin/pacman ]; then
+  alias pacman='pacman --config "${HOME}/.pacman.conf"'
   [ -x /usr/bin/expac ] && alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' '%l\t%n' | sort | tail -n 20"
   [ -x /usr/bin/expac ] && alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
   alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"

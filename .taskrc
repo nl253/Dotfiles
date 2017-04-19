@@ -29,3 +29,8 @@ data.location=~/.task
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
+taskd.server=freecinc.com:53589
+taskd.key=\/home\/norbert\/.task\/freecinc_9c444abf.key.pem
+taskd.certificate=\/home\/norbert\/.task\/freecinc_9c444abf.cert.pem
+taskd.ca=\/home\/norbert\/.task\/freecinc_9c444abf.ca.pem
+taskd.credentials=FreeCinc\/freecinc_9c444abf\/914394a0-817f-4630-8e34-cbe99901bac1
