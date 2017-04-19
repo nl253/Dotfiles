@@ -3,8 +3,8 @@
 # ~/.bash_profile
  
 # Uncomment both lines to change shell to zsh
-export SHELL=/bin/zsh  # no chsh -s solutin for lack of root access (in some rare cases it's blocked)
-zsh 
+# export SHELL=/bin/zsh  # no chsh -s solutin for lack of root access (in some rare cases it's blocked)
+# zsh 
 
 echo "~/.bash_profile loaded" # indicate
 

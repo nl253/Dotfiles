@@ -47,6 +47,7 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 [ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin" # GO 
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts/ && git clone https://github.com/nl253/Scripts ~/Scripts/ # clone my Scripts repo  
 [ -d ~/Scripts/ ] && export PATH="${PATH}:~/Scripts" # MY SCRIPTS
+[ -d ~/miniconda3 ] && export PATH="/home/norbert/miniconda3/bin:$PATH"
 # }}}
 
 # HISTORY {{{
