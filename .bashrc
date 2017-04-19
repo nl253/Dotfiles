@@ -8,11 +8,11 @@
 # }}}
 
 for file in ~/.shells/*; do
-  [[ -f $file ]] && source "$file" # source all in ~/.shells/
+  [[ -f $file ]] && source "$file" # source all in ~/.shells/ # general shell configuration 
 done
 
 for file in ~/.bash/*; do
-  [[ -f $file ]] && source "$file" # source all in ~/.bash/
+  [[ -f $file ]] && source "$file" # source all in ~/.bash/ # bash-specific configuration
 done
 
 if [[ -x /usr/bin/git ]] && [[ ! -e ~/Scripts ]]; then
@@ -22,12 +22,15 @@ fi
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash # load fzf configuration
+
+[ -e ~/.xsh ] && source ~/.xsh # ?
+
 # $PS1 aka PROMPT {{{
 
 # default (non-git) prompt
 export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;40m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;31m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \n\[$(tput sgr0)\]\[\033[38;5;241m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;88m\]>\[$(tput sgr0)\]\[\033[38;5;89m\]>\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]" # }}}
 
-[ -e ~/.xsh ] && source ~/.xsh
 
 stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
 stty -ctlecho # turn off control character echoing
@@ -54,4 +57,3 @@ shopt -s histreedit # Allow use to re-edit a faild history substitution.
 # }}}
 bind Space:magic-space # Expand "!" history when pressing space
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash

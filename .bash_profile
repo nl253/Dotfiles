@@ -2,19 +2,18 @@
 
 # ~/.bash_profile
  
-#export SHELL=/bin/zsh # Uncomment both lines to change shell to zsh
-#exec /bin/zsh -l
+# Uncomment both lines to change shell to zsh
+# export SHELL=/bin/zsh 
+# exec /bin/zsh -l
 
-echo "~/.bash_profile loaded"
+echo "~/.bash_profile loaded" # indicate
 
 [[ -f ~/.extend.bash_profile ]] && . ~/.extend.bash_profile
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
 # bash-completion
-if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
-  . /opt/local/etc/profile.d/bash_completion.sh
-fi
+[[ -f /opt/local/etc/profile.d/bash_completion.sh ]] && . /opt/local/etc/profile.d/bash_completion.sh
 
 if [ -x /usr/bin/pyvenv ]; then
   export PYENV_ROOT="$HOME/.pyenv"
@@ -34,15 +33,6 @@ source_bash_completion() {
 }
 
 source_bash_completion
-
-# enable bash completion in interactive shells
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
 
 # UTF-8 all the way.
 export LC_ALL='en_GB.UTF-8'

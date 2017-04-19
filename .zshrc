@@ -1,8 +1,4 @@
 #!/usr/bin/env zsh
-#
-# THIS ZSHRC SOURCES MY BASHRC,
-# where I do all I can to make is compatible with zsh
-#
 
 # try to install oh-my-zsh using curl, fall back on wget
 [[ -x /bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -30,14 +26,13 @@ setopt INC_APPEND_HISTORY SHARE_HISTORY # adds history incrementally and share i
 setopt HIST_IGNORE_ALL_DUPS             # don't record dupes in history
 setopt HIST_REDUCE_BLANKS
 
-# Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
+export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
 # Theme to load. 
 # DECENT :: jonathan half-life refined pygmalion
 # Optionally, if you set this to "random"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="refined"
+ZSH_THEME="refined" # minimalist, blue prompt, subtle git info
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -71,16 +66,10 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 
 plugins=(zsh-syntax-highlighting \
         zsh-autosuggestions \
-        compleat \
-        python pip \
-        npm \
-        sudo \
-        history gitignore \
-        globalias \
-        gnu-utils git-prompt \
-        git-extras \
-        cp copyfile \
-        colorize)
+        compleat python pip \
+        npm sudo history gitignore \
+        globalias gnu-utils git-prompt \
+        git-extras cp copyfile colorize)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -115,34 +104,34 @@ fi
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
 
 # # # # # # # # # # # # # # # # # # # # # # # # #
 
-for file in ~/.shells/* ; do
+for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
   [[ -f $file ]] && source $file
 done
 
-for file in ~/.zsh/* ; do
+for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
   [[ -f $file ]] && source $file
 done
 
-if [[ ! -x ~/.autojump/bin/autojump ]] ; then
+if [[ ! -x ~/.autojump/bin/autojump ]] ; then # download if missing
   git clone git://github.com/joelthelion/autojump.git
   cd autojump
   ./install.py
 fi
 
+# usage : j [fuzzy dir name] , j -a [exact name of dir to add to tracking]
 [[ -e ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
-source ~/.xsh
+[[ -e ~/.xsh ]] && source ~/.xsh
 
-[[ ! -e ~/.qfc/bin/ ]] && git clone https://github.com/pindexis/qfc $HOME/.qfc
-[[ -s "${HOME}/.qfc/bin/qfc.sh" ]] && source "${HOME}/.qfc/bin/qfc.sh"
+# Commenting out until the project supports readline keybindings
+# [[ ! -e ~/.qfc/bin/ ]] && git clone https://github.com/pindexis/qfc $HOME/.qfc
+# [[ -s "${HOME}/.qfc/bin/qfc.sh" ]] && source "${HOME}/.qfc/bin/qfc.sh"
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -1,3 +1,7 @@
+#!/usr/bin/env zsh
+
+# functions
+#
 
 paclist() {
   # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
@@ -39,9 +43,6 @@ pacmansignkeys() {
       --no-permission-warning --command-fd 0 --edit-key $key
   done
 }
-
-# Functions
-#
 
 # The name of the current branch
 # Back-compatibility wrapper for when this function was defined here in

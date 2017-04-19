@@ -1,4 +1,10 @@
 
+# THIS FILE MUST USE POSIX COMPLIANT SYNTAX
+# IT IS SOURCED BY ALL INTERACTIVE SHELLS
+
+# VARIABLES 
+# --------
+
 # $COLORS {{{
 # set variables to produce colored output later 
 export RED="\e[31m"
@@ -21,25 +27,26 @@ JAVSCRIPT="${DARKYELLOW}JAVSCRIPT${DEFCOLOR}"
 
 # }}}
 
+# GENERAL {{{
 export TERM=xterm-256color
 unset MAILCHECK                      # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a short hostname
+[ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false # }}}
 
 # $PATH (and JAVA_HOME and JRE_HOME) {{{
 # ------------------------------------------------------------------------
-# FUNCTION :: add packages from all package managers to path if these paths exist along with my own scripts in ~/Scripts/
+# FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
-[ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
-[ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
-[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin"
-[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.3.0/bin"
-[ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin"
-[ -d ~/.cabal/bin ] && export PATH="$HOME/.cabal/bin:$PATH"
-[ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin"
-[ -d ~/.local/bin ] && export PATH=${PATH}:"~/.local/bin"
-[ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin"
-[ ! -e ~/Scripts ] && mkdir -p ~/Scripts/ && git clone https://github.com/nl253/Scripts ~/Scripts/ # clone my Scripts repo 
-[ -d ~/Scripts/ ] && export PATH="${PATH}:~/Scripts"
+[ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre' # JAVA
+[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin" # GEM [RUBY]
+[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.3.0/bin" # GEM [RUBY]
+[ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin" # CARGO [RUST]
+[ -d ~/.cabal/bin ] && export PATH="$HOME/.cabal/bin:$PATH" # CABAL [HASKELL]
+[ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin" # COMPOSER [PHP]
+[ -d ~/.local/bin ] && export PATH=${PATH}:"~/.local/bin" # PIP [PYTHON]
+[ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin" # GO 
+[ ! -e ~/Scripts ] && mkdir -p ~/Scripts/ && git clone https://github.com/nl253/Scripts ~/Scripts/ # clone my Scripts repo  
+[ -d ~/Scripts/ ] && export PATH="${PATH}:~/Scripts" # MY SCRIPTS
 # }}}
 
 # HISTORY {{{
@@ -60,7 +67,7 @@ export HH_CONFIG=hicolor         # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs" # }}}
 
 # $IRC_CLIENT  {{{
-# default to irssi and fall back on hexchat
+# default to `irssi` and fall back on `hexchat`
 [ -x /usr/bin/irssi ] && export IRC_CLIENT='irssi'
 [ ! -x /usr/bin/irssi ] && [ -x /usr/bin/hexchat ] && export IRC_CLIENT='hexchat' # }}}
 
@@ -68,9 +75,9 @@ export GREP_COLOR='1;33' # makes it yellow # by default red
 
 # $PAGER {{{
 # ------------------------------------------------------------------
-# if available enable syntax highlighting # fall back on more if less not available
-# tries to set default pager as less and add coloring to the output if possible
-# falls back on more if available
+# if available enable syntax highlighting # fall back on `more` if `less` not available
+# tries to set default pager as `less` and add coloring to the output if possible
+# falls back on `more` if available
 # ------------------------------------------------------------------
 [ -f /usr/bin/source-highlight-esc.sh ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 [ -x /usr/bin/less ] && alias less='less -x4RFsX' && export PAGER=less
@@ -79,8 +86,8 @@ export GREP_COLOR='1;33' # makes it yellow # by default red
 
 # $BROWSER {{{
 # -------------------------------------------------
-# uses google chrome if available ie if running on a gui 
-# fall back on 1. elinks 2. lynx 3. w3m
+# uses `google chrome` if available ie if running on a gui 
+# fall back on 1. `elinks` 2. `lynx` 3. `w3m`
 # -------------------------------------------------
 if [ -x /usr/bin/google-chrome-stable ]; then
   export BROWSER=google-chrome-stable
@@ -112,4 +119,5 @@ elif [ -x /usr/bin/vi ]; then # if not neovim and not vim then fall back on vi
   alias vim=vi
   alias nvim=vi
 fi
-# }}}
+
+#vim:set foldmethod=marker:set foldlevel=0 # }}}
