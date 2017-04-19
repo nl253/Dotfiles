@@ -349,8 +349,7 @@ noremap j gj
 
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
-nnoremap <Leader>gA     :GHActivity<CR>
-nnoremap <Leader>ga     :GHActivity<Space>
+nnoremap <Leader>ga     :Git add %:p<Space>
 nnoremap <Leader>gb     :Gblame<CR>
 nnoremap <Leader>gB     :Gbrowse<CR>
 nnoremap <Leader>gc     :Gcommit<CR>
