@@ -5,7 +5,7 @@ if [ ! -x /usr/bin/fzf ] && [ ! -e ~/.fzf/install ] ; then                      
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install  # download and install
 fi
 
-if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/install] ; then
+if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/bin/fzf ] ; then
 
   export FZF_DEFAULT_OPTS="--bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --bind='alt-e:execute(\$EDITOR {})' --bind='alt-r:execute(rifle {}),alt-l:execute:(command less -RX {})' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:117,hl+:1,bg+:232,fg:240,fg+:246'"
   # enter : print to STDOUT
@@ -26,6 +26,7 @@ if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/install] ; then
   [ -x /usr/bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
 
 else # non fzf solution
+
   [ -x /usr/bin/htop ] && alias p=htop || alias p=top   # [P]ROCESSES 
 
 fi

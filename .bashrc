@@ -23,7 +23,7 @@ if [[ -x /usr/bin/git ]] && [[ ! -e ~/Scripts ]]; then
 fi
 
 # BY HERE WE HAVE ALL THE SCRIPTS AND VARIABLES ARE SET !
-setup-vim.sh
+# setup-vim.sh
 
 echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loaded
 

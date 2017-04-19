@@ -65,6 +65,9 @@
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"   # Switch to a branch, creating it if necessary
 
 	qq = "!git add -u ; git commit -m \"Quick commit. Nothing important ...\" ; git push -u" # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
+
+	remember = "!git config --global credential.helper \"cache --timeout=120\"" # long session, remember password for 120 min
+	rem = "!git config --global credential.helper \"cache --timeout=20\"" # short session, remember password for 20 min
 	
 	contributors = shortlog --summary --numbered  # List contributors with number of commits
 	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"  # Credit an author on the latest commit
