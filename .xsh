@@ -9,8 +9,8 @@ xiki_go_key="\C-g"          # Ctrl+G to grab commands between xsh and your shell
 xiki_reverse_key="\er"      # Alt+R to search shell history
 
 # Make the 'xsh' command available in the shell
-export PATH=/home/norbert/xiki-project/bin:$PATH
+[ -e ~/xiki-project/bin ] && export PATH="${HOME}/xiki-project/bin:${PATH}"
 
 # Enable the key shortcuts and the xsh wrapper function
-source /home/norbert/xiki-project/bin/.xsh
+[ -e ~/xiki-project/bin/.xsh ] && source ~/xiki-project/bin/.xsh
 
