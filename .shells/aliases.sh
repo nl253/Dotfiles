@@ -1,9 +1,9 @@
 
-# ALIASES {{{
+# ALIASES {{{#{{{
 env() { if [ ! $# = 0 ]; then command env $@; else command env | sort; fi; } # by default if no args provided sort env output
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date' # stopwatch
 alias sudo='sudo '                                                                # Enable aliases to be sudo’ed
-alias e="$EDITOR"
+alias e='$EDITOR'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
 [ -x /usr/bin/hh ] && alias h=hh # quicker access 
@@ -35,6 +35,10 @@ alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+alias rsync-copy="rsync -avz --progress -h"
+alias rsync-move="rsync -avz --progress -h --remove-source-files"
+alias rsync-update="rsync -avzu --progress -h"
+alias rsync-synchronize="rsync -avzu --delete --progress -h"
 [ ! -x /usr/bin/tree ] && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system
 [ -x /usr/bin/dmenu_run ] && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white" # dmenu # a good alternative to rofi # this modifies the prompt and coloring
 [ -x /usr/bin/aspell ] && alias aspell="aspell -c -l en_GB" 
@@ -52,7 +56,7 @@ alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*
 alias keybingings="bind -p | grep -v '^#\|self-insert\|^$'" # keybingings for readline
 alias http-server="python3 -m http.server" # open using 0.0.0.0:{PORT}
 [ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
-# }}}
+# }}}#}}}
 
 # pacman aliases, yaourt colors {{{
 # -----------------------------------

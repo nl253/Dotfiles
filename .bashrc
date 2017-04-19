@@ -52,3 +52,10 @@ shopt -s histreedit    # Allow use to re-edit a faild history substitution.
 # }}}
 bind Space:magic-space # Expand "!" history when pressing space
 
+
+### Bashhub.com Installation.
+### This Should be at the EOF. https://bashhub.com/docs
+if [ -f ~/.bashhub/bashhub.sh ]; then
+    source ~/.bashhub/bashhub.sh
+fi
+

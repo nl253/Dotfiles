@@ -37,7 +37,7 @@ export ZSH=~/.oh-my-zsh
 # DECENT :: jonathan half-life refined pygmalion
 # Optionally, if you set this to "random"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="jonathan"
+ZSH_THEME="refined"
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -71,12 +71,9 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 
 plugins=(zsh-syntax-highlighting \
         zsh-autosuggestions \
-        git \
         compleat \
-        dircycle \ 
-        tmuxinator \
-        rsync python pip \
-        npm man gem \
+        python pip \
+        npm \
         sudo \
         history gitignore \
         globalias \
@@ -96,16 +93,8 @@ fi
 if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
         git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 fi
-# if [[ ! -x /usr/bin/hstr ]] ; then
-        # sudo pacman -S "hstr-git"
-# fi
 
-if [[ ! -x ~/.autojump/bin/autojump ]] ; then
-        mkdir -p /tmp/autojump
-        git clone git://github.com/joelthelion/autojump.git /tmp/autojump/
-        /tmp/autojump/install.py
-fi
-
+#
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -142,4 +131,10 @@ for file in ~/.zsh/* ; do
   [[ -f $file ]] && source $file
 done
 
-#[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
+if [[ ! -x ~/.autojump/bin/autojump ]] ; then
+        mkdir -p /tmp/autojump
+        git clone git://github.com/joelthelion/autojump.git /tmp/autojump/
+        /tmp/autojump/install.py
+fi
+
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh

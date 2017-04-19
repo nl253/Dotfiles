@@ -40,3 +40,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# UTF-8 all the way.
+export LC_ALL='en_GB.UTF-8';
+export LANG='en_GB';
+

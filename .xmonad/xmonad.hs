@@ -48,7 +48,7 @@ import XMonad.Hooks.SetWMName
 -- certain contrib modules.
 -- MODIFIED :: changed from xterminal to terminix
 --
-myTerminal      = "alacritty"
+myTerminal      = "alacritty -e tmux"
 
 -- Whether focus follows the mouse pointer.
 -- MODIFIED :: changed from True to False
