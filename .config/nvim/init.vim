@@ -1,5 +1,5 @@
 
-let g:MARKUP = [ 'markdown', 'org', 'gitcommit']
+let g:MARKUP = [ 'markdown', 'org']
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sh', 'zsh' ]
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
 
@@ -117,6 +117,8 @@ let g:org_heading_shade_leading_stars = 0
 
 " Markdown
 " ==========
+"
+Plug 'blindFS/vim-taskwarrior'
 Plug 'jtratner/vim-flavored-markdown'
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
 
@@ -262,6 +264,8 @@ aug VIMENTER
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
     au FileType man setl nowrap
+    au FileType gitcommit setl virtualedit=block spell 
+    au FileType gitcommit WordyWordy 
     au FileType org setlocal foldlevel=2
     au FileType help nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <CR> <C-]> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u>
     au FileType qf nnoremap <buffer> <C-n> j<CR><C-w><C-w> | nnoremap <buffer> <C-p> k<CR><C-w><C-w> | nnoremap q :cclose<CR>
@@ -294,10 +298,8 @@ if has('nvim')
     if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
 endif
 
-if executable('fzf')
-    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-    Plug 'junegunn/fzf.vim'
-endif
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 call plug#end()
 

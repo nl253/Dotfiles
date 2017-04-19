@@ -2,7 +2,6 @@
 
 # ~/.bash_profile
 
-
 echo "~/.bash_profile loaded"
 
 [[ -f ~/.extend.bash_profile ]] && . ~/.extend.bash_profile
@@ -11,13 +10,14 @@ echo "~/.bash_profile loaded"
 
 # bash-completion
 if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
-    . /opt/local/etc/profile.d/bash_completion.sh
+  . /opt/local/etc/profile.d/bash_completion.sh
 fi
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
+if [ -x /usr/bin/pyvenv ]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+fi
 
 source_bash_completion() {
   local f
@@ -42,6 +42,7 @@ if ! shopt -oq posix; then
 fi
 
 # UTF-8 all the way.
-export LC_ALL='en_GB.UTF-8';
-export LANG='en_GB';
+export LC_ALL='en_GB.UTF-8'
+export LANG='en_GB'
 
+source ~/.xsh

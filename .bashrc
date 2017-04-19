@@ -3,19 +3,19 @@
 # ~/.bashrc
 
 # {{{ If not running interactively, don't do anything.
-[ -z "$PS1" ] && return
-[[ $- != *i* ]] && return
+[[ -z "$PS1" ]] && return 0
+[[ $- != *i* ]] && return 0
 # }}}
 
-for file in ~/.shells/* ; do
-  [[ -f $file ]] && source $file
+for file in ~/.shells/*; do
+  [[ -f $file ]] && source "$file"
 done
 
-for file in ~/.bash/* ; do
-  [[ -f $file ]] && source $file
+for file in ~/.bash/*; do
+  [[ -f $file ]] && source "$file"
 done
 
-if [ -x /usr/bin/git ] && [ ! -e ~/Scripts ] ; then 
+if [[ -x /usr/bin/git ]] && [[ ! -e ~/Scripts ]]; then
   echo -e "PULLING from https://github.com/nl253/Scripts master\n"
   git clone --recursive https://github.com/nl253/Scripts ~
 fi
@@ -26,6 +26,8 @@ echo -e "${RED}~/.bashrc ${YELLOW}loaded" # indicator if it has successfully loa
 
 # default (non-git) prompt
 export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;40m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;31m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \n\[$(tput sgr0)\]\[\033[38;5;241m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;88m\]>\[$(tput sgr0)\]\[\033[38;5;89m\]>\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]" # }}}
+
+[ -e ~/.xsh ] && source ~/.xsh
 
 stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
 stty -ctlecho # turn off control character echoing
@@ -45,17 +47,9 @@ shopt -s extglob      # Enable extended pattern-matching features
 shopt -s nullglob
 shopt -s nocaseglob # matches filenames in a case-insensitive fashion when performing pathname expansion.
 
-shopt -s globstar      # ** becomes a recursive wildstar
-shopt -s histappend    # Append each session's history to $HISTFILE
-shopt -s histverify    # History expansions will be verified before execution.
-shopt -s histreedit    # Allow use to re-edit a faild history substitution.
+shopt -s globstar   # ** becomes a recursive wildstar
+shopt -s histappend # Append each session's history to $HISTFILE
+shopt -s histverify # History expansions will be verified before execution.
+shopt -s histreedit # Allow use to re-edit a faild history substitution.
 # }}}
 bind Space:magic-space # Expand "!" history when pressing space
-
-
-### Bashhub.com Installation.
-### This Should be at the EOF. https://bashhub.com/docs
-if [ -f ~/.bashhub/bashhub.sh ]; then
-    source ~/.bashhub/bashhub.sh
-fi
-

@@ -36,6 +36,7 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 [ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin"
 [ -d ~/.cabal/bin ] && export PATH="$HOME/.cabal/bin:$PATH"
 [ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin"
+[ -d ~/.local/bin ] && export PATH=${PATH}:"~/.local/bin"
 [ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin"
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts/ && git clone https://github.com/nl253/Scripts ~/Scripts/ # clone my Scripts repo 
 [ -d ~/Scripts/ ] && export PATH="${PATH}:~/Scripts"
