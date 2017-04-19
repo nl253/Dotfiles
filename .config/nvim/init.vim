@@ -33,6 +33,7 @@ if has('nvim')
     call plug#begin('~/.local/share/nvim/plugged/')
 else
     let $MYVIMRC = glob('~/.vimrc')
+    call plug#begin('~/.vim/plugged')
     let g:VIMDIR = glob('~/.vim/')
     let g:DICTDIR = glob('~/.vim/dicts/')
     if empty(g:DICTDIR)
@@ -45,7 +46,6 @@ else
     if has('tags')
         set tags
     endif
-    call plug#begin('~/.vim/plugged')
 endif
 
 " Place plugins here
