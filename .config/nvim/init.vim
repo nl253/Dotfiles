@@ -269,7 +269,7 @@ aug VIMENTER
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
     au FileType man setl nowrap
-au FileType gitcommit setl virtualedit=block spell 
+    au FileType gitcommit setl virtualedit=block spell 
     au FileType gitcommit WordyWordy 
     au FileType org setlocal foldlevel=2
     au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <CR> <C-]> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u>
@@ -410,5 +410,6 @@ nnoremap <C-v> :FZFFileAnchor<CR>
 nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
 nnoremap <C-x><C-r> :FZFMru<CR>
 
-nnoremap <C-x><C-a> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
+nnoremap <C-x><C-g> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
+nnoremap <C-x><C-a> :Ag!<CR>
 
