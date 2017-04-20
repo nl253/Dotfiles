@@ -5,8 +5,8 @@
 
 # PATH set here because :: http://www.jacobsingh.name/content/adding-your-path-oh-my-zsh
 
-for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
-  [[ -f $file ]] && source $file
+for file in ~/.shells/* ; do  # Custom dirs with general shell configuration 
+  [[ -f $file ]] && source $file # all of these use POSIX compliant syntax 
 done
 
 for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
@@ -57,7 +57,17 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
 # Custom Themes :: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # spaceship (Best, custom, requres installation)
-[[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && [[ -x $CURL ]] && curl -o - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
+
+if [[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]]; then
+  if [[ -x $CURL ]] ; then
+    curl -o - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
+  elif [[ -x $WGET ]]; then
+    wget -O - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
+  else
+    echo -e "\nDownloading spaceship theme failed.\n"
+    return 0
+  fi
+fi
 
 # DECENT ::
 # refined # minimalist, blue prompt, subtle git info
@@ -66,7 +76,8 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 # half-life
 # Optionally, you can set it to "random"  # also, see
 
-ZSH_THEME="spaceship" # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
+ # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
+[[ -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && ZSH_THEME="spaceship" || ZSH_THEME="refined" 
 
 # NOTE -v is a new construct, I've had issues with it on remote machines 
 # [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already 
