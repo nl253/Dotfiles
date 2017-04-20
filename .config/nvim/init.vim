@@ -7,6 +7,7 @@ let loaded_matchit = 1
 let mapleader = " "
 let maplocalleader = ","
 
+" OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
 set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
@@ -14,9 +15,10 @@ execute 'set path+=' . glob('~') . '/**'
 set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow " New window goes below
 set virtualedit=all 
-
 set shortmess=atI " Don't show the intro message when starting vim
+" }}}
 
+" DOWNLOAD PLUG {{{
 if has('nvim') && ! filereadable(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     source ~/.config/nvim/init.vim
@@ -26,7 +28,9 @@ elseif ! has('nvim') && ! filereadable(glob('~/.vim/autoload/plug.vim'))
     source ~/.vimrc
     PlugInstall
 endif
+" }}}
 
+" PLUG INIT :: SET VARIABLES {{{
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
     let g:DICTDIR = glob('~/.config/nvim/dicts/')
@@ -51,11 +55,15 @@ else
         set tags
     endif
 endif
+" }}}
 
 " Place plugins here
+
 Plug 'Haron-Prime/Antares'
 Plug 'tpope/vim-dispatch', {'on' : ['Make','Dispatch','Copen','Start','Spawn']}
 Plug 'tpope/vim-sleuth' " auto set buffer options
+
+" SESSION {{{
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session' " enhanced session management
 let g:session_autosave = 'yes'
@@ -68,6 +76,8 @@ let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff', '&
             \'&scrollbind', '&number', '&relativenumber', '&foldmarker', '&background']
 
 if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let g:session_directory = '~/.vim/session' | endif
+
+" }}}
 
 Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
 Plug 'tpope/vim-fugitive'
@@ -84,6 +94,7 @@ Plug 'reedes/vim-textobj-sentence'
 Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
 let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 
+" SYNTASTIC {{{ 
 Plug 'vim-syntastic/syntastic', { 'on' : [ 'SyntasticInfo', 'SyntasticCheck', 'SyntasticToggleMode']}
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
@@ -97,6 +108,7 @@ let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
 let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
 let g:syntastic_javascript_checkers = ['jshint', 'eslint']
 "let g:syntastic_css_checkers = []
+" }}}
 
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
             \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn'],
@@ -124,7 +136,10 @@ let g:org_heading_shade_leading_stars = 0
 " ==========
 "
 Plug 'blindFS/vim-taskwarrior', {'on' : 'TW'}
+
+" MARKDOWN {{{
 Plug 'jtratner/vim-flavored-markdown'
+
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
 
 let g:vim_markdown_autowrite = 1
@@ -138,8 +153,10 @@ let g:vim_markdown_fenced_languages = [
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_folding_level = 1
+" }}}
 
-Plug 'klen/python-mode', { 'for': 'python' } " Python mode
+" PYTHON {{{
+Plug 'klen/python-mode', { 'for': 'python' }
 
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
@@ -173,7 +190,9 @@ let g:pymode_syntax = 1
 let g:pymode_syntax_all = 1
 let g:pymode_syntax_print_as_function = 1
 let g:pymode_trim_whitespaces = 1
+" }}}
 
+" COMPLETION {{{
 if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
     Plug 'maralla/completor.vim'
     if filereadable(glob('~/.pyenv/versions/3.5.0/bin/python3.5'))
@@ -186,10 +205,11 @@ endif
 
 if has('python') || has('python3')
     Plug 'SirVer/ultisnips' " Track the engine.
-Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
+    Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
     let g:UltiSnipsExpandTrigger="<tab>"
     let g:UltiSnipsEditSplit="vertical"
 endif
+" }}}
 
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
 Plug 'othree/html5-syntax.vim'
@@ -208,6 +228,7 @@ Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
 
 Plug 'wellle/targets.vim'
 
+" SCRATCHPAD {{{
 function! Scratch()
     if index(['netrw', 'terminal','gitcommit'], &filetype) >= 0  " blacklist
         return 1
@@ -235,9 +256,12 @@ function! Scratch()
     vnoremap <buffer> <BS> <Nop>
 endfunction
 command! Scratch call Scratch()
+" BackSpace in normal mode to quickly open a scratch buffer with the same
+" filetype. It will be saved in ~/Notes/scratch{.py,.java,.go} etc
 nnoremap <BS> :Scratch<CR>
 vnoremap <BS> :yank<CR>:Scratch<CR>p
-nnoremap <Leader><BS> :edit ~/Notes/todo.org<CR>``
+nnoremap <Leader><BS> :edit ~/Notes/todo.org<CR>`` 
+" }}}
 
 function! Init()
     if index(g:MARKUP, &filetype) < 0 
@@ -252,35 +276,51 @@ function! Init()
     endif
 endfunction
 
+" AUTOCOMMANDS {{{
 aug VIMENTER
+    " if completion / omnifunction is not provided fall back on default 
     au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     au FileType * if exists("+completefunc") && &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
+    " go back to where you left off
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+    " automatically change dir to the file you are editing
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
+    " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
+    " set dict and thesaurus completion if markup else, tags
     au FileType * if index(g:MARKUP, &filetype) < 0 | setl complete=.,w,t, | else | setl complete=.,w,k,s | endif
     au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown.markdown conceallevel=3
     au FileType * call Init()
     au Filetype markdown let g:table_mode_corner = '|'
     au BufReadPost,BufNew *.org let g:table_mode_corner = '+'
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
+    " alternative to ususal execute
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
-    au FileType man setl nowrap
+    au FileType man setl nowrap 
+    " on enter open the man page under cursor
+    au FileType man nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
     au FileType gitcommit setl virtualedit=block spell 
     au FileType gitcommit WordyWordy 
     au FileType org setlocal foldlevel=2
-    au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <CR> <C-]> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u>
+    " make it more like less
+    au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u> 
+    " on enter follow that `tag`
+    au FileType help nnoremap <buffer> <CR> <C-]> | nnoremap <BS> <C-o>
+    " easir preview after grepping (use emacs' C-p C-n)
     au FileType qf nnoremap <buffer> <C-n> j<CR><C-w><C-w> | nnoremap <buffer> <C-p> k<CR><C-w><C-w> | nnoremap q :cclose<CR>
 aug END
+" }}}
 
 if executable('pdftotext')
+    " TODO
     au! BufRead *.pdf execute '!pdftotext ' . expand('%:p') . ' ' . expand('%:p:r') .   '.txt'
     au! BufReadPost *.pdf execute 'enew ' . expand('%:p:r') . '.txt'
 endif
 
+" FOR NVIM {{{
 if has('nvim')
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
     nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
@@ -291,12 +331,14 @@ if has('nvim')
     Plug 'sbdchd/neoformat', {'on' : 'Neoformat'}
     if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
 endif
+" }}}
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 call plug#end()
 
+" download dictionaries from GitHub if missing {{{
 if ! filereadable(g:DICTDIR . 'frequent.dict')
     execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict'
 endif
@@ -313,9 +355,11 @@ if ! filereadable(g:DICTDIR .'mysql.txt')
 execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/VimScript/master/dicts/mysql.txt'
 endif
 au! FileType sql,mysql execute 'setlocal dictionary=' . g:DICTDIR . 'mysql.txt'
+" }}}
 
 colorscheme antares
 
+" markup conversion, recommended {{{
 if executable('pandoc')
     command! TOman execute '!pandoc -s -o ' expand('%:p:r') . '.1  -t man ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.1'
     command! TOmarkdown execute '!pandoc -s -o ' expand('%:p:r') . '.md  -t markdown_github ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.md'
@@ -323,6 +367,7 @@ if executable('pandoc')
     command! TOtex execute '!pandoc -s -o ' expand('%:p:r') . '.tex  -t tex ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.tex'
     command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
 endif
+" }}}
 
 if executable('dos2unix')
     command! Dos2Unix !dos2unix -F -n %:p %:p | edit
@@ -332,6 +377,33 @@ command! DeleteEmptyLines execute 'g/^\s*$/d'
 
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 
+" FZF  {{{
+let g:PREVIEW = ' --preview "head -n 20 {} " '
+let g:IGNORE_REGEXP = "grep -P -v \"(\d{4,}$)|(~$)|".
+            \"(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)".
+            \"|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
+let g:DIR_IGNORE_REGEXP = 'grep -P -v "^/(dev)|(tmp)|(mnt)|(root)"'
+
+command! FZFMru call fzf#run(fzf#wrap({
+            \'source':  v:oldfiles,
+            \'options': g:FZF_COLORS . '--multi -x +s --preview "head -n 30 {}"',
+            \'up':    '50%'
+            \}))
+
+command! FZFFileAnchor call fzf#run(fzf#wrap({
+            \'source': ' (git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | ' . g:IGNORE_REGEXP . ' | sed s/^..//) 2> /dev/null',
+            \'options': '-x +s --reverse --preview "head -n 38 {}"',
+            \'up': '80%',
+            \}))
+
+command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
+            \'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
+            \'options': '-x +s --reverse --preview "head -n 38 {}"',
+            \'up': '80%',
+            \}))
+" }}}
+
+" KEYBINDINGS {{{
 inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 nnoremap <Leader>mS :Neomake<CR>:SyntasticCheck<CR>
@@ -370,34 +442,12 @@ nnoremap <C-s><C-d>     :DeleteSession!<CR>
 nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
-let g:PREVIEW = ' --preview "head -n 20 {} " '
-let g:IGNORE_REGEXP = "grep -P -v \"(\d{4,}$)|(~$)|".
-            \"(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)".
-            \"|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
-let g:DIR_IGNORE_REGEXP = 'grep -P -v "^/(dev)|(tmp)|(mnt)|(root)"'
-
-command! FZFMru call fzf#run(fzf#wrap({
-            \'source':  v:oldfiles,
-            \'options': g:FZF_COLORS . '--multi -x +s --preview "head -n 30 {}"',
-            \'up':    '50%'
-            \}))
-
-command! FZFFileAnchor call fzf#run(fzf#wrap({
-            \'source': ' (git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | ' . g:IGNORE_REGEXP . ' | sed s/^..//) 2> /dev/null',
-            \'options': '-x +s --reverse --preview "head -n 38 {}"',
-            \'up': '80%',
-            \}))
-
-command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
-            \'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
-            \'options': '-x +s --reverse --preview "head -n 38 {}"',
-            \'up': '80%',
-            \}))
-
 nnoremap <C-v> :FZFFileAnchor<CR>
 nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
 nnoremap <C-x><C-r> :FZFMru<CR>
 
 nnoremap <C-x><C-g> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
 nnoremap <C-x><C-a> :Ag!<CR>
+" }}}
+
 

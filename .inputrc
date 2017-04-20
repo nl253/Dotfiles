@@ -1,6 +1,5 @@
-# do not bell on tab-completion
-#set bell-style none
 
+# DEFAULTS {{{
 # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
 set meta-flag on
 set input-meta on
@@ -35,14 +34,37 @@ $if mode=emacs
 "\e[H": beginning-of-line
 "\e[F": end-of-line
 
-# smart completion, list all options once and then cycle through them
-Tab: menu-complete 
-Space: magic-space
+# }}}
 
-# Shift-Tab
+# smarter completion, list all options once and then cycle through them {{{
+# TAB cycle forward
+Tab: menu-complete 
+
+# Shift-Tab 
 "\e[Z": "\e-1\C-i" 
 
+# # cycle back in menu-complete }}}
+
+Space: magic-space
+
+# MACROS {{{
+
+# sudo Esc Esc
+"\e\e": "\C-asudo \C-e"
+
+# less Ctrl-x Ctrl-l[ess]
+"\C-x\C-l":"\C-e | less " 
+
+# grep Ctrl-x Ctrl-g[rep]
+"\C-x\C-g":"\C-e | grep " 
+
+# nullify stderr Ctrl-x Ctrl-n[ullify]
+"\C-x\C-n":"\C-e 2>/dev/null " 
+# }}}
+
 $endif
+
+# OPTIONS {{{
 set expand-tilde on
 # Be more intelligent when autocompleting by also looking at the text after
 # the cursor. For example, when the current line is "cd ~/src/mozil", and
@@ -66,4 +88,5 @@ set colored-stats on
 # List all matches in case multiple possible completions are possible
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
-set colored-completion-prefix on
+set colored-completion-prefix on 
+# }}}
