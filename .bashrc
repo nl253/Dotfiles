@@ -27,17 +27,28 @@ done
 # `~/.shells/aliases.sh` have been sourced
 
 if [[ -x $GIT ]] && [[ ! -e ~/Scripts ]]; then
-  echo -e "PULLING from https://github.com/nl253/Scripts master\n" # Pull Scripts if not present already
-  git clone --recursive https://github.com/nl253/Scripts ~
+  echo -e "You don't appear to have scripts. They are necessary to make everything work."
+  echo -e "Would you like to download them from GitHub?\nNote, this will clone them into ~/Scripts/"
+  REGEX="^[Yy]es"
+  read -n 3 -r -p "type [Yes/No] " RESPONSE
+  if [[ $RESPONSE =~ $REGEX ]] ; then 
+    echo -e "PULLING from https://github.com/nl253/Scripts master\n" # Pull Scripts if not present already
+    git clone --recursive https://github.com/nl253/Scripts ~
+  else
+    echo -e "OK.\nNothing to be done.\n"
+  fi
 fi
 
-# if neither
 if [[ ! -f ~/.vimrc ]] && [[ ! -f ~/.config/nvim/init.vim ]]; then
   echo -e "Neither .vimrc nor init.vim were detected on this system."
   echo -e "\nWould you like to run vim-init ?"
+  read -n 3 -r -p "type [Yes/No] " RESPONSE
   REGEX="^[Yy]es"
-  read -n 3 -r -p "Would you like to move it to ~/${i}.backup ? [yes/no] " RESPONSE
-  [[ $RESPONSE =~ $REGEX ]] && setup-vim.sh || echo -e "OK.\nNothing to be done.\n"
+  if [[ $RESPONSE =~ $REGEX ]] ; then 
+    setup-vim.sh 
+  else
+    echo -e "OK.\nNothing to be done.\n"
+  fi
 fi
 
 if [[ ! -f ~/.bash/completions/tmuxinator.bash ]] && [[ -x $CURL ]]; then # pull tmuxinator completions if not present
