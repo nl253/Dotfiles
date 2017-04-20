@@ -17,7 +17,8 @@ done
 CURL=$(which curl)
 WGET=$(which wget)
 GIT=$(which git)
-if [[ ! -e ~/.oh-my-zsh/ ]]; then
+
+if [[ ! -e ~/.oh-my-zsh ]]; then
   if [[ -x $CURL ]] ; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   elif [[ -x $WGET ]]; then
@@ -59,9 +60,10 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 # spaceship (Best, custom, requres installation)
 
 if [[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]]; then
-  if [[ -x $CURL ]] ; then
-    curl -o - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
-  elif [[ -x $WGET ]]; then
+  mkdir -p ~/.oh-my-zsh/custom/themes # make it in case it doesn't exist
+  if [[ -x $CURL ]] ; then # try with curl 
+    curl -fLo ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme "https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/spaceship.zsh"
+  elif [[ -x $WGET ]]; then # fall back on wget
     wget -O - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
   else
     echo -e "\nDownloading spaceship theme failed.\n"
