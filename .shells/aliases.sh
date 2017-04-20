@@ -12,7 +12,6 @@ alias e='$EDITOR'                                                               
 [ -x /usr/bin/hh ] && alias h=hh                                                             # quicker access to an execellent history filter
 alias path='echo -e ${PATH//:/\\n}'                                                          # split path on ":"
 alias x=xonsh                                                                                # quicker access
-[ -x /usr/bin/zsh ] && alias z=zsh                                                           # quicker access
 if [ -x /usr/bin/ranger ]; then
   alias r='ranger'
 elif [ -x ~/.ranger/ranger.py ]; then

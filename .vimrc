@@ -282,17 +282,6 @@ if executable('pdftotext')
 endif
 
 if has('nvim')
-    "Plug 'roxma/python-support.nvim', {'on' : ['PythonSupportInitPython2', 'PythonSupportInitPython3']}
-    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
-    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'yapf')
-    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'pep8')
-    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'flake8')
-    "if ! has('python')
-        "PythonSupportInitPython2
-    "endif
-    "if ! has('python3')
-        "PythonSupportInitPython3
-    "endif
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
     nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
     vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
@@ -309,9 +298,9 @@ Plug 'junegunn/fzf.vim'
 call plug#end()
 
 if ! filereadable(g:DICTDIR . 'frequent.dict')
-execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict'
-    execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
+    execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict'
 endif
+execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
 if ! filereadable(g:VIMDIR .'thesaurus.txt')
     execute '!curl -o ' . g:VIMDIR . 'thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt'
 endif
@@ -321,7 +310,7 @@ if ! filereadable(g:DICTDIR .'css.dict')
 endif
 au! FileType css execute 'setlocal dictionary=' . g:DICTDIR . 'css.dict'
 if ! filereadable(g:DICTDIR .'mysql.txt')
-    execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/VimScript/master/dicts/mysql.txt'
+execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/VimScript/master/dicts/mysql.txt'
 endif
 au! FileType sql,mysql execute 'setlocal dictionary=' . g:DICTDIR . 'mysql.txt'
 
@@ -360,10 +349,10 @@ nnoremap <Leader>gB     :Gbrowse<CR>
 nnoremap <Leader>gc     :Gcommit<CR>
 nnoremap <Leader>gd     :Gdiff<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
-nnoremap <Leader>gf     :Gfetch<Space>
 nnoremap <Leader>gm     :Gmove<Space>
 if len($TMUX) > 1
     nnoremap <Leader>gp     :Gpush<CR>
+    nnoremap <Leader>gf     :Gfetch<Space>
 endif
 nnoremap <Leader>gh     :GHDashboard<CR>
 nnoremap <Leader>gV     :Gitv!<CR>

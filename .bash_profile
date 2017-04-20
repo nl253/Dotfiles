@@ -15,11 +15,11 @@ echo "~/.bash_profile loaded" # indicate
 # bash-completion
 [[ -f /opt/local/etc/profile.d/bash_completion.sh ]] && . /opt/local/etc/profile.d/bash_completion.sh
 
-#if [ -x /usr/bin/pyvenv ]; then # repladed temporarily by conda
-  #export PYENV_ROOT="$HOME/.pyenv"
-  #export PATH="$PYENV_ROOT/bin:$PATH"
-  #eval "$(pyenv init -)"
-#fi
+if [[ -x /usr/bin/pyenv ]] || [[ -x ~/.pyenv/bin/pyenv ]]; then # repladed temporarily by conda
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+fi
 
 source_bash_completion() {
   local f

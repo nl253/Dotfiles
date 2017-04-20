@@ -52,6 +52,14 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_p
 [ -d ~/miniconda3 ] && export PATH="${HOME}/miniconda3/bin:${PATH}"
 # }}}
 
+# $PYENV {{{
+if [[ -x /usr/bin/pyenv ]] || [[ -x ~/.pyenv/bin/pyenv ]]; then # repladed temporarily by conda
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    source "$(pyenv root)/completions/pyenv.zsh"
+fi # }}}
+
 # HISTORY {{{
 export HISTSIZE=20000
 export HISTFILESIZE=20000

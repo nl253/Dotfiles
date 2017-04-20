@@ -41,11 +41,23 @@ unsetopt correct_all
 
 export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
-# Theme to load. 
-# DECENT :: jonathan half-life refined pygmalion
-# Optionally, if you set this to "random"
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="refined" # minimalist, blue prompt, subtle git info
+
+# Custom Themes
+# spaceship
+[[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && curl -o - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
+
+# DECENT ::
+# refined # minimalist, blue prompt, subtle git info
+# pygmalion
+# jonathan
+# half-life
+# Optionally, you can set it to "random"  # also, see https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+
+ZSH_THEME="spaceship" # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
+
+if [[ ! -v TMUX ]]; then 
+  SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
+fi
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -78,22 +90,22 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 # too many plugins slow down shell startup.
 
 plugins=(zsh-syntax-highlighting \
-        zsh-autosuggestions \
-        compleat k python pip \
-        npm sudo history gitignore \
-        globalias gnu-utils git-prompt \
-        git-extras cp copyfile colorize)
+  zsh-autosuggestions \
+  compleat k python pip \
+  npm sudo history gitignore \
+  globalias gnu-utils git-prompt \
+  git-extras cp copyfile colorize)
 
 source $ZSH/oh-my-zsh.sh
 
 if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ]] ; then
-        git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+  git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
 fi
 if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]] ; then
-        git clone "https://github.com/zsh-users/zsh-completions" "${ZSH_CUSTOM}/plugins/zsh-completions"
+  git clone "https://github.com/zsh-users/zsh-completions" "${ZSH_CUSTOM}/plugins/zsh-completions"
 fi
 if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
-        git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+  git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 fi
 if [[ ! -e ${ZSH_CUSTOM}/plugins/k ]] ; then
   git clone https://github.com/supercrabtree/k $HOME/.oh-my-zsh/custom/plugins/k # git dir lisitng with `k`
