@@ -1,4 +1,8 @@
 
+#
+# .zshrc
+#
+
 # PATH set here because :: http://www.jacobsingh.name/content/adding-your-path-oh-my-zsh
 
 for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
@@ -10,8 +14,19 @@ for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
 done
 
 # try to install oh-my-zsh using curl, fall back on wget
-[[ -x /usr/bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-[[ -x /usr/bin/wget ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+CURL=$(which curl)
+WGET=$(which wget)
+GIT=$(which git)
+if [[ ! -e ~/.oh-my-zsh/ ]]; then
+  if [[ -x $CURL ]] ; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  elif [[ -x $WGET ]]; then
+    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+  else
+    echo -e "Neither curl nor wget present on this system,\nOh-my-zsh could not be downloaded.\n.zshrc will not be fully loaded.\nAborting."
+    return 0
+  fi
+fi
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000                          # expand history size
@@ -40,23 +55,20 @@ unsetopt correct_all
 
 export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
-
-# Custom Themes
-# spaceship
-[[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && curl -o - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
+# Custom Themes :: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# spaceship (Best, custom, requres installation)
+[[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && [[ -x $CURL ]] && curl -o - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
 
 # DECENT ::
 # refined # minimalist, blue prompt, subtle git info
 # pygmalion
 # jonathan
 # half-life
-# Optionally, you can set it to "random"  # also, see https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# Optionally, you can set it to "random"  # also, see
 
 ZSH_THEME="spaceship" # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
 
-if [[ ! -v TMUX ]]; then 
-  SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
-fi
+[[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -101,27 +113,28 @@ plugins=(zsh-syntax-highlighting \
 # - `gitignore` will generate `.gitignore` files when you type gi [python|java ... ]
 # - `pip` utilities for python and pip : clean cache ...
 # - `npm` adds aliases and completion
-# - `git-extras` add completion 
+# - `git-extras` add completion
 # - `colorize` adds a `colorize` command to color file content (it will try to guess)
 # - `k` a more pretty, git aware `ls` when you press `k`
-# - `tmuxinator` adds completion with description 
+# - `tmuxinator` adds completion with description
 # - `taskwarrior` adds a `t` alias for `task` and completion
 
 source $ZSH/oh-my-zsh.sh
 
-if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ]] ; then
-  git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+if [[ -x $GIT ]]; then
+  if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ]] ; then
+    git clone "git://github.com/zsh-users/zsh-autosuggestions" "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+  fi
+  if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]] ; then
+    git clone "https://github.com/zsh-users/zsh-completions" "${ZSH_CUSTOM}/plugins/zsh-completions"
+  fi
+  if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
+    git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+  fi
+  if [[ ! -e ${ZSH_CUSTOM}/plugins/k ]] ; then
+    git clone https://github.com/supercrabtree/k $HOME/.oh-my-zsh/custom/plugins/k # git dir lisitng with `k`
+  fi
 fi
-if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]] ; then
-  git clone "https://github.com/zsh-users/zsh-completions" "${ZSH_CUSTOM}/plugins/zsh-completions"
-fi
-if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
-  git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-fi
-if [[ ! -e ${ZSH_CUSTOM}/plugins/k ]] ; then
-  git clone https://github.com/supercrabtree/k $HOME/.oh-my-zsh/custom/plugins/k # git dir lisitng with `k`
-fi
-
 #
 # User configuration
 

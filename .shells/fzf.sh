@@ -5,7 +5,7 @@ if [ ! -x /usr/bin/fzf ] && [ ! -e ~/.fzf/install ] ; then                      
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install  # download and install
 fi
 
-if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/bin/fzf ] ; then
+if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/bin/fzf ] || [ -x /bin/fzf ]; then
 
   export FZF_DEFAULT_OPTS="--bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --bind='alt-e:execute(\$EDITOR {})' --bind='alt-r:execute(rifle {}),alt-l:execute:(command less -RX {})' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:117,hl+:1,bg+:232,fg:240,fg+:246'"
   # enter : print to STDOUT
