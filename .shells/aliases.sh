@@ -8,7 +8,7 @@
 # general  {{{
 env() { if [ ! $# = 0 ]; then command env "$@"; else command env | sort; fi; }                 # by default if no args provided sort env output
 alias sudo='sudo '                                                                           # Enable aliases to be sudo’ed
-alias e="$EDITOR"                                                                            # quicker access to vim
+alias e='$EDITOR'                                                                            # quicker access to vim
 alias path='echo -e ${PATH//:/\\n}'                                                          # split path on ":"
 alias x=xonsh                                                                                # quicker access
 if [ -x /usr/bin/ranger ] || [ -x /bin/ranger ] ; then
@@ -71,8 +71,8 @@ if [ -x /bin/rsync ] || [ -x /usr/bin/rsync ] ; then
     alias rsync-copy="rsync -avz --progress -h"
     alias rsync-move="rsync -avz --progress -h --remove-source-files"
     alias rsync-update="rsync -avzu --progress -h"
-    alias rsync-synchronize="rsync -avzu --delete --progress -h" # }}}
-fi
+    alias rsync-synchronize="rsync -avzu --delete --progress -h" 
+fi # }}}
 
 # pacman aliases, yaourt colors {{{
 # -----------------------------------
