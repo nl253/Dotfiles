@@ -1,6 +1,4 @@
 
-# try to install oh-my-zsh using curl, fall back on wget
-#
 # PATH set here because :: http://www.jacobsingh.name/content/adding-your-path-oh-my-zsh
 
 for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
@@ -11,6 +9,7 @@ for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
   [[ -f $file ]] && source $file
 done
 
+# try to install oh-my-zsh using curl, fall back on wget
 [[ -x /usr/bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 [[ -x /usr/bin/wget ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
@@ -90,11 +89,23 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 # too many plugins slow down shell startup.
 
 plugins=(zsh-syntax-highlighting \
-  zsh-autosuggestions \
-  compleat k python pip \
-  npm sudo history gitignore \
-  globalias gnu-utils git-prompt \
-  git-extras cp copyfile colorize)
+  zsh-autosuggestions compleat k pip \
+  npm sudo history tmuxinator gitignore \
+  github git-prompt z taskwarrior \
+  git-extras colorize ssh-agent)
+
+[[ ! -v TMUX ]] && plugins+="battery"
+
+# Description of plugins:
+# - `sudo` will insert sudo when ESC is pressed twice
+# - `gitignore` will generate `.gitignore` files when you type gi [python|java ... ]
+# - `pip` utilities for python and pip : clean cache ...
+# - `npm` adds aliases and completion
+# - `git-extras` add completion 
+# - `colorize` adds a `colorize` command to color file content (it will try to guess)
+# - `k` a more pretty, git aware `ls` when you press `k`
+# - `tmuxinator` adds completion with description 
+# - `taskwarrior` adds a `t` alias for `task` and completion
 
 source $ZSH/oh-my-zsh.sh
 

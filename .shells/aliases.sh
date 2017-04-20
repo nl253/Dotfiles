@@ -9,7 +9,6 @@
 env() { if [ ! $# = 0 ]; then command env $@; else command env | sort; fi; }                 # by default if no args provided sort env output
 alias sudo='sudo '                                                                           # Enable aliases to be sudo’ed
 alias e='$EDITOR'                                                                            # quicker access to vim
-[ -x /usr/bin/hh ] && alias h=hh                                                             # quicker access to an execellent history filter
 alias path='echo -e ${PATH//:/\\n}'                                                          # split path on ":"
 alias x=xonsh                                                                                # quicker access
 if [ -x /usr/bin/ranger ]; then
@@ -51,6 +50,7 @@ alias lr=recent-files.sh                                                        
 alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                                 # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                                                                   # list recursively just dirs
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                                                  # list recursively just files
+# NOTE: with this one you don't wanna misspell, better not write then write wrong
 alias f=find-approx.sh                                                                        # f [filename] # will search recursively using dense regexp to ensure quality, slow # }}}
 
 # pattern matching {{{
@@ -85,10 +85,10 @@ if [ -x /usr/bin/pacman ]; then
 fi # }}}
 
 # git {{{
-# -----------------------------------
-# REQUIRES :: git hub tig ag
-# -----------------------------------
-[ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub
-[ -x /usr/bin/tig ] && alias t=tig 
+# ------------------------
+# REQUIRES :: git hub tig 
+# ------------------------
+[ -x /usr/bin/hub ] && eval "$(hub alias -s)" && alias g=hub || alias g=git
+# [ -x /usr/bin/tig ] && alias t=tig 
 
 #vim:set foldmethod=marker:set foldlevel=0 }}}

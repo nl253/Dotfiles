@@ -37,7 +37,7 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 # ------------------------------------------------------------------------
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin/:"
+export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin/:"
 [[ -d ~/miniconda3/bin ]] && export PATH="${PATH}:${HOME}/miniconda3/bin"
 [ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre' # JAVA
 [ -d ~/.gem/ruby/2.4.0/bin ] && export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin" # GEM [RUBY]

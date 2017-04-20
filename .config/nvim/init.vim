@@ -186,7 +186,7 @@ endif
 
 if has('python') || has('python3')
     Plug 'SirVer/ultisnips' " Track the engine.
-    Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
     let g:UltiSnipsExpandTrigger="<tab>"
     let g:UltiSnipsEditSplit="vertical"
 endif
@@ -345,16 +345,15 @@ nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>ga     :Git add %:p<Space>
 nnoremap <Leader>gb     :Gblame<CR>
-nnoremap <Leader>gB     :Gbrowse<CR>
-nnoremap <Leader>gc     :Gcommit<CR>
 nnoremap <Leader>gd     :Gdiff<Space>
+nnoremap <Leader>gc     :Gcommit<CR>
+nnoremap <Leader>gW     :Gwrite<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
 nnoremap <Leader>gm     :Gmove<Space>
 if len($TMUX) > 1
     nnoremap <Leader>gp     :Gpush<CR>
     nnoremap <Leader>gf     :Gfetch<Space>
 endif
-nnoremap <Leader>gh     :GHDashboard<CR>
 nnoremap <Leader>gV     :Gitv!<CR>
 nnoremap <Leader>gv     :Gitv<CR>
 nnoremap <Leader>g?     :Gitv?<CR>
