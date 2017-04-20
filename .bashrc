@@ -39,8 +39,8 @@ if [[ -x $GIT ]] && [[ ! -e ~/Scripts ]]; then
   fi
 fi
 
-if [[ ! -f ~/.vimrc ]] && [[ ! -f ~/.config/nvim/init.vim ]]; then
-  echo -e "Neither .vimrc nor init.vim were detected on this system."
+if [[ ! -f ~/.vimrc ]] && [[ ! -f ~/.config/nvim/init.vim ]] || [[ ! -f ~/.vim/autoload/plug.vim ]] && [[ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]]; then
+  echo -e "Vim or Neovim doesn't appear to be properly setup on this system ..."
   echo -e "\nWould you like to run vim-init ?"
   read -n 3 -r -p "type [Yes/No] " RESPONSE
   REGEX="^[Yy]es"
