@@ -41,13 +41,13 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 [ -d ~/.gem/ruby/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin" # GEM [RUBY]
 [ -d ~/.gem/ruby/2.3.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.3.0/bin" # GEM [RUBY]
 [ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin" # CARGO [RUST]
-[ -d ~/.cabal/bin ] && export PATH="$HOME/.cabal/bin:$PATH" # CABAL [HASKELL]
-[ -d ~/.config/composer/vendor/bin ] && export PATH=${PATH}:"~/.config/composer/vendor/bin" # COMPOSER [PHP]
-[ -d ~/.local/bin ] && export PATH=${PATH}:"~/.local/bin" # PIP [PYTHON]
-[ -d ~/go/bin ] && export PATH=${PATH}:"~/go/bin" # GO 
+[ -d ~/.cabal/bin ] && export PATH="${HOME}/.cabal/bin:${PATH}" # CABAL [HASKELL]
+[ -d ~/.config/composer/vendor/bin ] && export PATH="${PATH}:${HOME}/.config/composer/vendor/bin" # COMPOSER [PHP]
+[ -d ~/.local/bin ] && export PATH="${PATH}:${HOME}/.local/bin" # PIP [PYTHON]
+[ -d ~/go/bin ] && export PATH="${PATH}:${HOME}/go/bin" # GO 
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts/ && git clone https://github.com/nl253/Scripts ~/Scripts/ # clone my Scripts repo  
-[ -d ~/Scripts/ ] && export PATH="${PATH}:~/Scripts" # MY SCRIPTS
-[ -d ~/miniconda3 ] && export PATH="/home/norbert/miniconda3/bin:$PATH"
+[ -d ~/Scripts/ ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
+[ -d ~/miniconda3 ] && export PATH="${HOME}/miniconda3/bin:${PATH}"
 # }}}
 
 # HISTORY {{{

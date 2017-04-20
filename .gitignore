@@ -11,6 +11,7 @@ xiki/
 .config/mimeapps.list
 .oh-my-zsh/
 .homesick/
+miniconda3/
 .icons/
 .tmux/
 *.class

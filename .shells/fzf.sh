@@ -7,11 +7,12 @@ fi
 
 if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/bin/fzf ] ; then
 
-  export FZF_DEFAULT_OPTS="--bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --bind='alt-e:execute(\$EDITOR {})' --bind='alt-r:execute(rifle {}),alt-l:execute:(command less -RX {})' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:117,hl+:1,bg+:232,fg:240,fg+:246'"
+  export FZF_DEFAULT_OPTS="--bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --bind='alt-e:execute(\$EDITOR {})' --bind='alt-r:execute(rifle {}),alt-l:execute:(command less -RX {})' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:117,hl+:1,bg+:232,fg:240,fg+:246'"
   # enter : print to STDOUT
   # ctrl-d : scroll down
   # ctrl-u : scroll up
   # alt-e : edit with $EDITOR
+  # alt-d : cd
   # alt-r : execute `rifle` [detects what to use based on file type]
   # alt-l : open in `less`
 

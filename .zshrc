@@ -1,6 +1,6 @@
-#!/usr/bin/env zsh
 
 # try to install oh-my-zsh using curl, fall back on wget
+# #!/usr/bin/env zsh
 [[ -x /usr/bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 [[ -x /usr/bin/wget ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
@@ -45,7 +45,7 @@ export UPDATE_ZSH_DAYS=7 # How often to auto-update (in days).
 
 # DISABLE_AUTO_TITLE="true" # Disable auto-setting terminal title.
 
-ENABLE_CORRECTION="true" # Enable command auto-correction.
+ENABLE_CORRECTION="false" # Enable command auto-correction.
 
 COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 
@@ -113,24 +113,9 @@ fi
 
 # # # # # # # # # # # # # # # # # # # # # # # # #
 
-for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
-  [[ -f $file ]] && source $file
-done
+[[ -f ~/.bin/tmuxinator.zsh ]] && source ~/.bin/tmuxinator.zsh
 
-for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
-  [[ -f $file ]] && source $file
-done
-
-if [[ ! -e ~/.autojump/bin/autojump ]] ; then # download if missing
-  git clone git://github.com/joelthelion/autojump.git
-  cd autojump
-  ./install.py
-fi
-
-# usage : j [fuzzy dir name] , j -a [exact name of dir to add to tracking]
-[[ -e ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
-
-[[ -e ~/.xsh ]] && source ~/.xsh
+# [[ -e ~/.xsh ]] && source ~/.xsh
 
 # Commenting out until the project supports readline keybindings
 # [[ ! -e ~/.qfc/bin/ ]] && git clone https://github.com/pindexis/qfc $HOME/.qfc

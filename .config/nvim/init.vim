@@ -282,17 +282,17 @@ if executable('pdftotext')
 endif
 
 if has('nvim')
-    Plug 'roxma/python-support.nvim', {'on' : ['PythonSupportInitPython2', 'PythonSupportInitPython3']}
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'yapf')
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'pep8')
-    let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'flake8')
-    if ! has('python')
-        PythonSupportInitPython2
-    endif
-    if ! has('python3')
-        PythonSupportInitPython3
-    endif
+    "Plug 'roxma/python-support.nvim', {'on' : ['PythonSupportInitPython2', 'PythonSupportInitPython3']}
+    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'jedi')
+    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'yapf')
+    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'pep8')
+    "let g:python_support_python3_requirements = add(get(g:,'python_support_python3_requirements',[]),'flake8')
+    "if ! has('python')
+        "PythonSupportInitPython2
+    "endif
+    "if ! has('python3')
+        "PythonSupportInitPython3
+    "endif
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
     nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
     vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
