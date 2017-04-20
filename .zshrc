@@ -115,10 +115,8 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 # too many plugins slow down shell startup.
 
 plugins=(zsh-syntax-highlighting \
-  zsh-autosuggestions compleat k pip \
-  npm sudo history tmuxinator gitignore \
-  github git-prompt z taskwarrior \
-  git-extras colorize)
+  zsh-autosuggestions compleat pip npm sudo tmuxinator gitignore \
+  github git-prompt z taskwarrior git-extras colorize)
 
 # [[ ! -v TMUX ]] && plugins+="battery" # NOTE -v is a new construct, I've had issues with it on remote machines 
 
@@ -144,9 +142,6 @@ if [[ -x $GIT ]]; then
   fi
   if [[ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]] ; then
     git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-  fi
-  if [[ ! -e ${ZSH_CUSTOM}/plugins/k ]] ; then
-    git clone https://github.com/supercrabtree/k $HOME/.oh-my-zsh/custom/plugins/k # git dir lisitng with `k`
   fi
 fi
 #

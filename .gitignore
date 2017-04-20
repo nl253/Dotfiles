@@ -12,6 +12,11 @@ xiki/
 .oh-my-zsh/
 .homesick/
 miniconda3/
+.pip/zsh-cache
+.z
+.config/fish/fishd.*
+.conf/fontconfig/
+.config/ranger/bookmarks
 .icons/
 .tmux/
 *.class

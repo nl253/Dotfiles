@@ -64,7 +64,7 @@ alias egrep='egrep --color=auto'
 
 # networking, ssh, rsync {{{
 alias http-server="python3 -m http.server"                                                                                     # open using 0.0.0.0:{PORT}
-[ -x /usr/bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
+[ -x /usr/bin/sshfs ] || [ -x /bin/sshfs ] && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor" # mount a remote hard-drive
 # set up logging in ~/Downloads/Torrents/aria2c.log and a default location for download of Torrents :: ~/Downloads/Torrents/
 [ -x /usr/bin/aria2c ] || [ -x /bin/aria2c ] && alias aria2c="mkdir -p ${HOME}/Downloads/Torrents/ ; touch ${HOME}/Downloads/Torrents/aria2c.log ; aria2c --continue --dir=${HOME}/Downloads/Torrents --log=${HOME}/Downloads/Torrents/aria2c.log"
 if [ -x /bin/rsync ] || [ -x /usr/bin/rsync ] ; then

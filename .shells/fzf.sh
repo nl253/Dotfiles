@@ -17,10 +17,13 @@ if [ -x /usr/bin/fzf ] || [ -e ~/.fzf/bin/fzf ] || [ -x /bin/fzf ]; then
   # alt-l : open in `less`
 
   export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//) 2> /dev/null'
+  export FZF_CTRL_T_OPTS="--select-1 --exit-0"
+
+  export FZF_CTRL_R_OPTS="--sort --exact --preview 'echo {}' --preview-window down:3:hidden --bind '?:toggle-preview'"
+
   alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"' # [FZF] with [P]REVIEW
 
   alias l=fzf-locate.sh       # [L]OCATE
-  # alias fh=fzf-search-home.sh # [F]IND [H]OME
   alias c=fzf-cd.sh           # [C]D
   alias p=fzf-pkill.sh        # [P]ROCESSES 
 
