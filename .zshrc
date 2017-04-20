@@ -68,7 +68,8 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
 ZSH_THEME="spaceship" # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
 
-# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
+# NOTE -v is a new construct, I've had issues with it on remote machines 
+# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already 
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -104,9 +105,9 @@ plugins=(zsh-syntax-highlighting \
   zsh-autosuggestions compleat k pip \
   npm sudo history tmuxinator gitignore \
   github git-prompt z taskwarrior \
-  git-extras colorize ssh-agent)
+  git-extras colorize)
 
-# [[ ! -v TMUX ]] && plugins+="battery"
+# [[ ! -v TMUX ]] && plugins+="battery" # NOTE -v is a new construct, I've had issues with it on remote machines 
 
 # Description of plugins:
 # - `sudo` will insert sudo when ESC is pressed twice
