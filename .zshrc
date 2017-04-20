@@ -68,7 +68,7 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
 ZSH_THEME="spaceship" # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
 
-[[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
+# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -106,7 +106,7 @@ plugins=(zsh-syntax-highlighting \
   github git-prompt z taskwarrior \
   git-extras colorize ssh-agent)
 
-[[ ! -v TMUX ]] && plugins+="battery"
+# [[ ! -v TMUX ]] && plugins+="battery"
 
 # Description of plugins:
 # - `sudo` will insert sudo when ESC is pressed twice
@@ -170,5 +170,5 @@ fi
 # [[ ! -e ~/.qfc/bin/ ]] && git clone https://github.com/pindexis/qfc $HOME/.qfc
 # [[ -s "${HOME}/.qfc/bin/qfc.sh" ]] && source "${HOME}/.qfc/bin/qfc.sh"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
