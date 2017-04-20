@@ -157,4 +157,4 @@
 [gg]
 	username = nl253
 [credential]
-	helper = cache --timeout=20
+	helper = cache --timeout=120

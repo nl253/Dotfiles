@@ -1,7 +1,7 @@
 
 # Dot-files 
 
-### [Alt text](https://github.com/tmux/tmux) with [alacritty](https://github.com/jwilm/alacritty) and [neovim](https://neovim.io/) and a few plugins.
+### [Tmux](https://github.com/tmux/tmux) with [alacritty](https://github.com/jwilm/alacritty) and [neovim](https://neovim.io/) and a few plugins.
 
 ![Alt text](Pictures/tmux-nvim.png?raw=true "Tmux Setup")
 
