@@ -37,16 +37,18 @@ export SHORT_HOSTNAME=$(hostname -s) # Set Xterm/screen/Tmux title with only a s
 # ------------------------------------------------------------------------
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin/:"
+[[ -d ~/miniconda3/bin ]] && export PATH="${PATH}:${HOME}/miniconda3/bin"
 [ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre' # JAVA
-[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.4.0/bin" # GEM [RUBY]
-[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH=${PATH}:"~/.gem/ruby/2.3.0/bin" # GEM [RUBY]
-[ -d ~/.cargo/bin ] && export PATH=${PATH}:"~/.cargo/bin" # CARGO [RUST]
+[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin" # GEM [RUBY]
+[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH="${PATH}:${HOME}/.gem/ruby/2.3.0/bin" # GEM [RUBY]
+[ -d ~/.cargo/bin ] && export PATH="${PATH}:${HOME}/.cargo/bin" # CARGO [RUST]
 [ -d ~/.cabal/bin ] && export PATH="${HOME}/.cabal/bin:${PATH}" # CABAL [HASKELL]
 [ -d ~/.config/composer/vendor/bin ] && export PATH="${PATH}:${HOME}/.config/composer/vendor/bin" # COMPOSER [PHP]
 [ -d ~/.local/bin ] && export PATH="${PATH}:${HOME}/.local/bin" # PIP [PYTHON]
 [ -d ~/go/bin ] && export PATH="${PATH}:${HOME}/go/bin" # GO 
-[ ! -e ~/Scripts ] && mkdir -p ~/Scripts/ && git clone https://github.com/nl253/Scripts ~/Scripts/ # clone my Scripts repo  
-[ -d ~/Scripts/ ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
+[ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/ # clone my Scripts repo  
+[ -d ~/Scripts ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
 [ -d ~/miniconda3 ] && export PATH="${HOME}/miniconda3/bin:${PATH}"
 # }}}
 

@@ -1,6 +1,16 @@
 
 # try to install oh-my-zsh using curl, fall back on wget
-# #!/usr/bin/env zsh
+#
+# PATH set here because :: http://www.jacobsingh.name/content/adding-your-path-oh-my-zsh
+
+for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
+  [[ -f $file ]] && source $file
+done
+
+for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
+  [[ -f $file ]] && source $file
+done
+
 [[ -x /usr/bin/curl ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 [[ -x /usr/bin/wget ]] && [[ ! -d ~/.oh-my-zsh ]] && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
@@ -17,14 +27,17 @@ setopt HIST_VERIFY
 setopt SHARE_HISTORY                    # share history between sessions ???
 setopt EXTENDED_HISTORY                 # add timestamps to history
 setopt PROMPT_SUBST
-setopt CORRECT
 setopt COMPLETE_IN_WORD
+
 #setopt IGNORE_EOF
 
 setopt APPEND_HISTORY                   # adds history
 setopt INC_APPEND_HISTORY SHARE_HISTORY # adds history incrementally and share it across sessions
 setopt HIST_IGNORE_ALL_DUPS             # don't record dupes in history
 setopt HIST_REDUCE_BLANKS
+
+# setopt CORRECT
+unsetopt correct_all
 
 export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
