@@ -1,12 +1,16 @@
 
 #
-# .zshrc
+# ~/.zshrc
 #
 
 # PATH set here because :: http://www.jacobsingh.name/content/adding-your-path-oh-my-zsh
 
-for file in ~/.shells/* ; do  # Custom dirs with general shell configuration 
-  [[ -f $file ]] && source $file # all of these use POSIX compliant syntax 
+CURL=$(which curl)
+WGET=$(which wget)
+GIT=$(which git)
+
+for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
+  [[ -f $file ]] && source $file # all of these use POSIX compliant syntax
 done
 
 for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
@@ -14,9 +18,6 @@ for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
 done
 
 # try to install oh-my-zsh using curl, fall back on wget
-CURL=$(which curl)
-WGET=$(which wget)
-GIT=$(which git)
 
 if [[ ! -e ~/.oh-my-zsh ]]; then
   if [[ -x $CURL ]] ; then
@@ -28,6 +29,15 @@ if [[ ! -e ~/.oh-my-zsh ]]; then
     return 0
   fi
 fi
+
+
+# $PYENV {{{
+if [[ -x /usr/bin/pyenv ]] || [[ -x ~/.pyenv/bin/pyenv ]] || [ -x /bin/pyenv ] ; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+  source "$(pyenv root)/completions/pyenv.zsh"
+fi # }}}
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000                          # expand history size
@@ -57,11 +67,11 @@ unsetopt correct_all
 export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 
 # Custom Themes :: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# spaceship (Best, custom, requres installation)
 
+# spaceship (Best, custom, requres installation) # {{{
 if [[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]]; then
   mkdir -p ~/.oh-my-zsh/custom/themes # make it in case it doesn't exist
-  if [[ -x $CURL ]] ; then # try with curl 
+  if [[ -x $CURL ]] ; then # try with curl
     curl -fLo ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme "https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/spaceship.zsh"
   elif [[ -x $WGET ]]; then # fall back on wget
     wget -O - https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh | zsh
@@ -69,20 +79,20 @@ if [[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]]; then
     echo -e "\nDownloading spaceship theme failed.\n"
     return 0
   fi
-fi
+fi # }}}
 
-# DECENT ::
+# configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
+[[ -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && ZSH_THEME="spaceship" || ZSH_THEME="refined"
+
+# OTHER DECENT THEMES :: {{{
 # refined # minimalist, blue prompt, subtle git info
 # pygmalion
 # jonathan
 # half-life
-# Optionally, you can set it to "random"  # also, see
+# Optionally, you can set it to "random"  # also, see }}}
 
- # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
-[[ -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && ZSH_THEME="spaceship" || ZSH_THEME="refined" 
-
-# NOTE -v is a new construct, I've had issues with it on remote machines 
-# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already 
+# NOTE -v is a new construct, I've had issues with it on remote machines
+# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -118,7 +128,7 @@ plugins=(zsh-syntax-highlighting \
   zsh-autosuggestions compleat pip npm sudo tmuxinator gitignore \
   github git-prompt z taskwarrior git-extras colorize)
 
-# [[ ! -v TMUX ]] && plugins+="battery" # NOTE -v is a new construct, I've had issues with it on remote machines 
+# [[ ! -v TMUX ]] && plugins+="battery" # NOTE -v is a new construct, I've had issues with it on remote machines
 
 # Description of plugins:
 # - `sudo` will insert sudo when ESC is pressed twice
@@ -171,13 +181,21 @@ fi
 
 # # # # # # # # # # # # # # # # # # # # # # # # #
 
-[[ -f ~/.bin/tmuxinator.zsh ]] && source ~/.bin/tmuxinator.zsh
-
-# [[ -e ~/.xsh ]] && source ~/.xsh
+# [[ -e ~/.xsh ]] && source ~/.xsh # for now, until I get used to zsh I am leaving this commented out
 
 # Commenting out until the project supports readline keybindings
 # [[ ! -e ~/.qfc/bin/ ]] && git clone https://github.com/pindexis/qfc $HOME/.qfc
 # [[ -s "${HOME}/.qfc/bin/qfc.sh" ]] && source "${HOME}/.qfc/bin/qfc.sh"
 
+if [[ ! -f ~/.zsh/zsh-interactive-cd.plugin.zsh ]] ; then # press TAB to get fzf to pop up
+  if [[ -x $CURL ]]; then
+    curl -fLo ~/.zsh/zsh-interactive-cd.plugin.zsh https://raw.githubusercontent.com/changyuheng/zsh-interactive-cd/master/zsh-interactive-cd.plugin.zsh
+  fi
+fi
+
+[[ -f ~/.zsh/zsh-interactive-cd.plugin.zsh ]] && source ~/.zsh/zsh-interactive-cd.plugin.zsh # make sure it exists
+
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+
+
 

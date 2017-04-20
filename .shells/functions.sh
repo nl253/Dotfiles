@@ -1,15 +1,17 @@
- # fh - repeat history
-h() {
-  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
-}
+ # FZF {{{
 
-# fda - including hidden directories
+ # h - repeat history {{{
+h() { 
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+} # }}}
+
+# c - including hidden directories {{{
 c() {
   local dir
   dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
-}
+} # }}}
 
-# ftpane - switch pane (@george-b)
+# tmux ftpane - switch pane (@george-b) {{{
 ftpane() {
   local panes current_window current_pane target target_window target_pane
   panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
@@ -27,4 +29,6 @@ ftpane() {
     tmux select-pane -t ${target_window}.${target_pane} &&
     tmux select-window -t $target_window
   fi
-}
+} # }}}
+
+# }}}

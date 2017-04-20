@@ -37,6 +37,7 @@ $if mode=emacs
 
 # smart completion, list all options once and then cycle through them
 Tab: menu-complete 
+Space: magic-space
 
 # Shift-Tab
 "\e[Z": "\e-1\C-i" 

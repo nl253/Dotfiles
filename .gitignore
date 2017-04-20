@@ -1,5 +1,7 @@
 ﻿*.bluej
 .xiki/
+.zsh/zsh-interactive-cd.plugin.zsh
+.local/include/python*
 .task/
 .qfc/
 xiki-project/
@@ -16,6 +18,7 @@ miniconda3/
 .z
 .config/fish/fishd.*
 .conf/fontconfig/
+.config/fontconfig/
 .config/ranger/bookmarks
 .icons/
 .tmux/
