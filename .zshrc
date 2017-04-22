@@ -63,7 +63,6 @@ setopt glob_complete                    # Expand globs when completion
 setopt mark_dirs                        # Add "/" if completes directory
 
 unsetopt correct_all
-
 # }}}
 
 # source ~/.shells and ~/.zsh {{{
@@ -188,7 +187,12 @@ plugins=(zsh-syntax-highlighting zsh-autosuggestions compleat pip npm sudo \
 # [[ ! -v TMUX ]] && plugins+="battery" # NOTE -v is a new construct, I've had issues with it on remote machines
 # }}}
 
-source $ZSH/oh-my-zsh.sh
+if [[ -e $ZSH/oh-my-zsh.sh ]]; then 
+  source $ZSH/oh-my-zsh.sh
+  unalias d
+  unalias please
+  unalias afind
+fi
 
 # CUSTOM PLUGINS {{{
 # pull custom plugins if missing
