@@ -508,5 +508,3 @@ cno qWA<CR> wqa<CR>
 cno QWA<CR> wqa<CR>
 cno QwA<CR> wqa<CR>
 " }}}
-
-
