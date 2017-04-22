@@ -5,6 +5,7 @@
 .Xauthority
 .local/include/python*
 .task/
+.config/nvim/spell/en.utf-8.add.spl
 .qfc/
 xiki-project/
 xiki/

@@ -10,5 +10,5 @@ fi
 
 # Key bindings
 # ------------
-# source "/home/norbert/.fzf/shell/key-bindings.zsh"
+source "/home/norbert/.fzf/shell/key-bindings.zsh"
 

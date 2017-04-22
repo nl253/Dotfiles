@@ -21,7 +21,7 @@ execute 'set path+=' . glob('~') . '/Scripts/'
 execute 'set path+=' . glob('~') . '/Notes/*'
 execute 'set path+=' . glob('~') . '/PyComLine/'
 execute 'set path+=' . glob('~') . '/OneDrive/'
-set statusline=\ %<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
 " }}}
 
 " DOWNLOAD PLUG {{{
@@ -68,6 +68,7 @@ endif
 Plug 'Haron-Prime/Antares'
 Plug 'tpope/vim-dispatch', {'on' : ['Make','Dispatch','Copen','Start','Spawn']}
 Plug 'tpope/vim-sleuth' " auto set buffer options
+" Plug 'tpope/vim-projectionist'
 
 " SESSION {{{
 Plug 'xolox/vim-misc'

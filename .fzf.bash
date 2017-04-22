@@ -10,5 +10,5 @@ fi
 
 # Key bindings
 # ------------
-# source "/home/norbert/.fzf/shell/key-bindings.bash"
+source "/home/norbert/.fzf/shell/key-bindings.bash"
 
