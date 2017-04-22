@@ -1,6 +1,8 @@
 ﻿*.bluej
 .xiki/
+.config/hub
 .zsh/zsh-interactive-cd.plugin.zsh
+.Xauthority
 .local/include/python*
 .task/
 .qfc/

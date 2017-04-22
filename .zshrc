@@ -53,15 +53,34 @@ setopt SHARE_HISTORY                    # share history between sessions ???
 setopt EXTENDED_HISTORY                 # add timestamps to history
 setopt PROMPT_SUBST
 setopt COMPLETE_IN_WORD
+setopt NO_BEEP
+setopt BRACE_CCL                        # {a-c} -> a b c  
 
 #setopt IGNORE_EOF
+# Improve rm *
+setopt rm_star_wait
+setopt list_types
 
+# Compact completion
+setopt auto_list
+setopt auto_param_slash
+setopt auto_param_keys
+setopt list_packed
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_minus
+setopt pushd_ignore_dups
+setopt complete_aliases                 # Check original command in alias completion
 setopt APPEND_HISTORY                   # adds history
 setopt INC_APPEND_HISTORY SHARE_HISTORY # adds history incrementally and share it across sessions
 setopt HIST_IGNORE_ALL_DUPS             # don't record dupes in history
 setopt HIST_REDUCE_BLANKS
+setopt hist_ignore_space                # Ignore add history if space
+setopt long_list_jobs                   # Better jobs
+setopt print_exit_value                 # Print exit value if return code is non-zero
+setopt glob_complete                    # Expand globs when completion
+setopt mark_dirs                        # Add "/" if completes directory
 
-# setopt CORRECT
 unsetopt correct_all
 
 export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
@@ -84,6 +103,8 @@ fi # }}}
 # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
 [[ -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && ZSH_THEME="spaceship" || ZSH_THEME="refined"
 
+SPACESHIP_PYENV_SYMBOL="[pyenv]"
+
 # OTHER DECENT THEMES :: {{{
 # refined # minimalist, blue prompt, subtle git info
 # pygmalion
@@ -92,7 +113,8 @@ fi # }}}
 # Optionally, you can set it to "random"  # also, see }}}
 
 # NOTE -v is a new construct, I've had issues with it on remote machines
-# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  # show the clock if tmux is not running # but don't show normally because tmux does it already
+# show the clock if tmux is not running # but don't show normally because tmux does it already
+# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true  
 
 # CASE_SENSITIVE="true" # Use case-sensitive completion.
 
@@ -119,10 +141,9 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # HIST_STAMPS="mm/dd/yyyy"
 
-# plugins can be found in ~/.oh-my-zsh/plugins/*
+# Plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-# too many plugins slow down shell startup.
 
 plugins=(zsh-syntax-highlighting \
   zsh-autosuggestions compleat pip npm sudo tmuxinator gitignore \
@@ -156,6 +177,7 @@ if [[ -x $GIT ]]; then
 fi
 #
 # User configuration
+# ------------------
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -179,7 +201,7 @@ fi
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-# # # # # # # # # # # # # # # # # # # # # # # # #
+# ------------------------------------------------
 
 # [[ -e ~/.xsh ]] && source ~/.xsh # for now, until I get used to zsh I am leaving this commented out
 
@@ -197,5 +219,7 @@ fi
 
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
-
+# for some reason this needs to be here because something is overwriting 
+export LSCOLORS=ExFxCxdxBxegedabagacad
+export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 

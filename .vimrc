@@ -11,11 +11,17 @@ let maplocalleader = ","
 set ignorecase smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
 set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
-execute 'set path+=' . glob('~') . '/**'
 set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow " New window goes below
 set virtualedit=all 
 set shortmess=atI " Don't show the intro message when starting vim
+set path=
+execute 'set path+=' . glob('~') . '/*'
+execute 'set path+=' . glob('~') . '/Scripts/'
+execute 'set path+=' . glob('~') . '/Notes/*'
+execute 'set path+=' . glob('~') . '/PyComLine/'
+execute 'set path+=' . glob('~') . '/OneDrive/'
+set statusline=\ %<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
 " }}}
 
 " DOWNLOAD PLUG {{{
@@ -89,6 +95,17 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
             \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
 
+" SQL {{{
+let g:sql_type_default = 'mysql'
+let g:ftplugin_sql_omni_key = ',' " shadows localleader
+" }}}
+"
+" SHELL {{{
+let readline_has_bash = 1
+let g:is_bash	   = 1
+let g:sh_fold_enabled= 4 
+" }}}
+
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
 Plug 'reedes/vim-textobj-sentence'
 Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
@@ -122,14 +139,19 @@ let g:easytags_events = ['BufReadPost']
 let g:easytags_always_enabled = 1
 let g:easytags_resolve_links = 1
 
-Plug 'vim-scripts/utl.vim'
-
-Plug 'dhruvasagar/vim-table-mode', { 'for': ['mardown', 'org'], 'on': ['TableModeEnable'] }
+" TABLE MODE {{{
+Plug 'dhruvasagar/vim-table-mode', { 'for':  
+            \['mardown', 'org'], 
+            \'on': ['TableModeEnable'] }
 let g:table_mode_disable_mappings = 1
+let g:table_mode_verbose = 0 " stops from indicating that it has loaded
+let g:table_mode_syntax = 1
+let g:table_mode_update_time = 800
+" }}}
 
-Plug 'vim-scripts/utl.vim'
 Plug 'jceb/vim-orgmode', {'for' : 'org'}
-let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING', 'URGENT', 'SOON', 'WAITING', 'IN_PROGRESS']
+let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING',
+            \ 'URGENT', 'SOON', 'WAITING', 'IN_PROGRESS']
 let g:org_heading_shade_leading_stars = 0
 
 " Markdown
@@ -138,10 +160,8 @@ let g:org_heading_shade_leading_stars = 0
 Plug 'blindFS/vim-taskwarrior', {'on' : 'TW'}
 
 " MARKDOWN {{{
-Plug 'jtratner/vim-flavored-markdown'
-
+Plug 'godlygeek/tabular', { 'for': ['markdown'], 'on' : 'Tabularize' }
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
-
 let g:vim_markdown_autowrite = 1
 let g:vim_markdown_emphasis_multiline = 1
 let g:vim_markdown_new_list_item_indent = 4
@@ -149,7 +169,7 @@ let g:vim_markdown_fenced_languages = [
             \'sh=shell', 'java', 'python=py',
             \'html=xhtml', 'css', 'php',
             \'javascript=js']
-<
+
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_folding_level = 1
@@ -228,6 +248,25 @@ Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
 
 Plug 'wellle/targets.vim'
 
+
+" FOR NVIM {{{
+if has('nvim')
+    Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
+    nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
+    vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
+    let g:neoterm_position = 'vertical'
+    let g:neoterm_keep_term_open = 0
+    let g:neoterm_size = 50
+    Plug 'sbdchd/neoformat', {'on' : 'Neoformat'}
+    if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
+endif
+" }}}
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+call plug#end()
+
 " SCRATCHPAD {{{
 function! Scratch()
     if index(['netrw', 'terminal','gitcommit'], &filetype) >= 0  " blacklist
@@ -251,18 +290,19 @@ function! Scratch()
     endif
     vertical resize 60
     write
-    nnoremap <buffer> <BS> :close!<CR>
+    nnoremap <buffer> <M-BS> :close!<CR>
     nnoremap <buffer> q :close!<CR>
-    vnoremap <buffer> <BS> <Nop>
+    vnoremap <buffer> <M-BS> <Nop>
 endfunction
 command! Scratch call Scratch()
-" BackSpace in normal mode to quickly open a scratch buffer with the same
+" Alt-BackSpace in normal mode to quickly open a scratch buffer with the same
 " filetype. It will be saved in ~/Notes/scratch{.py,.java,.go} etc
-nnoremap <BS> :Scratch<CR>
-vnoremap <BS> :yank<CR>:Scratch<CR>p
+nnoremap <M-BS> :Scratch<CR>
+vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 nnoremap <Leader><BS> :edit ~/Notes/todo.org<CR>`` 
 " }}}
 
+"Init() {{{
 function! Init()
     if index(g:MARKUP, &filetype) < 0 
         setlocal nospell 
@@ -272,9 +312,29 @@ function! Init()
             TableModeEnable
         endif
         nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
-        nnoremap <buffer> <Leader>me :execute '!pandoc -o /tmp/' . expand('%') . '.html'<CR>:execute '!$BROWSER /tmp/' . expand('%') . '.html'<CR> 
+        nnoremap <buffer> <Leader>me :execute '!pandoc -o /tmp/' . expand('%:r') . '.html ' . expand('%:p') ' ; '  . $BROWSER . ' /tmp/' . expand('%:r') . '.html'<CR> 
     endif
 endfunction
+" }}}
+
+" MarkdownInit() {{{"{{{
+function! MarkdownInit()
+    let g:table_mode_corner = '|'
+    nmap <buffer> [[ <Plug>Markdown_MoveToPreviousHeader
+    nmap <buffer> ]] <Plug>Markdown_MoveToNextHeader
+    nmap gx <buffer> <Plug>Markdown_OpenUrlUnderCursor
+    setlocal conceallevel=3
+    nnoremap <buffer> <Leader>me :execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'<CR>
+endfunction
+" }}}"}}}
+
+function! OrgInit()
+    setlocal foldlevel=2
+    let g:table_mode_corner = '+'
+endfunction
+
+au! BufEnter *.org let g:table_mode_corner = '+'
+au! BufEnter *.md,*.markdown,*.mmd let g:table_mode_corner = '|'
 
 " AUTOCOMMANDS {{{
 aug VIMENTER
@@ -292,10 +352,9 @@ aug VIMENTER
     au CmdwinLeave * setlocal updatetime=200
     " set dict and thesaurus completion if markup else, tags
     au FileType * if index(g:MARKUP, &filetype) < 0 | setl complete=.,w,t, | else | setl complete=.,w,k,s | endif
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown.markdown conceallevel=3
     au FileType * call Init()
-    au Filetype markdown let g:table_mode_corner = '|'
-    au BufReadPost,BufNew *.org let g:table_mode_corner = '+'
+    au FileType markdown call MarkdownInit()
+    au FileType org call OrgInit()
     au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     " alternative to ususal execute
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
@@ -304,39 +363,14 @@ aug VIMENTER
     au FileType man nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
     au FileType gitcommit setl virtualedit=block spell 
     au FileType gitcommit WordyWordy 
-    au FileType org setlocal foldlevel=2
     " make it more like less
-    au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> <BS> <C-o> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u> 
+    au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u> 
     " on enter follow that `tag`
-    au FileType help nnoremap <buffer> <CR> <C-]> | nnoremap <BS> <C-o>
+    au FileType help nnoremap <buffer> <CR> <C-]> 
     " easir preview after grepping (use emacs' C-p C-n)
     au FileType qf nnoremap <buffer> <C-n> j<CR><C-w><C-w> | nnoremap <buffer> <C-p> k<CR><C-w><C-w> | nnoremap q :cclose<CR>
 aug END
 " }}}
-
-if executable('pdftotext')
-    " TODO
-    au! BufRead *.pdf execute '!pdftotext ' . expand('%:p') . ' ' . expand('%:p:r') .   '.txt'
-    au! BufReadPost *.pdf execute 'enew ' . expand('%:p:r') . '.txt'
-endif
-
-" FOR NVIM {{{
-if has('nvim')
-    Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
-    nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
-    vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
-    let g:neoterm_position = 'vertical'
-    let g:neoterm_keep_term_open = 0
-    let g:neoterm_size = 50
-    Plug 'sbdchd/neoformat', {'on' : 'Neoformat'}
-    if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
-endif
-" }}}
-
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-
-call plug#end()
 
 " download dictionaries from GitHub if missing {{{
 if ! filereadable(g:DICTDIR . 'frequent.dict')
@@ -366,22 +400,26 @@ if executable('pandoc')
     command! TOrst execute '!pandoc -s -o ' expand('%:p:r') . '.rst  -t rst ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.rst'
     command! TOtex execute '!pandoc -s -o ' expand('%:p:r') . '.tex  -t tex ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.tex'
     command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
+    command! TOhtml2 execute '!pandoc -s -o ' expand('%:p:r') . '.html  -t html ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.html'
+endif
+if executable('pdftotext')
+    command! FROMpdfTOtxt execute '!pdftotext -eol unix "' . expand('%:p') . '"'
+    au! BufRead *.pdf execute '!pdftotext -eol unix "' . expand('%:p') . '" | edit ' expand('%:r') . '.txt'
 endif
 " }}}
 
 if executable('dos2unix')
     command! Dos2Unix !dos2unix -F -n %:p %:p | edit
 endif
-
 command! DeleteEmptyLines execute 'g/^\s*$/d'
-
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 
 " FZF  {{{
 let g:PREVIEW = ' --preview "head -n 20 {} " '
-let g:IGNORE_REGEXP = "grep -P -v \"(\d{4,}$)|(~$)|".
+let g:IGNORE_REGEXP = "grep -P -v '(\d{4,}$)|(~$)|".
             \"(.*(c|C)ache.*)|(.*\.git.*)|(.*\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)".
-            \"|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))\""
+            \"|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri))' | grep -v '%' | grep -v elpa | grep -v -i chrome | grep -v timeshift | grep -v -i ideaic "
+"
 let g:DIR_IGNORE_REGEXP = 'grep -P -v "^/(dev)|(tmp)|(mnt)|(root)"'
 
 command! FZFMru call fzf#run(fzf#wrap({
@@ -397,7 +435,7 @@ command! FZFFileAnchor call fzf#run(fzf#wrap({
             \}))
 
 command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
-            \'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
+            \'source': 'find ~ 2>/dev/null | grep -P -v "(\[0-9]{4,}$)|(~$)|(\.(png)|(jpeg)|(bluej)|(ctxt)|(hg)|(svn)|(bak)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(svn)|(swp)|(ri)$)" | grep -v "%" | grep -v chrome | grep -v elpa | grep -v timeshift | grep -v -i ideaic | grep -v ".git" | grep -v -i cache | sed -E "s/^\/home\/\w+\///"',
             \'options': '-x +s --reverse --preview "head -n 38 {}"',
             \'up': '80%',
             \}))
@@ -448,6 +486,26 @@ nnoremap <C-x><C-r> :FZFMru<CR>
 
 nnoremap <C-x><C-g> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
 nnoremap <C-x><C-a> :Ag!<CR>
+
+cno w!!<CR> %!sudo tee > /dev/null %<CR>
+cno W!<CR> w!<CR>
+cno W<CR> w<CR>
+cno Wa<CR> wa<CR>
+cno WA<CR> wa<CR>
+cno Wa!<CR> wa!<CR>
+cno WA!<CR> wa!<CR>
+cno Wqa<CR> wqa<CR>
+cno wQa<CR> wqa<CR>
+cno WQA<CR> wqa<CR>
+cno wqA<CR> wqa<CR>
+cno wqA<CR> wqa<CR>
+cno qwa<CR> wqa<CR>
+cno Qwa<CR> wqa<CR>
+cno qWa<CR> wqa<CR>
+cno qwA<CR> wqa<CR>
+cno qWA<CR> wqa<CR>
+cno QWA<CR> wqa<CR>
+cno QwA<CR> wqa<CR>
 " }}}
 
 

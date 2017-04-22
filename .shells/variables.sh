@@ -36,7 +36,6 @@ export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xte
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
 export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin/:"
-[[ -d ~/miniconda3/bin ]] && export PATH="${PATH}:${HOME}/miniconda3/bin"
 [ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre' # JAVA
 [ -d ~/.gem/ruby/2.4.0/bin ] && export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"                                                         # GEM [RUBY]
 [ -d ~/.gem/ruby/2.3.0/bin ] && export PATH="${PATH}:${HOME}/.gem/ruby/2.3.0/bin"                                                         # GEM [RUBY]
@@ -46,8 +45,7 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 [ -d ~/.local/bin ] && export PATH="${PATH}:${HOME}/.local/bin"                                                                           # PIP [PYTHON]
 [ -d ~/go/bin ] && export PATH="${PATH}:${HOME}/go/bin"                                                                                   # GO 
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
-[ -d ~/Scripts ] && export PATH="${PATH}:${HOME}/Scripts"                                                                                 # MY SCRIPTS
-[ -d ~/miniconda3 ] && export PATH="${HOME}/miniconda3/bin:${PATH}"
+[ -d ~/Scripts ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
 # }}}
 
 # HISTORY {{{
@@ -76,6 +74,10 @@ else
 fi # }}}
 
 export GREP_COLOR='1;33' # makes it yellow # by default red
+
+export LSCOLORS=ExFxCxdxBxegedabagacad
+
+export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
 # $PAGER {{{
 # ------------------------------------------------------------------

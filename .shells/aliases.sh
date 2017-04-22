@@ -31,6 +31,7 @@ alias info='info --vi-keys'
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30' # frequent entries from history
 alias logout="pkill -KILL -u "
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
+alias note=note.sh
 # }}}
 
 # keymap {{{
@@ -58,6 +59,7 @@ alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                    
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                 # list recursively just files
 # NOTE: with this one you don't wanna misspell, better not write then write wrong
 alias f=find-approx.sh                                 # f [filename] # will search recursively using dense regexp to ensure quality, slow # }}}
+alias gr=fzf-filtered-grep.sh
 
 # pattern matching {{{
 alias diff='diff --color=auto'
