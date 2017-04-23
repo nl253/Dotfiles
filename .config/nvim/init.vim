@@ -9,7 +9,7 @@ let maplocalleader = ","
 
 " OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile fileignorecase hidden clipboard=unnamed,unnamedplus
+set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile autoread fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
 set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow " New window goes below
@@ -69,6 +69,7 @@ Plug 'Haron-Prime/Antares'
 Plug 'tpope/vim-dispatch', {'on' : ['Make','Dispatch','Copen','Start','Spawn']}
 Plug 'tpope/vim-sleuth' " auto set buffer options
 " Plug 'tpope/vim-projectionist'
+Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " SESSION {{{
 Plug 'xolox/vim-misc'
@@ -87,7 +88,7 @@ if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let 
 " }}}
 
 Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive' " git
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'Konfekt/FastFold' " more efficient folds
