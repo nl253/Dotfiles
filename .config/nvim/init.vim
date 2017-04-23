@@ -1,5 +1,5 @@
 
-let g:MARKUP = [ 'markdown', 'org']
+let g:MARKUP = [ 'markdown' ]
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sh', 'zsh' ]
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
 
@@ -9,7 +9,7 @@ let maplocalleader = ","
 
 " OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile autoread fileignorecase hidden clipboard=unnamed,unnamedplus
+set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile formatoptions=tcqjonl1 autoread fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
 set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow " New window goes below
@@ -56,7 +56,7 @@ else
     syntax enable
     filetype plugin indent on
     set encoding=utf8 syntax=on autoindent nocompatible magic incsearch ttyfast
-    set display=lastline formatoptions=tcqj nrformats=bin,hex complete+=i hlsearch
+    set display=lastline nrformats=bin,hex complete+=i hlsearch
     if has('tags')
         set tags
     endif
@@ -143,7 +143,7 @@ let g:easytags_resolve_links = 1
 
 " TABLE MODE {{{
 Plug 'dhruvasagar/vim-table-mode', { 'for':  
-            \['mardown', 'org'], 
+            \['mardown'], 
             \'on': ['TableModeEnable'] }
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 " stops from indicating that it has loaded
@@ -151,15 +151,10 @@ let g:table_mode_syntax = 1
 let g:table_mode_update_time = 800
 " }}}
 
-Plug 'jceb/vim-orgmode', {'for' : 'org'}
-let g:org_todo_keywords = ['TODO', '|', 'DONE', 'PENDING',
-            \ 'URGENT', 'SOON', 'WAITING', 'IN_PROGRESS']
-let g:org_heading_shade_leading_stars = 0
-
 " Markdown
 " ==========
 "
-Plug 'blindFS/vim-taskwarrior', {'on' : 'TW'}
+Plug 'blindFS/vim-taskwarrior'
 
 " MARKDOWN {{{
 Plug 'godlygeek/tabular', { 'for': ['markdown'], 'on' : 'Tabularize' }
@@ -168,9 +163,8 @@ let g:vim_markdown_autowrite = 1
 let g:vim_markdown_emphasis_multiline = 1
 let g:vim_markdown_new_list_item_indent = 4
 let g:vim_markdown_fenced_languages = [
-            \'sh=shell', 'java', 'python=py',
-            \'html=xhtml', 'css', 'php',
-            \'javascript=js']
+            \'sh=shell', 'java', 'python=py', 'zsh=zshell',
+            \'html=xhtml', 'css', 'php', 'javascript=js']
 
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_folding_style_pythonic = 1
@@ -239,7 +233,7 @@ Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
 
 Plug 'chrisbra/Colorizer', { 'for': [
             \ 'css', 'html', 'javascript', 'json',
-            \ 'org', 'markdown', 'xhtml', 'yaml']}
+            \ 'markdown', 'xhtml', 'yaml']}
 
 let g:emmet_html5 = 1
 
@@ -274,12 +268,9 @@ function! Scratch()
     if index(['netrw', 'terminal','gitcommit'], &filetype) >= 0  " blacklist
         return 1
     endif
-    if index(g:PROGRAMMING, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0
+    if index(g:PROGRAMMING, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 || index(g:MARKUP, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
         execute 'vnew ' . '~/Notes/scratch.' . expand('%:e')
         execute 'setl ft=' . &filetype
-    elseif index(g:MARKUP, &filetype) >= 0
-        vnew ~/Notes/scratch
-        setl ft=note
     elseif &filetype == 'help'
         vnew ~/Notes/scratch.vim
         setl ft=vim
@@ -288,7 +279,7 @@ function! Scratch()
         setl ft=sh
     else
         vnew ~/Notes/scratch
-        setl ft=note
+        setl ft=config
     endif
     vertical resize 60
     write
@@ -301,43 +292,65 @@ command! Scratch call Scratch()
 " filetype. It will be saved in ~/Notes/scratch{.py,.java,.go} etc
 nnoremap <M-BS> :Scratch<CR>
 vnoremap <M-BS> :yank<CR>:Scratch<CR>p
-nnoremap <Leader><BS> :edit ~/Notes/todo.org<CR>`` 
+nnoremap <Leader><BS> :edit ~/Notes/todo.md<CR>`` 
 " }}}
 
-"Init() {{{
+"Init() execute for all buffers on filetype {{{
 function! Init()
     if index(g:MARKUP, &filetype) < 0 
-        setlocal nospell 
-    elseif index(g:MARKUP, &filetype) >= 0 
-        setlocal spell 
-        if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
-            TableModeEnable
-        endif
-        nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
-        nnoremap <buffer> <Leader>me :execute '!pandoc -o /tmp/' . expand('%:r') . '.html ' . expand('%:p') ' ; '  . $BROWSER . ' /tmp/' . expand('%:r') . '.html'<CR> 
+        setl nospell complete=.,w,t, 
     endif
 endfunction
 " }}}
 
-" MarkdownInit() {{{"{{{
+" GitcommitInit() {{{
+function! GitcommitInit()
+     setl virtualedit=block spell
+     WordyWordy                  
+endfunction
+" }}}
+"
+" ManInit() {{{
+function! ManInit()
+    nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
+    setl nowrap 
+endfunction
+" }}}
+
+" HelpInit() {{{
+function! HelpInit()
+    " on enter follow that `tag`
+    nnoremap <buffer> <CR> <C-]> 
+endfunction
+" }}}
+
+" QfInit() {{{
+function! QfInit()
+    " easir preview after grepping (use emacs' C-p C-n)
+    nnoremap <buffer> <C-n> j<CR><C-w><C-w> 
+    nnoremap <buffer> <C-p> k<CR><C-w><C-w> 
+    " quick exit
+    nnoremap q :cclose<CR>
+endfunction
+" }}}
+
+" MarkdownInit() {{{
 function! MarkdownInit()
     let g:table_mode_corner = '|'
     nmap <buffer> [[ <Plug>Markdown_MoveToPreviousHeader
     nmap <buffer> ]] <Plug>Markdown_MoveToNextHeader
     nmap gx <buffer> <Plug>Markdown_OpenUrlUnderCursor
-    setlocal conceallevel=3
+    setlocal conceallevel=3 formatoptions=tcqjonl1
+    setlocal spell complete=.,w,k,s 
+    if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
+        TableModeEnable
+    endif
+    nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
     nnoremap <buffer> <Leader>me :execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'<CR>
+    nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
 endfunction
-" }}}"}}}
-
-function! OrgInit()
-    setlocal foldlevel=2
-    let g:table_mode_corner = '+'
-endfunction
-
-au! BufEnter *.org let g:table_mode_corner = '+'
-au! BufEnter *.md,*.markdown,*.mmd let g:table_mode_corner = '|'
-
+" }}}
+"
 " AUTOCOMMANDS {{{
 aug VIMENTER
     " if completion / omnifunction is not provided fall back on default 
@@ -353,24 +366,16 @@ aug VIMENTER
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
     " set dict and thesaurus completion if markup else, tags
-    au FileType * if index(g:MARKUP, &filetype) < 0 | setl complete=.,w,t, | else | setl complete=.,w,k,s | endif
     au FileType * call Init()
     au FileType markdown call MarkdownInit()
-    au FileType org call OrgInit()
-    au BufReadPost,BufNew *.org,*.md,*.mmd nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
     " alternative to ususal execute
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
-    au FileType man setl nowrap 
     " on enter open the man page under cursor
-    au FileType man nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
-    au FileType gitcommit setl virtualedit=block spell 
-    au FileType gitcommit WordyWordy 
+    au FileType man call ManInit()
+    au FileType gitcommit call GitcommitInit()
     " make it more like less
     au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u> 
-    " on enter follow that `tag`
-    au FileType help nnoremap <buffer> <CR> <C-]> 
-    " easir preview after grepping (use emacs' C-p C-n)
-    au FileType qf nnoremap <buffer> <C-n> j<CR><C-w><C-w> | nnoremap <buffer> <C-p> k<CR><C-w><C-w> | nnoremap q :cclose<CR>
+    au FileType qf call QfInit()
 aug END
 " }}}
 
