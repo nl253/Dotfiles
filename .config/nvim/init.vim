@@ -1,9 +1,11 @@
 
 let g:MARKUP = [ 'markdown' ]
-let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sh', 'zsh' ]
+let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 
+            \'javascript', 'python', 'php', 'sh', 'zsh' ]
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
 
 let loaded_matchit = 1
+
 let mapleader = " "
 let maplocalleader = ","
 
@@ -16,7 +18,7 @@ set splitbelow " New window goes below
 set virtualedit=all 
 set shortmess=atI " Don't show the intro message when starting vim
 set path=
-execute 'set path+=' . glob('~') . '/*'
+execute 'set path+=' . glob('~') . '/**'
 execute 'set path+=' . glob('~') . '/Scripts/'
 execute 'set path+=' . glob('~') . '/Notes/*'
 execute 'set path+=' . glob('~') . '/PyComLine/'
@@ -64,17 +66,19 @@ endif
 " }}}
 
 " Place plugins here
+" -------------------
 
-Plug 'Haron-Prime/Antares'
+Plug 'Haron-Prime/Antares' " colorscheme
 Plug 'tpope/vim-dispatch', {'on' : ['Make','Dispatch','Copen','Start','Spawn']}
 Plug 'tpope/vim-sleuth' " auto set buffer options
+Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 " Plug 'tpope/vim-projectionist'
-Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " SESSION {{{
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session' " enhanced session management
 let g:session_autosave = 'yes'
+let g:session_autosave_silent = 1
 let g:session_autosave_to = 'default'
 let g:session_autosave_periodic = 3
 let g:session_lock_enabled = 0
@@ -118,7 +122,7 @@ Plug 'vim-syntastic/syntastic', { 'on' : [ 'SyntasticInfo', 'SyntasticCheck', 'S
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_enable_signs = 1
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': []}
 let g:syntastic_vim_checkers = []
 let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
 let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
@@ -126,14 +130,14 @@ let g:syntastic_markdown_checkers = ['proselint', 'mdl', 'textlint']
 let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
 let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
 let g:syntastic_javascript_checkers = ['jshint', 'eslint']
-"let g:syntastic_css_checkers = []
+let g:syntastic_css_checkers = ['stylelint', 'csslint', 'phpcs']
 " }}}
 
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
             \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn'],
             \'for' : g:MARKUP}
 
-Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' , 'do' : 'npm install -g writegood proselint'}
+Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
 let b:easytags_auto_highlight = 1
@@ -151,9 +155,6 @@ let g:table_mode_syntax = 1
 let g:table_mode_update_time = 800
 " }}}
 
-" Markdown
-" ==========
-"
 Plug 'blindFS/vim-taskwarrior'
 
 " MARKDOWN {{{
@@ -244,12 +245,9 @@ Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
 
 Plug 'wellle/targets.vim'
 
-
 " FOR NVIM {{{
 if has('nvim')
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
-    nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
-    vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
@@ -279,7 +277,7 @@ function! Scratch()
         setl ft=sh
     else
         vnew ~/Notes/scratch
-        setl ft=config
+        setl ft=scratch
     endif
     vertical resize 60
     write
@@ -290,9 +288,9 @@ endfunction
 command! Scratch call Scratch()
 " Alt-BackSpace in normal mode to quickly open a scratch buffer with the same
 " filetype. It will be saved in ~/Notes/scratch{.py,.java,.go} etc
-nnoremap <M-BS> :Scratch<CR>
+nnoremap <M-BS> :silent Scratch<CR>
 vnoremap <M-BS> :yank<CR>:Scratch<CR>p
-nnoremap <Leader><BS> :edit ~/Notes/todo.md<CR>`` 
+nnoremap <Leader><BS> :silent edit ~/Notes/todo.md<CR>`` 
 " }}}
 
 "Init() execute for all buffers on filetype {{{
@@ -317,6 +315,12 @@ function! ManInit()
 endfunction
 " }}}
 
+" PythonInit() {{{
+function! PythonInit()
+    au! BufEnter __run__ nnoremap <buffer> q :clo!<CR>
+endfunction
+" }}}
+"
 " HelpInit() {{{
 function! HelpInit()
     " on enter follow that `tag`
@@ -458,6 +462,9 @@ nnoremap <Leader>mS :Neomake<CR>:SyntasticCheck<CR>
 noremap k gk
 noremap j gj
 
+nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
+vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
+
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>ga     :Git add %:p<Space>
@@ -488,11 +495,11 @@ nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
 nnoremap <C-v> :FZFFileAnchor<CR>
-nnoremap <C-x><C-f> :FZFRecFilesHome<CR>
-nnoremap <C-x><C-r> :FZFMru<CR>
+nnoremap <leader>fh :FZFRecFilesHome<CR>
+nnoremap <Leader>fr :FZFMru<CR>
 
-nnoremap <C-x><C-g> :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
-nnoremap <C-x><C-a> :Ag!<CR>
+nnoremap <Leader>sg :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
+nnoremap <Leader>sa :Ag!<CR>
 
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
 cno W!<CR> w!<CR>

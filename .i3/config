@@ -304,7 +304,7 @@ exec --no-startup-id pamac-tray
 exec --no-startup-id clipit
 exec --no-startup-id xsetroot -bg black
 exec --no-startup-id dropbox
-exec --no-startup-id setxkbmap -layout gb -option ctrl:nocaps
+# exec --no-startup-id setxkbmap -layout gb -option ctrl:nocaps
 # exec --no-startup-id blueman
 # exec_always --no-startup-id sbxkb
 exec --no-startup-id start_conky_maia

@@ -52,14 +52,6 @@ setopt mark_dirs                        # Add "/" if completes directory
 unsetopt correct_all
 # }}}
 
-# Python virtual env manager  {{{
-if $(in-path); then
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-  source "$(pyenv root)/completions/pyenv.zsh"
-fi # }}}
-
 # oh-my-zsh {{{
 # try to install oh-my-zsh if missing
 # use curl, fall back on wget
@@ -207,6 +199,13 @@ fi
 
 # }}} # if this was sourced successfully then we have all the variables set properly
 
+# Python virtual env manager  {{{ # 
+# NOTE needs to be sourced AFTER sourcing general shells configuration
+if [[ -e ~/.pyenv/bin/pyenv ]]; then
+  eval "$(pyenv init -)"
+  source "$(pyenv root)/completions/pyenv.zsh"
+fi
+# }}}
 
 # CUSTOM PLUGINS {{{
 # pull custom plugins if missing {{

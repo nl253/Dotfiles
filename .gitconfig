@@ -94,6 +94,7 @@
 	fzf-checkout-branch-sorted = "!${HOME}/Scripts/fzf-checkout-branch-sorted.sh"
 	fzf-checkout-branch-tag = "!${HOME}/Scripts/fzf-checkout-branch-tag.sh"
 	fzf-checkout-commit = "!${HOME}/Scripts/fzf-checkout-commit.sh"
+	fzf-rm-cached = "!${HOME}/Scripts/fzf-git-rm-cached.sh"
 	fzf-stash = "!${HOME}/Scripts/fzf-stash.sh"
 	# Find commits by commit message
 	find-message = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
@@ -157,4 +158,4 @@
 [gg]
 	username = nl253
 [credential]
-	helper = cache --timeout=20
+	helper = cache --timeout=120

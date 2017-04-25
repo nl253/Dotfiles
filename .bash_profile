@@ -27,13 +27,10 @@ source_bash_completion
  # }}}
 
 # Python virtual env manager  {{{
-PYENV=$(which pyenv)
-if [[ -x $(which pyenv) ]] ; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-    source "$(pyenv root)/completions/pyenv.bash"
-fi # }}}
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+source "$(pyenv root)/completions/pyenv.bash"
 
 # UTF-8 {{{
 export LC_ALL='en_GB.UTF-8'

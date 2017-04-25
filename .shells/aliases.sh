@@ -45,18 +45,22 @@ alias logout="pkill -KILL -u "
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 alias note=note.sh       # refer to ~/Scripts/note.sh
 alias project=project.sh # refer to ~/Scripts/project.sh
+if ! $(in-path vit); then 
+    alias vit="\$EDITOR -c 'TW'"
+fi
 # }}}
 
 # keymap {{{
-if $(in-path xmodmap); then
-    alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
-    alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
-fi
-$(in-path setxkbmap) && alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
+ if $(in-path xmodmap); then
+     alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
+     alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
+ fi
+ $(in-path setxkbmap) && alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
 # }}}
 
 # dirs and files {{{
 alias -- -='cd -' # Go back
+
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."

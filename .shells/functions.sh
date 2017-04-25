@@ -5,12 +5,6 @@ h() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 } # }}}
 
-# c - including hidden directories {{{
-c() {
-  local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
-} # }}}
-
 # tmux ftpane - switch pane (@george-b) {{{
 ftpane() {
   local panes current_window current_pane target target_window target_pane

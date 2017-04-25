@@ -67,7 +67,7 @@ get_session(){
     echo "dbus-launch ${dbus_args[*]}"
 }
 
-setxkbmap -layout gb -option ctrl:nocaps # Caps Lock is Control on a GB keyboard
+# setxkbmap -layout gb -option ctrl:nocaps # Caps Lock is Control on a GB keyboard
 
 exec $(get_session)
 
@@ -78,3 +78,4 @@ exec $(get_session)
 # xterm -geometry 80x20+494-0 &
 #exec xterm -geometry 80x66+0+0 -name login
 
+xset r rate 660 25

@@ -46,6 +46,13 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 [ -d ~/go/bin ] && export PATH="${PATH}:${HOME}/go/bin"                                                                                   # GO 
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
 [ -d ~/Scripts ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
+[ -d ~/.bin ] && export PATH="${PATH}:${HOME}/.bin"       # MY READY PROJECTS AND EXECUTSBLES
+
+if [ -e ~/.pyenv/bin/pyenv ]; then
+  export PYENV_ROOT="${HOME}/.pyenv"
+  export PATH="${PYENV_ROOT}/bin:${PATH}"
+fi
+export PYTHONPATH="${PYTHONPATH}:${HOME}/UnixUtils:${HOME}/PyComLine:${HOME}/FieryCLI" # for python modules
 # }}}
 
 # HISTORY {{{
@@ -129,4 +136,8 @@ elif [ -x /usr/bin/vi ] || [ -x /bin/vi ]; then # if not neovim and not vim then
   alias nvim=vi
 fi
 
-#vim:set foldmethod=marker:set foldlevel=0 # }}}
+# }}}
+
+setxkbmap -option                           
+
+#vim:set foldmethod=marker:set foldlevel=0 
