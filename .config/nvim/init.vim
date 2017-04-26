@@ -433,19 +433,19 @@ aug END
 
 " download dictionaries from GitHub if missing {{{
 if ! filereadable(g:DICTDIR . 'frequent.dict')
-    execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/frequent.dict'
+    execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/dicts/frequent.dict'
 endif
 execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
 if ! filereadable(g:VIMDIR .'thesaurus.txt')
-    execute '!curl -o ' . g:VIMDIR . 'thesaurus.txt https://raw.githubusercontent.com/nl253/VimScript/master/thesaurus.txt'
+    execute '!curl -o ' . g:VIMDIR . 'thesaurus.txt https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/thesaurus.txt'
 endif
 execute 'set thesaurus=' . g:VIMDIR . 'thesaurus.txt'
 if ! filereadable(g:DICTDIR .'css.dict')
-    execute '!curl -o ' . g:DICTDIR . 'css.dict https://raw.githubusercontent.com/nl253/VimScript/master/dicts/css.dict'
+    execute '!curl -o ' . g:DICTDIR . 'css.dict https://raw.githubusercontent.com/nl253/Dot-files/master/dicts/css.dict'
 endif
 au! FileType css execute 'setlocal dictionary=' . g:DICTDIR . 'css.dict'
 if ! filereadable(g:DICTDIR .'mysql.txt')
-execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/VimScript/master/dicts/mysql.txt'
+execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/Dot-files/master/dicts/mysql.txt'
 endif
 au! FileType sql,mysql execute 'setlocal dictionary=' . g:DICTDIR . 'mysql.txt'
 " }}}
@@ -456,11 +456,11 @@ colorscheme antares
 " markup conversion, recommended {{{
 if executable('pandoc')
     command! TOman execute '!pandoc -s -o ' expand('%:p:r') . '.1  -t man ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.1'
-    command! TOmarkdown execute '!pandoc -s -o ' expand('%:p:r') . '.md  -t markdown_github ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.md'
-    command! TOrst execute '!pandoc -s -o ' expand('%:p:r') . '.rst  -t rst ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.rst'
+    command! TOmarkdown execute '!pandoc -s -o ' expand('%:p:r') . '.md  -t markdown_github --atx-headers --ascii --toc ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.md'
+    command! TOrst execute '!pandoc -s -o ' expand('%:p:r') . '.rst  -t rst --ascii ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.rst'
     command! TOtex execute '!pandoc -s -o ' expand('%:p:r') . '.tex  -t tex ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.tex'
     command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
-    command! TOhtml2 execute '!pandoc -s -o ' expand('%:p:r') . '.html  -t html ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.html'
+    command! TOhtml2 execute '!pandoc -s -o ' expand('%:p:r') . '.html  -t html --html-q-tags --self-contained ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.html'
 endif
 if executable('pdftotext')
     command! FROMpdfTOtxt execute '!pdftotext -eol unix "' . expand('%:p') . '"'

@@ -47,7 +47,7 @@ alias note=note.sh       # refer to ~/Scripts/note.sh
 function pandoc(){
     if $(in-path pandoc) ; then 
         if [ $# = 1 ]; then
-            pandoc -f html -t markdown_github --smart --standalone --ascii "$1"
+            pandoc -f html -t markdown_github --standalone --atx-headers --toc --ascii "$1"
         else
             command pandoc "$@"
         fi
