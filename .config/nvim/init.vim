@@ -9,21 +9,32 @@ let loaded_matchit = 1
 let mapleader = " "
 let maplocalleader = ","
 
+function! AtHome()
+    if filereadable(glob('~/.athome'))
+        return 1
+    else
+        return 0
+    endif
+endfunction
+
 " OPTIONS {{{
-set ignorecase smartcase foldmethod=marker autochdir sessionoptions-=blank completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w,t noswapfile mps+=<:> bufhidden=hide wildignorecase shiftwidth=4 autowrite undofile formatoptions=tcqjonl1 autoread fileignorecase hidden clipboard=unnamed,unnamedplus
-set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png,*.jpg,*.jpeg,tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn
+set ignorecase smartcase foldmethod=marker autochdir 
+set sessionoptions+=resize sessionoptions-=blank 
+set completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
+set mouse= complete=.,w,t noswapfile mps+=<:> 
+set sessionoptions-=options bufhidden=hide wildignorecase
+set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1
+set autoread fileignorecase hidden clipboard=unnamed,unnamedplus
+set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png
+set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg
 set nostartofline " Don't reset cursor to start of line when moving around
-set splitbelow " New window goes below
-set virtualedit=all 
+set splitbelow virtualedit=all 
 set shortmess=atI " Don't show the intro message when starting vim
 set path=
 execute 'set path+=' . glob('~') . '/**'
 execute 'set path+=' . glob('~') . '/Scripts/'
 execute 'set path+=' . glob('~') . '/Notes/*'
-execute 'set path+=' . glob('~') . '/PyComLine/'
-execute 'set path+=' . glob('~') . '/OneDrive/'
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
+execute 'set path+=' . glob('~') . '/Projects/'
 " }}}
 
 " DOWNLOAD PLUG {{{
@@ -43,6 +54,7 @@ if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
     let g:DICTDIR = glob('~/.config/nvim/dicts/')
     tnoremap <Esc> <C-\><C-n>
+    set inccommand=nosplit
     if empty(g:DICTDIR)
         !mkdir -p ~/.config/nvim/dicts
     endif
@@ -93,6 +105,7 @@ if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let 
 
 Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
 Plug 'tpope/vim-fugitive' " git
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'Konfekt/FastFold' " more efficient folds
@@ -118,19 +131,21 @@ Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
 let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 
 " SYNTASTIC {{{ 
-Plug 'vim-syntastic/syntastic', { 'on' : [ 'SyntasticInfo', 'SyntasticCheck', 'SyntasticToggleMode']}
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_enable_signs = 1
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': []}
-let g:syntastic_vim_checkers = []
-let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
-let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
-let g:syntastic_markdown_checkers = ['proselint', 'mdl', 'textlint']
-let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
-let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
-let g:syntastic_javascript_checkers = ['jshint', 'eslint']
-let g:syntastic_css_checkers = ['stylelint', 'csslint', 'phpcs']
+if ! has('nvim')
+    Plug 'vim-syntastic/syntastic', { 'on' : [ 'SyntasticInfo', 'SyntasticCheck', 'SyntasticToggleMode']}
+    let g:syntastic_error_symbol = '✗'
+    let g:syntastic_warning_symbol = '⚠'
+    let g:syntastic_enable_signs = 1
+    let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': []}
+    let g:syntastic_vim_checkers = []
+    let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
+    let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
+    let g:syntastic_markdown_checkers = ['proselint', 'mdl', 'textlint']
+    let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
+    let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
+    let g:syntastic_javascript_checkers = ['jshint', 'eslint']
+    let g:syntastic_css_checkers = ['stylelint', 'csslint', 'phpcs']
+endif
 " }}}
 
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
@@ -155,8 +170,6 @@ let g:table_mode_syntax = 1
 let g:table_mode_update_time = 800
 " }}}
 
-Plug 'blindFS/vim-taskwarrior'
-
 " MARKDOWN {{{
 Plug 'godlygeek/tabular', { 'for': ['markdown'], 'on' : 'Tabularize' }
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
@@ -174,6 +187,8 @@ let g:vim_markdown_folding_level = 1
 
 " PYTHON {{{
 Plug 'klen/python-mode', { 'for': 'python' }
+
+Plug 'critiqjo/lldb.nvim'
 
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
@@ -210,20 +225,23 @@ let g:pymode_trim_whitespaces = 1
 " }}}
 
 " COMPLETION {{{
-if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
-    Plug 'maralla/completor.vim'
-    if filereadable(glob('~/.pyenv/versions/3.5.0/bin/python3.5'))
-        let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
-    else
-        let g:completor_python_binary = '/usr/bin/python'
-    endif
-    let g:completor_completion_delay = 1
-endif
+"if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
+    "Plug 'maralla/completor.vim'
+    "if filereadable(glob('~/.pyenv/versions/3.5.0/bin/python3.5'))
+        "let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
+    "else
+        "let g:completor_python_binary = '/usr/bin/python'
+    "endif
+    "let g:completor_completion_delay = 1
+"endif
+
+Plug 'ajh17/VimCompletesMe'
 
 if has('python') || has('python3')
     Plug 'SirVer/ultisnips' " Track the engine.
     Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
-    let g:UltiSnipsExpandTrigger="<tab>"
+    "let g:UltiSnipsExpandTrigger="<Tab>"
+    let g:UltiSnipsExpandTrigger="<M-e>"
     let g:UltiSnipsEditSplit="vertical"
 endif
 " }}}
@@ -304,20 +322,37 @@ endfunction
 " GitcommitInit() {{{
 function! GitcommitInit()
      setl virtualedit=block spell
-     WordyWordy                  
+     let b:vcm_tab_complete = 'dict'
+     " WordyWordy                  
 endfunction
 " }}}
 "
 " ManInit() {{{
 function! ManInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
+    " make it more like less
+    nnoremap <buffer> q :bd!<CR> 
+    nnoremap <buffer> d <C-d> 
+    nnoremap <buffer> u <C-u> 
     setl nowrap 
+endfunction
+" }}}
+
+" ShInit() {{{
+function! ShInit()
+    nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
+    setl wrap complete=.,w,t,k~/Scripts/**.sh
+    for d in  split(glob("~/Scripts/**.sh"))
+        execute 'setl dictionary+=' . d
+    endfor
+    let b:vcm_tab_complete = 'dict'
 endfunction
 " }}}
 
 " PythonInit() {{{
 function! PythonInit()
-    au! BufEnter __run__ nnoremap <buffer> q :clo!<CR>
+    setl complete=.,w,t,k~/Scripts/**.py,k~/Projects/**.py
+    let b:vcm_tab_complete = "omni"
 endfunction
 " }}}
 "
@@ -325,6 +360,10 @@ endfunction
 function! HelpInit()
     " on enter follow that `tag`
     nnoremap <buffer> <CR> <C-]> 
+    " make it more like less
+    nnoremap <buffer> q :bd!<CR> 
+    nnoremap <buffer> d <C-d> 
+    nnoremap <buffer> u <C-u> 
 endfunction
 " }}}
 
@@ -344,13 +383,18 @@ function! MarkdownInit()
     nmap <buffer> [[ <Plug>Markdown_MoveToPreviousHeader
     nmap <buffer> ]] <Plug>Markdown_MoveToNextHeader
     nmap gx <buffer> <Plug>Markdown_OpenUrlUnderCursor
-    setlocal conceallevel=3 formatoptions=tcqjonl1
-    setlocal spell complete=.,w,k,s 
+    nnoremap <expr> <buffer> <CR> filereadable(glob('~/.athome')) ? ":execute '!wn ' . expand('\<cword>') . ' -over'\<CR>" : '\<CR>'
+    setlocal conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1
+    setlocal spell complete=.,w,k,s,k~/Notes/**.md 
     if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
         TableModeEnable
     endif
+    for d in  split(glob("~/Notes/**.md"))
+        execute 'setl dictionary+=' . d
+    endfor
+    let b:vcm_tab_complete = 'dict'
     nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
-    nnoremap <buffer> <Leader>me :execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'<CR>
+    nnoremap <buffer> <expr> <Leader>me AtHome() && executable('preview-markdown.sh') ? ":execute '!preview-markdown.sh ' . expand('%:p')\<CR>" : ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown-github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" 
     nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
 endfunction
 " }}}
@@ -376,9 +420,10 @@ aug VIMENTER
     au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
     " on enter open the man page under cursor
     au FileType man call ManInit()
+    au FileType sh call ShInit()
+    au FileType help call HelpInit()
     au FileType gitcommit call GitcommitInit()
-    " make it more like less
-    au FileType help,man nnoremap <buffer> q :bd!<CR> | nnoremap <buffer> d <C-d> | nnoremap <buffer> u <C-u> 
+    au FileType python call PythonInit()
     au FileType qf call QfInit()
 aug END
 " }}}
@@ -453,17 +498,17 @@ command! FZFRecFilesHome execute 'lcd ' . glob("~") | call fzf#run(fzf#wrap({
 " }}}
 
 " KEYBINDINGS {{{
-inoremap <expr> <Tab> pumvisible() ? "\<C-y>\<Space>" : "\<Tab>"
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-nnoremap <Leader>mS :Neomake<CR>:SyntasticCheck<CR>
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+nnoremap <expr> <Leader>mS has('nvim') ? ":Neomake\<CR>": ":SyntasticCheck\<CR>"
 
 " Move by screen lines instead of file lines.
 " http://vim.wikia.com/wiki/Moving_by_screen_lines_instead_of_file_lines
 noremap k gk
 noremap j gj
 
-nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendLine\<CR>" : "\<M-CR>"
-vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
+nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 && has('nvim') ? ":TREPLSendLine\<CR>" : "\<M-CR>"
+vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 && has('nvim') ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
 
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
@@ -498,7 +543,7 @@ nnoremap <C-v> :FZFFileAnchor<CR>
 nnoremap <leader>fh :FZFRecFilesHome<CR>
 nnoremap <Leader>fr :FZFMru<CR>
 
-nnoremap <Leader>sg :execute 'Ggrep ' . expand('<cword>') . " * "<CR>
+nnoremap <Leader>sg :execute 'lgrep ' . expand('<cword>') . " * "<CR>
 nnoremap <Leader>sa :Ag!<CR>
 
 cno w!!<CR> %!sudo tee > /dev/null %<CR>

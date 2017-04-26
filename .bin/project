@@ -1,0 +1,464 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import argparse
+import os
+from typing import Any
+from pprint import pprint
+import sys
+import logging
+import subprocess
+from itertools import chain
+from faker import Faker
+
+fake = Faker()
+
+# TODO
+# --------------------
+# dry-run
+# automatically initialise in GitHub
+# print (using tree), the structure of the project
+# logging
+# ---------------------
+# long-term
+# ---------------------
+# read from a JSON file and recreate the project structure
+
+
+logger = logging.getLogger()
+
+def report(item: Any, length_of_var=True, type_of_var=True, pprint_var=True):
+    if pprint_var:
+        pprint(item)
+        if length_of_var:
+            try:
+                print("length : {}".format(len(item)))
+            except:  # throws an Exception if that item has no len
+                print("length : -- ")
+                if type_of_var:
+                    print("type : {}".format(type(item)))
+                    print("\n")
+
+
+###############################################################################
+# CONFIGURATION
+###############################################################################
+# NOTE:
+#
+# In genereal,
+# More specific settings will overwrite the more general.
+# Things specified as an argument in the
+# commmand line have the highest weighting.
+#
+# It doesn't make sense to have a global default for project_name so it is not
+# included in configuration.
+#
+# OPTIONS:
+#
+# "git" : "git" (initialise a git repo), "github"
+# (create this repo on GitHub, github implies git) or False
+#
+# "dirs" : [ "dir1",  "dir2",  "dir3", ... ]
+#
+# "files" : [ "file1",  "file2",  "file3", ... ]
+#
+# "license" : [one of these (stick to the same format because it won't work)]
+#
+# "apache-2", "artistic", "GNU-GPL", "GNU-LGPL-2", "BSD-2", "BSD-3", "EPL",
+# "GNU-AGPL-3", "GNU-FDL-1", "GNU-GPL-2", "GNU-GPL-3", "GNU-LGPL-3", "MIT",
+# "MPL-2", "unlicense"
+#
+# execute needs to look like this
+
+# list of lists ...
+# make sure you don't do anything dodgy
+# like bash style redirects because it won't work
+#
+#      "execute" = [ ["cat", "~/.bashrc"],
+#                    ["curl", "something.co.uk", "another-arg"],
+#                    ["nl", "main.py"],
+#                    ["echo", "hello"] ]
+#
+##############################################################################
+
+language_template = {
+    'python': {
+        'dirs': ['doc', 'test', 'utils'],
+        'files': ['main.py'],
+        'editor': ['nvim', 'main.py'],
+    },
+    'java': {
+        'files': ['Main.java'],
+        'editor': ['nvim', 'Main.java'],
+    },
+    'javascript': {
+        'dirs': ['photos', 'pictures', 'css', 'javascript', 'php'],
+        'files': ['index.html', 'sheets.css', 'script.js', 'script.php'],
+        'editor': ['nvim', 'script.js'],
+    },
+    'html': {
+        'dirs': ['photos', 'pictures', 'css', 'javascript', 'php'],
+        'files': ['index.html', 'sheets.css', 'script.js', 'script.php'],
+        'editor': ['nvim', 'index.html'],
+    },
+    'php': {
+        'files': ['index.html', 'script.php'],
+    },
+    'bash': {
+        'files': ['script.sh'],
+        'editor': ['nvim', 'script.sh'],
+    },
+    '*': {                           # defaults
+        'dirs': ['doc', 'utils'],
+        'files': [],
+        'execute': [],
+        'language': 'python',
+        'readme': "markdown",
+        'git': 'git',
+        'license': 'BSD-3',
+        'gitignore': True,
+        'editor':   # this IS a list with args to be passed to the EDITOR
+        ['${EDITOR}' if bool(os.path.expandvars("${EDITOR}")) else False],
+        'verbosity': 0,
+        'location': '~/Projects'
+    }
+}
+
+languages = [language for language in language_template if language != "*"]
+
+readme_format = ['markdown', 'rst', 'asciidoc', 'textile']
+
+licenses = [ "apache-2", "artistic", "GNU-GPL", "MPL-2",
+            "GNU-AGPL-3", "GNU-FDL-1", "GNU-GPL-2",
+            "GNU-LGPL-2", "BSD-2", "BSD-3", "EPL",
+            "GNU-GPL-3", "GNU-LGPL-3", "MIT",
+            "unlicense"]
+
+parser = argparse.ArgumentParser(
+    prog="project",
+    description="\nQuickly initialise new projects using sane \
+    defaults without having to go through each command one by one.\n",
+    epilog="\nThanks for using the software.\n")
+
+parser.add_argument(
+    "-v",
+    "--verbosity",
+    help="increase output verbosity",
+    action="count",
+    default=language_template['*']['verbosity'])
+
+parser.add_argument(
+    "language",
+    help="The language you want to work with. [DEFAULT is {}]"
+    .format(language_template['*']['language']),
+    nargs='?',
+    default=language_template['*']['language'],
+    choices=languages)
+
+parser.add_argument(
+    "--name",
+    help="The name of your new project. \
+    [DEFAULT is random catchy phrase eg {}]".
+    format(fake.catch_phrase().replace(" ", "")),  # remove whitespace
+    default=fake.catch_phrase().replace(" ", ""),  # remove whitespace
+    nargs='?')
+
+git_init_group = parser.add_mutually_exclusive_group()
+
+git_init_group.add_argument(
+    "--no-git",
+    help="If you want to initialise git in the project root. [DEFAULT]",
+    dest='git',
+    action="store_false",
+    default=language_template['*']['git'])
+
+git_init_group.add_argument(
+    "-g", "--git", "--init-repo",
+    help="If you want to initialise git in the project root. [DEFAULT]",
+    dest='git',
+    const="git",
+    action="store_const",
+    default=language_template['*']['git'])
+
+git_init_group.add_argument(
+    "--github", "--hub", "--github-setup-repo",
+    help="Initlias a git repo AND create it on GitHub.\
+    Note: This requires 'hub'.",
+    dest='git',
+    action="store_const",
+    const="github",
+    default=language_template['*']['git'])
+
+parser.add_argument(
+    "-l", "--location", "--dest", "--loc",
+    help="Where you want to set up a project. [DEFAULT is ~/Projects]",
+    nargs='?',
+    metavar='DIR',
+    default=language_template['*']['location'])
+
+readme_group = parser.add_mutually_exclusive_group()
+
+readme_group.add_argument(
+    "-r", "--readme",
+    help="the format of the README file at project root. \
+    [DEFAULT is markdown]",
+    choices=readme_format,
+    nargs="?",
+    metavar='FORMAT',
+    default="markdown")
+
+readme_group.add_argument(
+    "--no-readme",
+    help="You don't want a README.md file.",
+    dest="readme",
+    default=language_template['*']['readme'],
+    action="store_false")
+
+license_group = parser.add_mutually_exclusive_group()
+
+license_group.add_argument(
+    "--license",
+    help="License under which the project is to be released. \
+    [DEFAULT is BSD-3]",
+    choices=licenses,
+    default=language_template['*']['license'])
+
+license_group.add_argument(
+    "--no-license",
+    help="You don't want a license.",
+    dest="license",
+    action="store_false",
+    default=language_template['*']['license']),
+
+gitignore_group = parser.add_mutually_exclusive_group()
+
+gitignore_group.add_argument(
+    "--gitignore",
+    help="include a .gitignore file",
+    action="store_true",
+    default=language_template['*']['gitignore'])
+
+gitignore_group.add_argument(
+    "--no-gitignore",
+    help="You don't want a .gitignore file at the root of your project.",
+    dest="gitignore",
+    action="store_false",
+    default=language_template['*']['gitignore']),
+
+dirs = parser.add_mutually_exclusive_group()
+
+dirs.add_argument(
+    "-d", "--dirs",
+    help="Dirs in the project. [DEFAULT is: {}]".format(language_template['*']['dirs']),
+    nargs='*',
+    metavar='DIR',
+    default=language_template['*']['dirs'])
+
+dirs.add_argument(
+    "--no-dirs",
+    help="You don't want any dirs created in the project.\nThis \
+    will overwrite other configuration.",
+    dest="dirs",
+    default=dirs,
+    action="store_false")
+
+files_group = parser.add_mutually_exclusive_group()
+
+files_group.add_argument(
+    "-f", "--files",
+    nargs="*",
+    help="Files in the project \
+    [DEFAULT is: {}]".format(language_template['*']['files']),
+    metavar='FILE',
+    default=language_template['*']['files'])
+
+files_group.add_argument(
+    "--no-files",
+    help="You don't want any files created in the project.\nThis \
+    will overwrite other configuration.",
+    action="store_false",
+    dest='files',
+    default=language_template['*']['files'])
+
+open_editor_group = parser.add_mutually_exclusive_group()
+
+open_editor_group.add_argument(
+    "-e", "--editor",
+    help="You want to automatically open $EDITOR with specified args and files. \
+    [EDITOR is {}] [they will be passed as args to $EDITOR]".
+    format(language_template['*']['editor']),
+    nargs="*",
+    default=language_template['*']['editor'],
+    dest='editor')
+
+open_editor_group.add_argument(
+    "--no-editor",
+    help="You don't want to automatically open $EDITOR",
+    action="store_false",
+    dest='editor')
+
+args = parser.parse_args()
+
+print('args')
+report(args)
+
+def get_fallback(option: str) -> str or list or bool:
+    """1. try to retrieve from the args
+       2. try to fall back on language specific configuration based on
+          selected [or default] language
+       3. fall back on global defaults / configuration (in the "*" section)
+       4. if a value hasn't been found return false, turn off the option
+       """
+    try:
+        if bool(vars(args)[option]):
+            return vars(args)[option]
+        else:  # if not args[option]
+            if bool(language_template[args.language][option]):
+                return language_template[args.language][option]
+            else:  # if not language_template[args.language]
+                if bool(language_template['*'][option]):
+                    return language_template['*'][option]
+                else:
+                    return False
+    except:
+        return False
+
+if  get_fallback('verbosity') and get_fallback('verbosity') > 0:
+    logging.basicConfig(filename='pylog.log',
+        level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
+
+
+logger.info('Assersions section.')
+
+# necessary to make things work
+assert bool(get_fallback('location')), \
+    'location is not defines.\nget_fallback \
+    returned {}'.get_fallback('location')
+
+location = os.path.expandvars(
+    os.path.expanduser(get_fallback('location')))
+
+subprocess.run(['mkdir', '-p', location])  # make in case it doesn't exist
+logger.info('running mkdir -p on location'.format(location))
+
+print('location')
+report(location)
+
+assert bool(get_fallback('language')), \
+    'language is not defines.\
+    \nget_fallback returned {}'.get_fallback('language')
+
+language = get_fallback('language')
+
+print('language')
+report(language)
+
+assert bool(get_fallback('name')), \
+    'name is not defines.\nget_fallback \
+    returned {}'.get_fallback('name')
+
+name = get_fallback('name')
+
+
+print('name')
+report(name)
+
+print('language_template')
+report(language_template)
+
+
+# git
+if get_fallback('git'):  # if git or github
+    os.chdir(location)
+    logger.info('Initialising a git repo')
+    subprocess.run(['git', 'init', name])
+    os.chdir(os.path.join(location, name))
+    logger.info("current dir : git section : {}".format(os.path.abspath(os.path.curdir)))
+    logger.info('Chaning dir to project root.')
+    if get_fallback('git') == "github":
+        logger.info('Using hub to create a GitHub repo.')
+        subprocess.run(['hub', "create", name])
+else:  # if non-git
+    logger.info('You didn\'t want a git repo, skipping.')
+    os.chdir(location)
+    os.mkdir(name)
+    os.chdir(os.path.join(location, name))
+    logger.info("current dir : git section : {}".format(os.path.abspath(os.path.curdir)))
+    logger.info('Chaning dir to project root.')
+
+# dirs
+if get_fallback('dirs'):
+    logger.info('Making dirs')
+    for d in get_fallback('dirs'):
+        os.mkdir(os.path.expandvars(os.path.expanduser(d)))
+
+# files
+if get_fallback('files'):
+    logger.info('Making files')
+    for f in get_fallback('files'):
+        os.mknod(os.path.expandvars(os.path.expanduser(f)))
+
+# execute
+if get_fallback('execute'):
+    logger.info('Executing commands.')
+    logger.info('Chaning dir to project root.')
+    os.chdir(os.path.join(location, name))
+    logger.info("current dir : execute section : {}".format(os.path.abspath(os.path.curdir)))
+    for e in get_fallback('execute'):
+        subprocess.run(e, stdout=sys.stdout, stdin=sys.stdin)
+
+# license
+if get_fallback('license'):
+    logger.info('Licensing the project.')
+    logger.info('Chaning dir to project root.')
+    os.chdir(os.path.join(location, name))
+    logger.info("current dir : license section : {}".format(os.path.abspath(os.path.curdir)))
+    logger.info('Running curl.')
+    subprocess.run(
+        ["curl", "-fLo", "LICENSE",
+         "https://raw.githubusercontent.com/nl253/ProjectGenerator/master/licenses/" + get_fallback('license') + ".md"],
+        stdout=sys.stdout, stdin=sys.stdin)
+
+# gitignore
+if get_fallback('gitignore'):
+    logger.info('Chaning dir to project root.')
+    os.chdir(os.path.join(location, name))
+    logger.info("current dir : gitignore section : {}".format(os.path.abspath(os.path.curdir)))
+    if language == "python":
+        subprocess.run([
+            "curl", "-fLo", ".gitignore",
+            "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore"])
+    elif language == "java":
+        subprocess.run([
+            "curl", "-fLo", ".gitignore",
+            "https://raw.githubusercontent.com/github/gitignore/master/Java.gitignore"
+        ])
+    elif language == "javascript":
+        pass
+    elif language == "php":
+        pass
+    elif language == "bash":
+        pass
+
+# files including README if not ""
+
+if get_fallback('readme'):  # deal with extensions
+    readme = "README."
+    if get_fallback('readme') is 'markdown':
+        readme += "md"
+    elif get_fallback('readme') is 'rst':
+        readme += "rst"
+    elif get_fallback('readme') is 'asciidoc':
+        readme += "txt"
+    elif get_fallback('readme') is 'textile':
+        readme += "textile"
+    os.chdir(os.path.join(location, name))
+    os.mknod(readme)
+
+if get_fallback('editor'):
+    logger.info('Chaning dir to project root.')
+    os.chdir(os.path.join(location, name))
+    logger.info("current dir : editor section : {}".format(os.path.abspath(os.path.curdir)))
+    subprocess.run(
+        [os.path.expandvars(os.path.expanduser(i))
+         for i in get_fallback('editor')])

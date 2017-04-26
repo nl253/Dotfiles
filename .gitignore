@@ -1,4 +1,5 @@
 ﻿*.bluej
+.athome
 .xiki/
 .config/hub
 .zsh/zsh-interactive-cd.plugin.zsh

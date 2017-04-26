@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# FUNCTION 
+# ----------------
+# `grep` recursively through all files in the cwd, and find a pattern in the lines.
+# the input will be passed on to `fzf` and on `enter` open in (on that specific line) in vim or neovim
+
+[[ ! -x /bin/nvim ]] && [[ ! -x /usr/bin/nvim ]]  && [[ ! -x /bin/vim ]]  && [[ ! -x /usr/bin/vim ]] && echo -e "$(basename $0) : You need vim or neovim for this script to work.\nAborting.\n" && exit 1
+
+format-handler() {
+        # take the input from fzf in the form FILENAME:LINENUMBER:TEXT
+        # open in vim on that lien number
+        [ $# = 0 ] && exit 1 # nothing is passed, exit
+        LINE="^.{10,}$" # if length is smaller than 10, then exit (false postive)
+        [[ ! $1 =~ $LINE ]] && exit 1
+        FILE=$(echo "$1" | grep -P -o "^\S+?(?<=:)" | sed -E "s/:$//") # isolate the file name
+        LINE=$(echo "$1" | grep -P -o "^\S+:\d+(?=:)" | sed -E "s/^\S+?://") # isolate the line number
+        $EDITOR "+${LINE}" "$FILE" # pass it to vim to be opened on the specified line
+}
+
+# -P = perl regexp
+# -r = recursive [from the cwd]
+# -I = omit binary files
+# -H = with a header that says what file it is
+# --color=never speeds up prining and fzf doesn't color output anyway
+# -n = line number (used later as an anchor)
+# --exclude-from is a reference to a file with a list of glob file patterns to ignore. 
+# This will first check if a .grepignore is in the CWD if there isn't then it defaults the to one in ~/.grepignore 
+
+generator() {
+        [ $# = 0 ] && exit 1
+        FLAG="^-\w"
+        WORD="^\w+"
+        [[ $1 =~ $FLAG ]] && echo -e "Please specify a pattern." && exit 1
+        [ -f .grepignore ] && GREPIGNORE=".grepignore" || GREPIGNORE="${HOME}/.grepignore"
+        
+        if [[ $1 =~ $WORD ]] ; then 
+                QUERY="$1" # if an argument is specified, then let it be the query
+        else
+                QUERY="" # else print everything (passing an empyt scring as a pattern causes all to match)
+        fi
+        grep -rPIHn --line-buffered --exclude-from="${GREPIGNORE}" --color=never --exclude-dir='*jsbeautify*' --exclude-dir='libre*' --exclude-dir='*jsbeautify' --exclude-dir='*js-beautify' --exclude-dir='*js-beautify*' --exclude-dir='.alacritty' --exclude-dir='.[cC]ache' --exclude-dir='dicts' --exclude-dir='elpa' --exclude-dir='node_modules' --exclude-dir='rustup' --exclude-dir='.rustup' --exclude-dir='.git' --exclude-dir='.npm' --exclude-dir='composer' --exclude-dir='font' --exclude-dir='timeshift' --exclude-dir='Trash' --exclude-dir='*chrome*' --exclude-dir='[Cc]ache' --exclude-dir='.gem' --exclude-dir='.pyenv' --exclude-dir='site-packages' --exclude-dir=".cabal" --exclude-dir='.cabal' "${QUERY}" 2>/dev/null
+}
+
+# -q = start fzf with this query 
+
+format-handler $(generator "$1" | fzf -q "$1")
+

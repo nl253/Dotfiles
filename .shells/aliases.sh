@@ -44,10 +44,10 @@ alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30' 
 alias logout="pkill -KILL -u "
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 alias note=note.sh       # refer to ~/Scripts/note.sh
-alias project=project.sh # refer to ~/Scripts/project.sh
 if ! $(in-path vit); then 
     alias vit="\$EDITOR -c 'TW'"
 fi
+alias libreoffice="libreoffice --norestore"
 # }}}
 
 # keymap {{{

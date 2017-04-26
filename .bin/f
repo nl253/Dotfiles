@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#
+# `fuzzy` file finder [although partial string matcher is more accurate]
+#  
+#  FUNCTION : find files quickly
+#
+# ------------------------------------------
+# USAGE 
+#                                                # lists all files in the CWD,                   
+# find-approx.sh [OPTIONAL PATTERN1, PAT2 ... ]  # it won't recurse unless you specify a pattern 
+#                                                # (or a few patterns)                           
+#                                               
+# find-approx.sh                                 # quick listing of FILES in the CWD            
+# -------------------------------------------
+# 
+#  NOTE: even if you don't have fzf it will still work, 
+#        it will be very dull though
+#
+# -------------------------------------------
+# - ignores anything to do with :
+# `git` `chrome` `timeshift` `trash` `font` `site-packages` (that's python) `cache`
+# 
+# - also ignores dirs taken by commonly used package managers : 
+# rustup elpa npm gem pip composer cabal 
+#
+# - ignores the following extensions 
+# xz class swp ri out pyc obj so bluej png jpeg jpg ctxt out 
+#
+# - avoids too long string ie, things far away and potentially cache dirs 
+#
+# - avoids strings that end with a series of unmbers only
+#
+# - avoids vim backup files that end with `~`
+#
+# - sed removes the leading "./" from GNU find as well as $HOME aka ~ when run from $HOME
+# -------------------------------------------
+#
+# NOTE: Beacuse I like descriptive names, the file name is too long to type in the command line 
+#       I have it aliased to f for quick file listing and finding
+#
+find-approx() { 
+
+        [[ $# == 0 ]] && find . -maxdepth 1 -type f | sed -E "s/^\.\///" | sort # if no args provided, print a sorted list of files in the cwd
+
+        for i in "$@"; do # iterate over provided arguments 
+                find . -regextype posix-extended -iregex ".*${i}.*" -readable -type f 2>/dev/null \
+                        | grep -E -v "(/\d{4,})|(/\S{50,})|~$" \
+                        | grep -E -v "(\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" \
+                        | grep -v "%" \
+                        | grep -E -v ".*(\.git\/)|(elpa)|(node_modules)|(rustup)|(\.gem)|(\.pyenv)|(font)|(ideaic)|(composer)|(npm)|(cabal)|(site-packages)|(chrome)|(cache)|(trash)|(timeshift).*" \
+                        | sort | sed -E "s/^\.\///"
+        done
+}
+
+LINE="^\S+"
+
+if [[ -x $(which fzf) ]]; then
+        if [[ -v TMUX ]]; then
+                X=$(find-approx "$@" | fzf-tmux -r "35%")
+        else
+                X=$(find-approx "$@" | fzf)
+        fi
+        [[ $X =~ $LINE ]] && $EDITOR "$X" || exit 1
+else
+        find-approx "$@" 
+fi
