@@ -138,6 +138,6 @@ fi
 
 # }}}
 
-setxkbmap -option                           
+setxkbmap -layout gb  
 
 #vim:set foldmethod=marker:set foldlevel=0 

@@ -1,0 +1,689 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import argparse
+import os
+from typing import Any
+from pprint import pprint
+import sys
+import logging
+import subprocess
+from fuzzywuzzy.fuzz import ratio
+import re
+import glob
+
+# TODO
+#
+# A)
+# agrep (a non-python dependency ... )
+# it might be safer to add fuzzy finding for file finding as well as querying ?
+# although it might be very difficult to make it look and work reasonable,
+# ideally Unix dependencies such as grep should be avoided,
+#
+# B)
+# list with different formats, add config options when you are certain this
+# design patter will work,
+#
+# C)
+# listing, querying and finding notes is limited by the extensions you list **.md
+# etc. FIX IT to work for all readable files, including notes that have no
+# extension
+#
+# D) add a universal detailed option for all listing and querying, make it
+# reusable, based on file name get details such as size, access time, tags,
+# keywords, themes, maybe sentiment score...
+#
+# LOOK AT TEXTBLOB API (if it changed or improved)
+#
+# D)
+## Write your own debugging tools similar to the `report` method
+#
+# E)
+# At the end add things like tags using textblob and possibly nltk if it's not
+# too complicated,
+#
+# F) TEMPLATES: make template files
+#
+# G) DO FZF AT THE VERY END !!! because it all needs to work without it, unlike
+# coreutills this won't be on every system
+#
+#
+
+# ##########
+# Debugging
+# ##########
+
+
+# logging.basicConfig(
+    # level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
+
+logger = logging.getLogger()
+
+####################################################
+
+# THE LOGIC
+# ==========
+#
+# The choosing of a specific mode from
+# {create,find,query,list} stores that mode
+# as a string in args
+#
+# It is then checked for and appropriate functions are called
+# and variables set.
+#
+#       I call : create_handler()
+#                find_handler()
+#                query_handler()
+#                list_handler()
+#
+#       and they produce the outcome.
+#
+#  To check that there is a value a function verify_set() is called to check if
+#  it is, if not, that function will be turned off.
+#
+#  Later, if a value is detected, I get variables through a mediator-function
+#  that checks in 3 locations:
+#
+#   In the case of CREATE
+#
+#       1. Agrs from the command line (highest weighting)
+#       2. Defaults specified in configuration for this specific note format
+#       3. Defaults specified in create / default
+#
+#   The rest follows a similar pattern.
+#
+# The `parsers` variable is basicallly a dict of parsers
+# this is a way of dealing with lack of namespaces in python
+# (as far as I am aware)
+#
+# `groups` is another dict that helps me to deal with nameing.
+#
+# ```python
+# parsers = {
+#   'main': ArgumentParser(),
+#   'subparsers: main.add_subparsers(),
+#   'create': subparsers.add_parser('create'),
+#   'query': subparsers.add_parser('query'),
+#   'list': subparsers.add_parser('list'),
+#   'find': subparsers.add_parser('find')
+# }
+# ```
+#
+# naming of `groups` follows this convention:
+#
+#         ```python
+#         groups['create']['name|format']
+#         groups['find']['dirs|all']
+#         groups['list']['tree|detailed|concise']
+#         ```
+#
+# A view on `groups`
+#
+# ```python
+# groups = {
+#   'create': {
+#       'name|format': {}
+#       'location|subject': {}
+#   },
+#   'query': {
+#       'name|format': {}
+#       'location|subject': {}
+#   },
+#   'list': {
+#       'name|format': {}
+#       'location|subject': {}
+#   },
+#   'find': {
+#       'name|format': {}
+#       'location|subject': {}
+#   },
+#   '*' : {
+#       'name|format': {}
+#       'location|subject': {}
+#   }
+# }
+# ```
+
+######################
+# Configuration Guide
+######################
+#
+# Options:
+#
+# ## create
+#
+#     default:
+#
+#       - --format : choose from {markdown,rst,asciidoc,textile}
+#
+#         [DEFAULT is markdown]
+#
+#         ALIASES  -f
+#
+#       - --name : the name of new notes to make. Useful, because even if you
+#       specify the same not name, your editor will simply reopen that document
+#       each time you call for a new note, (good for having a global todo-list).
+#
+#         [DEFAULT is undefined]
+#
+#         ALIASES  -n
+#
+#       - --template : Specify a file to copy to every new note. Paritcularly
+#       useful when defining that separately for each format. [DEFAULT is False]
+#
+#       - --location : the global location of all notes
+#         [DEFAULT is ~/Notes]
+#
+# => format-specific:
+#   - template :
+#                either specify True to use a deafult template, [bool]
+#                or
+#                specify a file to use it as a template [str]
+#
+#     It will be copied to new notes.
+#
+#   - location : the format-specific location for notes [str]
+#
+#     #synonyms:
+#     detailed == long == l [keywords, line count, date, location etc]
+#     regular == normal == concise == r [title, date]
+#     tree == structure == hierarchy == t [title, location(dir)]
+#
+#   - name : the default name of the note [str]
+#
+#          eg note.md
+#
+# --------------------------------------------------------------
+#
+# ## find [SEARCH TERM 1] [[SEARCH TERM 2] ... ]
+#
+#    NOTE based on titles, not content.
+#
+#     --fzf : [True|False] [bool]
+#     --no-fzf : [True|False [bool]
+#
+#     --all : search in the dirs recursively starting from
+#             the default note location for new note creation
+#     --dirs : [DIR1] [[DIR2] [DIR3] ... ] [list[str]]
+#              list of dirs to scan when looking for notes
+#
+#     --fuzzy : [True|False] [bool]
+#               If you want fuzzy finding of notes
+#     --exact, --no-fuzzy : [True|False] [bool]
+#
+# --------------------------------------------------------------
+#
+# ## query
+#
+#       recursively grep through note content to match queries
+#
+#   --dirs, -d : [DIR1] [[DIR2] [DIR3] ... ] [list[str]]
+#                list of of dirs to look for when grepping
+#   --all      : search in the dirs recursively starting from
+#                the default note location for new note creation
+#
+# --------------------------------------------------------------
+#
+# ## LIST
+#
+#   - format : the usual lising format of notes you want [str]
+#
+#           choose 1 from {detailed,regular,tree} [str]
+#
+# --------------------------------------------------------------
+
+# Set variables
+parsers = {
+    'main': {},
+    'create': {},
+    'list': {},
+    'find': {},
+    'query': {},
+    '*': {}
+}
+
+groups = {
+    'main': {},
+    'create': {},
+    'list': {},
+    'find': {},
+    'query': {},
+    '*': {}
+}
+
+configuration = {
+    'create': {
+        'markdown': {
+            'template': '~/.bashrc',
+            'name': 'note.md',
+        },
+        'rst': {
+            'name': 'note.rst',
+        },
+        'asciidoc': {
+            'name': 'note.txt',
+        },
+        'textile': {
+            'name': 'note.textile',
+        },
+        'default': {
+            'name': 'todo.md',
+            'template': False,
+        },
+    },
+    'find': {
+        'fzf': False,
+        'fuzzy': True,
+    },
+    'list': {
+        'format': 'concise',
+        'basename': False,
+        'fzf': False,
+    },
+    'query': {
+        'format': 'lines',
+        'fzf': False,
+        'fuzzy': False,
+    },
+    '*': {
+        'todo': '~/Notes/todo.md',
+        'location': '~/Notes',
+    }
+}
+
+parsers['main'] = argparse.ArgumentParser(
+    prog="note",
+    description="Note management tool. \n\
+    Create, manage, search for, query and organize your notes.",
+    epilog="\nThanks for using the software.\n")
+
+parsers['subparsers'] = parsers['main'].add_subparsers(dest='mode')
+
+###########################
+# TODO
+###########################
+
+parsers['todo'] = parsers['subparsers'].add_parser('todo')
+
+###########################
+# CREATE
+###########################
+
+parsers['create'] = parsers['subparsers'].add_parser('create')
+
+parsers['create'].add_argument(
+    "name",
+    help="The name of your new note. \n\
+    The app will infer the format from extension.\n \
+    PLEASE provide it.",
+    metavar='NAME')
+
+groups['create']['template'] = parsers['create'].add_mutually_exclusive_group()
+
+groups['create']['template'].add_argument(
+    "-t",
+    "--template",
+    help="The template to use for your new note.\n\
+    [DEFAULT is %(default)s]",
+    metavar='ABS PATH TO TEMPLATE FILE',
+    default=configuration['create']['default']['template'],
+    nargs='?')
+
+groups['create']['template'].add_argument(
+    "--no-template",
+    dest='template',
+    help=
+    "You don't want a template as the basis for a new note [DEFAULT is %(default)s]",
+    default=not configuration['create']['default']['template'],
+    action='store_false')
+
+parsers['create'].add_argument(
+    "-s",
+    "--subject",
+    "--subdir",
+    dest='subject',
+    help="Subject of the note. NOTE it will create a subdir \
+    (with that subject's name) in the default note location",
+    nargs='?')
+
+###########################
+# FIND
+###########################
+
+parsers['find'] = parsers['subparsers'].add_parser('find')
+
+parsers['find'].add_argument(
+    "terms",
+    nargs='+',
+    metavar='TERM',
+    help="Search note titles for these terms.\n\
+    NOTE implements fuzzy finding.")
+
+groups['find']['fzf'] = parsers['find'].add_mutually_exclusive_group()
+
+groups['find']['fzf'].add_argument(
+    "--fzf",
+    action='store_true',
+    default=configuration['find']['fzf'],
+    help="If you want to filter the results with fzf. \
+    Note : you need it on your system . \
+    [DEFAULT is %(default)s]")
+
+groups['find']['fzf'].add_argument(
+    "--no-fzf",
+    action='store_true',
+    default=not configuration['find']['fzf'],
+    help="If you want to filter the results with fzf. \
+    Note : you need it on your system . \
+    [DEFAULT is %(default)s]")
+
+groups['find']['fuzzy'] = parsers['find'].add_mutually_exclusive_group()
+
+groups['find']['fuzzy'].add_argument(
+    "--fuzzy",
+    action='store_true',
+    default=configuration['find']['fuzzy'],
+    help="If you want to use fuzzy finding of notes (titles).\
+    [DEFAULT is %(default)s]")
+
+groups['find']['fuzzy'].add_argument(
+    "--no-fuzzy",
+    "--exact",
+    dest='fuzzy',
+    action='store_false',
+    default=not configuration['find']['fuzzy'],
+    help="If you want to use fuzzy finding of notes (titles).\
+    [DEFAULT is %(default)s]")
+
+###########################
+# LIST
+###########################
+
+parsers['list'] = parsers['subparsers'].add_parser('list')
+
+groups['list']['tree|detailed|concise'] = parsers[
+    'list'].add_mutually_exclusive_group()
+
+groups['list']['basename'] = parsers['list'].add_mutually_exclusive_group()
+
+groups['list']['basename'].add_argument(
+    '-b',
+    '--basename',
+    action='store_true',
+    dest='basename',
+    default=configuration['list']['basename'],
+    help='Tree format notes of listing')
+
+groups['list']['basename'].add_argument(
+    '-f',
+    '--fullname',
+    action='store_false',
+    dest='basename',
+    default=not configuration['list']['basename'],
+    help='Tree format notes of listing')
+
+groups['list']['tree|detailed|concise'].add_argument(
+    '-t',
+    '--tree',
+    '--structure',
+    '--hierarchy',
+    action='store_const',
+    const='tree',
+    dest='format',
+    default='concise',
+    help='Tree format notes of listing')
+
+groups['list']['tree|detailed|concise'].add_argument(
+    '-l',
+    '--long',
+    '--details',
+    '--detailed',
+    action='store_const',
+    const='detailed',
+    dest='format',
+    default='concise',
+    help='Long, detailed format of note listing\n [DEFAULT is %(default)s]')
+
+groups['list']['tree|detailed|concise'].add_argument(
+    '-c',
+    '--concise',
+    '-n',
+    '--normal',
+    '-r',
+    '--regular',
+    action='store_const',
+    const='concise',
+    default='concise',
+    dest='format',
+    help='Regular, concise format of listing notes.')
+
+###########################
+# QUERY
+###########################
+
+parsers['query'] = parsers['subparsers'].add_parser('query')
+
+parsers['query'].add_argument(
+    'terms',
+    nargs='+',
+    metavar='SEARCH TERM',
+    help='When querying the content of notes look for these strings.')
+
+groups['query']['lines|notes'] = parsers[
+    'query'].add_mutually_exclusive_group()
+
+groups['query']['lines|notes'].add_argument(
+    '-l',
+    '--lines',
+    action='store_const',
+    dest='format',
+    help='Standard grep behaviour, show matching lines.',
+    default=configuration['query']['format'],
+    const='lines')
+
+groups['query']['lines|notes'].add_argument(
+    '-n',
+    '--notes',
+    '--matching-notes',
+    '--matching-files',
+    default=configuration['query']['format'],
+    dest='format',
+    action='store_const',
+    help='Show notes with matches. [DEFAULT is %(default)s]',
+    const='notes')
+
+args = parsers['main'].parse_args()
+
+# ASSERTIONS
+
+# assert args.mode is not None and type(args.mode) is str, "args.mode checking failed"
+assert configuration['*']['location'] is not None and type(
+    configuration['*']
+    ['location']) is str, "default note location checking failed"
+
+# ##############################
+# Utils
+# ##############################
+
+
+def report(item: Any, length_of_var=True, type_of_var=True, pprint_var=True):
+    if pprint_var:
+        pprint(item)
+        if length_of_var:
+            try:
+                print("length : {}".format(len(item)))
+            except:  # throws an Exception if that item has no len
+                print("length : ??? ")
+                if type_of_var:
+                    try:
+                        print("type : {}".format(type(item)))
+                        print("\n")
+                    except:
+                        print("type : ??? ")
+                        print("\n")
+
+
+def infer_fromat() -> str:
+    """Only call when you know create has been chosen.
+    """
+    note_name = args.name
+    try:
+        if re.compile('.*\.md').fullmatch(note_name):
+            return 'markdown'
+        elif re.compile('.*\.rst').fullmatch(note_name):
+            return 'rst'
+        elif re.compile('.*\.txt').fullmatch(note_name):
+            return 'asciidoc'
+        elif re.compile('.*\.textile').fullmatch(note_name):
+            return 'textile'
+        else:
+            return 'other'
+    except:
+        logger.info(
+            'You are trying to infer the format of a note without it\'t name.')
+        raise Exception(
+            'You are trying to infer the format of a note without it\'t name. \
+            \n`create` wasn\'t chosen! The program is running in {} mode'
+            .format(args.mode))
+
+
+def exists(var_name: str) -> bool:
+    try:
+        exec(var_name)
+        if var_name is not None:
+            return True
+        else:
+            return False
+    except (KeyError, NameError, AttributeError):
+        return False
+
+
+def retrieve(option_name: str) -> Any:
+    """Safely get a value by passing it's name as a string.
+    If it doesn't exist, return None.
+    """
+    assert type(option_name) is not None, 'The argument passed \
+        to retrieve was `None`, this method requires a string.'
+    assert type(option_name) is str, 'The type of parameter passed \
+        to retrieve was {}, this function only accepts strings!'.format(
+        type(option_name))
+    logger.info('checking args.mode')
+    ####report(args.mode)
+    logger.info('checking argument in retrieve')
+    #report(option_name)
+    if exists("vars(args)['" + option_name + "']"):
+        return vars(args)[option_name]
+    elif exists("configuration[args.mode][infer_fromat()]['" + option_name +
+                "']"):
+        return configuration[args.mode][infer_fromat()][option_name]
+    elif exists("configuration[args.mode]['default']['" + option_name +
+                "']"):
+        return configuration[args.mode][infer_fromat()][option_name]
+    elif exists("configuration[args.mode]['" + option_name + "']"):
+        return configuration[args.mode][option_name]
+    elif exists("configuration['*']['" + option_name + "']"):
+        return configuration['*'][option_name]
+    else:
+        raise Exception(
+            'Option {} not found anywhere in the application. You might have removed it by accident.'.
+            format(option_name))
+
+
+def create_handler():
+    note_dir = os.path.abspath(
+        os.path.expandvars(os.path.expanduser(retrieve('location'))))
+    logger.info('note absolute dir : ' + note_dir)
+    note_name = retrieve('name')
+    logger.info('note name : ' + note_name)
+    if retrieve('subject'):
+        subject = retrieve('subject')
+        logger.info('subject : ' + subject)
+        note_path = os.path.join(note_dir, subject, note_name)
+    else:
+        note_path = os.path.join(note_dir, note_name)
+    logger.info('note absolute path : ' + note_path)
+    editor = os.path.expandvars('${EDITOR}')
+    logger.info('editor identified : ' + editor)
+    if not os.path.exists(note_path):
+        logger.info('the note doesn\'t exist yet, it will be created.')
+        # report(retrieve('template'))
+        if retrieve('template'):
+            template_path = os.path.abspath(
+                os.path.expandvars(os.path.expanduser(retrieve('template'))))
+            logger.info('template absolute path : ' + note_path)
+            assert os.path.exists(
+                template_path), 'Specified template doesn\' exist.'
+            logger.info('template file found in ' + template_path +
+                        " copying as a new file")
+            subprocess.run(['cp', template_path, note_path])
+        else:
+            subprocess.run([
+                'mkdir', '-p', os.path.dirname(note_path)
+            ])  # call for mkdir with a safe -p flag just in case
+            os.mknod(note_path)
+    logger.info('opening the note `' + note_name + '` in `' + editor + "`")
+    subprocess.run([editor, note_path])
+
+
+def list_handler():
+    location = os.path.abspath(
+        os.path.expanduser(os.path.expandvars(retrieve('location'))))
+    ##report(location)
+    subprocess.run([
+        'find', location, "-regextype", "posix-extended", '-iregex',
+        ".*(\.(md)|(rst)|(txt)|(textile))$"
+    ])
+
+
+def find_handler():
+    pass
+
+
+def query_handler():
+    location = os.path.abspath(
+        os.path.expanduser(os.path.expandvars(retrieve('location'))))
+    md_files = glob.glob(os.path.join(location, "**.md"), recursive=True)
+    rst_files = glob.glob(os.path.join(location, "**.rst"), recursive=True)
+    asciidoc_files = glob.glob(
+        os.path.join(location, "**.txt"), recursive=True)
+    textile_files = glob.glob(
+        os.path.join(location, "**.textile"), recursive=True)
+    notes = md_files + rst_files + asciidoc_files + textile_files
+    if retrieve('format') == 'lines':
+        flags = '-PIHn'
+    elif retrieve('format') == 'notes':
+        flags = '-l'
+    for term in args.terms:
+        subprocess.run([
+            'grep', flags, '--line-buffered', "--exclude-dir='.[cC]ache'",
+            "--exclude-dir='*dicts*'", "--exclude-dir='.git'",
+            "--exclude-dir='timeshift'", "--exclude-dir='Trash'",
+            "--exclude-dir='*chrome*'", "--exclude-dir='.pyenv'", term
+        ] + notes)
+
+
+def todo_handler():
+    #report(args)
+    # report(args.mode)
+    subprocess.run([os.path.expandvars('${EDITOR}'), retrieve('todo')])
+
+
+def main():
+    if args.mode == 'create':
+        create_handler()
+    elif args.mode == 'find':
+        find_handler()
+    elif args.mode == 'query':
+        query_handler()
+    elif args.mode == 'list':
+        list_handler()
+    elif args.mode is 'todo':
+        todo_handler()
+    elif args.mode is None:
+        #report(args.mode)
+        # report(args)
+        subprocess.run([os.path.abspath(sys.argv[0]), '-h'])
+
+
+if __name__ == "__main__":
+    main()

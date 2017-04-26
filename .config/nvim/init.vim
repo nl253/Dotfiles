@@ -516,6 +516,11 @@ noremap j gj
 nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 && has('nvim') ? ":TREPLSendLine\<CR>" : "\<M-CR>"
 vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 && has('nvim') ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
 
+"automatically enable spell if you attempt to use correction
+nnoremap <expr> z= &spell ? "z=" : ":setl spell\<CR>z="
+nnoremap <expr> [s &spell ? "[s" : ":setl spell\<CR>[s"
+nnoremap <expr> ]s &spell ? "]s" : ":setl spell\<CR>]s"
+
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>ga     :Git add %:p<Space>
