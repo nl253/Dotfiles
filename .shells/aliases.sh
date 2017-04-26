@@ -7,12 +7,12 @@
 # UTILS {{{
 # checks if an executable is in $PATH
 in-path() {
-    for i in $(echo "$PATH" | sed "s/:/\n/g"); do
-        if [ -x "$i/$1" ]; then
-            return 0
-        fi
-    done
-    return 1
+for i in $(echo "$PATH" | sed "s/:/\n/g"); do
+    if [ -x "$i/$1" ]; then
+        return 0
+    fi
+done
+return 1
 }
 # }}}
 
@@ -44,18 +44,32 @@ alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30' 
 alias logout="pkill -KILL -u "
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 alias note=note.sh       # refer to ~/Scripts/note.sh
-if ! $(in-path vit); then 
+function pandoc(){
+    if $(in-path pandoc) ; then 
+        if [ $# = 1 ]; then
+            pandoc -f html -t markdown_github --smart --standalone --ascii "$1"
+        else
+            command pandoc "$@"
+        fi
+    else
+        echo "pandoc not on system." && return 0
+    fi
+}
+if ! $(in-path vit); then
     alias vit="\$EDITOR -c 'TW'"
 fi
-alias libreoffice="libreoffice --norestore"
+
+if $(in-path libreoffice); then
+    alias libreoffice="libreoffice --norestore"
+fi
 # }}}
 
 # keymap {{{
- if $(in-path xmodmap); then
-     alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
-     alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
- fi
- $(in-path setxkbmap) && alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
+if $(in-path xmodmap); then
+    alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
+    alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
+fi
+$(in-path setxkbmap) && alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
 # }}}
 
 # dirs and files {{{
@@ -73,7 +87,7 @@ alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                  
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                                                        # list recursively just dirs
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                                       # list recursively just files
 # NOTE: with this one you don't wanna misspell, better not write then write wrong
-# f [filename] # will search recursively using dense regexp to ensure quality, slow 
+# f [filename] # will search recursively using dense regexp to ensure quality, slow
 alias f=find-approx.sh
 # refer to ~/Scripts/fzf-filtered-grep.sh
 $(in-path fzf) && alias gr=fzf-filtered-grep.sh
@@ -93,7 +107,7 @@ $(in-path ag) && alias ag='ag --hidden --pager="less -MIRFX"' # search with dotf
 alias http-server="python3 -m http.server" # open using 0.0.0.0:{PORT}
 # mount a remote hard-drive
 $(in-path sshfs) && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor"
-# set up logging in ~/Downloads/Torrents/aria2c.log 
+# set up logging in ~/Downloads/Torrents/aria2c.log
 # and a default location for download of Torrents in ~/Downloads/Torrents/
 $(in-path aria2c) && alias aria2c="mkdir -p ${HOME}/Downloads/Torrents/ ; touch ${HOME}/Downloads/Torrents/aria2c.log ; aria2c --continue --dir=${HOME}/Downloads/Torrents --log=${HOME}/Downloads/Torrents/aria2c.log"
 if $(in-path rsync); then
@@ -121,7 +135,7 @@ fi # }}}
 
 # git {{{
 # ------------------------
-# REQUIRES :: git hub 
+# REQUIRES :: git hub
 # ------------------------
 if $(in-path git); then
     alias todo="git grep -n --word-regexp --break --heading TODO" # look for TODOs in the current repo

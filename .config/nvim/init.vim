@@ -21,7 +21,7 @@ endfunction
 set ignorecase smartcase foldmethod=marker autochdir 
 set sessionoptions+=resize sessionoptions-=blank 
 set completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
-set mouse= complete=.,w,t noswapfile mps+=<:> 
+set mouse= complete=.,w,t noswapfile mps+=<:> pumheight=12
 set sessionoptions-=options bufhidden=hide wildignorecase
 set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1
 set autoread fileignorecase hidden clipboard=unnamed,unnamedplus
@@ -94,10 +94,11 @@ let g:session_autosave_silent = 1
 let g:session_autosave_to = 'default'
 let g:session_autosave_periodic = 3
 let g:session_lock_enabled = 0
-let g:session_autoload = 'yes'
+let g:session_autoload = 'no'
 let g:session_default_to_last = 1
-let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff', '&spell', '&wrap',
-            \'&scrollbind', '&number', '&relativenumber', '&foldmarker', '&background']
+let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff', 
+            \'&spell', '&wrap', '&scrollbind', '&number', 
+            \'&relativenumber', '&foldmarker', '&background']
 
 if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let g:session_directory = '~/.vim/session' | endif
 
@@ -316,6 +317,13 @@ function! Init()
     if index(g:MARKUP, &filetype) < 0 
         setl nospell complete=.,w,t, 
     endif
+    " if completion / omnifunction is not provided fall back on default 
+    if exists("+omnifunc") && &omnifunc == "" 
+        setlocal omnifunc=syntaxcomplete#Complete 
+    endif
+    if exists("+completefunc") && &completefunc == "" 
+        setlocal completefunc=syntaxcomplete#Complete 
+    endif
 endfunction
 " }}}
 
@@ -341,11 +349,8 @@ endfunction
 " ShInit() {{{
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
-    setl wrap complete=.,w,t,k~/Scripts/**.sh
-    for d in  split(glob("~/Scripts/**.sh"))
-        execute 'setl dictionary+=' . d
-    endfor
-    let b:vcm_tab_complete = 'dict'
+    setl wrap complete=.,w,t,k~/Scripts/**.sh,k~/Projects/**.sh
+    let b:vcm_tab_complete = 'user'
 endfunction
 " }}}
 
@@ -401,15 +406,13 @@ endfunction
 "
 " AUTOCOMMANDS {{{
 aug VIMENTER
-    " if completion / omnifunction is not provided fall back on default 
-    au FileType * if exists("+omnifunc") && &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
-    au FileType * if exists("+completefunc") && &completefunc == "" | setlocal completefunc=syntaxcomplete#Complete | endif
     " go back to where you left off
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
     " automatically change dir to the file you are editing
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
+    au BufEnter * if &filetype == "" | setl ft=markdown | endif
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
@@ -449,6 +452,7 @@ au! FileType sql,mysql execute 'setlocal dictionary=' . g:DICTDIR . 'mysql.txt'
 
 colorscheme antares
 
+" COMMANDS {{{
 " markup conversion, recommended {{{
 if executable('pandoc')
     command! TOman execute '!pandoc -s -o ' expand('%:p:r') . '.1  -t man ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.1'
@@ -469,6 +473,8 @@ if executable('dos2unix')
 endif
 command! DeleteEmptyLines execute 'g/^\s*$/d'
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
+
+" }}}
 
 " FZF  {{{
 let g:PREVIEW = ' --preview "head -n 20 {} " '
