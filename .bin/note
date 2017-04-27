@@ -8,33 +8,69 @@ from pprint import pprint
 import sys
 import logging
 import subprocess
-from fuzzywuzzy.fuzz import ratio
+import shlex
 import re
 import glob
-import shlex
-
 from prompt_toolkit import prompt
 from prompt_toolkit.contrib.completers import WordCompleter
 
+def report(item: Any, name_of_var=None, print_cwd=False, length_of_var=True, type_of_var=True, pprint_var=True):
+    if print_cwd:
+        print("PWD : " + os.getcwd())
+    if pprint_var:
+        pprint(item)
+    if length_of_var:
+        try:
+            print("LENGTH : {}".format(len(item)))
+        except:  # throws an Exception if that item has no len
+            print("LENGTH : ??? ")
+    if type_of_var:
+        try:
+            print("TYPE : {}".format(type(item)))
+            print("\n")
+        except:
+            print("TYPE : ??? ")
+            print("\n")
+    if type(name_of_var) is str and len(name_of_var) > 0:
+        print(name_of_var)
 
+
+logging.basicConfig(
+    level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
+
+logger = logging.getLogger()
+
+def list_notes():
+    # extension_whitelist = ['md', 'txt', 'textile', 'rst', 'html', 'tex']
+    os.chdir(os.path.abspath(os.path.expanduser('~/Notes')))
+    all_files = glob.glob(os.path.join('.', '**'), recursive=True)
+    filtered = filter(
+        lambda x: os.path.isfile(x) and re.
+        compile('(\.(md)|(tex)|(txt)|(org)|(textile)|(rst)|(html))$').search(x),
+        all_files)
+    as_list = list(filtered)
+    return [re.compile('^\./').sub("", i) for i in as_list]
+
+
+# Set variables
+parsers = {
+    'main': {},
+    'edit': {},
+    'list': {},
+    'query': {},
+}
+
+groups = {
+    'main': {},
+    'edit': {},
+    'list': {},
+    'query': {},
+}
 
 
 # TODO
-#
-# A)
-# agrep (a non-python dependency ... )
-# it might be safer to add fuzzy finding for file finding as well as querying ?
-# although it might be very difficult to make it look and work reasonable,
-# ideally Unix dependencies such as grep should be avoided,
-#
-# B)
-# list with different formats, add config options when you are certain this
-# design patter will work,
-#
-# C)
-# listing, querying and finding notes is limited by the extensions you list **.md
-# etc. FIX IT to work for all readable files, including notes that have no
-# extension
+# ----
+#  make it swap ansers if a command has already been provided.
 #
 # D) add a universal detailed option for all listing and querying, make it
 # reusable, based on file name get details such as size, access time, tags,
@@ -51,20 +87,6 @@ from prompt_toolkit.contrib.completers import WordCompleter
 #
 # F) TEMPLATES: make template files
 #
-# G) DO FZF AT THE VERY END !!! because it all needs to work without it, unlike
-# coreutills this won't be on every system
-#
-#
-
-# ##########
-# Debugging
-# ##########
-
-
-# logging.basicConfig(
-    # level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
-
-logger = logging.getLogger()
 
 ####################################################
 
@@ -72,31 +94,16 @@ logger = logging.getLogger()
 # ==========
 #
 # The choosing of a specific mode from
-# {edit,find,query,list} stores that mode
+# {edit,query,list} stores that mode
 #
 # It is then checked for and appropriate functions are called
 # and variables set.
 #
 #       I call : edit_handler()
-#                find_handler()
 #                query_handler()
 #                list_handler()
 #
-#       and they produce the outcome.
-#
-#  To check that there is a value a function verify_set() is called to check if
-#  it is, if not, that function will be turned off.
-#
-#  Later, if a value is detected, I get variables through a mediator-function
-#  that checks in 3 locations:
-#
-#   In the case of edit
-#
-#       1. Agrs from the command line (highest weighting)
-#       2. Defaults specified in configuration for this specific note format
-#       3. Defaults specified in edit / default
-#
-#   The rest follows a similar pattern.
+#       and they produce the outcome. Think catalogue.
 #
 # The `parsers` variable is basicallly a dict of parsers
 # this is a way of dealing with lack of namespaces in python
@@ -111,7 +118,6 @@ logger = logging.getLogger()
 #   'edit': subparsers.add_parser('edit'),
 #   'query': subparsers.add_parser('query'),
 #   'list': subparsers.add_parser('list'),
-#   'find': subparsers.add_parser('find')
 # }
 # ```
 #
@@ -119,7 +125,6 @@ logger = logging.getLogger()
 #
 #         ```python
 #         groups['edit']['name|format']
-#         groups['find']['dirs|all']
 #         groups['list']['tree|detailed|concise']
 #         ```
 #
@@ -139,133 +144,16 @@ logger = logging.getLogger()
 #       'name|format': {}
 #       'location|subject': {}
 #   },
-#   'find': {
-#       'name|format': {}
-#       'location|subject': {}
-#   },
-#   '*' : {
-#       'name|format': {}
-#       'location|subject': {}
-#   }
 # }
 # ```
-
-######################
-# Configuration Guide
-######################
-#
-# Options:
-#
-# ## edit
-#
-#     default:
-#
-#       - --format : choose from {markdown,rst,asciidoc,textile}
-#
-#         [DEFAULT is markdown]
-#
-#         ALIASES  -f
-#
-#       - --name : the name of new notes to make. Useful, because even if you
-#       specify the same not name, your editor will simply reopen that document
-#       each time you call for a new note, (good for having a global todo-list).
-#
-#         [DEFAULT is undefined]
-#
-#         ALIASES  -n
-#
-#       - --template : Specify a file to copy to every new note. Paritcularly
-#       useful when defining that separately for each format. [DEFAULT is False]
-#
-#       - --location : the global location of all notes
-#         [DEFAULT is ~/Notes]
-#
-# => format-specific:
-#   - template :
-#                either specify True to use a deafult template, [bool]
-#                or
-#                specify a file to use it as a template [str]
-#
-#     It will be copied to new notes.
-#
-#   - location : the format-specific location for notes [str]
-#
-#     #synonyms:
-#     detailed == long == l [keywords, line count, date, location etc]
-#     regular == normal == concise == r [title, date]
-#     tree == structure == hierarchy == t [title, location(dir)]
-#
-#   - name : the default name of the note [str]
-#
-#          eg note.md
-#
-# --------------------------------------------------------------
-#
-# ## find [SEARCH TERM 1] [[SEARCH TERM 2] ... ]
-#
-#    NOTE based on titles, not content.
-#
-#     --fzf : [True|False] [bool]
-#     --no-fzf : [True|False [bool]
-#
-#     --all : search in the dirs recursively starting from
-#             the default note location for new note creation
-#     --dirs : [DIR1] [[DIR2] [DIR3] ... ] [list[str]]
-#              list of dirs to scan when looking for notes
-#
-#     --fuzzy : [True|False] [bool]
-#               If you want fuzzy finding of notes
-#     --exact, --no-fuzzy : [True|False] [bool]
-#
-# --------------------------------------------------------------
-#
-# ## query
-#
-#       recursively grep through note content to match queries
-#
-#   --dirs, -d : [DIR1] [[DIR2] [DIR3] ... ] [list[str]]
-#                list of of dirs to look for when grepping
-#   --all      : search in the dirs recursively starting from
-#                the default note location for new note creation
-#
-# --------------------------------------------------------------
-#
-# ## LIST
-#
-#   - format : the usual lising format of notes you want [str]
-#
-#           choose 1 from {detailed,regular,tree} [str]
-#
 # --------------------------------------------------------------
 
-# Set variables
-#
-parsers = {
-    'main': {},
-    'edit': {},
-    'analyse': {},
-    'list': {},
-    'find': {},
-    'query': {},
-    'todo': {},
-    '*': {}
-}
-
-groups = {
-    'main': {'verbosity'},
-    'edit': {},
-    'analyse': {},
-    'list': {'regular': {}, 'tree': {}, 'stats': {}},
-    'find': {},
-    'query': {},
-    'todo': {},
-    '*': {}
-}
 
 parsers['main'] = argparse.ArgumentParser(
     prog="note",
     description="Note management tool. \n\
-    edit, manage, search for, query, and lexically analyse your notes.",
+    edit, manage, search for, query, and lexically analyse your notes."
+                                                                       ,
     epilog="\nThanks for using the software.\n")
 
 parsers['main'].add_argument(
@@ -277,10 +165,32 @@ parsers['main'].add_argument(
 parsers['subparsers'] = parsers['main'].add_subparsers(dest='mode')
 
 ###########################
-# ANALYSE
+# LIST
 ###########################
 
-parsers['analyse'] = parsers['subparsers'].add_parser('analyse')
+parsers['list'] = parsers['subparsers'].add_parser('list')
+
+groups['list']['format'] = parsers['list'].add_mutually_exclusive_group()
+
+groups['list']['format'].add_argument(
+    '-l',
+    '-list',
+    action='store_const',
+    const='list',
+    dest='format',
+    default='list',
+    help='Long, detailed format of note listing\n [DEFAULT is %(default)s]')
+
+groups['list']['format'].add_argument(
+    '-t',
+    '--tree',
+    '--structure',
+    '--hierarchy',
+    action='store_const',
+    const='tree',
+    dest='format',
+    default=[],
+    help='Tree format notes of listing')
 
 ###########################
 # QUERY
@@ -288,6 +198,33 @@ parsers['analyse'] = parsers['subparsers'].add_parser('analyse')
 
 parsers['query'] = parsers['subparsers'].add_parser('query')
 
+parsers['query'].add_argument(
+    'terms',
+    nargs='+',
+    metavar='SEARCH TERM',
+    help='When querying the content of notes look for these strings.')
+
+groups['query']['lines|files'] = parsers['query'].add_mutually_exclusive_group()
+
+groups['query']['lines|files'].add_argument(
+    '-l',
+    '--lines',
+    action='store_const',
+    dest='format',
+    help='Standard grep behaviour, show matching lines.',
+    default='lines',
+    const='lines')
+
+groups['query']['lines|files'].add_argument(
+    '-n',
+    '--files',
+    '--notes',
+    '--matching-notes',
+    '--matching-files',
+    dest='format',
+    action='store_const',
+    help='Show notes with matches. [DEFAULT is %(default)s]',
+    const='files')
 
 ###########################
 # edit
@@ -299,7 +236,8 @@ parsers['edit'].add_argument(
     "name",
     help="The name of your new note. \n\
     The app will infer the format from extension.\n \
-    PLEASE provide it.",
+    PLEASE provide it."
+                       ,
     metavar='NAME')
 
 groups['edit']['template'] = parsers['edit'].add_mutually_exclusive_group()
@@ -308,9 +246,10 @@ groups['edit']['template'].add_argument(
     "-t",
     "--template",
     help="The template to use for your new note.\n\
-    [DEFAULT is %(default)s]",
+    [DEFAULT is %(default)s]"
+                             ,
     metavar='ABS PATH TO TEMPLATE FILE',
-    default=False,
+    default='~/.templates/template.md',
     nargs='?')
 
 groups['edit']['template'].add_argument(
@@ -320,66 +259,97 @@ groups['edit']['template'].add_argument(
     "You don't want a template as the basis for a new note [DEFAULT is %(default)s]",
     action='store_false')
 
-parsers['edit'].add_argument(
-    "-s",
-    "--subject",
-    "--subdir",
-    dest='subject',
-    help="Subject of the note. NOTE it will edit a subdir \
-    (with that subject's name) in the default note location",
-    nargs='?')
 
-commands = [
-    'analyse', 'edit', 'find', 'query', 'list', 'todo', '--absolute',
-    '--basename', '--fuzzy', '--fzf', '--lines', '--no-fuzzy', '--relative',
-    '--subject', '--tree', '--template'
-]
+if len(sys.argv) == 1: # for interactive usage
 
-markdown_notes = glob.glob(os.path.join(os.path.expanduser('~/Notes/'),'**.md'),recursive=True)
-textile_notes = glob.glob(os.path.join(os.path.expanduser('~/Notes/'),'**.textile'),recursive=True)
-rst_notes = glob.glob(os.path.join(os.path.expanduser('~/Notes/'),'**.rst'),recursive=True)
-asciidoc_notes = glob.glob(os.path.join(os.path.expanduser('~/Notes/'),'**.asciidoc'),recursive=True)
-all_notes = markdown_notes + rst_notes + asciidoc_notes + textile_notes
-completer = WordCompleter(commands + [os.path.basename(i) for i in all_notes])
+    commands = ['edit', 'query', 'list']
 
-args = prompt(' note >> ', completer=completer)
-args = parsers['main'].parse_args(shlex.split(args))
+    print('\nWelcome to the interactive note creation wizard!')
+    print(
+        '\nMany sane defaults are defined so you only need to provide a [new] file name.'
+    )
+    print('\nchoices :: edit query todo\n')
 
-location = os.path.abspath(os.path.expanduser(os.path.expandvars(args.location)))
+    # initiliase
+    mode_arg = prompt(' note >> ', completer=WordCompleter(commands))
 
-def report(item: Any, length_of_var=True, type_of_var=True, pprint_var=True):
-    if pprint_var:
-        pprint(item)
-        if length_of_var:
-            try:
-                print("length : {}".format(len(item)))
-            except:  # throws an Exception if that item has no len
-                print("length : ??? ")
-                if type_of_var:
-                    try:
-                        print("type : {}".format(type(item)))
-                        print("\n")
-                    except:
-                        print("type : ??? ")
-                        print("\n")
+    if mode_arg == "edit":
+        edit_commands = ['--template', '--no-template']
+        notes = list_notes()
+        completer = WordCompleter(notes + edit_commands)
+        mode = 'edit'
 
+    elif mode_arg == "query":
+        query_commands = ['--lines', '--files']
+        completer = WordCompleter(query_commands)
+        mode = 'query'
+
+    elif mode_arg == "list":
+        list_commands = ['--tree', '--list']
+        completer = WordCompleter(list_commands)
+        mode = 'list'
+
+        # if more than one args provided and
+        # if any of the args provided is a commands
+
+    elif any(map(lambda x : x in commands, shlex.split(mode_arg))) and len(shlex.split(mode_arg)) > 1:
+        report(mode_arg)
+        mode = mode_arg
+        completer = WordCompleter(commands + list_notes())
+        # mode = mode_arg
+
+    else:
+        subprocess.run([os.path.abspath(sys.argv[0]), '-h'])
+        sys.exit()
+
+    # initiliase
+    args = mode
+
+    # iterate unitll enter is pressed
+    new_arg = None
+
+    while new_arg != "":
+        print('')  # new line
+        new_arg = prompt(' note ' + args + ' >> ', completer=completer)
+        if new_arg not in args:
+            #if new_arg in command and not any(map(lambda argument : argument in commands, args)):
+            args += " " + new_arg
+        completer = WordCompleter(  # completer get passed on with modified values on each loop
+            list(filter(lambda x: x not in shlex.split(args), completer.words)))
+        # it removes typed words (included already in args) from completion
+
+    report(args)
+    report(shlex.split(args))
+    args = parsers['main'].parse_args(shlex.split(args))
+
+else:  # if not running interactively
+
+    args = parsers['main'].parse_args()
+
+# ###########################################################################
+# PARSIGN COMPLETE
+#
+# parsed variables
+note_dir = os.path.abspath(
+    os.path.expanduser(os.path.expandvars(args.location)))
+# automatically change dir to note dir and operate relative to that dir
+# automatically change dir to note dir and operate relative to that dir
+os.chdir(note_dir)
+
+# ###########################################################################
+# HANDLERS
 
 def edit_handler():
-    logger.info('note absolute dir : ' + location)
+    logger.info('note absolute dir : ' + note_dir)
     note_name = args.name
     logger.info('note name : ' + note_name)
-    if args.subject:
-        subject = args.subject
-        logger.info('subject : ' + subject)
-        note_path = os.path.join(location, subject, note_name)
-    else:
-        note_path = os.path.join(location, note_name)
+    note_path = os.path.join(note_dir, note_name)
     logger.info('note absolute path : ' + note_path)
     editor = os.path.expandvars('${EDITOR}')
     logger.info('editor identified : ' + editor)
     if not os.path.exists(note_path):
         logger.info('the note doesn\'t exist yet, it will be editd.')
-        if  args.template:
+        if args.template:
             template_path = os.path.abspath(
                 os.path.expandvars(os.path.expanduser(args.template)))
             logger.info('template absolute path : ' + note_path)
@@ -398,35 +368,32 @@ def edit_handler():
 
 
 def query_handler():
+    if args.format == 'lines':
+        flags = '-PIHn'
+    elif args.format == 'files':
+        flags = '-l'
     for term in args.terms:
-        subprocess.run([
-            'grep', '-PIHn', '--line-buffered', "--exclude-dir='.[cC]ache'",
-            "--exclude-dir='*dicts*'", "--exclude-dir='.git'",
-            "--exclude-dir='timeshift'", "--exclude-dir='Trash'",
-            "--exclude-dir='*chrome*'", "--exclude-dir='.pyenv'", term] + all_notes)
-
-def todo_handler():
-    #report(args)
-    # report(args.mode)
-    subprocess.run([os.path.expandvars('${EDITOR}'), args.todo])
+        subprocess.run(['grep', flags, '--line-buffered', term] + list(
+            filter(
+                lambda x: os.path.isfile(x) and re.compile('(\.(md)|(tex)|(txt)|(org)|(textile)|(rst)|(html))$').search(x),
+                glob.glob(os.path.join(note_dir, '**'), recursive=True))))
 
 
-def analyse_handler():
-    # report(args.mode)
-    pass
+def list_handler():
+    if args.format == 'list':
+        for note in list_notes():
+            pprint(note)
+    elif args.format == 'tree':
+        subprocess.run(['tree', '--prune', '-I', '*.ppt*', note_dir])
 
 
 def main():
     if args.mode == 'edit':
         edit_handler()
-    elif args.mode == 'find':
-        find_handler()
     elif args.mode == 'query':
         query_handler()
     elif args.mode == 'list':
         list_handler()
-    elif args.mode is 'todo':
-        todo_handler()
 
 
 if __name__ == "__main__":

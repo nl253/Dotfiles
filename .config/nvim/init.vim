@@ -1,5 +1,6 @@
 
-let g:MARKUP = [ 'markdown' ]
+" {{{ VARIABLES and UTILS
+let g:MARKUP = [ 'markdown', 'rst' ]
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
@@ -16,11 +17,12 @@ function! AtHome()
         return 0
     endif
 endfunction
+" }}}
 
 " OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir 
 set sessionoptions+=resize sessionoptions-=blank 
-set completeopt=menuone,longest,preview,noinsert diffopt=filler,vertical,iwhite
+set completeopt=menuone,longest,noinsert diffopt=filler,vertical,iwhite
 set mouse= complete=.,w,t noswapfile mps+=<:> pumheight=12
 set sessionoptions-=options bufhidden=hide wildignorecase
 set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1
@@ -80,11 +82,22 @@ endif
 " Place plugins here
 " -------------------
 
+" {{{ GENERAL
 Plug 'Haron-Prime/Antares' " colorscheme
-Plug 'tpope/vim-dispatch', {'on' : ['Make','Dispatch','Copen','Start','Spawn']}
 Plug 'tpope/vim-sleuth' " auto set buffer options
+Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
-" Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-fugitive' " git
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
+Plug 'gregsexton/gitv', { 'on': 'Gitv' }
+Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
+Plug 'Konfekt/FastFold' " more efficient folds
+Plug 'scrooloose/nerdcommenter'
+Plug 'wellle/targets.vim'
+
+Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
+            \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
+" }}}
 
 " SESSION {{{
 Plug 'xolox/vim-misc'
@@ -104,32 +117,29 @@ if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let 
 
 " }}}
 
-Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
-Plug 'tpope/vim-fugitive' " git
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
-Plug 'gregsexton/gitv', { 'on': 'Gitv' }
-Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
-Plug 'Konfekt/FastFold' " more efficient folds
-Plug 'scrooloose/nerdcommenter'
+" COMPLETION {{{
+"if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
+    "Plug 'maralla/completor.vim'
+    "if filereadable(glob('~/.pyenv/versions/3.5.0/bin/python3.5'))
+        "let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
+    "else
+        "let g:completor_python_binary = '/usr/bin/python'
+    "endif
+    "let g:completor_completion_delay = 1
+"endif
 
-Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
-            \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
+Plug 'ajh17/VimCompletesMe'
 
-" SQL {{{
-let g:sql_type_default = 'mysql'
-let g:ftplugin_sql_omni_key = ',' " shadows localleader
+if has('python') || has('python3')
+    Plug 'SirVer/ultisnips' " Track the engine.
+    Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
+    "let g:UltiSnipsExpandTrigger="<Tab>"
+    let g:UltiSnipsExpandTrigger="<M-e>"
+    let g:UltiSnipsEditSplit="vertical"
+endif
 " }}}
-"
-" SHELL {{{
-let readline_has_bash = 1
-let g:is_bash	   = 1
-let g:sh_fold_enabled= 4 
-" }}}
 
-Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
-Plug 'reedes/vim-textobj-sentence'
 Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
-let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 
 " SYNTASTIC {{{ 
 if ! has('nvim')
@@ -142,6 +152,7 @@ if ! has('nvim')
     let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
     let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
     let g:syntastic_markdown_checkers = ['proselint', 'mdl', 'textlint']
+    let g:syntastic_rst_checkers = ['proselint', 'mdl', 'textlint']
     let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
     let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
     let g:syntastic_javascript_checkers = ['jshint', 'eslint']
@@ -149,18 +160,26 @@ if ! has('nvim')
 endif
 " }}}
 
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
-            \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn'],
-            \'for' : g:MARKUP}
-
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 
+" {{{ TAGS
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
 let b:easytags_auto_highlight = 1
 let g:easytags_events = ['BufReadPost']
 let g:easytags_always_enabled = 1
 let g:easytags_resolve_links = 1
+" }}}
 
+" MARKUP {{{ {{{
+Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
+Plug 'reedes/vim-textobj-sentence'
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
+            \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn'],
+            \'for' : g:MARKUP}
+let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
+let g:neomake_rst_enabled_makers = ['writegood', 'proselint']
+" }}}
+"
 " TABLE MODE {{{
 Plug 'dhruvasagar/vim-table-mode', { 'for':  
             \['mardown'], 
@@ -169,10 +188,23 @@ let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 " stops from indicating that it has loaded
 let g:table_mode_syntax = 1
 let g:table_mode_update_time = 800
+au! BufEnter *.md let g:table_mode_corner = '|'
+au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
+
 " }}}
 
+"{{{ RST
+Plug 'Rykka/riv.vim'
+Plug 'Rykka/InstantRst'
+let g:instant_rst_browser = $BROWSER
+let g:instant_rst_port = 8000
+"}}}
+
 " MARKDOWN {{{
-Plug 'godlygeek/tabular', { 'for': ['markdown'], 'on' : 'Tabularize' }
+Plug 'chrisbra/Colorizer', { 'for': [
+            \ 'css', 'html', 'javascript', 'json',
+            \ 'markdown','rst' ,'xhtml', 'yaml']} 
+Plug 'godlygeek/tabular', { 'for': ['markdown', 'rst'], 'on' : 'Tabularize' }
 Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
 let g:vim_markdown_autowrite = 1
 let g:vim_markdown_emphasis_multiline = 1
@@ -184,7 +216,7 @@ let g:vim_markdown_fenced_languages = [
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_folding_level = 1
-" }}}
+" }}}  }}}
 
 " PYTHON {{{
 Plug 'klen/python-mode', { 'for': 'python' }
@@ -225,44 +257,30 @@ let g:pymode_syntax_print_as_function = 1
 let g:pymode_trim_whitespaces = 1
 " }}}
 
-" COMPLETION {{{
-"if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
-    "Plug 'maralla/completor.vim'
-    "if filereadable(glob('~/.pyenv/versions/3.5.0/bin/python3.5'))
-        "let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
-    "else
-        "let g:completor_python_binary = '/usr/bin/python'
-    "endif
-    "let g:completor_completion_delay = 1
-"endif
-
-Plug 'ajh17/VimCompletesMe'
-
-if has('python') || has('python3')
-    Plug 'SirVer/ultisnips' " Track the engine.
-    Plug 'honza/vim-snippets' " Snippets are separated from the engine. Add this if you want them:
-    "let g:UltiSnipsExpandTrigger="<Tab>"
-    let g:UltiSnipsExpandTrigger="<M-e>"
-    let g:UltiSnipsEditSplit="vertical"
-endif
+" SHELL {{{
+Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
+let readline_has_bash = 1
+let g:is_bash	   = 1
+let g:sh_fold_enabled= 4 
 " }}}
 
+" SQL {{{
+let g:sql_type_default = 'mysql'
+let g:ftplugin_sql_omni_key = ',' " shadows localleader
+" }}}
+
+" WEB DEV {{{
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
 Plug 'othree/html5-syntax.vim'
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
-
-Plug 'chrisbra/Colorizer', { 'for': [
-            \ 'css', 'html', 'javascript', 'json',
-            \ 'markdown', 'xhtml', 'yaml']}
 
 let g:emmet_html5 = 1
 
 Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 
 Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
-            \'xhtml', 'xml', 'css'] }
-
-Plug 'wellle/targets.vim'
+        \'xhtml', 'xml', 'css'] }
+" }}}
 
 " FOR NVIM {{{
 if has('nvim')
@@ -314,8 +332,20 @@ nnoremap <Leader><BS> :silent edit ~/Notes/todo.md<CR>``
 
 "Init() execute for all buffers on filetype {{{
 function! Init()
-    if index(g:MARKUP, &filetype) < 0 
-        setl nospell complete=.,w,t, 
+    if index(g:MARKUP, &filetype) >= 0 
+        setlocal spell complete=.,w,k,s,k~/Notes/**.md,k~/Notes/**.rst
+        setlocal conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1
+        if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
+            TableModeEnable
+        endif
+        nnoremap <expr> <buffer> <CR> executable('wn') ? ":execute '!wn ' . expand('\<cword>') . ' -over'\<CR>" : '\<CR>'
+        for d in  split(glob("~/Notes/**.md,~/Notes/**.rst"))
+            execute 'setl dictionary+=' . d
+        endfor
+        let b:vcm_tab_complete = 'dict'
+        nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
+        nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
+        nnoremap <buffer> gx yiW:execute '!'. $BROWSER . ' ' . @+ <CR>
     endif
     " if completion / omnifunction is not provided fall back on default 
     if exists("+omnifunc") && &omnifunc == "" 
@@ -365,13 +395,14 @@ endfunction
 function! HelpInit()
     " on enter follow that `tag`
     nnoremap <buffer> <CR> <C-]> 
+    nnoremap <buffer> K <C-]> 
     " make it more like less
     nnoremap <buffer> q :bd!<CR> 
     nnoremap <buffer> d <C-d> 
     nnoremap <buffer> u <C-u> 
 endfunction
 " }}}
-
+                        
 " QfInit() {{{
 function! QfInit()
     " easir preview after grepping (use emacs' C-p C-n)
@@ -379,31 +410,50 @@ function! QfInit()
     nnoremap <buffer> <C-p> k<CR><C-w><C-w> 
     " quick exit
     nnoremap q :cclose<CR>
+    setl nospell
+endfunction
+" }}}
+
+" VimInit() {{{
+function! VimInit()
+    " easir preview after grepping (use emacs' C-p C-n)
+    nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
 endfunction
 " }}}
 
 " MarkdownInit() {{{
 function! MarkdownInit()
-    let g:table_mode_corner = '|'
     nmap <buffer> [[ <Plug>Markdown_MoveToPreviousHeader
     nmap <buffer> ]] <Plug>Markdown_MoveToNextHeader
     nmap gx <buffer> <Plug>Markdown_OpenUrlUnderCursor
-    nnoremap <expr> <buffer> <CR> filereadable(glob('~/.athome')) ? ":execute '!wn ' . expand('\<cword>') . ' -over'\<CR>" : '\<CR>'
-    setlocal conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1
-    setlocal spell complete=.,w,k,s,k~/Notes/**.md 
-    if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
-        TableModeEnable
-    endif
-    for d in  split(glob("~/Notes/**.md"))
-        execute 'setl dictionary+=' . d
-    endfor
-    let b:vcm_tab_complete = 'dict'
-    nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
-    nnoremap <buffer> <expr> <Leader>me AtHome() && executable('preview-markdown.sh') ? ":execute '!preview-markdown.sh ' . expand('%:p')\<CR>" : ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown-github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" 
-    nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
+    nnoremap <buffer> <expr> <Leader>me executable($BROWSER) && executable('preview-markdown.sh') ? ":execute '!preview-markdown.sh ' . expand('%:p')\<CR>" : ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown-github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" 
 endfunction
 " }}}
 "
+" RstInit() {{{
+function! RstInit()
+    nnoremap <buffer> <expr> <Leader>me executable('pandoc') ? ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f rst -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" : "\<Leader>me"
+endfunction
+"}}}
+
+" HTMLInit() {{{
+function! HTMLInit()
+    noremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
+    setl foldmethod=indent
+    setl complete=.,w
+    let b:vcm_tab_complete = 'omni'
+endfunction
+"}}}
+
+" {{{ Template
+function! Template()
+    if filereadable(glob("~/.templates/template." . expand("%:e"))) 
+        read ~/.templates/template.%:e
+        write
+    endif 
+endfunction
+"}}}
+
 " AUTOCOMMANDS {{{
 aug VIMENTER
     " go back to where you left off
@@ -416,15 +466,15 @@ aug VIMENTER
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
-    " set dict and thesaurus completion if markup else, tags
+    au BufNewFile * call Template()
     au FileType * call Init()
     au FileType markdown call MarkdownInit()
-    " alternative to ususal execute
-    au FileType xhtml,html nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
-    " on enter open the man page under cursor
+    au FileType rst call RstInit()
     au FileType man call ManInit()
     au FileType sh call ShInit()
+    au FileType vim call VimInit()
     au FileType help call HelpInit()
+    au FileType xhtml,html call HTMLInit()
     au FileType gitcommit call GitcommitInit()
     au FileType python call PythonInit()
     au FileType qf call QfInit()
@@ -473,6 +523,8 @@ if executable('dos2unix')
 endif
 command! DeleteEmptyLines execute 'g/^\s*$/d'
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
+
+command! Note -nargs=1 -bar -complete=file edit <args>
 
 " }}}
 
@@ -554,8 +606,9 @@ nnoremap <C-v> :FZFFileAnchor<CR>
 nnoremap <leader>fh :FZFRecFilesHome<CR>
 nnoremap <Leader>fr :FZFMru<CR>
 
-nnoremap <Leader>sg :execute 'lgrep ' . expand('<cword>') . " * "<CR>
+nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " * "<CR>
 nnoremap <Leader>sa :Ag!<CR>
+nnoremap <Leader>sl :Lines!<CR>
 
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
 cno W!<CR> w!<CR>
@@ -576,4 +629,4 @@ cno qwA<CR> wqa<CR>
 cno qWA<CR> wqa<CR>
 cno QWA<CR> wqa<CR>
 cno QwA<CR> wqa<CR>
-" }}}
+" }}}                                  
