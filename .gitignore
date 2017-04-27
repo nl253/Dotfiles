@@ -1,6 +1,10 @@
 ﻿*.bluej
 .athome
 .xiki/
+.cookiecutter*
+nltk_data/
+boosterclapps/
+Projects/
 .config/hub
 .zsh/zsh-interactive-cd.plugin.zsh
 .Xauthority

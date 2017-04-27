@@ -1,0 +1,5 @@
+ default_context:
+    full_name: "Norbert Logiewa"
+    email: "nl253@kent.ac.uk"
+    github_username: "nl253"
+cookiecutters_dir: "~/.cookiecutters/"
