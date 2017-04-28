@@ -47,6 +47,7 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
 [ -d ~/Scripts ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
 [ -d ~/.bin ] && export PATH="${PATH}:${HOME}/.bin"       # MY READY PROJECTS AND EXECUTSBLES
+[ -d ~/.fzf/bin ] && export PATH="${PATH}:${HOME}/.fzf/bin"       # MY READY PROJECTS AND EXECUTSBLES
 
 if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_ROOT="${HOME}/.pyenv"
