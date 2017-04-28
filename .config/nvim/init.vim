@@ -1,5 +1,5 @@
 
-" {{{ VARIABLES and UTILS
+" VARIABLES and UTILS {{{ 
 let g:MARKUP = [ 'markdown', 'rst' ]
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css', 
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
@@ -33,11 +33,11 @@ set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow virtualedit=all 
 set shortmess=atI " Don't show the intro message when starting vim
 set path=
-execute 'set path+=' . glob('~') . '/**'
-execute 'set path+=' . glob('~') . '/Scripts/'
-execute 'set path+=' . glob('~') . '/Notes/*'
+execute 'set path+=' . glob('~') . '/Scripts/**'
+execute 'set path+=' . glob('~') . '/Notes/**'
 execute 'set path+=' . glob('~') . '/.scratchpads/**'
-execute 'set path+=' . glob('~') . '/Projects/'
+execute 'set path+=' . glob('~') . '/.templates/**'
+execute 'set path+=' . glob('~') . '/Projects/**'
 " }}}
 
 " DOWNLOAD PLUG {{{
@@ -54,6 +54,8 @@ endif
 
 " PLUG INIT :: SET VARIABLES {{{
 let g:DICTDIR = glob('~/.dicts/')
+execute 'set thesaurus=' . g:DICTDIR . 'thesaurus.txt'
+execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
 if empty(g:DICTDIR)
     execute '!mkdir -p ' . g:DICTDIR
 endif
@@ -82,16 +84,17 @@ else
 endif
 " }}}
 
+" PLUGINS {{{
 " Place plugins here
 " -------------------
-
-" {{{ GENERAL
+"
+" GENERAL {{{ 
 Plug 'Haron-Prime/Antares' " colorscheme
 Plug 'tpope/vim-sleuth' " auto set buffer options
 Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 Plug 'tpope/vim-fugitive' " git
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(line\ %l%)\ %P\ 
+set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %P\ of\ %L%)\ \ 
 Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'Konfekt/FastFold' " more efficient folds
@@ -119,7 +122,7 @@ let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff',
 if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let g:session_directory = '~/.vim/session' | endif
 " }}}
 
-" {{{ COMPLETION
+" COMPLETION {{{ 
 Plug 'ajh17/VimCompletesMe'
 
 if has('python') || has('python3')
@@ -154,7 +157,7 @@ endif
 
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 
-" {{{ TAGS
+" TAGS {{{
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
 let b:easytags_auto_highlight = 1
 let g:easytags_events = ['BufReadPost']
@@ -252,8 +255,8 @@ let g:pymode_trim_whitespaces = 1
 " SHELL {{{
 Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
 let readline_has_bash = 1
-let g:is_bash	   = 1
-let g:sh_fold_enabled= 4 
+let g:is_bash         = 1
+let g:sh_fold_enabled = 4
 " }}}
 
 " SQL {{{
@@ -289,8 +292,9 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 call plug#end()
+" }}}
 
-" SCRATCHPAD {{{
+" Scratchpad {{{
 function! Scratch()
     if empty(glob('~/.scratchpads/'))
         !mkdir -p ~/.scratchpads
@@ -326,11 +330,13 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 nnoremap <Leader><BS> :silent edit ~/Notes/todo.md<CR>`` 
 " }}}
 
-"Init() execute for all buffers on filetype {{{
+" INIT {{{
+" Init() execute for all buffers on filetype {{{
 function! Init()
     if index(g:MARKUP, &filetype) >= 0 
-        setlocal spell complete=.,w,k,s,k~/Notes/**.md,k~/Notes/**.rst
-        setlocal conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1
+        setl spell complete=.,w,k,s,k~/Notes/**.md,k~/Notes/**.rst
+        setl conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1
+        setl sw=4
         if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
             TableModeEnable
         endif
@@ -377,7 +383,9 @@ endfunction
 " ShInit() {{{
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
-    setl wrap complete=.,w,t,k~/Scripts/**.sh,k~/Projects/**.sh,k~/.scratchpads/**.sh
+    setl wrap complete=.,w,t,k~/Scripts/**.sh
+    setl complete+=,k~/Projects/**.sh,k~/.scratchpads/**.sh
+    setl complete+=,k~/.dicts/shell.dict
     let b:vcm_tab_complete = 'user'
 endfunction
 " }}}
@@ -401,13 +409,37 @@ function! HelpInit()
 endfunction
 " }}}
                         
+" SqlInit() {{{ 
+function! SqlInit()
+    setl complete=.,w,k~/.dicts/sql.dict
+endfunction
+" }}}
+
+" JavascriptInit() {{{ 
+function! JavascriptInit()
+    setl complete=.,w,k~/.dicts/javascript.dict
+endfunction
+" }}}
+
+" CssInit() {{{ 
+function! CssInit()
+    setl complete=.,w,k~/.dicts/css.dict
+endfunction
+" }}}
+
+" PhpInit() {{{ 
+function! PhpInit()
+    setl complete=.,w,t,k~/.dicts/php.dict
+endfunction
+"}}}
+
 " QfInit() {{{
 function! QfInit()
     " easir preview after grepping (use emacs' C-p C-n)
     nnoremap <buffer> <C-n> j<CR><C-w><C-w> 
     nnoremap <buffer> <C-p> k<CR><C-w><C-w> 
     " quick exit
-    nnoremap q :cclose<CR>
+    nnoremap <buffer> q :cclose<CR>
     setl nospell
 endfunction
 " }}}
@@ -416,6 +448,7 @@ endfunction
 function! VimInit()
     " easir preview after grepping (use emacs' C-p C-n)
     nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
+    setl foldmethod=marker
 endfunction
 " }}}
 
@@ -424,26 +457,30 @@ function! MarkdownInit()
     nmap <buffer> [[ <Plug>Markdown_MoveToPreviousHeader
     nmap <buffer> ]] <Plug>Markdown_MoveToNextHeader
     nmap gx <buffer> <Plug>Markdown_OpenUrlUnderCursor
-    nnoremap <buffer> <expr> <Leader>me executable($BROWSER) && executable('preview-markdown.sh') ? ":execute '!preview-markdown.sh ' . expand('%:p')\<CR>" : ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown-github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" 
+    command! PandocMarkdownPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown_github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html' 
+    nnoremap <buffer> <expr> <Leader>me executable('pandoc') && executable($BROWSER) ? ":PandocMarkdownPreview\<CR>" : "\<Leader>me"
+
 endfunction
 " }}}
 "
 " RstInit() {{{
 function! RstInit()
-    nnoremap <buffer> <expr> <Leader>me executable('pandoc') ? ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f rst -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" : "\<Leader>me"
+    command! PandocRstPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f rst -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html' 
+    nnoremap <buffer> <expr> <Leader>me executable('pandoc') && executable($BROWSER) ? ":PandocRstPreview\<CR>" : "\<Leader>me"
 endfunction
 "}}}
 
 " HTMLInit() {{{
 function! HTMLInit()
-    noremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
+    nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
     setl foldmethod=indent
     setl complete=.,w
     let b:vcm_tab_complete = 'omni'
 endfunction
 "}}}
+"}}}
 
-" {{{ Template
+" Template {{{ 
 function! Template()
     if filereadable(glob("~/.templates/template." . expand("%:e"))) 
         read ~/.templates/template.%:e
@@ -451,7 +488,6 @@ function! Template()
     endif 
 endfunction
 command! Template call Template()
-
 "}}}
 
 " AUTOCOMMANDS {{{
@@ -474,6 +510,10 @@ aug VIMENTER
     au FileType sh call ShInit()
     au FileType vim call VimInit()
     au FileType help call HelpInit()
+    au FileType php call PhpInit()
+    au FileType javascript call JavascriptInit()
+    au FileType sql call SqlInit()
+    au FileType css call CssInit()
     au FileType xhtml,html call HTMLInit()
     au FileType gitcommit call GitcommitInit()
     au FileType python call PythonInit()
@@ -482,22 +522,12 @@ aug END
 " }}}
 
 " download dictionaries from GitHub if missing {{{
-if ! filereadable(g:DICTDIR . 'frequent.dict')
-    execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/dicts/frequent.dict'
-endif
-execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
-if ! filereadable(g:DICTDIR .'thesaurus.txt')
-    execute '!curl -o ' . g:DICTDIR . 'thesaurus.txt  https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/thesaurus.txt'
-endif
-execute 'set thesaurus=' . g:DICTDIR . 'thesaurus.txt'
-if ! filereadable(g:DICTDIR .'css.dict')
-    execute '!curl -o ' . g:DICTDIR . 'css.dict https://raw.githubusercontent.com/nl253/Dot-files/master/dicts/css.dict'
-endif
-au! FileType css execute 'setlocal dictionary=' . g:DICTDIR . 'css.dict'
-if ! filereadable(g:DICTDIR .'mysql.txt')
-execute '!curl -o ' . g:DICTDIR . 'mysql.txt https://raw.githubusercontent.com/nl253/Dot-files/master/dicts/mysql.txt'
-endif
-au! FileType sql,mysql execute 'setlocal dictionary=' . g:DICTDIR . 'mysql.txt'
+let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'css.dict', 'sql.dict', 'php.dict', 'shell.dict', 'javascript.dict']
+for dict in g:DICTS
+    if ! filereadable(g:DICTDIR . dict)
+        execute '!curl -o ' . g:DICTDIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
+    endif
+endfor
 " }}}
 
 colorscheme antares
@@ -606,7 +636,9 @@ nnoremap <C-v> :FZFFileAnchor<CR>
 nnoremap <leader>fh :FZFRecFilesHome<CR>
 nnoremap <Leader>fr :FZFMru<CR>
 
-nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " * "<CR>
+nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " ./* ~/Notes/** ~/* ~/.templates/* ~/Scripts/** ~/Projects/**"<CR>:cw<CR> 
+nnoremap <M-k> :silent cp<CR>
+nnoremap <M-j> :silent cn<CR>
 nnoremap <Leader>sa :Ag!<CR>
 nnoremap <Leader>sl :Lines!<CR>
 

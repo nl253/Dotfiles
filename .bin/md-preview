@@ -28,7 +28,7 @@ browser-not-set() {
 }
 
 [[ ! $# == 1 ]] && help && exit 0
-[[ -v BROWSER ]] && browser-not-found && exit 0
+[[ ! -v BROWSER ]] && browser-not-found && exit 0
 [[ ! -x $(which mkdocs) ]] && [[ ! -x $(which pandoc) ]] && software-not-found && exit 0
 
 if [[ -x $(which mkdocs) ]] && [[ -e ~/.athome ]] ; then

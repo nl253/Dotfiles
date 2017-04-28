@@ -31,7 +31,7 @@ unset MAILCHECK                                                        # Don't c
 export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xterm/screen/Tmux title with only a short hostname
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false # }}}
 
-# $PATH (and JAVA_HOME and JRE_HOME) {{{
+# $PATH (and JAVA_HOME and JRE_HOME and Python) {{{
 # ------------------------------------------------------------------------
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
@@ -52,7 +52,7 @@ if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_ROOT="${HOME}/.pyenv"
   export PATH="${PYENV_ROOT}/bin:${PATH}"
 fi
-export PYTHONPATH="${PYTHONPATH}:${HOME}/UnixUtils:${HOME}/PyComLine:${HOME}/FieryCLI" # for python modules
+export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:" # for python modules
 # }}}
 
 # HISTORY {{{
