@@ -36,6 +36,7 @@ set path=
 execute 'set path+=' . glob('~') . '/**'
 execute 'set path+=' . glob('~') . '/Scripts/'
 execute 'set path+=' . glob('~') . '/Notes/*'
+execute 'set path+=' . glob('~') . '/.scratchpads/**'
 execute 'set path+=' . glob('~') . '/Projects/'
 " }}}
 
@@ -52,9 +53,15 @@ endif
 " }}}
 
 " PLUG INIT :: SET VARIABLES {{{
+let g:DICTDIR = glob('~/.dicts/')
+if empty(g:DICTDIR)
+    execute '!mkdir -p ' . g:DICTDIR
+endif
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
-    let g:DICTDIR = glob('~/.config/nvim/dicts/')
+    if empty(g:VIMDIR)
+        execute '!mkdir -p ' . g:VIMDIR
+    endif
     tnoremap <Esc> <C-\><C-n>
     set inccommand=nosplit
     if empty(g:DICTDIR)
@@ -65,10 +72,6 @@ else
     let $MYVIMRC = glob('~/.vimrc')
     call plug#begin('~/.vim/plugged')
     let g:VIMDIR = glob('~/.vim/')
-    let g:DICTDIR = glob('~/.vim/dicts/')
-    if empty(g:DICTDIR)
-        !mkdir -p ~/.vim/dicts
-    endif
     syntax enable
     filetype plugin indent on
     set encoding=utf8 syntax=on autoindent nocompatible magic incsearch ttyfast
@@ -114,20 +117,9 @@ let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff',
             \'&relativenumber', '&foldmarker', '&background']
 
 if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let g:session_directory = '~/.vim/session' | endif
-
 " }}}
 
-" COMPLETION {{{
-"if ((has('python') || has('python3')) && has('lambda') && has('timers') && has('job')) || has('nvim')
-    "Plug 'maralla/completor.vim'
-    "if filereadable(glob('~/.pyenv/versions/3.5.0/bin/python3.5'))
-        "let g:completor_python_binary = glob('~/.pyenv/versions/3.5.0/bin/python3.5')
-    "else
-        "let g:completor_python_binary = '/usr/bin/python'
-    "endif
-    "let g:completor_completion_delay = 1
-"endif
-
+" {{{ COMPLETION
 Plug 'ajh17/VimCompletesMe'
 
 if has('python') || has('python3')
@@ -382,14 +374,14 @@ endfunction
 " ShInit() {{{
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR> 
-    setl wrap complete=.,w,t,k~/Scripts/**.sh,k~/Projects/**.sh
+    setl wrap complete=.,w,t,k~/Scripts/**.sh,k~/Projects/**.sh,k~/.scratchpads/**.sh
     let b:vcm_tab_complete = 'user'
 endfunction
 " }}}
 
 " PythonInit() {{{
 function! PythonInit()
-    setl complete=.,w,t,k~/Scripts/**.py,k~/Projects/**.py
+    setl complete=.,w,t,k~/Scripts/**.py,k~/Projects/**.py,k~/.scratchpads/**.py
     let b:vcm_tab_complete = "omni"
 endfunction
 " }}}
@@ -491,10 +483,10 @@ if ! filereadable(g:DICTDIR . 'frequent.dict')
     execute '!curl -o ' . g:DICTDIR . 'frequent.dict https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/dicts/frequent.dict'
 endif
 execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
-if ! filereadable(g:VIMDIR .'thesaurus.txt')
-    execute '!curl -o ' . g:VIMDIR . 'thesaurus.txt https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/thesaurus.txt'
+if ! filereadable(g:DICTDIR .'thesaurus.txt')
+    execute '!curl -o ' . g:DICTDIR . 'thesaurus.txt  https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/thesaurus.txt'
 endif
-execute 'set thesaurus=' . g:VIMDIR . 'thesaurus.txt'
+execute 'set thesaurus=' . glob('~/.dicts/'). 'thesaurus.txt'
 if ! filereadable(g:DICTDIR .'css.dict')
     execute '!curl -o ' . g:DICTDIR . 'css.dict https://raw.githubusercontent.com/nl253/Dot-files/master/dicts/css.dict'
 endif

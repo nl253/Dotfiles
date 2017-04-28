@@ -1,4 +1,4 @@
-dotfiles
+files
 symlinks
 gitignore
 utils
@@ -59,7 +59,6 @@ ish
 API
 ipod
 HDD
-#g
 microkernel
 usb
 util

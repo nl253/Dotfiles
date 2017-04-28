@@ -12,18 +12,18 @@
 # - git might not be on the system
 # - it might be that neither curl nor wget is present on the system
 
-# {{{ If not running interactively, don't do anything.
+#  If not running interactively, don't do anything.
 [[ -z "$PS1" ]] && return 0
 [[ $- != *i* ]] && return 0
-# }}}
+# 
 
 echo -e "${HOME}/.bashrc loaded" # indicator if it has successfully loaded
 
-# $PS1 aka PROMPT {{{
+# $PS1 aka PROMPT 
 # default (non-git) prompt
-export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;40m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;31m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \n\[$(tput sgr0)\]\[\033[38;5;241m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;88m\]>\[$(tput sgr0)\]\[\033[38;5;89m\]>\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]" # }}}
+export PS1="\n\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;3m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;40m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;31m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \n\[$(tput sgr0)\]\[\033[38;5;241m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;88m\]>\[$(tput sgr0)\]\[\033[38;5;89m\]>\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]" # 
 
-# {{{ SHELL OPTIONS
+#  SHELL OPTIONS
 
 stty -ixon    # enable inc search <C-s> which is often disabled by terminal emulators
 stty -ctlecho # turn off control character echoing
@@ -45,9 +45,9 @@ shopt -s globstar   # ** becomes a recursive wildstar
 shopt -s histappend # Append each session's history to $HISTFILE
 shopt -s histverify # History expansions will be verified before execution.
 shopt -s histreedit # Allow use to re-edit a faild history substitution.
-# }}}
+# 
 
-# source all in ~/.shells/ # general shell configuration {{{
+# source all in ~/.shells/ # general shell configuration 
 # this will set `$PATH` and allow me to use my scripts 
 if [[ -d ~/.shells ]] && [[ -d ~/.bash ]]; then
   for file in ~/.shells/*; do
@@ -59,13 +59,13 @@ if [[ -d ~/.shells ]] && [[ -d ~/.bash ]]; then
     [[ -f $file ]] && source "$file"
   done
 fi
-# }}}
+# 
 
 # BY HERE $PATH AND OTHER VARIABLES HAVE BEEN SET !
 # `~/.shells/variables.sh` AND
 # `~/.shells/aliases.sh` have been sourced
 
-# pull scripts if needed {{{
+# pull scripts if needed 
 if [[ ! -e ~/Scripts ]] && [[ -x $(which git) ]]; then
   echo -e "You don't appear to have scripts. They are necessary to make everything work."
   echo -e "Would you like to download them from GitHub?\nNote, this will clone them into ~/Scripts/"
@@ -78,7 +78,10 @@ if [[ ! -e ~/Scripts ]] && [[ -x $(which git) ]]; then
   else
     echo -e "OK.\nNothing to be done.\n"
   fi
-fi # }}}
+fi # 
+
+[[ ! -e ~/.dicts ]] && mkdir -p ~/.dicts
+[[ ! -e ~/.scratchpads ]] && mkdir -p ~/.scratchpads
 
 # because we have `Scripts` # but check just in case
 # we can try to init vim # nothing will happen if it's set up properly
