@@ -452,6 +452,8 @@ function! Template()
         write
     endif 
 endfunction
+command! Template call Template()
+
 "}}}
 
 " AUTOCOMMANDS {{{
