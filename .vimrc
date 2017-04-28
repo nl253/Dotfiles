@@ -33,11 +33,11 @@ set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow virtualedit=all 
 set shortmess=atI " Don't show the intro message when starting vim
 set path=
-execute 'set path+=' . glob('~') . '/**'
-execute 'set path+=' . glob('~') . '/Scripts/'
-execute 'set path+=' . glob('~') . '/Notes/*'
+execute 'set path+=' . glob('~') . '/Scripts/**'
+execute 'set path+=' . glob('~') . '/Notes/**'
 execute 'set path+=' . glob('~') . '/.scratchpads/**'
-execute 'set path+=' . glob('~') . '/Projects/'
+execute 'set path+=' . glob('~') . '/.templates/**'
+execute 'set path+=' . glob('~') . '/Projects/**'
 " }}}
 
 " DOWNLOAD PLUG {{{
@@ -57,7 +57,7 @@ let g:DICTDIR = glob('~/.dicts/')
 execute 'set thesaurus=' . g:DICTDIR . 'thesaurus.txt'
 execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
 if empty(g:DICTDIR)
-    execute '!mkdir -p ' . g:DICTDIR
+    call system('mkdir -p ' . g:DICTDIR)
 endif
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
@@ -334,8 +334,9 @@ nnoremap <Leader><BS> :silent edit ~/Notes/todo.md<CR>``
 " Init() execute for all buffers on filetype {{{
 function! Init()
     if index(g:MARKUP, &filetype) >= 0 
-        setlocal spell complete=.,w,k,s,k~/Notes/**.md,k~/Notes/**.rst
-        setlocal conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1
+        setl spell complete=.,w,k,s,k~/Notes/**.md,k~/Notes/**.rst
+        setl conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1
+        setl sw=4
         if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
             TableModeEnable
         endif
@@ -438,7 +439,7 @@ function! QfInit()
     nnoremap <buffer> <C-n> j<CR><C-w><C-w> 
     nnoremap <buffer> <C-p> k<CR><C-w><C-w> 
     " quick exit
-    nnoremap q :cclose<CR>
+    nnoremap <buffer> q :cclose<CR>
     setl nospell
 endfunction
 " }}}
@@ -447,6 +448,7 @@ endfunction
 function! VimInit()
     " easir preview after grepping (use emacs' C-p C-n)
     nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
+    setl foldmethod=marker
 endfunction
 " }}}
 
@@ -455,20 +457,22 @@ function! MarkdownInit()
     nmap <buffer> [[ <Plug>Markdown_MoveToPreviousHeader
     nmap <buffer> ]] <Plug>Markdown_MoveToNextHeader
     nmap gx <buffer> <Plug>Markdown_OpenUrlUnderCursor
-    nnoremap <buffer> <expr> <Leader>me executable($BROWSER) && executable('preview-markdown.sh') ? ":execute '!preview-markdown.sh ' . expand('%:p')\<CR>" : ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown-github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" 
-    command! PandocMdPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown_github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'<CR>
+    command! PandocMarkdownPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown_github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html' 
+    nnoremap <buffer> <expr> <Leader>me executable('pandoc') && executable($BROWSER) ? ":PandocMarkdownPreview\<CR>" : "\<Leader>me"
+
 endfunction
 " }}}
 "
 " RstInit() {{{
 function! RstInit()
-    nnoremap <buffer> <expr> <Leader>me executable('pandoc') ? ":execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f rst -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'\<CR>" : "\<Leader>me"
+    command! PandocRstPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f rst -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html' 
+    nnoremap <buffer> <expr> <Leader>me executable('pandoc') && executable($BROWSER) ? ":PandocRstPreview\<CR>" : "\<Leader>me"
 endfunction
 "}}}
 
 " HTMLInit() {{{
 function! HTMLInit()
-    noremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
+    nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
     setl foldmethod=indent
     setl complete=.,w
     let b:vcm_tab_complete = 'omni'
@@ -632,7 +636,9 @@ nnoremap <C-v> :FZFFileAnchor<CR>
 nnoremap <leader>fh :FZFRecFilesHome<CR>
 nnoremap <Leader>fr :FZFMru<CR>
 
-nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " * "<CR>
+nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " ./* ~/Notes/** ~/* ~/.templates/* ~/Scripts/** ~/Projects/**"<CR>:cw<CR> 
+nnoremap <M-k> :silent cp<CR>
+nnoremap <M-j> :silent cn<CR>
 nnoremap <Leader>sa :Ag!<CR>
 nnoremap <Leader>sl :Lines!<CR>
 
