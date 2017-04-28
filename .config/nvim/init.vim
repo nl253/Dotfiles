@@ -57,7 +57,7 @@ let g:DICTDIR = glob('~/.dicts/')
 execute 'set thesaurus=' . g:DICTDIR . 'thesaurus.txt'
 execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
 if empty(g:DICTDIR)
-    execute '!mkdir -p ' . g:DICTDIR
+    call system('mkdir -p ' . g:DICTDIR)
 endif
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
