@@ -5,6 +5,10 @@
 nltk_data/
 boosterclapps/
 Projects/
+.dicts/
+.vim/
+*.ropeprojec*
+*breakpoints*
 .config/hub
 .zsh/zsh-interactive-cd.plugin.zsh
 .Xauthority

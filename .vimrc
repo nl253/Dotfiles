@@ -319,6 +319,7 @@ function! Scratch()
 endfunction
 command! Scratch call Scratch()
 " Alt-BackSpace in normal mode to quickly open a scratch buffer with the same
+"
 " filetype. It will be saved in ~/Notes/scratch{.py,.java,.go} etc
 nnoremap <M-BS> :silent Scratch<CR>
 vnoremap <M-BS> :yank<CR>:Scratch<CR>p
@@ -341,6 +342,8 @@ function! Init()
         nnoremap <buffer> <Leader>mS :WordyWordy<CR>:setl spell<CR>:Neomake<CR>:DittoSentOn<CR>
         nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
         nnoremap <buffer> gx yiW:execute '!'. $BROWSER . ' ' . @+ <CR>
+    else
+        setl nospell
     endif
     " if completion / omnifunction is not provided fall back on default 
     if exists("+omnifunc") && &omnifunc == "" 
@@ -354,7 +357,7 @@ endfunction
 
 " GitcommitInit() {{{
 function! GitcommitInit()
-     setl virtualedit=block spell
+     setl virtualedit=block spell complete=.,w,k,s,k~/Notes/**.md,k~/Notes/**.rst
      let b:vcm_tab_complete = 'dict'
      " WordyWordy                  
 endfunction
@@ -486,7 +489,7 @@ execute 'set dictionary=' .  g:DICTDIR . 'frequent.dict'
 if ! filereadable(g:DICTDIR .'thesaurus.txt')
     execute '!curl -o ' . g:DICTDIR . 'thesaurus.txt  https://raw.githubusercontent.com/nl253/Dot-files/master/.config/nvim/thesaurus.txt'
 endif
-execute 'set thesaurus=' . glob('~/.dicts/'). 'thesaurus.txt'
+execute 'set thesaurus=' . g:DICTDIR . 'thesaurus.txt'
 if ! filereadable(g:DICTDIR .'css.dict')
     execute '!curl -o ' . g:DICTDIR . 'css.dict https://raw.githubusercontent.com/nl253/Dot-files/master/dicts/css.dict'
 endif
