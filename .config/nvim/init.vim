@@ -300,20 +300,23 @@ call plug#end()
 
 " SCRATCHPAD {{{
 function! Scratch()
+    if empty(glob('~/.scratchpads/'))
+        !mkdir -p ~/.scratchpads
+    endif
     if index(['netrw', 'terminal','gitcommit'], &filetype) >= 0  " blacklist
         return 1
     endif
     if index(g:PROGRAMMING, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 || index(g:MARKUP, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
-        execute 'vnew ' . '~/Notes/scratch.' . expand('%:e')
+        execute 'vnew ' . '~/.scratchpads/scratch.' . expand('%:e')
         execute 'setl ft=' . &filetype
     elseif &filetype == 'help'
-        vnew ~/Notes/scratch.vim
+        vnew ~/.scratchpads/scratch.vim
         setl ft=vim
     elseif &filetype == 'man'
-        vnew ~/Notes/scratch.sh
+        vnew ~/.scratchpads/scratch.sh
         setl ft=sh
     else
-        vnew ~/Notes/scratch
+        vnew ~/.scratchpads/scratch
         setl ft=scratch
     endif
     vertical resize 60
