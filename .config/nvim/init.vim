@@ -261,11 +261,8 @@ let g:ftplugin_sql_omni_key = ',' " shadows localleader
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
 Plug 'othree/html5-syntax.vim'
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
-
 let g:emmet_html5 = 1
-
 Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
-
 Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
             \'xhtml', 'xml', 'css'] }
 " }}}
@@ -285,7 +282,6 @@ endif
 " }}}
 
 call plug#end()
-
 " }}}
 
 " Scratchpad {{{
