@@ -6,6 +6,7 @@ let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css',
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
 let g:DICT_DIR = glob('~/.dicts/')
 let g:TEMPLATE_DIR = glob('~/.templates/')
+let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 
 let g:WORKING_DIRS = [ 'Scripts', 'Notes','.scratchpads', 
             \'.templates', 'Projects', '.bin']
@@ -14,8 +15,12 @@ if empty(g:DICT_DIR)
     call system('!mkdir -p '.g:DICT_DIR)
 endif
 
-if empty(glob('~/.scratchpads/'))
-    !mkdir -p ~/.scratchpads
+if empty(g:SCRATCHPAD_DIR)
+    call system('!mkdir -p '.g:SCRATCHPAD_DIR)
+endif
+
+if empty(g:TEMPLATE_DIR)
+    call system('!mkdir -p '.g:TEMPLATE_DIR)
 endif
 
 let loaded_matchit = 1
@@ -472,19 +477,15 @@ aug VIMENTER
     au FileType sh call ShInit()
     au FileType vim call VimInit()
     au FileType help call HelpInit()
-    au FileType php call PhpInit()
-    au FileType javascript call JavascriptInit()
-    au FileType sql call SqlInit()
-    au FileType css call CssInit()
     au FileType xhtml,html call HTMLInit()
     au FileType gitcommit call GitcommitInit()
-    au FileType python call PythonInit()
     au FileType qf call QfInit()
 aug END
 " }}}
 
 " download dictionaries from GitHub if missing {{{
-let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'css.dict', 'sql.dict', 'php.dict', 'sh.dict', 'javascript.dict']
+let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
+" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
 for dict in g:DICTS
     if ! filereadable(g:DICT_DIR . dict)
         execute '!curl -o ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
