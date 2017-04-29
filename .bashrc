@@ -72,7 +72,7 @@ if [[ ! -e ~/Scripts ]] && [[ -x $(which git) ]]; then
   REGEX="^[Yy]es"
   read -n 3 -r -p "type [Yes/No] " RESPONSE
   if [[ $RESPONSE =~ $REGEX ]]; then
-    echo -e "PULLING from https://github.com/nl253/Scripts master\n" # Pull Scripts if not present already
+    echo -e "PULLING https://github.com/nl253/Scripts master branch\n" # Pull Scripts if not present already
     cd
     git clone --recursive https://github.com/nl253/Scripts
   else
@@ -80,12 +80,19 @@ if [[ ! -e ~/Scripts ]] && [[ -x $(which git) ]]; then
   fi
 fi # 
 
-[[ ! -e ~/.dicts ]] && mkdir -p ~/.dicts
-[[ ! -e ~/.scratchpads ]] && mkdir -p ~/.scratchpads
-
-# because we have `Scripts` # but check just in case
-# we can try to init vim # nothing will happen if it's set up properly
-[[ -e $(setup-vim.sh) ]] && setup-vim.sh
+# pull scripts if needed 
+if [[ ! -e ~/.dicts ]] && [[ -x $(which git) ]]; then
+  echo -e "You don't appear to have dicts."
+  echo -e "Would you like to download them from GitHub?\nNote, this will clone them into ~/.dicts/"
+  REGEX="^[Yy]es"
+  read -n 3 -r -p "type [Yes/No] " RESPONSE
+  if [[ $RESPONSE =~ $REGEX ]]; then
+    echo -e "PULLING https://github.com/nl253/Dictionaries master branch\n" # Pull Scripts if not present already
+    git clone --recursive https://github.com/nl253/Dictionaries ~/.dicts
+  else
+    echo -e "OK.\nNothing to be done.\n"
+  fi
+fi # 
 
 # load fzf configuration # alters $PATH
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash

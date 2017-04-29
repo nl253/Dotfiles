@@ -347,7 +347,11 @@ function! Init()
         if executable('wn') 
             nnoremap <buffer> <CR> :execute '!wn '.expand('<cword>').' -over'<CR>
         endif
-        nnoremap <expr> <buffer> <Leader>mS has('nvim') ? ':WordyWordy\<CR>:setl spell\<CR>:Neomake\<CR>:DittoSentOn\<CR>' : ':WordyWordy\<CR>:setl spell\<CR>:SyntasticCheck\<CR>:DittoSentOn\<CR>'
+        if has('nvim')
+            nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
+        else
+            nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:SyntasticCheck<CR>:DittoSentOn<CR>
+        endif
         nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
         nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
     elseif index(g:PROGRAMMING, &filetype) >= 0                             
@@ -486,7 +490,7 @@ aug VIMENTER
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
-    au BufEnter * if &filetype == "" | setl ft=markdown | endif
+    au BufEnter * if &filetype == "" | setl ft=rst | endif
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
