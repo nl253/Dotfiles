@@ -1,6 +1,6 @@
 
 " VARIABLES and UTILS {{{
-let g:MARKUP = [ 'markdown', 'rst' ]
+let g:MARKUP = [ 'rst' ]
 
 let g:MARKUP_EXT = ['md', 'rst'] 
 
@@ -161,7 +161,6 @@ if ! has('nvim')
     let g:syntastic_vim_checkers = []
     let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
     let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
-    let g:syntastic_markdown_checkers = ['proselint', 'mdl', 'textlint']
     let g:syntastic_rst_checkers = ['proselint', 'mdl', 'textlint']
     let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
     let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
@@ -186,7 +185,6 @@ Plug 'reedes/vim-textobj-sentence'
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 
             \'DittoOn', 'DittoSent','DittoSentOn'],
             \'for' : g:MARKUP}
-let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 let g:neomake_rst_enabled_makers = ['writegood', 'proselint']
 " }}}
 "
@@ -206,21 +204,10 @@ au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_
 Plug 'Rykka/riv.vim', {'for' : 'rst'}
 "}}}
 
-" MARKDOWN {{{
 Plug 'chrisbra/Colorizer', { 'for': [ 'css', 'html', 
             \'javascript', 'json', 'markdown',
             \'rst' ,'xhtml', 'yaml']}
 Plug 'godlygeek/tabular', { 'for': ['markdown', 'rst'], 'on' : 'Tabularize' }
-Plug 'plasticboy/vim-markdown', { 'for': ['markdown']}
-let g:vim_markdown_autowrite = 1
-let g:vim_markdown_emphasis_multiline = 1
-let g:vim_markdown_new_list_item_indent = 4
-let g:vim_markdown_fenced_languages = [
-            \'sh=shell', 'java', 'python=py', 'zsh=zshell',
-            \'html=xhtml', 'css', 'php', 'javascript=js']
-let g:vim_markdown_no_default_key_mappings = 1
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_folding_level = 1
 " }}}  }}}
 
 " PYTHON {{{
@@ -274,6 +261,7 @@ Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
             \'xhtml', 'xml', 'css'] }
 " }}}
 "
+" FZF {{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
@@ -281,6 +269,7 @@ let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-s': 'split',
             \ 'ctrl-v': 'vsplit' }
+" }}}
 
 " FOR NVIM {{{
 if has('nvim')
@@ -294,7 +283,6 @@ endif
 " }}}
 
 call plug#end()
-" }}}
 
 " Scratchpad {{{
 function! Scratch()
@@ -445,17 +433,6 @@ function! VimInit()
 endfunction
 " }}}
 
-" MarkdownInit() {{{
-function! MarkdownInit()
-    nmap <buffer> [[ <Plug>Markdown_MoveToPreviousHeader
-    nmap <buffer> ]] <Plug>Markdown_MoveToNextHeader
-    nmap gx <buffer> <Plug>Markdown_OpenUrlUnderCursor
-    command! PandocMarkdownPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f markdown_github -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'
-    nnoremap <buffer> <expr> <Leader>me executable('pandoc') && executable($BROWSER) ? ":PandocMarkdownPreview\<CR>" : "\<Leader>me"
-
-endfunction
-" }}}
-"
 " RstInit() {{{
 function! RstInit()
     command! PandocRstPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f rst -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'
@@ -496,7 +473,6 @@ aug VIMENTER
     au CmdwinLeave * setlocal updatetime=200
     au BufNewFile * call Template()
     au FileType * call Init()
-    au FileType markdown call MarkdownInit()
     au FileType rst call RstInit()
     au FileType man call ManInit()
     au FileType sh call ShInit()
@@ -513,7 +489,7 @@ let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'css.dict', 'sql.dict', 'sh.dic
 " let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
 for dict in g:DICTS
     if ! filereadable(g:DICT_DIR . dict)
-        execute '!curl -o ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
+        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
     endif
 endfor
 " }}}
@@ -623,3 +599,5 @@ cno QWA<CR> wqa<CR>
 cno QwA<CR> wqa<CR>
 " }}}
 " }}}
+
+"vim:set foldlevel=0
