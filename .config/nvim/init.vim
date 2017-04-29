@@ -2,6 +2,8 @@
 " VARIABLES and UTILS {{{
 let g:MARKUP = [ 'markdown', 'rst' ]
 
+let g:MARKUP_EXT = ['md', 'rst'] 
+
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css',
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
 
@@ -181,8 +183,8 @@ let g:easytags_resolve_links = 1
 " MARKUP {{{ {{{
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
 Plug 'reedes/vim-textobj-sentence'
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent',
-            \'DittoSentOn', 'DittoFile', 'DittoFileOn', 'DittoPar', 'DittoParOn'],
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 
+            \'DittoOn', 'DittoSent','DittoSentOn'],
             \'for' : g:MARKUP}
 let g:neomake_markdown_enabled_makers = ['writegood', 'proselint']
 let g:neomake_rst_enabled_makers = ['writegood', 'proselint']
@@ -201,7 +203,7 @@ au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_
 " }}}
 
 "{{{ RST
-Plug 'Rykka/riv.vim'
+Plug 'Rykka/riv.vim', {'for' : 'rst'}
 "}}}
 
 " MARKDOWN {{{
@@ -275,6 +277,11 @@ Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+let g:fzf_action = {
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-s': 'split',
+            \ 'ctrl-v': 'vsplit' }
+
 " FOR NVIM {{{
 if has('nvim')
     Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
@@ -326,12 +333,12 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 function! Init()
     if index(g:MARKUP, &filetype) >= 0
         setl spell complete=.,w,k,s
-        for dir in g:WORKING_DIRS
-            if expand('%:e') != ''
-                execute 'setl complete+=k~/'.dir.'/**.'.expand('%:e')
-                execute 'setl complete+=k~/'.dir.'/**/**.'.expand('%:e')
-                execute 'setl complete+=k~/'.dir.'/**/**/**.'.expand('%:e')
-            endif
+        for dir in g:WORKING_DIRS  " this actually isn't recursive 
+            for extension in g:MARKUP_EXT " 2 levels of depth ... 
+                execute 'setl complete+=k~/'.dir.'/**.'.extension
+                " uncomment to get 2 levels of depth
+                execute 'setl complete+=k~/'.dir.'/**/**.'.extension  
+            endfor
         endfor
         setl conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1 sw=4
         if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
@@ -343,10 +350,23 @@ function! Init()
         nnoremap <expr> <buffer> <Leader>mS has('nvim') ? ':WordyWordy\<CR>:setl spell\<CR>:Neomake\<CR>:DittoSentOn\<CR>' : ':WordyWordy\<CR>:setl spell\<CR>:SyntasticCheck\<CR>:DittoSentOn\<CR>'
         nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
         nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
-    else
+    elseif index(g:PROGRAMMING, &filetype) >= 0                             
         setl nospell
-        if index(g:PROGRAMMING, &filetype) >= 0 
-            setl complete=.,w,t,k
+        if expand('%:e') != ''     " if there is an extension (needed)
+            setl complete=.,w,t    " current buffer, windows (splits), tags
+            for dir in g:WORKING_DIRS
+                execute 'setl complete+=k~/'.dir.'/**.'.expand('%:e')
+                " uncomment to get 2 levels of depth
+                "execute 'setl complete+=k~/'.dir.'/**/**.'.expand('%:e')
+            endfor
+        endif
+        if filereadable(g:DICT_DIR . &filetype . '.dict')                       
+            " if in g:PROGRAMMING and an appropriate dict is available, 
+            " then REPLACE english dict with it and add dict to user defined completion 
+            " this works because dicts follow the naming convention of {filetype}.dict
+            let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict' " 
+            execute g:to_exe                                                    
+            setl complete+=k
         endif
     endif
     " if completion / omnifunction is not provided fall back on default
@@ -512,11 +532,12 @@ if executable('pdftotext')
 endif
 " }}}
 if executable('dos2unix')
-    command! Dos2Unix !dos2unix -F -n %:p %:p | edit
+    command! Dos2Unix !dos2unix %:p | edit
 endif
 command! DeleteEmptyLines execute 'g/^\s*$/d'
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
-command! Note -nargs=1 -bar -complete=file edit <args>
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 " }}}
 
 " KEYBINDINGS {{{
@@ -566,15 +587,15 @@ nnoremap <C-s><C-d>     :DeleteSession!<CR>
 nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
-nnoremap <C-v> :FZFFileAnchor<CR>
-nnoremap <leader>fh :FZFRecFilesHome<CR>
-nnoremap <Leader>fr :FZFMru<CR>
-
-nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " ./* ~/Notes/** ~/* ~/.templates/* ~/Scripts/** ~/Projects/**"<CR>:cw<CR>
+nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " ./* ./**/*." . expand('%:e') . " ./**/**/*." . expand('%:e')." ~/Notes/** ~/* ~/.templates/* ~/Scripts/** ~/Projects/**"<CR>:cw<CR>
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
-nnoremap <Leader>sa :Ag!<CR>
-nnoremap <Leader>sl :Lines!<CR>
+nnoremap <Leader>fa :Ag!<CR>
+nnoremap <Leader>fg :GGrep!<CR>
+nnoremap <Leader>fl :Lines!<CR>
+nnoremap <Leader>/ :History/<CR>
+nnoremap <Leader>: :History:<CR>
+nnoremap <Leader><Leader> :Commands!<CR>
 
 " {{{ SHAME
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
