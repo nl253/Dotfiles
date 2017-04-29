@@ -1,15 +1,21 @@
 
 " VARIABLES and UTILS {{{
 let g:MARKUP = [ 'markdown', 'rst' ]
+
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css',
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
+
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
+
 let g:DICT_DIR = glob('~/.dicts/')
+
 let g:TEMPLATE_DIR = glob('~/.templates/')
+
 let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 
+" THESE NEED!!! TO BE RELATIVE TO $HOME
 let g:WORKING_DIRS = [ 'Scripts', 'Notes','.scratchpads', 
-            \'.templates', 'Projects', '.bin']
+            \'.templates', 'Projects', '.bin', '.dicts']
 
 if empty(g:DICT_DIR)
     call system('!mkdir -p '.g:DICT_DIR)
@@ -87,7 +93,6 @@ set splitbelow virtualedit=all
 set shortmess=atI " Don't show the intro message when starting vim
 set path=
 
-" THESE NEED!!! TO BE RELATIVE TO $HOME
 for dir in g:WORKING_DIRS
     execute 'set path+=' . glob('~/') . dir . '/**'
 endfor
