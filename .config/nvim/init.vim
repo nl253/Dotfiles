@@ -481,6 +481,7 @@ aug VIMENTER
     au FileType xhtml,html call HTMLInit()
     au FileType gitcommit call GitcommitInit()
     au FileType qf call QfInit()
+    au FileType python nnoremap <Leader>mS :PymodeLint<CR>
 aug END
 " }}}
 

@@ -13,27 +13,7 @@ import re
 import glob
 from prompt_toolkit import prompt
 from prompt_toolkit.contrib.completers import WordCompleter
-
-def report(item: Any, name_of_var=None, print_cwd=False, length_of_var=True, type_of_var=True, pprint_var=True):
-    if print_cwd:
-        print("PWD : " + os.getcwd())
-    if pprint_var:
-        pprint(item)
-    if length_of_var:
-        try:
-            print("LENGTH : {}".format(len(item)))
-        except:  # throws an Exception if that item has no len
-            print("LENGTH : ??? ")
-    if type_of_var:
-        try:
-            print("TYPE : {}".format(type(item)))
-            print("\n")
-        except:
-            print("TYPE : ??? ")
-            print("\n")
-    if type(name_of_var) is str and len(name_of_var) > 0:
-        print(name_of_var)
-
+from PythonUtils.debugging import report
 
 logging.basicConfig(
     level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
@@ -67,88 +47,6 @@ groups = {
     'query': {},
 }
 
-
-# TODO
-# ----
-#  make it swap ansers if a command has already been provided.
-#
-# D) add a universal detailed option for all listing and querying, make it
-# reusable, based on file name get details such as size, access time, tags,
-# keywords, themes, maybe sentiment score...
-#
-# LOOK AT TEXTBLOB API (if it changed or improved)
-#
-# D)
-## Write your own debugging tools similar to the `report` method
-#
-# E)
-# At the end add things like tags using textblob and possibly nltk if it's not
-# too complicated,
-#
-# F) TEMPLATES: make template files
-#
-
-####################################################
-
-# THE LOGIC
-# ==========
-#
-# The choosing of a specific mode from
-# {edit,query,list} stores that mode
-#
-# It is then checked for and appropriate functions are called
-# and variables set.
-#
-#       I call : edit_handler()
-#                query_handler()
-#                list_handler()
-#
-#       and they produce the outcome. Think catalogue.
-#
-# The `parsers` variable is basicallly a dict of parsers
-# this is a way of dealing with lack of namespaces in python
-# (as far as I am aware)
-#
-# `groups` is another dict that helps me to deal with nameing.
-#
-# ```python
-# parsers = {
-#   'main': ArgumentParser(),
-#   'subparsers: main.add_subparsers(),
-#   'edit': subparsers.add_parser('edit'),
-#   'query': subparsers.add_parser('query'),
-#   'list': subparsers.add_parser('list'),
-# }
-# ```
-#
-# naming of `groups` follows this convention:
-#
-#         ```python
-#         groups['edit']['name|format']
-#         groups['list']['tree|detailed|concise']
-#         ```
-#
-# A view on `groups`
-#
-# ```python
-# groups = {
-#   'edit': {
-#       'name|format': {}
-#       'location|subject': {}
-#   },
-#   'query': {
-#       'name|format': {}
-#       'location|subject': {}
-#   },
-#   'list': {
-#       'name|format': {}
-#       'location|subject': {}
-#   },
-# }
-# ```
-# --------------------------------------------------------------
-
-
 parsers['main'] = argparse.ArgumentParser(
     prog="note",
     description="Note management tool. \n\
@@ -160,7 +58,8 @@ parsers['main'].add_argument(
     '--location',
     default='~/Notes',
     help='Global location where notes are stored and managed. \
-    DEFAULT : %(default)s')
+    DEFAULT : %(default)s'
+                          )
 
 parsers['subparsers'] = parsers['main'].add_subparsers(dest='mode')
 
@@ -249,7 +148,7 @@ groups['edit']['template'].add_argument(
     [DEFAULT is %(default)s]"
                              ,
     metavar='ABS PATH TO TEMPLATE FILE',
-    default='~/.templates/template.md',
+    default='~/.templates/template.rst',
     nargs='?')
 
 groups['edit']['template'].add_argument(

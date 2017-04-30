@@ -1,0 +1,28 @@
+#!/bin/bash
+
+[[ ! -v EDITOR ]] && echo -e "\nSet the EDITOR variable and run $(basename $0) again.\n" && exit 1
+[[ ! -d ~/Scripts ]] && echo -e "\nYou don't have a ~/Scripts dir.\nMake it and run $(basename $0) again.\n" && exit 1
+
+help(){
+	echo -e "Usage:\n$(basename $0) [new script name]\n"
+	echo -e "The script takes 1 argument and makes a script in ~/Scripts with this name.\n"
+}
+
+[[ ! $# == 1 ]] && help && exit 0
+
+case $1 in
+	help | h | -h | --help )
+		help
+		exit 0
+		;;
+		* )
+		[[ ! -e ~/Scripts ]] && mkdir -p ~/Scripts
+		cd ~/Scripts || exit 1
+		if [[ -e ~/.templates/template.sh ]] && [[ ! -e "${HOME}/Scripts/${1}" ]] ; then 
+			cp ~/.templates/template.sh "${HOME}/Scripts/${1}"
+		else
+			touch "$1"
+		fi
+		$EDITOR "$1"
+		;;
+esac
