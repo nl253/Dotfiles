@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# {{{ SCRIPT OUTLINE
+# -----------------------------------------------------------------------
+# DESCRIPTION 
+#
+# List all notes (only the basename) from my ~/Notes directory 
+# NOTE depth is 3 levels and extensions are rst org txt textile and md
+# -----------------------------------------------------------------------
+# USAGE notes 
+# -----------------------------------------------------------------------
+# }}}
+
+# call when user is confused or the args are wrong
+
+for i in $(ls ~/Notes/{**,**/**,**/**/**}.{rst,org,txt,md,textile} 2>/dev/null) ; do
+    echo "$(basename ${i})" 
+done
+
+
