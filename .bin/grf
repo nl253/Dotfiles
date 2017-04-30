@@ -5,7 +5,7 @@
 # `grep` recursively through all files in the cwd, and find a pattern in the lines.
 # the input will be passed on to `fzf` and on `enter` open in (on that specific line) in vim or neovim
 
-[[ ! -x /bin/nvim ]] && [[ ! -x /usr/bin/nvim ]]  && [[ ! -x /bin/vim ]]  && [[ ! -x /usr/bin/vim ]] && echo -e "$(basename $0) : You need vim or neovim for this script to work.\nAborting.\n" && exit 1
+[[ ! -x $(which vim) ]] && [[ ! -x $(which nvim) ]] && echo -e "$(basename $0) : You need vim or neovim for this script to work.\nAborting.\n" && exit 1
 
 format-handler() {
         # take the input from fzf in the form FILENAME:LINENUMBER:TEXT

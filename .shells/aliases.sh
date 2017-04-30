@@ -107,6 +107,7 @@ $(in-path ag) && alias ag='ag --hidden --pager="less -MIRFX"' # search with dotf
 alias http-server="python3 -m http.server" # open using 0.0.0.0:{PORT}
 # mount a remote hard-drive
 $(in-path sshfs) && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor"
+$(in-path) && alias my-ip='curl ipinfo.io/ip'
 # set up logging in ~/Downloads/Torrents/aria2c.log
 # and a default location for download of Torrents in ~/Downloads/Torrents/
 $(in-path aria2c) && alias aria2c="mkdir -p ${HOME}/Downloads/Torrents/ ; touch ${HOME}/Downloads/Torrents/aria2c.log ; aria2c --continue --dir=${HOME}/Downloads/Torrents --log=${HOME}/Downloads/Torrents/aria2c.log"
