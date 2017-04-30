@@ -1806,7 +1806,7 @@ set imap_check_subscribed=yes
 # up periodically, try unsetting this.
 # 
 # 
-set imap_keepalive=300
+set imap_keepalive=900
 #
 # Name: imap_keepalive
 # Type: number
@@ -4856,7 +4856,7 @@ set smtp_pass="Kruszynka96*"
 # 
 # 
 # set smtp_url="smtps://norbertlogiewa96@gmail.com:Kruszynka96*@gmail.com"
-set smtp_url = 'smtps://norbertlogiewa96@smtp.gmail.com:587/'
+set smtp_url = 'smtps://norbertlogiewa96:Kruszynka96*@smtp.gmail.com'
 #
 # Name: smtp_url
 # Type: string
@@ -5055,7 +5055,7 @@ set spoolfile = '+INBOX'
 # the default from the GNUTLS library.
 # 
 # 
-set ssl_starttls=yes
+# set ssl_starttls=yes
 #
 # Name: ssl_starttls
 # Type: quadoption

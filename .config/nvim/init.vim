@@ -19,17 +19,11 @@ let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 let g:WORKING_DIRS = [ 'Scripts', 'Notes','.scratchpads', 
             \'.templates', 'Projects', '.bin', '.dicts']
 
-if empty(g:DICT_DIR)
-    call system('!mkdir -p '.g:DICT_DIR)
-endif
-
-if empty(g:SCRATCHPAD_DIR)
-    call system('!mkdir -p '.g:SCRATCHPAD_DIR)
-endif
-
-if empty(g:TEMPLATE_DIR)
-    call system('!mkdir -p '.g:TEMPLATE_DIR)
-endif
+for d in [g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR]
+    if empty(d)
+        call system('!mkdir -p '.d)
+    endif
+endfor
 
 let loaded_matchit = 1
 let mapleader = " "
@@ -162,7 +156,6 @@ if ! has('nvim')
     let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
     let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
     let g:syntastic_rst_checkers = ['proselint', 'mdl', 'textlint']
-    let g:syntastic_python_checkers = ['flake8', 'pylint', 'pycodestyle']
     let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
     let g:syntastic_javascript_checkers = ['jshint', 'eslint']
     let g:syntastic_css_checkers = ['stylelint', 'csslint', 'phpcs']
@@ -217,7 +210,7 @@ let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
 let g:pymode_doc_bind = ',h'
 let g:pymode_indent = 1
-let g:pymode_lint = 1 " Neomake is better
+let g:pymode_lint = 1 
 let g:pymode_motion = 1
 let g:pymode_options = 1
 let g:pymode_options_colorcolumn = 1
@@ -290,7 +283,7 @@ function! Scratch()
         return 1
     endif
     if index(g:PROGRAMMING, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 || index(g:MARKUP, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0
-        execute 'vnew ' . '~/.scratchpads/scratch.' . expand('%:e')
+        vnew ~/.scratchpads/scratch.%:e
         execute 'setl ft=' . &filetype
     elseif &filetype == 'help'
         vnew ~/.scratchpads/scratch.vim
@@ -421,7 +414,7 @@ function! QfInit()
     nnoremap <buffer> <C-n> j<CR><C-w><C-w>
     nnoremap <buffer> <C-p> k<CR><C-w><C-w>
     " quick exit
-    nnoremap <buffer> q :cclose<CR>
+    nnoremap <buffer> q :cclose<CR>:lclose<CR>
     setl nospell
 endfunction
 " }}}
@@ -435,14 +428,14 @@ endfunction
 
 " RstInit() {{{
 function! RstInit()
-    command! PandocRstPreview execute '!pandoc -s -o /tmp/' . expand('%:r') . '.html  -f rst -t html ' . expand('%:p') . ' ; ' . $BROWSER . ' /tmp/' . expand('%:r') . '.html'
+    command! PandocRstPreview !pandoc -s -o /tmp/%:r.html -f rst -t html %:p | $BROWSER /tmp/%:r.html
     nnoremap <buffer> <expr> <Leader>me executable('pandoc') && executable($BROWSER) ? ":PandocRstPreview\<CR>" : "\<Leader>me"
 endfunction
 "}}}
 
 " HTMLInit() {{{
 function! HTMLInit()
-    nnoremap <buffer> <Leader>me :execute '!$BROWSER ' . expand('%:p')<CR>
+    nnoremap <buffer> <Leader>me :!$BROWSER %:p<CR>
     setl foldmethod=indent
     setl complete=.,w
 endfunction
@@ -452,7 +445,9 @@ endfunction
 " Template {{{
 function! Template()
     if filereadable(g:TEMPLATE_DIR."template.".expand("%:e"))
+        normal gg
         call execute('read '.g:TEMPLATE_DIR."template.".expand("%:e"))
+        normal dd
         write
     endif
 endfunction
@@ -467,6 +462,7 @@ aug VIMENTER
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
+    " by default blank files are rst notes
     au BufEnter * if &filetype == "" | setl ft=rst | endif
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
@@ -500,16 +496,24 @@ colorscheme antares
 " COMMANDS {{{
 " markup conversion, recommended {{{
 if executable('pandoc')
-    command! TOman execute '!pandoc -s -o ' expand('%:p:r') . '.1  -t man ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.1'
-    command! TOmarkdown execute '!pandoc -s -o ' expand('%:p:r') . '.md  -t markdown_github --atx-headers --ascii --toc ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.md'
-    command! TOrst execute '!pandoc -s -o ' expand('%:p:r') . '.rst  -t rst --ascii ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.rst'
-    command! TOtex execute '!pandoc -s -o ' expand('%:p:r') . '.tex  -t tex ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.tex'
-    command! TOwordocx execute '!pandoc -s -o ' expand('%:p:r') . '.docx  -t docx ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.docx'
-    command! TOhtml2 execute '!pandoc -s -o ' expand('%:p:r') . '.html  -t html --html-q-tags --self-contained ' . expand('%:p') | sleep 250ms | execute 'vs  ' . expand('%:p:r') . '.html'
+    command! TOmarkdown execute !pandoc -s -o %:p:r.md -t markdown_github --atx-headers --ascii --toc %:p | sleep 250ms | vs %:p:r.md
+    command! TOrst execute !pandoc -s -o %:p:r.rst -t rst --ascii %:p | sleep 250ms | vs %:p:r.rst
+    command! TOtex execute !pandoc -s -o %:p:r.tex  -t tex %:p | sleep 250ms | vs %:p:r.tex
+    command! TOwordocx execute !pandoc -s -o %:p:r.docx -t docx %:p | sleep 250ms | vs %:p:r.docx
+    command! TOhtml2 execute !pandoc -s -o %:p:r.html -t html --html-q-tags --self-contained %:p | sleep 250ms | vs %:p:r.html
 endif
 if executable('pdftotext')
-    command! FROMpdfTOtxt execute '!pdftotext -eol unix "' . expand('%:p') . '"'
-    au! BufRead *.pdf execute '!pdftotext -eol unix "' . expand('%:p') . '" | edit ' expand('%:r') . '.txt'
+    function! PdfTOtxt()
+        !pdftotext -eol unix %:p /tmp/%:r.txt 
+        edit /tmp/%:r.txt 
+    endfunction
+    command! PdfTOtxt call PdfTOtxt()
+    function! PdfInit()
+        if matchstr(expand('%'),' ') == "" 
+            PdfTOtxt 
+        endif
+    endfunction
+    au! FileType pdf call PdfInit()
 endif
 " }}}
 if executable('dos2unix')
@@ -568,37 +572,19 @@ nnoremap <C-s><C-d>     :DeleteSession!<CR>
 nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
-nnoremap <Leader>sg :execute 'grep ' . expand('<cword>') . " ./* ./**/*." . expand('%:e') . " ./**/**/*." . expand('%:e')." ~/Notes/** ~/* ~/.templates/* ~/Scripts/** ~/Projects/**"<CR>:cw<CR>
+nnoremap <Leader>* :grep <cword> {./*,./**/*,./**/**/*}.%:e ~/Notes/{**,**/**}/*.{rst,md,txt} ~/{.templates,Scripts,Projects}/**<CR>:cw<CR>
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
-nnoremap <Leader>fa :Ag!<CR>
-nnoremap <Leader>fg :GGrep!<CR>
-nnoremap <Leader>fl :Lines!<CR>
+nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
+nnoremap <C-k> :silent lp<CR>
+nnoremap <C-j> :silent lne<CR>
+nnoremap <Leader>a<Leader> :Ag!<CR>
+nnoremap <Leader>g<Leader> :GGrep!<CR>
+nnoremap <Leader>l<Leader> :Lines!<CR>
 nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
 
-" {{{ SHAME
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
-cno W!<CR> w!<CR>
-cno W<CR> w<CR>
-cno Wa<CR> wa<CR>
-cno WA<CR> wa<CR>
-cno Wa!<CR> wa!<CR>
-cno WA!<CR> wa!<CR>
-cno Wqa<CR> wqa<CR>
-cno wQa<CR> wqa<CR>
-cno WQA<CR> wqa<CR>
-cno wqA<CR> wqa<CR>
-cno wqA<CR> wqa<CR>
-cno qwa<CR> wqa<CR>
-cno Qwa<CR> wqa<CR>
-cno qWa<CR> wqa<CR>
-cno qwA<CR> wqa<CR>
-cno qWA<CR> wqa<CR>
-cno QWA<CR> wqa<CR>
-cno QwA<CR> wqa<CR>
-" }}}
-" }}}
 
 "vim:set foldlevel=0
