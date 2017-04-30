@@ -52,7 +52,7 @@ else
     endif
 endif
 
-if ! filereadable(g:PLUG_FILE)
+if ! filereadable(g:PLUG_FILE) && executable('curl')
     call system('curl -fLo ' . g:PLUG_FILE . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     PlugInstall
     source $MYVIMRC
@@ -447,8 +447,8 @@ function! Template()
     if filereadable(g:TEMPLATE_DIR."template.".expand("%:e"))
         normal gg
         call execute('read '.g:TEMPLATE_DIR."template.".expand("%:e"))
+        normal gg
         normal dd
-        write
     endif
 endfunction
 command! Template call Template()
@@ -485,7 +485,7 @@ aug END
 let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
 " let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
 for dict in g:DICTS
-    if ! filereadable(g:DICT_DIR . dict)
+    if ! filereadable(g:DICT_DIR . dict) && executable('curl')
         execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
     endif
 endfor
@@ -496,11 +496,11 @@ colorscheme antares
 " COMMANDS {{{
 " markup conversion, recommended {{{
 if executable('pandoc')
-    command! TOmarkdown execute !pandoc -s -o %:p:r.md -t markdown_github --atx-headers --ascii --toc %:p | sleep 250ms | vs %:p:r.md
-    command! TOrst execute !pandoc -s -o %:p:r.rst -t rst --ascii %:p | sleep 250ms | vs %:p:r.rst
-    command! TOtex execute !pandoc -s -o %:p:r.tex  -t tex %:p | sleep 250ms | vs %:p:r.tex
-    command! TOwordocx execute !pandoc -s -o %:p:r.docx -t docx %:p | sleep 250ms | vs %:p:r.docx
-    command! TOhtml2 execute !pandoc -s -o %:p:r.html -t html --html-q-tags --self-contained %:p | sleep 250ms | vs %:p:r.html
+    command! TOmarkdown call system('pandoc -s -o '.expand('%:p:r').'.md -t markdown_github --atx-headers --ascii --toc '.expand('%:p')) | sleep 250ms | vs %:p:r.md
+    command! TOrst call system('pandoc -s -o '.expand('%:p:r').'.rst -t rst --ascii '.expand('%:p')) | sleep 250ms | vs %:p:r.rst
+    command! TOtex call system('pandoc -s -o '.expand('%:p:r').'.tex  -t tex '.expand('%:p')) | sleep 250ms | vs %:p:r.tex
+    command! TOwordocx call system('pandoc -s -o '.expand('%:p:r').'.docx -t docx '.expand('%:p')) | sleep 250ms | vs %:p:r.docx
+    command! TOhtml2 call system('pandoc -s -o '.expand('%:p:r').'html -t html --html-q-tags --self-contained '.expand('%:p')) | sleep 250ms | vs %:p:r.html
 endif
 if executable('pdftotext')
     function! PdfTOtxt()
