@@ -205,7 +205,9 @@ Plug 'godlygeek/tabular', { 'for': ['markdown', 'rst'], 'on' : 'Tabularize' }
 
 " PYTHON {{{
 Plug 'klen/python-mode', { 'for': 'python' }
-
+let g:pymode_lint_on_write = 0
+let g:pymode_options_max_line_length = 150
+let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
 let g:pymode_doc_bind = ',h'
