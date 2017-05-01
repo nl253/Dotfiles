@@ -37,6 +37,7 @@ from fuzzywuzzy.fuzz import ratio
 import subprocess
 import functools
 
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('file', nargs='+')
@@ -54,9 +55,12 @@ prefered_extension = '.rst'
 look_in = '~/Notes/'
 # -------------------------------------------
 
+look_in = os.path.expandvars(os.path.expanduser(look_in))
+
 alternative = "".join(args.file) + prefered_extension
 
-stringified = "".join(map(lambda x: x + " ", args.file))
+
+stringified = "".join(map(lambda x: x + " ", args.file)) if len(args.file) > 1 else args.file[0]
 
 notes = [
     i
@@ -70,6 +74,7 @@ reduced = functools.reduce(
     [os.path.basename(i) for i in notes])
 
 subprocess.run([
-    os.path.expandvars('${EDITOR}'), reduced
-    if ratio(reduced, stringified) >= threshold else alternative
+    os.path.expandvars('${EDITOR}'),
+    notes[[os.path.basename(i) for i in notes].index(reduced)]
+    if ratio(reduced, stringified) >= threshold else os.path.join(look_in, alternative)
 ])

@@ -204,6 +204,7 @@ fi
 if [[ -e ~/.pyenv/bin/pyenv ]]; then
   eval "$(pyenv init -)"
   source "$(pyenv root)/completions/pyenv.zsh"
+  [[ -e ~/.pyenv/plugins/pyenv-virtualenv/bin/pyenv-activate ]] && eval "$(pyenv virtualenv-init -)"
 fi
 # }}}
 

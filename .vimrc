@@ -2,7 +2,7 @@
 " VARIABLES and UTILS {{{
 let g:MARKUP = [ 'rst' ]
 
-let g:MARKUP_EXT = ['md', 'rst'] 
+let g:MARKUP_EXT = ['md', 'rst']
 
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css',
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
@@ -16,7 +16,7 @@ let g:TEMPLATE_DIR = glob('~/.templates/')
 let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 
 " THESE NEED!!! TO BE RELATIVE TO $HOME
-let g:WORKING_DIRS = [ 'Scripts', 'Notes','.scratchpads', 
+let g:WORKING_DIRS = [ 'Scripts', 'Notes','.scratchpads',
             \'.templates', 'Projects', '.bin', '.dicts']
 
 for d in [g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR]
@@ -137,32 +137,19 @@ if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let 
 if has('python') || has('python3')
     Plug 'SirVer/ultisnips' " Track the engine.
     " Snippets are separated from the engine. Add this if you want them:
-    Plug 'honza/vim-snippets' 
+    Plug 'honza/vim-snippets'
     let g:UltiSnipsExpandTrigger="<Tab>"
     let g:UltiSnipsEditSplit="vertical"
 endif
 " }}}
 
-Plug 'neomake/neomake', {'on' : [ 'Neomake', 'NeomakeProject', 'NeomakeFile' ]}
+Plug 'neomake/neomake', {'on' : [ 'Neomake' ]}
 
-" SYNTASTIC {{{
-if ! has('nvim')
-    Plug 'vim-syntastic/syntastic', { 'on' : [ 'SyntasticInfo', 'SyntasticCheck', 'SyntasticToggleMode']}
-    let g:syntastic_error_symbol = '✗'
-    let g:syntastic_warning_symbol = '⚠'
-    let g:syntastic_enable_signs = 1
-    let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': []}
-    let g:syntastic_vim_checkers = []
-    let g:syntastic_html_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
-    let g:syntastic_xhtml_checkers = ['w3', 'validator', 'tidy', 'jshint', 'eslint']
-    let g:syntastic_rst_checkers = ['proselint', 'mdl', 'textlint']
-    let g:syntastic_sh_checkers = ['bashate', 'sh', 'shellcheck']
-    let g:syntastic_javascript_checkers = ['jshint', 'eslint']
-    let g:syntastic_css_checkers = ['stylelint', 'csslint', 'phpcs']
-endif
-" }}}
+Plug 'dbakker/vim-lint'
 
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
+
+Plug 'sbdchd/neoformat', {'on' : 'Neoformat'}
 
 " TAGS {{{
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
@@ -175,14 +162,14 @@ let g:easytags_resolve_links = 1
 " MARKUP {{{ {{{
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
 Plug 'reedes/vim-textobj-sentence'
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
             \'DittoOn', 'DittoSent','DittoSentOn'],
             \'for' : g:MARKUP}
 let g:neomake_rst_enabled_makers = ['writegood', 'proselint']
 " }}}
 "
 " TABLE MODE {{{
-Plug 'dhruvasagar/vim-table-mode', { 'for': ['mardown', 'rst'],
+Plug 'dhruvasagar/vim-table-mode', { 'for': g:MARKUP,
             \'on': ['TableModeEnable'] }
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 " stops from indicating that it has loaded
@@ -197,10 +184,10 @@ au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_
 Plug 'Rykka/riv.vim', {'for' : 'rst'}
 "}}}
 
-Plug 'chrisbra/Colorizer', { 'for': [ 'css', 'html', 
+Plug 'chrisbra/Colorizer', { 'for': [ 'css', 'html',
             \'javascript', 'json', 'markdown',
             \'rst' ,'xhtml', 'yaml']}
-Plug 'godlygeek/tabular', { 'for': ['markdown', 'rst'], 'on' : 'Tabularize' }
+Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " }}}  }}}
 
 " PYTHON {{{
@@ -208,11 +195,12 @@ Plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
 let g:pymode_options_max_line_length = 150
 let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
+let g:pymode_lint_ignore = "E116,W"
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
 let g:pymode_doc_bind = ',h'
 let g:pymode_indent = 1
-let g:pymode_lint = 1 
+let g:pymode_lint = 1
 let g:pymode_motion = 1
 let g:pymode_options = 1
 let g:pymode_options_colorcolumn = 1
@@ -272,7 +260,6 @@ if has('nvim')
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
-    Plug 'sbdchd/neoformat', {'on' : 'Neoformat'}
     if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
 endif
 " }}}
@@ -316,28 +303,24 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 function! Init()
     if index(g:MARKUP, &filetype) >= 0
         setl complete=.,w,k,s
-        for dir in g:WORKING_DIRS  " this actually isn't recursive 
-            for extension in g:MARKUP_EXT " 2 levels of depth ... 
+        for dir in g:WORKING_DIRS  " this actually isn't recursive
+            for extension in g:MARKUP_EXT " 2 levels of depth ...
                 execute 'setl complete+=k~/'.dir.'/**.'.extension
                 " uncomment to get 2 levels of depth
-                execute 'setl complete+=k~/'.dir.'/**/**.'.extension  
+                execute 'setl complete+=k~/'.dir.'/**/**.'.extension
             endfor
         endfor
         setl conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1 sw=4
         if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
             TableModeEnable
         endif
-        if executable('wn') 
+        if executable('wn')
             nnoremap <buffer> <CR> :execute '!wn '.expand('<cword>').' -over'<CR>
         endif
-        if has('nvim')
-            nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
-        else
-            nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:SyntasticCheck<CR>:DittoSentOn<CR>
-        endif
+        nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
         nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
         nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
-    elseif index(g:PROGRAMMING, &filetype) >= 0                             
+    elseif index(g:PROGRAMMING, &filetype) >= 0
         setl nospell
         if expand('%:e') != ''     " if there is an extension (needed)
             setl complete=.,w,t    " current buffer, windows (splits), tags
@@ -347,12 +330,12 @@ function! Init()
                 "execute 'setl complete+=k~/'.dir.'/**/**.'.expand('%:e')
             endfor
         endif
-        if filereadable(g:DICT_DIR . &filetype . '.dict')                       
-            " if in g:PROGRAMMING and an appropriate dict is available, 
-            " then REPLACE english dict with it and add dict to user defined completion 
+        if filereadable(g:DICT_DIR . &filetype . '.dict')
+            " if in g:PROGRAMMING and an appropriate dict is available,
+            " then REPLACE english dict with it and add dict to user defined completion
             " this works because dicts follow the naming convention of {filetype}.dict
-            let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict' " 
-            execute g:to_exe                                                    
+            let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict' "
+            execute g:to_exe
             setl complete+=k
         endif
     endif
@@ -372,7 +355,7 @@ endfunction
 
 " GitcommitInit() {{{
 function! GitcommitInit()
-    setl virtualedit=block 
+    setl virtualedit=block
     setl spell complete=.,w,k,s
 endfunction
 " }}}
@@ -506,13 +489,13 @@ if executable('pandoc')
 endif
 if executable('pdftotext')
     function! PdfTOtxt()
-        !pdftotext -eol unix %:p /tmp/%:r.txt 
-        edit /tmp/%:r.txt 
+        !pdftotext -eol unix %:p /tmp/%:r.txt
+        edit /tmp/%:r.txt
     endfunction
     command! PdfTOtxt call PdfTOtxt()
     function! PdfInit()
-        if matchstr(expand('%'),' ') == "" 
-            PdfTOtxt 
+        if matchstr(expand('%'),' ') == ""
+            PdfTOtxt
         endif
     endfunction
     au! FileType pdf call PdfInit()
@@ -524,13 +507,13 @@ endif
 command! DeleteEmptyLines execute 'g/^\s*$/d'
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 command! -bang -nargs=* GGrep
-  \ call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
+            \ call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 " }}}
 
 " KEYBINDINGS {{{
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-nnoremap <expr> <Leader>mS has('nvim') ? ":Neomake\<CR>": ":SyntasticCheck\<CR>"
+nnoremap <Leader>mS :Neomake<CR>
 
 " Move by screen lines instead of file lines.
 " http://vim.wikia.com/wiki/Moving_by_screen_lines_instead_of_file_lines
