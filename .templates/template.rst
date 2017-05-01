@@ -1,18 +1,18 @@
 
-:Authors: 
-          Norbert Logiewa
-:Date: 
-       2017-04-27
+:Authors: Norbert Logiewa
+:Date: 2017-04-27
+:Info: see ... for more info
 
-
+==========
 Note Title
 ==========
+
 Subtitle
 ---------
 
+    .. attention:: **This will be in the exam.**
 
-    NOTE : 
-        *A warning to be read.*
+    .. note:: **This is important.**
 
 
 Intro
@@ -22,30 +22,22 @@ Intro
 Examples
 ~~~~~~~~~~~~~~
 
-For instance:
+.. rubric:: For instance
 
--  
--  
--  
--  
+* ItemA
+* ItemC
+* ItemD
 
 
 Details
-~~~~~~~~~~~~~~
+""""""""""""""
 
 Look into :
-~~~~~~~~~~~~~~
+""""""""""""""
 
-#. ItemA
-#. ItemB
-#. ItemC
-#. ItemD
-
-Section
+Middle
 -------
 
-Definitions
-~~~~~~~~~~
 
 what 
   Definition lists associate a term with 
@@ -56,17 +48,13 @@ how
   definition is one or more paragraphs or 
     
 
-Subsection
-~~~~~~~~~~
-
 Summary
 ~~~~~~~
 
---------------
+----------------------------------------------------------------
 
-Sources:
+.. footer:: Sources
 
-    https://docs.python.org/3.4/library/pathlib.html
-    https://docs.python.org/3.4/library/pathlib.html
-    https://docs.python.org/3.4/library/pathlib.html
-    https://docs.python.org/3.4/library/pathlib.html
+[1] https://docs.python.org/3.4/library/pathlib.html
+
+[2] https://docs.python.org/3.4/library/pathlib.html

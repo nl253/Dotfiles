@@ -76,7 +76,7 @@ endif
 
 " OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir
-set sessionoptions+=resize sessionoptions-=blank
+set sessionoptions+=resize sessionoptions-=blank nospell
 set completeopt=menuone,longest,noinsert diffopt=filler,vertical,iwhite
 set mouse= complete=.,w,t,k noswapfile mps+=<:> pumheight=12
 set sessionoptions-=options bufhidden=hide wildignorecase
@@ -315,7 +315,7 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 " Init() execute for all buffers on filetype {{{
 function! Init()
     if index(g:MARKUP, &filetype) >= 0
-        setl spell complete=.,w,k,s
+        setl complete=.,w,k,s
         for dir in g:WORKING_DIRS  " this actually isn't recursive 
             for extension in g:MARKUP_EXT " 2 levels of depth ... 
                 execute 'setl complete+=k~/'.dir.'/**.'.extension
