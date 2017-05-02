@@ -1,8 +1,8 @@
 
 " VARIABLES and UTILS {{{
-let g:MARKUP = [ 'rst' ]
+let g:MARKUP = [ 'rst', 'markdown', 'asciidoc' , 'vimwiki', 'vimwiki_markdown', 'vimwiki_markdown_custom' ]
 
-let g:MARKUP_EXT = ['md', 'rst']
+let g:MARKUP_EXT = ['md', 'rst', 'wiki', 'txt']
 
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css',
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
@@ -16,7 +16,7 @@ let g:TEMPLATE_DIR = glob('~/.templates/')
 let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 
 " THESE NEED!!! TO BE RELATIVE TO $HOME
-let g:WORKING_DIRS = [ 'Scripts', 'Notes','.scratchpads',
+let g:WORKING_DIRS = [ 'Scripts', '.scratchpads', 'vimwiki',
             \'.templates', 'Projects', '.bin', '.dicts']
 
 for d in [g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR]
@@ -38,7 +38,7 @@ if has('nvim')
         call system('!mkdir -p '.g:VIMDIR)
     endif
     tnoremap <Esc> <C-\><C-n>
-    set inccommand=nosplit
+    set inccommand=nosplit termguicolors
 else
     let g:VIMDIR = glob('~/.vim/')
     let g:PLUG_FILE = glob('~/.vim/autoload/plug.vim')
@@ -63,9 +63,6 @@ endif
 " PLUG INIT :: SET VARIABLES {{{
 execute 'set thesaurus=' . g:DICT_DIR . 'thesaurus.txt'
 execute 'set dictionary=' .  g:DICT_DIR . 'frequent.dict'
-if empty(g:DICT_DIR)
-    call system('mkdir -p ' . g:DICT_DIR)
-endif
 
 if has('nvim')
     call plug#begin('~/.local/share/nvim/plugged/')
@@ -77,17 +74,17 @@ endif
 " OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir
 set sessionoptions+=resize sessionoptions-=blank nospell
-set completeopt=menuone,longest,noinsert diffopt=filler,vertical,iwhite
+set completeopt=menuone,longest diffopt+=vertical,iwhite
 set mouse= complete=.,w,t,k noswapfile mps+=<:> pumheight=12
 set sessionoptions-=options bufhidden=hide wildignorecase
 set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1
 set autoread fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png
-set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg
+set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,.rope*
 set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow virtualedit=all
 set shortmess=atI " Don't show the intro message when starting vim
-set path=
+set path=~/.*,~/.config/**/*
 
 for dir in g:WORKING_DIRS
     execute 'set path+=' . glob('~/') . dir . '/**'
@@ -143,34 +140,30 @@ if has('python') || has('python3')
 endif
 " }}}
 
-Plug 'neomake/neomake', {'on' : [ 'Neomake' ]}
+Plug 'neomake/neomake', {'on' : [ 'Neomake']}
 
-Plug 'dbakker/vim-lint'
-
-Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
-
-Plug 'sbdchd/neoformat', {'on' : 'Neoformat'}
+Plug 'vimwiki/vimwiki'
 
 " TAGS {{{
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
 let b:easytags_auto_highlight = 1
-let g:easytags_events = ['BufReadPost']
+let g:easytags_events = ['BufNewFile']
 let g:easytags_always_enabled = 1
 let g:easytags_resolve_links = 1
 " }}}
 
 " MARKUP {{{ {{{
-Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy']}
+Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'], 'for' : g:MARKUP }
 Plug 'reedes/vim-textobj-sentence'
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
             \'DittoOn', 'DittoSent','DittoSentOn'],
             \'for' : g:MARKUP}
-let g:neomake_rst_enabled_makers = ['writegood', 'proselint']
 " }}}
 "
 " TABLE MODE {{{
-Plug 'dhruvasagar/vim-table-mode', { 'for': g:MARKUP,
+Plug 'dhruvasagar/vim-table-mode', { 'for': ['markdown', 'rst'],
             \'on': ['TableModeEnable'] }
+let g:loaded_table_mode = 1
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 " stops from indicating that it has loaded
 let g:table_mode_syntax = 1
@@ -179,10 +172,6 @@ au! BufEnter *.md let g:table_mode_corner = '|'
 au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
 
 " }}}
-
-"{{{ RST
-Plug 'Rykka/riv.vim', {'for' : 'rst'}
-"}}}
 
 Plug 'chrisbra/Colorizer', { 'for': [ 'css', 'html',
             \'javascript', 'json', 'markdown',
@@ -239,9 +228,6 @@ Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
 Plug 'othree/html5-syntax.vim'
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
 let g:emmet_html5 = 1
-Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
-Plug 'maksimr/vim-jsbeautify', { 'for': [ 'javascript', 'json', 'html',
-            \'xhtml', 'xml', 'css'] }
 " }}}
 "
 " FZF {{{
@@ -292,8 +278,6 @@ function! Scratch()
 endfunction
 command! Scratch call Scratch()
 " Alt-BackSpace in normal mode to quickly open a scratch buffer with the same
-"
-" filetype. It will be saved in ~/Notes/scratch{.py,.java,.go} etc
 nnoremap <M-BS> :silent Scratch<CR>
 vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 " }}}
@@ -302,7 +286,7 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 " Init() execute for all buffers on filetype {{{
 function! Init()
     if index(g:MARKUP, &filetype) >= 0
-        setl complete=.,w,k,s
+        setl complete=.,w,k,s conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1 sw=4
         for dir in g:WORKING_DIRS  " this actually isn't recursive
             for extension in g:MARKUP_EXT " 2 levels of depth ...
                 execute 'setl complete+=k~/'.dir.'/**.'.extension
@@ -310,20 +294,12 @@ function! Init()
                 execute 'setl complete+=k~/'.dir.'/**/**.'.extension
             endfor
         endfor
-        setl conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1 sw=4
-        if ! exists('b:table_mode_on') || (exists('b:table_mode_on') && b:table_mode_on == 0)
-            TableModeEnable
-        endif
-        if executable('wn')
-            nnoremap <buffer> <CR> :execute '!wn '.expand('<cword>').' -over'<CR>
-        endif
         nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
-        nnoremap <buffer> <M-Tab> :TableModeRealign<CR>
+        nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1) ":TableModeRealign\<CR>" : "\<M-Tab>"
         nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
     elseif index(g:PROGRAMMING, &filetype) >= 0
-        setl nospell
+        setl nospell complete=.,w,t 
         if expand('%:e') != ''     " if there is an extension (needed)
-            setl complete=.,w,t    " current buffer, windows (splits), tags
             for dir in g:WORKING_DIRS
                 execute 'setl complete+=k~/'.dir.'/**.'.expand('%:e')
                 " uncomment to get 2 levels of depth
@@ -331,15 +307,11 @@ function! Init()
             endfor
         endif
         if filereadable(g:DICT_DIR . &filetype . '.dict')
-            " if in g:PROGRAMMING and an appropriate dict is available,
-            " then REPLACE english dict with it and add dict to user defined completion
-            " this works because dicts follow the naming convention of {filetype}.dict
             let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict' "
             execute g:to_exe
             setl complete+=k
         endif
     endif
-    " if completion / omnifunction is not provided fall back on default
     if exists("+omnifunc") && &omnifunc == ""
         setlocal omnifunc=syntaxcomplete#Complete
     endif
@@ -347,8 +319,7 @@ function! Init()
         setlocal completefunc=syntaxcomplete#Complete
     endif
     if filereadable(g:DICT_DIR . &filetype . '.dict')
-        let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict'
-        execute g:to_exe
+        call execute('setl dictionary='. g:DICT_DIR . &filetype . '.dict')
     endif
 endfunction
 " }}}
@@ -378,6 +349,10 @@ endfunction
 " ShInit() {{{
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
+    setl complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile
+    if executable('shftm')
+        setl formatprg=shfmt
+    endif
 endfunction
 " }}}
 
@@ -408,24 +383,78 @@ endfunction
 function! VimInit()
     nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
     setl foldmethod=marker
+    setl complete+=k~/.vimrc
 endfunction
 " }}}
 
-" RstInit() {{{
-function! RstInit()
-    command! PandocRstPreview !pandoc -s -o /tmp/%:r.html -f rst -t html %:p | $BROWSER /tmp/%:r.html
-    nnoremap <buffer> <expr> <Leader>me executable('pandoc') && executable($BROWSER) ? ":PandocRstPreview\<CR>" : "\<Leader>me"
+" VimWikiInit() {{{      
+function! VimWikiInit()
+    nnoremap <C-i> <C-i>
+    nnoremap <Tab> <Tab>
+    nnoremap <S-Tab> <S-Tab>
+    nnoremap = =
+    nnoremap <Leader>me :Vimwiki2HTMLBrowse<CR>
 endfunction
-"}}}
+" }}}
+
+"PythonInit() {{{
+function! PythonInit()
+    nnoremap <Leader>mS :PymodeLint<CR>
+    if executable('autopep8') && executable('pycodestyle')
+        setl formatprg=autopep8\ -
+    endif
+endfunction
+" }}}
+"
+" JavascriptInit() {{{
+function! JavascriptInit()
+    setl foldmethod=marker
+    setl foldmarker={,}
+    if executable('js-beautify')
+        setl formatprg=js-beautify
+    endif
+endfunction
+" }}}
+"
+" JsonInit() {{{
+function! JsonInit()
+    setl foldmethod=marker
+    setl foldmarker={,}
+    if executable('js-beautify')
+        setl formatprg=js-beautify
+    endif
+endfunction
+" }}}
+
+" CSSInit() {{{
+function! CSSInit()
+    setl foldmethod=marker
+    setl foldmarker={,}
+    if executable('js-beautify')
+        setl formatprg=js-beautify\ --type\ css
+    endif
+endfunction
+" }}}
+"
+" XmlInit() {{{
+function! XmlInit()
+    setl foldmethod=indent
+    if executable('js-beautify')
+        setl formatprg=js-beautify\ --type\ html
+    endif
+endfunction
+" }}}
 
 " HTMLInit() {{{
 function! HTMLInit()
     nnoremap <buffer> <Leader>me :!$BROWSER %:p<CR>
     setl foldmethod=indent
     setl complete=.,w
+    if executable('js-beautify')
+        setl formatprg=js-beautify\ --type\ html
+    endif
 endfunction
-"}}}
-"}}}
+"}}} "}}}
 
 " Template {{{
 function! Template()
@@ -448,21 +477,26 @@ aug VIMENTER
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
     " by default blank files are rst notes
-    au BufEnter * if &filetype == "" | setl ft=rst | endif
+    au BufEnter * if &filetype == "" | setl ft=markdown | endif
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
     au BufNewFile * call Template()
     au FileType * call Init()
-    au FileType rst call RstInit()
     au FileType man call ManInit()
     au FileType sh call ShInit()
     au FileType vim call VimInit()
     au FileType help call HelpInit()
     au FileType xhtml,html call HTMLInit()
     au FileType gitcommit call GitcommitInit()
+    au FileType vimwiki,vimwiki_markdown,vimwiki_markdown_custom call VimWikiInit()
     au FileType qf call QfInit()
-    au FileType python nnoremap <Leader>mS :PymodeLint<CR>
+    au FileType python call PythonInit()
+    au FileType json call JsonInit()
+    au FileType javascript call JavascriptInit()
+    au FileType xml call XmlInit()
+    au FileType css call CssInit()
+    au BufNewFile,BufRead *.txt setl ft=asciidoc
 aug END
 " }}}
 
@@ -549,15 +583,15 @@ vnoremap <Leader>g?     :Gitv?<CR>
 nnoremap <Leader>gs     :Gstatus<CR>
 
 nnoremap <C-s>s         :SaveSession<Space>
-nnoremap <C-s><C-s>     :SaveSession<CR>
+nnoremap <C-s><C-s>     :SaveSession default<CR>
 nnoremap <C-s>o         :OpenSession<Space>
-nnoremap <C-s><C-o>     :OpenSession<CR>
+nnoremap <C-s><C-o>     :OpenSession default<CR>
 nnoremap <C-s>d         :DeleteSession<Space>
 nnoremap <C-s><C-d>     :DeleteSession!<CR>
 nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
-nnoremap <Leader>* :grep <cword> {./*,./**/*,./**/**/*}.%:e ~/Notes/{**,**/**}/*.{rst,md,txt} ~/{.templates,Scripts,Projects}/**<CR>:cw<CR>
+nnoremap <Leader>* :grep <cword> {./*,./**/*,./**/**/*}.%:e ~/vimwiki/{**,**/**}/*.{rst,md,txt} ~/{.templates,Scripts,Projects}/** ~/.*<CR>:cw<CR>
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
@@ -569,6 +603,7 @@ nnoremap <Leader>l<Leader> :Lines!<CR>
 nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
+nnoremap - :execute('veritcal pedit '.g:SCRATCHPAD_DIR.'scratchpad')<CR>
 
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
 

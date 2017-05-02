@@ -40,7 +40,10 @@ import functools
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('file', nargs='+')
+parser.add_argument(
+    'files',
+    metavar='FILE',
+    nargs='+')
 
 args = parser.parse_args()
 
@@ -49,24 +52,28 @@ args = parser.parse_args()
 threshold = 35
 
 # CUSTOMIZE
-prefered_extension = '.rst'
+prefered_extension = '.wiki'
 
 # CUSTOMIZE
-look_in = '~/Notes/'
+look_in = '~/vimwiki/'
+
+# CUSTOMIZE
+note_extensions = '(md)|(rst)|(org)|(txt)|(wiki)|(textile)'
+
 # -------------------------------------------
 
 look_in = os.path.expandvars(os.path.expanduser(look_in))
 
-alternative = "".join(args.file) + prefered_extension
+alternative = "".join(args.files) + prefered_extension
 
 
-stringified = "".join(map(lambda x: x + " ", args.file)) if len(args.file) > 1 else args.file[0]
+stringified = "".join(map(lambda x: x + " ", args.files)) if len(args.files) > 1 else args.files[0]
 
 notes = [
     i
     for i in glob.glob(
         os.path.expanduser(os.path.join(look_in, '**')), recursive=True)
-    if re.compile('\.(md)|(rst)|(org)|(txt)|(textile)$').search(i)
+    if re.compile('\.' + note_extensions + '$').search(i)
 ]
 
 reduced = functools.reduce(
