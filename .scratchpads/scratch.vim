@@ -1,9 +1,6 @@
 
-
-let prompt = " >> "
-let break = " "
-
-inoremap <buffer> <expr> <CR> len(getline(".")) > 1 ? "\<C-R>=break\<CR>\<C-R>=system(substitute(getline('.'), prompt, '', ''))\<CR>\<CR>\<BS>\<C-R>=prompt\<CR>" : "\<CR>"
+nnoremap <Leader>- :topleft copen<CR>:nnoremap <buffer> <CR>:lexpr system(getline('.'))<CR>:topleft lopen<CR>
 
 
-inoremap <buffer> <C-l> <C-o>:%d<CR>
+
+

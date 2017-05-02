@@ -84,7 +84,7 @@ set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,.r
 set nostartofline " Don't reset cursor to start of line when moving around
 set splitbelow virtualedit=all
 set shortmess=atI " Don't show the intro message when starting vim
-set path=~/.*,~/.config/**/*
+set path=~/.*
 
 for dir in g:WORKING_DIRS
     execute 'set path+=' . glob('~/') . dir . '/**'
@@ -142,7 +142,19 @@ endif
 
 Plug 'neomake/neomake', {'on' : [ 'Neomake']}
 
-Plug 'vimwiki/vimwiki'
+Plug 'vimwiki/vimwiki', {'for' : 'vimwiki', 
+            \'on' : ['<Plug>VimwikiIndex'] }
+
+let g:markdown_fenced_languages = [
+            \'html', 'python', 'zsh', 'javascript',
+            \'php', 'css', 'java', 'vim', 'sh']
+
+Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
+
+Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
+
+Plug 'dkarter/bullets.vim'
+
 
 " TAGS {{{
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
@@ -182,8 +194,7 @@ Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " PYTHON {{{
 Plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
-let g:pymode_options_max_line_length = 150
-let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
+let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
 let g:pymode_lint_ignore = "E116,W"
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
@@ -194,6 +205,9 @@ let g:pymode_motion = 1
 let g:pymode_options = 1
 let g:pymode_options_colorcolumn = 1
 let g:pymode_paths = [glob('~/Scripts/'), glob('~/Projects/')]
+let g:pymode_rope_autoimport_modules = [
+            \ 'os', 'shutil', 'PythonUtils',
+            \ 'pathlib', 'subprocess', 'shlex' ]
 let g:pymode_python = 'python3'
 let g:pymode_rope = 1
 let g:pymode_rope_autoimport = 1
@@ -202,7 +216,7 @@ let g:pymode_rope_change_signature_bind = '<localleader>cs'
 let g:pymode_rope_complete_on_dot = 1
 let g:pymode_rope_completion = 1
 let g:pymode_rope_goto_definition_bind = '<localleader>D'
-let g:pymode_rope_regenerate_on_write = 0
+let g:pymode_rope_regenerate_on_write = 1
 let g:pymode_rope_show_doc_bind = '<localleader>d'
 let g:pymode_run_bind = '<leader>me'
 let g:pymode_syntax = 1
@@ -257,9 +271,10 @@ function! Scratch()
     if index(['netrw', 'terminal','gitcommit'], &filetype) >= 0  " blacklist
         return 1
     endif
-    if index(g:PROGRAMMING, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 || index(g:MARKUP, &filetype) >= 0 && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0
+    if (index(g:PROGRAMMING + g:MARKUP, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
+        let g:_SCRATCH_FILETYPE = &filetype
         vnew ~/.scratchpads/scratch.%:e
-        execute 'setl ft=' . &filetype
+        execute 'setl ft=' . g:_SCRATCH_FILETYPE
     elseif &filetype == 'help'
         vnew ~/.scratchpads/scratch.vim
         setl ft=vim
@@ -286,7 +301,8 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 " Init() execute for all buffers on filetype {{{
 function! Init()
     if index(g:MARKUP, &filetype) >= 0
-        setl complete=.,w,k,s conceallevel=3 formatoptions=tcrqjonl1 foldlevel=1 sw=4
+        setl complete=.,w,k,s conceallevel=3 makeprg=write-good
+        setl formatoptions=tcrqjonl1 foldlevel=1 sw=4
         for dir in g:WORKING_DIRS  " this actually isn't recursive
             for extension in g:MARKUP_EXT " 2 levels of depth ...
                 execute 'setl complete+=k~/'.dir.'/**.'.extension
@@ -295,7 +311,7 @@ function! Init()
             endfor
         endfor
         nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
-        nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1) ":TableModeRealign\<CR>" : "\<M-Tab>"
+        nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
         nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
     elseif index(g:PROGRAMMING, &filetype) >= 0
         setl nospell complete=.,w,t 
@@ -321,6 +337,7 @@ function! Init()
     if filereadable(g:DICT_DIR . &filetype . '.dict')
         call execute('setl dictionary='. g:DICT_DIR . &filetype . '.dict')
     endif
+    nnoremap <Leader>* :execute('grep '.expand('<cword>').' '.substitute(&path,',',' ','g'))<CR>
 endfunction
 " }}}
 
@@ -350,7 +367,7 @@ endfunction
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
     setl complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile
-    if executable('shftm')
+    if executable('shfmt')
         setl formatprg=shfmt
     endif
 endfunction
@@ -394,6 +411,12 @@ function! VimWikiInit()
     nnoremap <S-Tab> <S-Tab>
     nnoremap = =
     nnoremap <Leader>me :Vimwiki2HTMLBrowse<CR>
+    hi VimwikiHeader1 guifg=#FF0000
+    hi VimwikiHeader2 guifg=#00FF00
+    hi VimwikiHeader3 guifg=#0000FF
+    hi VimwikiHeader4 guifg=#FF00FF
+    hi VimwikiHeader5 guifg=#00FFFF
+    hi VimwikiHeader6 guifg=#FFFF00
 endfunction
 " }}}
 
@@ -591,7 +614,6 @@ nnoremap <C-s><C-d>     :DeleteSession!<CR>
 nnoremap <C-s><C-c>     :CloseSession!<CR>
 nnoremap <C-s>c         :CloseSession<CR>
 
-nnoremap <Leader>* :grep <cword> {./*,./**/*,./**/**/*}.%:e ~/vimwiki/{**,**/**}/*.{rst,md,txt} ~/{.templates,Scripts,Projects}/** ~/.*<CR>:cw<CR>
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
