@@ -74,7 +74,7 @@ endif
 " OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir
 set sessionoptions+=resize sessionoptions-=blank nospell
-set completeopt=menuone,longest diffopt+=vertical,iwhite
+set completeopt=menuone,longest,noinsert diffopt+=vertical,iwhite
 set mouse= complete=.,w,t,k noswapfile mps+=<:> pumheight=12
 set sessionoptions-=options bufhidden=hide wildignorecase
 set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1
@@ -142,19 +142,18 @@ endif
 
 Plug 'neomake/neomake', {'on' : [ 'Neomake']}
 
-Plug 'vimwiki/vimwiki', {'for' : 'vimwiki', 
-            \'on' : ['<Plug>VimwikiIndex'] }
+Plug 'vimwiki/vimwiki'
 
+" MARKDOWN {{{
 let g:markdown_fenced_languages = [
             \'html', 'python', 'zsh', 'javascript',
             \'php', 'css', 'java', 'vim', 'sh']
 
 Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
-
 Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
+" }}}
 
 Plug 'dkarter/bullets.vim'
-
 
 " TAGS {{{
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
@@ -165,16 +164,14 @@ let g:easytags_resolve_links = 1
 " }}}
 
 " MARKUP {{{ {{{
-Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'], 'for' : g:MARKUP }
+Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
 Plug 'reedes/vim-textobj-sentence'
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
-            \'DittoOn', 'DittoSent','DittoSentOn'],
-            \'for' : g:MARKUP}
+            \'DittoOn', 'DittoSent','DittoSentOn']}
 " }}}
 "
 " TABLE MODE {{{
-Plug 'dhruvasagar/vim-table-mode', { 'for': ['markdown', 'rst'],
-            \'on': ['TableModeEnable'] }
+Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
 let g:loaded_table_mode = 1
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 " stops from indicating that it has loaded
@@ -186,8 +183,9 @@ au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_
 " }}}
 
 Plug 'chrisbra/Colorizer', { 'for': [ 'css', 'html',
-            \'javascript', 'json', 'markdown',
-            \'rst' ,'xhtml', 'yaml']}
+            \'javascript', 'json', 
+            \'xhtml', 'yaml']}
+
 Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " }}}  }}}
 
@@ -239,7 +237,7 @@ let g:ftplugin_sql_omni_key = ',' " shadows localleader
 
 " WEB DEV {{{
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
-Plug 'othree/html5-syntax.vim'
+Plug 'othree/html5-syntax.vim', { 'for': ['html', 'xhtml']}
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
 let g:emmet_html5 = 1
 " }}}
@@ -406,10 +404,9 @@ endfunction
 
 " VimWikiInit() {{{      
 function! VimWikiInit()
-    nnoremap <C-i> <C-i>
-    nnoremap <Tab> <Tab>
-    nnoremap <S-Tab> <S-Tab>
-    nnoremap = =
+    nmap <F13> <Plug>VimwikiNextLink
+    nmap <F14> <Plug>VimwikiPrevLink
+    nmap <F15> <Plug>VimwikiAddHeaderLevel
     nnoremap <Leader>me :Vimwiki2HTMLBrowse<CR>
     hi VimwikiHeader1 guifg=#FF0000
     hi VimwikiHeader2 guifg=#00FF00
