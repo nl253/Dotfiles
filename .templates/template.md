@@ -1,14 +1,20 @@
--   [Note Title](#note-title)
-    -   [Subtitle](#subtitle)
-    -   [Intro](#intro)
-        -   [Examples](#examples)
-        -   [Details](#details)
-        -   [Look into :](#look-into)
-    -   [Section](#section-1)
-        -   [Subsection](#subsection)
-        -   [Summary](#summary)
+
+<!-- vim-markdown-toc GFM -->
+* [Note Title](#note-title)
+    * [Subtitle](#subtitle)
+    * [Intro](#intro)
+        * [Examples](#examples)
+        * [Details](#details)
+        * [Look into :](#look-into-)
+    * [Section](#section)
+        * [Summary](#summary)
+                * [Related](#related)
+
+<!-- vim-markdown-toc -->
 
 # Note Title
+
+- index.wiki
 
 ## Subtitle
 
@@ -20,10 +26,8 @@
 ### Examples
 
 For instance:
-
-#### -
-
--   
++ A
++ B
 
 ### Details
 
@@ -31,24 +35,23 @@ For instance:
 
 1.  ItemA
 2.  ItemB
-3.  ItemC
-4.  ItemD
 
 ## Section
 
 Definitions 
 
-what  
+*what*
 Definition lists associate a term with a definition.
 
-how  
+*how*
 The term is a one-line phrase, and the definition is one or more paragraphs or
-
-### Subsection
 
 ### Summary
 
+##### Related
+
+
 ------------------------------------------------------------------------
 
-Sources:
+*Sources*:
 

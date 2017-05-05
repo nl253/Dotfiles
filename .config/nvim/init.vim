@@ -1,6 +1,6 @@
 
 " VARIABLES and UTILS {{{
-let g:MARKUP = [ 'rst', 'markdown', 'asciidoc' , 'vimwiki', 'vimwiki_markdown', 'vimwiki_markdown_custom' ]
+let g:MARKUP = [ 'rst', 'markdown', 'asciidoc' , 'vimwiki' ]
 
 let g:MARKUP_EXT = ['md', 'rst', 'wiki', 'txt']
 
@@ -301,6 +301,7 @@ function! Init()
     if index(g:MARKUP, &filetype) >= 0
         setl complete=.,w,k,s conceallevel=3 makeprg=write-good
         setl formatoptions=tcrqjonl1 foldlevel=1 sw=4
+        nnoremap <buffer> <CR> :call GoFile()<CR>
         for dir in g:WORKING_DIRS  " this actually isn't recursive
             for extension in g:MARKUP_EXT " 2 levels of depth ...
                 execute 'setl complete+=k~/'.dir.'/**.'.extension
@@ -414,6 +415,17 @@ function! VimWikiInit()
     hi VimwikiHeader4 guifg=#FF00FF
     hi VimwikiHeader5 guifg=#00FFFF
     hi VimwikiHeader6 guifg=#FFFF00
+     if executable('vimwiki-formatter.py') 
+         setl formatprg=vimwiki-formatter.py
+     endif                                  
+endfunction
+" }}}
+
+" MarkdownInit() {{{
+function! MarkdownInit()
+    if executable('markdown-formatter.py')
+        setl formatprg=markdown-formatter.py
+    endif
 endfunction
 " }}}
 
@@ -509,13 +521,14 @@ aug VIMENTER
     au FileType help call HelpInit()
     au FileType xhtml,html call HTMLInit()
     au FileType gitcommit call GitcommitInit()
-    au FileType vimwiki,vimwiki_markdown,vimwiki_markdown_custom call VimWikiInit()
+    au FileType vimwiki,vimwiki_markdown_custom call VimWikiInit()
     au FileType qf call QfInit()
     au FileType python call PythonInit()
     au FileType json call JsonInit()
     au FileType javascript call JavascriptInit()
     au FileType xml call XmlInit()
     au FileType css call CssInit()
+    au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
 aug END
 " }}}
@@ -560,8 +573,8 @@ if executable('dos2unix')
 endif
 command! DeleteEmptyLines execute 'g/^\s*$/d'
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
-command! -bang -nargs=* GGrep
-            \ call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
+command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
+command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
 " }}}
 
 " KEYBINDINGS {{{
@@ -622,8 +635,19 @@ nnoremap <Leader>l<Leader> :Lines!<CR>
 nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
-nnoremap - :execute('veritcal pedit '.g:SCRATCHPAD_DIR.'scratchpad')<CR>
 
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
+
+function! GoFile()
+    try
+        normal gf
+    catch /.*/
+        let s:file = expand('<cWORD>').'.'.expand('%:e')
+        try
+            call execute('find '.s:file)
+        catch /.*/
+        endtry
+    endtry
+endfunction
 
 "vim:set foldlevel=0

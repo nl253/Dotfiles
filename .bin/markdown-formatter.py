@@ -86,25 +86,17 @@ for i in [',', ';']:
     text = re.compile('(?<=[A-Za-z0-9_*~]{2}) *' + i + '+ *(?=[A-Za-z0-9_*~]{2})').sub(i + ' ', text)
 
 
-# emails anne @ soooo to anne@soooo
-text = re.compile('(?<=[a-zA-Z]{2}) *@ *(?=[A-Za-z]{2})').sub('@', text)
+# emails anne @ soooo.com to anne@soooo
+text = re.compile('(?<=\w{2}) *@ *(?=[A-Za-z]{2,} *\. *\w+)').sub('@', text)
 
 # math
-text = re.compile('(?<=\d)( *)\*( *)(?=\d)', flags=re.ASCII).sub(' • ', text)
+text = re.compile('(?<=\d)( *)\*( *)(?=(\d))', flags=re.ASCII).sub(' • ', text)
 text = re.compile('(?<=\d)( *)\/( *)(?=\d)', flags=re.ASCII).sub(' ÷ ', text)
 text = re.compile('(?<=\d)( *)-( *)(?=\d)', flags=re.ASCII).sub(' - ', text)
 text = re.compile('(?<=\d)( *)\+( *)(?=\d)', flags=re.ASCII).sub(' + ', text)
 text = re.compile('(?<=\d)( *)\=( *)(?=\d)', flags=re.ASCII).sub(' = ', text)
 text = re.compile('(?<=\d)( *)>( *)(?=\d)', flags=re.ASCII).sub(' > ', text)
 text = re.compile('(?<=\d)( *)<( *)(?=\d)', flags=re.ASCII).sub(' < ', text)
-
-# bulletpoints
-# minus bullet '-'
-# text = re.compile('(?<=\n)( *)-( *)(?=\w{2})', flags=re.MULTILINE).sub(i + '    - ', text)
-
-# bulletpoints that need escaping
-# for i in ['*', '+']:  # 3-5 spaces at the beginning becomes 8 , 1-2 becomes 4, 6-7 becomes 8
-    # re.compile('\s|\b*\\' + i + ' *(?=\S)', flags=re.MULTILINE).sub('\n    ' + i + ' ', text)
 
 # fixes apostrophes
 for i in ['wosn', 'weren', 'ins', 'aren', 'won', 'wouldn', 'ain', 'don', 'didn', 'shouldn', 'haven', 'couldn', 'can', 'hadn']:
@@ -114,30 +106,39 @@ text = re.compile("(?<=\w{2}) +(?=['’]s\b\w{2})").sub("", text)
 
 text = re.compile("(?<=\w{2}) +(?=['’]d\w\b\w{2})").sub("", text)
 
-
 # sentence ending
 # ----------------
 # exclemation and question mark
-for i in ['!', '?']:  # normalies sdlkfjl  !!!!! to  sdlfjsd??? and sfdsdf!!!,
-    text = re.compile('(?<=\w{2}) *\\' + i).sub(i, text)  # deal with spaces
-    text = re.compile('\\' + i + '{3,}').sub(i + i + i, text)    # no more than 3
+text = re.compile('(?<=\w{2}) *(?=[.?!]+)').sub('', text)  # deal with spaces
+text = re.compile('\?{3,}').sub('???', text)    # no more than 3
+text = re.compile('!{3,}').sub('!!!', text)    # no more than 3
 
 text = re.compile('(?<=[A-Za-z]{2}) *\.\b').sub(".", text)
 
-# [ ... ] to [...]
-text = re.compile('(?<=[A-Za-z]{2}) *\[+ *\.{3} *\]+ *').sub(' [...] ', text)
+# brackets and quotes
+text = re.compile(' *\[ *(?=.{3,200}\])').sub(' [', text)
+text = re.compile(' *\{ *(?=.{3,200}\})').sub(' {', text)
+text = re.compile(' *\( *(?=.{3,200}\))').sub(' (', text)
+
+text = re.compile('(?<=\w{2}) +(?=\])').sub('', text)
+text = re.compile('(?<=\w{2}) +(?=\))').sub('', text)
+text = re.compile('(?<=\w{2}) +(?=\})').sub('', text)
 
 # elipsis no more than 3
-text = re.compile('\.{4,8}').sub('...', text)
+text = re.compile('(?<=\w{2}) {,2}\.{4,10}(?=( *|\w{2}|\n))').sub('... ', text)
 
 # percent after numbers to %
-text = re.compile('(?<=\d) +percent *').sub('% ', text)
+text = re.compile('(?<=\d) +percent *(?=( |\n))').sub('% ', text)
 
 # PI to π
-text = re.compile('(?<=[-+*% ]) +PI *').sub(' π ', text)
-text = re.compile('(?<=\d) +PI *').sub('π ', text)
+text = re.compile('(?<=[-+*% =0-9()/]) *PI *').sub(' π ', text)
 text = re.compile('(?<=\d) +degrees *').sub('° ', text)
-text = re.compile('(?<=\d) +theta *').sub('θ ', text)
+text = re.compile('(?<=[-+*% =0-9()/]) *theta *').sub('θ ', text)
+text = re.compile('(?<=[-+*% =0-9()/]) *Delta *').sub('Δ ', text)
+text = re.compile('(?<=[-+*% =0-9()/]) *delta *').sub('δ ', text)
+text = re.compile('(?<=[-+*% =0-9()/]) *phi *').sub('φ ', text)
+text = re.compile('(?<=[-+*% =0-9()/]) *Phi *').sub('Φ ', text)
+text = re.compile('(?<=[-+*% =0-9()/]) *[lL]ambda *').sub('λ ', text)
 
 #  TerraBytes to TB Megabytes to MB kilobytes to KB
 text = re.compile('(?<=\d) +[Kk](ilo)?[bB]ytes *').sub('kB ', text)
@@ -148,19 +149,10 @@ text = re.compile('(?<=\d) +[pP](eta)?[bB]ytes *').sub('PB ', text)
 
 text = re.compile('(?<=\d) +[Kk]ilo([gG]rams)? *').sub('kg ', text)
 
-text = re.compile('(?<=\d) +min *').sub('minutes ', text)
+text = re.compile('(?<=\d) +mins? *').sub('minutes ', text)
 
-text = re.compile('(?<=\d) +sec *').sub('seconds ', text)
+text = re.compile('(?<=\d) +secs? *').sub('seconds ', text)
 
-# brackets and quotes
-text = re.compile('(?<=[A-Za-z]{2}) *\{+ *(?=[A-Za-z]{2})').sub(" {", text)
-text = re.compile('(?<=[A-Za-z]{2}) *\}+ *(?=[A-Za-z]{2})').sub("} ", text)
-
-text = re.compile('(?<=[A-Za-z]{2}) *\(+ *(?=[A-Za-z]{2})').sub(" (", text)
-text = re.compile('(?<=[A-Za-z]{2}) *\)+ *(?=[A-Za-z]{2})').sub(") ", text)
-
-text = re.compile('(?<=[A-Za-z]{2}) *\[+ *(?=[A-Za-z]{2})').sub(" [", text)
-text = re.compile('(?<=[A-Za-z]{2}) *\]+ *(?=[A-Za-z]{2})').sub("] ", text)
 
 text = re.compile('\bXOR\b', flags=re.MULTILINE).sub("⊕", text)
 
@@ -171,9 +163,9 @@ text = re.compile('(?<=[a-zA-Z1-9]) *\) *(?=\w{2})', flags=re.MULTILINE).sub(") 
 text = re.compile('(?<=\b\d)\.? *', flags=re.MULTILINE).sub('. ', text)
 
 if MODE == 'list':
-    text = re.compile('^( {,3}|\t)(?=[-+*1-9])', flags=re.MULTILINE).sub('', text)
-    text = re.compile('^( {5,7}|\t{2})(?=[-+*1-9])', flags=re.MULTILINE).sub('    ', text)
-    text = re.compile('^( {9,}|\t{2,})(?=[-+*1-9])', flags=re.MULTILINE).sub('        ', text)
+    text = re.compile('^( {,2}|\t)(?=[-+*1-9])', flags=re.MULTILINE).sub('', text)
+    text = re.compile('^( {3,6}|\t{2})(?=[-+*1-9])', flags=re.MULTILINE).sub('    ', text)
+    text = re.compile('^( {7,}|\t{2,})(?=[-+*1-9])', flags=re.MULTILINE).sub('        ', text)
 
 # MARKDOWN SPECIFIC
 ############################
@@ -218,15 +210,7 @@ text = re.compile('^ *> *(?=\[A-Za-z]{2})').sub("> ", text)
 
 # `code` text
 
-text = re.compile('(?<=`) +(?=\S{10}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{2}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{3}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{4}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{5}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{6}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{7}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{8}`)').sub('', text)
-text = re.compile('(?<=`) +(?=\S{9}`)').sub('', text)
+text = re.compile('(?<=`) +(?=\S{2,10}`)').sub('', text)
 
 text = re.compile('(?<=\S{10}`) +(?=`)').sub('', text)
 text = re.compile('(?<=\S{3}`) +(?=`)').sub('', text)
