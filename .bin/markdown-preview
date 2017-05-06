@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# REQUIRES :: $BROWSER variable to be set
+#
+# DEPENDES :: mkdocs and pip and python or pandoc
+#
+# This script used `mkdocs` to preview your markdown notes (and documents) in
+# your broweser, in a nice format,
+# Previously I used `pandoc` to convert it to HTML and preview it in my browser
+# but the rendering was at best average.
+# Pandoc still remains a fallback option in this script if you do not have mkdocs.
+
+help() {
+    echo -e "\n$(basename $0) : usage\n"
+    echo -e "$(basename $0) [PATH TO MARKDOWN FILE]"
+    echo -e "This will render the file in a pretty format in a [modern] browser."
+    echo -e "One argument is necessary, please provide it.\n"
+}
+
+software-not-found() {
+    echo "You lack the software to make this script work."
+    echo "Please install mkdocs (pip install mkdocs) or at least install pandoc and run it again."
+}
+
+browser-not-set() {
+    echo "$BROWSER variable is not set!"
+    echo "Please set it in your .bashrc or .zshrc and run the script again"
+}
+
+[[ ! $# == 1 ]] && help && exit 0
+[[ ! -v BROWSER ]] && browser-not-found && exit 0
+[[ ! -x $(which mkdocs) ]] && [[ ! -x $(which pandoc) ]] && software-not-found && exit 0
+
+if [[ -x $(which mkdocs) ]] && [[ -e ~/.athome ]] ; then
+    killall mkdocs
+    DIR=$(pwd)
+    FILE="$(readlink -e $1)"
+    cd /tmp || exit 1
+    if [[ ! -e /tmp/docs/ ]] && [[ ! -e /tmp/mkdocs.yml ]]; then
+        mkdocs new /tmp/
+    fi
+    if [[ -e /tmp/docs/ ]] && [[ -e /tmp/mkdocs.yml ]]; then
+        cp "${FILE}" /tmp/docs/index.md
+        mkdocs serve & $BROWSER http://127.0.0.1:8000 || cd "${DIR}" 
+    fi
+
+elif [[ -x $(which pandoc) ]]; then
+    pandoc -s -o "/tmp/markdown-preview-${1}.html" -f markdown_github -t html "${1}"
+    $BROWSER "/tmp/markdown-preview-${1}.html"
+fi
