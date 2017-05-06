@@ -2,6 +2,16 @@
 .athome
 .xiki/
 .cookiecutter*
+vimwiki/
+.config/kdeglobals
+.config/QtProject.conf
+.thumbnails/
+go/
+.nvimlog
+.newsbeuter/
+tags
+vimwiki_html/
+.gitignores/.github/PULL_REQUEST_TEMPLATE.md
 nltk_data/
 boosterclapps/
 Projects/
