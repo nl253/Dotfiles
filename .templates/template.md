@@ -38,7 +38,7 @@ For instance:
 
 ## Section
 
-Definitions 
+Definitions
 
 *what*
 Definition lists associate a term with a definition.
@@ -49,7 +49,6 @@ The term is a one-line phrase, and the definition is one or more paragraphs or
 ### Summary
 
 ##### Related
-
 
 ------------------------------------------------------------------------
 

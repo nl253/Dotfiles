@@ -132,6 +132,7 @@ let g:markdown_fenced_languages = [
 
 Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
+Plug 'nelstrom/vim-markdown-folding'
 " }}}
 
 Plug 'dkarter/bullets.vim'
@@ -289,6 +290,11 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 function! Markup()
     setl complete=.,w,k,s conceallevel=3 makeprg=write-good
     setl formatoptions=tcrqjonl1 foldlevel=1 sw=4
+    if &filetype == 'vimwiki'
+        nnoremap <buffer> <Leader>x :VimwikiToggleListItem<CR>
+    else
+        nnoremap <buffer> <Leader>x :ToggleCheckbox<CR>
+    endif
     for dir in g:WORKING_DIRS  " this actually isn't recursive
         for extension in g:MARKUP_EXT " 2 levels of depth ...
             execute 'setl complete+=k~/'.dir.'/**.'.extension
@@ -374,6 +380,15 @@ function! ShInit()
 endfunction
 " }}}
 
+" PhpInit() {{{
+function! PhpInit()
+    nnoremap <buffer> <Leader>me :!php % > /tmp/php-converted.html<CR>:!google-chrome-stable /tmp/php-converted.html<CR>
+    if executable('js-beautify')
+        setl formatprg=js-beautify\ --type\ html
+    endif
+endfunction
+" }}}
+
 " HelpInit() {{{
 function! HelpInit()
     " on enter follow that `tag`
@@ -427,15 +442,19 @@ endfunction
 " MarkdownInit() {{{
 function! MarkdownInit()
     if executable('markdown-formatter')
-        setl formatprg=markdown-formatter
+        setl formatprg=markdown-formatter\ --markdown\ --gentle
     endif
     if executable('markdown-preview')
         nnoremap <Leader>me :!markdown-preview %<CR>
     endif
+    syn region markdownBold start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=markdownLineStart
+    syn region markdownBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart
+    syn region markdownBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart
+    syn region markdownBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart
 endfunction
 " }}}
 
-"PythonInit() {{{
+" PythonInit() {{{
 function! PythonInit()
     nnoremap <Leader>mS :PymodeLint<CR>
     if executable('autopep8') && executable('pycodestyle')
@@ -515,6 +534,7 @@ aug VIMENTER
     au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
     au FileType markdown call MarkdownInit()
+    au FileType php call PhpInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
 aug END
 " }}}

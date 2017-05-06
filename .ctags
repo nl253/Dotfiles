@@ -1,0 +1,6 @@
+--langdef=markdown 
+--langmap=markdown:.md
+--regex-markdown=/^[ \t]*#+[ \t]*.{2,6}?\n/heading/
+--langdef=vimwiki 
+--langmap=vimwiki:.wiki
+--regex-vimwiki=/^[ \t]*=+[ \t]*.{2,8}+?\n/heading/

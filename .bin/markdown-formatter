@@ -7,97 +7,135 @@ import sys
 from pprint import pprint
 import re
 import textwrap
+import argparse
+import logging
 
 # TODO:
+# emails conflict with dot ending of sentences
+# restrict even more
 # support gentle table formatting
+# more typos formatting
 # support date and time formatting
 # protect source code
-# split those for loops
-# restrict even more
 # make more modular
-# add a cli interface to turn off modules
-# more typos formatting
-# make dot at the end of line work properly
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename='pylog.log',
+    format='%(levelname)s:%(asctime)s  %(message)s')
+
+logger = logging.getLogger()
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    'file',
+    nargs='?',
+    default=sys.stdin)
+
+parser.add_argument(
+    '--aggressive',
+    '--all',
+    dest='mode',
+    const='aggressive',
+    action='store_const')
+parser.add_argument(
+    '--gentle',
+    dest='mode',
+    const='gentle',
+    action='store_const')
+parser.add_argument(
+    '--mediawiki',
+    dest='markup',
+    const='mediawiki',
+    action='store_const')
+parser.add_argument(
+    '--markdown',
+    '--md',
+    dest='markup',
+    const='markdown',
+    action='store_const')
+
+args = parser.parse_args()
 
 try:
-    text = open(sys.argv[1]).read()
+    text = open(args.file).read()
 except:
     text = sys.stdin.read()
 
-if len(text) < 1 or len(sys.argv) > 2:
-    print('\nmarkdown-formatter.py - format markdown documents (works great with Vim)\n\nUsage:\nmarkdown-formatter.py [FILE]\nOR\nDATA | markdown-formatter.py\n')
+if len(text) < 1:
+    print('\nmarkdown-formatter.py - format markdown documents \
+          (works great with Vim)\n\nUsage:\nmarkdown-formatter.py \
+          [FILE]\nOR\nDATA | markdown-formatter.py\n')
     sys.exit()
 
-pylog = open('pylog.log', 'w+')
+logger.info(text)
+logger.info('type: ' + str(type(text)))
+logger.info('len: ' + str(len(text)))
 
-pylog.write(text)
 
 def init():
     if re.compile('^[ \t]*`{2,3} *\w+\S*$', flags=re.DOTALL|re.MULTILINE).search(text):
         # detect source code to avoid breaking the synatx
         MODE = 'sourcecode'
-        pylog.write('\nsourcecode\n')
-    elif not re.compile('^ *[-*+1-9] *', flags=re.MULTILINE).search(text):
+        logger.info('MODE is sourcecode')
+    elif not re.compile('^ *[-*+1-9#] *', flags=re.MULTILINE).search(text):
     # paragraphs do not include bulletpoints
     # separate lists from the paragraph (insert a newline), then wrap paragraph, smart wrap lists
-        MODE = 'paragraph'
-        pylog.write('\nparagraph\n')
-    elif re.compile('(^[ \t]*[-1-9*+]\.?[ \t]*[\w[(]+)+', flags=re.DOTALL|re.MULTILINE).search(text):
+        MODE = 'aggressive'
+        logger.info('MODE is paragraph')
+    elif re.compile('(^[ \t]*[-1-9*+#]\.?[ \t]*[\w[(\[\'“”`’‘"]+)+', flags=re.DOTALL|re.MULTILINE).search(text):
     # at least one bulletpoint (starting with [-+*]) with a length of at most 300 characters
     # wrap smartly using the position of the first `\w` character after a bullet point `[-+*]`
     # indent using 8 spaces
-        MODE = 'list'
-        pylog.write('\nlist\n')
+        MODE = 'gentle'
+        logger.info('MODE is gentle')
     else:
     # fallback, make sure this is safe and doesn't harm lists or codeblocks
-        MODE = 'default'
-        pylog.write('\ndefault\n')
+        MODE = 'gentle'
+        logger.info('MODE is gentle')
     return MODE
+
 
 MODE = init()
 
-# max 2 newlines at the time, avoids massive gaps in text
-text = re.compile('\n{3,}').sub('\n\n', text)
+logger.info('MODE: ' + MODE)
 
-# remove duplicate punctuation
-# that requires escaping
-if not MODE == 'sourcecode':
-    for i in [':', '$', '|', '^', '(', ')', ']', '[', '{', '}', '+']:
+def aggressive_format(text):
+    logger.info('begin aggressive format')
+    # only good for no source code, no tables, just prose
+    # remove duplicate punctuation that requires escaping
+    for i in [ '|', '^', ')', ']', '+']:
         text = re.compile("\\" + i + '{2,}').sub(i, text)
-
-# doesn't require escaping
-# also will remove double (or multiple) whitespace
-for i in [',', '%', '£', '"', "'", '¬', '&', '“' '”', '‘', '’', '@', '§', '~']:
-    text = re.compile(i + '{2,}').sub(i, text)
-
-if MODE == 'paragraph':
-    # if it has bulletpoints
-    if re.compile('^ * [-*+] * \w{2}', flags=re.MULTILINE|re.DOTALL):
-        # insert a \n to separate it from the text body
-        re.compile('\n(^ * [-*+] * \w{2})', flags=re.MULTILINE|re.DOTALL).subn('\n', text, 1)
-
-# normalise space around punctuation
-# colon, needs to be like this word: subword1, sub2 [...]
-text = re.compile('(?<=[a-zA-Z\]]{2}) *\: *(?=[a-zA-Z]{2})').sub(': ', text)
-
-text = re.compile('(?<=[a-zA-Z\]]{2}) *\:[ \n]$', flags=re.MULTILINE).sub(':\n', text)
-
-for i in [',', ';']:
-    text = re.compile('(?<=[A-Za-z0-9_*~]{2}) *' + i + '+ *(?=[A-Za-z0-9_*~]{2})').sub(i + ' ', text)
+    return text
 
 
 def email_format(text):
     # emails anne @ soooo.com to anne@soooo
+    logger.info('begin email format')
     text = re.compile('(?<=\w{2}) *@ *(?=[A-Za-z]{2,} *\. *\w+)').sub('@', text)
     return text
 
 
 def date_format(text):
-    pass
+    logger.info('begin date format')
+    text = re.compile('(?<=\d) +(?=(th|nd|rd))').sub('', text)
+    text = re.compile('(?<=[ \n\t\(\[])j(?=anuary[ \n\t\(\[])').sub('J', text)
+    text = re.compile('(?<=[ \n\t\(\[])f(?=ebrurary[ \n\t\(\[])').sub('F', text)
+    text = re.compile('(?<=[ \n\t\(\[])m(?=arch[ \n\t\(\[])').sub('M', text)
+    text = re.compile('(?<=[ \n\t\(\[])a(?=pril[ \n\t\(\[])').sub('A', text)
+    text = re.compile('(?<=[ \n\t\(\[])j(?=une[ \n\t\(\[])').sub('J', text)
+    text = re.compile('(?<=[ \n\t\(\[])j(?=uly[ \n\t\(\[])').sub('J', text)
+    text = re.compile('(?<=[ \n\t\(\[])a(?=ugust[ \n\t\(\[])').sub('A', text)
+    text = re.compile('(?<=[ \n\t\(\[])s(?=eptember[ \n\t\(\[])').sub('S', text)
+    text = re.compile('(?<=[ \n\t\(\[])o(?=ctober[ \n\t\(\[])').sub('O', text)
+    text = re.compile('(?<=[ \n\t\(\[])d(?=ecember[ \n\t\(\[])').sub('D', text)
+    return text
 
 
 def math_format(text):
     # math
+    logger.info('begin math format')
     text = re.compile('(?<=\d)( *)\*( *)(?=(\d))', flags=re.ASCII).sub(' • ', text)
     text = re.compile('(?<=\d)( *)\/( *)(?=\d)', flags=re.ASCII).sub(' ÷ ', text)
     text = re.compile('(?<=\d)( *)-( *)(?=\d)', flags=re.ASCII).sub(' - ', text)
@@ -120,6 +158,7 @@ def math_format(text):
 
 def typos_format(text):
     # fixes apostrophes
+    logger.info('begin typos format')
     for i in ['wosn', 'weren', 'ins', 'aren', 'won', 'wouldn', 'ain', 'don', 'didn', 'shouldn', 'haven', 'couldn', 'can', 'hadn']:
         text = re.compile('\b' + i + " *['’]t\b").sub(i + "'t", text)
     text = re.compile("(?<=\w{2}) +(?=['’]s\b\w{2})").sub("", text)
@@ -129,30 +168,17 @@ def typos_format(text):
     text = re.compile('\?{3,}').sub('???', text)    # no more than 3
     text = re.compile('!{3,}').sub('!!!', text)    # no more than 3
 
-    text = re.compile('(?<=[A-Za-z]{2}) {,4}\.[\b \t]{,4}').sub(".", text)
+    text = re.compile('(?<=[A-Za-z0-9\(\)]{2})[ \t]{,4}\.[ \t]{,4}').sub(". ", text)
+
+    for i in ['$', '{', '}']:
+        text = re.compile("\\" + i + '{2,}').sub(i, text)
 
     return text
-
-
-def backets_format(text):
-    text = re.compile(' *\[ *(?=.{3,200}\])').sub(' [', text)
-    text = re.compile(' *\{ *(?=.{3,200}\})').sub(' {', text)
-    text = re.compile(' *\( *(?=.{3,200}\))').sub(' (', text)
-
-    text = re.compile('(?<=\w{2}) +(?=\])').sub('', text)
-    text = re.compile('(?<=\w{2}) +(?=\))').sub('', text)
-    text = re.compile('(?<=\w{2}) +(?=\})').sub('', text)
-    return text
-
-# elipsis no more than 3
-text = re.compile('(?<=\w{2}) {,2}\.{4,10}(?=( *|\w{2}|\n))').sub('... ', text)
-
-# percent after numbers to %
-text = re.compile('(?<=\d) +percent *(?=( |\n))').sub('% ', text)
 
 
 def units_format(text):
     #  TerraBytes to TB Megabytes to MB kilobytes to KB
+    logger.info('begin units format')
     text = re.compile('(?<=\d) +[Kk](ilo)?[bB]ytes *').sub('kB ', text)
     text = re.compile('(?<=\d) +[Mm](ega)?[bB]ytes *').sub('MB ', text)
     text = re.compile('(?<=\d) +[Gg](iga)?[bB]ytes *').sub('GB ', text)
@@ -167,10 +193,14 @@ def units_format(text):
 
     text = re.compile('\bXOR\b', flags=re.MULTILINE).sub("⊕", text)
 
+    # percent after numbers to %
+    text = re.compile('(?<=\d) +percent(?=[ \t]+|\n)').sub('%', text)
+
     return text
 
 
 def list_format(text):
+    logger.info('begin list format')
     text = re.compile('^( {,2}|\t)(?=[-+*1-9])', flags=re.MULTILINE).sub('', text)
 
     # numbered lists
@@ -184,7 +214,14 @@ def list_format(text):
     return text
 
 
+def mediawiki_format(text):
+    logger.info('begin mediawiki format')
+    pass
+
+
 def markdown_format(text):
+    logger.info('begin markdown format')
+
     # fenced languages backtics
     text = re.compile('^ *[`]{2,} *(?=\w{2,})', flags=re.MULTILINE).sub('```', text)
 
@@ -192,13 +229,16 @@ def markdown_format(text):
     # remove excess headers max is 6 anyway
     text = re.compile('^[#]{6,} *', flags=re.MULTILINE).sub("###### ", text)
 
+    # first, remove leading whitespaces
+    text = re.compile('^ +(?=#+)', flags=re.MULTILINE).sub('', text)
     # add a whitespace after the last pound sign
-    text = re.compile('^ ?# *(?=\w{2})', flags=re.MULTILINE).sub('# ', text)
-    text = re.compile('^ ?#{2} *(?=\w{2})', flags=re.MULTILINE).sub('## ', text)
-    text = re.compile('^ ?#{3} *(?=\w{2})', flags=re.MULTILINE).sub('### ', text)
-    text = re.compile('^ ?#{4} *(?=\w{2})', flags=re.MULTILINE).sub('#### ', text)
-    text = re.compile('^ ?#{5} *(?=\w{2})', flags=re.MULTILINE).sub('##### ', text)
-    text = re.compile('^ ?#{6} *(?=\w{2})', flags=re.MULTILINE).sub('###### ', text)
+    # becasue lookbehinds require fixed length
+    text = re.compile('(?<=^#) +(?=[A-Za-x]{2,})', flags=re.MULTILINE).sub(' ', text)
+    text = re.compile('(?<=^#{2}) +(?=[A-Za-z]{2,})', flags=re.MULTILINE).sub(' ', text)
+    text = re.compile('(?<=^#{3}) +(?=[A-Za-z]{2,})', flags=re.MULTILINE).sub(' ', text)
+    text = re.compile('(?<=^#{4}) +(?=[A-Za-z]{2,})', flags=re.MULTILINE).sub(' ', text)
+    text = re.compile('(?<=^#{5}) +(?=[A-Za-z]{2,})', flags=re.MULTILINE).sub(' ', text)
+    text = re.compile('(?<=^#{6}) +(?=[A-Za-z]{2,})', flags=re.MULTILINE).sub(' ', text)
 
     # normalise linebreaks to consisten len
     text = re.compile('\n-{5,} *\n', flags=re.MULTILINE).sub("\n---------------------------------------------------------------\n", text)
@@ -236,35 +276,93 @@ def markdown_format(text):
     text = re.compile('(?<=\S{9}`) +(?=`)').sub('', text)
     text = re.compile('(?<=`\S{2}) +(?=`)').sub('', text)
 
+    logger.info('begin markdown brackets format')
+    # space before opening bracket iff it is not proceeded by a closing bracket
+    text = re.compile('(?<!\]) *\[ *(?=.{3,200}\])', flags=re.DOTALL).sub(' [', text)
+    text = re.compile('\{ *(?=.{3,200}\})', flags=re.DOTALL).sub(' {', text)
+    # space before opening parenthesis iff it is not preceeded by a bracket
+    text = re.compile('(?<!\]) *\( *(?=.{3,200}\))', flags=re.DOTALL).sub(' (', text)
+    # remove extra space between the last word inside brackets and enclosing bracket
+    text = re.compile('(?<=\w{2}) +(?=\])').sub('', text)
+    text = re.compile('(?<=\w{2}) +(?=\))').sub('', text)
+    text = re.compile('(?<=\w{2}) +(?=\})').sub('', text)
+
     return text
 
     ############################
 
-# more than 2 whitespaces between words reduced to 1
-text = re.compile('(?<=[\w. ]{2}) {2,}(?=\w{2})').sub(' ', text)
 
-# remove trailing whitespace
-text = re.compile(' *$', flags=re.MULTILINE).sub("", text)
+def prose_format(text):
+    # max 2 newlines at the time, avoids massive gaps in text
+    text = re.compile('\n{3,}').sub('\n\n', text)
 
+    # normalise space around punctuation
+    # colon, needs to be like this word: subword1, sub2 [...]
+    text = re.compile('(?<=[a-zA-Z\]]{2}) *\: *(?=[a-zA-Z]{2})').sub(': ', text)
+
+    text = re.compile('(?<=[a-zA-Z\]]{2}) *\:[ \n]$', flags=re.MULTILINE).sub(':\n', text)
+
+    for i in [',', ';']:
+        text = re.compile('(?<=[A-Za-z0-9_*~]{2}) *' + i + '+ *(?=[A-Za-z0-9_*~]{2})').sub(i + ' ', text)
+
+    logger.info(text)
+    logger.info('type: ' + str(type(text)))
+    logger.info('len: ' + str(len(text)))
+
+    # doesn't require escaping
+    # also will remove double (or multiple) whitespace
+    for i in [',', '%', '£', '"', "'", '¬', '&', '“' '”', '‘', '’', '@', '§', '~']:
+        text = re.compile(i + '{2,}').sub(i, text)
+
+    # elipsis no more than 3
+    text = re.compile('(?<=[a-z0=9\(\)]{2}) {,2}\.{4,10}(?=[ \t]*([a-zA-Z]{2,}|\n))').sub('... ', text)
+    # more than 2 whitespaces between words reduced to 1
+    # also takes into account this: [...] word] word
+    text = re.compile('(?<=[a-zA-Z\)\]]{2}) {2,}(?=[a-zA-Z]{2,})').sub(' ', text)
+
+    # remove trailing whitespace
+    text = re.compile(' +$', flags=re.MULTILINE).sub("", text)
+
+    return text
+
+logger.info(text)
+logger.info('type: ' + str(type(text)))
+logger.info('len: ' + str(len(text)))
+
+# run these always
+text = prose_format(text)
 text = typos_format(text)
-text = math_format(text)
-text = units_format(text)
 text = email_format(text)
 text = list_format(text)
-text = backets_format(text)
-text = markdown_format(text)
+text = math_format(text)
+text = date_format(text)
+
+logger.info(text)
+logger.info('type: ' + str(type(text)))
+logger.info('len: ' + str(len(text)))
+
+if args.mode == 'aggressive':
+    text = units_format(text)
+    if MODE != 'sourcecode':
+        text = aggressive_format(text)
+
+if args.markup == 'markdown':
+    logger.info(text)
+    logger.info(str(type(text)))
+    text = markdown_format(text)
+elif args.markup == 'mediawiki':
+    text = mediawiki_format(text)
+
+logger.info(text)
+logger.info('str(type: ' + str(type(text)))
+logger.info('len: ' + str(len(text)))
 
 # wrapping
-if MODE == 'sentence':
-    [print(line.lstrip(), end="\n") for line in textwrap.TextWrapper().wrap(text)]
-elif MODE == 'word':
+if MODE == 'aggressive':
+    # adjustment, extra whites show up after folding
+    [print(re.compile(' {2,}').sub(' ' ,line.lstrip()), end="\n") for line in textwrap.TextWrapper().wrap(text)]
+elif MODE == 'gentle':
     print(text, end="")
-elif MODE == 'paragraph':
-    [print(line.lstrip(), end="\n") for line in textwrap.TextWrapper().wrap(text)]
-elif MODE == 'list':
-    list_format()
-    print(text,end="")
-else:
-    # fallback on default, safe mode
+else: # fallback on default, safe mode, print as is
     print(text, end="")
 
