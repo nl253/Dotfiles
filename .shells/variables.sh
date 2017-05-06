@@ -52,6 +52,7 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_ROOT="${HOME}/.pyenv"
   export PATH="${PYENV_ROOT}/bin:${PATH}"
+  export PYENV_VERSION='general'
 fi
 export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:" # for python modules
 # }}}
