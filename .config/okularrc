@@ -9,13 +9,11 @@ Width 1920=1001
 
 [Recent Files]
 File1[$e]=$HOME/OneDrive/zsh-manual.pdf
-File2[$e]=$HOME/Notes/CS/PowerPoints/Lecture 19 (CW).pdf
-File3[$e]=$HOME/Notes/CS/PowerPoints/Lecture 18 (CW).pdf
-File4[$e]=$HOME/Notes/CS/PowerPoints/Lecture 17 (CW).pdf
+File2[$e]=$HOME/vimwiki/uni/computer-systems/cs-components-structure-organization.pdf
+File3[$e]=$HOME/vimwiki/uni/computer-systems/filesystems-structure-organization.pdf
 Name1[$e]=zsh-manual.pdf
-Name2[$e]=Lecture 19 (CW).pdf
-Name3[$e]=Lecture 18 (CW).pdf
-Name4[$e]=Lecture 17 (CW).pdf
+Name2[$e]=cs-components-structure-organization.pdf
+Name3[$e]=filesystems-structure-organization.pdf
 
 [Shortcut Schemes]
 Current Scheme=Default

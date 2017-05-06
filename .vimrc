@@ -1,8 +1,8 @@
 
 " VARIABLES and UTILS {{{
-let g:MARKUP = [ 'rst', 'markdown', 'asciidoc' , 'vimwiki' ]
+let g:MARKUP = [ 'markdown', 'vimwiki' ]
 
-let g:MARKUP_EXT = ['md', 'rst', 'wiki', 'txt']
+let g:MARKUP_EXT = ['md', 'wiki', 'txt']
 
 let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css',
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
@@ -39,7 +39,7 @@ if has('nvim')
     endif
     tnoremap <Esc> <C-\><C-n>
     set inccommand=nosplit termguicolors
-else
+else " if vim
     let g:VIMDIR = glob('~/.vim/')
     let g:PLUG_FILE = glob('~/.vim/autoload/plug.vim')
     let $MYVIMRC = glob('~/.vimrc')
@@ -103,31 +103,12 @@ Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 Plug 'tpope/vim-fugitive' " git
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %P\ of\ %L%)\ \
-Plug 'gregsexton/gitv', { 'on': 'Gitv' }
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'Konfekt/FastFold' " more efficient folds
 Plug 'scrooloose/nerdcommenter'
 Plug 'wellle/targets.vim'
-
 Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
             \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
-" }}}
-
-" SESSION {{{
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session' " enhanced session management
-let g:session_autosave = 'yes'
-let g:session_autosave_silent = 1
-let g:session_autosave_to = 'default'
-let g:session_autosave_periodic = 3
-let g:session_lock_enabled = 0
-let g:session_autoload = 'no'
-let g:session_default_to_last = 1
-let g:session_persist_globals = [ '&foldmethod', '&foldcolumn', '&scrolloff',
-            \'&spell', '&wrap', '&scrollbind', '&number',
-            \'&relativenumber', '&foldmarker', '&background']
-
-if has('nvim') | let g:session_directory = '~/.config/nvim/session'| else | let g:session_directory = '~/.vim/session' | endif
 " }}}
 
 " COMPLETION {{{
@@ -156,6 +137,7 @@ Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
 Plug 'dkarter/bullets.vim'
 
 " TAGS {{{
+Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
 let b:easytags_auto_highlight = 1
 let g:easytags_events = ['BufNewFile']
@@ -179,7 +161,6 @@ let g:table_mode_syntax = 1
 let g:table_mode_update_time = 800
 au! BufEnter *.md let g:table_mode_corner = '|'
 au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
-
 " }}}
 
 Plug 'chrisbra/Colorizer', { 'for': [ 'css', 'html',
@@ -204,7 +185,7 @@ let g:pymode_options = 1
 let g:pymode_options_colorcolumn = 1
 let g:pymode_paths = [glob('~/Scripts/'), glob('~/Projects/')]
 let g:pymode_rope_autoimport_modules = [
-            \ 'os', 'shutil', 'PythonUtils',
+            \ 'os', 'shutil', 'PythonUtils', 're',
             \ 'pathlib', 'subprocess', 'shlex' ]
 let g:pymode_python = 'python3'
 let g:pymode_rope = 1
@@ -259,26 +240,33 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
     if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
+else
+    Plug 'francoiscabrol/ranger.vim'
+    let g:ranger_map_keys = 0
 endif
+
 " }}}
 
 call plug#end()
 
 " Scratchpad {{{
 function! Scratch()
-    if index(['netrw', 'terminal','gitcommit'], &filetype) >= 0  " blacklist
+    if index(['netrw', 'terminal','gitcommit', 'qf', 'gitcommit', 'git', 'netrc'], &filetype) >= 0  " blacklist
         return 1
     endif
-    if (index(g:PROGRAMMING + g:MARKUP, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
-        let g:_SCRATCH_FILETYPE = &filetype
-        vnew ~/.scratchpads/scratch.%:e
-        execute 'setl ft=' . g:_SCRATCH_FILETYPE
-    elseif &filetype == 'help'
+    if &filetype == 'help'
         vnew ~/.scratchpads/scratch.vim
         setl ft=vim
     elseif &filetype == 'man'
         vnew ~/.scratchpads/scratch.sh
         setl ft=sh
+    elseif (index(g:MARKUP, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 && expand('%:p') != '~/vimwiki/diary/diary.wiki'
+        vnew ~/vimwiki/diary/diary.wiki
+        setl ft=vimwiki
+    elseif (index(g:PROGRAMMING, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
+        let g:_SCRATCH_FILETYPE = &filetype
+        vnew ~/.scratchpads/scratch.%:e
+        execute 'setl ft=' . g:_SCRATCH_FILETYPE
     else
         vnew ~/.scratchpads/scratch
         setl ft=scratch
@@ -295,37 +283,48 @@ nnoremap <M-BS> :silent Scratch<CR>
 vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 " }}}
 
-" INIT {{{
+" INIT  {{{
 " Init() execute for all buffers on filetype {{{
+"
+function! Markup()
+    setl complete=.,w,k,s conceallevel=3 makeprg=write-good
+    setl formatoptions=tcrqjonl1 foldlevel=1 sw=4
+    for dir in g:WORKING_DIRS  " this actually isn't recursive
+        for extension in g:MARKUP_EXT " 2 levels of depth ...
+            execute 'setl complete+=k~/'.dir.'/**.'.extension
+            " uncomment to get 2 levels of depth
+            execute 'setl complete+=k~/'.dir.'/**/**.'.extension
+        endfor
+    endfor
+    nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
+    nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
+    nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
+    if executable('wn')
+        nnoremap <buffer> K :execute('Capture wn ' . expand('<cword>') . ' -over')<CR>
+    endif
+endfunction
+
+function! Programming()
+    setl nospell complete=.,w,t 
+    if expand('%:e') != ''     " if there is an extension (needed)
+        for dir in g:WORKING_DIRS
+            execute 'setl complete+=k~/'.dir.'/**.'.expand('%:e')
+            " uncomment to get 2 levels of depth
+            "execute 'setl complete+=k~/'.dir.'/**/**.'.expand('%:e')
+        endfor
+    endif
+    if filereadable(g:DICT_DIR . &filetype . '.dict')
+        let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict' "
+        execute g:to_exe
+        setl complete+=k
+    endif
+endfunction
+
 function! Init()
     if index(g:MARKUP, &filetype) >= 0
-        setl complete=.,w,k,s conceallevel=3 makeprg=write-good
-        setl formatoptions=tcrqjonl1 foldlevel=1 sw=4
-        nnoremap <buffer> <CR> :call GoFile()<CR>
-        for dir in g:WORKING_DIRS  " this actually isn't recursive
-            for extension in g:MARKUP_EXT " 2 levels of depth ...
-                execute 'setl complete+=k~/'.dir.'/**.'.extension
-                " uncomment to get 2 levels of depth
-                execute 'setl complete+=k~/'.dir.'/**/**.'.extension
-            endfor
-        endfor
-        nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
-        nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
-        nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
+        call Markup()
     elseif index(g:PROGRAMMING, &filetype) >= 0
-        setl nospell complete=.,w,t 
-        if expand('%:e') != ''     " if there is an extension (needed)
-            for dir in g:WORKING_DIRS
-                execute 'setl complete+=k~/'.dir.'/**.'.expand('%:e')
-                " uncomment to get 2 levels of depth
-                "execute 'setl complete+=k~/'.dir.'/**/**.'.expand('%:e')
-            endfor
-        endif
-        if filereadable(g:DICT_DIR . &filetype . '.dict')
-            let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict' "
-            execute g:to_exe
-            setl complete+=k
-        endif
+        call Programming()
     endif
     if exists("+omnifunc") && &omnifunc == ""
         setlocal omnifunc=syntaxcomplete#Complete
@@ -344,6 +343,9 @@ endfunction
 function! GitcommitInit()
     setl virtualedit=block
     setl spell complete=.,w,k,s
+    if executable('markdown-formatter')
+        setl formatprg=markdown-formatter
+    endif
 endfunction
 " }}}
 "
@@ -409,22 +411,26 @@ function! VimWikiInit()
     nmap <F14> <Plug>VimwikiPrevLink
     nmap <F15> <Plug>VimwikiAddHeaderLevel
     nnoremap <Leader>me :Vimwiki2HTMLBrowse<CR>
-    hi VimwikiHeader1 guifg=#FF0000
-    hi VimwikiHeader2 guifg=#00FF00
-    hi VimwikiHeader3 guifg=#0000FF
-    hi VimwikiHeader4 guifg=#FF00FF
-    hi VimwikiHeader5 guifg=#00FFFF
-    hi VimwikiHeader6 guifg=#FFFF00
-     if executable('vimwiki-formatter.py') 
-         setl formatprg=vimwiki-formatter.py
-     endif                                  
+    hi VimwikiHeader1 guifg=#FF9999
+    hi VimwikiHeader2 guifg=#FF9900
+    hi VimwikiHeader3 guifg=#CCCC00
+    hi VimwikiHeader4 guifg=#00CC66
+    hi VimwikiHeader5 guifg=#3399FF
+    hi VimwikiHeader6 guifg=#CC66FF
+    if executable('markdown-formatter') 
+        setl formatprg=markdown-formatter
+    endif                                  
+    nnoremap <buffer> <M-CR> :VimwikiTabnewLink<CR>
 endfunction
 " }}}
 
 " MarkdownInit() {{{
 function! MarkdownInit()
-    if executable('markdown-formatter.py')
-        setl formatprg=markdown-formatter.py
+    if executable('markdown-formatter')
+        setl formatprg=markdown-formatter
+    endif
+    if executable('markdown-preview')
+        nnoremap <Leader>me :!markdown-preview %<CR>
     endif
 endfunction
 " }}}
@@ -448,16 +454,6 @@ function! JavascriptInit()
 endfunction
 " }}}
 "
-" JsonInit() {{{
-function! JsonInit()
-    setl foldmethod=marker
-    setl foldmarker={,}
-    if executable('js-beautify')
-        setl formatprg=js-beautify
-    endif
-endfunction
-" }}}
-
 " CSSInit() {{{
 function! CSSInit()
     setl foldmethod=marker
@@ -468,15 +464,6 @@ function! CSSInit()
 endfunction
 " }}}
 "
-" XmlInit() {{{
-function! XmlInit()
-    setl foldmethod=indent
-    if executable('js-beautify')
-        setl formatprg=js-beautify\ --type\ html
-    endif
-endfunction
-" }}}
-
 " HTMLInit() {{{
 function! HTMLInit()
     nnoremap <buffer> <Leader>me :!$BROWSER %:p<CR>
@@ -519,14 +506,13 @@ aug VIMENTER
     au FileType sh call ShInit()
     au FileType vim call VimInit()
     au FileType help call HelpInit()
-    au FileType xhtml,html call HTMLInit()
+    au FileType xhtml,html,xml call HTMLInit()
     au FileType gitcommit call GitcommitInit()
-    au FileType vimwiki,vimwiki_markdown_custom call VimWikiInit()
+    au FileType vimwiki call VimWikiInit()
     au FileType qf call QfInit()
     au FileType python call PythonInit()
     au FileType json call JsonInit()
-    au FileType javascript call JavascriptInit()
-    au FileType xml call XmlInit()
+    au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
@@ -553,6 +539,7 @@ if executable('pandoc')
     command! TOtex call system('pandoc -s -o '.expand('%:p:r').'.tex  -t tex '.expand('%:p')) | sleep 250ms | vs %:p:r.tex
     command! TOwordocx call system('pandoc -s -o '.expand('%:p:r').'.docx -t docx '.expand('%:p')) | sleep 250ms | vs %:p:r.docx
     command! TOhtml2 call system('pandoc -s -o '.expand('%:p:r').'html -t html --html-q-tags --self-contained '.expand('%:p')) | sleep 250ms | vs %:p:r.html
+    command! TOmediawiki call system('pandoc -s -o '.expand('%:p:r').'wiki -t mediawiki --self-contained '.expand('%:p')) | sleep 250ms | vs %:p:r.wiki
 endif
 if executable('pdftotext')
     function! PdfTOtxt()
@@ -571,7 +558,6 @@ endif
 if executable('dos2unix')
     command! Dos2Unix !dos2unix %:p | edit
 endif
-command! DeleteEmptyLines execute 'g/^\s*$/d'
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
@@ -637,17 +623,5 @@ nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
 
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
-
-function! GoFile()
-    try
-        normal gf
-    catch /.*/
-        let s:file = expand('<cWORD>').'.'.expand('%:e')
-        try
-            call execute('find '.s:file)
-        catch /.*/
-        endtry
-    endtry
-endfunction
 
 "vim:set foldlevel=0
