@@ -2,12 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import shutil
+import shlex
 import os
+import re
 import sys
 import logging
 import subprocess
 from faker import Faker
 from PythonUtils.debugging import function_guard, report
+from typing import Any, List
 
 fake = Faker()
 
@@ -15,44 +19,16 @@ fake = Faker()
 #   -----------------
 #   1. dry-run
 #   2. print (using tree), the structure of the project
-#   3. logging
+#   3. [ ] logging
 #   4. when using templates check if they exist and default to False if not
 #   5. if a project with a name like that exists (check for it), then just open
-
-import pudb; pudb.set_trace()  # XXX BREAKPOINT
-
-
-def exists(var_name: str) -> bool:
-    try:
-        exec(var_name)
-        if exec(var_name) is not None:
-            return True
-        else:
-            return False
-    except (KeyError, NameError, AttributeError):
-        return False
-
-
-def get_fallback(option: str, search_in: list) -> str or list or bool:
-    assert search_in is not None, 'get_fallback : list of locations to look for the value is None'
-    assert len(search_in) >= 1, 'locations passed to get_fallback don\'t appear to be in an iterable container.'
-    logger.info('get_fallback : received a value to check for')
-    logger.info('get_fallback : will be checking in {}'.format(search_in))
-    for l in search_in:
-        logger.info('get_fallback : Checking in {}'.format(l))
-        if exists(option):
-            logger.info('get_fallback : Found in {}'.format(l))
-            return exec(option)
-    logger.info('get_fallback : {} is nowhere to be found, returning False'.format(option))
-    return False
-
 
 logger = logging.getLogger()
 
 language_template = {
     'python': {
         'dirs': ['doc', 'test', 'utils'],
-        'files': ['main.py', 'README.rst'],
+        'files': ['main.py', 'README.md'],
         'template': '~/.templates/template.py',
         'gitignore': '~/.gitignores/Python.gitignore',
         'editor': ['main.py'],
@@ -61,6 +37,12 @@ language_template = {
         'files': ['Main.java'],
         'gitignore': '~/.gitignores/Java.gitignore',
         'editor': ['Main.java'],
+    },
+    'vim': {
+        'files': ['script.vim'],
+        'editor': ['script.vim'],
+        'template': '',
+        'dirs': [],
     },
     'javascript': {
         'dirs': ['photos', 'pictures', 'css', 'javascript', 'php'],
@@ -80,25 +62,23 @@ language_template = {
         'files': ['index.html', 'script.php'],
     },
     'bash': {
-        'files': ['script.sh', 'README.rst'],
+        'files': ['script.sh', 'README.md'],
         'editor': ['script.sh'],
         'template': '~/.templates/template.sh',
     },
     'default': {                           # defaults
-                'dirs': ['doc', 'utils'],
-                'files': ['todo.rst', 'README.rst'],
-                'execute': [],
-                'language': 'python',
-                'git': 'git',
-                'license': '~/.licenses/BSD-3.md',
-                'gitignore': '~/.gitignores/Global/Vim.gitignore',
-                'editor': ['outline.rst'],
-                'verbosity': 3,
-                'location': '~/Projects'
-                }
+        'dirs': ['doc', 'utils'],
+        'files': ['todo.rst', 'README.md'],
+        'execute': [],
+        'git': 'git',
+        'license': '~/.licenses/BSD-3.md',
+        'gitignore': '~/.gitignores/Global/Vim.gitignore',
+        'editor': ['outline.md'],
+        'verbosity': 3,
+        'template': '',
+        'location': '~/Projects'
+    }
 }
-
-languages = [language for language in language_template if language != "default"]
 
 parser = argparse.ArgumentParser(
     prog="project",
@@ -110,277 +90,371 @@ parser.add_argument(
     "-v",
     "--verbosity",
     help="increase output verbosity",
-    action="count",
+    action="count")
 
 parser.add_argument(
-    "--language",
-    help="The language you want to work with. [DEFAULT is {}]"
-    .format(language_template['default']['language']),
-    nargs='?',
-    choices=languages)
+    "language",
+    help="The language you want to work with. [DEFAULT is %(default)s]",
+    choices=[language for language in language_template if language != "default"])
+
+parser.add_argument(
+    'name',
+    help="The name of your new project.")
+
+parser.add_argument(
+    "--execute", '--exec',
+    help="A list of commands you want execute with cwd set to project root.",
+    nargs='+',
+    metavar='COMMAND',
+    dest='execute')
+
+git_init_group = parser.add_mutually_exclusive_group()
+
+git_init_group.add_argument(
+    "--no-git",
+    help="If you want to initialise git in the project root.",
+    dest='git',
+    const='',
+    action="store_const")
+
+git_init_group.add_argument(
+    "-g", "--git", "--init-repo", '--init',
+    help="If you want to initialise git in the project root. [DEFAULT is {}]".format(language_template['default']['git']),
+    dest='git',
+    const="git",
+    action="store_const")
+
+git_init_group.add_argument(
+    "--github", "--hub", "--github-setup-repo",
+    help="Initlias a git repo AND create it on GitHub.\
+    Note: This requires 'hub'. [DEFAULT is {}]".
+    format(language_template['default']['git']),
+    dest='git',
+    action="store_const",
+    const="github")
+
+parser.add_argument(
+    "-l", "--location", "--dest", "--loci",
+    help="Where you want to set up a project. [DEFAULT is {}]".format(language_template['default']['location']),
+    nargs=1,
+    dest='location',
+    metavar='DIR')
+
+license_group = parser.add_mutually_exclusive_group()
+
+license_group.add_argument(
+    "--license",
+    metavar='PATH/URL',
+    help="Path or a URL to license under which the project is to be released. \
+    [DEFAULT is {}]".format(language_template['default']['license']))
+
+license_group.add_argument(
+    "--no-license",
+    help="You don't want a license.",
+    action="store_const",
+    dest="license",
+    const="")
+
+template_group = parser.add_mutually_exclusive_group()
+
+template_group.add_argument(
+    "--template",
+    metavar='PATH/URL',
+    help="Path or a URL to template under which the project is to be released")
+
+template_group.add_argument(
+    "--no-template",
+    help="You don't want a license.",
+    dest="template",
+    action="store_const",
+    const="")
+
+gitignore_group = parser.add_mutually_exclusive_group()
+
+gitignore_group.add_argument(
+    "--gitignore",
+    metavar='PATH/URL',
+    help="Path or a URL to a gitignore file to be included in the project. \
+    [DEFAULT is {} but you can specify language specific gitignores]".format(language_template['default']['gitignore']))
+
+gitignore_group.add_argument(
+    "--no-gitignore",
+    help="You don't want a .gitignore file at the root of your project.",
+    action="store_const",
+    dest="gitignore",
+    const="")
+
+dirs = parser.add_mutually_exclusive_group()
+
+dirs.add_argument(
+    "-d", "--dirs",
+    help="Dirs in the project. \
+    [DEFAULT is: {}]".format(language_template['default']['dirs']),
+    nargs='+',
+    dest='dirs',
+    metavar='DIR')
+
+dirs.add_argument(
+    "--no-dirs",
+    help="You don't want any dirs created in the project.\nThis \
+    will overwrite other configuration.",
+    dest="dirs",
+    action="store_const",
+    const=[])
+
+files_group = parser.add_mutually_exclusive_group()
+
+files_group.add_argument(
+    "-f", "--files",
+    dest='files',
+    nargs="+",
+    help="Files in the project \
+    [DEFAULT is: {}]"
+    .format(language_template['default']['files']),
+    metavar='FILE')
+
+files_group.add_argument(
+    "--no-files",
+    help="You don't want any files created in the project.\nThis \
+    will overwrite other configuration.".
+    format(language_template['default']['files']),
+    action="store_const",
+    dest='files',
+    const=[])
+
+open_editor_group = parser.add_mutually_exclusive_group()
+
+open_editor_group.add_argument(
+    "-e", "--editor",
+    help="You want to automatically open $EDITOR with specified args and files. \
+    [EDITOR is " + os.path.expandvars('${EDITOR}') + "] [DEFAULT is {}]".
+    format(language_template['default']['editor']),
+    nargs="+",
+    metavar='ARG',
+    dest='editor')
+
+open_editor_group.add_argument(
+    "--no-editor",
+    help="You don't want to automatically open $EDITOR",
+    action="store_const",
+    dest='editor',
+    const=[])
+
+args = parser.parse_args()
+
+def exists(option: str) -> str or List or False:
+    try:
+        eval(option)
+        return True
+    except (NameError, KeyError, ValueError):
+        return False
 
 
-# parser.add_argument(
-    # '--name',
-    # help="The name of your new project. [DEFAULT is random catchy phrase]",
-    # nargs='?')
-
-# git_init_group = parser.add_mutually_exclusive_group()
-
-# git_init_group.add_argument(
-    # "--no-git",
-    # help="If you want to initialise git in the project root.",
-    # dest='git',
-    # action="store_false")
-
-# git_init_group.add_argument(
-    # "-g", "--git", "--init-repo", '--init',
-    # help="If you want to initialise git in the project root. [DEFAULT is {}]".format(language_template['default']['git']),
-    # dest='git',
-    # const="git",
-    # action="store_const")
-
-# git_init_group.add_argument(
-    # "--github", "--hub", "--github-setup-repo",
-    # help="Initlias a git repo AND create it on GitHub.\
-    # Note: This requires 'hub'. [DEFAULT is {}]".
-    # format(language_template['default']['git']),
-    # dest='git',
-    # action="store_const",
-    # const="github")
-
-# parser.add_argument(
-    # "-l", "--location", "--dest", "--loci",
-    # help="Where you want to set up a project. [DEFAULT is {}]".format(language_template['default']['location']),
-    # nargs='?',
-    # dest='location',
-    # metavar='DIR')
-
-# license_group = parser.add_mutually_exclusive_group()
-
-# license_group.add_argument(
-    # "--license",
-    # help="License under which the project is to be released. \
-    # [DEFAULT is {}]".format(language_template['default']['license']))
-
-# license_group.add_argument(
-    # "--no-license",
-    # help="You don't want a license.",
-    # dest="license",
-    # action="store_false")
-
-# gitignore_group = parser.add_mutually_exclusive_group()
-
-# gitignore_group.add_argument(
-    # "--gitignore",
-    # action="store_true",
-    # help="Include a gitignore file to be included in the project. \
-    # The file will be chosen for you depending on the choice of language. \
-    # [DEFAULT is {}]".format(language_template['default']['gitignore']))
-
-# gitignore_group.add_argument(
-    # "--no-gitignore",
-    # help="You don't want a .gitignore file at the root of your project.",
-    # dest="gitignore",
-    # action="store_false")
-
-# dirs = parser.add_mutually_exclusive_group()
-
-# dirs.add_argument(
-    # "-d", "--dirs",
-    # help="Dirs in the project. \
-    # [DEFAULT is: {}]".format(language_template['default']['dirs']),
-    # nargs='+',
-    # metavar='DIR')
-
-# dirs.add_argument(
-    # "--no-dirs",
-    # help="You don't want any dirs created in the project.\nThis \
-    # will overwrite other configuration.",
-    # dest="dirs",
-    # action="store_false")
-
-# files_group = parser.add_mutually_exclusive_group()
-
-# files_group.add_argument(
-    # "-f", "--files",
-    # nargs="+",
-    # help="Files in the project \
-    # [DEFAULT is: {}]"
-    # .format(language_template['default']['files']),
-    # metavar='FILE')
-
-# files_group.add_argument(
-    # "--no-files",
-    # help="You don't want any files created in the project.\nThis \
-    # will overwrite other configuration.".
-    # format(language_template['default']['files']),
-    # action="store_false",
-    # dest='files')
-
-# open_editor_group = parser.add_mutually_exclusive_group()
-
-# open_editor_group.add_argument(
-    # "-e", "--editor",
-    # help="You want to automatically open $EDITOR with specified args and files. \
-    # [EDITOR is " + os.path.expandvars('${EDITOR}') + "] [DEFAULT is {}]".
-    # format(language_template['default']['editor']),
-    # nargs="*",
-    # dest='editor')
-
-# open_editor_group.add_argument(
-    # "--no-editor",
-    # help="You don't want to automatically open $EDITOR",
-    # action="store_false",
-    # dest='editor')
-
-# args = parser.parse_args()
+def retrieve(option: str) -> str or list:
+    if exists('vars(args)["' + option + '"]') and eval('vars(args)["' + option + '"]') != None:
+        logger.info('retrieve : found ' + option + ' in the command line')
+        return eval('vars(args)["' + option + '"]')
+    elif exists('language_template[args.language]["' + option + '"]') and eval('language_template[args.language]["' + option + '"]') != None:
+        logger.info('retrieve : found ' + option + ' in lanuga specific section')
+        return eval('language_template[args.language]["' + option + '"]')
+    elif exists('language_template["default"]["' + option + '"]') and eval('language_template["default"]["' + option + '"]') != None:
+        logger.info('retrieve : found ' + option + ' in the default section')
+        return eval('language_template["default"]["' + option + '"]')
+    else:
+        raise Exception(
+            'This option ({}) is not defined anywhere'.format(option))
 
 
-# def retrieve(option: str) -> str or list or False:
-    # get_fallback(option, [
-        # vars(args)[option], language_template[args.language][option],
-        # language_template['default'][option]
-    # ])
+logging.basicConfig(
+    filename='pylog.log',
+    level=logging.INFO, format='%(levelname)s:%(asctime)s  %(message)s')
+
+logger.info('Args from the command-line {}'.format(args))
+
+logger.info('Sorting and normalising, resolving parsed and preconfigured variables.')
+
+assert retrieve('location'), 'location provided is None'
+
+location = os.path.expandvars(os.path.expanduser(retrieve('location')))
 
 
-# if retrieve('verbosity') and get_fallback('verbosity') > 0:
-    # logging.basicConfig(
-        # filename='pylog.log',
-        # level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
+logger.info('Running mkdir -p on {} (project dir location) in case it doesn\' exit.'.format(location))
 
-# logger.info('Assersions section.')
+subprocess.run(['mkdir', '-p', location])  # make in case it doesn't exist
 
-# logger.info('Sorting and normalising, resolving parsed and preconfigured variables.')
+assert retrieve('name'), 'name provided is None'
 
-# # necessary to make things work
-# assert bool(retrieve('location')), \
-    # 'location is not defines.\nretrieve \
-    # returned {}'.retrieve('location')
+logger.info('Storing items in variables and checking the content.')
 
-# location = os.path.expandvars(
-    # os.path.expanduser(retrieve('location')))
+language = retrieve('language').lower().strip()
+logger.info('Project language is {}'.format(language))
+name = retrieve('name').strip()
+logger.info('Project name is {}'.format(name))
+git = retrieve('git')
+logger.info('Git is {}'.format(git))
+try:
+    gitignore = retrieve('gitignore') if re.compile('^https?').search(retrieve('gitignore')) else os.path.expandvars(os.path.expanduser(retrieve('gitignore')))
+except:
+    os.path.expandvars(os.path.expanduser(retrieve('gitignore')))
+logger.info('Gitignore is {}'.format(gitignore))
+try:
+    license = retrieve('license') if re.compile('^https?').search(retrieve('license')) else os.path.expandvars(os.path.expanduser(retrieve('license')))
+except:
+    os.path.expandvars(os.path.expanduser(retrieve('license')))
+logger.info('License is {}'.format(license))
+dirs = [os.path.expandvars(os.path.expanduser(i)) for i in retrieve('dirs')]
+logger.info('Project dirs is {}'.format(dirs))
+files = [os.path.expandvars(os.path.expanduser(i)) for i in retrieve('files')]
+logger.info('Project files is {}'.format(files))
+logger.info('Adding ${EDITOR} to list of args to be passed to $EDITOR')
+editor = [os.path.expandvars('${EDITOR}')] + [os.path.expandvars(os.path.expanduser(i)) for i in retrieve('editor')]
+logger.info('Editor argv is {}'.format(editor))
+try:
+    template = retrieve('template') if re.compile('^https?').search(retrieve('template')) else os.path.expandvars(os.path.expanduser(retrieve('template')))
+except:
+    os.path.expandvars(os.path.expanduser(retrieve('template')))
+logger.info('Template is {}'.format(template))
+execute = [os.path.expandvars(os.path.expanduser(i)) for i in retrieve('execute')]
+logger.info('List of commands to execute is {}'.format(execute))
 
-# subprocess.run(['mkdir', '-p', location])  # make in case it doesn't exist
-# logger.info('running mkdir -p on location'.format(location))
+logger.info('running mkdir -p on project root which is : {}'.format(location))
 
-# assert bool(retrieve('language')), \
-    # 'language is not defines.\
-    # \nretrieve returned {}'.get_fallback('language')
+subprocess.run(['mkdir', '-p', location])
 
-# logger.info('Storing items in variables and checking the content.')
+logger.info('Changing dir to : {}'.format(location))
 
-# language = retrieve('language')
-# report(language)
-# name = retrieve('name')
-# report(name)
-# git = retrieve('git')
-# report(git)
-# license = retrieve('license')
-# report(license)
-# dirs = retrieve('dirs')
-# report(dirs)
-# files = retrieve('files')
-# report(files)
-# editor = retrieve('editor')
-# report(editor)
-# template = retrieve('template')
-# report(template)
-# execute = retrieve('execute')
-# report(execute)
+os.chdir(location)
 
-# logger.info('Chaning dir to project root.')
-# os.chdir(os.path.join(location, name))
+logger.info('CWD : {}'.format(os.path.abspath(os.curdir)))
 
-
-# def git_handler():
-    # if retrieve('git'):  # if git or github
-        # os.chdir(location)
-        # logger.info('Initialising a git repo')
-        # subprocess.run(['git', 'init', name])
-        # os.chdir(os.path.join(location, name))
-        # logger.info("current dir : git section : {}".format(
-            # os.path.abspath(os.path.curdir)))
-        # logger.info('Chaning dir to project root.')
-        # if retrieve('git') == "github":
-            # logger.info('Using hub to create a GitHub repo.')
-            # subprocess.run(['hub', "create", name])
-        # else:  # if non-git
-            # logger.info('You didn\'t want a git repo, skipping.')
-            # os.chdir(location)
-            # os.mkdir(name)
-            # os.chdir(os.path.join(location, name))
-            # logger.info("current dir : git section : {}".format(
-                # os.path.abspath(os.path.curdir)))
-            # logger.info('Chaning dir to project root.')
+# import pudb; pudb.set_trace()  # XXX BREAKPOINT
 
 
-# def dir_handler():
-    # if retrieve('dirs'):
-        # logger.info('Making dirs')
-        # for d in retrieve('dirs'):
-            # os.mkdir(os.path.expandvars(os.path.expanduser(d)))
+def git_handler():
+    if git:
+        logger.info('git_handler: Initialising a git repo')
+        subprocess.run(['git', 'init', name])
+        logger.info('git_handler: Chaning dir to newly initialied project root.')
+        os.chdir(name)
+        logger.info("git_handler: Current dir : git section : {}".format(os.path.abspath(os.path.curdir)))
+        if git == "github":
+            logger.info('git_handler: Using hub to create a GitHub repo.')
+            subprocess.run(['hub', "create", name])
+    else:  # if non-git
+        logger.info('git_handler: You didn\'t want a git repo, skipping.')
+        logger.info('git_handler: Making a new project dir specified by "name" : {}'.format(name))
+        os.mkdir(name)
+        logger.info('git_handler: Chaning dir to project root.')
+        os.chdir(name)
+        logger.info("git_handler: current dir : {}".format(os.path.abspath(os.path.curdir)))
 
 
-# def files_handler():
-    # if retrieve('files'):
-        # logger.info('Making files')
-        # for f in retrieve('files'):
-            # os.mknod(os.path.expandvars(os.path.expanduser(f)))
+def dir_handler():
+    if dirs:
+        logger.info('dir_handler: Making dirs')
+        for d in dirs:
+            os.mkdir(d)
 
 
-# def execute_handler():
-    # if retrieve('execute'):
-        # logger.info('Executing commands.')
-        # logger.info('Chaning dir to project root.')
-        # os.chdir(os.path.join(location, name))
-        # logger.info("current dir : execute section : {}".format(
-            # os.path.abspath(os.path.curdir)))
-        # for e in retrieve('execute'):
-            # subprocess.run(e, stdout=sys.stdout, stdin=sys.stdin)
+def files_handler():
+    if files:
+        logger.info('files_handler: Making files')
+        for f in files:
+            os.mknod(f)
 
 
-# def license_handler():
-    # if retrieve('license'):
-        # logger.info('Licensing the project.')
-        # logger.info('Chaning dir to project root.')
-        # os.chdir(os.path.join(location, name))
-        # logger.info("current dir : license section : {}".format(
-            # os.path.abspath(os.path.curdir)))
-        # logger.info('Running curl.')
-        # subprocess.run(
-            # ["curl", "-fLo", "LICENSE",
-             # "https://raw.githubusercontent.com/nl253/ProjectGenerator/master/licenses/" + retrieve('license') + ".md"],
-            # stdout=sys.stdout, stdin=sys.stdin)
+def execute_handler():
+    if execute:
+        logger.info('execute_handler: Executing commands. {}'.format(execute))
+        for e in execute:
+            subprocess.run(shlex.split(e))
 
 
-# def gitignore_handler():
-    # if retrieve('gitignore'):
-        # logger.info('Chaning dir to project root.')
-        # os.chdir(os.path.join(location, name))
-        # logger.info("current dir : gitignore section : {}".format(
-            # os.path.abspath(os.path.curdir)))
-        # if language == "python":
-            # subprocess.run([
-                # "curl", "-fLo", ".gitignore",
-                # "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore"])
-        # elif language == "java":
-            # subprocess.run([
-                # "curl", "-fLo", ".gitignore",
-                # "https://raw.githubusercontent.com/github/gitignore/master/Java.gitignore"
-            # ])
-        # elif language == "javascript":
-            # pass
-        # elif language == "php":
-            # pass
-        # elif language == "bash":
-            # pass
+def template_handler():
+    if template:
+        logger.info('template_handler: Licensing the project.')
+        logger.info("template_handler: Current dir : template section : {}".format(
+            os.path.abspath(os.path.curdir)))
+        if re.compile('^https?').search(template):
+            logger.info('template_handler: Running curl.')
+            subprocess.run(["curl", "-fLo", "template", template])
+        else:
+            if os.path.isfile(template):
+                logger.info('template_handler: a valid file detected: {}'.format(template))
+                logger.info('template_handler: copying')
+                shutil.copy(template, os.path.basename(template))
+            else:
+                logger.info('template_handler: invalid path to template {}'.format(template))
 
 
-# def editor_handler():
-    # if retrieve('editor'):
-        # logger.info("current dir : editor section : {}".format(os.path.abspath(os.path.curdir)))
-        # subprocess.run(
-            # [os.path.expandvars(os.path.expanduser(i))
-             # for i in retrieve('editor')])
+def license_handler():
+    if license:
+        logger.info('license_handler: Licensing the project.')
+        logger.info("license_handler: Current dir : license section : {}".format(
+            os.path.abspath(os.path.curdir)))
+        if re.compile('^https?').search(license):
+            logger.info('license_handler: Running curl.')
+            subprocess.run(["curl", "-fLo", "LICENSE", license])
+        else:
+            if os.path.isfile(license):
+                logger.info('license_handler: a valid file detected: {}'.format(license))
+                logger.info('license_handler: copying')
+                shutil.copy(license, os.path.basename(license))
+            else:
+                logger.info('license_handler: invalid path to license {}'.format(license))
 
+
+def gitignore_handler():
+    if gitignore:
+        logger.info('gitignore_handler: Generating .gitignore.')
+        logger.info("gitignore_handler: current dir : gitignore section : {}".format(
+            os.path.abspath(os.path.curdir)))
+        if re.compile('^https?').search(license):
+            logger.info('gitignore_handler: URL detected: {}'.format(gitignore))
+            logger.info('gitignore_handler: running curl')
+            subprocess.run(["curl", "-fLo", ".gitignore", gitignore])
+        else:
+            if os.path.isfile(gitignore):
+                logger.info('gitignore_handler: a valid file detected: {}'.format(gitignore))
+                logger.info('gitignore_handler: copying')
+                shutil.copy(gitignore, os.path.basename(gitignore))
+            else:
+                logger.info('gitignore_handler: invalid path to license {}'.format(gitignore))
+
+
+def editor_handler():
+    if editor:
+        logger.info("editor_handler: current dir : editor section : {}".format(
+            os.path.abspath(os.path.curdir)))
+        logger.info("editor_handler: editor argv : {}".format(str(editor)))
+        subprocess.run(editor)
+
+
+def main():
+    git_handler()
+    logger.info('main : git_handler : done')
+    if dirs:
+        dir_handler()
+        logger.info('main : dirs done')
+    if files:
+        files_handler()
+        logger.info('main : files done')
+    if gitignore:
+        gitignore_handler()
+        logger.info('main : gitignore done')
+    if template:
+        template_handler()
+        logger.info('main : template done')
+    if license:
+        license_handler()
+        logger.info('main : license done')
+    if execute:
+        execute_handler()
+        logger.info('main : execute done')
+    if editor:
+        editor_handler()
+        logger.info('main : editor done')
+
+
+if __name__ == '__main__':
+    main()

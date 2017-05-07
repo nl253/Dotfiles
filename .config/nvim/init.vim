@@ -137,16 +137,8 @@ Plug 'nelstrom/vim-markdown-folding'
 
 Plug 'dkarter/bullets.vim'
 
-" TAGS {{{
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-easytags', {'for' : g:PROGRAMMING}
-let b:easytags_auto_highlight = 1
-let g:easytags_events = ['BufNewFile']
-let g:easytags_always_enabled = 1
-let g:easytags_resolve_links = 1
-" }}}
-
 " MARKUP {{{ {{{
+Plug 'rhysd/vim-grammarous'
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
 Plug 'reedes/vim-textobj-sentence'
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
@@ -261,9 +253,13 @@ function! Scratch()
     elseif &filetype == 'man'
         vnew ~/.scratchpads/scratch.sh
         setl ft=sh
-    elseif (index(g:MARKUP, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 && expand('%:p') != '~/vimwiki/diary/diary.wiki'
-        vnew ~/vimwiki/diary/diary.wiki
-        setl ft=vimwiki
+    elseif (index(g:MARKUP, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
+        if expand('%:p') != '~/vimwiki/diary/diary.wiki'
+            vnew ~/vimwiki/diary/diary.wiki
+            setl ft=vimwiki
+        else
+            return 0
+        endif
     elseif (index(g:PROGRAMMING, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
         let g:_SCRATCH_FILETYPE = &filetype
         vnew ~/.scratchpads/scratch.%:e
@@ -320,18 +316,12 @@ function! Programming()
         endfor
     endif
     if filereadable(g:DICT_DIR . &filetype . '.dict')
-        let g:to_exe = 'setl dictionary='. g:DICT_DIR . &filetype . '.dict' "
-        execute g:to_exe
+        execute 'setl dictionary='. g:DICT_DIR . &filetype . '.dict'
         setl complete+=k
     endif
 endfunction
 
 function! Init()
-    if index(g:MARKUP, &filetype) >= 0
-        call Markup()
-    elseif index(g:PROGRAMMING, &filetype) >= 0
-        call Programming()
-    endif
     if exists("+omnifunc") && &omnifunc == ""
         setlocal omnifunc=syntaxcomplete#Complete
     endif
@@ -341,7 +331,6 @@ function! Init()
     if filereadable(g:DICT_DIR . &filetype . '.dict')
         call execute('setl dictionary='. g:DICT_DIR . &filetype . '.dict')
     endif
-    nnoremap <Leader>* :execute('grep '.expand('<cword>').' '.substitute(&path,',',' ','g'))<CR>
 endfunction
 " }}}
 
@@ -420,7 +409,7 @@ function! VimInit()
 endfunction
 " }}}
 
-" VimWikiInit() {{{      
+" VimWikiInit() {{{
 function! VimWikiInit()
     nmap <F13> <Plug>VimwikiNextLink
     nmap <F14> <Plug>VimwikiPrevLink
@@ -460,6 +449,7 @@ function! PythonInit()
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
     endif
+    setl magic
 endfunction
 " }}}
 "
@@ -506,6 +496,20 @@ endfunction
 command! Template call Template()
 "}}}
 
+" CTags() {{{
+function! Ctags()
+    if expand('%') == ''
+        return 0
+    endif
+    let s:working_dirs = g:WORKING_DIRS
+    for i in range(len(s:working_dirs))
+        let s:working_dirs[i] = s:working_dirs[i].'/**.'.expand('%:e')
+    endfor
+    let s:working_dirs = join(s:working_dirs)
+    call system('ctags -R '.s:working_dirs.' **.'.expand('%:e'))
+endfunction
+" }}}
+
 " AUTOCOMMANDS {{{
 aug VIMENTER
     " go back to where you left off
@@ -514,8 +518,8 @@ aug VIMENTER
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
-    " by default blank files are rst notes
-    au BufEnter * if &filetype == "" | setl ft=markdown | endif
+    " by default blank files are markdown notes
+    au VimEnter * if &filetype == "" | setl ft=markdown | endif
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
@@ -536,12 +540,17 @@ aug VIMENTER
     au FileType markdown call MarkdownInit()
     au FileType php call PhpInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
+    au BufRead,BufNewFile * call Ctags()
 aug END
+
+call execute('au! FileType '.join(g:PROGRAMMING, ',').' call Programming()')
+call execute('au! FileType '.join(g:MARKUP, ',').' call Markup()')
+
 " }}}
 
 " download dictionaries from GitHub if missing {{{
-let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
-" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
+let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
+"" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
 for dict in g:DICTS
     if ! filereadable(g:DICT_DIR . dict) && executable('curl')
         execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
@@ -607,6 +616,7 @@ nnoremap <Leader>ga     :Git add %:p<Space>
 nnoremap <Leader>gb     :Gblame<CR>
 nnoremap <Leader>gd     :Gdiff<Space>
 nnoremap <Leader>gc     :Gcommit<CR>
+nnoremap <Leader>gs     :Gstatus<CR>
 nnoremap <Leader>gW     :Gwrite<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
 nnoremap <Leader>gm     :Gmove<Space>
@@ -614,30 +624,17 @@ if len($TMUX) > 1
     nnoremap <Leader>gp     :Gpush<CR>
     nnoremap <Leader>gf     :Gfetch<Space>
 endif
-nnoremap <Leader>gV     :Gitv!<CR>
-nnoremap <Leader>gv     :Gitv<CR>
-nnoremap <Leader>g?     :Gitv?<CR>
-vnoremap <Leader>gv     :Gitv<CR>
-vnoremap <Leader>g?     :Gitv?<CR>
-nnoremap <Leader>gs     :Gstatus<CR>
-
-nnoremap <C-s>s         :SaveSession<Space>
-nnoremap <C-s><C-s>     :SaveSession default<CR>
-nnoremap <C-s>o         :OpenSession<Space>
-nnoremap <C-s><C-o>     :OpenSession default<CR>
-nnoremap <C-s>d         :DeleteSession<Space>
-nnoremap <C-s><C-d>     :DeleteSession!<CR>
-nnoremap <C-s><C-c>     :CloseSession!<CR>
-nnoremap <C-s>c         :CloseSession<CR>
 
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
+nnoremap <Leader>* :execute('grep '.expand('<cword>').' '.substitute(&path,',',' ','g'))<CR>
 nnoremap <C-k> :silent lp<CR>
 nnoremap <C-j> :silent lne<CR>
 nnoremap <Leader>a<Leader> :Ag!<CR>
 nnoremap <Leader>g<Leader> :GGrep!<CR>
 nnoremap <Leader>l<Leader> :Lines!<CR>
+nnoremap <Leader>t<Leader> :Tags!<CR>
 nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
@@ -645,3 +642,4 @@ nnoremap <Leader><Leader> :Commands!<CR>
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
 "vim:set foldlevel=0
+syntax on
