@@ -2,9 +2,9 @@
 " VARIABLES and UTILS {{{
 let g:MARKUP = [ 'markdown', 'vimwiki' ]
 
-let g:MARKUP_EXT = ['md', 'wiki', 'txt']
+let g:MARKUP_EXT = ['md', 'wiki']
 
-let g:PROGRAMMING =  [ 'vim', 'xhtml', 'html', 'css',
+let g:PROGRAMMING =  [ 'xhtml', 'html', 'css',
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
 
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
@@ -16,8 +16,7 @@ let g:TEMPLATE_DIR = glob('~/.templates/')
 let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 
 " THESE NEED!!! TO BE RELATIVE TO $HOME
-let g:WORKING_DIRS = [ 'Scripts', '.scratchpads', 'vimwiki',
-            \'.templates', 'Projects', '.bin', '.dicts']
+let g:WORKING_DIRS = ['Scripts', 'vimwiki', 'Projects']
 
 for d in [g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR]
     if empty(d)
@@ -95,7 +94,6 @@ endfor
 " PLUGINS {{{
 " Place plugins here
 " -------------------
-"
 " GENERAL {{{
 Plug 'Haron-Prime/Antares' " colorscheme
 Plug 'tpope/vim-sleuth' " auto set buffer options
@@ -167,7 +165,7 @@ Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 Plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
-let g:pymode_lint_ignore = "E116,W"
+let g:pymode_lint_ignore = "E303,W"
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_doc = 1
 let g:pymode_doc_bind = ',h'
@@ -178,7 +176,7 @@ let g:pymode_options = 1
 let g:pymode_options_colorcolumn = 1
 let g:pymode_paths = [glob('~/Scripts/'), glob('~/Projects/')]
 let g:pymode_rope_autoimport_modules = [
-            \ 'os', 'shutil', 'PythonUtils', 're',
+            \ 'os', 'shutil', 're', 'sys',
             \ 'pathlib', 'subprocess', 'shlex' ]
 let g:pymode_python = 'python3'
 let g:pymode_rope = 1
@@ -284,7 +282,7 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 " Init() execute for all buffers on filetype {{{
 "
 function! Markup()
-    setl complete=.,w,k,s conceallevel=3 makeprg=write-good
+    set complete=.,w, conceallevel=3 makeprg=write-good
     setl formatoptions=tcrqjonl1 foldlevel=1 sw=4
     if &filetype == 'vimwiki'
         nnoremap <buffer> <Leader>x :VimwikiToggleListItem<CR>
@@ -293,9 +291,10 @@ function! Markup()
     endif
     for dir in g:WORKING_DIRS  " this actually isn't recursive
         for extension in g:MARKUP_EXT " 2 levels of depth ...
-            execute 'setl complete+=k~/'.dir.'/**.'.extension
+            " execute 'set complete+=k'.glob('~/').dir.'/*.'.extension.','
             " uncomment to get 2 levels of depth
-            execute 'setl complete+=k~/'.dir.'/**/**.'.extension
+            execute 'set complete+=k'.glob('~/').dir.'/*/*.'.extension.','
+            " execute 'set complete+=k'.glob('~/').dir.'/*/*/*.'.extension.','
         endfor
     endfor
     nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
@@ -307,17 +306,14 @@ function! Markup()
 endfunction
 
 function! Programming()
-    setl nospell complete=.,w,t 
+    setl nospell 
+    set complete=.,w,t 
     if expand('%:e') != ''     " if there is an extension (needed)
         for dir in g:WORKING_DIRS
-            execute 'setl complete+=k~/'.dir.'/**.'.expand('%:e')
+            execute 'set complete+=k'.glob('~/').dir.'/**.'.expand('%:e').","
             " uncomment to get 2 levels of depth
-            "execute 'setl complete+=k~/'.dir.'/**/**.'.expand('%:e')
+            "execute 'set complete+=k~/'.dir.'/**/**.'.expand('%:e').","
         endfor
-    endif
-    if filereadable(g:DICT_DIR . &filetype . '.dict')
-        execute 'setl dictionary='. g:DICT_DIR . &filetype . '.dict'
-        setl complete+=k
     endif
 endfunction
 
@@ -330,6 +326,7 @@ function! Init()
     endif
     if filereadable(g:DICT_DIR . &filetype . '.dict')
         call execute('setl dictionary='. g:DICT_DIR . &filetype . '.dict')
+        set complete+=k,
     endif
 endfunction
 " }}}
@@ -362,7 +359,7 @@ endfunction
 " ShInit() {{{
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
-    setl complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile
+    set complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile
     if executable('shfmt')
         setl formatprg=shfmt
     endif
@@ -405,7 +402,14 @@ endfunction
 function! VimInit()
     nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
     setl foldmethod=marker
-    setl complete+=k~/.vimrc
+    set complete=.,w,
+    if expand('%:t') != 'init.vim' && expand('%:t') != '.vimrc'
+        if has('nvim')
+            set complete+=k~/.config/nvim/init.vim,
+        else
+            set complete+=k~/.vimrc,
+        endif
+    endif
 endfunction
 " }}}
 
@@ -449,7 +453,7 @@ function! PythonInit()
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
     endif
-    setl magic
+    set complete-=k
 endfunction
 " }}}
 "
@@ -477,7 +481,7 @@ endfunction
 function! HTMLInit()
     nnoremap <buffer> <Leader>me :!$BROWSER %:p<CR>
     setl foldmethod=indent
-    setl complete=.,w
+    set complete=.,w
     if executable('js-beautify')
         setl formatprg=js-beautify\ --type\ html
     endif
@@ -541,10 +545,10 @@ aug VIMENTER
     au FileType php call PhpInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
     au BufRead,BufNewFile * call Ctags()
+    call execute('au FileType '.join(g:PROGRAMMING, ',').' call Programming()')
+    call execute('au FileType '.join(g:MARKUP, ',').' call Markup()')
 aug END
 
-call execute('au! FileType '.join(g:PROGRAMMING, ',').' call Programming()')
-call execute('au! FileType '.join(g:MARKUP, ',').' call Markup()')
 
 " }}}
 
@@ -609,6 +613,10 @@ vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 && has('nvim') ? ":TREPLSen
 nnoremap <expr> z= &spell ? "z=" : ":setl spell\<CR>z="
 nnoremap <expr> [s &spell ? "[s" : ":setl spell\<CR>[s"
 nnoremap <expr> ]s &spell ? "]s" : ":setl spell\<CR>]s"
+
+" move visually highlighted lines
+vnoremap > >gv
+vnoremap < <gv
 
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>

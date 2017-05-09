@@ -22,6 +22,7 @@ alias sudo='sudo '                                                             #
 alias e='$EDITOR'                                                              # quicker access to vim
 alias path='echo -e ${PATH//:/\\n}'                                            # split path on ":"
 alias x=xonsh                                                                  # quicker access
+alias ipython='ipython --profile=me'
 if $(in-path ranger); then
     alias r='ranger'
 elif [ -x ~/.ranger/ranger.py ]; then

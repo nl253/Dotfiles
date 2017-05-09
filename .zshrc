@@ -71,28 +71,8 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 # THEME {{{
 # Custom Themes :: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
-# spaceship (Best, custom, requres installation) # {{{
-# $ZSH_CUSTOM is not set yet !
-if [[ ! -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]]; then
-  mkdir -p ~/.oh-my-zsh/custom/themes # make it in case it doesn't exist
-  if $(in-path curl); then # try with curl
-    curl -fLo ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme "https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/spaceship.zsh"
-  elif $(in-path wget); then # fall back on wget
-    wget -O - 'https://raw.githubusercontent.com/denysdovhan/spaceship-zsh-theme/master/install.sh' | zsh
-  else
-    echo -e "\nDownloading spaceship theme failed.\n"
-    return 0
-  fi
-fi # }}}
-
 # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
-[[ -e ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme ]] && ZSH_THEME="spaceship" || ZSH_THEME="refined"
-
-# NOTE -v is a new construct, I've had issues with it on remote machines
-# show the clock if tmux is not running # but don't show normally because tmux does it already
-# [[ ! -v TMUX ]] && SPACESHIP_TIME_SHOW=true
-
-SPACESHIP_PYENV_SYMBOL="[pyenv]"
+# ZSH_THEME=""
 
 # OTHER DECENT THEMES :: {{{
 # refined # minimalist, blue prompt, subtle git info
@@ -156,13 +136,10 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 # `fast-syntax-highlighting` tweaks to `zsh-syntax-highlighting`
 # `git-extra-commands` a large collection of git commands for reference : 
 #  https://github.com/unixorn/git-extra-commands/blob/master/git-extra-commands.plugin.zsh
-# `zsh-interactive-cd.plugin` integration with fzf when you type cd and TAB
 #
 # }}}
 
-
-plugins=(fast-syntax-highlighting zsh-syntax-highlighting zsh-autosuggestions compleat sudo \
-  gitignore github git-extra-commands z zsh-history-substring-search git-extras zsh-interactive-cd zsh-pandoc-completion)
+plugins=(fast-syntax-highlighting zsh-syntax-highlighting zsh-autosuggestions compleat)
 
 # [[ ! -v TMUX ]] && plugins+="battery" # NOTE -v is a new construct, I've had issues with it on remote machines
 # }}}
@@ -228,17 +205,10 @@ if $(in-path git); then
   if [[ ! -e ${ZSH_CUSTOM}/plugins/git-extra-commands/git-extra-commands.plugin.zsh ]] ; then
     cd ${ZSH_CUSTOM}/plugins && git clone https://github.com/unixorn/git-extra-commands.git git-extra-commands && cd && source ~/.zshrc
   fi
-  if [[ ! -e ${ZSH_CUSTOM}/plugins/zsh-pandoc-completion/zsh-pandoc-completion.plugin.zsh ]] ; then
-    cd ${ZSH_CUSTOM}/plugins && git clone https://github.com/srijanshetty/zsh-pandoc-completion zsh-pandoc-completion && cd && source ~/.zshrc
-  fi
 fi
 
 if $(in-path curl); then
   # press TAB to get fzf to pop up
-  if [[ ! -f ${ZSH_CUSTOM}/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh ]] && $(in-path curl); then
-    mkdir -p ${ZSH_CUSTOM}/plugins/zsh-interactive-cd
-    curl -fLo ${ZSH_CUSTOM}/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh "https://raw.githubusercontent.com/changyuheng/zsh-interactive-cd/master/zsh-interactive-cd.plugin.zsh"
-  fi
   if [[ ! -f ${ZSH_CUSTOM}/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh ]] && $(in-path curl); then
     mkdir -p ${ZSH_CUSTOM}/plugins/zsh-history-substring-search
     curl -fLo ${ZSH_CUSTOM}/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh "https://raw.githubusercontent.com/zsh-users/zsh-history-substring-search/master/zsh-history-substring-search.zsh"
@@ -275,9 +245,7 @@ fi
 
 # ------------------------------------------------ }}}
 
-# [[ -e ~/.xsh ]] && source ~/.xsh # for now, until I get used to zsh I am leaving this commented out
-
-# Commenting out until the project supports readline keybindings
-# [[ ! -e ~/.qfc/bin/ ]] && git clone https://github.com/pindexis/qfc $HOME/.qfc
-# [[ -s "${HOME}/.qfc/bin/qfc.sh" ]] && source "${HOME}/.qfc/bin/qfc.sh"
+# $PROMPT
+export PROMPT=' %F{yellow}%d%f  %F{54}>>%f '
+export RPROMPT='%F{red}%?%f'
 

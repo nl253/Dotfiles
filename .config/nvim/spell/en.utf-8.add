@@ -101,3 +101,7 @@ Javascript's
 lookaheads
 lookbehinds
 PCRE
+Bash's
+superglobals
+variables
+REPL

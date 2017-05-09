@@ -96,7 +96,6 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 # ------------------------------------------------------------------
 if [ -x /usr/bin/less ] || [ -x /bin/less ]; then
   alias less='less -x4RFsX' && export PAGER=less
-  [ -f /usr/bin/source-highlight-esc.sh ] && export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 else
   [ -x /usr/bin/more ] && export PAGER=more && alias less=more
 fi
