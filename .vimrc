@@ -4,7 +4,7 @@ let g:MARKUP = [ 'markdown', 'vimwiki' ]
 
 let g:MARKUP_EXT = ['md', 'wiki']
 
-let g:PROGRAMMING =  [ 'xhtml', 'html', 'css',
+let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 
             \'javascript', 'python', 'php', 'sh', 'zsh' ]
 
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
@@ -60,8 +60,8 @@ endif
 " }}}
 "
 " PLUG INIT :: SET VARIABLES {{{
-execute 'set thesaurus=' . g:DICT_DIR . 'thesaurus.txt'
-execute 'set dictionary=' .  g:DICT_DIR . 'frequent.dict'
+call execute('set thesaurus=' . g:DICT_DIR . 'thesaurus.txt')
+call execute('set dictionary=' .  g:DICT_DIR . 'frequent.dict')
 
 if has('nvim')
     call plug#begin('~/.local/share/nvim/plugged/')
@@ -72,11 +72,11 @@ endif
 
 " OPTIONS {{{
 set ignorecase smartcase foldmethod=marker autochdir
-set sessionoptions+=resize sessionoptions-=blank nospell
+set sessionoptions+=resize sessionoptions-=blank 
 set completeopt=menuone,longest,noinsert diffopt+=vertical,iwhite
 set mouse= complete=.,w,t,k noswapfile mps+=<:> pumheight=12
 set sessionoptions-=options bufhidden=hide wildignorecase
-set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1
+set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1 formatprg=fmt\ -s\ -u
 set autoread fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png
 set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,.rope*
@@ -86,7 +86,7 @@ set shortmess=atI " Don't show the intro message when starting vim
 set path=~/.*
 
 for dir in g:WORKING_DIRS
-    execute 'set path+=' . glob('~/') . dir . '/**'
+    call execute('set path+=' . glob('~/') . dir . '/**,')
 endfor
 
 " }}}
@@ -136,7 +136,7 @@ Plug 'nelstrom/vim-markdown-folding'
 Plug 'dkarter/bullets.vim'
 
 " MARKUP {{{ {{{
-Plug 'rhysd/vim-grammarous'
+Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
 Plug 'reedes/vim-textobj-sentence'
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
@@ -282,24 +282,20 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 " Init() execute for all buffers on filetype {{{
 "
 function! Markup()
-    set complete=.,w, conceallevel=3 makeprg=write-good
-    setl formatoptions=tcrqjonl1 foldlevel=1 sw=4
+    set complete=.,w, conceallevel=3 makeprg=write-good 
+    setl spell formatoptions=tcrqjonl1 foldlevel=1 sw=4
     if &filetype == 'vimwiki'
         nnoremap <buffer> <Leader>x :VimwikiToggleListItem<CR>
     else
         nnoremap <buffer> <Leader>x :ToggleCheckbox<CR>
     endif
-    for dir in g:WORKING_DIRS  " this actually isn't recursive
-        for extension in g:MARKUP_EXT " 2 levels of depth ...
-            " execute 'set complete+=k'.glob('~/').dir.'/*.'.extension.','
-            " uncomment to get 2 levels of depth
-            execute 'set complete+=k'.glob('~/').dir.'/*/*.'.extension.','
-            " execute 'set complete+=k'.glob('~/').dir.'/*/*/*.'.extension.','
-        endfor
-    endfor
-    nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
+    call execute('set complete+=k'.glob('~/vimwiki').'/*/*/*.wiki')
+    call execute('set complete+=k'.glob('~/vimwiki').'/*/*.wiki')
+    call execute('set complete+=k'.glob('~/vimwiki').'/*.wiki')
+    set complete+=k*.md
+    nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>:GrammarousCheck<CR>
     nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
-    nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
+    " nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
     if executable('wn')
         nnoremap <buffer> K :execute('Capture wn ' . expand('<cword>') . ' -over')<CR>
     endif
@@ -309,11 +305,8 @@ function! Programming()
     setl nospell 
     set complete=.,w,t 
     if expand('%:e') != ''     " if there is an extension (needed)
-        for dir in g:WORKING_DIRS
-            execute 'set complete+=k'.glob('~/').dir.'/**.'.expand('%:e').","
-            " uncomment to get 2 levels of depth
-            "execute 'set complete+=k~/'.dir.'/**/**.'.expand('%:e').","
-        endfor
+        call execute('set complete+=k'.glob('~/Projects').'/*/*.'.expand('%:e').",")
+        call execute('set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').",")
     endif
 endfunction
 
@@ -334,10 +327,8 @@ endfunction
 " GitcommitInit() {{{
 function! GitcommitInit()
     setl virtualedit=block
-    set spell complete=.,kspell,
-    if executable('markdown-formatter')
-        setl formatprg=markdown-formatter
-    endif
+    set complete=.,kspell,
+    setl spell 
 endfunction
 " }}}
 "
@@ -358,8 +349,9 @@ endfunction
 
 " ShInit() {{{
 function! ShInit()
-    nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
+    nnoremap <buffer> <CR> :call execute('Man ' . expand('<cword>'))<CR>
     set complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile
+    set complete+=k~/Scripts/*.sh
     if executable('shfmt')
         setl formatprg=shfmt
     endif
@@ -394,13 +386,13 @@ function! QfInit()
     nnoremap <buffer> <C-p> k<CR><C-w><C-w>
     " quick exit
     nnoremap <buffer> q :cclose<CR>:lclose<CR>
-    setl nospell
+    set nospell
 endfunction
 " }}}
 
 " VimInit() {{{
 function! VimInit()
-    nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
+    nnoremap <buffer> K :call execute('help ' . expand('<cword>'))<CR>
     setl foldmethod=marker
     set complete=.,w,
     if expand('%:t') != 'init.vim' && expand('%:t') != '.vimrc'
@@ -425,18 +417,12 @@ function! VimWikiInit()
     hi VimwikiHeader4 guifg=#00CC66
     hi VimwikiHeader5 guifg=#3399FF
     hi VimwikiHeader6 guifg=#CC66FF
-    if executable('markdown-formatter') 
-        setl formatprg=markdown-formatter
-    endif                                  
     nnoremap <buffer> <M-CR> :VimwikiTabnewLink<CR>
 endfunction
 " }}}
 
 " MarkdownInit() {{{
 function! MarkdownInit()
-    if executable('markdown-formatter')
-        setl formatprg=markdown-formatter\ --markdown\ --gentle
-    endif
     if executable('markdown-preview')
         nnoremap <Leader>me :!markdown-preview %<CR>
     endif
@@ -467,8 +453,8 @@ function! JavascriptInit()
 endfunction
 " }}}
 "
-" CSSInit() {{{
-function! CSSInit()
+" CssInit() {{{
+function! CssInit()
     setl foldmethod=marker
     setl foldmarker={,}
     if executable('js-beautify')
@@ -545,8 +531,8 @@ aug VIMENTER
     au FileType php call PhpInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
     au BufRead,BufNewFile * call Ctags()
-    call execute('au FileType '.join(g:PROGRAMMING, ',').' call Programming()')
-    call execute('au FileType '.join(g:MARKUP, ',').' call Markup()')
+    call execute('au! FileType '.join(g:PROGRAMMING, ',').' call Programming()')
+    call execute('au! FileType '.join(g:MARKUP, ',').' call Markup()')
 aug END
 
 
@@ -557,7 +543,7 @@ let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.di
 "" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
 for dict in g:DICTS
     if ! filereadable(g:DICT_DIR . dict) && executable('curl')
-        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
+        call execute('!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict)
     endif
 endfor
 " }}}
@@ -591,7 +577,7 @@ endif
 if executable('dos2unix')
     command! Dos2Unix !dos2unix %:p | edit
 endif
-command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
+command! CountOccurances call execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
 " }}}
@@ -636,7 +622,7 @@ endif
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
-nnoremap <Leader>* :execute('grep '.expand('<cword>').' '.substitute(&path,',',' ','g'))<CR>
+nnoremap <Leader>* :call execute('grep '.expand('<cword>').' '.substitute(&path,',',' ','g'))<CR>
 nnoremap <C-k> :silent lp<CR>
 nnoremap <C-j> :silent lne<CR>
 nnoremap <Leader>a<Leader> :Ag!<CR>

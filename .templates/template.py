@@ -6,40 +6,22 @@
 #
 # -----------------------------
 
-import os, pathlib, sys
+import os
+import pathlib
+import sys
 from pprint import pprint
 import glob
 import subprocess
 import logging
-from typing import Any, List, Set, Dict
 import shlex
 import re
+import inspect
+from typing import Any, List, Set, Dict
 
 logging.basicConfig(
     level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
 
 logger = logging.getLogger()
-
-def report(item: Any, name_of_var=None, print_cwd=False, length_of_var=True, type_of_var=True, pprint_var=True):
-    if print_cwd:
-        print("PWD : " + os.getcwd())
-    if pprint_var:
-        pprint(item)
-    if length_of_var:
-        try:
-            print("LENGTH : {}".format(len(item)))
-        except:  # throws an Exception if that item has no len
-            print("LENGTH : ??? ")
-    if type_of_var:
-        try:
-            print("TYPE : {}".format(type(item)))
-            print("\n")
-        except:
-            print("TYPE : ??? ")
-            print("\n")
-    if type(name_of_var) is str and len(name_of_var) > 0:
-        print(name_of_var)
-
 
 def exists(var_name: str) -> bool:
     try:
