@@ -334,7 +334,7 @@ endfunction
 " GitcommitInit() {{{
 function! GitcommitInit()
     setl virtualedit=block
-    setl spell complete=.,w,k,s
+    set spell complete=.,kspell,
     if executable('markdown-formatter')
         setl formatprg=markdown-formatter
     endif
