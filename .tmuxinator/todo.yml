@@ -37,6 +37,6 @@ windows:
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
       # synchronize: after
       panes:
-        - $EDITOR ~/Notes/todo.org
-        - cd Scripts ; todo-detector.sh
+        - $EDITOR ~/vimwiki/diary/tasks.wiki
+        - cd ~/Projects/ ; git grep -n --word-regexp --break --heading TODO
         - task list
