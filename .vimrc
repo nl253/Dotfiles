@@ -94,26 +94,23 @@ endfor
 " PLUGINS {{{
 " Place plugins here
 " -------------------
+
+Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 " GENERAL {{{
-Plug 'Haron-Prime/Antares' " colorscheme
-Plug 'tpope/vim-sleuth' " auto set buffer options
-Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
-Plug 'tpope/vim-fugitive' " git
+Plug 'Haron-Prime/Antares' | Plug 'tpope/vim-fugitive'
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %P\ of\ %L%)\ \
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'Konfekt/FastFold' " more efficient folds
-Plug 'scrooloose/nerdcommenter'
-Plug 'wellle/targets.vim'
+Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
 Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
             \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
 " }}}
 
 " COMPLETION {{{
 if has('python') || has('python3')
-    Plug 'SirVer/ultisnips' " Track the engine.
-    " Snippets are separated from the engine. Add this if you want them:
-    Plug 'honza/vim-snippets'
+    Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     let g:UltiSnipsExpandTrigger="<Tab>"
     let g:UltiSnipsEditSplit="vertical"
 endif
@@ -130,15 +127,14 @@ let g:markdown_fenced_languages = [
 
 Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
-Plug 'nelstrom/vim-markdown-folding'
+Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
 
-Plug 'dkarter/bullets.vim'
 
 " MARKUP {{{ {{{
 Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
-Plug 'reedes/vim-textobj-sentence'
+Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
             \'DittoOn', 'DittoSent','DittoSentOn']}
 " }}}
@@ -193,10 +189,6 @@ let g:pymode_syntax = 1
 let g:pymode_syntax_all = 1
 let g:pymode_syntax_print_as_function = 1
 let g:pymode_trim_whitespaces = 1
-" }}}
-
-" Go {{{
-Plug 'fatih/vim-go'
 " }}}
 
 " SHELL {{{

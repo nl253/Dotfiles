@@ -94,26 +94,23 @@ endfor
 " PLUGINS {{{
 " Place plugins here
 " -------------------
+
+Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 " GENERAL {{{
-Plug 'Haron-Prime/Antares' " colorscheme
-Plug 'tpope/vim-sleuth' " auto set buffer options
-Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
-Plug 'tpope/vim-fugitive' " git
+Plug 'Haron-Prime/Antares' | Plug 'tpope/vim-fugitive'
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %P\ of\ %L%)\ \
 Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'Konfekt/FastFold' " more efficient folds
-Plug 'scrooloose/nerdcommenter'
-Plug 'wellle/targets.vim'
+Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
 Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
             \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
 " }}}
 
 " COMPLETION {{{
 if has('python') || has('python3')
-    Plug 'SirVer/ultisnips' " Track the engine.
-    " Snippets are separated from the engine. Add this if you want them:
-    Plug 'honza/vim-snippets'
+    Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     let g:UltiSnipsExpandTrigger="<Tab>"
     let g:UltiSnipsEditSplit="vertical"
 endif
@@ -130,15 +127,14 @@ let g:markdown_fenced_languages = [
 
 Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
-Plug 'nelstrom/vim-markdown-folding'
+Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
 
-Plug 'dkarter/bullets.vim'
 
 " MARKUP {{{ {{{
 Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
-Plug 'reedes/vim-textobj-sentence'
+Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
             \'DittoOn', 'DittoSent','DittoSentOn']}
 " }}}
@@ -259,9 +255,8 @@ function! Scratch()
             return 0
         endif
     elseif (index(g:PROGRAMMING, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
-        let g:_SCRATCH_FILETYPE = &filetype
         vnew ~/.scratchpads/scratch.%:e
-        execute 'setl ft=' . g:_SCRATCH_FILETYPE
+        call execute('setl ft='.&filetype)
     else
         vnew ~/.scratchpads/scratch
         setl ft=scratch
@@ -376,6 +371,13 @@ function! HelpInit()
     nnoremap <buffer> q :bd!<CR>
     nnoremap <buffer> d <C-d>
     nnoremap <buffer> u <C-u>
+endfunction
+" }}}
+
+" GoInit() {{{
+function! GoInit()
+    nnoremap <buffer> <Leader>me :GoRun<CR>
+    nnoremap <buffer> <Leader>mS :GoLint<CR>
 endfunction
 " }}}
 
@@ -503,6 +505,7 @@ endfunction
 " AUTOCOMMANDS {{{
 aug VIMENTER
     " go back to where you left off
+    au!
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
     " automatically change dir to the file you are editing
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
@@ -515,6 +518,8 @@ aug VIMENTER
     au CmdwinLeave * setlocal updatetime=200
     au BufNewFile * call Template()
     au FileType * call Init()
+    call execute('au! FileType '.join(g:PROGRAMMING, ',').' call Programming()')
+    call execute('au! FileType '.join(g:MARKUP, ',').' call Markup()')
     au FileType man call ManInit()
     au FileType sh call ShInit()
     au FileType vim call VimInit()
@@ -527,15 +532,12 @@ aug VIMENTER
     au FileType json call JsonInit()
     au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
-    au FileType markdown call MarkdownInit()
     au FileType php call PhpInit()
+    au FileType go call GoInit()
+    au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
     au BufRead,BufNewFile * call Ctags()
-    call execute('au! FileType '.join(g:PROGRAMMING, ',').' call Programming()')
-    call execute('au! FileType '.join(g:MARKUP, ',').' call Markup()')
 aug END
-
-
 " }}}
 
 " download dictionaries from GitHub if missing {{{
@@ -585,7 +587,7 @@ command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | t
 " KEYBINDINGS {{{
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-nnoremap <Leader>mS :Neomake<CR>
+nnoremap <expr> <Leader>mS &filetype != 'python' ? ":Neomake\<CR>" : ":PymodeLint\<CR>"
 
 " Move by screen lines instead of file lines.
 " http://vim.wikia.com/wiki/Moving_by_screen_lines_instead_of_file_lines

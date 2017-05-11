@@ -44,6 +44,7 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 [ -d ~/.config/composer/vendor/bin ] && export PATH="${PATH}:${HOME}/.config/composer/vendor/bin"                                         # COMPOSER [PHP]
 [ -d ~/.local/bin ] && export PATH="${PATH}:${HOME}/.local/bin"                                                                           # PIP [PYTHON]
 [ -d ~/go/bin ] && export PATH="${PATH}:${HOME}/go/bin"                                                                                   # GO 
+[ -d /usr/local/go/bin ] && export PATH="${PATH}:/usr/local/go/bin"
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
 [ -d ~/Scripts ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
 [ -d ~/.bin ] && export PATH="${PATH}:${HOME}/.bin"       # MY READY PROJECTS AND EXECUTSBLES
@@ -53,6 +54,7 @@ if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_ROOT="${HOME}/.pyenv"
   export PATH="${PYENV_ROOT}/bin:${PATH}"
   export PYENV_VERSION='general'
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
 export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:" # for python modules
 # }}}

@@ -96,8 +96,4 @@ fi #
 
 # load fzf configuration # alters $PATH
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
-# [ -e ~/.xsh ] && source ~/.xsh # leaving this one out for now
-
-
-source ~/.xsh
 
