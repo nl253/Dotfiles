@@ -4,8 +4,10 @@ let g:MARKUP = [ 'markdown', 'vimwiki' ]
 
 let g:MARKUP_EXT = ['md', 'wiki']
 
-let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 
-            \'javascript', 'python', 'php', 'sh', 'zsh' ]
+let g:PROGRAMMING =  ['xhtml', 'html', 
+            \'css', 'javascript', 
+            \'python', 'php', 
+            \'sh', 'zsh']
 
 let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
 
@@ -81,9 +83,8 @@ set autoread fileignorecase hidden clipboard=unnamed,unnamedplus
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png
 set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,.rope*
 set nostartofline " Don't reset cursor to start of line when moving around
-set splitbelow virtualedit=all
 set shortmess=atI " Don't show the intro message when starting vim
-set path=~/.*
+set splitbelow virtualedit=all path=~/.*
 
 for dir in g:WORKING_DIRS
     call execute('set path+=' . glob('~/') . dir . '/**,')
@@ -95,7 +96,6 @@ endfor
 " Place plugins here
 " -------------------
 
-Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 " GENERAL {{{
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
@@ -118,6 +118,7 @@ endif
 
 Plug 'neomake/neomake', {'on' : [ 'Neomake']}
 
+" MARKUP {{{ {{{
 Plug 'vimwiki/vimwiki'
 
 " MARKDOWN {{{
@@ -129,9 +130,6 @@ Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
 Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
-
-
-" MARKUP {{{ {{{
 Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
 Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
 Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
@@ -150,45 +148,46 @@ au! BufEnter *.md let g:table_mode_corner = '|'
 au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
 " }}}
 
-Plug 'chrisbra/Colorizer', { 'for': [ 'css', 'html',
-            \'javascript', 'json', 
+Plug 'chrisbra/Colorizer', { 'for': [ 
+            \'css', 'html',
+            \'javascript', 
+            \'json', 'php', 
             \'xhtml', 'yaml']}
 
 Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " }}}  }}}
 
+" HASKELL {{{
+Plug 'Shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
+Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
+Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
+let g:haskellmode_completion_ghc = 0   " Disable haskell-vim omnifunc
+" }}}
+"
 " PYTHON {{{
 Plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
-let g:pymode_lint_ignore = "E303,W"
-let g:pymode_breakpoint_bind = '<localleader>b'
-let g:pymode_doc = 1
-let g:pymode_doc_bind = ',h'
-let g:pymode_indent = 1
-let g:pymode_lint = 1
-let g:pymode_motion = 1
-let g:pymode_options = 1
-let g:pymode_options_colorcolumn = 1
+"let g:pymode_lint_ignore = "E303,W"
+"let g:pymode_breakpoint_bind = '<localleader>b'
+let g:pymode_lint_checkers = ['pyflakes']
+let g:pymode_doc = 1 | let g:pymode_doc_bind = 'K'
+let g:pymode_rope_show_doc_bind = '' | let g:pymode_lint = 1
 let g:pymode_paths = [glob('~/Scripts/'), glob('~/Projects/')]
-let g:pymode_rope_autoimport_modules = [
-            \ 'os', 'shutil', 're', 'sys',
-            \ 'pathlib', 'subprocess', 'shlex' ]
 let g:pymode_python = 'python3'
-let g:pymode_rope = 1
-let g:pymode_rope_autoimport = 1
-let g:pymode_rope_autoimport_import_after_complete = 1
+let g:pymode_quickfix_minheight = 4
 let g:pymode_rope_change_signature_bind = '<localleader>cs'
-let g:pymode_rope_complete_on_dot = 1
-let g:pymode_rope_completion = 1
-let g:pymode_rope_goto_definition_bind = '<localleader>D'
+let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
+let g:pymode_rope_goto_definition_bind = '<CR>'
 let g:pymode_rope_regenerate_on_write = 1
-let g:pymode_rope_show_doc_bind = '<localleader>d'
 let g:pymode_run_bind = '<leader>me'
-let g:pymode_syntax = 1
-let g:pymode_syntax_all = 1
 let g:pymode_syntax_print_as_function = 1
-let g:pymode_trim_whitespaces = 1
+let g:pymode_lint_todo_symbol = 'DO'
+let g:pymode_lint_comment_symbol = 'C'
+let g:pymode_lint_visual_symbol = 'V'
+let g:pymode_lint_error_symbol = 'E'
+let g:pymode_lint_info_symbol = 'I'
+let g:pymode_lint_pyflakes_symbol = 'F'
 " }}}
 
 " SHELL {{{
@@ -198,17 +197,23 @@ let g:is_bash         = 1
 let g:sh_fold_enabled = 4
 " }}}
 
+" WEB DEV {{{
+"
+" HTML {{{
+Plug 'othree/html5.vim', { 'for': ['html', 'xhtml', 'php']}
+Plug 'othree/html5-syntax.vim', { 'for': ['html', 'xhtml', 'php']}
+Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css', 'php' ]}
+let g:emmet_html5 = 1
+" }}}
+
 " SQL {{{
 let g:sql_type_default = 'mysql'
 let g:ftplugin_sql_omni_key = ',' " shadows localleader
 " }}}
 
-" WEB DEV {{{
-Plug 'othree/html5.vim', { 'for': ['html', 'xhtml']}
-Plug 'othree/html5-syntax.vim', { 'for': ['html', 'xhtml']}
-Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css' ]}
-let g:emmet_html5 = 1
-" }}}
+" PHP{{{
+Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+" }}} }}}
 "
 " FZF {{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -222,13 +227,16 @@ let g:fzf_action = {
 
 " FOR NVIM {{{
 if has('nvim')
-    Plug 'kassio/neoterm', {'on' : ['TREPLSendSelection', 'TREPSendLine', 'TREPLSendFile']}
+    Plug 'kassio/neoterm', {'on' : [
+                \'TREPLSendSelection', 
+                \'TREPLSendLine', 
+                \'TREPLSendFile']}
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
     if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
 else
-    Plug 'francoiscabrol/ranger.vim'
+    if executable('ranger') | Plug 'francoiscabrol/ranger.vim' | endif
     let g:ranger_map_keys = 0
 endif
 
@@ -374,10 +382,10 @@ function! HelpInit()
 endfunction
 " }}}
 
-" GoInit() {{{
-function! GoInit()
-    nnoremap <buffer> <Leader>me :GoRun<CR>
-    nnoremap <buffer> <Leader>mS :GoLint<CR>
+" HaskellInit() {{{
+function! HaskellInit()
+     setlocal omnifunc=necoghc#omnifunc 
+     nnoremap <M-CR> :TREPLSendLine<CR> 
 endfunction
 " }}}
 
@@ -388,7 +396,7 @@ function! QfInit()
     nnoremap <buffer> <C-p> k<CR><C-w><C-w>
     " quick exit
     nnoremap <buffer> q :cclose<CR>:lclose<CR>
-    set nospell
+    setl nospell
 endfunction
 " }}}
 
@@ -440,8 +448,11 @@ function! PythonInit()
     nnoremap <Leader>mS :PymodeLint<CR>
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
+    elseif executable('yapf') 
+        call execute('setl formatprg=yapf\ '.expand('%:p'))
     endif
-    set complete-=k
+    setl complete-=k
+    nnoremap q :pclose<CR>
 endfunction
 " }}}
 "
@@ -533,16 +544,16 @@ aug VIMENTER
     au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
     au FileType php call PhpInit()
-    au FileType go call GoInit()
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
-    au BufRead,BufNewFile * call Ctags()
+    au BufNewFile call Ctags()
+    au FileType haskell call HaskellInit()
 aug END
 " }}}
 
 " download dictionaries from GitHub if missing {{{
-let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
-"" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
+let g:DICTS = ['frequent.dict', 'haskell.dict' , 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
+" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
 for dict in g:DICTS
     if ! filereadable(g:DICT_DIR . dict) && executable('curl')
         call execute('!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict)
@@ -585,8 +596,8 @@ command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | t
 " }}}
 
 " KEYBINDINGS {{{
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap <expr> <Leader>mS &filetype != 'python' ? ":Neomake\<CR>" : ":PymodeLint\<CR>"
 
 " Move by screen lines instead of file lines.
@@ -602,7 +613,9 @@ nnoremap <expr> z= &spell ? "z=" : ":setl spell\<CR>z="
 nnoremap <expr> [s &spell ? "[s" : ":setl spell\<CR>[s"
 nnoremap <expr> ]s &spell ? "]s" : ":setl spell\<CR>]s"
 
-" move visually highlighted lines
+"move visually highlighted lines
+"vnoremap <S-k> :m '<-2<CR>gv=gv
+"vnoremap <S-j> :m '>+1<CR>gv=gv
 vnoremap > >gv
 vnoremap < <gv
 

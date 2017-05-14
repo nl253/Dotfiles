@@ -105,7 +105,9 @@ $(in-path ag) && alias ag='ag --hidden --pager="less -MIRFX"' # search with dotf
 # -----------------------------------
 # REQUIRES :: sshfs aria2c rsync python3
 # -----------------------------------
-alias http-server="python3 -m http.server" # open using 0.0.0.0:{PORT}
+alias http-server-python="python3 -m http.server" # open using 0.0.0.0:{PORT}
+# note the php server requires index.php in the root dir 
+alias http-server-php="php -S 0.0.0.0:8000" # open using 0.0.0.0:{PORT}
 # mount a remote hard-drive
 $(in-path sshfs) && alias mount-raptor="sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ~/Raptor"
 $(in-path) && alias my-ip='curl ipinfo.io/ip'

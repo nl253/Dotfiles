@@ -1,4 +1,6 @@
 ﻿*.bluej
+.tor-browser/
+.steam/
 .athome
 .xiki/
 .cookiecutter*
