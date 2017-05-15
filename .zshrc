@@ -72,7 +72,7 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 # Custom Themes :: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
 # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
-# ZSH_THEME=""
+ ZSH_THEME="refined"
 
 # OTHER DECENT THEMES :: {{{
 # refined # minimalist, blue prompt, subtle git info
@@ -246,6 +246,6 @@ fi
 # ------------------------------------------------ }}}
 
 # $PROMPT
-export PROMPT=' %F{yellow}%d%f  %F{54}>>%f '
-export RPROMPT='%F{red}%?%f'
+# export PROMPT=' %F{yellow}%d%f  %F{54}>>%f '
+# export RPROMPT='%F{red}%?%f'
 

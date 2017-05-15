@@ -234,11 +234,14 @@ if has('nvim')
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
-    if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
+    "if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
 else
-    if executable('ranger') | Plug 'francoiscabrol/ranger.vim' | endif
+    "if executable('ranger') | Plug 'francoiscabrol/ranger.vim' | endif
     let g:ranger_map_keys = 0
 endif
+
+let g:netrw_scpport	= "-P 21"
+let g:netrw_sshport	= "-p 21"
 
 " }}}
 

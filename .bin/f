@@ -38,29 +38,24 @@
 # NOTE: Beacuse I like descriptive names, the file name is too long to type in the command line 
 #       I have it aliased to f for quick file listing and finding
 #
-find-approx() { 
+find-approx() {
 
-        [[ $# == 0 ]] && find . -maxdepth 1 -type f | sed -E "s/^\.\///" | sort # if no args provided, print a sorted list of files in the cwd
+	[[ $# == 0 ]] && find . -maxdepth 1 -type f | sed -E "s/^\.\///" | sort # if no args provided, print a sorted list of files in the cwd
 
-        for i in "$@"; do # iterate over provided arguments 
-                find . -regextype posix-extended -iregex ".*${i}.*" -readable -type f 2>/dev/null \
-                        | grep -E -v "(/\d{4,})|(/\S{50,})|~$" \
-                        | grep -E -v "(\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri))$" \
-                        | grep -v "%" \
-                        | grep -E -v ".*(\.git\/)|(elpa)|(node_modules)|(rustup)|(\.gem)|(\.pyenv)|(font)|(ideaic)|(composer)|(npm)|(cabal)|(site-packages)|(chrome)|(cache)|(trash)|(timeshift).*" \
-                        | sort | sed -E "s/^\.\///"
-        done
+	for i in "$@"; do # iterate over provided arguments 
+		find . -iname '*'"${i}"'*' -readable -type f 2>/dev/null | grep -P -v "(((/\d{4,})|(/\S{50,})|~)$)|(^.*((\.(png)|(jpeg)|(bluej)|(ctxt)|(jpg)|(so)|(pyc)|(obj)|(out)|(class)|(swp)|(xz)|(ri)))$)|(^.*((%)|(\.git\/)|(elpa)|(node_modules)|(rustup)|(\.gem)|(\.pyenv)|(font)|(ideaic)|(composer)|(npm)|(cabal)|(site-packages)|(chrome)|(cache)|(trash)|(timeshift)).*$)" | sort | sed -E "s/^\.\///"
+	done
 }
 
 LINE="^\S+"
 
 if [[ -x $(which fzf) ]]; then
-        if [[ -v TMUX ]]; then
-                X=$(find-approx "$@" | fzf-tmux -r "35%")
-        else
-                X=$(find-approx "$@" | fzf)
-        fi
-        [[ $X =~ $LINE ]] && $EDITOR "$X" || exit 1
+	if [[ -v TMUX ]]; then
+		X=$(find-approx "$@" | fzf-tmux -r "35%")
+	else
+		X=$(find-approx "$@" | fzf)
+	fi
+	[[ $X =~ $LINE ]] && $EDITOR "$X" || exit 1
 else
-        find-approx "$@" 
+	find-approx "$@"
 fi
