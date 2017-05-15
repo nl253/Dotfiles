@@ -62,8 +62,8 @@ endif
 " }}}
 "
 " PLUG INIT :: SET VARIABLES {{{
-call execute('set thesaurus=' . g:DICT_DIR . 'thesaurus.txt')
-call execute('set dictionary=' .  g:DICT_DIR . 'frequent.dict')
+execute 'set thesaurus=' . g:DICT_DIR . 'thesaurus.txt'
+execute 'set dictionary=' .  g:DICT_DIR . 'frequent.dict'
 
 if has('nvim')
     call plug#begin('~/.local/share/nvim/plugged/')
@@ -87,7 +87,7 @@ set shortmess=atI " Don't show the intro message when starting vim
 set splitbelow virtualedit=all path=~/.*
 
 for dir in g:WORKING_DIRS
-    call execute('set path+=' . glob('~/') . dir . '/**,')
+    execute 'set path+=' . glob('~/') . dir . '/**,'
 endfor
 
 " }}}
@@ -267,7 +267,7 @@ function! Scratch()
         endif
     elseif (index(g:PROGRAMMING, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
         vnew ~/.scratchpads/scratch.%:e
-        call execute('setl ft='.&filetype)
+        execute 'setl ft='.&filetype
     else
         vnew ~/.scratchpads/scratch
         setl ft=scratch
@@ -295,15 +295,15 @@ function! Markup()
     else
         nnoremap <buffer> <Leader>x :ToggleCheckbox<CR>
     endif
-    call execute('set complete+=k'.glob('~/vimwiki').'/*/*/*.wiki')
-    call execute('set complete+=k'.glob('~/vimwiki').'/*/*.wiki')
-    call execute('set complete+=k'.glob('~/vimwiki').'/*.wiki')
+    execute 'set complete+=k'.glob('~/vimwiki').'/*/*/*.wiki'
+    execute 'set complete+=k'.glob('~/vimwiki').'/*/*.wiki'
+    execute 'set complete+=k'.glob('~/vimwiki').'/*.wiki'
     set complete+=k*.md
     nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>:GrammarousCheck<CR>
     nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
     " nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
     if executable('wn')
-        nnoremap <buffer> K :execute('Capture wn ' . expand('<cword>') . ' -over')<CR>
+        nnoremap <buffer> K :execute 'Capture wn ' . expand('<cword>') . ' -over'<CR>
     endif
 endfunction
 
@@ -311,8 +311,8 @@ function! Programming()
     setl nospell 
     set complete=.,w,t 
     if expand('%:e') != ''     " if there is an extension (needed)
-        call execute('set complete+=k'.glob('~/Projects').'/*/*.'.expand('%:e').",")
-        call execute('set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').",")
+        execute 'set complete+=k'.glob('~/Projects').'/*/*.'.expand('%:e').","
+        execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').","
     endif
 endfunction
 
@@ -324,7 +324,7 @@ function! Init()
         setlocal completefunc=syntaxcomplete#Complete
     endif
     if filereadable(g:DICT_DIR . &filetype . '.dict')
-        call execute('setl dictionary='. g:DICT_DIR . &filetype . '.dict')
+        execute 'setl dictionary='. g:DICT_DIR . &filetype . '.dict'
         set complete+=k,
     endif
 endfunction
@@ -355,7 +355,7 @@ endfunction
 
 " ShInit() {{{
 function! ShInit()
-    nnoremap <buffer> <CR> :call execute('Man ' . expand('<cword>'))<CR>
+    nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
     set complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile
     set complete+=k~/Scripts/*.sh
     if executable('shfmt')
@@ -405,7 +405,7 @@ endfunction
 
 " VimInit() {{{
 function! VimInit()
-    nnoremap <buffer> K :call execute('help ' . expand('<cword>'))<CR>
+    nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
     setl foldmethod=marker
     set complete=.,w,
     if expand('%:t') != 'init.vim' && expand('%:t') != '.vimrc'
@@ -452,7 +452,7 @@ function! PythonInit()
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
     elseif executable('yapf') 
-        call execute('setl formatprg=yapf\ '.expand('%:p'))
+        execute 'setl formatprg=yapf\ '.expand('%:p')
     endif
     setl complete-=k
     nnoremap q :pclose<CR>
@@ -494,7 +494,7 @@ endfunction
 function! Template()
     if filereadable(g:TEMPLATE_DIR."template.".expand("%:e"))
         normal gg
-        call execute('read '.g:TEMPLATE_DIR."template.".expand("%:e"))
+        execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
         normal gg
         normal dd
     endif
@@ -532,8 +532,8 @@ aug VIMENTER
     au CmdwinLeave * setlocal updatetime=200
     au BufNewFile * call Template()
     au FileType * call Init()
-    call execute('au! FileType '.join(g:PROGRAMMING, ',').' call Programming()')
-    call execute('au! FileType '.join(g:MARKUP, ',').' call Markup()')
+    execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()'
+    execute 'au! FileType '.join(g:MARKUP, ',').' call Markup()'
     au FileType man call ManInit()
     au FileType sh call ShInit()
     au FileType vim call VimInit()
@@ -559,7 +559,7 @@ let g:DICTS = ['frequent.dict', 'haskell.dict' , 'thesaurus.txt', 'php.dict', 'c
 " let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
 for dict in g:DICTS
     if ! filereadable(g:DICT_DIR . dict) && executable('curl')
-        call execute('!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict)
+        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
     endif
 endfor
 " }}}
@@ -593,7 +593,7 @@ endif
 if executable('dos2unix')
     command! Dos2Unix !dos2unix %:p | edit
 endif
-command! CountOccurances call execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
+command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
 " }}}
@@ -640,7 +640,7 @@ endif
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
-nnoremap <Leader>* :call execute('grep '.expand('<cword>').' '.substitute(&path,',',' ','g'))<CR>
+nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',',' ','g')<CR>
 nnoremap <C-k> :silent lp<CR>
 nnoremap <C-j> :silent lne<CR>
 nnoremap <Leader>a<Leader> :Ag!<CR>
