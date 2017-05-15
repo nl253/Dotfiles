@@ -72,7 +72,7 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 # Custom Themes :: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
 # configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
- ZSH_THEME="refined"
+ ZSH_THEME="robbyrussell"
 
 # OTHER DECENT THEMES :: {{{
 # refined # minimalist, blue prompt, subtle git info
