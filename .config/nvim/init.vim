@@ -73,20 +73,18 @@ endif
 " }}}
 
 " OPTIONS {{{
-set ignorecase smartcase foldmethod=marker autochdir
-set sessionoptions+=resize sessionoptions-=blank 
+set ignorecase smartcase foldmethod=marker autochdir pumheight=12
+set sessionoptions+=resize sessionoptions-=blank formatprg=fmt\ -s\ -u
 set completeopt=menuone,longest,noinsert diffopt+=vertical,iwhite
-set mouse= complete=.,w,t,k noswapfile mps+=<:> pumheight=12
-set sessionoptions-=options bufhidden=hide wildignorecase
-set shiftwidth=4 autowrite undofile formatoptions=tcqjonl1 formatprg=fmt\ -s\ -u
-set autoread fileignorecase hidden clipboard=unnamed,unnamedplus
-set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,*.png
-set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,.rope*
-set nostartofline " Don't reset cursor to start of line when moving around
-set shortmess=atI " Don't show the intro message when starting vim
-set splitbelow virtualedit=all path=~/.*
+set mouse= complete=.,w,k, noswapfile mps+=<:> wildignorecase
+set sessionoptions-=options bufhidden=hide formatoptions=tcqjonl1 
+set shiftwidth=4 autowrite undofile clipboard=unnamed,unnamedplus
+set autoread fileignorecase hidden splitbelow virtualedit=all path=~/.*
+set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,
+set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,
+set wildignore+=*.jpeg,.rope*,*.png,.rope*, nostartofline shortmess=atI 
 
-for dir in g:WORKING_DIRS
+for dir in g:WORKING_DIRS " so that :find is more powerful
     execute 'set path+=' . glob('~/') . dir . '/**,'
 endfor
 
@@ -120,6 +118,10 @@ Plug 'neomake/neomake', {'on' : [ 'Neomake']}
 
 " MARKUP {{{ {{{
 Plug 'vimwiki/vimwiki'
+let g:vimwiki_table_mappings = 0
+let g:vimwiki_html_header_numbering = 2
+let g:vimwiki_list_ignore_newline = 0
+" let g:vimwiki_url_maxsave = 0 
 
 " MARKDOWN {{{
 let g:markdown_fenced_languages = [
@@ -169,7 +171,7 @@ Plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
 "let g:pymode_lint_ignore = "E303,W"
-"let g:pymode_breakpoint_bind = '<localleader>b'
+let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_lint_checkers = ['pyflakes']
 let g:pymode_doc = 1 | let g:pymode_doc_bind = 'K'
 let g:pymode_rope_show_doc_bind = '' | let g:pymode_lint = 1
@@ -192,8 +194,7 @@ let g:pymode_lint_pyflakes_symbol = 'F'
 
 " SHELL {{{
 Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
-let readline_has_bash = 1
-let g:is_bash         = 1
+let readline_has_bash = 1 | let g:is_bash = 1
 let g:sh_fold_enabled = 4
 " }}}
 
@@ -234,10 +235,6 @@ if has('nvim')
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
-    "if executable('ranger') | Plug 'airodactyl/neovim-ranger' | endif
-else
-    "if executable('ranger') | Plug 'francoiscabrol/ranger.vim' | endif
-    let g:ranger_map_keys = 0
 endif
 
 let g:netrw_scpport	= "-P 21"
