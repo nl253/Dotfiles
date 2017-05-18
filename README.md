@@ -18,7 +18,7 @@
 
 #### How I compiled my Vim 
 
-1. follow instructions on official vim website
+1. follow instructions on the official vim website
 2. you will have to clone the vim repo somewhere
 3. RUN THIS 
 
