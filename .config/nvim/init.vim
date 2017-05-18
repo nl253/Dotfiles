@@ -31,19 +31,19 @@ let mapleader = " "
 let maplocalleader = ","
 " }}}
 
-" download plug {{{
+" download Plug {{{
 set termguicolors
 if has('nvim')
-    let g:vimdir = glob('~/.config/nvim/')
-    let g:plug_file = glob('~/.local/share/nvim/site/autoload/plug.vim')
-    if empty(g:vimdir)
-        call system('!mkdir -p '.g:vimdir)
+    let g:VIMDIR = glob('~/.config/nvim/')
+    let g:PLUG_FILE = glob('~/.local/share/nvim/site/autoload/plug.vim')
+    if empty(g:VIMDIR)
+        call system('!mkdir -p '.g:VIMDIR)
     endif
     tnoremap <esc> <c-\><c-n>
     set inccommand=nosplit 
 else " if vim
-    let g:vimdir = glob('~/.vim/')
-    let g:plug_file = glob('~/.vim/autoload/plug.vim')
+    let g:VIMDIR = glob('~/.vim/')
+    let g:PLUG_FILE = glob('~/.vim/autoload/plug.vim')
     let $myvimrc = glob('~/.vimrc')
     syntax enable
     filetype plugin indent on
@@ -54,15 +54,15 @@ else " if vim
     endif
 endif
 
-if ! filereadable(g:plug_file) && executable('curl')
-    call system('curl -flo ' . g:plug_file . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    pluginstall
-    source $myvimrc
+if ! filereadable(g:PLUG_FILE) && executable('curl')
+    call system('curl -flo ' . g:PLUG_FILE . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    PlugInstall
+    source $MYVIMRC
 endif
 
 " }}}
 "
-" plug init :: set variables {{{
+" Plug init :: set variables {{{
 execute 'set thesaurus=' . g:DICT_DIR . 'thesaurus.txt'
 execute 'set dictionary=' .  g:DICT_DIR . 'frequent.dict'
 
@@ -91,34 +91,34 @@ endfor
 
 " }}}
 
-" plugins {{{
-" place plugins here
+" Plugins {{{
+" place Plugins here
 " -------------------
 
 " general {{{
-plug 'tpope/vim-sleuth' | plug 'tpope/vim-speeddating'
-plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
-plug 'haron-prime/antares' | plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
+Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
+Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \
-plug 'junegunn/vim-easy-align', { 'on' : 'easyalign' }
-plug 'konfekt/fastfold' " more efficient folds
-plug 'scrooloose/nerdcommenter' | plug 'wellle/targets.vim'
-plug 'tpope/vim-eunuch', {'on' : [ 'move', 'remove', 'find', 'mkdir', 'wall',
-            \'sudowrite', 'sudoedit', 'unlink', 'chmod', 'rename', ]}
+Plug 'junegunn/vim-easy-align', { 'on' : 'Easyalign' }
+Plug 'konfekt/fastfold' " more efficient folds
+Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
+Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
+            \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
 " }}}
 
 " completion {{{
 if has('python') || has('python3')
-    plug 'sirver/ultisnips' | plug 'honza/vim-snippets'
+    Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
     let g:ultisnipsexpandtrigger="<tab>"
     let g:ultisnipseditsplit="vertical"
 endif
 " }}}
 
-plug 'neomake/neomake', {'on' : [ 'neomake']}
+Plug 'neomake/neomake', {'on' : [ 'Neomake']}
 
 " markup {{{ {{{
-plug 'vimwiki/vimwiki'
+Plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_html_header_numbering = 2
 let g:vimwiki_list_ignore_newline = 0
@@ -129,18 +129,18 @@ let g:markdown_fenced_languages = [
             \'html', 'python', 'zsh', 'javascript',
             \'php', 'css', 'java', 'vim', 'sh']
 
-plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
-plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
-plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
+Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
+Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
+Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
-plug 'reedes/vim-wordy', { 'on': ['wordy', 'wordywordy'] }
-plug 'dkarter/bullets.vim' | plug 'reedes/vim-textobj-sentence'
-plug 'dbmrq/vim-ditto', { 'on': [ 'toggleditto',
-            \'dittoon', 'dittosent','dittosenton']}
+Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
+Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
+            \'DittoOn', 'DittoSent','DittoSentOn']}
 " }}}
 "
 " table mode {{{
-plug 'dhruvasagar/vim-table-mode', { 'on': ['tablemodeenable'] }
+Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
 let g:loaded_table_mode = 1
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 " stops from indicating that it has loaded
@@ -150,24 +150,24 @@ au! bufenter *.md let g:table_mode_corner = '|'
 au! bufenter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
 " }}}
 
-plug 'chrisbra/colorizer', { 'for': [ 
+Plug 'chrisbra/colorizer', { 'for': [ 
             \'css', 'html',
             \'javascript', 
             \'json', 'php', 
             \'xhtml', 'yaml']}
 
-plug 'godlygeek/tabular', { 'for': g:markup, 'on' : 'tabularize' }
+Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " }}}  }}}
 
 " haskell {{{
-plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
-plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
-plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
+Plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
+Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
+Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
 let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
 " }}}
 "
 " python {{{
-plug 'klen/python-mode', { 'for': 'python' }
+Plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
 "let g:pymode_lint_ignore = "e303,w"
@@ -209,7 +209,7 @@ let g:emmet_html5 = 1
 
 " SQL {{{
 let g:sql_type_default = 'mysql'
-let g:ftplugin_sql_omni_key = ',' " shadows localleader
+let g:ftPlugin_sql_omni_key = ',' " shadows localleader
 " }}}
 
 " PHP{{{
