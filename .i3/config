@@ -3,7 +3,6 @@
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 #set $mod Mod4
-exec bash ~/.bashrc
 
 set $mod Mod1
 set $WINKEY Mod4
@@ -43,26 +42,9 @@ font xft:monospace 13
 floating_modifier $ALTKEY
 
 # start a terminal
-#bindsym $mod+Return exec terminal
-#bindsym $WINKEY+Ctrl+c exec google-chrome-stable
-#bindsym $WINKEY+Ctrl+t exec terminix
-#bindsym $WINKEY+Ctrl+r exec terminix -e ranger
-#bindsym $WINKEY+Ctrl+n exec terminix -e nvim
-#bindsym $WINKEY+Ctrl+a exec alacritty&
-#bindsym $WINKEY+Ctrl+h exec terminix -e htop
-#bindsym F10 exec alacritty -e tig
-#bindsym F9 exec alacritty -e htop
-#bindsym F8 exec terminix
-#bindsym F7 exec emacs
-#bindsym F6 exec spotify
-#bindsym F5 exec google-chrome-stable
-#bindsym F4 exec alacritty -e ranger
-#bindsym F3 exec alacritty -e nvim
-#bindsym F1 exec alacritty&
 bindsym $WINKEY+Shift+Return exec alacritty -e tmux&
-#
+
 # kill focused window
-#bindsym $mod+Shift+q kill
 bindsym $ALTKEY+F4 kill
 
 # start program launcher
@@ -71,17 +53,18 @@ bindsym $ALTKEY+F4 kill
 
 # launch categorized menu
 bindsym $WINKEY+z exec --no-startup-id morc_menu
-
 bindsym $WINKEY+p exec --no-startup-id rofi -width 20 -location 0 -matching fuzzy -lines 10 -terminal alacritty -show run
+
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
 ################################################################################################
 
 exec --no-startup-id volumeicon
 bindsym $WINKEY+Ctrl+m exec terminal -e 'alsamixer'
+
 #exec --no-startup-id pulseaudio
 #exec --no-startup-id pa-applet
-#bindsym $mod+Ctrl+m exec pavucontrol
+bindsym $mod+Ctrl+m exec pavucontrol
 
 ################################################################################################
 
@@ -93,9 +76,9 @@ bindsym $WINKEY+Ctrl+m exec terminal -e 'alsamixer'
 #bindsym $mod+t exec --no-startup-id pkill compton
 #bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
+bindsym Print exec "scrot %Y-%m-%d_%H-%M_$wx$h.png -e mv $f ~/Pictures/ ; exec notify-send 'Prinscreen saved to ~/'"
+#bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
+#bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
 #bindsym $mod+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 #bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
@@ -150,21 +133,20 @@ bindsym $WINKEY+minus scratchpad show
 #navigate workspaces next / previous
 #bindsym $WINKEY+Ctrl+Right workspace next
 
-
 # Workspace names
 # to display names or symbols instead of plain workspace numbers you can use
 # something like: set $ws1 1:mail
 #                 set $ws2 2:
-set $ws1 1:ALACRITTY
-set $ws2 2:UNI
-set $ws3 3:NVIM
-set $ws4 4:RANGER
-set $ws5 5:CHROME
-set $ws6 6:JAVA
-set $ws7 7:EMACS
-set $ws8 8:TERMINIX
-set $ws9 9:VIMSCRIPT
-set $ws10 10:POWERPOINT
+set $ws1 1:TERMINAL
+set $ws2 2:CHROME
+set $ws3 3:POWERPOINTS
+set $ws4 4:OTHER
+set $ws5 5:OTHER
+set $ws6 6:OTHER
+set $ws7 7:OTHER
+set $ws8 8:OTHER
+set $ws9 9:OTHER
+set $ws10 10:OTHER
 
 # switch to workspace
 bindsym $WINKEY+1 workspace $ws1
@@ -203,10 +185,8 @@ bindsym $WINKEY+Shift+9 move container to workspace $ws9; workspace $ws9
 bindsym $WINKEY+Shift+0 move container to workspace $ws10; workspace $ws10
 
 # Open applications on specific workspaces
-assign [class="google-chrome"] $ws5
-assign [class="terminix"] $ws8
-assign [class="nyaovim"] $ws3
-assign [class="emacs"] $ws7
+assign [class="google-chrome"] $ws2
+assign [class="alacritty"] $ws1
 assign [class="libreoffice"] $ws10
 
 # Open specific applications in floating mode
@@ -244,6 +224,7 @@ for_window [urgent=latest] focus
 bindsym $WINKEY+Shift+c reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+#bindsym $WINKEY+Shift+r restart
 bindsym $WINKEY+Shift+r restart
 
 # exit i3 (logs you out of your X session)
@@ -304,11 +285,9 @@ exec --no-startup-id pamac-tray
 exec --no-startup-id clipit
 exec --no-startup-id xsetroot -bg black
 exec --no-startup-id dropbox
-# exec --no-startup-id setxkbmap -layout gb -option ctrl:nocaps
 # exec --no-startup-id blueman
 # exec_always --no-startup-id sbxkb
 exec --no-startup-id start_conky_maia
-# exec --no-startup-id start_conky_green
 exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id fix_xcursor
 
@@ -419,5 +398,4 @@ mode "$mode_gaps_outer" {
         bindsym Escape mode "default"
 }
 
-
-
+# vim:ft=config:

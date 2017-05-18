@@ -57,6 +57,9 @@ if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
 export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:" # for python modules
+if [ -e ~/.eclipse/org.eclipse.platform_4.6.3_155965261_linux_gtk_x86_64/eclimd ]; then
+  export PATH="${PATH}:${HOME}/.eclipse/org.eclipse.platform_4.6.3_155965261_linux_gtk_x86_64"
+fi
 # }}}
 
 # HISTORY {{{
@@ -125,7 +128,7 @@ fi
 # ----------------------------------------------------------------------
 if [ -x /usr/bin/nvim ] || [ -x /bin/nvim ]; then # if neovim
   export EDITOR=/usr/bin/nvim
-  alias vim=/usr/bin/nvim
+  #alias vim=/usr/bin/nvim
   alias vi=/usr/bin/nvim
 
 elif [ -x /usr/bin/vim ] || [ -x /bin/vim ]; then # if vim but not neovim

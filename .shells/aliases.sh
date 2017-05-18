@@ -113,7 +113,6 @@ $(in-path sshfs) && alias mount-raptor="sshfs -o transform_symlinks -o follow_sy
 $(in-path) && alias my-ip='curl ipinfo.io/ip'
 # set up logging in ~/Downloads/Torrents/aria2c.log
 # and a default location for download of Torrents in ~/Downloads/Torrents/
-$(in-path aria2c) && alias aria2c="mkdir -p ${HOME}/Downloads/Torrents/ ; touch ${HOME}/Downloads/Torrents/aria2c.log ; aria2c --continue --dir=${HOME}/Downloads/Torrents --log=${HOME}/Downloads/Torrents/aria2c.log"
 if $(in-path rsync); then
     alias rsync-copy="rsync -avz --progress -h"
     alias rsync-move="rsync -avz --progress -h --remove-source-files"

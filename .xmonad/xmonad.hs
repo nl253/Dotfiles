@@ -1,12 +1,4 @@
 --
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
---
---
 -- DEPENDENCIES:
 -- rofi :: launcher
 -- alacritty :: terminal emulator
@@ -257,14 +249,12 @@ myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Google-chrome"  --> doShift "2:BROWSER"
     , className =? "Alacritty"      --> doShift "1:NVIM"
-    , className =? "Emacs"          --> doShift "3:EMACS"
-    , className =? "Gimp"           --> doFloat
     , className =? "Steam"          --> doFloat
-    , resource  =? "PyCharm"        --> doFloat
-    , resource  =? "jetbrains-idea-ce" --> doIgnore
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+    , resource  =? "desktop_window" --> doIgnore]
 
+    {-, className =? "Gimp"           --> doFloat-}
+    {-, resource  =? "PyCharm"        --> doFloat-}
+    {-, resource  =? "jetbrains-idea-ce" --> doIgnore-}
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -302,7 +292,7 @@ myStartupHook = do
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad defaults
+  main = xmonad defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
