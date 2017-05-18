@@ -7,6 +7,10 @@
 vimwiki/
 .config/kdeglobals
 .config/QtProject.conf
+.eclipse/
+.eclim/
+.stack/
+workspace/
 .thumbnails/
 go/
 .nvimlog

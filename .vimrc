@@ -31,37 +31,38 @@ let mapleader = " "
 let maplocalleader = ","
 " }}}
 
-" DOWNLOAD PLUG {{{
+" download plug {{{
+set termguicolors
 if has('nvim')
-    let g:VIMDIR = glob('~/.config/nvim/')
-    let g:PLUG_FILE = glob('~/.local/share/nvim/site/autoload/plug.vim')
-    if empty(g:VIMDIR)
-        call system('!mkdir -p '.g:VIMDIR)
+    let g:vimdir = glob('~/.config/nvim/')
+    let g:plug_file = glob('~/.local/share/nvim/site/autoload/plug.vim')
+    if empty(g:vimdir)
+        call system('!mkdir -p '.g:vimdir)
     endif
-    tnoremap <Esc> <C-\><C-n>
-    set inccommand=nosplit termguicolors
+    tnoremap <esc> <c-\><c-n>
+    set inccommand=nosplit 
 else " if vim
-    let g:VIMDIR = glob('~/.vim/')
-    let g:PLUG_FILE = glob('~/.vim/autoload/plug.vim')
-    let $MYVIMRC = glob('~/.vimrc')
+    let g:vimdir = glob('~/.vim/')
+    let g:plug_file = glob('~/.vim/autoload/plug.vim')
+    let $myvimrc = glob('~/.vimrc')
     syntax enable
     filetype plugin indent on
     set encoding=utf8 syntax=on autoindent nocompatible magic incsearch ttyfast
-    set display=lastline nrformats=bin,hex complete+=i hlsearch
+    set display=lastline nrformats=bin,hex complete+=i hlsearch wildmenu
     if has('tags')
         set tags
     endif
 endif
 
-if ! filereadable(g:PLUG_FILE) && executable('curl')
-    call system('curl -fLo ' . g:PLUG_FILE . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    PlugInstall
-    source $MYVIMRC
+if ! filereadable(g:plug_file) && executable('curl')
+    call system('curl -flo ' . g:plug_file . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    pluginstall
+    source $myvimrc
 endif
 
 " }}}
 "
-" PLUG INIT :: SET VARIABLES {{{
+" plug init :: set variables {{{
 execute 'set thesaurus=' . g:DICT_DIR . 'thesaurus.txt'
 execute 'set dictionary=' .  g:DICT_DIR . 'frequent.dict'
 
@@ -72,17 +73,17 @@ else
 endif
 " }}}
 
-" OPTIONS {{{
+" options {{{
 set ignorecase smartcase foldmethod=marker autochdir pumheight=12
 set sessionoptions+=resize sessionoptions-=blank formatprg=fmt\ -s\ -u
 set completeopt=menuone,longest,noinsert diffopt+=vertical,iwhite
-set mouse= complete=.,w,k, noswapfile mps+=<:> wildignorecase
+set mouse= complete=.,w,k, noswapfile mps+=<:> wildignorecase noshowcmd
 set sessionoptions-=options bufhidden=hide formatoptions=tcqjonl1 
 set shiftwidth=4 autowrite undofile clipboard=unnamed,unnamedplus
 set autoread fileignorecase hidden splitbelow virtualedit=all path=~/.*
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,
 set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,
-set wildignore+=*.jpeg,.rope*,*.png,.rope*, nostartofline shortmess=atI 
+set wildignore+=*.jpeg,.rope*,*.png,.rope*, nostartofline shortmess=ati 
 
 for dir in g:WORKING_DIRS " so that :find is more powerful
     execute 'set path+=' . glob('~/') . dir . '/**,'
@@ -90,106 +91,105 @@ endfor
 
 " }}}
 
-" PLUGINS {{{
-" Place plugins here
+" plugins {{{
+" place plugins here
 " -------------------
 
-" GENERAL {{{
-Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
-Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
-Plug 'Haron-Prime/Antares' | Plug 'tpope/vim-fugitive'
-set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %P\ of\ %L%)\ \
-Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
-Plug 'Konfekt/FastFold' " more efficient folds
-Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
-Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
-            \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
+" general {{{
+plug 'tpope/vim-sleuth' | plug 'tpope/vim-speeddating'
+plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
+plug 'haron-prime/antares' | plug 'tpope/vim-fugitive'
+set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \
+plug 'junegunn/vim-easy-align', { 'on' : 'easyalign' }
+plug 'konfekt/fastfold' " more efficient folds
+plug 'scrooloose/nerdcommenter' | plug 'wellle/targets.vim'
+plug 'tpope/vim-eunuch', {'on' : [ 'move', 'remove', 'find', 'mkdir', 'wall',
+            \'sudowrite', 'sudoedit', 'unlink', 'chmod', 'rename', ]}
 " }}}
 
-" COMPLETION {{{
+" completion {{{
 if has('python') || has('python3')
-    Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-    let g:UltiSnipsExpandTrigger="<Tab>"
-    let g:UltiSnipsEditSplit="vertical"
+    plug 'sirver/ultisnips' | plug 'honza/vim-snippets'
+    let g:ultisnipsexpandtrigger="<tab>"
+    let g:ultisnipseditsplit="vertical"
 endif
 " }}}
 
-Plug 'neomake/neomake', {'on' : [ 'Neomake']}
+plug 'neomake/neomake', {'on' : [ 'neomake']}
 
-" MARKUP {{{ {{{
-Plug 'vimwiki/vimwiki'
+" markup {{{ {{{
+plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_html_header_numbering = 2
 let g:vimwiki_list_ignore_newline = 0
 " let g:vimwiki_url_maxsave = 0 
 
-" MARKDOWN {{{
+" markdown {{{
 let g:markdown_fenced_languages = [
             \'html', 'python', 'zsh', 'javascript',
             \'php', 'css', 'java', 'vim', 'sh']
 
-Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
-Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
-Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
+plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
+plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
+plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
-Plug 'rhysd/vim-grammarous', {'on': 'GrammarousCheck'}
-Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
-Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
-            \'DittoOn', 'DittoSent','DittoSentOn']}
+plug 'reedes/vim-wordy', { 'on': ['wordy', 'wordywordy'] }
+plug 'dkarter/bullets.vim' | plug 'reedes/vim-textobj-sentence'
+plug 'dbmrq/vim-ditto', { 'on': [ 'toggleditto',
+            \'dittoon', 'dittosent','dittosenton']}
 " }}}
 "
-" TABLE MODE {{{
-Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
+" table mode {{{
+plug 'dhruvasagar/vim-table-mode', { 'on': ['tablemodeenable'] }
 let g:loaded_table_mode = 1
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 " stops from indicating that it has loaded
 let g:table_mode_syntax = 1
 let g:table_mode_update_time = 800
-au! BufEnter *.md let g:table_mode_corner = '|'
-au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
+au! bufenter *.md let g:table_mode_corner = '|'
+au! bufenter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
 " }}}
 
-Plug 'chrisbra/Colorizer', { 'for': [ 
+plug 'chrisbra/colorizer', { 'for': [ 
             \'css', 'html',
             \'javascript', 
             \'json', 'php', 
             \'xhtml', 'yaml']}
 
-Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
+plug 'godlygeek/tabular', { 'for': g:markup, 'on' : 'tabularize' }
 " }}}  }}}
 
-" HASKELL {{{
-Plug 'Shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
-Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
-Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
-let g:haskellmode_completion_ghc = 0   " Disable haskell-vim omnifunc
+" haskell {{{
+plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
+plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
+plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
+let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
 " }}}
 "
-" PYTHON {{{
-Plug 'klen/python-mode', { 'for': 'python' }
+" python {{{
+plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
-"let g:pymode_lint_ignore = "E303,W"
+"let g:pymode_lint_ignore = "e303,w"
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_lint_checkers = ['pyflakes']
-let g:pymode_doc = 1 | let g:pymode_doc_bind = 'K'
+let g:pymode_doc = 1 | let g:pymode_doc_bind = 'k'
 let g:pymode_rope_show_doc_bind = '' | let g:pymode_lint = 1
-let g:pymode_paths = [glob('~/Scripts/'), glob('~/Projects/')]
+let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
 let g:pymode_python = 'python3'
 let g:pymode_quickfix_minheight = 4
 let g:pymode_rope_change_signature_bind = '<localleader>cs'
 let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
-let g:pymode_rope_goto_definition_bind = '<CR>'
+let g:pymode_rope_goto_definition_bind = '<cr>'
 let g:pymode_rope_regenerate_on_write = 1
 let g:pymode_run_bind = '<leader>me'
 let g:pymode_syntax_print_as_function = 1
-let g:pymode_lint_todo_symbol = 'DO'
-let g:pymode_lint_comment_symbol = 'C'
-let g:pymode_lint_visual_symbol = 'V'
-let g:pymode_lint_error_symbol = 'E'
-let g:pymode_lint_info_symbol = 'I'
-let g:pymode_lint_pyflakes_symbol = 'F'
+let g:pymode_lint_todo_symbol = 'do'
+let g:pymode_lint_comment_symbol = 'c'
+let g:pymode_lint_visual_symbol = 'v'
+let g:pymode_lint_error_symbol = 'e'
+let g:pymode_lint_info_symbol = 'i'
+let g:pymode_lint_pyflakes_symbol = 'f'
 " }}}
 
 " SHELL {{{
@@ -296,7 +296,7 @@ function! Markup()
     execute 'set complete+=k'.glob('~/vimwiki').'/*/*.wiki'
     execute 'set complete+=k'.glob('~/vimwiki').'/*.wiki'
     set complete+=k*.md
-    nnoremap <buffer> <Leader>mS :setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>:GrammarousCheck<CR>
+    nnoremap <buffer> <Leader>mS :silent setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
     nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
     " nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
     if executable('wn')
@@ -428,6 +428,7 @@ function! VimWikiInit()
     hi VimwikiHeader5 guifg=#3399FF
     hi VimwikiHeader6 guifg=#CC66FF
     nnoremap <buffer> <M-CR> :VimwikiTabnewLink<CR>
+    setl comments+=:::
 endfunction
 " }}}
 
