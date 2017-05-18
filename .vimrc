@@ -49,6 +49,7 @@ else " if vim
     filetype plugin indent on
     set encoding=utf8 syntax=on autoindent nocompatible magic incsearch ttyfast
     set display=lastline nrformats=bin,hex complete+=i hlsearch wildmenu
+    set tagcase=ignore
     if has('tags')
         set tags
     endif
@@ -100,7 +101,7 @@ Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \
-Plug 'junegunn/vim-easy-align', { 'on' : 'Easyalign' }
+Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'konfekt/fastfold' " more efficient folds
 Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
 Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
@@ -652,4 +653,3 @@ nnoremap <Leader><Leader> :Commands!<CR>
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
 "vim:set foldlevel=0
-syntax on

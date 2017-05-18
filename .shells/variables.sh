@@ -126,12 +126,7 @@ fi
 # ---------------------------------------------------------------------- 
 # attempt to set to neo-vim if available, fall back on vim and then vi
 # ----------------------------------------------------------------------
-if [ -x /usr/bin/nvim ] || [ -x /bin/nvim ]; then # if neovim
-  export EDITOR=/usr/bin/nvim
-  #alias vim=/usr/bin/nvim
-  alias vi=/usr/bin/nvim
-
-elif [ -x /usr/bin/vim ] || [ -x /bin/vim ]; then # if vim but not neovim
+if [ -x /usr/bin/vim ] || [ -x /bin/vim ]; then # if vim but not neovim
   export EDITOR=/usr/bin/vim
   alias nvim=/usr/bin/vim
   alias vi=/usr/bin/vim
