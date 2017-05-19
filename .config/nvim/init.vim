@@ -49,7 +49,7 @@ else " if vim
     filetype plugin indent on
     set encoding=utf8 syntax=on autoindent nocompatible magic incsearch ttyfast
     set display=lastline nrformats=bin,hex complete+=i hlsearch wildmenu
-    set tagcase=ignore
+    set tagcase=ignore switchbuf=useopen,newtab, infercase
     if has('tags')
         set tags
     endif
@@ -85,6 +85,7 @@ set autoread fileignorecase hidden splitbelow virtualedit=all path=~/.*
 set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,
 set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,
 set wildignore+=*.jpeg,.rope*,*.png,.rope*, nostartofline shortmess=ati 
+set breakindent undolevels=3000 textwidth=79 
 
 for dir in g:WORKING_DIRS " so that :find is more powerful
     execute 'set path+=' . glob('~/') . dir . '/**,'
@@ -194,7 +195,6 @@ let g:pymode_lint_pyflakes_symbol = 'f'
 " }}}
 
 " SHELL {{{
-Plug 'vim-scripts/bats.vim', {'for' : 'sh'}
 let readline_has_bash = 1 | let g:is_bash = 1
 let g:sh_fold_enabled = 4
 " }}}

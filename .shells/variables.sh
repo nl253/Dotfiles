@@ -29,6 +29,7 @@ JAVSCRIPT="${DARKYELLOW}JAVSCRIPT${DEFCOLOR}"
 export TERM=xterm-256color
 unset MAILCHECK                                                        # Don't check mail when opening terminal.
 export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xterm/screen/Tmux title with only a short hostname
+[ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false # }}}
 
 # $PATH (and JAVA_HOME and JRE_HOME and Python) {{{
