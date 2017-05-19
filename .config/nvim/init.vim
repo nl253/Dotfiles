@@ -87,7 +87,7 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
 
 for item in g:OPTIONS
     try
-        execute 'set '.item
+        execute 'silent set '.item
     catch /.*/
     endtry
 endfor
@@ -96,9 +96,10 @@ for dir in g:WORKING_DIRS " so that :find is more powerful
     execute 'set path+=' . glob('~/') . dir . '/**,'
 endfor
 
+runtime ftplugin/man.vim
 " }}}
 
-" Plugins {{{
+" PLUGINS {{{
 " place Plugins here
 " -------------------
 
@@ -163,10 +164,16 @@ Plug 'chrisbra/colorizer', { 'for': [
             \'json', 'php', 
             \'xhtml', 'yaml']}
 
+
 Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " }}}  }}}
 
-" haskell {{{
+" NETRW {{{
+let g:netrw_scpport	= "-P 21"
+let g:netrw_sshport	= "-p 21"
+" }}}
+
+" HASKELL {{{
 Plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
 Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
 Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
@@ -178,7 +185,7 @@ let hs_highlight_more_types = 1
 let hs_highlight_debug = 1
 " }}}
 "
-" python {{{
+" PYTHON {{{
 Plug 'klen/python-mode', { 'for': 'python' }
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
@@ -216,12 +223,28 @@ Plug 'othree/html5.vim', { 'for': ['html', 'xhtml', 'php']}
 Plug 'othree/html5-syntax.vim', { 'for': ['html', 'xhtml', 'php']}
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css', 'php' ]}
 let g:emmet_html5 = 1
+let g:html_hover_unfold = 1
+let g:html_font = ["Sans Serif", "DejaVu Sans Mono", "Consolas", "monospace"]
+let g:html_use_xhtml = 1
+let g:html_dynamic_folds = 1
+let g:html_no_foldcolumn = 1
+let g:html_use_encoding = "UTF-8"
+let html_wrong_comments=1
 " }}}
 
 " SQL {{{
 let g:sql_type_default = 'mysql'
+let msql_sql_query = 1
 let g:ftPlugin_sql_omni_key = ',' " shadows localleader
 " }}}
+
+" ZSH {{{
+let g:zsh_fold_enable = 1
+"}}}
+
+" YAML {{{
+let g:yaml_schema = 'pyyaml'
+"}}}
 
 " PHP{{{
 Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
@@ -247,10 +270,6 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-
-let g:netrw_scpport	= "-P 21"
-let g:netrw_sshport	= "-p 21"
-
 " }}}
 
 call plug#end()
@@ -288,8 +307,8 @@ function! Scratch()
 endfunction
 command! Scratch call Scratch()
 " Alt-BackSpace in normal mode to quickly open a scratch buffer with the same
-nnoremap <M-BS> :silent Scratch<CR>
-vnoremap <M-BS> :yank<CR>:Scratch<CR>p
+nnoremap <BS> :silent Scratch<CR>
+vnoremap <BS> :yank<CR>:Scratch<CR>p
 " }}}
 
 " INIT  {{{
@@ -461,8 +480,6 @@ function! PythonInit()
     nnoremap <Leader>mS :PymodeLint<CR>
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
-    elseif executable('yapf') 
-        execute 'setl formatprg=yapf\ '.expand('%:p')
     endif
     setl complete-=k
     nnoremap q :pclose<CR>
