@@ -31,28 +31,17 @@ let mapleader = " "
 let maplocalleader = ","
 " }}}
 
-" download Plug {{{
-set termguicolors
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
     let g:PLUG_FILE = glob('~/.local/share/nvim/site/autoload/plug.vim')
-    if empty(g:VIMDIR)
-        call system('!mkdir -p '.g:VIMDIR)
-    endif
+    if empty(g:VIMDIR) | call system('!mkdir -p '.g:VIMDIR) | endif
     tnoremap <esc> <c-\><c-n>
-    set inccommand=nosplit 
 else " if vim
     let g:VIMDIR = glob('~/.vim/')
     let g:PLUG_FILE = glob('~/.vim/autoload/plug.vim')
-    let $myvimrc = glob('~/.vimrc')
+    let $MYVIMRC = glob('~/.vimrc')
     syntax enable
     filetype plugin indent on
-    set encoding=utf8 syntax=on autoindent nocompatible magic incsearch ttyfast
-    set display=lastline nrformats=bin,hex complete+=i hlsearch wildmenu
-    set tagcase=ignore switchbuf=useopen,newtab, infercase
-    if has('tags')
-        set tags
-    endif
 endif
 
 if ! filereadable(g:PLUG_FILE) && executable('curl')
@@ -74,18 +63,34 @@ else
 endif
 " }}}
 
-" options {{{
-set ignorecase smartcase foldmethod=marker autochdir pumheight=12
-set sessionoptions+=resize sessionoptions-=blank formatprg=fmt\ -s\ -u
-set completeopt=menuone,longest,noinsert diffopt+=vertical,iwhite
-set mouse= complete=.,w,k, noswapfile mps+=<:> wildignorecase noshowcmd
-set sessionoptions-=options bufhidden=hide formatoptions=tcqjonl1 
-set shiftwidth=4 autowrite undofile clipboard=unnamed,unnamedplus
-set autoread fileignorecase hidden splitbelow virtualedit=all path=~/.*
-set wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,
-set wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,
-set wildignore+=*.jpeg,.rope*,*.png,.rope*, nostartofline shortmess=ati 
-set breakindent undolevels=3000 textwidth=79 
+" OPTIONS {{{
+let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
+            \'pumheight=12', 'sessionoptions+=resize',
+            \'formatprg=fmt\ -s\ -u\ --width=79',
+            \'completeopt=menuone,longest,noinsert',
+            \'diffopt+=vertical,iwhite', 'mouse=',
+            \'complete=.,w,k,', 'noswapfile', 'mps+=<:>',
+            \'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite',
+            \'undofile', 'bufhidden=hide', 'sessionoptions-=options',
+            \'clipboard=unnamed,unnamedplus', 'autoread', 'fileignorecase',
+            \'hidden', 'splitbelow', 'sessionoptions-=blank',
+            \'wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,',
+            \'wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,',
+            \'wildignore+=*.jpeg,.rope*,*.png,.rope*,', 'virtualedit=all',
+            \'nostartofline', 'shortmess=ati', 'wildignorecase', 'noshowcmd',
+            \'breakindent', 'undolevels=3000', 'path='.expand('~/').'.*',
+            \'termguicolors', 'inccommand=nosplit',
+            \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
+            \'magic', 'incsearch', 'ttyfast', 'hlsearch', 'wildmenu',
+            \'display=lastline', 'nrformats=bin,hex', 'complete+=i',
+            \'tagcase=ignore', 'switchbuf=useopen,newtab,', 'infercase']
+
+for item in g:OPTIONS
+    try
+        execute 'set '.item
+    catch /.*/
+    endtry
+endfor
 
 for dir in g:WORKING_DIRS " so that :find is more powerful
     execute 'set path+=' . glob('~/') . dir . '/**,'
@@ -166,6 +171,11 @@ Plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
 Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
 Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
 let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
+let hs_highlight_delimiters = 1
+let hs_highlight_boolean = 1
+let hs_highlight_types = 1
+let hs_highlight_more_types = 1
+let hs_highlight_debug = 1
 " }}}
 "
 " python {{{
@@ -287,7 +297,8 @@ vnoremap <M-BS> :yank<CR>:Scratch<CR>p
 "
 function! Markup()
     set complete=.,w, conceallevel=3 makeprg=write-good 
-    setl spell formatoptions=tcrqjonl1 foldlevel=1 sw=4
+    setl spell formatoptions=tcrqjonl1 foldlevel=1 sw=4 textwidth=79 
+    setl formatprg=fmt\ -s\ -u\ --width=79
     if &filetype == 'vimwiki'
         nnoremap <buffer> <Leader>x :VimwikiToggleListItem<CR>
     else

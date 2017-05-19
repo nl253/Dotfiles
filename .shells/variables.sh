@@ -46,10 +46,10 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 [ -d ~/.local/bin ] && export PATH="${PATH}:${HOME}/.local/bin"                                                                           # PIP [PYTHON]
 [ -d ~/go/bin ] && export PATH="${PATH}:${HOME}/go/bin"                                                                                   # GO 
 [ -d /usr/local/go/bin ] && export PATH="${PATH}:/usr/local/go/bin"
-[ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
-[ -d ~/Scripts ] && export PATH="${PATH}:${HOME}/Scripts" # MY SCRIPTS
-[ -d ~/.bin ] && export PATH="${PATH}:${HOME}/.bin"       # MY READY PROJECTS AND EXECUTSBLES
 [ -d ~/.fzf/bin ] && export PATH="${PATH}:${HOME}/.fzf/bin"       # MY READY PROJECTS AND EXECUTSBLES
+[ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
+[ -d ~/Scripts ] && export PATH="${HOME}/Scripts:${PATH}" # MY SCRIPTS
+[ -d ~/.bin ] && export PATH="${HOME}/.bin:${PATH}"       # MY READY PROJECTS AND EXECUTSBLES
 
 if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_ROOT="${HOME}/.pyenv"
