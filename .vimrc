@@ -46,7 +46,7 @@ endif
 if empty(g:VIMDIR) | call system('!mkdir -p '.g:VIMDIR) | endif
 
 if ! filereadable(g:PLUG_FILE) && executable('curl')
-    call system('curl -flo ' . g:PLUG_FILE . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    call system('curl -flo ' . g:PLUG_FILE . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     PlugInstall
     source $MYVIMRC
 endif
