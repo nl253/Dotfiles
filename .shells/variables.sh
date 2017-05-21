@@ -140,6 +140,6 @@ fi
 
 # }}}
 
-[ -x $(which setxkbmap) ] && setxkbmap -layout gb  
+[ -x /usr/bin/setxkbmap ] || [ -x /bin/setxkbmap ] && setxkbmap -layout gb  
 
 #vim:set foldmethod=marker:set foldlevel=0 
