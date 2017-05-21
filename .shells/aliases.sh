@@ -143,10 +143,10 @@ fi # }}}
 if $(in-path git); then
     alias todo="git grep -n --word-regexp --break --heading TODO" # look for TODOs in the current repo
     if $(in-path hub); then
-        eval "$(hub alias -s)"
-        alias g=git
-    else
         alias g=hub
+        eval "$(hub alias -s)"
+    else
+        alias g=git
     fi
 fi
-#vim:set foldmethod=marker:set foldlevel=0 }}}
+# vim:set foldmethod=marker:set foldlevel=0 }}}
