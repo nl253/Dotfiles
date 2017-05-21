@@ -96,6 +96,7 @@ nl253
 .node_repl*
 .config/okular*
 .config/dconf/user
+.config/user-dirs*
 .config/configstore/
 .config/autostart/
 .cargo/git/
