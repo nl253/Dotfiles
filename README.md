@@ -23,7 +23,7 @@
 3. RUN THIS 
 
 ```sh
-./configure --with-features=big --enable-fail-if-missing --disable-acl --disable-darwin --disable-desktop-database-update --disable-gpm --disable-icon-cache-update --disable-netbeans --enable-fail-if-missing --enable-gui=no --with-modified-by=kier --disable-darwin --disable-smack --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-perlinterp=no --enable-pythoninterp=no --enable-python3interp=no --enable-tclinterp=no --enable-rubyinterp=no --enable-cscope --disable-netbeans --enable-gui=no --disable-icon-cache-update --disable-desktop-database-update --disable-gpm --disable-sysmouse --disable-nls --with-compiledby='kier'
+./configure --with-features=big --enable-fail-if-missing --disable-acl --disable-darwin --disable-desktop-database-update --disable-icon-cache-update --disable-netbeans --enable-fail-if-missing --enable-gui=no --with-modified-by=kier --disable-darwin --disable-smack --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-perlinterp=no --enable-pythoninterp=no --enable-python3interp=dynamic --enable-tclinterp=no --enable-rubyinterp=no --enable-cscope --disable-netbeans --enable-gui=no --disable-icon-cache-update --disable-desktop-database-update --disable-gpm --disable-sysmouse --disable-nls --with-compiledby='kier'
 ```
 
 4. Run make 

@@ -2,7 +2,7 @@
 " VARIABLES and UTILS {{{
 let g:MARKUP = [ 'markdown', 'vimwiki' ]
 
-let g:MARKUP_EXT = ['md', 'wiki']
+let g:MARKUP_EXT = ['md', 'wiki', 'rst']
 
 let g:PROGRAMMING =  ['xhtml', 'html', 
             \'css', 'javascript', 
@@ -34,7 +34,6 @@ let maplocalleader = ","
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
     let g:PLUG_FILE = glob('~/.local/share/nvim/site/autoload/plug.vim')
-    if empty(g:VIMDIR) | call system('!mkdir -p '.g:VIMDIR) | endif
     tnoremap <esc> <c-\><c-n>
 else " if vim
     let g:VIMDIR = glob('~/.vim/')
@@ -44,12 +43,13 @@ else " if vim
     filetype plugin indent on
 endif
 
+if empty(g:VIMDIR) | call system('!mkdir -p '.g:VIMDIR) | endif
+
 if ! filereadable(g:PLUG_FILE) && executable('curl')
     call system('curl -flo ' . g:PLUG_FILE . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     PlugInstall
     source $MYVIMRC
 endif
-
 " }}}
 "
 " Plug init :: set variables {{{
@@ -66,9 +66,8 @@ endif
 " OPTIONS {{{
 let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'pumheight=12', 'sessionoptions+=resize',
-            \'formatprg=fmt\ -s\ -u\ --width=79',
-            \'completeopt=menuone,longest,noinsert',
-            \'diffopt+=vertical,iwhite', 'mouse=',
+            \'formatprg=fmt\ -s\ -u\ --width=79', 'spelllang=en_gb',
+            \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,',
             \'complete=.,w,k,', 'noswapfile', 'mps+=<:>',
             \'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite',
             \'undofile', 'bufhidden=hide', 'sessionoptions-=options',
@@ -79,7 +78,8 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'wildignore+=*.jpeg,.rope*,*.png,.rope*,', 'virtualedit=all',
             \'nostartofline', 'shortmess=ati', 'wildignorecase', 'noshowcmd',
             \'breakindent', 'undolevels=3000', 'path='.expand('~/').'.*',
-            \'termguicolors', 'inccommand=nosplit',
+            \'backspace=indent,eol,start', 'diffopt+=vertical,iwhite',
+            \'mouse=', 'termguicolors', 'inccommand=nosplit',
             \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
             \'magic', 'incsearch', 'ttyfast', 'hlsearch', 'wildmenu',
             \'display=lastline', 'nrformats=bin,hex', 'complete+=i',
@@ -95,8 +95,6 @@ endfor
 for dir in g:WORKING_DIRS " so that :find is more powerful
     execute 'set path+=' . glob('~/') . dir . '/**,'
 endfor
-
-runtime ftplugin/man.vim
 " }}}
 
 " PLUGINS {{{
@@ -169,8 +167,10 @@ Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " }}}  }}}
 
 " NETRW {{{
-let g:netrw_scpport	= "-P 21"
-let g:netrw_sshport	= "-p 21"
+let g:netrw_scpport = "-P 21"
+let g:netrw_sshport = "-p 21"
+let g:netrw_preview = 1 
+let g:netrw_mousemaps = 0
 " }}}
 
 " HASKELL {{{
@@ -192,7 +192,7 @@ let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
 "let g:pymode_lint_ignore = "e303,w"
 let g:pymode_breakpoint_bind = '<localleader>b'
 let g:pymode_lint_checkers = ['pyflakes']
-let g:pymode_doc = 1 | let g:pymode_doc_bind = 'k'
+let g:pymode_doc = 1 | let g:pymode_doc_bind = 'K'
 let g:pymode_rope_show_doc_bind = '' | let g:pymode_lint = 1
 let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
 let g:pymode_python = 'python3'
@@ -301,9 +301,9 @@ function! Scratch()
     endif
     vertical resize 60
     write
-    nnoremap <buffer> <M-BS> :close!<CR>
+    nnoremap <buffer> <BS> :close!<CR>
     nnoremap <buffer> q :close!<CR>
-    vnoremap <buffer> <M-BS> <Nop>
+    vnoremap <buffer> <BS> <Nop>
 endfunction
 command! Scratch call Scratch()
 " Alt-BackSpace in normal mode to quickly open a scratch buffer with the same
@@ -417,6 +417,8 @@ endfunction
 function! HaskellInit()
      setlocal omnifunc=necoghc#omnifunc 
      nnoremap <M-CR> :TREPLSendLine<CR> 
+     nnoremap <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
+     nnoremap K :GhcModInfo<CR>
 endfunction
 " }}}
 
@@ -602,6 +604,13 @@ if executable('pandoc')
     command! TOwordocx call system('pandoc -s -o '.expand('%:p:r').'.docx -t docx '.expand('%:p')) | sleep 250ms | vs %:p:r.docx
     command! TOhtml2 call system('pandoc -s -o '.expand('%:p:r').'html -t html --html-q-tags --self-contained '.expand('%:p')) | sleep 250ms | vs %:p:r.html
     command! TOmediawiki call system('pandoc -s -o '.expand('%:p:r').'wiki -t mediawiki --self-contained '.expand('%:p')) | sleep 250ms | vs %:p:r.wiki
+
+    function! DocxTOmd()
+        !pandoc -f docx -t markdown_github %:p -o /tmp/%:r.md
+        edit /tmp/%:r.md
+    endfunction
+
+    au! BufRead *.docx call DocxTOmd()
 endif
 if executable('pdftotext')
     function! PdfTOtxt()
@@ -664,6 +673,8 @@ if len($TMUX) > 1
     nnoremap <Leader>gf     :Gfetch<Space>
 endif
 
+inoremap <C-w> <C-o>dB
+inoremap <C-u> <C-o>d0
 nnoremap <M-k> :silent cp<CR>
 nnoremap <M-j> :silent cn<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
@@ -680,4 +691,4 @@ nnoremap <Leader><Leader> :Commands!<CR>
 
 cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
-"vim:set foldlevel=0
+" vim:set foldlevel=0
