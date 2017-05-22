@@ -18,16 +18,12 @@
 
 #### How I compiled my Vim 
 
-1. follow instructions on the official vim website
-2. you will have to clone the vim repo somewhere
-3. RUN THIS 
-
 ```sh
+git clone https://www.github.com/vim/vim.git
+cd vim/src
 ./configure --with-features=big --enable-fail-if-missing --disable-acl --disable-darwin --disable-desktop-database-update --disable-icon-cache-update --disable-netbeans --enable-fail-if-missing --enable-gui=no --with-modified-by=kier --disable-darwin --disable-smack --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-perlinterp=no --enable-pythoninterp=no --enable-python3interp=dynamic --enable-tclinterp=no --enable-rubyinterp=no --enable-cscope --disable-netbeans --enable-gui=no --disable-icon-cache-update --disable-desktop-database-update --disable-gpm --disable-sysmouse --disable-nls --with-compiledby='kier'
+make install
 ```
-
-4. Run make 
-
 
 --------------------------------------------------------------------
 

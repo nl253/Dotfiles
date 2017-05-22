@@ -8,6 +8,7 @@ echo "${HOME}/.bash_profile loaded" # indicate
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 # bash-completion {{{
 
 source_bash_completion() {
@@ -38,7 +39,4 @@ fi
 # UTF-8 {{{
 export LC_ALL='en_GB.UTF-8'
 export LANG='en_GB' # }}}
-
-
-source ~/.xsh
 

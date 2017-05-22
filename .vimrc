@@ -47,7 +47,7 @@ endif
 if empty(g:VIMDIR) | call system('!mkdir -p '.g:VIMDIR) | endif
 
 if ! filereadable(g:PLUG_FILE) && executable('curl')
-    call system('curl -flo ' . g:PLUG_FILE . ' --create-dirs ' . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    call system('curl -flo ' . g:PLUG_FILE . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     PlugInstall
     source $MYVIMRC
 endif
@@ -69,7 +69,7 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'pumheight=12', 'sessionoptions+=resize',
             \'formatprg=fmt\ -s\ -u\ --width=79', 'spelllang=en_gb',
             \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,',
-            \'complete=.,w,k,', 'noswapfile', 'mps+=<:>',
+            \'complete=.,w,k,', 'noswapfile', 'mps+=<:>', 'nowritebackup',
             \'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite',
             \'undofile', 'bufhidden=hide', 'sessionoptions-=options',
             \'clipboard=unnamed,unnamedplus', 'autoread', 'fileignorecase',
@@ -80,7 +80,7 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'nostartofline', 'shortmess=ati', 'wildignorecase', 'noshowcmd',
             \'breakindent', 'undolevels=3000', 'path='.expand('~/').'.*',
             \'backspace=indent,eol,start', 'diffopt+=vertical,iwhite',
-            \'mouse=', 'termguicolors', 'inccommand=nosplit',
+            \'mouse=', 'termguicolors', 'inccommand=nosplit', 'nobackup',
             \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
             \'magic', 'incsearch', 'ttyfast', 'hlsearch', 'wildmenu',
             \'display=lastline', 'nrformats=bin,hex', 'complete+=i',
