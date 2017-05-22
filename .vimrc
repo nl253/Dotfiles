@@ -31,6 +31,7 @@ let mapleader = " "
 let maplocalleader = ","
 " }}}
 
+" VIM/NVIM INIT {{{
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
     let g:PLUG_FILE = glob('~/.local/share/nvim/site/autoload/plug.vim')
@@ -106,11 +107,11 @@ Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \
-Plug 'junegunn/vim-easy-align', { 'on' : 'EasyAlign' }
 Plug 'konfekt/fastfold' " more efficient folds
 Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
-Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 'Mkdir', 'Wall',
-            \'SudoWrite', 'SudoEdit', 'Unlink', 'Chmod', 'Rename', ]}
+Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 
+            \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
+            \'SudoWrite', 'Unlink', 'Rename' ]}
 " }}}
 
 " completion {{{
@@ -128,7 +129,6 @@ Plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_html_header_numbering = 2
 let g:vimwiki_list_ignore_newline = 0
-" let g:vimwiki_url_maxsave = 0 
 
 " markdown {{{
 let g:markdown_fenced_languages = [
@@ -139,38 +139,27 @@ Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
 Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
-Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
 Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
-            \'DittoOn', 'DittoSent','DittoSentOn']}
+let g:bullets_enabled_file_types = ['markdown']
+"Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
+            "\'DittoOn', 'DittoSent','DittoSentOn']}
+"Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
 " }}}
 "
 " table mode {{{
 Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
-let g:loaded_table_mode = 1
 let g:table_mode_disable_mappings = 1
-let g:table_mode_verbose = 0 " stops from indicating that it has loaded
-let g:table_mode_syntax = 1
-let g:table_mode_update_time = 800
+let g:table_mode_verbose = 0 | let g:loaded_table_mode = 1
+let g:table_mode_syntax = 1 | let g:table_mode_update_time = 800
 au! bufenter *.md let g:table_mode_corner = '|'
 au! bufenter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
 " }}}
 
-Plug 'chrisbra/colorizer', { 'for': [ 
-            \'css', 'html',
-            \'javascript', 
-            \'json', 'php', 
-            \'xhtml', 'yaml']}
-
-
-Plug 'godlygeek/tabular', { 'for': g:MARKUP, 'on' : 'Tabularize' }
 " }}}  }}}
 
 " NETRW {{{
-let g:netrw_scpport = "-P 21"
-let g:netrw_sshport = "-p 21"
-let g:netrw_preview = 1 
-let g:netrw_mousemaps = 0
+let g:netrw_scpport = "-P 22" | let g:netrw_sshport = "-p 22"
+let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
 " }}}
 
 " HASKELL {{{
@@ -179,10 +168,8 @@ Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
 Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
 let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
 let hs_highlight_delimiters = 1
-let hs_highlight_boolean = 1
-let hs_highlight_types = 1
-let hs_highlight_more_types = 1
-let hs_highlight_debug = 1
+let hs_highlight_boolean = 1 | let hs_highlight_more_types = 1
+let hs_highlight_types = 1 | let hs_highlight_debug = 1
 " }}}
 "
 " PYTHON {{{
@@ -222,19 +209,15 @@ let g:sh_fold_enabled = 4
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml', 'php']}
 Plug 'othree/html5-syntax.vim', { 'for': ['html', 'xhtml', 'php']}
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css', 'php' ]}
-let g:emmet_html5 = 1
-let g:html_hover_unfold = 1
+let g:emmet_html5 = 1 | let g:html_hover_unfold = 1
 let g:html_font = ["Sans Serif", "DejaVu Sans Mono", "Consolas", "monospace"]
-let g:html_use_xhtml = 1
-let g:html_dynamic_folds = 1
-let g:html_no_foldcolumn = 1
-let g:html_use_encoding = "UTF-8"
+let g:html_use_xhtml = 1 | let g:html_dynamic_folds = 1
+let g:html_no_foldcolumn = 1 | let g:html_use_encoding = "UTF-8"
 let html_wrong_comments=1
 " }}}
 
 " SQL {{{
-let g:sql_type_default = 'mysql'
-let msql_sql_query = 1
+let g:sql_type_default = 'mysql' | let msql_sql_query = 1
 let g:ftPlugin_sql_omni_key = ',' " shadows localleader
 " }}}
 
@@ -416,9 +399,9 @@ endfunction
 " HaskellInit() {{{
 function! HaskellInit()
      setlocal omnifunc=necoghc#omnifunc 
-     nnoremap <M-CR> :TREPLSendLine<CR> 
-     nnoremap <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
-     nnoremap K :GhcModInfo<CR>
+     if has('nvim') | nnoremap <buffer> <M-CR> :TREPLSendLine<CR> | endif
+     nnoremap <buffer> <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
+     nnoremap <buffer> K :GhcModInfo<CR>
 endfunction
 " }}}
 
@@ -453,14 +436,13 @@ function! VimWikiInit()
     nmap <F13> <Plug>VimwikiNextLink
     nmap <F14> <Plug>VimwikiPrevLink
     nmap <F15> <Plug>VimwikiAddHeaderLevel
-    nnoremap <Leader>me :Vimwiki2HTMLBrowse<CR>
+    nnoremap <buffer> <Leader>me :Vimwiki2HTMLBrowse<CR>
     hi VimwikiHeader1 guifg=#FF9999
     hi VimwikiHeader2 guifg=#FF9900
     hi VimwikiHeader3 guifg=#CCCC00
     hi VimwikiHeader4 guifg=#00CC66
     hi VimwikiHeader5 guifg=#3399FF
     hi VimwikiHeader6 guifg=#CC66FF
-    nnoremap <buffer> <M-CR> :VimwikiTabnewLink<CR>
     setl comments+=:::
 endfunction
 " }}}
@@ -468,7 +450,7 @@ endfunction
 " MarkdownInit() {{{
 function! MarkdownInit()
     if executable('markdown-preview')
-        nnoremap <Leader>me :!markdown-preview %<CR>
+        nnoremap <buffer> <Leader>me :!markdown-preview %<CR>
     endif
     syn region markdownBold start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=markdownLineStart
     syn region markdownBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart
@@ -484,7 +466,7 @@ function! PythonInit()
         setl formatprg=autopep8\ -
     endif
     setl complete-=k
-    nnoremap q :pclose<CR>
+    nnoremap <buffer> q :pclose<CR>
 endfunction
 " }}}
 "
@@ -675,8 +657,8 @@ endif
 
 inoremap <C-w> <C-o>dB
 inoremap <C-u> <C-o>d0
-nnoremap <M-k> :silent cp<CR>
-nnoremap <M-j> :silent cn<CR>
+"nnoremap <M-k> :silent cp<CR>
+"nnoremap <M-j> :silent cn<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
 nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',',' ','g')<CR>
 nnoremap <C-k> :silent lp<CR>
