@@ -166,6 +166,8 @@ let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
 Plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
 Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
 Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
+Plug 'itchyny/vim-haskell-indent', {'for' : 'haskell'}
+Plug 'Twinside/vim-haskellFold', {'for' : 'haskell'}
 let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
 let hs_highlight_delimiters = 1
 let hs_highlight_boolean = 1 | let hs_highlight_more_types = 1
@@ -398,10 +400,17 @@ endfunction
 
 " HaskellInit() {{{
 function! HaskellInit()
-     setlocal omnifunc=necoghc#omnifunc 
-     if has('nvim') | nnoremap <buffer> <M-CR> :TREPLSendLine<CR> | endif
-     nnoremap <buffer> <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
-     nnoremap <buffer> K :GhcModInfo<CR>
+    if ! executable('stack')
+        !curl -sSL https://get.haskellstack.org/ \| sh
+    endif
+    if ! executable('stylish-haskell')
+        !stack install stylish-haskell
+    endif
+    setl omnifunc=necoghc#omnifunc foldmethod=expr
+    setl formatprg=stylish-haskell
+    if has('nvim') | nnoremap <buffer> <M-CR> :TREPLSendLine<CR> | endif
+    nnoremap <buffer> <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
+    nnoremap <buffer> K :GhcModInfo<CR>
 endfunction
 " }}}
 

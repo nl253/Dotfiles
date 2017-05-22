@@ -1,0 +1,43 @@
+{
+    "python": {
+        "dirs": ["doc", "test", "util", "src"],
+        "files": ["src/main.py", "README.md", "TODO.md"],
+        "template": "~/.templates/template.py",
+        "gitignore": "~/.gitignores/Python.gitignore",
+        "execute": ["$EDITOR src/main.py"]
+    },
+    "java": {
+        "files": ["Main.java"],
+        "gitignore": "~/.gitignores/Java.gitignore"
+    },
+    "javascript": {
+        "dirs": ["photos", "pictures", "css", "javascript", "php"],
+        "files": ["index.html", "sheets.css", "script.js", "script.php"],
+        "template": "~/.templates/template.js"
+    },
+    "html": {
+        "dirs": ["photos", "pictures", "css", "javascript", "php"],
+        "files": ["index.html", "sheets.css", "script.js", "script.php"],
+        "template": "~/.templates/template.html"
+    },
+    "php": {
+        "template": "~/.templates/template.php",
+        "gitignore": "~/.gitignores/CakePHP.gitignore",
+        "files": ["index.html", "script.php"]
+    },
+    "bash": {
+        "files": ["script.sh", "README.md"],
+        "template": "~/.templates/template.sh"
+    },
+    "default": {
+        "dirs": ["doc", "utils"],
+        "files": ["todo.rst", "README.md"],
+        "execute": [],
+        "git": "git",
+        "license": "~/.licenses/BSD-3.md",
+        "gitignore": "~/.gitignores/Global/Vim.gitignore",
+        "verbosity": 3,
+        "template": "",
+        "location": "~/Projects"
+    }
+}
