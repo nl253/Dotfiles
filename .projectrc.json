@@ -1,43 +1,48 @@
 {
     "python": {
         "dirs": ["doc", "test", "util", "src"],
-        "files": ["src/main.py", "README.md", "TODO.md"],
-        "template": "~/.templates/template.py",
-        "gitignore": "~/.gitignores/Python.gitignore",
-        "execute": ["$EDITOR src/main.py"]
-    },
-    "java": {
-        "files": ["Main.java"],
-        "gitignore": "~/.gitignores/Java.gitignore"
-    },
-    "javascript": {
-        "dirs": ["photos", "pictures", "css", "javascript", "php"],
-        "files": ["index.html", "sheets.css", "script.js", "script.php"],
-        "template": "~/.templates/template.js"
-    },
-    "html": {
-        "dirs": ["photos", "pictures", "css", "javascript", "php"],
-        "files": ["index.html", "sheets.css", "script.js", "script.php"],
-        "template": "~/.templates/template.html"
-    },
-    "php": {
-        "template": "~/.templates/template.php",
-        "gitignore": "~/.gitignores/CakePHP.gitignore",
-        "files": ["index.html", "script.php"]
+        "files": [],
+        "execute": [
+            "$EDITOR src/main.py",
+            "git init"
+        ],
+        "fetch": {
+            "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
+            ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore",
+            "src/main.py": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.py",
+            "README.md": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md"
+        }
     },
     "bash": {
-        "files": ["script.sh", "README.md"],
-        "template": "~/.templates/template.sh"
+        "dirs": [],
+        "files": [],
+        "execute": [
+            "$EDITOR script.sh"
+        ],
+        "fetch": {
+            "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
+            ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore",
+            "script.sh": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.sh"
+        }
+    },
+    "html": {
+        "dirs": ["php", "js", "css", "html"],
+        "files": [],
+        "execute": [
+            "$EDITOR html/index.html css/sheets.css",
+            "git init"
+        ],
+        "fetch": {
+            "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
+            "README.md": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md",
+            "html/index.html": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.html",
+            "css/sheets.css": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.css",
+            "js/script.js": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.js",
+            "php/script.php": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.php",
+            ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Global/Vim.gitignore"
+        }
     },
     "default": {
-        "dirs": ["doc", "utils"],
-        "files": ["todo.rst", "README.md"],
-        "execute": [],
-        "git": "git",
-        "license": "~/.licenses/BSD-3.md",
-        "gitignore": "~/.gitignores/Global/Vim.gitignore",
-        "verbosity": 3,
-        "template": "",
         "location": "~/Projects"
     }
 }

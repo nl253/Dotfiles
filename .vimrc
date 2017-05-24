@@ -80,11 +80,16 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'nostartofline', 'shortmess=ati', 'wildignorecase', 'noshowcmd',
             \'breakindent', 'undolevels=3000', 'path='.expand('~/').'.*',
             \'backspace=indent,eol,start', 'diffopt+=vertical,iwhite',
-            \'mouse=', 'termguicolors', 'inccommand=nosplit', 'nobackup',
+            \'mouse=', 'inccommand=nosplit', 'nobackup',
             \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
             \'magic', 'incsearch', 'ttyfast', 'hlsearch', 'wildmenu',
             \'display=lastline', 'nrformats=bin,hex', 'complete+=i',
             \'tagcase=ignore', 'switchbuf=useopen,newtab,', 'infercase']
+
+" REMOVED
+" ----------
+"'termguicolors',
+"
 
 for item in g:OPTIONS
     try
@@ -129,6 +134,7 @@ Plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_html_header_numbering = 2
 let g:vimwiki_list_ignore_newline = 0
+let g:vimwiki_hl_headers = 1
 
 " markdown {{{
 let g:markdown_fenced_languages = [
@@ -446,12 +452,12 @@ function! VimWikiInit()
     nmap <F14> <Plug>VimwikiPrevLink
     nmap <F15> <Plug>VimwikiAddHeaderLevel
     nnoremap <buffer> <Leader>me :Vimwiki2HTMLBrowse<CR>
-    hi VimwikiHeader1 guifg=#FF9999
-    hi VimwikiHeader2 guifg=#FF9900
-    hi VimwikiHeader3 guifg=#CCCC00
-    hi VimwikiHeader4 guifg=#00CC66
-    hi VimwikiHeader5 guifg=#3399FF
-    hi VimwikiHeader6 guifg=#CC66FF
+    "hi VimwikiHeader1 guifg=#FF9999
+    "hi VimwikiHeader2 guifg=#FF9900
+    "hi VimwikiHeader3 guifg=#CCCC00
+    "hi VimwikiHeader4 guifg=#00CC66
+    "hi VimwikiHeader5 guifg=#3399FF
+    "hi VimwikiHeader6 guifg=#CC66FF
     setl comments+=:::
 endfunction
 " }}}
@@ -563,7 +569,6 @@ aug VIMENTER
     au FileType vimwiki call VimWikiInit()
     au FileType qf call QfInit()
     au FileType python call PythonInit()
-    au FileType json call JsonInit()
     au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
     au FileType php call PhpInit()
