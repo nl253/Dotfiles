@@ -671,12 +671,12 @@ endif
 
 inoremap <C-w> <C-o>dB
 inoremap <C-u> <C-o>d0
-"nnoremap <M-k> :silent cp<CR>
-"nnoremap <M-j> :silent cn<CR>
+"nnoremap <M-k> :silent lprev<CR>
+"nnoremap <M-j> :silent lnext<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
 nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',',' ','g')<CR>
-nnoremap <C-k> :silent lp<CR>
-nnoremap <C-j> :silent lne<CR>
+nnoremap <C-k> :silent cn<CR>
+nnoremap <C-j> :silent cp<CR>
 nnoremap <Leader>a<Leader> :Ag!<CR>
 nnoremap <Leader>g<Leader> :GGrep!<CR>
 nnoremap <Leader>l<Leader> :Lines!<CR>
@@ -685,6 +685,6 @@ nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
 
-cno w!!<CR> %!sudo tee > /dev/null %<CR>
+"cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
 " vim:set foldlevel=0
