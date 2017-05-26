@@ -69,7 +69,7 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'pumheight=12', 'sessionoptions+=resize',
             \'formatprg=fmt\ -s\ -u\ --width=79', 'spelllang=en_gb',
             \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,',
-            \'complete=.,w,k,', 'noswapfile', 'mps+=<:>', 'nowritebackup',
+            \'complete=.,w,k,', 'mps+=<:>', 'nowritebackup',
             \'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite',
             \'undofile', 'bufhidden=hide', 'sessionoptions-=options',
             \'clipboard=unnamed,unnamedplus', 'autoread', 'fileignorecase',
@@ -80,7 +80,7 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'nostartofline', 'shortmess=ati', 'wildignorecase', 'noshowcmd',
             \'breakindent', 'undolevels=3000', 'path='.expand('~/').'.*',
             \'backspace=indent,eol,start', 'diffopt+=vertical,iwhite',
-            \'mouse=', 'inccommand=nosplit', 'nobackup',
+            \'mouse=', 'inccommand=nosplit',
             \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
             \'magic', 'incsearch', 'ttyfast', 'hlsearch', 'wildmenu',
             \'display=lastline', 'nrformats=bin,hex', 'complete+=i',
@@ -687,4 +687,4 @@ nnoremap <Leader><Leader> :Commands!<CR>
 
 "cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
-" vim:set foldlevel=0
+" vim: foldlevel=0 nospell
