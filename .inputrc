@@ -45,8 +45,6 @@ Tab: menu-complete
 
 # # cycle back in menu-complete }}}
 
-Space: magic-space
-
 # MACROS {{{
 
 # sudo Esc Esc

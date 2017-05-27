@@ -18,7 +18,7 @@ let g:TEMPLATE_DIR = glob('~/.templates/')
 let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 
 " THESE NEED!!! TO BE RELATIVE TO $HOME
-let g:WORKING_DIRS = ['Scripts', 'vimwiki', 'Projects']
+let g:WORKING_DIRS = ['Scripts', 'vimwiki', 'Projects', '.templates']
 
 for d in [g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR]
     if empty(d)
@@ -68,9 +68,9 @@ endif
 let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'pumheight=12', 'sessionoptions+=resize',
             \'formatprg=fmt\ -s\ -u\ --width=79', 'spelllang=en_gb',
-            \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,',
-            \'complete=.,w,k,', 'mps+=<:>', 'nowritebackup',
-            \'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite',
+            \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,', 'backupskip=*',
+            \'complete=.,w,k,', 'mps+=<:>', 'nowritebackup', 'backupcopy=no',
+            \'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite', 'noswapfile',
             \'undofile', 'bufhidden=hide', 'sessionoptions-=options',
             \'clipboard=unnamed,unnamedplus', 'autoread', 'fileignorecase',
             \'hidden', 'splitbelow', 'sessionoptions-=blank',
@@ -85,11 +85,6 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'magic', 'incsearch', 'ttyfast', 'hlsearch', 'wildmenu',
             \'display=lastline', 'nrformats=bin,hex', 'complete+=i',
             \'tagcase=ignore', 'switchbuf=useopen,newtab,', 'infercase']
-
-" REMOVED
-" ----------
-"'termguicolors',
-"
 
 for item in g:OPTIONS
     try
@@ -687,4 +682,4 @@ nnoremap <Leader><Leader> :Commands!<CR>
 
 "cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
-" vim: foldlevel=0 nospell
+" vim: foldlevel=1 nospell
