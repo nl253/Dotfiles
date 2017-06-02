@@ -1,9 +1,30 @@
 ﻿*.bluej
 .tor-browser/
 .steam/
+.sqlite
 .athome
 .xiki/
 .cookiecutter*
+.config/pulse/
+.config/urxvtconfig/
+.dbshell
+.split
+.rnd
+.keras/
+.grip/
+.swt/
+.tooling/
+.config/konsolerc
+.config/gocode/
+.config/gnome-boxes/
+.*.tmp
+.esd_auth
+.vagrant.d/
+.cs_cache
+.ICEauthority
+VMs/
+.dlv/
+.steam*
 vimwiki/
 .config/kdeglobals
 .config/QtProject.conf
@@ -183,5 +204,5 @@ node_modules/
 .gksu*
 .local/share/xorg/
 
-
+# vim: ft=conf nospell
 
