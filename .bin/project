@@ -12,6 +12,11 @@ from typing import List
 import json
 import urllib.request
 
+logging.basicConfig(
+    level=logging.CRITICAL,
+    filename="pylog.log",
+    filemode="w")
+
 #      TODO
 #   -----------------
 #   1. dry-run
@@ -161,3 +166,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# vim: ft=python

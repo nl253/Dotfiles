@@ -1,4 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, sys, re, shlex, pathlib
+import sys, re, shlex
+from urllib.request import urlopen as get
+

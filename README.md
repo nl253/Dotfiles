@@ -2,15 +2,15 @@
 # Dot-files 
 
 
-### [Tmux](https://github.com/tmux/tmux) with [alacritty](https://github.com/jwilm/alacritty) and [neovim](https://neovim.io/) and a few plugins.
+### [Tmux](https://github.com/tmux/tmux) with [Alacritty](https://github.com/jwilm/alacritty) and [Neovim](https://neovim.io/) and a few plugins.
 
 ![Alt text](Pictures/tmux-nvim.png?raw=true "Tmux Setup")
 
-### Chrome, tmux and neovim
+### Chrome, Tmux and Neovim
 
 ![Alt text](Pictures/chrome-nvim-tmux.png?raw=true "Chrome and neovim")
 
-### Desktop (xmonad)
+### Desktop (Xmonad)
 
 ![Alt text](Pictures/desktop.png?raw=true "desktop") 
 
@@ -53,7 +53,7 @@ cd vim/src
 --disable-gpm
 --disable-sysmouse
 --disable-nls
---with-compiledby='kier'
+--with-compiledby='Kier'
 
 make install
 

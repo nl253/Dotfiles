@@ -54,7 +54,7 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_ROOT="${HOME}/.pyenv"
   export PATH="${PYENV_ROOT}/bin:${PATH}"
-  export PYENV_VERSION='general'
+  export PYENV_VERSION='pypy3.5-5.7.1-beta'
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
 export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:" # for python modules

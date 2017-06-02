@@ -141,10 +141,12 @@ Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
 Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
 Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
+
 let g:bullets_enabled_file_types = ['markdown']
-"Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto',
-            "\'DittoOn', 'DittoSent','DittoSentOn']}
-"Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
+
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent','DittoSentOn']}
+Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
+
 " }}}
 "
 " table mode {{{
@@ -212,6 +214,7 @@ let g:sh_fold_enabled = 4
 Plug 'othree/html5.vim', { 'for': ['html', 'xhtml', 'php']}
 Plug 'othree/html5-syntax.vim', { 'for': ['html', 'xhtml', 'php']}
 Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css', 'php' ]}
+"let g:xml_syntax_folding = 1
 let g:emmet_html5 = 1 | let g:html_hover_unfold = 1
 let g:html_font = ["Sans Serif", "DejaVu Sans Mono", "Consolas", "monospace"]
 let g:html_use_xhtml = 1 | let g:html_dynamic_folds = 1
@@ -222,11 +225,19 @@ let html_wrong_comments=1
 " SQL {{{
 let g:sql_type_default = 'mysql' | let msql_sql_query = 1
 let g:ftPlugin_sql_omni_key = ',' " shadows localleader
+Plug 'alcesleo/vim-uppercase-sql', {'for': 'sql'}
 " }}}
 
 " ZSH {{{
 let g:zsh_fold_enable = 1
 "}}}
+
+" TEX {{{
+Plug 'lervag/vimtex', {'for': 'tex'}
+let g:tex_fold_enabled=1
+let g:tex_stylish = 1
+let g:tex_flavor = 'latex'
+" }}}
 
 " YAML {{{
 let g:yaml_schema = 'pyyaml'
@@ -476,7 +487,7 @@ function! PythonInit()
         setl formatprg=autopep8\ -
     endif
     setl complete-=k
-    nnoremap <buffer> q :pclose<CR>
+    nnoremap <buffer> q :pclose<CR>q
 endfunction
 " }}}
 "
