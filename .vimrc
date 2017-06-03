@@ -486,7 +486,7 @@ function! PythonInit()
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
     endif
-    setl complete-=k
+    setl complete-=k formatoptions=cqjonl1
     nnoremap <buffer> q :pclose<CR>q
 endfunction
 " }}}
