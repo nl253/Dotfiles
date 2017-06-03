@@ -154,8 +154,8 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 | let g:loaded_table_mode = 1
 let g:table_mode_syntax = 1 | let g:table_mode_update_time = 800
-au! bufenter *.md let g:table_mode_corner = '|'
-au! bufenter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
+au! BufEnter *.md let g:table_mode_corner = '|'
+au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
 " }}}
 
 " }}}  }}}
@@ -166,15 +166,15 @@ let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
 " }}}
 
 " HASKELL {{{
-Plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
-Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
-Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
-Plug 'itchyny/vim-haskell-indent', {'for' : 'haskell'}
-Plug 'Twinside/vim-haskellFold', {'for' : 'haskell'}
-let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
-let hs_highlight_delimiters = 1
-let hs_highlight_boolean = 1 | let hs_highlight_more_types = 1
-let hs_highlight_types = 1 | let hs_highlight_debug = 1
+"Plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
+"Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
+"Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
+"Plug 'itchyny/vim-haskell-indent', {'for' : 'haskell'}
+"Plug 'Twinside/vim-haskellFold', {'for' : 'haskell'}
+"let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
+"let hs_highlight_delimiters = 1
+"let hs_highlight_boolean = 1 | let hs_highlight_more_types = 1
+"let hs_highlight_types = 1 | let hs_highlight_debug = 1
 " }}}
 "
 " PYTHON {{{
@@ -336,8 +336,12 @@ function! Programming()
     setl nospell 
     set complete=.,w,t 
     if expand('%:e') != ''     " if there is an extension (needed)
-        execute 'set complete+=k'.glob('~/Projects').'/*/*.'.expand('%:e').","
-        execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').","
+        for i in split(glob("*.".expand('%:e')))
+            execute 'setl complete+=k'.i
+        endfor
+        "execute 'set complete+=k'.glob('~/Projects').'/*/*.'.expand('%:e').","
+        "execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').","
+        "execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').","
     endif
 endfunction
 
@@ -411,19 +415,19 @@ endfunction
 " }}}
 
 " HaskellInit() {{{
-function! HaskellInit()
-    if ! executable('stack')
-        !curl -sSL https://get.haskellstack.org/ \| sh
-    endif
-    if ! executable('stylish-haskell')
-        !stack install stylish-haskell
-    endif
-    setl omnifunc=necoghc#omnifunc foldmethod=expr
-    setl formatprg=stylish-haskell
-    if has('nvim') | nnoremap <buffer> <M-CR> :TREPLSendLine<CR> | endif
-    nnoremap <buffer> <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
-    nnoremap <buffer> K :GhcModInfo<CR>
-endfunction
+"function! HaskellInit()
+    "if ! executable('stack')
+        "!curl -sSL https://get.haskellstack.org/ \| sh
+    "endif
+    "if ! executable('stylish-haskell')
+        "!stack install stylish-haskell
+    "endif
+    "setl omnifunc=necoghc#omnifunc foldmethod=expr
+    "setl formatprg=stylish-haskell
+    "if has('nvim') | nnoremap <buffer> <M-CR> :TREPLSendLine<CR> | endif
+    "nnoremap <buffer> <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
+    "nnoremap <buffer> K :GhcModInfo<CR>
+"endfunction
 " }}}
 
 " QfInit() {{{
@@ -482,7 +486,7 @@ endfunction
 
 " PythonInit() {{{
 function! PythonInit()
-    nnoremap <Leader>mS :PymodeLint<CR>
+    nnoremap <buffer> <Leader>mS :PymodeLint<CR>
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
     endif
@@ -515,7 +519,6 @@ endfunction
 function! HTMLInit()
     nnoremap <buffer> <Leader>me :!$BROWSER %:p<CR>
     setl foldmethod=indent
-    set complete=.,w
     if executable('js-beautify')
         setl formatprg=js-beautify\ --type\ html
     endif
@@ -564,7 +567,7 @@ aug VIMENTER
     au CmdwinLeave * setlocal updatetime=200
     au BufNewFile * call Template()
     au FileType * call Init()
-    execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()'
+    execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()' 
     execute 'au! FileType '.join(g:MARKUP, ',').' call Markup()'
     au FileType man call ManInit()
     au FileType sh call ShInit()
@@ -581,7 +584,7 @@ aug VIMENTER
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
     au BufNewFile call Ctags()
-    au FileType haskell call HaskellInit()
+    "au FileType haskell call HaskellInit()
 aug END
 " }}}
 
