@@ -24,6 +24,7 @@
 .ICEauthority
 VMs/
 .dlv/
+.PyCharmCE2017.1/
 .steam*
 vimwiki/
 .config/kdeglobals
