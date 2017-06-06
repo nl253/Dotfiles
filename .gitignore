@@ -24,6 +24,9 @@
 .ICEauthority
 VMs/
 .dlv/
+.travis/
+.ipython/profile_me/db/dhist
+.ipython/profile_me/startup/README
 .PyCharmCE2017.1/
 .steam*
 vimwiki/
