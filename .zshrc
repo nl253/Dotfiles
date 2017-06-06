@@ -249,3 +249,6 @@ fi
 # export PROMPT=' %F{yellow}%d%f  %F{54}>>%f '
 # export RPROMPT='%F{red}%?%f'
 
+
+# added by travis gem
+[ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh

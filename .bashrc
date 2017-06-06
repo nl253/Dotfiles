@@ -97,3 +97,6 @@ fi #
 # load fzf configuration # alters $PATH
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
 
+
+# added by travis gem
+[ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh

@@ -96,9 +96,9 @@ bindsym $WINKEY+Right workspace next
 # to display names or symbols instead of plain workspace numbers you can use
 # something like: set $ws1 1:mail
 #                 set $ws2 2:
-set $ws1 1:TERMINAL
+set $ws1 1:TERM
 set $ws2 2:CHROME
-set $ws3 3:POWERPOINTS
+set $ws3 3:PP
 set $ws4 4:OTHER
 set $ws5 5:OTHER
 set $ws6 6:OTHER

@@ -666,16 +666,15 @@ vnoremap < <gv
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>ga     :Git add %:p<Space>
-nnoremap <Leader>gb     :Gblame<CR>
+nnoremap <Leader>gB     :Gblame<CR>
 nnoremap <Leader>gd     :Gdiff<Space>
-nnoremap <Leader>gc     :Gcommit<CR>
+nnoremap <Leader>gC     :Gcommit<CR>
 nnoremap <Leader>gs     :Gstatus<CR>
 nnoremap <Leader>gW     :Gwrite<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
 nnoremap <Leader>gm     :Gmove<Space>
 if len($TMUX) > 1
     nnoremap <Leader>gp     :Gpush<CR>
-    nnoremap <Leader>gf     :Gfetch<Space>
 endif
 
 inoremap <C-w> <C-o>dB

@@ -1,6 +1,8 @@
+
 let mapleader = " "
 let maplocalleader = ","
 set hlsearch
+set incsearch
 set hidden
 set lazyredraw
 set noerrorbells
@@ -13,102 +15,84 @@ set wildmode=full
 set spelllang=en_gb
 set nospell
 set number
-set surround
+set surround mps+=<:>
 set clipboard+=unnamed
 set wrap
 set complete=.,w,t,
 set thesaurus=~/.config/nvim/thesaurus.txt
-set dictionary=/usr/share/dict/cracklib-small
+set dictionary=~/.dicts/frequent.dict 
+set ignorecase
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
-set relativenumber
-set scrolloff=50
+set norelativenumber
+"set scrolloff=50
 
 " commands
-command! AlignAll normal gg=G
 command! DeleteEmptyLines execute 'g/^\s*$/d'
-command! YankAll execute '%yank'
-
-" built-in navigation to navigated items works better
-nmap <c-o> :action Back<cr>
 
 " but preserve ideavim defaults
 nnoremap g<c-o> <c-o>
 nnoremap g<c-i> <c-i>
 
 " search
-nmap <leader><leader> :action SearchEverywhere<cr>
-nmap <leader>/ :action GotoSymbol<cr>
-nmap <C-v> :action GotoClass<cr>
-nmap <C-x><C-f> :action GotoFile<cr>
+nmap <Leader><Leader> :action SearchEverywhere<CR>
+nmap <Leader>/ :action GotoSymbol<CR>
+nmap <C-v> :action GotoClass<CR>
+nmap <C-x><C-f> :action GotoFile<CR>
 
 " built in search looks better
-nmap / :action Find<cr>
-nmap <c-i> :action Forward<cr>
+"nmap / :action Find<CR>
+" built-in navigation to navigated items works better
+nmap <c-o> :action Back<CR>
+nmap <c-i> :action Forward<CR>
 
 " but preserve ideavim search
-nmap g/ /
+"nmap g/ /
 
 " switcher
-nmap <leader>ss :action Switcher<cr>
+nmap <Leader>ss :action Switcher<CR>
 
 " scratchpad
-nmap <Leader>p :e ~/.config/nvim/scratchpads/scratchpad.java<cr>
+nmap <Leader>p :e ~/.config/nvim/scratchpads/scratchpad.java<CR>
 
 " execute
-nmap <leader>me :action Run<cr>
-nmap <leader>d :action DebugClass<cr>
-nmap <leader>D :action Debug<cr>
-nmap <leader>u :action FindUsages<cr>
+nmap <Leader>me :action Run<CR>
+nmap <Leader>d :action DebugClass<CR>
+nmap <Leader>D :action Debug<CR>
+nmap <Leader>u :action FindUsages<CR>
 
 " syntax check
-nmap <leader>mS :action CheckStyleCurrentFileAction<cr>
-
-" tabs
-nmap J gT
-nmap K gt
-nmap <C-t>n :tab new<CR>
-
-" folds
-"nmap <Tab> :action FoldCodeBlock<CR>
+nmap <Leader>mS :action CheckStyleCurrentFileAction<CR>
 
 " jump
-nmap <Leader>jj :jumps<cr>
-nmap <leader>ji :action GotoImplementation<CR>
-nmap <leader>js :action GotoSuperMethod<CR>
-nnoremap <leader>jt :action GotoTest<CR>
+nmap <Leader>ji :action GotoImplementation<CR>
+nmap <Leader>js :action GotoSuperMethod<CR>
+nnoremap <Leader>jt :action GotoTest<CR>
+
+nnoremap <Leader>ga :action Git.Add<CR>
+nnoremap <Leader>gb :action Git.Branches<CR>
+nnoremap <Leader>gs :action ChangesView.Commit<CR>
+nnoremap <Leader>gD :action ChangesView.Diff<CR>
+nnoremap <Leader>gl :action Git.Log<CR>
+nnoremap <Leader>gp :action Git.Push<CR>
+nnoremap <Leader>gU :action Git.Uncommit<CR>
+"nnoremap <Leader>gl :action HideAllToolWindows<CR>
 
 " edit
 
 " toggle
-nmap <leader>tw :action EditorToggleUseSoftWraps<cr>
-nmap <leader>tW :action EditorToggleShowWhitespaces<cr>
-nmap <leader>ts :action ViewStatusBar<CR>
-nmap <Leader>t- :set scrolloff=50
+nmap <Leader>tw :action EditorToggleUseSoftWraps<CR>
+nmap <Leader>tW :action EditorToggleShowWhitespaces<CR>
 
 " editing
-nmap <leader>cs :action ChangeSignature<cr>
-nmap <localleader>r :action RenameElement<cr>
-inoremap <C-a> <Esc>I
-inoremap <C-e> <Esc>A
-"nnoremap <leader>hd :action QuickJavaDoc<CR>
+nmap <Leader>cs :action ChangeSignature<CR>
+nmap <LocalLeader>r :action RenameElement<CR>
+"nnoremap <Leader>hd :action QuickJavaDoc<CR>
 "nmap <C-q> :action QuickDocumentation<CR>
 nnoremap ]] :action MethodDown<CR>
 nnoremap [[ :action MethodUp<CR>
-
 
 " enter newlines
 nnoremap <CR> :action EditorEnter<CR>
 inoremap <CR> <C-o>:action EditorEnter<CR>
 
-" generate
-nnoremap <leader>gt :action GenerateTestMethod<CR>
-nnoremap <leader>gs :action GenerateSetUpMethod<CR>
-nnoremap <leader>gG :action GenerateGetter<CR>
-nnoremap <leader>gS :action GenerateSetter<CR>
-nnoremap <leader>ga :action GenerateGetterAndSetter<CR>
-nnoremap <leader>ge :action GenerateEquals<CR>
-nnoremap <leader>gc :action GenerateConstructor<CR>
-nnoremap <leader>G :action Generate<CR>
-nnoremap <leader>gn :action NewClass<CR>
-
-
+" vim: noreadonly modifiable
