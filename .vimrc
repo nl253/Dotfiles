@@ -103,6 +103,7 @@ endfor
 " -------------------
 
 " general {{{
+Plug 'drmikehenry/vim-fixkey'
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
@@ -658,10 +659,8 @@ nnoremap <expr> [s &spell ? "[s" : ":setl spell\<CR>[s"
 nnoremap <expr> ]s &spell ? "]s" : ":setl spell\<CR>]s"
 
 "move visually highlighted lines
-"vnoremap <S-k> :m '<-2<CR>gv=gv
-"vnoremap <S-j> :m '>+1<CR>gv=gv
-vnoremap > >gv
-vnoremap < <gv
+"vnoremap > >gv
+"vnoremap < <gv
 
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
@@ -685,13 +684,17 @@ nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
 nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',',' ','g')<CR>
 nnoremap <C-k> :silent cn<CR>
 nnoremap <C-j> :silent cp<CR>
-nnoremap <Leader>a<Leader> :Ag!<CR>
-nnoremap <Leader>g<Leader> :GGrep!<CR>
-nnoremap <Leader>l<Leader> :Lines!<CR>
-nnoremap <Leader>t<Leader> :Tags!<CR>
+nnoremap <Leader>a :Ag!<CR>
+nnoremap <Leader>g :GGrep!<CR>
+nnoremap <Leader>l :Lines!<CR>
+nnoremap <Leader>t :Tags!<CR>
 nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
+
+" intellij
+nnoremap <Leader>f :Files! .<CR>
+nnoremap <Leader>m :Marks!<CR>
 
 "cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
