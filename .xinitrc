@@ -71,4 +71,9 @@ setxkbmap -layout gb
 
 exec $(get_session)
 
+feh --bg-fill /home/norbert/Dropbox/Backup/ciervo.png
+
+#check if dropbox is running
+[ ! $(pgrep dropbox >/dev/null 2>&1) && dropbox ]
+
 xset r rate 660 25

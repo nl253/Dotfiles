@@ -638,6 +638,7 @@ endif
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
+command! Evax %!evax 
 " }}}
 
 " KEYBINDINGS {{{
@@ -699,3 +700,4 @@ nnoremap <Leader>m :Marks!<CR>
 "cno w!!<CR> %!sudo tee > /dev/null %<CR>
 
 " vim: foldlevel=1 nospell
+

@@ -26,6 +26,8 @@ VMs/
 .dlv/
 .travis/
 .ipython/profile_me/db/dhist
+.PyCharm2017.1/
+.PhpStorm2017.1/
 .ipython/profile_me/startup/README
 .PyCharmCE2017.1/
 .steam*
