@@ -98,11 +98,10 @@ for dir in g:WORKING_DIRS " so that :find is more powerful
 endfor
 " }}}
 
-" PLUGINS {{{
+" PLUGINS {{{ {{{
 " place Plugins here
 " -------------------
-
-" general {{{
+" GENERAL {{{
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
@@ -114,19 +113,18 @@ Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find',
             \'SudoWrite', 'Unlink', 'Rename' ]}
 " }}}
 
-
-" completion {{{
-"if has('python') || has('python3')
-    "Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
-    "let g:ultisnipsexpandtrigger="<tab>"
-    "let g:ultisnicompletor.vim'
-"Plug 'maralla/completor.vim'
-"let g:completor_python_binary = 'python3.6'
-"endif
+" COMPLETION {{{
+if has('python') || has('python3')
+    Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
+    let g:ultisnipsexpandtrigger="<tab>"
+    Plug 'maralla/completor.vim'
+    let g:completor_blacklist = ['tagbar', 'qf', 'netrw', 'unite', 'vim']
+    let g:completor_python_binary = 'python3.6'
+endif
 
 " }}}
 "
-" markup {{{ {{{
+" MARKUP {{{ {{{
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_html_header_numbering = 2
@@ -179,42 +177,70 @@ let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
 "let hs_highlight_types = 1 | let hs_highlight_debug = 1
 " }}}
 "
-"
 " PYTHON {{{
-"Plug 'klen/python-mode', { 'for': 'python' }
-"Plug 'davidhalter/jedi-vim', { 'for': 'python' }
-"let g:jedi#force_py_version = 3
-"let g:jedi#completions_enabled = 1
-"let g:jedi#goto_command = "<CR>"
-"let g:jedi#goto_assignments_command = "<leader>g"
-"let g:jedi#goto_definitions_command = "<LocalLeader>d"
-"let g:jedi#documentation_command = "K"
-"let g:jedi#usages_command = "<LocalLeader>u"
-"let g:jedi#rename_command = "<LocalLeader>r"
-"let g:pymode_lint_on_write = 0
-"let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
-""let g:pymode_lint_ignore = "e303,w"
-"let g:pymode_breakpoint_bind = '<localleader>b'
-"let g:pymode_lint_checkers = ['pyflakes']
-"let g:pymode_doc = 1 | let g:pymode_doc_bind = 'K'
-"let g:pymode_rope_show_doc_bind = '' | let g:pymode_lint = 1
-"let g:pymode_rope_completion = 0
-"let g:pymode_rope_complete_on_dot = 0
-"let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
-"let g:pymode_python = 'python3'
-"let g:pymode_quickfix_minheight = 4
-"let g:pymode_rope_change_signature_bind = '<localleader>cs'
-"let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
-"let g:pymode_rope_goto_definition_bind = '<cr>'
-"let g:pymode_rope_regenerate_on_write = 1
-"let g:pymode_run_bind = '<leader>me'
-"let g:pymode_syntax_print_as_function = 1
-"let g:pymode_lint_todo_symbol = 'do'
-"let g:pymode_lint_comment_symbol = 'c'
-"let g:pymode_lint_visual_symbol = 'v'
-"let g:pymode_lint_error_symbol = 'e'
-"let g:pymode_lint_info_symbol = 'i'
-"let g:pymode_lint_pyflakes_symbol = 'f'
+if has('python3') || has('python')
+    "Plug 'davidhalter/jedi-vim', { 'for': 'python',  {{{
+                "\'do': 'pip install jedi' }
+    "let g:jedi#force_py_version = 3
+    "let g:jedi#completions_enabled = 1
+    "let g:jedi#goto_command = "<CR>"
+    "let g:jedi#goto_assignments_command = "<leader>g"
+    "let g:jedi#goto_definitions_command = "<LocalLeader>d"
+    "let g:jedi#documentation_command = "K"
+    "let g:jedi#usages_command = "<LocalLeader>u"
+    "let g:jedi#rename_command = "<LocalLeader>r" }}}
+    Plug 'klen/python-mode', { 'for': 'python' } 
+    let g:pymode_python = 'python3'
+    let g:pymode_quickfix_minheight = 4
+    let g:pymode_breakpoint_bind = '<localleader>b'
+    let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
+    let g:pymode_lint_on_write = 0
+    "let g:pymode_lint_ignore = "e303,w"
+    let g:pymode_lint_checkers = ['pyflakes']
+    let g:pymode_doc = 1 
+    let g:pymode_lint = 1
+    "let g:pymode_doc_bind = ''
+    let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
+    let g:pymode_rope_show_doc_bind = 'K' 
+    let g:pymode_rope_completion = 1
+    let g:pymode_rope_complete_on_dot = 0
+    let g:pymode_rope_move_bind = '<LocalLeader>m'
+    let g:pymode_rope_rename_bind = "<LocalLeader>r"
+    let g:pymode_rope_rename_module_bind = "<LocalLeader>R"
+    let g:pymode_rope_goto_definition_bind = '<C-p>'
+    let g:pymode_rope_organize_imports_bind = '<LocalLeader>o'
+    let g:pymode_rope_change_signature_bind = '<localleader>s'
+    let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
+    let g:pymode_rope_goto_definition_bind = '<localleader>d'
+    let g:pymode_rope_autoimport = 1
+    let g:pymode_rope_autoimport_modules = [
+                \'os',
+                \'re',
+                \'typing',
+                \'copy',
+                \'pprint',
+                \'operator',
+                \'glob',
+                \'itertools', 
+                \'logging', 
+                \'ctypes', 
+                \'threading', 
+                \'multiprocessing', 
+                \'subprocess', 
+                \'urllib.request', 
+                \'sys', 
+                \'pathlib']
+    let g:pymode_rope_regenerate_on_write = 1
+    let g:pymode_run_bind = '<leader>me'
+    let g:pymode_breakpoint_cmd = 'import ipdb ; ipdb.set_trace()'
+    let g:pymode_syntax_print_as_function = 1
+    let g:pymode_lint_todo_symbol = 'do'
+    let g:pymode_lint_comment_symbol = 'c'
+    let g:pymode_lint_visual_symbol = 'v'
+    let g:pymode_lint_error_symbol = 'e'
+    let g:pymode_lint_info_symbol = 'i'
+    let g:pymode_lint_pyflakes_symbol = 'f'
+endif
 " }}}
 
 " SHELL {{{
@@ -274,7 +300,7 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-" }}}
+" }}} }}}
 
 call plug#end()
 
@@ -506,6 +532,13 @@ function! PythonInit()
     endif
     setl complete-=k formatoptions=cqjonl1 
     nnoremap <buffer> q :pclose<CR>q
+    nnoremap <buffer> <LocalLeader>eM :call pymode#rope#extract_method()<CR>
+    nnoremap <buffer> <localleader>f :call pymode#rope#find_it()<CR>
+    nnoremap <buffer> <LocalLeader>ev :call pymode#rope#extract_variable()<CR>
+    nnoremap <buffer> <localleader>C :call pymode#rope#generate_class()<CR>
+    nnoremap <buffer> <localleader>F :call pymode#rope#generate_function()<CR>
+    nnoremap <buffer> <localleader>P :call pymode#rope#generate_package()<CR>
+    nnoremap <buffer> <CR> :call pymode#rope#goto_definition()<CR>
 endfunction
 " }}}
 "
