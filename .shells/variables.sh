@@ -38,26 +38,27 @@ export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xte
 # ------------------------------------------------------------------------
 export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin/:"
 [ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre' # JAVA
-[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH="${PATH}:${HOME}/.gem/ruby/2.4.0/bin"                                                         # GEM [RUBY]
-[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH="${PATH}:${HOME}/.gem/ruby/2.3.0/bin"                                                         # GEM [RUBY]
-[ -d ~/.cargo/bin ] && export PATH="${PATH}:${HOME}/.cargo/bin"                                                                           # CARGO [RUST]
-[ -d ~/.cabal/bin ] && export PATH="${HOME}/.cabal/bin:${PATH}"                                                                           # CABAL [HASKELL]
-[ -d ~/.config/composer/vendor/bin ] && export PATH="${PATH}:${HOME}/.config/composer/vendor/bin"                                         # COMPOSER [PHP]
-[ -d ~/.local/bin ] && export PATH="${PATH}:${HOME}/.local/bin"                                                                           # PIP [PYTHON]
-[ -d ~/go/bin ] && export PATH="${PATH}:${HOME}/go/bin"                                                                                   # GO 
-[ -d /usr/local/go/bin ] && export PATH="${PATH}:/usr/local/go/bin"
-[ -d ~/.fzf/bin ] && export PATH="${PATH}:${HOME}/.fzf/bin"       # MY READY PROJECTS AND EXECUTSBLES
+[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH="${HOME}/.gem/ruby/2.4.0/bin:${PATH}:"                                                         # GEM [RUBY]
+[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH="${HOME}/.gem/ruby/2.3.0/bin:${PATH}:"                                                         # GEM [RUBY]
+[ -d ~/.cargo/bin ] && export PATH="${HOME}/.cargo/bin:${PATH}:"                                                                           # CARGO [RUST]
+[ -d ~/.cabal/bin ] && export PATH="${HOME}/.cabal/bin:${PATH}:"                                                                           # CABAL [HASKELL]
+[ -d ~/.config/composer/vendor/bin ] && export PATH="${HOME}/.config/composer/vendor/bin:${PATH}:"                                         # COMPOSER [PHP]
+[ -d ~/.local/bin ] && export PATH="${HOME}/.local/bin:${PATH}:"                                                                           # PIP [PYTHON]
+[ -d ~/go/bin ] && export PATH="${HOME}/go/bin:${PATH}:"                                                                                   # GO 
+[ -d /usr/local/go/bin ] && export PATH="/usr/local/go/bin:${PATH}:"
+[ -d ~/.fzf/bin ] && export PATH="${HOME}/.fzf/bin:${PATH}:"       # MY READY PROJECTS AND EXECUTSBLES
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
-[ -d ~/Scripts ] && export PATH="${HOME}/Scripts:${PATH}" # MY SCRIPTS
-[ -d ~/.bin ] && export PATH="${HOME}/.bin:${PATH}"       # MY READY PROJECTS AND EXECUTSBLES
+[ -d ~/Scripts ] && export PATH="${HOME}/Scripts:${PATH}:" # MY SCRIPTS
+[ -d ~/.bin ] && export PATH="${HOME}/.bin:${PATH}:"       # MY READY PROJECTS AND EXECUTSBLES
 
 if [ -e ~/.pyenv/bin/pyenv ]; then
   export PYENV_ROOT="${HOME}/.pyenv"
-  export PATH="${PYENV_ROOT}/bin:${PATH}"
+  export PATH="${PYENV_ROOT}/bin:${PATH}:"
   #export PYENV_VERSION='pypy3.5-5.7.1-beta'
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
-export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:" # for python modules
+
+export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:${HOME}/.vim/plugged/ropevim:" # for python modules
 if [ -e ~/.eclipse/org.eclipse.platform_4.6.3_155965261_linux_gtk_x86_64/eclimd ]; then
   export PATH="${PATH}:${HOME}/.eclipse/org.eclipse.platform_4.6.3_155965261_linux_gtk_x86_64"
 fi
@@ -127,15 +128,16 @@ fi
 # ---------------------------------------------------------------------- 
 # attempt to set to neo-vim if available, fall back on vim and then vi
 # ----------------------------------------------------------------------
-if [ -x /usr/bin/vim ] || [ -x /bin/vim ]; then # if vim but not neovim
-  export EDITOR=/usr/bin/vim
-  alias nvim=/usr/bin/vim
-  alias vi=/usr/bin/vim
+if [ -x $(which vim) ] ; then # if vim but not neovim
+  export EDITOR=$(which vim)
+  alias vi=$(which vim)
   # set up vim plugins
 elif [ -x /usr/bin/vi ] || [ -x /bin/vi ]; then # if not neovim and not vim then fall back on vi
-  export EDITOR=/usr/bin/vi
-  alias vim=vi
-  alias nvim=vi
+  export EDITOR=$(which vi)
+  alias vim=$(which vi)
+elif [ -x $(which nvim) ]; then 
+  export EDITOR=$(which nvim)
+  alias vim=$(which nvim)
 fi
 
 # }}}

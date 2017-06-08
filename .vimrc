@@ -103,7 +103,6 @@ endfor
 " -------------------
 
 " general {{{
-Plug 'drmikehenry/vim-fixkey'
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
 Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
@@ -115,16 +114,18 @@ Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find',
             \'SudoWrite', 'Unlink', 'Rename' ]}
 " }}}
 
+
 " completion {{{
-if has('python') || has('python3')
-    Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
-    let g:ultisnipsexpandtrigger="<tab>"
-    let g:ultisnipseditsplit="vertical"
-endif
+"if has('python') || has('python3')
+    "Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
+    "let g:ultisnipsexpandtrigger="<tab>"
+    "let g:ultisnicompletor.vim'
+"Plug 'maralla/completor.vim'
+"let g:completor_python_binary = 'python3.6'
+"endif
+
 " }}}
-
-Plug 'neomake/neomake', {'on' : [ 'Neomake']}
-
+"
 " markup {{{ {{{
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
@@ -178,30 +179,42 @@ let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
 "let hs_highlight_types = 1 | let hs_highlight_debug = 1
 " }}}
 "
+"
 " PYTHON {{{
-Plug 'klen/python-mode', { 'for': 'python' }
-let g:pymode_lint_on_write = 0
-let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
-"let g:pymode_lint_ignore = "e303,w"
-let g:pymode_breakpoint_bind = '<localleader>b'
-let g:pymode_lint_checkers = ['pyflakes']
-let g:pymode_doc = 1 | let g:pymode_doc_bind = 'K'
-let g:pymode_rope_show_doc_bind = '' | let g:pymode_lint = 1
-let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
-let g:pymode_python = 'python3'
-let g:pymode_quickfix_minheight = 4
-let g:pymode_rope_change_signature_bind = '<localleader>cs'
-let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
-let g:pymode_rope_goto_definition_bind = '<cr>'
-let g:pymode_rope_regenerate_on_write = 1
-let g:pymode_run_bind = '<leader>me'
-let g:pymode_syntax_print_as_function = 1
-let g:pymode_lint_todo_symbol = 'do'
-let g:pymode_lint_comment_symbol = 'c'
-let g:pymode_lint_visual_symbol = 'v'
-let g:pymode_lint_error_symbol = 'e'
-let g:pymode_lint_info_symbol = 'i'
-let g:pymode_lint_pyflakes_symbol = 'f'
+"Plug 'klen/python-mode', { 'for': 'python' }
+"Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+"let g:jedi#force_py_version = 3
+"let g:jedi#completions_enabled = 1
+"let g:jedi#goto_command = "<CR>"
+"let g:jedi#goto_assignments_command = "<leader>g"
+"let g:jedi#goto_definitions_command = "<LocalLeader>d"
+"let g:jedi#documentation_command = "K"
+"let g:jedi#usages_command = "<LocalLeader>u"
+"let g:jedi#rename_command = "<LocalLeader>r"
+"let g:pymode_lint_on_write = 0
+"let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
+""let g:pymode_lint_ignore = "e303,w"
+"let g:pymode_breakpoint_bind = '<localleader>b'
+"let g:pymode_lint_checkers = ['pyflakes']
+"let g:pymode_doc = 1 | let g:pymode_doc_bind = 'K'
+"let g:pymode_rope_show_doc_bind = '' | let g:pymode_lint = 1
+"let g:pymode_rope_completion = 0
+"let g:pymode_rope_complete_on_dot = 0
+"let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
+"let g:pymode_python = 'python3'
+"let g:pymode_quickfix_minheight = 4
+"let g:pymode_rope_change_signature_bind = '<localleader>cs'
+"let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
+"let g:pymode_rope_goto_definition_bind = '<cr>'
+"let g:pymode_rope_regenerate_on_write = 1
+"let g:pymode_run_bind = '<leader>me'
+"let g:pymode_syntax_print_as_function = 1
+"let g:pymode_lint_todo_symbol = 'do'
+"let g:pymode_lint_comment_symbol = 'c'
+"let g:pymode_lint_visual_symbol = 'v'
+"let g:pymode_lint_error_symbol = 'e'
+"let g:pymode_lint_info_symbol = 'i'
+"let g:pymode_lint_pyflakes_symbol = 'f'
 " }}}
 
 " SHELL {{{
@@ -232,13 +245,6 @@ Plug 'alcesleo/vim-uppercase-sql', {'for': 'sql'}
 " ZSH {{{
 let g:zsh_fold_enable = 1
 "}}}
-
-" TEX {{{
-Plug 'lervag/vimtex', {'for': 'tex'}
-let g:tex_fold_enabled=1
-let g:tex_stylish = 1
-let g:tex_flavor = 'latex'
-" }}}
 
 " YAML {{{
 let g:yaml_schema = 'pyyaml'
@@ -321,13 +327,24 @@ function! Markup()
     else
         nnoremap <buffer> <Leader>x :ToggleCheckbox<CR>
     endif
-    execute 'set complete+=k'.glob('~/vimwiki').'/*/*/*.wiki'
-    execute 'set complete+=k'.glob('~/vimwiki').'/*/*.wiki'
-    execute 'set complete+=k'.glob('~/vimwiki').'/*.wiki'
-    set complete+=k*.md
+    " SLOW! {{{
+    "execute 'set complete+=k'.glob('~/vimwiki').'/*/*/*.wiki'
+    "execute 'set complete+=k'.glob('~/vimwiki').'/*/*.wiki'
+    "execute 'set complete+=k'.glob('~/vimwiki').'/*.wiki' }}}
+    "set complete+=k*.wiki
+    "set complete+=k*.md
+    "set complete+=k*.rst
+    for f in split(glob('*.wiki'))
+        execute 'set complete+=k./'.f
+    endfor
+    for f in split(glob('*.rst'))
+        execute 'set complete+=k./'.f
+    endfor
+    for f in split(glob('*.md'))
+        execute 'set complete+=k./'.f
+    endfor
     nnoremap <buffer> <Leader>mS :silent setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
     nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
-    " nnoremap <buffer> gx vF:FhoEy:execute '!'. $BROWSER . ' ' . @+ <CR>
     if executable('wn')
         nnoremap <buffer> K :execute 'Capture wn ' . expand('<cword>') . ' -over'<CR>
     endif
@@ -340,9 +357,10 @@ function! Programming()
         for i in split(glob("*.".expand('%:e')))
             execute 'setl complete+=k'.i
         endfor
+        " SLOW! {{{
         "execute 'set complete+=k'.glob('~/Projects').'/*/*.'.expand('%:e').","
         "execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').","
-        "execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').","
+        "execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e')."," "}}}
     endif
 endfunction
 
@@ -447,6 +465,7 @@ function! VimInit()
     nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
     setl foldmethod=marker
     set complete=.,w,
+    inoremap <C-n> <C-x><C-v>
     if expand('%:t') != 'init.vim' && expand('%:t') != '.vimrc'
         if has('nvim')
             set complete+=k~/.config/nvim/init.vim,
@@ -463,12 +482,6 @@ function! VimWikiInit()
     nmap <F14> <Plug>VimwikiPrevLink
     nmap <F15> <Plug>VimwikiAddHeaderLevel
     nnoremap <buffer> <Leader>me :Vimwiki2HTMLBrowse<CR>
-    "hi VimwikiHeader1 guifg=#FF9999
-    "hi VimwikiHeader2 guifg=#FF9900
-    "hi VimwikiHeader3 guifg=#CCCC00
-    "hi VimwikiHeader4 guifg=#00CC66
-    "hi VimwikiHeader5 guifg=#3399FF
-    "hi VimwikiHeader6 guifg=#CC66FF
     setl comments+=:::
 endfunction
 " }}}
@@ -491,7 +504,7 @@ function! PythonInit()
     if executable('autopep8') && executable('pycodestyle')
         setl formatprg=autopep8\ -
     endif
-    setl complete-=k formatoptions=cqjonl1
+    setl complete-=k formatoptions=cqjonl1 
     nnoremap <buffer> q :pclose<CR>q
 endfunction
 " }}}
@@ -686,18 +699,17 @@ nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',','
 nnoremap <C-k> :silent cn<CR>
 nnoremap <C-j> :silent cp<CR>
 nnoremap <Leader>a :Ag!<CR>
-nnoremap <Leader>g :GGrep!<CR>
-nnoremap <Leader>l :Lines!<CR>
-nnoremap <Leader>t :Tags!<CR>
+nnoremap <Leader>g<Leader> :GGrep!<CR>
+nnoremap <Leader>l<Leader> :Lines!<CR>
+nnoremap <Leader>t<Leader> :Tags!<CR>
 nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
 
 " intellij
-nnoremap <Leader>f :Files! .<CR>
-nnoremap <Leader>m :Marks!<CR>
+nnoremap <Leader>f<Leader> :Files! .<CR>
+nnoremap <Leader>m<Leader> :Marks!<CR>
 
 "cno w!!<CR> %!sudo tee > /dev/null %<CR>
-
 " vim: foldlevel=1 nospell
 

@@ -1,7 +1,6 @@
 
 # Dot-files 
 
-
 ### [Tmux](https://github.com/tmux/tmux) with [Alacritty](https://github.com/jwilm/alacritty) and [Neovim](https://neovim.io/) and a few plugins.
 
 ![Alt text](Pictures/tmux-nvim.png?raw=true "Tmux Setup")
@@ -19,44 +18,12 @@
 #### How I compiled my Vim 
 
 ```sh
-
+cd /tmp
 git clone https://www.github.com/vim/vim.git
-
 cd vim/src
-
-./configure
---with-features=big
---enable-fail-if-missing
---disable-acl
---disable-darwin
---disable-desktop-database-update
---disable-icon-cache-update
---disable-netbeans
---enable-fail-if-missing
---enable-gui=no
---with-modified-by=kier
---disable-darwin
---disable-smack
---disable-selinux
---disable-xsmp
---disable-xsmp-interact
---enable-perlinterp=no
---enable-pythoninterp=no
---enable-python3interp=dynamic
---enable-tclinterp=no
---enable-rubyinterp=no
---enable-cscope
---disable-netbeans
---enable-gui=no
---disable-icon-cache-update
---disable-desktop-database-update
---disable-gpm
---disable-sysmouse
---disable-nls
---with-compiledby='Kier'
-
+./configure --with-features=big --enable-fail-if-missing --disable-acl --disable-darwin --disable-desktop-database-update --disable-icon-cache-update --disable-netbeans --enable-fail-if-missing --enable-gui=no --enable-luainterp=no --with-modified-by=kier --disable-darwin --disable-smack --disable-selinux --disable-xsmp --disable-xsmp-interact --enable-perlinterp=no --enable-pythoninterp=yes --enable-python3interp=yes --with-python3-config-dir=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu --with-python-config-dir=/usr/lib/python2.7/config --enable-tclinterp=no --enable-rubyinterp=no --disable-netbeans --enable-gui=no --disable-icon-cache-update --disable-desktop-database-update --disable-gpm --disable-sysmouse --disable-nls --with-compiledby='Kier B.'
 make install
-
+# at this point you'll want to put it in path somehow 
 ```
 
 --------------------------------------------------------------------
@@ -67,3 +34,7 @@ make install
 + [A dictionary generator that I wrote because I needed dictionaries for vim completion](https://github.com/nl253/DictGen)
 + [Grab a dict for a filetype + fantastic general english dict and thesaurus](https://github.com/nl253/Dictionaries)
 + [My uni notes](https://github.com/nl253/Notes) :: for easy access across repos
+
+<!-- vim: nospell
+
+
