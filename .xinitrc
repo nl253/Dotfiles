@@ -67,11 +67,10 @@ get_session(){
     echo "dbus-launch ${dbus_args[*]}"
 }
 
-setxkbmap -layout gb  
-
 exec $(get_session)
 
 feh --bg-fill /home/norbert/Dropbox/Backup/ciervo.png
+setxkbmap -layout gb  
 
 #check if dropbox is running
 [ ! $(pgrep dropbox >/dev/null 2>&1) && dropbox ]

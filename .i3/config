@@ -15,7 +15,9 @@ set $white #ffffff
 set $darkgrey #707070
 set $brickred #b22222
 set $darkred #8b0000
+set $red #ff3300
 set $darkgold #eead0e
+set $lightblue #3399ff
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
 new_window pixel 1
@@ -29,9 +31,9 @@ hide_edge_borders none
 font xft:monospace 13
 
 # start a terminal
-bindsym $WINKEY+Shift+Return exec alacritty -e tmux&
+bindsym $WINKEY+Return exec alacritty -e tmux&
 
-# kill focused window
+# kill focused window (Just like in Windows)
 bindsym $ALTKEY+F4 kill
 
 # start program launcher
@@ -222,10 +224,12 @@ exec --no-startup-id nitrogen --restore; sleep 1; compton -b
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
+exec_always --no-startup-id setxkbmap -layout gb  
 exec --no-startup-id clipit
 exec --no-startup-id xsetroot -bg black
 exec --no-startup-id dropbox
 exec --no-startup-id blueman
+exec_always --no-startup-id feh --bg-fill /home/norbert/Dropbox/Backup/ciervo.png
 exec_always --no-startup-idbsbxkb
 exec --no-startup-id start_conky_maia
 exec --no-startup-id feh --bg-fill /home/norbert/Dropbox/Backup/ciervo.png
@@ -235,7 +239,7 @@ exec_always --no-startup-id fix_xcursor
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bar {
 	status_command i3status
-	position bottom
+	position top
 
 ## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
 #	tray_output primary
@@ -243,35 +247,36 @@ bar {
 
 	bindsym button4 nop
 	bindsym button5 nop
-	font xft:monospace 12.5
+	font xft:monospace 13.5
 	strip_workspace_numbers no
 
 	colors {
 #	background $transparent
-		background #2B2C2B
-                statusline #F9FAF9
+		background $black
+                statusline $darkgrey
 		separator  #454947
 
 #                                  border  backgr. text
-		focused_workspace  #F9FAF9 #16A085 #2B2C2B
+		focused_workspace  #F9FAF9 $lightblue #2B2C2B
 		active_workspace   #595B5B #353836 #FDF6E3
-		inactive_workspace #595B5B #353836 #EEE8D5
+		inactive_workspace #595B5B #353836 $darkgold
 		urgent_workspace   #16A085 #FDF6E3 #E5201D
 	}
 }
 
 # hide/unhide i3status bar
-bindsym $mod+m bar mode toggle
+bindsym $WINKEY+m bar mode toggle
 
 # Theme colors
 # class                 border  backgr. text    indic.  child_border
 
-client.focused          #808280 $darkorange $black $darkgold
+client.focused          #808280 $red $black $darkgold
 client.focused_inactive #434745 #434745 #16A085 #454948
 client.unfocused        #434745 #434745 #16A085 #454948
 client.urgent           #CB4B16 #FDF6E3 #16A085 #268BD2
 client.placeholder      #000000 #0c0c0c #ffffff #000000 #0c0c0c
 client.background       #2B2C2B
+
 
 #############################
 ### settings for i3-gaps: ###
