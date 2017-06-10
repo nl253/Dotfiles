@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# AUTHOR: $AUTHOR
-# DATE: $DATE
+# AUTHOR: $AUTHORS
+# DATE: $DATE at $TIME
 # PYTHON: $PYTHON_VERSION PYTHON_IMPLEMENTATION $PYTHON_COMPILER
 
 import os

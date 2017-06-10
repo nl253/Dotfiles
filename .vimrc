@@ -572,8 +572,8 @@ function! HTMLInit()
 endfunction
 "}}} "}}}
 
-" Template {{{
-function! Expand() 
+" Templates, Subsitutions and Python Integraion {{{
+function! PyExpand() 
     write
 py3 << EOF
 import os
@@ -582,19 +582,52 @@ import string
 import sys
 import time
 import vim
+import random
+import math
+import secrets
 
 variables = {
-    'AUTHORS': "",
+    'AUTHORS': "Norbert Logiewa",
     'CPU_COUNT': os.cpu_count(),
-    'DATE': time.strftime("%c"),
+    'DATE': time.strftime("%x"),
+    'TIME': time.strftime("%X"),
+    'DATE_TIME': time.strftime("%c"),
     'JAVA_VERSION': str(platform.java_ver()),
     'MONTH': time.strftime("%B"),
+    'YEAR': time.strftime("%Y"),
+    'WEEKDAY': time.strftime("%A"),
+    'SHELL': os.environ['SHELL'],
+    'EDITOR': os.environ['EDITOR'],
+    'USER': os.environ['USER'],
+    'JRE_HOME': os.environ['JRE_HOME'],
+    'FILE': vim.current.buffer.name,
+    'BUFFER': vim.current.buffer.name,
+    'BASENAME': vim.current.buffer.name,
+    'TOKEN_HEX':  secrets.token_hex(16),
+    'TOKEN_URL':  secrets.token_urlsafe(16),
+    'TOKEN':  secrets.token_hex(16),
+    'PWD': os.path.abspath(os.curdir),
+    'DIRNAME': os.path.abspath(os.curdir),
+    'DIR': os.path.abspath(os.curdir),
+    'CWD': os.path.abspath(os.curdir),
+    'E': str(math.e),
+    'PI': str(math.pi),
+    'RAND': str(random.randint(0,9999)),
+    'RANDOM': str(random.randint(0,9999)),
+    'JAVA_HOME': os.environ['JAVA_HOME'],
+    'BROWSER': os.environ['BROWSER'],
+    'PATH': os.environ['PATH'],
+    'PYTHONPATH': os.environ['PYTHONPATH'],
+    'PYMODULES': str(sys.modules),
+    'PYTHON_MODULES': str(sys.modules),
+    'MODULES': str(sys.modules),
     'PLATFORM': platform.platform(),
     'PYTHON_COMPILER': platform.python_compiler(),
     'PYTHON_IMPLEMENTATION': platform.python_implementation(),
     'PYTHON_VERSION': platform.python_version(),
     'SYSTEM': platform.system(),
-    'TIME': time.strftime("%H:%M"),
+    'TIME24': time.strftime("%H:%M"),
+    'TIME12': time.strftime("%I:%M"),
     'PROJECT_NAME': "",
     'PROJECT_LANGUAGE': "1.0",
     'PROJECT_TAGS': "",
@@ -612,7 +645,7 @@ checktime
 write
 endfunction
 
-command! ExpandVars call Expand()
+command! PyExpand call PyExpand()
 
 function! PyEval() 
 py3 << EOF
@@ -644,6 +677,7 @@ with open(vim.current.buffer.name, mode="w") as f:
     f.write(text)
     f.close()
 EOF
+checktime
 endfunction
 
 function! PySubs() 
@@ -666,7 +700,7 @@ with open(vim.current.buffer.name, encoding="utf-8") as f:
 
 
 pattern: Pattern = re.compile(
-    '(<!!py3[ \t\n]*)(.*?)([ \t\n]*!!>)(?![\n\t ]+RESULT)',
+    '(<!!py3[ \t\n]*)(.*?)([ \t\n]*!!>)',
     flags=re.DOTALL)
 
 for match in filter(bool, pattern.finditer(text)):
@@ -681,6 +715,7 @@ with open(vim.current.buffer.name, mode="w") as f:
     f.write(text)
     f.close()
 EOF
+checktime
 endfunction
 
 command! PySubs call PySubs()
@@ -693,7 +728,8 @@ function! Template()
         execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
         normal gg
         normal dd
-        ExpandVars
+        PyExpand
+        PySubs
     endif
 endfunction
 command! Template call Template()
