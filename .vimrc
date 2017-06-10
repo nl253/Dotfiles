@@ -614,6 +614,79 @@ endfunction
 
 command! ExpandVars call Expand()
 
+function! PyEval() 
+py3 << EOF
+import re
+import vim
+import subprocess
+from typing import Pattern
+
+def python_execute(commands: str) -> str:
+    return subprocess.run(["python", "-c", commands], stdout=subprocess.PIPE).stdout.decode('utf-8')
+
+
+with open(vim.current.buffer.name, encoding="utf-8") as f:
+    text = f.read()
+
+
+pattern: Pattern = re.compile(
+    '(<!!py3[ \t\n]*)(.*?)([ \t\n]*!!>)(?![\n\t ]+RESULT)',
+    flags=re.DOTALL)
+
+for match in filter(bool, pattern.finditer(text)):
+
+    result: str = python_execute(match.group(2))
+
+    text: str = text.replace(match.group(0), match.group(0) + f"\n\nRESULT:\n\n{result}")
+
+# if replace then write the resultant text back into that file
+with open(vim.current.buffer.name, mode="w") as f:
+    f.write(text)
+    f.close()
+EOF
+endfunction
+
+function! PySubs() 
+py3 << EOF
+import re
+import vim
+import subprocess
+from typing import Pattern
+
+evaluate = True
+substitute = False
+
+
+def python_execute(commands: str) -> str:
+    return subprocess.run(["python", "-c", commands], stdout=subprocess.PIPE).stdout.decode('utf-8')
+
+
+with open(vim.current.buffer.name, encoding="utf-8") as f:
+    text = f.read()
+
+
+pattern: Pattern = re.compile(
+    '(<!!py3[ \t\n]*)(.*?)([ \t\n]*!!>)(?![\n\t ]+RESULT)',
+    flags=re.DOTALL)
+
+for match in filter(bool, pattern.finditer(text)):
+
+    result: str = python_execute(match.group(2))
+
+    text: str = text.replace(match.group(0), result)
+
+
+# if replace then write the resultant text back into that file
+with open(vim.current.buffer.name, mode="w") as f:
+    f.write(text)
+    f.close()
+EOF
+endfunction
+
+command! PySubs call PySubs()
+command! PyEval call PyEval()
+
+
 function! Template()
     if filereadable(g:TEMPLATE_DIR."template.".expand("%:e"))
         normal gg
