@@ -1,12 +1,9 @@
-- [[index]]
-
-Author: $AUTHOR
-Date: $DATE
-
-			  = Title =
 
 
-== Subtitle ==
+$AUTHORS 
+$DATE at $TIME
+
+                         = $BASENAME =
 
 
 
@@ -21,10 +18,17 @@ Date: $DATE
 
 
 
-----------------------------------------------------
 
-*Related*:
+
+*DEFINITION*::
+:: ABCD
+:: ABCD
+
+
+-----------------------------------------------------------------------------------
+
+ *Links*
 - 
 - 
-
+- 
 

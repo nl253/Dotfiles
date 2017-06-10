@@ -573,6 +573,7 @@ endfunction
 "}}} "}}}
 
 " Templates, Subsitutions and Python Integraion {{{
+" PyExpand() {{{
 function! PyExpand() 
     write
 py3 << EOF
@@ -600,9 +601,10 @@ variables = {
     'EDITOR': os.environ['EDITOR'],
     'USER': os.environ['USER'],
     'JRE_HOME': os.environ['JRE_HOME'],
-    'FILE': vim.current.buffer.name,
-    'BUFFER': vim.current.buffer.name,
-    'BASENAME': vim.current.buffer.name,
+    'FILE': os.path.basename(vim.current.buffer.name),
+    'BUFFER': os.path.basename(vim.current.buffer.name),
+    'BUFFERS': str([i.name for i in vim.buffers]),
+    'BASENAME': os.path.basename(vim.current.buffer.name),
     'TOKEN_HEX':  secrets.token_hex(16),
     'TOKEN_URL':  secrets.token_urlsafe(16),
     'TOKEN':  secrets.token_hex(16),
@@ -644,9 +646,9 @@ EOF
 checktime
 write
 endfunction
+" }}}
 
-command! PyExpand call PyExpand()
-
+" PyEval() {{{
 function! PyEval() 
 py3 << EOF
 import re
@@ -679,7 +681,9 @@ with open(vim.current.buffer.name, mode="w") as f:
 EOF
 checktime
 endfunction
+" }}}
 
+" PySubs() {{{
 function! PySubs() 
 py3 << EOF
 import re
@@ -717,23 +721,29 @@ with open(vim.current.buffer.name, mode="w") as f:
 EOF
 checktime
 endfunction
+" }}}
 
-command! PySubs call PySubs()
-command! PyEval call PyEval()
-
-
+" Template(){{{
 function! Template()
     if filereadable(g:TEMPLATE_DIR."template.".expand("%:e"))
-        normal gg
+        %d
         execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
-        normal gg
-        normal dd
-        PyExpand
-        PySubs
+        1,2d
+        write
+        call PyExpand()
+        call PySubs()
     endif
 endfunction
-command! Template call Template()
-"}}}
+command! Template call Template() 
+"}}} }}}
+
+command! PySubs call PySubs()
+command! PyExpand call PyExpand()
+command! PyEval call PyEval()
+nnoremap \s :call PySubs()<CR>
+nnoremap \e :call PyExpand()<CR>
+nnoremap \E :call PyEval()<CR>
+nnoremap \\ :call PyExpand()<CR>:call PySubs()<CR>
 
 " CTags() {{{
 function! Ctags()
@@ -763,7 +773,7 @@ aug VIMENTER
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
-    au BufNewFile * call Template()
+    au BufNewFile * call Template() 
     au FileType * call Init()
     execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()' 
     execute 'au! FileType '.join(g:MARKUP, ',').' call Markup()'
