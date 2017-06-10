@@ -430,7 +430,7 @@ endfunction
 " ShInit() {{{
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
-    set complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile
+    set complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile,k~/.bash/**
     set complete+=k~/Scripts/*.sh
     if executable('shfmt')
         setl formatprg=shfmt
@@ -573,12 +573,54 @@ endfunction
 "}}} "}}}
 
 " Template {{{
+function! Expand() 
+    write
+py3 << EOF
+import os
+import platform
+import string
+import sys
+import time
+import vim
+
+variables = {
+    'AUTHORS': "",
+    'CPU_COUNT': os.cpu_count(),
+    'DATE': time.strftime("%c"),
+    'JAVA_VERSION': str(platform.java_ver()),
+    'MONTH': time.strftime("%B"),
+    'PLATFORM': platform.platform(),
+    'PYTHON_COMPILER': platform.python_compiler(),
+    'PYTHON_IMPLEMENTATION': platform.python_implementation(),
+    'PYTHON_VERSION': platform.python_version(),
+    'SYSTEM': platform.system(),
+    'TIME': time.strftime("%H:%M"),
+    'PROJECT_NAME': "",
+    'PROJECT_LANGUAGE': "1.0",
+    'PROJECT_TAGS': "",
+    'PROJECT_VERSION': "" }
+
+with open(vim.current.buffer.name, mode="r", encoding="utf-8") as f:
+    text = f.read() 
+    f.close()
+ 
+with open(vim.current.buffer.name, mode="w", encoding="utf-8") as f:
+    f.write(string.Template(text).safe_substitute(variables))
+    f.close()
+EOF
+checktime
+write
+endfunction
+
+command! ExpandVars call Expand()
+
 function! Template()
     if filereadable(g:TEMPLATE_DIR."template.".expand("%:e"))
         normal gg
         execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
         normal gg
         normal dd
+        ExpandVars
     endif
 endfunction
 command! Template call Template()
