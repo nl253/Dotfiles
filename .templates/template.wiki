@@ -1,8 +1,9 @@
+- [[index]]
 
-[[index]]
+Author: $AUTHOR
+Date: $DATE
 
-
-= Title =
+			  = Title =
 
 
 == Subtitle ==
@@ -23,7 +24,7 @@
 ----------------------------------------------------
 
 *Related*:
-# 
-# 
+- 
+- 
 
 

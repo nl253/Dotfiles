@@ -1,15 +1,15 @@
 {
     "python": {
-        "dirs": ["doc", "test", "util", "src"],
+        "dirs": ["tests", "utils"],
         "files": [],
         "execute": [
-            "$EDITOR src/main.py",
-            "git init"
+            "git init",
+            "$EDITOR main.py"
         ],
         "fetch": {
             "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
             ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore",
-            "src/main.py": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.py",
+            "main.py": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.py",
             "README.md": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md"
         }
     },
@@ -29,8 +29,8 @@
         "dirs": ["php", "js", "css", "html"],
         "files": [],
         "execute": [
-            "$EDITOR html/index.html css/sheets.css",
-            "git init"
+            "git init",
+            "$EDITOR html/index.html css/sheets.css"
         ],
         "fetch": {
             "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",

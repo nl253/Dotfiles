@@ -1,7 +1,6 @@
 
 <!-- vim-markdown-toc GFM -->
-* [Note Title](#note-title)
-    * [Subtitle](#subtitle)
+* [$PROJECT_NAME](#project_name)
     * [Intro](#intro)
         * [Examples](#examples)
         * [Details](#details)
@@ -12,11 +11,9 @@
 
 <!-- vim-markdown-toc -->
 
-# Note Title
+$DATE
 
-- index.wiki
-
-## Subtitle
+# $PROJECT_NAME
 
 > NOTE :  
 > *A warning to be read.*

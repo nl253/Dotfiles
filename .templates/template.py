@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# TODO
 #
+# AUTHOR: $AUTHOR
+# DATE: $DATE
+# PYTHON: $PYTHON_VERSION PYTHON_IMPLEMENTATION $PYTHON_COMPILER
 
 import os
 import sys
-from pprint import pprint
 import logging
 import re
-from traceback import print_tb
-from inspect import getfullargspec, getmembers
 from typing import List, Iterator, Iterable
 
 logging.basicConfig(
@@ -23,6 +21,21 @@ def main():
     pass
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     main()
-
