@@ -593,6 +593,7 @@ variables = {
     'DATE': time.strftime("%x"),
     'TIME': time.strftime("%X"),
     'DATE_TIME': time.strftime("%c"),
+    'NOW': time.strftime("%c"),
     'JAVA_VERSION': str(platform.java_ver()),
     'MONTH': time.strftime("%B"),
     'YEAR': time.strftime("%Y"),
@@ -646,73 +647,40 @@ EOF
 checktime
 write
 endfunction
-" }}}
-
-" PyEval() {{{
-function! PyEval() 
-py3 << EOF
-import re
-import vim
-import subprocess
-from typing import Pattern
-
-def python_execute(commands: str) -> str:
-    return subprocess.run(["python", "-c", commands], stdout=subprocess.PIPE).stdout.decode('utf-8')
-
-
-with open(vim.current.buffer.name, encoding="utf-8") as f:
-    text = f.read()
-
-
-pattern: Pattern = re.compile(
-    '(<!!py3[ \t\n]*)(.*?)([ \t\n]*!!>)(?![\n\t ]+RESULT)',
-    flags=re.DOTALL)
-
-for match in filter(bool, pattern.finditer(text)):
-
-    result: str = python_execute(match.group(2))
-
-    text: str = text.replace(match.group(0), match.group(0) + f"\n\nRESULT:\n\n{result}")
-
-# if replace then write the resultant text back into that file
-with open(vim.current.buffer.name, mode="w") as f:
-    f.write(text)
-    f.close()
-EOF
-checktime
-endfunction
-" }}}
-
+" }}} 
+"
 " PySubs() {{{
 function! PySubs() 
+    write
 py3 << EOF
 import re
 import vim
 import subprocess
-from typing import Pattern
-
-evaluate = True
-substitute = False
-
-
-def python_execute(commands: str) -> str:
-    return subprocess.run(["python", "-c", commands], stdout=subprocess.PIPE).stdout.decode('utf-8')
-
 
 with open(vim.current.buffer.name, encoding="utf-8") as f:
     text = f.read()
 
-
-pattern: Pattern = re.compile(
-    '(<!!py3[ \t\n]*)(.*?)([ \t\n]*!!>)',
+pattern = re.compile(
+    '(?P<head><!!)(?P<language>[a-zA-Z]{2,})(?P<version>[-0-9\.]*)([ \t\n]*)(?P<command>.*?)([ \t\n]*)(?P<tail>!!>)', 
     flags=re.DOTALL)
 
-for match in filter(bool, pattern.finditer(text)):
+match = pattern.search(text)
 
-    result: str = python_execute(match.group(2))
+d = {'sh': 'bash', 'rb': 'ruby', 'ruby': 'ruby', 'python': 'python', 'py': 'python', 'js': 'node', 'bash': 'bash', 'pe': 'perl', 'pl': 'perl'}
 
-    text: str = text.replace(match.group(0), result)
+c = {'bash': '-c', 'ruby': '-e', 'python': '-c', 'node': '-e', 'perl': '-e', 'lua': '-e'}
 
+while match:
+
+    assert match.group('language') in d, 'Format is: <!!{perl,python,lua,bash,ruby} you have a typo.'
+
+    text = text.replace(
+        match.group(0), 
+        subprocess.run([d[match.group('language')] + match.group('version'), c[d[match.group('language')]], match.group('command')], stdout=subprocess.PIPE).stdout.decode('utf-8'), 
+        1)
+
+
+    match = pattern.search(text)
 
 # if replace then write the resultant text back into that file
 with open(vim.current.buffer.name, mode="w") as f:
@@ -730,7 +698,6 @@ function! Template()
         execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
         1,2d
         write
-        call PyExpand()
         call PySubs()
     endif
 endfunction
@@ -739,11 +706,9 @@ command! Template call Template()
 
 command! PySubs call PySubs()
 command! PyExpand call PyExpand()
-command! PyEval call PyEval()
 nnoremap \s :call PySubs()<CR>
-nnoremap \e :call PyExpand()<CR>
-nnoremap \E :call PyEval()<CR>
-nnoremap \\ :call PyExpand()<CR>:call PySubs()<CR>
+nnoremap \\ :call PyExpand()<CR>
+nnoremap ,, i<!!py3<Space>!!><Left><Left><Left><Space><Left>
 
 " CTags() {{{
 function! Ctags()
@@ -905,5 +870,5 @@ nnoremap <Leader>f<Leader> :Files! .<CR>
 nnoremap <Leader>m<Leader> :Marks!<CR>
 
 "cno w!!<CR> %!sudo tee > /dev/null %<CR>
-" vim: foldlevel=1 nospell
+" vim: foldlevel=1 nospell formatoptions= 
 
