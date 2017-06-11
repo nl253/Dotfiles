@@ -666,9 +666,34 @@ pattern = re.compile(
 
 match = pattern.search(text)
 
-d = {'sh': 'bash', 'rb': 'ruby', 'ruby': 'ruby', 'python': 'python', 'py': 'python', 'js': 'node', 'bash': 'bash', 'pe': 'perl', 'pl': 'perl'}
 
-c = {'bash': '-c', 'ruby': '-e', 'python': '-c', 'node': '-e', 'perl': '-e', 'lua': '-e'}
+d = {
+    'bash': 'bash', 
+    'js': 'node', 
+    'javascript': 'node', 
+    'jscript': 'node', 
+    'node': 'node', 
+    'lua': 'lua', 
+    'pl': 'perl',
+    'pe': 'perl', 
+    'perl': 'perl',
+    'py': 'python', 
+    'python': 'python', 
+    'rb': 'ruby',
+    'ruby': 'ruby', 
+    'sh': 'bash',
+    'shell': 'bash',
+}
+
+c = {
+    'bash': '-c', 
+    'lua': '-e',
+    'node': '-e', 
+    'perl': '-e', 
+    'python': '-c', 
+    'ruby': '-e'
+}
+
 
 while match:
 
