@@ -178,11 +178,11 @@ fi
 
 # Python virtual env manager  {{{ # 
 # NOTE needs to be sourced AFTER sourcing general shells configuration
-if [[ -e ~/.pyenv/bin/pyenv ]]; then
-  eval "$(pyenv init -)"
-  source "$(pyenv root)/completions/pyenv.zsh"
-  [[ -e ~/.pyenv/plugins/pyenv-virtualenv/bin/pyenv-activate ]] && eval "$(pyenv virtualenv-init -)"
-fi
+#if [[ -e ~/.pyenv/bin/pyenv ]]; then
+  #eval "$(pyenv init -)"
+  #source "$(pyenv root)/completions/pyenv.zsh"
+  #[[ -e ~/.pyenv/plugins/pyenv-virtualenv/bin/pyenv-activate ]] && eval "$(pyenv virtualenv-init -)"
+#fi
 # }}}
 
 # CUSTOM PLUGINS {{{

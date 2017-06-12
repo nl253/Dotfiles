@@ -50,13 +50,14 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
 [ -d ~/Scripts ] && export PATH="${HOME}/Scripts:${PATH}:" # MY SCRIPTS
 [ -d ~/.bin ] && export PATH="${HOME}/.bin:${PATH}:"       # MY READY PROJECTS AND EXECUTSBLES
+[ -d ~/anaconda3/bin ] && export PATH="${HOME}/anaconda3/bin:${PATH}"
 
-if [ -e ~/.pyenv/bin/pyenv ]; then
-  export PYENV_ROOT="${HOME}/.pyenv"
-  export PATH="${PYENV_ROOT}/bin:${PATH}:"
-  #export PYENV_VERSION='pypy3.5-5.7.1-beta'
-  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-fi
+#if [ -e ~/.pyenv/bin/pyenv ]; then
+  #export PYENV_ROOT="${HOME}/.pyenv"
+  #export PATH="${PYENV_ROOT}/bin:${PATH}:"
+  ##export PYENV_VERSION='pypy3.5-5.7.1-beta'
+  #export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+#fi
 
 export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:${HOME}/.vim/plugged/ropevim:" # for python modules
 if [ -e ~/.eclipse/org.eclipse.platform_4.6.3_155965261_linux_gtk_x86_64/eclimd ]; then

@@ -66,19 +66,19 @@ endif
 
 " OPTIONS {{{
 let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
-            \'pumheight=12', 'sessionoptions+=resize',
             \'formatprg=fmt\ -s\ -u\ --width=79', 'spelllang=en_gb',
-            \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,', 'backupskip=*',
-            \'complete=.,w,k,', 'mps+=<:>', 'nowritebackup', 'backupcopy=no',
-            \'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite', 'noswapfile',
-            \'undofile', 'bufhidden=hide', 'sessionoptions-=options',
+            \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,',
+            \'complete=.,w,k,', 'mps+=<:>', 'formatoptions=tcqjonl1', 'shiftwidth=4', 'autowrite',
+            \'undofile', 'bufhidden=hide', 'sessionoptions-=options', 'nobackup',
             \'clipboard=unnamed,unnamedplus', 'autoread', 'fileignorecase',
-            \'hidden', 'splitbelow', 'sessionoptions-=blank',
+            \'pumheight=12', 'sessionoptions+=resize', 'hidden', 'splitbelow', 'sessionoptions-=blank', 
+            \'backupdir='.expand('~/.vim/backup/'), 'directory='.expand('~/.vim/swap/'),
+            \'undodir='.expand('~/.vim/undo/'), 'backup', 'noswapfile',
             \'wildignore+=*cache*,*chrome*,*/.dropbox/*,*intellij*,*fonts*,*libreoffice*,',
-            \'wildignore+=tags,*~,.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,',
+            \'wildignore+=tags,*.'.expand('~').',.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,',
             \'wildignore+=*.jpeg,.rope*,*.png,.rope*,', 'virtualedit=all',
             \'nostartofline', 'shortmess=ati', 'wildignorecase', 'noshowcmd',
-            \'breakindent', 'undolevels=3000', 'path='.expand('~/').'.*',
+            \'breakindent', 'undolevels=3000', 'path='.expand('~/').'*',
             \'backspace=indent,eol,start', 'diffopt+=vertical,iwhite',
             \'mouse=', 'inccommand=nosplit',
             \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
@@ -682,7 +682,6 @@ d = {
     'rb': 'ruby',
     'ruby': 'ruby', 
     'sh': 'bash',
-    'shell': 'bash',
 }
 
 c = {

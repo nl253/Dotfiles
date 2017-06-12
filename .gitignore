@@ -1,4 +1,5 @@
 ﻿*.bluej
+anaconda3/
 .tor-browser/
 .steam/
 .sqlite
