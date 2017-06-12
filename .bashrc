@@ -97,6 +97,18 @@ fi #
 # load fzf configuration # alters $PATH
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
 
+if [[ ! -d ~/.vim/backup ]] || [[ ! -d ~/.vim/ ]] || [[ ! -d ~/.vim/swap ]]; then
+  mkdir -p ~/.vim/{swap,backup}
+fi
+
+# automatically link /tmp to ~/Downloads 
+if [[ -x ~/Downloads ]] && [[ ! -L ~/Downloads ]]; then
+  ln -s /tmp ~/Downloads
+fi
 
 # added by travis gem
 [ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh
+
+if [[ -f ~/.pc ]]; then
+  tmux -c zsh
+fi

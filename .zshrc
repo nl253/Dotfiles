@@ -249,6 +249,13 @@ fi
 # export PROMPT=' %F{yellow}%d%f  %F{54}>>%f '
 # export RPROMPT='%F{red}%?%f'
 
-
 # added by travis gem
-[ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh
+[[ -f /home/norbert/.travis/travis.sh ]] && source /home/norbert/.travis/travis.sh
+
+# config to be run only for my PC
+# make sure it's the very last thing in .zshrc
+if [[ -f ~/.pc ]]; then
+  # aweful terminal color and utf-8 support 
+  # normalise prompt 
+  export PS1="[%* - %D] %d %% " 
+fi
