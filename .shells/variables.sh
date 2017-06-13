@@ -1,7 +1,6 @@
-# IT IS SOURCED BY `zsh` and `bash`
 
-# VARIABLES 
-# --------
+
+# VARIABLES - SOURCED BY `zsh` and `bash`
 
 # $COLORS {{{
 # set variables to produce colored output later 
@@ -35,20 +34,22 @@ export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xte
 # ------------------------------------------------------------------------
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
+
+function add-to-path(){
+  for directory in $@; do
+    if [[ -d $directory ]]; then
+      export PATH="${directory}:${PATH}:"
+    fi
+  done
+}
+
 export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin/:"
-[ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'  # JAVA
-[[ -d ~/.gem/ruby/*/bin ]] && export PATH=${HOME}/.gem/ruby/*/bin:${PATH}:                                                                 # GEM [RUBY]
-[ -d ~/.cargo/bin ] && export PATH="${HOME}/.cargo/bin:${PATH}:"                                                                           # CARGO [RUST]
-[ -d ~/.cabal/bin ] && export PATH="${HOME}/.cabal/bin:${PATH}:"                                                                           # CABAL [HASKELL]
-[ -d ~/.config/composer/vendor/bin ] && export PATH="${HOME}/.config/composer/vendor/bin:${PATH}:"                                         # COMPOSER [PHP]
-[ -d ~/.local/bin ] && export PATH="${HOME}/.local/bin:${PATH}:"                                                                           # PIP [PYTHON]
-[ -d ~/go/bin ] && export PATH="${HOME}/go/bin:${PATH}:"                                                                                   # GO 
-[ -d /usr/local/go/bin ] && export PATH="/usr/local/go/bin:${PATH}:"
-[ -d ~/.fzf/bin ] && export PATH="${HOME}/.fzf/bin:${PATH}:"                                                                    
+
 [ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # MY SCRIPTS
-[ -d ~/Scripts ] && export PATH="${HOME}/Scripts:${PATH}:" 
-[ -d ~/.bin ] && export PATH="${HOME}/.bin:${PATH}:"                                                                                      # MY FINISHED PROJECTS
-[ -d ~/anaconda3/bin ] && export PATH="${HOME}/anaconda3/bin:${PATH}"
+
+add-to-path ~/{.local,.cabal,.cargo,.gem,go,anaconda3}/bin  ~/{Scripts,.bin,.config/composer/vendor/bin} /usr/local/go/bin 
+
+[ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'  # JAVA
 
 #if [ -e ~/.pyenv/bin/pyenv ]; then
   #export PYENV_ROOT="${HOME}/.pyenv"

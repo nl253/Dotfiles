@@ -3,34 +3,11 @@
 
 # NOTE `$PATH` set here because :: `http://www.jacobsingh.name/content/adding-your-path-oh-my-zsh`
 
- # UTILS {{{
- # checks if an executable is in $PATH
-function in-path(){  # {{{
-  for i in $(echo $PATH | sed "s/:/\n/g"); do
-      if [[ -x "$i/$1" ]]; then
-          return 0
-      fi
-  done
-  return 1
-}  # }}}
-
-function safe-source(){  # {{{
-  for i in $@; do
-    [[ -f $i ]] && source $i
-  done
-}  # }}}
-
-function ensure-dir-exists(){  # {{{
-  for i in $@; do
-    [[ ! -e $i ]] && mkdir -p $i
-  done
-}  # }}} }}}
-
 # OPTIONS {{{
              
 # {{{ HISTORY, some in ~/.shells/variables.sh
-HISTFILE=~/.zsh_history
-SAVEHIST=10000
+export HISTFILE=~/.zsh_history
+export SAVEHIST=10000
 # }}}
 
 setopt NO_BG_NICE                       # don't nice background tasks
@@ -63,16 +40,18 @@ setopt mark_dirs                        # Add "/" if completes directory
 unsetopt correct_all
 # }}}
 
-# oh-my-zsh {{{
-# try to install oh-my-zsh if missing
+# DOWNLOAD OH-MY-ZSH IF MISSING {{{
 # use `curl`, fall back on `wget`
 if [[ ! -e ~/.oh-my-zsh ]]; then
-  if $(in-path curl); then
+  if [[ -x $(which url) ]]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  elif $(in-path wget); then
+  elif [[ -x $(which wget) ]]; then
     sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
   else
-    echo -e "Neither curl nor wget present on this system,\nOh-my-zsh could not be downloaded.\n.zshrc will not be fully loaded.\nAborting."
+    echo -e "Neither curl nor wget present on this system."
+    echo -e "Oh-my-zsh could not be downloaded."
+    echo -e "zshrc will not be fully loaded."
+    echo -e "Aborting."
     return 0
   fi
 fi # }}}
@@ -151,9 +130,11 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 #  https://github.com/unixorn/git-extra-commands/blob/master/git-extra-commands.plugin.zsh
 #
 # }}}
-
 plugins=(fast-syntax-highlighting zsh-syntax-highlighting zsh-autosuggestions compleat)
+# }}}
 
+# SOURCE OH_MY_ZSH {{{
+[[ -e $ZSH/oh-my-zsh.sh ]] && source $ZSH/oh-my-zsh.sh
 # }}}
 
 # OVERWITE OH-MY-ZSH OPTIONS {{{
@@ -162,25 +143,16 @@ plugins=(fast-syntax-highlighting zsh-syntax-highlighting zsh-autosuggestions co
 # this means we need to overwite it AFTER sourcing oh-my-zsh 
 export LSCOLORS=ExFxCxdxBxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-
-# UNALIAS {{{
-if [[ -e $ZSH/oh-my-zsh.sh ]]; then  
-  source $ZSH/oh-my-zsh.sh
-  unalias d
-  unalias please
-  unalias afind
-fi # }}}
-
 # }}}
 
 # source ~/.shells and ~/.zsh here to overwite some settings {{{
 if [[ -d ~/.zsh ]] && [[ -d ~/.shells ]]; then
-  for file in ~/.shells/* ; do  # Custom dirs with general shell configuration
+  for file in ~/.{shells,zsh}/* ; do  # Custom dirs with general shell configuration
     [[ -f $file ]] && source $file # all of these use POSIX compliant syntax
   done
-  for file in ~/.zsh/* ; do      # Custom dirs with zsh specific configuration
-    [[ -f $file ]] && source $file
-  done
+
+  # CONFIG TO BE RUN ONLY FOR MY PC 
+  [[ -f ~/.pc ]] && source ~/.pc.zsh
 fi
 
 # }}} # if this was sourced successfully then we have all the variables set properly
@@ -202,7 +174,7 @@ fi
 # ARG2: repo owner/Repo_name
 # {{{
 function fetch-custom-plug-gh(){  
-  if $(in-path git) && [[ ! -e ${ZSH_CUSTOM}/plugins/$1/$1.plugin.zsh ]] ; then
+  if [[ -x $(which git) ]] && [[ ! -e ${ZSH_CUSTOM}/plugins/$1/$1.plugin.zsh ]] ; then
     cd ${ZSH_CUSTOM}/plugins
     git clone https://github.com/$2 $1 
     cd  
@@ -216,60 +188,20 @@ fetch-custom-plug-gh zsh-completions zsh-users/zsh-completions
 fetch-custom-plug-gh zsh-syntax-highlighting zsh-users/zsh-syntax-highlighting.git
 fetch-custom-plug-gh fast-syntax-highlighting zdharma/fast-syntax-highlighting.git
 fetch-custom-plug-gh git-extra-commands unixorn/git-extra-commands.git
+fetch-custom-plug-gh zsh-history-substring-search zsh-users/zsh-history-substring-search
 
-if $(in-path curl); then
-  # press TAB to get fzf to pop up
-  if [[ ! -f ${ZSH_CUSTOM}/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh ]]; then
-    mkdir -p ${ZSH_CUSTOM}/plugins/zsh-history-substring-search
-    curl -fLo ${ZSH_CUSTOM}/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh "https://raw.githubusercontent.com/zsh-users/zsh-history-substring-search/master/zsh-history-substring-search.zsh"
-  fi
-fi
-
-# SOURCE CUSTOM PLUGINS {{{
-# make sure it exists
-safe-source ~/.fzf.zsh ${ZSH_CUSTOM}/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh
-# }}}
-# }}}
+unset -f fetch-custom-plug-gh
 
 # USER CONFIGURATION {{{
 # ------------------
-
 # export MANPATH="/usr/local/man:$MANPATH"
-
 # export LANG=en_US.UTF-8  # You may need to manually set your language environment
+# export ARCHFLAGS="-arch x86_64"  # Compilation flags
+# export SSH_KEY_PATH="~/.ssh/rsa_id"  # ssh
 
 # Preferred editor for local and remote sessions
 [[ -n $SSH_CONNECTION ]] && export EDITOR='vim'
-
-# export ARCHFLAGS="-arch x86_64"  # Compilation flags
-
-# export SSH_KEY_PATH="~/.ssh/rsa_id"  # ssh
-
-# Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-
-# ------------------------------------------------ 
 # }}}
 
-# $PROMPT {{{
-# -------
-# export PROMPT=' %F{yellow}%d%f  %F{54}>>%f '
-# export RPROMPT='%F{red}%?%f' }}}
-
-safe-source ~/.travis/travis.sh
-
-# CONFIG TO BE RUN ONLY FOR MY PC {{{
-# -------------------------------
-# make sure it's the very last thing in .zshrc
-if [[ -f ~/.pc ]]; then
-  # aweful terminal color and utf-8 support 
-  # normalise prompt 
-  export PS1="[%* - %D] %d %% " 
-fi
-unset -f in-path
-unset -f safe-source
-#unset -f ensure-dir-exists
-unset -f fetch-custom-plug-gh
-# }}}
 
 # vim: foldmethod=marker

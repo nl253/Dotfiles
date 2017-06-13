@@ -1,7 +1,6 @@
 
-
-$AUTHORS 
-$DATE at $TIME
+author: $AUTHORS 
+date: $DATE at $TIME
 
                          = $BASENAME =
 
@@ -30,5 +29,5 @@ $DATE at $TIME
  *Links*
 - 
 - 
-- 
 
+%% vim: 

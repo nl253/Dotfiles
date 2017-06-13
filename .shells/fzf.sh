@@ -1,15 +1,10 @@
 
-# FZF init # chech if on system # set up aliases in case it is and isn't
+# FZF init 
 
-ensure-dir-exists(){  # {{{
-  for i in $@; do
-    [[ ! -e $i ]] && mkdir -p $i
-  done
-}  
+# chech if on system 
+# set up aliases in case it is and isn't
 
-ensure-dir-exists ~/.bin
-
-unset -f ensure-dir-exists
+source ~/.shells/setup.sh
 
  # }}}
 
@@ -67,12 +62,15 @@ if [ -x /bin/fzf ] || [ -x ~/.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
   # preview configured to `cat` for files and use `tree` for dirs
   alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"' # [FZF] with [P]REVIEW
 
-  alias l=fzf-locate.sh # [L]OCATE
-  alias c=fzf-cd.sh     # [C]D
+  #alias c=fzf-cd.sh     # [C]D
   alias p=fzf-pkill.sh  # [P]ROCESSES 
 
 else # non fzf solution 
 
-  [ -x /usr/bin/htop ] || [ -x /bin/htop ] && alias p=htop || alias p=top # [P]ROCESSES 
+  if [ -x /usr/bin/htop ] || [ -x /bin/htop ] ; then
+    alias p=htop 
+  else 
+    alias p=top # [P]ROCESSES 
+  fi
 
 fi # }}}
