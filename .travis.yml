@@ -5,15 +5,16 @@ python:
 
 # command to run tests
 script: 
-    - zsh
-    - bash
+    - pip install prompt_toolkit
+    - bash -c ranger
+    - bash -c "project --help"
     - sh
+    - sh -c "sqlite --help"
 
 # blocklist
 branches: 
     only:
         - master
-        - feature
 
 notifications:
     email: true
