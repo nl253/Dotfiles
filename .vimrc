@@ -1,8 +1,6 @@
 
 " VARIABLES and UTILS {{{
-let g:MARKUP = [ 'markdown', 'vimwiki' ]
-
-let g:MARKUP_EXT = ['md', 'wiki', 'rst']
+let g:MARKUP = [ 'markdown', 'vimwiki', 'rst', 'vimwiki_markdown' ]
 
 let g:PROGRAMMING =  ['xhtml', 'html', 
             \'css', 'javascript', 
@@ -18,7 +16,13 @@ let g:TEMPLATE_DIR = glob('~/.templates/')
 let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 
 " THESE NEED!!! TO BE RELATIVE TO $HOME
-let g:WORKING_DIRS = ['Scripts', 'vimwiki', 'Projects', '.templates']
+let g:WORKING_DIRS = ['Scripts', 'Notes', 'Projects', 
+            \'.zsh', '.', '.shells', '.licenses',
+            \'.templates', '.bash', '.shells', '.config']
+
+if ! has("nvim")
+    let g:WORKING_DIRS = filter(g:WORKING_DIRS, {x -> ! empty(x)})
+endif
 
 for d in [g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR]
     if empty(d)
@@ -47,16 +51,13 @@ endif
 if empty(g:VIMDIR) | call system('!mkdir -p '.g:VIMDIR) | endif
 
 if ! filereadable(g:PLUG_FILE) && executable('curl')
-    call system('curl -flo ' . g:PLUG_FILE . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    call system('curl -flo '.g:PLUG_FILE.' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     PlugInstall
     source $MYVIMRC
 endif
 " }}}
-"
-" Plug init :: set variables {{{
-execute 'set thesaurus=' . g:DICT_DIR . 'thesaurus.txt'
-execute 'set dictionary=' .  g:DICT_DIR . 'frequent.dict'
 
+" Plug init :: set variables {{{
 if has('nvim')
     call plug#begin('~/.local/share/nvim/plugged/')
 else
@@ -64,7 +65,7 @@ else
 endif
 " }}}
 
-" OPTIONS {{{
+" OPTIONS {{{   
 let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'formatprg=fmt\ -s\ -u\ --width=79', 'spelllang=en_gb',
             \'completeopt=menuone,longest,noinsert', 'spellsuggest=best,12,',
@@ -87,30 +88,45 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'tagcase=ignore', 'switchbuf=useopen,newtab,', 'infercase']
 
 for item in g:OPTIONS
-    try
-        execute 'silent set '.item
-    catch /.*/
-    endtry
+    try | execute 'silent set '.item | catch /.*/ | endtry
 endfor
 
 for dir in g:WORKING_DIRS " so that :find is more powerful
-    execute 'set path+=' . glob('~/') . dir . '/**,'
+    execute 'set path+='.glob('~/').dir.'/**,'
 endfor
+
+" download dictionaries from GitHub if missing {{{
+let g:DICTS = ['frequent.dict', 'haskell.dict' , 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
+" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
+for dict in g:DICTS
+    if ! filereadable(g:DICT_DIR . dict) && executable('curl')
+        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
+    endif
+endfor
+" }}} }}}
+
+" Plug init :: set variables {{{
+execute 'set thesaurus='.g:DICT_DIR.'thesaurus.txt'
+execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
 " }}}
 
-" PLUGINS {{{ {{{
+" PLUGINS {{{ 
 " place Plugins here
 " -------------------
 " GENERAL {{{
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
-Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
+if executable("tmux")
+    Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
+endif
 Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \
-Plug 'konfekt/fastfold' " more efficient folds
+Plug 'konfekt/fastfold' 
 Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
-Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 
-            \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
-            \'SudoWrite', 'Unlink', 'Rename' ]}
+if has('unix')
+    Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 
+                \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
+                \'SudoWrite', 'Unlink', 'Rename' ]}
+endif
 " }}}
 
 " COMPLETION {{{
@@ -118,18 +134,47 @@ if has('python') || has('python3')
     Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
     let g:ultisnipsexpandtrigger="<tab>"
     Plug 'maralla/completor.vim'
-    let g:completor_blacklist = ['tagbar', 'qf', 'netrw', 'unite', 'vim']
-    let g:completor_python_binary = 'python3.6'
+    let g:completor_blacklist = ['tagbar', 
+                \'qf', 'netrw', 'unite', 'vim', 
+                \'help']
+    let g:completor_python_binary = 'python3'
 endif
 
 " }}}
 "
 " MARKUP {{{ {{{
+
+Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
+
+let g:bullets_enabled_file_types = ['markdown']
+
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent','DittoSentOn']}
+Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
+
+" table mode {{{
+Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
+let g:table_mode_disable_mappings = 1
+let g:table_mode_verbose = 0 | let g:loaded_table_mode = 1
+let g:table_mode_syntax = 1 | let g:table_mode_update_time = 800
+au! BufEnter *.md let g:table_mode_corner = '|'
+au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
+" }}}
+
+" vimwiki {{{
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_html_header_numbering = 2
-let g:vimwiki_list_ignore_newline = 0
 let g:vimwiki_hl_headers = 1
+let g:vimwiki_use_calendar = 0
+let g:vimwiki_dir_link = 'index'
+let g:vimwiki_hl_cb_checked = 1
+let g:vimwiki_valid_html_tags = 'b,i,s,u,sub,sup,kbd,br,hr,h1,h2,h3,h4,h5,h6,pre,code'
+let g:vimwiki_list = [{'path': '~/Notes/',
+            \ 'auto_toc': 1,
+            \ 'syntax': 'default',
+            \ 'ext': '.wiki',
+            \ 'path_html': '~/.Notes-html/'}]
+" }}}
 
 " markdown {{{
 let g:markdown_fenced_languages = [
@@ -140,25 +185,8 @@ Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
 Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
 " }}}
-Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
 
-let g:bullets_enabled_file_types = ['markdown']
-
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent','DittoSentOn']}
-Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
-
-" }}}
-"
-" table mode {{{
-Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
-let g:table_mode_disable_mappings = 1
-let g:table_mode_verbose = 0 | let g:loaded_table_mode = 1
-let g:table_mode_syntax = 1 | let g:table_mode_update_time = 800
-au! BufEnter *.md let g:table_mode_corner = '|'
-au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
-" }}}
-
-" }}}  }}}
+" }}} 
 
 " NETRW {{{
 let g:netrw_scpport = "-P 22" | let g:netrw_sshport = "-p 22"
@@ -303,21 +331,22 @@ endif
 " }}} }}}
 
 call plug#end()
+" }}}
 
 " Scratchpad {{{
 function! Scratch()
-    if index(['netrw', 'terminal','gitcommit', 'qf', 'gitcommit', 'git', 'netrc'], &filetype) >= 0  " blacklist
-        return 1
-    endif
-    if &filetype == 'help'
+    " blacklist
+    if index(['netrw', 'terminal','gitcommit', 'qf', 'gitcommit', 'git', 'netrc'], &filetype) >= 0  
+        return 0
+    elseif index(['vim', 'help'], &filetype) >= 0  
         vnew ~/.scratchpads/scratch.vim
         setl ft=vim
-    elseif &filetype == 'man'
+    elseif index(['sh', 'zsh', 'man'], &filetype) >= 0  
         vnew ~/.scratchpads/scratch.sh
         setl ft=sh
     elseif (index(g:MARKUP, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
-        if expand('%:p') != '~/vimwiki/diary/diary.wiki'
-            vnew ~/vimwiki/diary/diary.wiki
+        if expand('%:p') != expand('~/Notes/diary/diary.wiki')
+            vnew ~/Notes/diary/diary.wiki
             setl ft=vimwiki
         else
             return 0
@@ -348,28 +377,15 @@ function! Markup()
     set complete=.,w, conceallevel=3 makeprg=write-good 
     setl spell formatoptions=tcrqjonl1 foldlevel=1 sw=4 textwidth=79 
     setl formatprg=fmt\ -s\ -u\ --width=79
-    if &filetype == 'vimwiki'
+    if &filetype == 'vimwiki' || &filetype == 'vimwiki_markdown'
         nnoremap <buffer> <Leader>x :VimwikiToggleListItem<CR>
     else
         nnoremap <buffer> <Leader>x :ToggleCheckbox<CR>
     endif
-    " SLOW! {{{
-    "execute 'set complete+=k'.glob('~/vimwiki').'/*/*/*.wiki'
-    "execute 'set complete+=k'.glob('~/vimwiki').'/*/*.wiki'
-    "execute 'set complete+=k'.glob('~/vimwiki').'/*.wiki' }}}
-    "set complete+=k*.wiki
-    "set complete+=k*.md
-    "set complete+=k*.rst
-    for f in split(glob('*.wiki'))
+    for f in split(glob('*.wiki')) + split(glob('*.md')) + split(glob('*.rst'))
         execute 'set complete+=k./'.f
     endfor
-    for f in split(glob('*.rst'))
-        execute 'set complete+=k./'.f
-    endfor
-    for f in split(glob('*.md'))
-        execute 'set complete+=k./'.f
-    endfor
-    nnoremap <buffer> <Leader>mS :silent setl spell<CR>:WordyWordy<CR>:Neomake<CR>:DittoSentOn<CR>
+    nnoremap <buffer> <Leader>mS :silent setl spell<CR>:WordyWordy<CR>:DittoSentOn<CR>:Neomake<CR>
     nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
     if executable('wn')
         nnoremap <buffer> K :execute 'Capture wn ' . expand('<cword>') . ' -over'<CR>
@@ -383,10 +399,6 @@ function! Programming()
         for i in split(glob("*.".expand('%:e')))
             execute 'setl complete+=k'.i
         endfor
-        " SLOW! {{{
-        "execute 'set complete+=k'.glob('~/Projects').'/*/*.'.expand('%:e').","
-        "execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e').","
-        "execute 'set complete+=k'.glob('~/Scripts').'/*/*.'.expand('%:e')."," "}}}
     endif
 endfunction
 
@@ -430,8 +442,9 @@ endfunction
 " ShInit() {{{
 function! ShInit()
     nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
-    set complete+=k~/.bashrc,k~/.shells/**.sh,k~/.profile,k~/.bash_profile,k~/.bash/**
-    set complete+=k~/Scripts/*.sh
+    for f in split(expand("~/")) + split(expand("~/.{bashrc,profile,bash_profile}")) + split(expand('~/{.shells,.bash,Scripts}/*.sh'))
+        execute 'set complete+='.f
+    endfor
     if executable('shfmt')
         setl formatprg=shfmt
     endif
@@ -489,8 +502,7 @@ endfunction
 " VimInit() {{{
 function! VimInit()
     nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
-    setl foldmethod=marker
-    set complete=.,w,
+    setl foldmethod=marker complete=.,w,
     inoremap <C-n> <C-x><C-v>
     if expand('%:t') != 'init.vim' && expand('%:t') != '.vimrc'
         if has('nvim')
@@ -521,6 +533,12 @@ function! MarkdownInit()
     syn region markdownBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart
     syn region markdownBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart
     syn region markdownBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart
+endfunction
+" }}}
+
+" SqlInit() {{{
+function! SqlInit()
+    execute 'setl complete=.,w,k'.g:DICT_DIR.'sql.dict')
 endfunction
 " }}}
 
@@ -773,26 +791,18 @@ aug VIMENTER
     au FileType xhtml,html,xml call HTMLInit()
     au FileType gitcommit call GitcommitInit()
     au FileType vimwiki call VimWikiInit()
+    au FileType sql call SqlInit()
     au FileType qf call QfInit()
     au FileType python call PythonInit()
     au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
     au FileType php call PhpInit()
+    au FileType sql call SqlInit()
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
     au BufNewFile call Ctags()
     "au FileType haskell call HaskellInit()
 aug END
-" }}}
-
-" download dictionaries from GitHub if missing {{{
-let g:DICTS = ['frequent.dict', 'haskell.dict' , 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
-" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
-for dict in g:DICTS
-    if ! filereadable(g:DICT_DIR . dict) && executable('curl')
-        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
-    endif
-endfor
 " }}}
 
 colorscheme antares
@@ -834,7 +844,6 @@ endif
 command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
-command! Evax %!evax 
 " }}}
 
 " KEYBINDINGS {{{
@@ -855,10 +864,6 @@ nnoremap <expr> z= &spell ? "z=" : ":setl spell\<CR>z="
 nnoremap <expr> [s &spell ? "[s" : ":setl spell\<CR>[s"
 nnoremap <expr> ]s &spell ? "]s" : ":setl spell\<CR>]s"
 
-"move visually highlighted lines
-"vnoremap > >gv
-"vnoremap < <gv
-
 nnoremap <Leader>fed    :e $MYVIMRC<CR>
 nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>ga     :Git add %:p<Space>
@@ -869,14 +874,13 @@ nnoremap <Leader>gs     :Gstatus<CR>
 nnoremap <Leader>gW     :Gwrite<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
 nnoremap <Leader>gm     :Gmove<Space>
+
 if len($TMUX) > 1
     nnoremap <Leader>gp     :Gpush<CR>
 endif
 
 inoremap <C-w> <C-o>dB
 inoremap <C-u> <C-o>d0
-"nnoremap <M-k> :silent lprev<CR>
-"nnoremap <M-j> :silent lnext<CR>
 nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
 nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',',' ','g')<CR>
 nnoremap <C-k> :silent cn<CR>
@@ -893,6 +897,5 @@ nnoremap <Leader><Leader> :Commands!<CR>
 nnoremap <Leader>f<Leader> :Files! .<CR>
 nnoremap <Leader>m<Leader> :Marks!<CR>
 
-"cno w!!<CR> %!sudo tee > /dev/null %<CR>
-" vim: foldlevel=1 nospell formatoptions= 
+" vim: foldlevel=1 nospell formatoptions= foldmethod=marker foldlevel=0
 
