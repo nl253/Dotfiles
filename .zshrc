@@ -205,3 +205,6 @@ unset -f fetch-custom-plug-gh
 
 
 # vim: foldmethod=marker
+
+# added by travis gem
+[ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh

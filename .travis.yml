@@ -1,0 +1,19 @@
+sudo: false
+language: python
+python:
+    - "nightly" 
+
+# command to run tests
+script: 
+    - zsh
+    - bash
+    - sh
+
+# blocklist
+branches: 
+    only:
+        - master
+        - feature
+
+notifications:
+    email: true

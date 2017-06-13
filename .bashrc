@@ -64,3 +64,6 @@ fi
 # }}}
 
 # vim: foldmethod=marker foldlevel=0
+
+# added by travis gem
+[ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh
