@@ -1,5 +1,4 @@
-# THIS FILE MUST USE POSIX COMPLIANT SYNTAX
-# IT IS SOURCED BY ALL INTERACTIVE SHELLS
+# IT IS SOURCED BY `zsh` and `bash`
 
 # VARIABLES 
 # --------
@@ -37,19 +36,18 @@ export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xte
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
 export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin/:"
-[ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre' # JAVA
-[ -d ~/.gem/ruby/2.4.0/bin ] && export PATH="${HOME}/.gem/ruby/2.4.0/bin:${PATH}:"                                                         # GEM [RUBY]
-[ -d ~/.gem/ruby/2.3.0/bin ] && export PATH="${HOME}/.gem/ruby/2.3.0/bin:${PATH}:"                                                         # GEM [RUBY]
+[ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'  # JAVA
+[[ -d ~/.gem/ruby/*/bin ]] && export PATH=${HOME}/.gem/ruby/*/bin:${PATH}:                                                                 # GEM [RUBY]
 [ -d ~/.cargo/bin ] && export PATH="${HOME}/.cargo/bin:${PATH}:"                                                                           # CARGO [RUST]
 [ -d ~/.cabal/bin ] && export PATH="${HOME}/.cabal/bin:${PATH}:"                                                                           # CABAL [HASKELL]
 [ -d ~/.config/composer/vendor/bin ] && export PATH="${HOME}/.config/composer/vendor/bin:${PATH}:"                                         # COMPOSER [PHP]
 [ -d ~/.local/bin ] && export PATH="${HOME}/.local/bin:${PATH}:"                                                                           # PIP [PYTHON]
 [ -d ~/go/bin ] && export PATH="${HOME}/go/bin:${PATH}:"                                                                                   # GO 
 [ -d /usr/local/go/bin ] && export PATH="/usr/local/go/bin:${PATH}:"
-[ -d ~/.fzf/bin ] && export PATH="${HOME}/.fzf/bin:${PATH}:"       # MY READY PROJECTS AND EXECUTSBLES
-[ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # clone my Scripts repo  
-[ -d ~/Scripts ] && export PATH="${HOME}/Scripts:${PATH}:" # MY SCRIPTS
-[ -d ~/.bin ] && export PATH="${HOME}/.bin:${PATH}:"       # MY READY PROJECTS AND EXECUTSBLES
+[ -d ~/.fzf/bin ] && export PATH="${HOME}/.fzf/bin:${PATH}:"                                                                    
+[ ! -e ~/Scripts ] && mkdir -p ~/Scripts && git clone https://github.com/nl253/Scripts ~/Scripts/                                         # MY SCRIPTS
+[ -d ~/Scripts ] && export PATH="${HOME}/Scripts:${PATH}:" 
+[ -d ~/.bin ] && export PATH="${HOME}/.bin:${PATH}:"                                                                                      # MY FINISHED PROJECTS
 [ -d ~/anaconda3/bin ] && export PATH="${HOME}/anaconda3/bin:${PATH}"
 
 #if [ -e ~/.pyenv/bin/pyenv ]; then
@@ -59,10 +57,6 @@ export PATH="/usr/local/sbin:/bin/:/usr/local/bin:/usr/bin/site_perl:/usr/bin/ve
   #export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 #fi
 
-export PYTHONPATH="${PYTHONPATH}:${HOME}/Projects/:${HOME}/.vim/plugged/ropevim:" # for python modules
-if [ -e ~/.eclipse/org.eclipse.platform_4.6.3_155965261_linux_gtk_x86_64/eclimd ]; then
-  export PATH="${PATH}:${HOME}/.eclipse/org.eclipse.platform_4.6.3_155965261_linux_gtk_x86_64"
-fi
 # }}}
 
 # HISTORY {{{
@@ -81,14 +75,6 @@ export HH_CONFIG=hicolor # get more colors
 # The pattern  matching honors the setting of the extglob shell option.
 # ----------------------------------------------------------------------------------------------------------
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs" # }}}
-
-# $IRC_CLIENT  {{{
-# default to `irssi` and fall back on `hexchat`
-if [ -x /usr/bin/irssi ] || [ -x /usr/bin/irssi ] ; then 
-  export IRC_CLIENT='irssi'
-else
-  [ -x /usr/bin/hexchat ] || [ -x /bin/hexchat ] && export IRC_CLIENT='hexchat' 
-fi # }}}
 
 export GREP_COLOR='1;33' # makes it yellow # by default red
 
@@ -145,4 +131,4 @@ fi
 
 [ -x /usr/bin/setxkbmap ] || [ -x /bin/setxkbmap ] && setxkbmap -layout gb  
 
-#vim:set foldmethod=marker:set foldlevel=0 
+# vim: foldmethod=marker foldlevel=0 

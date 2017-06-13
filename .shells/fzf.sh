@@ -1,15 +1,46 @@
 # FZF init # chech if on system # set up aliases in case it is and isn't
 
+ensure-dir-exists(){  # {{{
+  for i in $@; do
+    [[ ! -e $i ]] && mkdir -p $i
+  done
+}  # }}}
+
+ensure-dir-exists ~/.bin
+
 # {{{ executeable not found ... Install ... 
-if [ ! -x /usr/bin/fzf ] && [ ! -x ~/.fzf/bin/fzf ] && [ ! -x ~/.fzf/bin/fzf ]; then       # look in /usr/bin/ and /bin/ and ~/.fzf/bin/fzf
-  if [ -x /usr/bin/git ] || [ -x /bin/git ] ; then                                   # make sure ther is git
-    [ -e ~/.fzf ] && rm -rf ~/.fzf                                                   # if there is such a dir, remove
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install # download and install
-  fi
+if [ ! -x /usr/bin/fzf ] && [ ! -x ~/.fzf/bin/fzf ] && [ ! -x ~/.fzf/bin/fzf ] && [ -x /bin/fzf ]; then       # look in /usr/bin/ and /bin/ and ~/.fzf/bin/fzf
+  cd /tmp && wget https://github.com/junegunn/fzf-bin/releases/download/0.16.8/fzf-0.16.8-linux_amd64.tgz || exit 1
+  tar xfvz fzf-0.16.8-linux_amd64.tgz && mv ./fzf ~/.bin/fzf
 fi
 # }}}
 
-if [ -x /usr/bin/fzf ] || [ -x ~/.fzf/bin/fzf ] || [ -x /bin/fzf ]; then # {{{
+if [ -x /bin/fzf ] || [ -x ~/.fzf/bin/fzf ] || [ -x /.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
+
+   # h - repeat history {{{
+  h() { 
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+  } # }}}
+
+  # tmux ftpane - switch pane (@george-b) {{{
+  ftpane() {
+    local panes current_window current_pane target target_window target_pane
+    panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
+    current_pane=$(tmux display-message -p '#I:#P')
+    current_window=$(tmux display-message -p '#I')
+
+    target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
+
+    target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
+    target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
+
+    if [[ $current_window -eq $target_window ]]; then
+      tmux select-pane -t ${target_window}.${target_pane}
+    else
+      tmux select-pane -t ${target_window}.${target_pane} &&
+      tmux select-window -t $target_window
+    fi
+  } # }}}
 
   export FZF_DEFAULT_OPTS="--bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --bind='alt-e:execute(\$EDITOR {})' --bind='alt-r:execute(rifle {}),alt-l:execute:(command less -RX {})' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:117,hl+:1,bg+:232,fg:240,fg+:246'"
 
@@ -33,8 +64,6 @@ if [ -x /usr/bin/fzf ] || [ -x ~/.fzf/bin/fzf ] || [ -x /bin/fzf ]; then # {{{
   alias l=fzf-locate.sh # [L]OCATE
   alias c=fzf-cd.sh     # [C]D
   alias p=fzf-pkill.sh  # [P]ROCESSES 
-
-  [ -x /usr/bin/gdrive ] || [ -x /bin/gdrive ] && alias gdrive-fzf='gdrive list | fzf --bind "enter:execute(echo {} | grep -P -o \"^\w+\")"'
 
 else # non fzf solution 
 

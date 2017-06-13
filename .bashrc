@@ -1,16 +1,15 @@
 # ~/.bashrc
 
-# NOTE THIS SCRIPT ASSUMES THAT YOU GOT THIS FILE BY CLONING https://github.com/nl253/Dot-files/tree/working
+# NOTE THIS SCRIPT ASSUMES THAT YOU GOT THIS FILE BY CLONING https://github.com/nl253/Dot-files
 # 
-# NOTE IF YOU HAVE GIT, THEN RUNNING THIS SCRIPT WILL AUTOMATICALLY CLONE MY SCRIPTS REPO TO $HOME/Scripts/
+# NOTE IF YOU HAVE GIT, THEN RUNNING THIS SCRIPT WILL AUTOMATICALLY ATTEMPT TO CLONE:
+#       - MY SCRIPTS REPO TO $HOME/Scripts/
+#       - MY DICTS REPO TO $HOME/.dicts/
+#       - RANGER (IF NOT PRESENT) REPO TO $HOME/.applications/ranger
+#       - MY PROJECT GENERATOR (IF NOT PRESENT) REPO TO $HOME/.applications/project
+#       - MY SQLITE PROMPT_TOOLKIT-BASED CLIENT (IF NOT PRESENT) REPO TO $HOME/.applications/sqlite
 #
 # NOTE THAT BASHS' BEHAVIOURS IS ALSO ALTERED BY `~/.inputrc`
-
-# TODO
-# what can go wrong:
-# - Scripts might not get downloaded 
-# - git might not be on the system
-# - it might be that neither curl nor wget is present on the system
 
 #  If not running interactively, don't do anything.
 [[ -z "$PS1" ]] && return 0
@@ -59,56 +58,63 @@ if [[ -d ~/.shells ]] && [[ -d ~/.bash ]]; then
     [[ -f $file ]] && source "$file"
   done
 fi
-# 
 
 # BY HERE $PATH AND OTHER VARIABLES HAVE BEEN SET !
 # `~/.shells/variables.sh` AND
 # `~/.shells/aliases.sh` have been sourced
 
-# pull scripts if needed 
-if [[ ! -e ~/Scripts ]] && [[ -x $(which git) ]]; then
-  echo -e "You don't appear to have scripts. They are necessary to make everything work."
-  echo -e "Would you like to download them from GitHub?\nNote, this will clone them into ~/Scripts/"
-  REGEX="^[Yy]es"
-  read -n 3 -r -p "type [Yes/No] " RESPONSE
-  if [[ $RESPONSE =~ $REGEX ]]; then
-    echo -e "PULLING https://github.com/nl253/Scripts master branch\n" # Pull Scripts if not present already
-    cd
-    git clone --recursive https://github.com/nl253/Scripts
-  else
-    echo -e "OK.\nNothing to be done.\n"
-  fi
-fi # 
+safe-source(){
+  for i in $@; do
+    [[ -f $i ]] && source $i
+  done
+}
 
-# pull scripts if needed 
-if [[ ! -e ~/.dicts ]] && [[ -x $(which git) ]]; then
-  echo -e "You don't appear to have dicts."
-  echo -e "Would you like to download them from GitHub?\nNote, this will clone them into ~/.dicts/"
-  REGEX="^[Yy]es"
-  read -n 3 -r -p "type [Yes/No] " RESPONSE
-  if [[ $RESPONSE =~ $REGEX ]]; then
-    echo -e "PULLING https://github.com/nl253/Dictionaries master branch\n" # Pull Scripts if not present already
-    git clone --recursive https://github.com/nl253/Dictionaries ~/.dicts
-  else
-    echo -e "OK.\nNothing to be done.\n"
-  fi
-fi # 
+safe-source ~/.fzf.bash ~/.travis/travis.sh
 
-# load fzf configuration # alters $PATH
-[[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
+ensure-dir-exists(){
+  for i in $@; do
+    [[ ! -e $i ]] && mkdir -p $i
+  done
+}
 
-if [[ ! -d ~/.vim/backup ]] || [[ ! -d ~/.vim/ ]] || [[ ! -d ~/.vim/swap ]]; then
-  mkdir -p ~/.vim/{swap,backup}
-fi
+ensure-dir-exists ~/.vim/{swap,backup} ~/.applications ~/.bin
 
 # automatically link /tmp to ~/Downloads 
-if [[ -x ~/Downloads ]] && [[ ! -L ~/Downloads ]]; then
-  ln -s /tmp ~/Downloads
-fi
+[[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rm -rf ~/Downloads
+[[ ! -e ~/Downloads ]] && ln -s /tmp ~/Downloads
 
-# added by travis gem
-[ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh
+fetch(){
+  # arg1 : ~/${DIR RELATIVE TO ~}
+  # arg2 : https://github.com/${} 
+  # pull scripts if needed 
+  if [[ ! -e ~/$1 ]] && [[ -x $(which git) ]]; then
+    echo -e "You don't appear to have ~/${1}."
+    echo -e "Would you like to download ${1} from https://github.com/${2} ?\nNote, this will clone them into ~/${1}."
+    REGEX="^[Yy]es"
+    read -n 3 -r -p "type [Yes/No] " RESPONSE
+    if [[ $RESPONSE =~ $REGEX ]]; then
+      echo -e "PULLING https://github.com/${2} master branch\n" # Pull Scripts if not present already
+      mkdir -p ~/$1
+      git clone https://github.com/$2 ~/$1
+    else
+      echo -e "OK.\nNothing to be done.\n"
+    fi
+  fi
+}
 
+fetch Scripts nl253/Scripts
+fetch .dicts nl253/Dictionaries
+fetch .applications/sqlite nl253/SQLiteREPL
+fetch .applications/project nl253/ProjectGenerator
+fetch .applications/ranger ranger/ranger
+fetch .applications/fzf junegunn/fzf.git 
+
+[[ ! -x $(which ranger) ]] && ln -s ~/.applications/ranger/ranger.py ~/.bin/ranger
+[[ ! -x $(which project) ]] && ln -s ~/.applications/project/project ~/.bin/project
+[[ ! -x $(which sqlite) ]]  && ln -s ~/.applications/sqlite/main.py ~/.bin/sqlite
+[[ ! -x $(which fzf) ]]  && ln -s ~/.applications/sqlite/main.py ~/.bin/sqlite
+
+# execute only by my PC at home
 if [[ -f ~/.pc ]]; then
   tmux -c zsh
 fi
