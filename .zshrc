@@ -5,7 +5,7 @@
 
  # UTILS {{{
  # checks if an executable is in $PATH
-in-path(){  # {{{
+function in-path(){  # {{{
   for i in $(echo $PATH | sed "s/:/\n/g"); do
       if [[ -x "$i/$1" ]]; then
           return 0
@@ -14,13 +14,13 @@ in-path(){  # {{{
   return 1
 }  # }}}
 
-safe-source(){  # {{{
+function safe-source(){  # {{{
   for i in $@; do
     [[ -f $i ]] && source $i
   done
 }  # }}}
 
-ensure-dir-exists(){  # {{{
+function ensure-dir-exists(){  # {{{
   for i in $@; do
     [[ ! -e $i ]] && mkdir -p $i
   done
@@ -256,7 +256,7 @@ safe-source ~/.fzf.zsh ${ZSH_CUSTOM}/plugins/zsh-history-substring-search/zsh-hi
 # export PROMPT=' %F{yellow}%d%f  %F{54}>>%f '
 # export RPROMPT='%F{red}%?%f' }}}
 
-safe-source /home/norbert/.travis/travis.sh
+safe-source ~/.travis/travis.sh
 
 # CONFIG TO BE RUN ONLY FOR MY PC {{{
 # -------------------------------
@@ -266,6 +266,10 @@ if [[ -f ~/.pc ]]; then
   # normalise prompt 
   export PS1="[%* - %D] %d %% " 
 fi
+unset -f in-path
+unset -f safe-source
+#unset -f ensure-dir-exists
+unset -f fetch-custom-plug-gh
 # }}}
 
 # vim: foldmethod=marker
