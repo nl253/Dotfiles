@@ -69,7 +69,9 @@ safe-source(){
   done
 }
 
-safe-source ~/.fzf.bash ~/.travis/travis.sh
+safe-source ~/.travis/travis.sh
+
+unset -f safe-source  # done using safe-source
 
 ensure-dir-exists(){
   for i in $@; do
@@ -78,6 +80,8 @@ ensure-dir-exists(){
 }
 
 ensure-dir-exists ~/.vim/{swap,backup} ~/.applications ~/.bin
+
+unset -f ensure-dir-exists  # done using ensure-dir-exists
 
 # automatically link /tmp to ~/Downloads 
 [[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rm -rf ~/Downloads
@@ -109,10 +113,15 @@ fetch .applications/project nl253/ProjectGenerator
 fetch .applications/ranger ranger/ranger
 fetch .applications/fzf junegunn/fzf.git 
 
+unset -f fetch  # done using fetch
+
 [[ ! -x $(which ranger) ]] && ln -s ~/.applications/ranger/ranger.py ~/.bin/ranger
 [[ ! -x $(which project) ]] && ln -s ~/.applications/project/project ~/.bin/project
 [[ ! -x $(which sqlite) ]]  && ln -s ~/.applications/sqlite/main.py ~/.bin/sqlite
-[[ ! -x $(which fzf) ]]  && ln -s ~/.applications/sqlite/main.py ~/.bin/sqlite
+#[[ ! -x $(which fzf) ]]  && ln -s ~/.applications/fzf/bin/fzf-tmux ~/.bin/fzf
+[[ ! -x $(which extractor) ]]  && ln -s ~/Scripts/extractor.sh ~/.bin/extractor
+[[ ! -x $(which download-dotfile) ]]  && ln -s ~/Scripts/download-dotfile.sh ~/.bin/download-dotfile
+[[ ! -x $(which grf) ]]  && ln -s ~/Scripts/grf.sh ~/.bin/grf
 
 # execute only by my PC at home
 if [[ -f ~/.pc ]]; then

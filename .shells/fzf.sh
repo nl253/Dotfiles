@@ -1,21 +1,27 @@
+
 # FZF init # chech if on system # set up aliases in case it is and isn't
 
 ensure-dir-exists(){  # {{{
   for i in $@; do
     [[ ! -e $i ]] && mkdir -p $i
   done
-}  # }}}
+}  
 
 ensure-dir-exists ~/.bin
 
+unset -f ensure-dir-exists
+
+ # }}}
+
 # {{{ executeable not found ... Install ... 
-if [ ! -x /usr/bin/fzf ] && [ ! -x ~/.fzf/bin/fzf ] && [ ! -x ~/.fzf/bin/fzf ] && [ -x /bin/fzf ]; then       # look in /usr/bin/ and /bin/ and ~/.fzf/bin/fzf
+if [ ! -x /usr/bin/fzf ] && [ ! -x ~/.bin/fzf ] && [ ! -x /bin/fzf ] ; then       
   cd /tmp && wget https://github.com/junegunn/fzf-bin/releases/download/0.16.8/fzf-0.16.8-linux_amd64.tgz || exit 1
   tar xfvz fzf-0.16.8-linux_amd64.tgz && mv ./fzf ~/.bin/fzf
+  cd
 fi
 # }}}
 
-if [ -x /bin/fzf ] || [ -x ~/.fzf/bin/fzf ] || [ -x /.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
+if [ -x /bin/fzf ] || [ -x ~/.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
 
    # h - repeat history {{{
   h() { 

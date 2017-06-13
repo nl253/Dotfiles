@@ -50,9 +50,12 @@ vimwiki_html/
 .gitignores/.github/PULL_REQUEST_TEMPLATE.md
 nltk_data/
 boosterclapps/
+.applications/
 Projects/
 .dicts/
 .vim/
+.bin/*
+.bin/
 *.ropeprojec*
 *breakpoints*
 .config/hub
