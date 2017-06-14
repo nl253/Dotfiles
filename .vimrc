@@ -306,7 +306,10 @@ Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 " }}} }}}
 "
 " FZF {{{
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+if empty(glob("~/.applications"))
+    !mkdir -p /home/norbert/.applications/
+endif
+Plug 'junegunn/fzf', { 'dir': '~/.applications/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_action = {
