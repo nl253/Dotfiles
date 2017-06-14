@@ -18,7 +18,7 @@ let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
 " THESE NEED!!! TO BE RELATIVE TO $HOME
 let g:WORKING_DIRS = ['Scripts', 'Notes', 'Projects', 
             \'.zsh', '.', '.shells', '.licenses',
-            \'.templates', '.bash', '.shells', '.config']
+            \'.templates', '.bash', '.shells']
 
 if ! has("nvim")
     let g:WORKING_DIRS = filter(g:WORKING_DIRS, {x -> ! empty(x)})
@@ -103,12 +103,9 @@ for dict in g:DICTS
         execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
     endif
 endfor
-" }}} }}}
-
-" Plug init :: set variables {{{
 execute 'set thesaurus='.g:DICT_DIR.'thesaurus.txt'
 execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
-" }}}
+" }}} }}}
 
 " PLUGINS {{{ 
 " place Plugins here
@@ -382,13 +379,13 @@ function! Markup()
     else
         nnoremap <buffer> <Leader>x :ToggleCheckbox<CR>
     endif
-    for f in split(glob('*.wiki')) + split(glob('*.md')) + split(glob('*.rst'))
-        execute 'set complete+=k./'.f
+    for f in split(glob('*.{wiki,md,rst}'))
+        execute 'set complete+=k'.f
     endfor
-    nnoremap <buffer> <Leader>mS :silent setl spell<CR>:WordyWordy<CR>:DittoSentOn<CR>:Neomake<CR>
+    nnoremap <buffer> <Leader>mS :silent setl spell<CR>:WordyWordy<CR>:DittoSentOn<CR>
     nnoremap <expr> <buffer> <M-Tab> exists('b:table_mode_on') && b:table_mode_on == 1 ? ":TableModeRealign\<CR>" : "\<M-Tab>"
     if executable('wn')
-        nnoremap <buffer> K :execute 'Capture wn ' . expand('<cword>') . ' -over'<CR>
+        nnoremap <buffer> K :execute 'Capture wn '.expand('<cword>').' -over'<CR>
     endif
 endfunction
 
@@ -403,14 +400,14 @@ function! Programming()
 endfunction
 
 function! Init()
-    if exists("+omnifunc") && &omnifunc == ""
+    if &omnifunc == "" && exists("+omnifunc")
         setlocal omnifunc=syntaxcomplete#Complete
     endif
-    if exists("+completefunc") && &completefunc == ""
+    if &completefunc == "" && exists("+completefunc")
         setlocal completefunc=syntaxcomplete#Complete
     endif
-    if filereadable(g:DICT_DIR . &filetype . '.dict')
-        execute 'setl dictionary='. g:DICT_DIR . &filetype . '.dict'
+    if filereadable(g:DICT_DIR.&filetype.'.dict')
+        execute 'setl dictionary='.g:DICT_DIR.&filetype.'.dict'
         set complete+=k,
     endif
 endfunction
@@ -419,8 +416,8 @@ endfunction
 " GitcommitInit() {{{
 function! GitcommitInit()
     setl virtualedit=block
-    set complete=.,kspell,
     setl spell 
+    set complete=.,kspell,t,
 endfunction
 " }}}
 "
@@ -441,10 +438,6 @@ endfunction
 
 " ShInit() {{{
 function! ShInit()
-    nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
-    for f in split(expand("~/")) + split(expand("~/.{bashrc,profile,bash_profile}")) + split(expand('~/{.shells,.bash,Scripts}/*.sh'))
-        execute 'set complete+='.f
-    endfor
     if executable('shfmt')
         setl formatprg=shfmt
     endif
@@ -453,7 +446,9 @@ endfunction
 
 " PhpInit() {{{
 function! PhpInit()
-    nnoremap <buffer> <Leader>me :!php % > /tmp/php-converted.html<CR>:!google-chrome-stable /tmp/php-converted.html<CR>
+    if executable("php") && len($BROWSER) 
+        nnoremap <buffer> <Leader>me :!php % > /tmp/php-converted.html<CR>:!$BROWSER /tmp/php-converted.html<CR>
+    endif
     if executable('js-beautify')
         setl formatprg=js-beautify\ --type\ html
     endif
@@ -501,16 +496,10 @@ endfunction
 
 " VimInit() {{{
 function! VimInit()
-    nnoremap <buffer> K :execute 'help ' . expand('<cword>')<CR>
-    setl foldmethod=marker complete=.,w,
+    nnoremap <buffer> K :execute 'help '.expand('<cword>')<CR>
+    setl foldmethod=marker 
+    execute 'set complete=.,w,k'.$MYVIMRC
     inoremap <C-n> <C-x><C-v>
-    if expand('%:t') != 'init.vim' && expand('%:t') != '.vimrc'
-        if has('nvim')
-            set complete+=k~/.config/nvim/init.vim,
-        else
-            set complete+=k~/.vimrc,
-        endif
-    endif
 endfunction
 " }}}
 
@@ -543,21 +532,23 @@ endfunction
 " }}}
 
 " PythonInit() {{{
-function! PythonInit()
-    nnoremap <buffer> <Leader>mS :PymodeLint<CR>
-    if executable('autopep8') && executable('pycodestyle')
-        setl formatprg=autopep8\ -
-    endif
-    setl complete-=k formatoptions=cqjonl1 
-    nnoremap <buffer> q :pclose<CR>q
-    nnoremap <buffer> <LocalLeader>eM :call pymode#rope#extract_method()<CR>
-    nnoremap <buffer> <localleader>f :call pymode#rope#find_it()<CR>
-    nnoremap <buffer> <LocalLeader>ev :call pymode#rope#extract_variable()<CR>
-    nnoremap <buffer> <localleader>C :call pymode#rope#generate_class()<CR>
-    nnoremap <buffer> <localleader>F :call pymode#rope#generate_function()<CR>
-    nnoremap <buffer> <localleader>P :call pymode#rope#generate_package()<CR>
-    nnoremap <buffer> <CR> :call pymode#rope#goto_definition()<CR>
-endfunction
+if has('python3')
+    function! PythonInit()
+        nnoremap <buffer> <Leader>mS :PymodeLint<CR>
+        if executable('autopep8') && executable('pycodestyle')
+            setl formatprg=autopep8\ -
+        endif
+        setl complete-=k formatoptions=cqjonl1 
+        nnoremap <buffer> q :pclose<CR>q
+        nnoremap <buffer> <LocalLeader>eM :call pymode#rope#extract_method()<CR>
+        nnoremap <buffer> <localleader>f :call pymode#rope#find_it()<CR>
+        nnoremap <buffer> <LocalLeader>ev :call pymode#rope#extract_variable()<CR>
+        nnoremap <buffer> <localleader>C :call pymode#rope#generate_class()<CR>
+        nnoremap <buffer> <localleader>F :call pymode#rope#generate_function()<CR>
+        nnoremap <buffer> <localleader>P :call pymode#rope#generate_package()<CR>
+        nnoremap <buffer> <CR> :call pymode#rope#goto_definition()<CR>
+    endfunction
+endif
 " }}}
 "
 " JavascriptInit() {{{
@@ -589,8 +580,10 @@ function! HTMLInit()
     endif
 endfunction
 "}}} "}}}
+ 
+" Templates, Subsitutions and Python Integraion {{{ {{{
+if has('python3')
 
-" Templates, Subsitutions and Python Integraion {{{
 " PyExpand() {{{
 function! PyExpand() 
     write
@@ -746,11 +739,13 @@ endfunction
 command! Template call Template() 
 "}}} }}}
 
-command! PySubs call PySubs()
-command! PyExpand call PyExpand()
-nnoremap \s :call PySubs()<CR>
-nnoremap \\ :call PyExpand()<CR>
-nnoremap ,, i<!!py3<Space>!!><Left><Left><Left><Space><Left>
+    command! PySubs call PySubs()
+    command! PyExpand call PyExpand()
+    nnoremap \s :call PySubs()<CR>
+    nnoremap \\ :call PyExpand()<CR>
+    nnoremap ,, i<!!py3<Space>!!><Left><Left><Left><Space><Left>
+
+endif " }}}
 
 " CTags() {{{
 function! Ctags()
@@ -763,6 +758,8 @@ function! Ctags()
     endfor
     let s:working_dirs = join(s:working_dirs)
     call system('ctags -R '.s:working_dirs.' **.'.expand('%:e'))
+
+    "call system('ctags -R ~/{'.join(g:WORKING_DIRS,",").'} -f ~/.tags')
 endfunction
 " }}}
 
@@ -780,7 +777,10 @@ aug VIMENTER
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
-    au BufNewFile * call Template() 
+    if has('python3')
+        au BufNewFile * call Template() 
+        au FileType python call PythonInit()
+    endif
     au FileType * call Init()
     execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()' 
     execute 'au! FileType '.join(g:MARKUP, ',').' call Markup()'
@@ -793,7 +793,6 @@ aug VIMENTER
     au FileType vimwiki call VimWikiInit()
     au FileType sql call SqlInit()
     au FileType qf call QfInit()
-    au FileType python call PythonInit()
     au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
     au FileType php call PhpInit()
@@ -856,8 +855,10 @@ nnoremap <expr> <Leader>mS &filetype != 'python' ? ":Neomake\<CR>" : ":PymodeLin
 noremap k gk
 noremap j gj
 
-nnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 && has('nvim') ? ":TREPLSendLine\<CR>" : "\<M-CR>"
-vnoremap <expr> <M-CR> index(g:REPL, &filetype) >= 0 && has('nvim') ? ":TREPLSendSelection\<CR>" : "\<M-CR>"
+if has('nvim')
+    nnoremap :TREPLSendLine<CR>
+    vnoremap :TREPLSendSelection<CR>
+endif
 
 "automatically enable spell if you attempt to use correction
 nnoremap <expr> z= &spell ? "z=" : ":setl spell\<CR>z="
@@ -875,13 +876,13 @@ nnoremap <Leader>gW     :Gwrite<Space>
 nnoremap <Leader>gD     :Gdiff<CR>
 nnoremap <Leader>gm     :Gmove<Space>
 
-if len($TMUX) > 1
+if ! has('nvim') || len($TMUX) > 1
     nnoremap <Leader>gp     :Gpush<CR>
 endif
 
 inoremap <C-w> <C-o>dB
 inoremap <C-u> <C-o>d0
-nnoremap <LocalLeader>* :lgrep <cword> %:p<CR>:lopen<CR>
+nnoremap <LocalLeader>* :grep <cword> %:p<CR>:lopen<CR>
 nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',',' ','g')<CR>
 nnoremap <C-k> :silent cn<CR>
 nnoremap <C-j> :silent cp<CR>
@@ -892,6 +893,7 @@ nnoremap <Leader>t<Leader> :Tags!<CR>
 nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
+nnoremap <C-n> :GitFiles<CR>
 
 " intellij
 nnoremap <Leader>f<Leader> :Files! .<CR>

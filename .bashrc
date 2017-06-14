@@ -67,3 +67,5 @@ fi
 
 # added by travis gem
 [ -f /home/norbert/.travis/travis.sh ] && source /home/norbert/.travis/travis.sh
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
