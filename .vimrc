@@ -530,7 +530,7 @@ endfunction
 
 " SqlInit() {{{
 function! SqlInit()
-    execute 'setl complete=.,w,k'.g:DICT_DIR.'sql.dict')
+    execute 'setl complete=.,w,k'.g:DICT_DIR.'sql.dict'
 endfunction
 " }}}
 
