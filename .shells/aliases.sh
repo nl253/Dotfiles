@@ -20,7 +20,6 @@ env() { if [ ! $# = 0 ]; then command env "$@"; else command env | sort; fi; } #
 alias sudo='sudo '                   # Enable aliases to be sudo’ed
 alias e='$EDITOR'                    # quicker access to vim
 alias show-path='echo -e ${PATH//:/\\n}'  # split path on ":"
-alias ipython='ipython --profile=me'
 $(in-path ranger) && alias r='ranger'
  # 
 
@@ -53,6 +52,26 @@ function pandoc(){  # {{{
 } # }}}
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
+
+function ipython(){
+    in-path() {
+    for i in $(echo "$PATH" | sed "s/:/\n/g"); do
+        if [ -x "$i/$1" ]; then
+            return 0
+        fi
+    done
+    return 1
+    }
+    if $(in-path ipython); then
+        if [ -f .ipythonrc.py ]; then
+            command ipython --config=.ipythonrc.py $@
+        else
+            command ipython --profile=me $@
+        fi
+    else
+        echo "ipython not on system." && return 0
+    fi
+}
 
 # }}}
 

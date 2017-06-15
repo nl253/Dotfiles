@@ -157,7 +157,7 @@ c.TerminalIPythonApp.force_interact = True
 #  it is not applied if there are no more arguments on the line, and '2' for
 #  'full' autocall, where all callable objects are automatically called (even if
 #  no arguments are present).
-c.InteractiveShell.autocall = 2
+c.InteractiveShell.autocall = 1
 
 ## Autoindent IPython code entered interactively.
 #c.InteractiveShell.autoindent = True
@@ -275,7 +275,7 @@ c.InteractiveShell.sphinxify_docstring = True
 ## Set to confirm when you try to exit IPython with an EOF (Control-D in Unix,
 #  Control-Z/Enter in Windows). By typing 'exit' or 'quit', you can force a
 #  direct exit without any confirmation.
-#c.TerminalInteractiveShell.confirm_exit = True
+c.TerminalInteractiveShell.confirm_exit = True
 
 ## Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
@@ -543,7 +543,7 @@ c.TerminalInteractiveShell.true_color = True
 #  When 1: all 'magic' names (``__foo__``) will be excluded.
 #
 #  When 0: nothing will be excluded.
-c.IPCompleter.omit__names = 1
+c.IPCompleter.omit__names = 2
 
 #------------------------------------------------------------------------------
 # ScriptMagics(Magics) configuration

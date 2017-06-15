@@ -131,7 +131,7 @@ if has('python') || has('python3')
     Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
     let g:ultisnipsexpandtrigger="<tab>"
     Plug 'maralla/completor.vim'
-    let g:completor_blacklist = ['tagbar', 
+    let g:completor_blacklist = ['tagbar', 'sql',
                 \'qf', 'netrw', 'unite', 'vim', 
                 \'help']
     let g:completor_python_binary = 'python3'
@@ -214,7 +214,7 @@ if has('python3') || has('python')
     "let g:jedi#documentation_command = "K"
     "let g:jedi#usages_command = "<LocalLeader>u"
     "let g:jedi#rename_command = "<LocalLeader>r" }}}
-    Plug 'klen/python-mode', { 'for': 'python' } 
+    "Plug 'klen/python-mode', { 'for': 'python' } 
     let g:pymode_python = 'python3'
     let g:pymode_quickfix_minheight = 4
     let g:pymode_breakpoint_bind = '<localleader>b'
@@ -537,19 +537,19 @@ endfunction
 " PythonInit() {{{
 if has('python3')
     function! PythonInit()
-        nnoremap <buffer> <Leader>mS :PymodeLint<CR>
+        "nnoremap <buffer> <Leader>mS :PymodeLint<CR>
         if executable('autopep8') && executable('pycodestyle')
             setl formatprg=autopep8\ -
         endif
         setl complete-=k formatoptions=cqjonl1 
         nnoremap <buffer> q :pclose<CR>q
-        nnoremap <buffer> <LocalLeader>eM :call pymode#rope#extract_method()<CR>
-        nnoremap <buffer> <localleader>f :call pymode#rope#find_it()<CR>
-        nnoremap <buffer> <LocalLeader>ev :call pymode#rope#extract_variable()<CR>
-        nnoremap <buffer> <localleader>C :call pymode#rope#generate_class()<CR>
-        nnoremap <buffer> <localleader>F :call pymode#rope#generate_function()<CR>
-        nnoremap <buffer> <localleader>P :call pymode#rope#generate_package()<CR>
-        nnoremap <buffer> <CR> :call pymode#rope#goto_definition()<CR>
+        "nnoremap <buffer> <LocalLeader>eM :call pymode#rope#extract_method()<CR>
+        "nnoremap <buffer> <localleader>f :call pymode#rope#find_it()<CR>
+        "nnoremap <buffer> <LocalLeader>ev :call pymode#rope#extract_variable()<CR>
+        "nnoremap <buffer> <localleader>C :call pymode#rope#generate_class()<CR>
+        "nnoremap <buffer> <localleader>F :call pymode#rope#generate_function()<CR>
+        "nnoremap <buffer> <localleader>P :call pymode#rope#generate_package()<CR>
+        "nnoremap <buffer> <CR> :call pymode#rope#goto_definition()<CR>
     endfunction
 endif
 " }}}
@@ -634,7 +634,6 @@ variables = {
     'JAVA_HOME': os.environ['JAVA_HOME'],
     'BROWSER': os.environ['BROWSER'],
     'PATH': os.environ['PATH'],
-    'PYTHONPATH': os.environ['PYTHONPATH'],
     'PYMODULES': str(sys.modules),
     'PYTHON_MODULES': str(sys.modules),
     'MODULES': str(sys.modules),
