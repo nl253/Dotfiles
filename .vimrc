@@ -1,41 +1,31 @@
 
-" VARIABLES and UTILS {{{
-let g:MARKUP = [ 'markdown', 'vimwiki', 'rst', 'vimwiki_markdown' ]
+" VARIABLES 
 
-let g:PROGRAMMING =  ['xhtml', 'html', 
-            \'css', 'javascript', 
-            \'python', 'php', 
-            \'sh', 'zsh']
+" MARKUP languages you actively use 
+let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
 
-let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript']
+" PROGRAMMING LANGUAGES you code 
+let g:PROGRAMMING =  ['xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh']
 
-let g:DICT_DIR = glob('~/.dicts/')
+"  REPL-compatible languages 
+let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript', 'sql']
 
-let g:TEMPLATE_DIR = glob('~/.templates/')
-
-let g:SCRATCHPAD_DIR = glob('~/.scratchpads/')
-
-" THESE NEED!!! TO BE RELATIVE TO $HOME
+" WORKING DIRS {{{
+" THESE NEED!!! TO BE RELATIVE TO $HOME, will be added to path for file finding
 let g:WORKING_DIRS = ['Scripts', 'Notes', 'Projects', 
             \'.zsh', '.', '.shells', '.licenses',
-            \'.templates', '.bash', '.shells']
+            \'.vim/.templates', '.bash', '.shells']
 
-if ! has("nvim")
+if ! has("nvim")  " filter non-existent (lambdas not in nvim...)
     let g:WORKING_DIRS = filter(g:WORKING_DIRS, {x -> ! empty(x)})
 endif
 
-for d in [g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR]
-    if empty(d)
-        call system('!mkdir -p '.d)
-    endif
+for dir in g:WORKING_DIRS " so that :find is more powerful
+    execute 'set path+='.glob('~/').dir.'/*,'
 endfor
+" }}} }}}
 
-let loaded_matchit = 1
-let mapleader = " "
-let maplocalleader = ","
-" }}}
-
-" VIM/NVIM INIT {{{
+" NVIM/VIM {{{
 if has('nvim')
     let g:VIMDIR = glob('~/.config/nvim/')
     let g:PLUG_FILE = glob('~/.local/share/nvim/site/autoload/plug.vim')
@@ -43,12 +33,49 @@ if has('nvim')
 else " if vim
     let g:VIMDIR = glob('~/.vim/')
     let g:PLUG_FILE = glob('~/.vim/autoload/plug.vim')
-    let $MYVIMRC = glob('~/.vimrc')
-    syntax enable
+    let $MYVIMRC = glob('~/.vimrc')  " set automatically in nvim
+    syntax enable  " enable sane-defaults (already present in nvim)
     filetype plugin indent on
 endif
+" }}}
 
-if empty(g:VIMDIR) | call system('!mkdir -p '.g:VIMDIR) | endif
+" where you store templates [format is $TEMPLATE_DIR/template.{sh,py,js}]
+let g:TEMPLATE_DIR = glob(g:VIMDIR.'templates/')
+
+" where scratchpads will be kept
+let g:SCRATCHPAD_DIR = glob(g:VIMDIR.'scratchpads/')
+
+let g:DICT_DIR = glob(g:VIMDIR.'dicts/')
+
+let g:UNDO_DIR = glob(g:VIMDIR.'undo/')
+let g:BACKUP_DIR = glob(g:VIMDIR.'backup/')
+let g:SWAP_DIR = glob(g:VIMDIR.'swap/')
+
+" MAKE MISSING DIRS {{{
+for d in [g:VIMDIR, g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, g:UNDO_DIR, g:SWAP_DIR]
+    if empty(d)
+        call system('!mkdir -p '.d)
+    endif
+endfor
+" }}}
+
+" download dictionaries from GitHub if missing {{{
+let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
+" UNCOMMENT IN NEED
+" let g:DICTS += ['erlang.dict', 'haskell.dict', 'perl.dict', 'java.dict'] 
+for dict in g:DICTS
+    if ! filereadable(g:DICT_DIR . dict) && executable('curl')
+        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
+    endif
+endfor
+execute 'set thesaurus='.g:DICT_DIR.'thesaurus.txt'
+execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
+for f in split(system("ls ".g:DICT_DIR))
+    if index(g:DICTS, f) < 0  
+        call system("rm ".g:DICT_DIR.f)
+    endif
+endfor
+" }}} }}}
 
 if ! filereadable(g:PLUG_FILE) && executable('curl')
     call system('curl -flo '.g:PLUG_FILE.' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
@@ -91,24 +118,15 @@ for item in g:OPTIONS
     try | execute 'silent set '.item | catch /.*/ | endtry
 endfor
 
-for dir in g:WORKING_DIRS " so that :find is more powerful
-    execute 'set path+='.glob('~/').dir.'/**,'
-endfor
-
-" download dictionaries from GitHub if missing {{{
-let g:DICTS = ['frequent.dict', 'haskell.dict' , 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
-" let g:DICTS += ['erlang.dict', 'php.dict', 'haskell.dict', 'perl.dict', 'java.dict'] " UNCOMMENT IN NEED
-for dict in g:DICTS
-    if ! filereadable(g:DICT_DIR . dict) && executable('curl')
-        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
-    endif
-endfor
-execute 'set thesaurus='.g:DICT_DIR.'thesaurus.txt'
-execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
-" }}} }}}
+let mapleader = " "
+let maplocalleader = ","
+" }}}
 
 " PLUGINS {{{ 
-" place Plugins here
+
+let loaded_matchit = 1
+
+" place plugins here
 " -------------------
 " GENERAL {{{
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
@@ -901,5 +919,5 @@ nnoremap <C-n> :GitFiles<CR>
 nnoremap <Leader>f<Leader> :Files! .<CR>
 nnoremap <Leader>m<Leader> :Marks!<CR>
 
-" vim: foldlevel=1 nospell formatoptions= foldmethod=marker foldlevel=0
+" vim: foldlevel=1 nospell foldmethod=marker foldlevel=0 formatoptions=o
 

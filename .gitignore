@@ -1,6 +1,13 @@
 ﻿*.bluej
 anaconda3/
 .conda/environments.txt
+.vim/undo/*
+.vim/autoload/plug.vim.old
+.vim/dicts/wn/*
+*/wn/*
+*/undo/*
+undo/*
+*session*
 .laptop
 .pc
 .tor-browser/
