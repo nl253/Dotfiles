@@ -1,5 +1,4 @@
 
-
 # VARIABLES - SOURCED BY `zsh` and `bash`
 
 # $COLORS {{{

@@ -1,5 +1,8 @@
 --exclude=**site/
 --exclude=**google**
+--exclude=**anaconda**
+--exclude=**conda**
+--exclude=*PyCharm2017*
 --exclude=.vim/plugged/**
 --exclude=.oh-my-zsh/**
 --exclude=.rustup/**

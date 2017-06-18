@@ -16,7 +16,6 @@ return 1
 #  }}}
 
 # general   {{{
-env() { if [ ! $# = 0 ]; then command env "$@"; else command env | sort; fi; } # by default if no args provided sort env output
 alias sudo='sudo '                   # Enable aliases to be sudo’ed
 alias e='$EDITOR'                    # quicker access to vim
 alias show-path='echo -e ${PATH//:/\\n}'  # split path on ":"
@@ -36,42 +35,13 @@ alias df='df --human-readable --si'
 alias info='info --vi-keys'
 alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30' # frequent entries from history
 alias logout="pkill -KILL -u "
+alias battery="acpi -V"
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
+
 # alias note=note.sh       # refer to ~/Scripts/note.sh
 
-function pandoc(){  # {{{
-    if $(in-path pandoc) ; then 
-        if [ $# = 1 ]; then
-            pandoc -f html -t markdown_github --standalone --atx-headers --toc --ascii "$1"
-        else
-            command pandoc "$@"
-        fi
-    else
-        echo "pandoc not on system." && return 0
-    fi
-} # }}}
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
-
-function ipython(){
-    in-path() {
-    for i in $(echo "$PATH" | sed "s/:/\n/g"); do
-        if [ -x "$i/$1" ]; then
-            return 0
-        fi
-    done
-    return 1
-    }
-    if $(in-path ipython); then
-        if [ -f .ipythonrc.py ]; then
-            command ipython --config=.ipythonrc.py $@
-        else
-            command ipython --profile=me $@
-        fi
-    else
-        echo "ipython not on system." && return 0
-    fi
-}
 
 # }}}
 

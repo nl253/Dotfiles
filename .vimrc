@@ -1,22 +1,27 @@
 
-" VARIABLES 
+if ! has('unix')
+    echo "You need to be running a UNIX-like system for this script to work."
+    exit 
+endif
+
+" VARIABLES  {{{
 
 " MARKUP languages you actively use 
 let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
 
 " PROGRAMMING LANGUAGES you code 
-let g:PROGRAMMING =  ['xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh']
+let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
 
 "  REPL-compatible languages 
-let g:REPL = ['php', 'python', 'sh', 'zsh', 'javascript', 'sql']
+let g:REPL = [ 'php', 'python', 'sh', 'zsh', 'javascript', 'sql' ]
 
 " WORKING DIRS {{{
 " THESE NEED!!! TO BE RELATIVE TO $HOME, will be added to path for file finding
-let g:WORKING_DIRS = ['Scripts', 'Notes', 'Projects', 
-            \'.zsh', '.', '.shells', '.licenses',
-            \'.vim/.templates', '.bash', '.shells']
+let g:WORKING_DIRS = [ 'Scripts', 'Notes', 'Projects', 
+            \'.zsh', '.', '.shells', '.vim/licenses',
+            \'.vim/templates', '.bash', '.shells' ]
 
-if ! has("nvim")  " filter non-existent (lambdas not in nvim...)
+if ! has('nvim')  " filter non-existent (lambdas not in nvim...)
     let g:WORKING_DIRS = filter(g:WORKING_DIRS, {x -> ! empty(x)})
 endif
 
@@ -47,36 +52,66 @@ let g:SCRATCHPAD_DIR = glob(g:VIMDIR.'scratchpads/')
 
 let g:DICT_DIR = glob(g:VIMDIR.'dicts/')
 
+let g:LICENSE_DIR = glob(g:VIMDIR.'licenses/')
+
 let g:UNDO_DIR = glob(g:VIMDIR.'undo/')
 let g:BACKUP_DIR = glob(g:VIMDIR.'backup/')
 let g:SWAP_DIR = glob(g:VIMDIR.'swap/')
 
 " MAKE MISSING DIRS {{{
-for d in [g:VIMDIR, g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, g:UNDO_DIR, g:SWAP_DIR]
+for d in [g:VIMDIR, g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, g:UNDO_DIR, g:SWAP_DIR, g:LICENSE_DIR]
     if empty(d)
         call system('!mkdir -p '.d)
     endif
 endfor
-" }}}
+" }}} }}} 
 
-" download dictionaries from GitHub if missing {{{
-let g:DICTS = ['frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict']
-" UNCOMMENT IN NEED
-" let g:DICTS += ['erlang.dict', 'haskell.dict', 'perl.dict', 'java.dict'] 
-for dict in g:DICTS
-    if ! filereadable(g:DICT_DIR . dict) && executable('curl')
-        execute '!curl -fLo ' . g:DICT_DIR . dict . ' https://raw.githubusercontent.com/nl253/Dictionaries/master/' . dict
+" LICENSES - download from GitHub if missing {{{
+let g:LICENSES = [ 'apache-2.md', 'artistic.md', 'BSD-2.md', 
+            \ 'BSD-3.md', 'CREDITS.md', 'EPL.md', 'GNU-AGPL-3.md', 
+            \ 'GNU-FDL-1.md', 'GNU-GPL-2.md', 'GNU-GPL-3.md', 
+            \ 'GNU-GPL.md', 'GNU-LGPL-2.md', 'GNU-LGPL-3.md', 
+            \ 'MIT.md', 'MPL-2.md', 'unlicense.md' ]
+
+if executable('curl')
+    for license in g:LICENSES
+        if ! filereadable(g:LICENSE_DIR.license)
+            execute '!curl -fLo '.g:LICENSE_DIR.license.' https://raw.githubusercontent.com/nl253/MarkdownLicenses/master/'.license
+        endif
+    endfor
+endif
+for license in split(system("ls ".g:LICENSE_DIR))
+    if index(g:LICENSES, license) < 0  
+        call system("rm ".g:LICENSE_DIR.license)
     endif
 endfor
-execute 'set thesaurus='.g:DICT_DIR.'thesaurus.txt'
-execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
+" }}}
+
+" DICTIONARIES - download from GitHub if missing {{{
+let g:DICTS = [ 'frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict' ]
+" UNCOMMENT IN NEED
+" let g:DICTS += [ 'erlang.dict', 'haskell.dict', 'perl.dict', 'java.dict' ] 
+if executable('curl')
+    for dict in g:DICTS
+        if ! filereadable(g:DICT_DIR.dict) 
+            execute '!curl -fLo '.g:DICT_DIR.dict.' https://raw.githubusercontent.com/nl253/Dictionaries/master/'.dict
+        endif
+    endfor
+endif
 for f in split(system("ls ".g:DICT_DIR))
     if index(g:DICTS, f) < 0  
         call system("rm ".g:DICT_DIR.f)
     endif
 endfor
+if filereadable(g:DICT_DIR.'thesaurus.txt')
+    execute 'set thesaurus='.g:DICT_DIR.'thesaurus.txt'
+endif
+if filereadable(g:DICT_DIR.'frequent.dict')
+    execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
+endif
 " }}} }}}
 
+" Plug - download if missing {{{
 if ! filereadable(g:PLUG_FILE) && executable('curl')
     call system('curl -flo '.g:PLUG_FILE.' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     PlugInstall
@@ -112,7 +147,7 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
             \'magic', 'incsearch', 'ttyfast', 'hlsearch', 'wildmenu',
             \'display=lastline', 'nrformats=bin,hex', 'complete+=i',
-            \'tagcase=ignore', 'switchbuf=useopen,newtab,', 'infercase']
+            \'tagcase=ignore', 'switchbuf=useopen,newtab,', 'infercase' ]
 
 for item in g:OPTIONS
     try | execute 'silent set '.item | catch /.*/ | endtry
@@ -130,7 +165,7 @@ let loaded_matchit = 1
 " -------------------
 " GENERAL {{{
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating'
-if executable("tmux")
+if executable('tmux')
     Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
 endif
 Plug 'haron-prime/antares' | Plug 'tpope/vim-fugitive'
@@ -138,7 +173,7 @@ set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\
 Plug 'konfekt/fastfold' 
 Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
 if has('unix')
-    Plug 'tpope/vim-eunuch', {'on' : [ 'Move', 'Remove', 'Find', 
+    Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find', 
                 \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
                 \'SudoWrite', 'Unlink', 'Rename' ]}
 endif
@@ -149,9 +184,9 @@ if has('python') || has('python3')
     Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
     let g:ultisnipsexpandtrigger="<tab>"
     Plug 'maralla/completor.vim'
-    let g:completor_blacklist = ['tagbar', 'sql',
+    let g:completor_blacklist = [ 'tagbar', 'sql',
                 \'qf', 'netrw', 'unite', 'vim', 
-                \'help']
+                \'help' ]
     let g:completor_python_binary = 'python3'
 endif
 
@@ -161,13 +196,13 @@ endif
 
 Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
 
-let g:bullets_enabled_file_types = ['markdown']
+let g:bullets_enabled_file_types = [ 'markdown' ]
 
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent','DittoSentOn']}
-Plug 'reedes/vim-wordy', { 'on': ['Wordy', 'WordyWordy'] }
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent','DittoSentOn' ]}
+Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ] }
 
 " table mode {{{
-Plug 'dhruvasagar/vim-table-mode', { 'on': ['TableModeEnable'] }
+Plug 'dhruvasagar/vim-table-mode', { 'on': [ 'TableModeEnable' ] }
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 | let g:loaded_table_mode = 1
 let g:table_mode_syntax = 1 | let g:table_mode_update_time = 800
@@ -184,21 +219,21 @@ let g:vimwiki_use_calendar = 0
 let g:vimwiki_dir_link = 'index'
 let g:vimwiki_hl_cb_checked = 1
 let g:vimwiki_valid_html_tags = 'b,i,s,u,sub,sup,kbd,br,hr,h1,h2,h3,h4,h5,h6,pre,code'
-let g:vimwiki_list = [{'path': '~/Notes/',
+let g:vimwiki_list = [{ 'path': '~/Notes/',
             \ 'auto_toc': 1,
             \ 'syntax': 'default',
             \ 'ext': '.wiki',
-            \ 'path_html': '~/.Notes-html/'}]
+            \ 'path_html': '~/.Notes-html/' }]
 " }}}
 
 " markdown {{{
 let g:markdown_fenced_languages = [
             \'html', 'python', 'zsh', 'javascript',
-            \'php', 'css', 'java', 'vim', 'sh']
+            \'php', 'css', 'java', 'vim', 'sh' ]
 
-Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
-Plug 'rhysd/vim-gfm-syntax', {'for' : 'markdown'}
-Plug 'nelstrom/vim-markdown-folding', {'for' : 'markdown'}
+Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
+Plug 'rhysd/vim-gfm-syntax', { 'for' : 'markdown' }
+Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 " }}}
 
 " }}} 
@@ -209,11 +244,11 @@ let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
 " }}}
 
 " HASKELL {{{
-"Plug 'shougo/vimproc.vim', {'do' : 'make', 'for' : ['haskell']}
-"Plug 'eagletmt/ghcmod-vim', {'for' : 'haskell'}
-"Plug 'eagletmt/neco-ghc', {'for' : 'haskell'}
-"Plug 'itchyny/vim-haskell-indent', {'for' : 'haskell'}
-"Plug 'Twinside/vim-haskellFold', {'for' : 'haskell'}
+"Plug 'shougo/vimproc.vim', { 'do' : 'make', 'for' : [ 'haskell' ]}
+"Plug 'eagletmt/ghcmod-vim', { 'for' : 'haskell' }
+"Plug 'eagletmt/neco-ghc', { 'for' : 'haskell' }
+"Plug 'itchyny/vim-haskell-indent', { 'for' : 'haskell' }
+"Plug 'Twinside/vim-haskellFold', { 'for' : 'haskell' }
 "let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
 "let hs_highlight_delimiters = 1
 "let hs_highlight_boolean = 1 | let hs_highlight_more_types = 1
@@ -222,67 +257,70 @@ let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
 "
 " PYTHON {{{
 if has('python3') || has('python')
-    "Plug 'davidhalter/jedi-vim', { 'for': 'python',  {{{
-                "\'do': 'pip install jedi' }
-    "let g:jedi#force_py_version = 3
-    "let g:jedi#completions_enabled = 1
-    "let g:jedi#goto_command = "<CR>"
-    "let g:jedi#goto_assignments_command = "<leader>g"
-    "let g:jedi#goto_definitions_command = "<LocalLeader>d"
-    "let g:jedi#documentation_command = "K"
-    "let g:jedi#usages_command = "<LocalLeader>u"
-    "let g:jedi#rename_command = "<LocalLeader>r" }}}
+
+    Plug 'davidhalter/jedi-vim', { 'for': 'python',  
+                \'do': 'pip install jedi' }
+
+    let g:jedi#force_py_version = 3
+    let g:jedi#completions_enabled = 1
+    let g:jedi#goto_command = "<CR>"
+    let g:jedi#goto_assignments_command = "<leader>g"
+    let g:jedi#goto_definitions_command = "<LocalLeader>d"
+    let g:jedi#documentation_command = 'K'
+    let g:jedi#usages_command = "<LocalLeader>u"
+    let g:jedi#rename_command = "<LocalLeader>r" 
+
     "Plug 'klen/python-mode', { 'for': 'python' } 
-    let g:pymode_python = 'python3'
-    let g:pymode_quickfix_minheight = 4
-    let g:pymode_breakpoint_bind = '<localleader>b'
-    let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
-    let g:pymode_lint_on_write = 0
-    "let g:pymode_lint_ignore = "e303,w"
-    let g:pymode_lint_checkers = ['pyflakes']
-    let g:pymode_doc = 1 
-    let g:pymode_lint = 1
-    "let g:pymode_doc_bind = ''
-    let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
-    let g:pymode_rope_show_doc_bind = 'K' 
-    let g:pymode_rope_completion = 1
-    let g:pymode_rope_complete_on_dot = 0
-    let g:pymode_rope_move_bind = '<LocalLeader>m'
-    let g:pymode_rope_rename_bind = "<LocalLeader>r"
-    let g:pymode_rope_rename_module_bind = "<LocalLeader>R"
-    let g:pymode_rope_goto_definition_bind = '<C-p>'
-    let g:pymode_rope_organize_imports_bind = '<LocalLeader>o'
-    let g:pymode_rope_change_signature_bind = '<localleader>s'
-    let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
-    let g:pymode_rope_goto_definition_bind = '<localleader>d'
-    let g:pymode_rope_autoimport = 1
-    let g:pymode_rope_autoimport_modules = [
-                \'os',
-                \'re',
-                \'typing',
-                \'copy',
-                \'pprint',
-                \'operator',
-                \'glob',
-                \'itertools', 
-                \'logging', 
-                \'ctypes', 
-                \'threading', 
-                \'multiprocessing', 
-                \'subprocess', 
-                \'urllib.request', 
-                \'sys', 
-                \'pathlib']
-    let g:pymode_rope_regenerate_on_write = 1
-    let g:pymode_run_bind = '<leader>me'
-    let g:pymode_breakpoint_cmd = 'import ipdb ; ipdb.set_trace()'
-    let g:pymode_syntax_print_as_function = 1
-    let g:pymode_lint_todo_symbol = 'do'
-    let g:pymode_lint_comment_symbol = 'c'
-    let g:pymode_lint_visual_symbol = 'v'
-    let g:pymode_lint_error_symbol = 'e'
-    let g:pymode_lint_info_symbol = 'i'
-    let g:pymode_lint_pyflakes_symbol = 'f'
+    "let g:pymode_python = 'python3'
+    "let g:pymode_quickfix_minheight = 4
+    "let g:pymode_breakpoint_bind = '<localleader>b'
+    "let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
+    "let g:pymode_lint_on_write = 0
+    ""let g:pymode_lint_ignore = "e303,w"
+    "let g:pymode_lint_checkers = [ 'pyflakes' ]
+    "let g:pymode_doc = 1 
+    "let g:pymode_lint = 1
+    ""let g:pymode_doc_bind = ''
+    "let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
+    "let g:pymode_rope_show_doc_bind = 'K' 
+    "let g:pymode_rope_completion = 1
+    "let g:pymode_rope_complete_on_dot = 0
+    "let g:pymode_rope_move_bind = '<LocalLeader>m'
+    "let g:pymode_rope_rename_bind = "<LocalLeader>r"
+    "let g:pymode_rope_rename_module_bind = "<LocalLeader>R"
+    "let g:pymode_rope_goto_definition_bind = '<C-p>'
+    "let g:pymode_rope_organize_imports_bind = '<LocalLeader>o'
+    "let g:pymode_rope_change_signature_bind = '<localleader>s'
+    "let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
+    "let g:pymode_rope_goto_definition_bind = '<localleader>d'
+    "let g:pymode_rope_autoimport = 1
+    "let g:pymode_rope_autoimport_modules = [
+                "\'os',
+                "\'re',
+                "\'typing',
+                "\'copy',
+                "\'pprint',
+                "\'operator',
+                "\'glob',
+                "\'itertools', 
+                "\'logging', 
+                "\'ctypes', 
+                "\'threading', 
+                "\'multiprocessing', 
+                "\'subprocess', 
+                "\'urllib.request', 
+                "\'sys', 
+                "\'pathlib' ]
+    "let g:pymode_rope_regenerate_on_write = 1
+    "let g:pymode_run_bind = '<leader>me'
+    "let g:pymode_breakpoint_cmd = 'import ipdb ; ipdb.set_trace()'
+    "let g:pymode_syntax_print_as_function = 1
+    "let g:pymode_lint_todo_symbol = 'do'
+    "let g:pymode_lint_comment_symbol = 'c'
+    "let g:pymode_lint_visual_symbol = 'v'
+    "let g:pymode_lint_error_symbol = 'e'
+    "let g:pymode_lint_info_symbol = 'i'
+    "let g:pymode_lint_pyflakes_symbol = 'f'
 endif
 " }}}
 
@@ -294,12 +332,12 @@ let g:sh_fold_enabled = 4
 " WEB DEV {{{
 "
 " HTML {{{
-Plug 'othree/html5.vim', { 'for': ['html', 'xhtml', 'php']}
-Plug 'othree/html5-syntax.vim', { 'for': ['html', 'xhtml', 'php']}
-Plug 'mattn/emmet-vim', { 'for': ['xml', 'html', 'xhtml', 'css', 'php' ]}
+Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
+Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
+Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ]}
 "let g:xml_syntax_folding = 1
 let g:emmet_html5 = 1 | let g:html_hover_unfold = 1
-let g:html_font = ["Sans Serif", "DejaVu Sans Mono", "Consolas", "monospace"]
+let g:html_font = ["Sans Serif", "DejaVu Sans Mono", 'Consolas', 'monospace']
 let g:html_use_xhtml = 1 | let g:html_dynamic_folds = 1
 let g:html_no_foldcolumn = 1 | let g:html_use_encoding = "UTF-8"
 let html_wrong_comments=1
@@ -308,7 +346,7 @@ let html_wrong_comments=1
 " SQL {{{
 let g:sql_type_default = 'mysql' | let msql_sql_query = 1
 let g:ftPlugin_sql_omni_key = ',' " shadows localleader
-Plug 'alcesleo/vim-uppercase-sql', {'for': 'sql'}
+Plug 'alcesleo/vim-uppercase-sql', { 'for': 'sql' }
 " }}}
 
 " ZSH {{{
@@ -320,7 +358,7 @@ let g:yaml_schema = 'pyyaml'
 "}}}
 
 " PHP{{{
-Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 " }}} }}}
 "
 " FZF {{{
@@ -330,6 +368,8 @@ endif
 Plug 'junegunn/fzf', { 'dir': '~/.applications/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+let g:fzf_layout = { 'up': '~40%' }
+
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-s': 'split',
@@ -338,10 +378,10 @@ let g:fzf_action = {
 
 " FOR NVIM {{{
 if has('nvim')
-    Plug 'kassio/neoterm', {'on' : [
+    Plug 'kassio/neoterm', { 'on' : [
                 \'TREPLSendSelection', 
                 \'TREPLSendLine', 
-                \'TREPLSendFile']}
+                \'TREPLSendFile' ]}
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
@@ -354,13 +394,13 @@ call plug#end()
 " Scratchpad {{{
 function! Scratch()
     " blacklist
-    if index(['netrw', 'terminal','gitcommit', 'qf', 'gitcommit', 'git', 'netrc'], &filetype) >= 0  
+    if index([ 'netrw', 'terminal','gitcommit', 'qf', 'gitcommit', 'git', 'netrc' ], &filetype) >= 0  
         return 0
-    elseif index(['vim', 'help'], &filetype) >= 0  
-        vnew ~/.scratchpads/scratch.vim
+    elseif index([ 'vim', 'help' ], &filetype) >= 0  
+        execute 'vnew '.g:SCRATCHPAD_DIR.'scratchpad.vim'
         setl ft=vim
-    elseif index(['sh', 'zsh', 'man'], &filetype) >= 0  
-        vnew ~/.scratchpads/scratch.sh
+    elseif index([ 'sh', 'zsh', 'man' ], &filetype) >= 0  
+        execute 'vnew '.g:SCRATCHPAD_DIR.'scratchpad.sh'
         setl ft=sh
     elseif (index(g:MARKUP, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
         if expand('%:p') != expand('~/Notes/diary/diary.wiki')
@@ -370,13 +410,14 @@ function! Scratch()
             return 0
         endif
     elseif (index(g:PROGRAMMING, &filetype) >= 0) && expand('%:r') != expand('%:e') && len(expand('%:e')) > 0 
-        vnew ~/.scratchpads/scratch.%:e
+        execute 'vnew '.g:SCRATCHPAD_DIR.'scratchpad.'expand('%:e')
         execute 'setl ft='.&filetype
     else
-        vnew ~/.scratchpads/scratch
+        execute 'vnew '.g:SCRATCHPAD_DIR.'scratchpad'
         setl ft=scratch
     endif
     vertical resize 60
+    checktime
     write
     nnoremap <buffer> <BS> :close!<CR>
     nnoremap <buffer> q :close!<CR>
@@ -392,7 +433,7 @@ vnoremap <BS> :yank<CR>:Scratch<CR>p
 " Init() execute for all buffers on filetype {{{
 "
 function! Markup()
-    set complete=.,w, conceallevel=3 makeprg=write-good 
+    setl complete=.,w, conceallevel=3 makeprg=write-good 
     setl spell formatoptions=tcrqjonl1 foldlevel=1 sw=4 textwidth=79 
     setl formatprg=fmt\ -s\ -u\ --width=79
     if &filetype == 'vimwiki' || &filetype == 'vimwiki_markdown'
@@ -444,7 +485,7 @@ endfunction
 "
 " ManInit() {{{
 function! ManInit()
-    nnoremap <buffer> <CR> :execute 'Man ' . expand('<cword>')<CR>
+    nnoremap <buffer> <CR> :execute 'Man '.expand('<cword>')<CR>
     " make it more like less
     nnoremap <buffer> q :bd!<CR>
     nnoremap <buffer> d <C-d>
@@ -462,13 +503,15 @@ function! ShInit()
     if executable('shfmt')
         setl formatprg=shfmt
     endif
+    setl makeprg=bash
 endfunction
 " }}}
 
 " PhpInit() {{{
 function! PhpInit()
-    if executable("php") && len($BROWSER) 
+    if executable('php') && len($BROWSER) 
         nnoremap <buffer> <Leader>me :!php % > /tmp/php-converted.html<CR>:!$BROWSER /tmp/php-converted.html<CR>
+        setl makeprg=php\ -f\ >\ php_converted.html
     endif
     if executable('js-beautify')
         setl formatprg=js-beautify\ --type\ html
@@ -521,6 +564,7 @@ function! VimInit()
     setl foldmethod=marker 
     execute 'set complete=.,w,k'.$MYVIMRC
     inoremap <C-n> <C-x><C-v>
+    nnoremap <Leader>me :source %<CR>
 endfunction
 " }}}
 
@@ -543,12 +587,9 @@ function! MarkdownInit()
     syn region markdownBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart
     syn region markdownBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart
     syn region markdownBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart
-endfunction
-" }}}
-
-" SqlInit() {{{
-function! SqlInit()
-    execute 'setl complete=.,w,k'.g:DICT_DIR.'sql.dict'
+    if executable("pandoc")
+        setl makeprg=pandoc\ -s\ -f\ markdown_github\ -t\ html\ --html-q-tags\ --self-contained\ >\ pandoc_converted.html
+    endif
 endfunction
 " }}}
 
@@ -561,6 +602,7 @@ if has('python3')
         endif
         setl complete-=k formatoptions=cqjonl1 
         nnoremap <buffer> q :pclose<CR>q
+        setl makeprg=python3
         "nnoremap <buffer> <LocalLeader>eM :call pymode#rope#extract_method()<CR>
         "nnoremap <buffer> <localleader>f :call pymode#rope#find_it()<CR>
         "nnoremap <buffer> <LocalLeader>ev :call pymode#rope#extract_variable()<CR>
@@ -599,6 +641,9 @@ function! HTMLInit()
     if executable('js-beautify')
         setl formatprg=js-beautify\ --type\ html
     endif
+    if len($BROWSER) > 0
+        setl makeprg=$BROWSER
+    endif
 endfunction
 "}}} "}}}
  
@@ -630,10 +675,10 @@ variables = {
     'MONTH': time.strftime("%B"),
     'YEAR': time.strftime("%Y"),
     'WEEKDAY': time.strftime("%A"),
-    'SHELL': os.environ['SHELL'],
-    'EDITOR': os.environ['EDITOR'],
-    'USER': os.environ['USER'],
-    'JRE_HOME': os.environ['JRE_HOME'],
+    'SHELL': os.environ[ 'SHELL' ],
+    'EDITOR': os.environ[ 'EDITOR' ],
+    'USER': os.environ[ 'USER' ],
+    'JRE_HOME': os.environ[ 'JRE_HOME' ],
     'FILE': os.path.basename(vim.current.buffer.name),
     'BUFFER': os.path.basename(vim.current.buffer.name),
     'BUFFERS': str([i.name for i in vim.buffers]),
@@ -649,9 +694,9 @@ variables = {
     'PI': str(math.pi),
     'RAND': str(random.randint(0,9999)),
     'RANDOM': str(random.randint(0,9999)),
-    'JAVA_HOME': os.environ['JAVA_HOME'],
-    'BROWSER': os.environ['BROWSER'],
-    'PATH': os.environ['PATH'],
+    'JAVA_HOME': os.environ[ 'JAVA_HOME' ],
+    'BROWSER': os.environ[ 'BROWSER' ],
+    'PATH': os.environ[ 'PATH' ],
     'PYMODULES': str(sys.modules),
     'PYTHON_MODULES': str(sys.modules),
     'MODULES': str(sys.modules),
@@ -662,16 +707,15 @@ variables = {
     'SYSTEM': platform.system(),
     'TIME24': time.strftime("%H:%M"),
     'TIME12': time.strftime("%I:%M"),
-    'PROJECT_NAME': "",
-    'PROJECT_LANGUAGE': "1.0",
-    'PROJECT_TAGS': "",
-    'PROJECT_VERSION': "" }
+    'PROJECT': os.path.basename(os.path.abspath(os.curdir)),
+    'PROJECT_NAME': os.path.basename(os.path.abspath(os.curdir)),
+    'PROJECT_VERSION': "1.0" }
 
-with open(vim.current.buffer.name, mode="r", encoding="utf-8") as f:
+with open(vim.current.buffer.name, mode='r', encoding="utf-8") as f:
     text = f.read() 
     f.close()
  
-with open(vim.current.buffer.name, mode="w", encoding="utf-8") as f:
+with open(vim.current.buffer.name, mode='w', encoding="utf-8") as f:
     f.write(string.Template(text).safe_substitute(variables))
     f.close()
 EOF
@@ -734,11 +778,10 @@ while match:
         subprocess.run([d[match.group('language')] + match.group('version'), c[d[match.group('language')]], match.group('command')], stdout=subprocess.PIPE).stdout.decode('utf-8'), 
         1)
 
-
     match = pattern.search(text)
 
 # if replace then write the resultant text back into that file
-with open(vim.current.buffer.name, mode="w") as f:
+with open(vim.current.buffer.name, mode='w') as f:
     f.write(text)
     f.close()
 EOF
@@ -779,7 +822,7 @@ function! Ctags()
     let s:working_dirs = join(s:working_dirs)
     call system('ctags -R '.s:working_dirs.' **.'.expand('%:e'))
 
-    "call system('ctags -R ~/{'.join(g:WORKING_DIRS,",").'} -f ~/.tags')
+    "call system('ctags -R ~/{ '.join(g:WORKING_DIRS,",").' } -f ~/.tags')
 endfunction
 " }}}
 
@@ -820,14 +863,13 @@ aug VIMENTER
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
     au BufNewFile call Ctags()
-    "au FileType haskell call HaskellInit()
 aug END
 " }}}
 
 colorscheme antares
 
 " COMMANDS {{{
-" markup conversion, recommended {{{
+" markup conversion, (recommended) {{{
 if executable('pandoc')
     command! TOmarkdown call system('pandoc -s -o '.expand('%:p:r').'.md -t markdown_github --atx-headers --ascii --toc '.expand('%:p')) | sleep 250ms | vs %:p:r.md
     command! TOrst call system('pandoc -s -o '.expand('%:p:r').'.rst -t rst --ascii '.expand('%:p')) | sleep 250ms | vs %:p:r.rst
@@ -860,7 +902,6 @@ endif
 if executable('dos2unix')
     command! Dos2Unix !dos2unix %:p | edit
 endif
-command! CountOccurances execute printf('%%s/%s//gn', escape(expand('<cword>'), '/')) | normal! ``
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
 " }}}
@@ -890,10 +931,12 @@ nnoremap <Leader>fer    :so $MYVIMRC<CR>
 nnoremap <Leader>ga     :Git add %:p<Space>
 nnoremap <Leader>gB     :Gblame<CR>
 nnoremap <Leader>gd     :Gdiff<Space>
-nnoremap <Leader>gC     :Gcommit<CR>
+nnoremap <Leader>gC     :Commits<CR>
 nnoremap <Leader>gs     :Gstatus<CR>
+nnoremap <Leader>gS     :GFiles?<CR>
 nnoremap <Leader>gW     :Gwrite<Space>
-nnoremap <Leader>gD     :Gdiff<CR>
+nnoremap <Leader>gd     :Gdiff<CR>
+nnoremap <Leader>gD     :BCommits<CR>
 nnoremap <Leader>gm     :Gmove<Space>
 
 if ! has('nvim') || len($TMUX) > 1
@@ -906,7 +949,6 @@ nnoremap <LocalLeader>* :grep <cword> %:p<CR>:lopen<CR>
 nnoremap <Leader>* :execute 'grep '.expand('<cword>').' '.substitute(&path,',',' ','g')<CR>
 nnoremap <C-k> :silent cn<CR>
 nnoremap <C-j> :silent cp<CR>
-nnoremap <Leader>a :Ag!<CR>
 nnoremap <Leader>g<Leader> :GGrep!<CR>
 nnoremap <Leader>l<Leader> :Lines!<CR>
 nnoremap <Leader>t<Leader> :Tags!<CR>
@@ -914,10 +956,10 @@ nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
 nnoremap <C-n> :GitFiles<CR>
+nnoremap <C-S-n> :Locate! ~<CR>
 
 " intellij
 nnoremap <Leader>f<Leader> :Files! .<CR>
 nnoremap <Leader>m<Leader> :Marks!<CR>
 
-" vim: foldlevel=1 nospell foldmethod=marker foldlevel=0 formatoptions=o
-
+" vim: nospell foldmethod=marker foldlevel=1 formatoptions=o
