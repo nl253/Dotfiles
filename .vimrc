@@ -25,8 +25,10 @@ if ! has('nvim')  " filter non-existent (lambdas not in nvim...)
     let g:WORKING_DIRS = filter(g:WORKING_DIRS, {x -> ! empty(x)})
 endif
 
+execute 'set path='.expand('~')
+
 for dir in g:WORKING_DIRS " so that :find is more powerful
-    execute 'set path+='.glob('~/').dir.'/*,'
+    execute 'set path+='.expand('~/').dir.'/*,'
 endfor
 " }}} }}}
 
@@ -45,38 +47,33 @@ endif
 " }}}
 
 " where you store templates [format is $TEMPLATE_DIR/template.{sh,py,js}]
-let g:TEMPLATE_DIR = glob(g:VIMDIR.'templates/')
+let g:TEMPLATE_DIR = expand(g:VIMDIR.'templates/')
 
 " where scratchpads will be kept
-let g:SCRATCHPAD_DIR = glob(g:VIMDIR.'scratchpads/')
+let g:SCRATCHPAD_DIR = expand(g:VIMDIR.'scratchpads/')
 
-let g:DICT_DIR = glob(g:VIMDIR.'dicts/')
+let g:DICT_DIR = expand(g:VIMDIR.'dicts/')
 
-let g:LICENSE_DIR = glob(g:VIMDIR.'licenses/')
+let g:LICENSE_DIR = expand(g:VIMDIR.'licenses/')
 
-let g:UNDO_DIR = glob(g:VIMDIR.'undo/')
-let g:BACKUP_DIR = glob(g:VIMDIR.'backup/')
-let g:SWAP_DIR = glob(g:VIMDIR.'swap/')
+let g:UNDO_DIR = expand(g:VIMDIR.'undo/')
+let g:BACKUP_DIR = expand(g:VIMDIR.'backup/')
+let g:SWAP_DIR = expand(g:VIMDIR.'swap/')
 
 " MAKE MISSING DIRS {{{
 for d in [g:VIMDIR, g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, g:UNDO_DIR, g:SWAP_DIR, g:LICENSE_DIR]
-    if empty(d)
-        call system('!mkdir -p '.d)
-    endif
+    call system('[ ! -e '.d.' ] && mkdir -p '.d)
 endfor
 " }}} }}} 
 
 " LICENSES - download from GitHub if missing {{{
-let g:LICENSES = [ 'apache-2.md', 'artistic.md', 'BSD-2.md', 
-            \ 'BSD-3.md', 'CREDITS.md', 'EPL.md', 'GNU-AGPL-3.md', 
-            \ 'GNU-FDL-1.md', 'GNU-GPL-2.md', 'GNU-GPL-3.md', 
-            \ 'GNU-GPL.md', 'GNU-LGPL-2.md', 'GNU-LGPL-3.md', 
-            \ 'MIT.md', 'MPL-2.md', 'unlicense.md' ]
+let g:LICENSES = [ 'apache-v2.0.md', 'artistic-v2.0.md', 'bsd-2.md', 'bsd-3.md', 'CREDITS.md', 'epl-v1.0.md', 'gnu-agpl-v3.0.md', 'gnu-fdl-v1.3.md', 'gnu-gpl-v1.0.md', 'gnu-gpl-v2.0.md', 'gnu-gpl-v3.0.md', 'gnu-lgpl-v2.1.md', 'gnu-lgpl-v3.0.md', 'mit.md', 'mpl-v2.0.md', 'README.md', 'unlicense.md' ]
 
 if executable('curl')
     for license in g:LICENSES
         if ! filereadable(g:LICENSE_DIR.license)
-            execute '!curl -fLo '.g:LICENSE_DIR.license.' https://raw.githubusercontent.com/nl253/MarkdownLicenses/master/'.license
+            echo 'Downloading '.license.' from https://raw.githubusercontent.com/nl253/markdown-licenses/master/'.license
+            execute '!curl -fLo '.g:LICENSE_DIR.license.' https://raw.githubusercontent.com/nl253/markdown-licenses/master/'.license
         endif
     endfor
 endif
@@ -94,6 +91,7 @@ let g:DICTS = [ 'frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.d
 if executable('curl')
     for dict in g:DICTS
         if ! filereadable(g:DICT_DIR.dict) 
+            echo 'Downloading '.dict.' from https://raw.githubusercontent.com/nl253/Dictionaries/master/'.dict
             execute '!curl -fLo '.g:DICT_DIR.dict.' https://raw.githubusercontent.com/nl253/Dictionaries/master/'.dict
         endif
     endfor
@@ -141,7 +139,7 @@ let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
             \'wildignore+=tags,*.'.expand('~').',.vim,*sessio*,*swap*,*.git,*.class,*.svn,*.jpg,*.jpeg,',
             \'wildignore+=*.jpeg,.rope*,*.png,.rope*,', 'virtualedit=all',
             \'nostartofline', 'shortmess=ati', 'wildignorecase', 'noshowcmd',
-            \'breakindent', 'undolevels=3000', 'path='.expand('~/').'*',
+            \'breakindent', 'undolevels=3000', 
             \'backspace=indent,eol,start', 'diffopt+=vertical,iwhite',
             \'mouse=', 'inccommand=nosplit',
             \'encoding=utf8', 'syntax=on', 'autoindent', 'nocompatible',
@@ -441,7 +439,7 @@ function! Markup()
     else
         nnoremap <buffer> <Leader>x :ToggleCheckbox<CR>
     endif
-    for f in split(glob('*.{wiki,md,rst}'))
+    for f in split(expand('*.{wiki,md,rst}'))
         execute 'set complete+=k'.f
     endfor
     nnoremap <buffer> <Leader>mS :silent setl spell<CR>:WordyWordy<CR>:DittoSentOn<CR>
@@ -455,7 +453,7 @@ function! Programming()
     setl nospell 
     set complete=.,w,t 
     if expand('%:e') != ''     " if there is an extension (needed)
-        for i in split(glob("*.".expand('%:e')))
+        for i in split(expand("*.".expand('%:e')))
             execute 'setl complete+=k'.i
         endfor
     endif

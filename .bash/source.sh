@@ -7,10 +7,12 @@ safe-source(){ # {{{
   done
 } # }}}
 
-# Setup fzf {{{
-# ---------
-# - Auto-completion
-# - Key bindings
-[[ $- == *i* ]] && safe-source ~/.applications/fzf/shell/{completion,key-bindings}.bash 2> /dev/null
-# }}}
+# - fzf Auto-completion
+# - fzf Key bindings
+safe-source ~/.applications/fzf/shell/{completion,key-bindings}.bash 2> /dev/null
 
+# execute only by my PC at home 
+[[ -f ~/.pc ]] && safe-source ~/.pc.sh
+
+# added by travis gem
+safe-source /home/norbert/.travis/travis.sh
