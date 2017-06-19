@@ -45,7 +45,7 @@ done
 # }}}
 
 # set path...
-source variables.sh
+source ~/.shells/variables.sh
 
 # fetch-script() {{{
 # FUNCTION
