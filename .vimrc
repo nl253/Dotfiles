@@ -4,6 +4,29 @@ if ! has('unix')
     exit 
 endif
 
+" UTIL functions {{{
+"
+function! RemoveRedundantFiles(directory, files) " {{{
+    for f in split(system("ls ".a:directory))
+        if index(a:files, f) < 0  
+            call system("rm ".a:directory.f)
+        endif
+    endfor
+endfunction " }}}
+
+function! FetchWithCurl(files, githubaddress, outputloc) " {{{
+    if executable('curl')
+        for file in a:files
+            if ! filereadable(a:outputloc.file)
+                echo 'Downloading '.file.' from https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file
+                execute '!curl -fLo '.a:outputloc.file.' https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file
+            endif
+        endfor
+    endif
+endfunction " }}}
+
+" }}}
+
 " VARIABLES  {{{ {{{
 
 " MARKUP languages you actively use  {{{
@@ -33,10 +56,9 @@ let g:REPL = [ 'php', 'python', 'sh', 'zsh', 'javascript', 'sql' ]
 
 " WORKING DIRS {{{
 " THESE NEED!!! TO BE RELATIVE TO $HOME, will be added to path for file finding
-let g:WORKING_DIRS = [ 'Notes', 'Projects', '.zsh', 
-            \ '.', '.shells', '.vim/licenses',
-            \ 'Projects/Scripts',
-            \'.vim/templates', '.bash', '.shells' ]
+let g:WORKING_DIRS = split(expand('~/.{zsh,shells,bash,shells,}')) + 
+            \ split(expand("~/.vim/{templates,licenses}")) + 
+            \ split(expand("~/Projects/{Scripts,}")) + split(expand("~/{Notes,}"))
 
 if ! has('nvim')  " filter non-existent (lambdas not in nvim...)
     let g:WORKING_DIRS = filter(g:WORKING_DIRS, {x -> ! empty(x)})
@@ -45,7 +67,7 @@ endif
 execute 'set path='.expand('~')
 
 for dir in g:WORKING_DIRS " so that :find is more powerful
-    execute 'set path+='.expand('~/').dir.'/*,'
+    execute 'set path+='.dir.'/*,'
 endfor
 
 " }}} }}}
@@ -86,55 +108,32 @@ endfor
 " }}} }}} }}} }}}
 
 " LICENSES - download from GitHub if missing {{{
-let g:LICENSES = [ 'apache-v2.0.md', 'bsd-3.md', 'gnu-agpl-v3.0.md', 'gnu-gpl-v3.0.md', 'mit.md' ]
+let g:LICENSES = split(expand('{apache-v2.0,bsd-3,gnu-agpl-v3.0,gnu-gpl-v3.0,mit}.md'))
 
 " Other Available:  (uncomment in need) {{{
-" let g:LICENSES += [ 'artistic-v2.0.md', 'bsd-2.md', 'epl-v1.0.md', 
-            " \ 'gnu-fdl-v1.3.md', 'gnu-gpl-v1.0.md', 
-            " \ 'gnu-gpl-v2.0.md', 'gnu-lgpl-v2.1.md', 'gnu-lgpl-v3.0.md', 
-            " \ 'mpl-v2.0.md', 'unlicense.md' ] }}}
+"let g:LICENSES += split(expand('{artistic-v2.0,bsd-2,epl-v1.0,gnu-fdl-v1.3,gnu-gpl-v2.0,gnu-lgpl-v2.1,gnu-lgpl-v3.0,mpl-v2.0,unlicense}.md'))
+" }}}
 
-" Fetch using `curl` {{{
-if executable('curl')
-    for license in g:LICENSES
-        if ! filereadable(g:LICENSE_DIR.license)
-            echo 'Downloading '.license.' from https://raw.githubusercontent.com/nl253/markdown-licenses/master/'.license
-            execute '!curl -fLo '.g:LICENSE_DIR.license.' https://raw.githubusercontent.com/nl253/markdown-licenses/master/'.license
-        endif
-    endfor
-endif
-for license in split(system("ls ".g:LICENSE_DIR))
-    if index(g:LICENSES, license) < 0  
-        call system("rm ".g:LICENSE_DIR.license)
-    endif
-endfor
+call FetchWithCurl(g:LICENSES, 'nl253/markdown-licenses', g:LICENSE_DIR)
+
+call RemoveRedundantFiles(g:LICENSE_DIR, g:LICENSES)
+
 " }}} }}}
 
 " DICTIONARIES - download from GitHub if missing {{{
 let g:DICTS = [ 'frequent.dict', 'thesaurus.txt' ] " English dictionary and Thesaurus
 
 " Extra dicts
-let g:DICTS += [ 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict' ]
-"
+let g:DICTS += split(expand('{php,css,sh,sql,javascript}.dict'))
+
 " All Available: (uncomment in need) {{{
-" let g:DICTS += [ 'erlang.dict', 'haskell.dict', 'perl.dict', 'java.dict', 'frequent.dict', 
-            " \ 'thesaurus.txt', 'sql.dict',
-            " \'php.dict', 'css.dict', 'sh.dict', 'javascript.dict' ] }}}
+"let g:DICTS += split(expand('{erlang,perl,haskell,java,}.dict')) 
+" }}} 
             
-" Fetch using `curl` {{{
-if executable('curl')
-    for dict in g:DICTS
-        if ! filereadable(g:DICT_DIR.dict) 
-            echo 'Downloading '.dict.' from https://raw.githubusercontent.com/nl253/Dictionaries/master/'.dict
-            execute '!curl -fLo '.g:DICT_DIR.dict.' https://raw.githubusercontent.com/nl253/Dictionaries/master/'.dict
-        endif
-    endfor
-endif
-for f in split(system("ls ".g:DICT_DIR))
-    if index(g:DICTS, f) < 0  
-        call system("rm ".g:DICT_DIR.f)
-    endif
-endfor
+call FetchWithCurl(g:DICTS, 'nl253/dictionaries', g:DICT_DIR)
+
+call RemoveRedundantFiles(g:DICT_DIR, g:DICTS)
+
 " }}}
 "
 if filereadable(g:DICT_DIR.'thesaurus.txt')
@@ -146,25 +145,12 @@ endif
 " }}} }}} 
 
 " TEMPLATES - download from GitHub if missing {{{
-let g:TEMPLATES = [ 'template.css', 'template.html', 'template.js', 
-            \'template.md', 'template.php', 'template.py', 'template.rst', 
-            \'template.sh', 'template.tex', 'template.txt', 'template.wiki' ]
+let g:TEMPLATES = split(expand('template.{css,php,html,js,md,sh,tex,rst,wiki,py,txt}'))
 
-" Fetch using `curl` {{{
-if executable('curl')
-    for template in g:TEMPLATES 
-        if ! filereadable(g:TEMPLATE_DIR.template)
-            echo 'Downloading '.template.' from https://raw.githubusercontent.com/nl253/Templates/master/'.template
-            execute '!curl -fLo '.g:template_DIR.template.' from https://raw.githubusercontent.com/nl253/Templates/master/'.template
-        endif
-    endfor
-endif
+call FetchWithCurl(g:TEMPLATES, 'nl253/Templates', g:TEMPLATE_DIR)
 
-for template in split(system("ls ".g:TEMPLATE_DIR))
-    if index(g:TEMPLATES, template) < 0  
-        call system("rm ".g:TEMPLATE_DIR.template)
-    endif
-endfor
+call RemoveRedundantFiles(g:TEMPLATE_DIR, g:TEMPLATES)
+
 " }}} }}}
 
 " OPTIONS {{{   
@@ -283,9 +269,7 @@ let g:vimwiki_list = [{ 'path': '~/Notes/',
 " }}}
 
 " markdown {{{
-let g:markdown_fenced_languages = [
-            \'html', 'python', 'zsh', 'javascript',
-            \'php', 'css', 'java', 'vim', 'sh' ]
+let g:markdown_fenced_languages = g:PROGRAMMING + g:MARKUP
 
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 Plug 'rhysd/vim-gfm-syntax', { 'for' : 'markdown' }
@@ -297,87 +281,6 @@ Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 " NETRW {{{
 let g:netrw_scpport = "-P 22" | let g:netrw_sshport = "-p 22"
 let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
-" }}}
-
-" HASKELL {{{
-"Plug 'shougo/vimproc.vim', { 'do' : 'make', 'for' : [ 'haskell' ]}
-"Plug 'eagletmt/ghcmod-vim', { 'for' : 'haskell' }
-"Plug 'eagletmt/neco-ghc', { 'for' : 'haskell' }
-"Plug 'itchyny/vim-haskell-indent', { 'for' : 'haskell' }
-"Plug 'Twinside/vim-haskellFold', { 'for' : 'haskell' }
-"let g:haskellmode_completion_ghc = 0   " disable haskell-vim omnifunc
-"let hs_highlight_delimiters = 1
-"let hs_highlight_boolean = 1 | let hs_highlight_more_types = 1
-"let hs_highlight_types = 1 | let hs_highlight_debug = 1
-" }}}
-"
-" PYTHON {{{
-if has('python3') || has('python')
-
-    Plug 'davidhalter/jedi-vim', { 'for': 'python',  
-                \'do': 'pip install jedi' }
-
-    let g:jedi#force_py_version = 3
-    let g:jedi#completions_enabled = 1
-    let g:jedi#goto_command = "<CR>"
-    let g:jedi#goto_assignments_command = "<leader>g"
-    let g:jedi#goto_definitions_command = "<LocalLeader>d"
-    let g:jedi#documentation_command = 'K'
-    let g:jedi#usages_command = "<LocalLeader>u"
-    let g:jedi#rename_command = "<LocalLeader>r" 
-
-    "Plug 'klen/python-mode', { 'for': 'python' } 
-    "let g:pymode_python = 'python3'
-    "let g:pymode_quickfix_minheight = 4
-    "let g:pymode_breakpoint_bind = '<localleader>b'
-    "let g:pymode_lint_options_pep8 = { 'max_line_length': 150 }
-    "let g:pymode_lint_on_write = 0
-    ""let g:pymode_lint_ignore = "e303,w"
-    "let g:pymode_lint_checkers = [ 'pyflakes' ]
-    "let g:pymode_doc = 1 
-    "let g:pymode_lint = 1
-    ""let g:pymode_doc_bind = ''
-    "let g:pymode_paths = [glob('~/scripts/'), glob('~/projects/')]
-    "let g:pymode_rope_show_doc_bind = 'K' 
-    "let g:pymode_rope_completion = 1
-    "let g:pymode_rope_complete_on_dot = 0
-    "let g:pymode_rope_move_bind = '<LocalLeader>m'
-    "let g:pymode_rope_rename_bind = "<LocalLeader>r"
-    "let g:pymode_rope_rename_module_bind = "<LocalLeader>R"
-    "let g:pymode_rope_goto_definition_bind = '<C-p>'
-    "let g:pymode_rope_organize_imports_bind = '<LocalLeader>o'
-    "let g:pymode_rope_change_signature_bind = '<localleader>s'
-    "let g:pymode_rope_goto_definition_cmd = 'rightbelow vs'
-    "let g:pymode_rope_goto_definition_bind = '<localleader>d'
-    "let g:pymode_rope_autoimport = 1
-    "let g:pymode_rope_autoimport_modules = [
-                "\'os',
-                "\'re',
-                "\'typing',
-                "\'copy',
-                "\'pprint',
-                "\'operator',
-                "\'glob',
-                "\'itertools', 
-                "\'logging', 
-                "\'ctypes', 
-                "\'threading', 
-                "\'multiprocessing', 
-                "\'subprocess', 
-                "\'urllib.request', 
-                "\'sys', 
-                "\'pathlib' ]
-    "let g:pymode_rope_regenerate_on_write = 1
-    "let g:pymode_run_bind = '<leader>me'
-    "let g:pymode_breakpoint_cmd = 'import ipdb ; ipdb.set_trace()'
-    "let g:pymode_syntax_print_as_function = 1
-    "let g:pymode_lint_todo_symbol = 'do'
-    "let g:pymode_lint_comment_symbol = 'c'
-    "let g:pymode_lint_visual_symbol = 'v'
-    "let g:pymode_lint_error_symbol = 'e'
-    "let g:pymode_lint_info_symbol = 'i'
-    "let g:pymode_lint_pyflakes_symbol = 'f'
-endif
 " }}}
 
 " SHELL {{{
@@ -585,22 +488,6 @@ function! HelpInit()
     nnoremap <buffer> d <C-d>
     nnoremap <buffer> u <C-u>
 endfunction
-" }}}
-
-" HaskellInit() {{{
-"function! HaskellInit()
-    "if ! executable('stack')
-        "!curl -sSL https://get.haskellstack.org/ \| sh
-    "endif
-    "if ! executable('stylish-haskell')
-        "!stack install stylish-haskell
-    "endif
-    "setl omnifunc=necoghc#omnifunc foldmethod=expr
-    "setl formatprg=stylish-haskell
-    "if has('nvim') | nnoremap <buffer> <M-CR> :TREPLSendLine<CR> | endif
-    "nnoremap <buffer> <Leader>me :!ghc %:p<CR>:lexpr system(expand('%:p:r'))<CR>:lopen 5<CR>
-    "nnoremap <buffer> K :GhcModInfo<CR>
-"endfunction
 " }}}
 
 " QfInit() {{{
@@ -845,7 +732,6 @@ checktime
 endfunction
 " }}}
 
-
     command! PySubs call PySubs()
     command! PyExpand call PyExpand()
     nnoremap \s :call PySubs()<CR>
@@ -879,8 +765,6 @@ aug VIMENTER
     au CursorHold  * silent!  checktime
     au BufLeave * try | write | catch /.*/ | endtry
     au BufEnter * checktime
-    " by default blank files are markdown notes
-    au VimEnter * if &filetype == "" | setl ft=markdown | endif
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
@@ -902,7 +786,9 @@ aug VIMENTER
     au FileType qf call QfInit()
     au FileType javascript,json call JavascriptInit()
     au FileType css call CssInit()
-    au FileType php call PhpInit()
+    if has('php')
+        au FileType php call PhpInit()
+    endif
     au FileType sql call SqlInit()
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
