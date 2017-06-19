@@ -1,2 +1,2 @@
 #!/bin/sh
-feh  --bg-fill '/home/norbert/Dropbox/Backup/ciervo.png' 
+feh  --bg-fill ~/Pictures/desktop.png

@@ -877,7 +877,7 @@ aug VIMENTER
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
-    au BufLeave * write
+    au BufLeave * try | write | catch /.*/ | endtry
     au BufEnter * checktime
     " by default blank files are markdown notes
     au VimEnter * if &filetype == "" | setl ft=markdown | endif
