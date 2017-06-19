@@ -6,19 +6,36 @@ endif
 
 " VARIABLES  {{{
 
-" MARKUP languages you actively use 
+" MARKUP languages you actively use  {{{
 let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
 
-" PROGRAMMING LANGUAGES you code 
+" Other Popular (uncomment in need) {{{
+"let g:MARKUP += [ 'asciidoc', 'textile', 'org', 
+            " \ 'vimwiki_media', 'vimwiki_custom', 
+            " \ 'vimwiki_markdown', 'vimwiki_markdown_custom' ] 
+" }}} }}}
+
+" PROGRAMMING LANGUAGES you code in {{{
 let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
 
-"  REPL-compatible languages 
+" Other Popular (uncomment in need) {{{
+"let g:PROGRAMMING +=  [ 'ruby', 'haskell', 'java', 'perl', 'lua', 'julia' ] 
+
+" }}} }}}
+
+" REPL-compatible languages {{{
 let g:REPL = [ 'php', 'python', 'sh', 'zsh', 'javascript', 'sql' ]
+
+" Other Popular (uncomment in need) {{{
+"let g:REPL +=  [ 'ruby', 'haskell', 'lua', 'julia' ] 
+
+" }}} }}}
 
 " WORKING DIRS {{{
 " THESE NEED!!! TO BE RELATIVE TO $HOME, will be added to path for file finding
-let g:WORKING_DIRS = [ 'Scripts', 'Notes', 'Projects', 
-            \'.zsh', '.', '.shells', '.vim/licenses',
+let g:WORKING_DIRS = [ 'Notes', 'Projects', '.zsh', 
+            \ '.', '.shells', '.vim/licenses',
+            \ 'Projects/Scripts',
             \'.vim/templates', '.bash', '.shells' ]
 
 if ! has('nvim')  " filter non-existent (lambdas not in nvim...)
@@ -30,6 +47,7 @@ execute 'set path='.expand('~')
 for dir in g:WORKING_DIRS " so that :find is more powerful
     execute 'set path+='.expand('~/').dir.'/*,'
 endfor
+
 " }}} }}}
 
 " NVIM/VIM {{{
@@ -48,12 +66,11 @@ endif
 
 " where you store templates [format is $TEMPLATE_DIR/template.{sh,py,js}]
 let g:TEMPLATE_DIR = expand(g:VIMDIR.'templates/')
-
 " where scratchpads will be kept
 let g:SCRATCHPAD_DIR = expand(g:VIMDIR.'scratchpads/')
-
+" where dictionaries will be kept
 let g:DICT_DIR = expand(g:VIMDIR.'dicts/')
-
+" where licenses will be kept
 let g:LICENSE_DIR = expand(g:VIMDIR.'licenses/')
 
 let g:UNDO_DIR = expand(g:VIMDIR.'undo/')
@@ -67,7 +84,16 @@ endfor
 " }}} }}} 
 
 " LICENSES - download from GitHub if missing {{{
-let g:LICENSES = [ 'apache-v2.0.md', 'artistic-v2.0.md', 'bsd-2.md', 'bsd-3.md', 'CREDITS.md', 'epl-v1.0.md', 'gnu-agpl-v3.0.md', 'gnu-fdl-v1.3.md', 'gnu-gpl-v1.0.md', 'gnu-gpl-v2.0.md', 'gnu-gpl-v3.0.md', 'gnu-lgpl-v2.1.md', 'gnu-lgpl-v3.0.md', 'mit.md', 'mpl-v2.0.md', 'README.md', 'unlicense.md' ]
+let g:LICENSES = [ 'apache-v2.0.md', 'bsd-3.md', 'gnu-agpl-v3.0.md', 'gnu-gpl-v3.0.md', 'mit.md' ]
+
+" All Available:  (uncomment in need) {{{
+" let g:LICENSES = [ 'apache-v2.0.md', 'artistic-v2.0.md', 
+            " \'bsd-2.md', 'bsd-3.md', 'CREDITS.md', 
+            " \'epl-v1.0.md', 'gnu-agpl-v3.0.md', 
+            " \'gnu-fdl-v1.3.md', 'gnu-gpl-v1.0.md', 
+            " \'gnu-gpl-v2.0.md', 'gnu-gpl-v3.0.md', 
+            " \'gnu-lgpl-v2.1.md', 'gnu-lgpl-v3.0.md', 
+            " \'mit.md', 'mpl-v2.0.md', 'README.md', 'unlicense.md' ] }}}
 
 if executable('curl')
     for license in g:LICENSES
@@ -85,9 +111,17 @@ endfor
 " }}}
 
 " DICTIONARIES - download from GitHub if missing {{{
-let g:DICTS = [ 'frequent.dict', 'thesaurus.txt', 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict' ]
-" UNCOMMENT IN NEED
-" let g:DICTS += [ 'erlang.dict', 'haskell.dict', 'perl.dict', 'java.dict' ] 
+let g:DICTS = [ 'frequent.dict', 'thesaurus.txt' ] " English dictionary and Thesaurus
+
+" Extra dicts
+let g:DICTS += [ 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict' ]
+"
+" All Available: (uncomment in need) {{{
+" let g:DICTS += [ 'erlang.dict', 'haskell.dict', 'perl.dict', 
+            " \'java.dict', 'frequent.dict', 'thesaurus.txt', 
+            " \'php.dict', 'css.dict', 'sql.dict',
+            " \ 'sh.dict', 'javascript.dict' ] }}}
+            "
 if executable('curl')
     for dict in g:DICTS
         if ! filereadable(g:DICT_DIR.dict) 
@@ -108,6 +142,33 @@ if filereadable(g:DICT_DIR.'frequent.dict')
     execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
 endif
 " }}} }}}
+
+" TEMPLATES - download from GitHub if missing {{{
+let g:TEMPLATES = [ 'template.css', 'template.html', 'template.js', 
+            \'template.md', 'template.php', 'template.py', 'template.rst', 
+            \'template.sh', 'template.tex', 'template.txt', 'template.wiki' ]
+
+" All Available: (uncomment in need) {{{
+"let g:TEMPLATES = [ 'template.css', 'template.html', 
+            " \ 'template.js', 'template.md', 'template.php', 
+            " \ 'template.py', 'template.rst', 'template.sh', 
+            " \ 'template.tex', 'template.txt', 'template.wiki' ] " }}}
+
+if executable('curl')
+    for template in g:TEMPLATES 
+        if ! filereadable(g:TEMPLATE_DIR.template)
+            echo 'Downloading '.template.' from https://raw.githubusercontent.com/nl253/Templates/master/'.template
+            execute '!curl -fLo '.g:template_DIR.template.' from https://raw.githubusercontent.com/nl253/Templates/master/'.template
+        endif
+    endfor
+endif
+
+for template in split(system("ls ".g:TEMPLATE_DIR))
+    if index(g:TEMPLATES, template) < 0  
+        call system("rm ".g:TEMPLATE_DIR.template)
+    endif
+endfor
+" }}}
 
 " Plug - download if missing {{{
 if ! filereadable(g:PLUG_FILE) && executable('curl')
@@ -645,7 +706,7 @@ function! HTMLInit()
 endfunction
 "}}} "}}}
  
-" Templates, Subsitutions and Python Integraion {{{ {{{
+" Python Scripts - Subsitutions and Variable Expansion {{{ {{{
 if has('python3')
 
 " PyExpand() {{{
@@ -787,18 +848,6 @@ checktime
 endfunction
 " }}}
 
-" Template(){{{
-function! Template()
-    if filereadable(g:TEMPLATE_DIR."template.".expand("%:e"))
-        %d
-        execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
-        1,2d
-        write
-        call PySubs()
-    endif
-endfunction
-command! Template call Template() 
-"}}} }}}
 
     command! PySubs call PySubs()
     command! PyExpand call PyExpand()
@@ -808,26 +857,24 @@ command! Template call Template()
 
 endif " }}}
 
-" CTags() {{{
-function! Ctags()
-    if expand('%') == ''
-        return 0
+" Template(){{{
+function! Template()
+    if expand('%:e') != "" && filereadable(g:TEMPLATE_DIR."template.".expand("%:e")) 
+        %d
+        execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
+        1,2d
+        write
     endif
-    let s:working_dirs = g:WORKING_DIRS
-    for i in range(len(s:working_dirs))
-        let s:working_dirs[i] = s:working_dirs[i].'/**.'.expand('%:e')
-    endfor
-    let s:working_dirs = join(s:working_dirs)
-    call system('ctags -R '.s:working_dirs.' **.'.expand('%:e'))
-
-    "call system('ctags -R ~/{ '.join(g:WORKING_DIRS,",").' } -f ~/.tags')
 endfunction
+command! Template call Template() 
+"}}} }}}
+
 " }}}
 
 " AUTOCOMMANDS {{{
 aug VIMENTER
-    " go back to where you left off
     au!
+    " go back to where you left off
     au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
     " automatically change dir to the file you are editing
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
@@ -838,8 +885,8 @@ aug VIMENTER
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
+    au BufNewFile * call Template() 
     if has('python3')
-        au BufNewFile * call Template() 
         au FileType python call PythonInit()
     endif
     au FileType * call Init()
@@ -860,7 +907,9 @@ aug VIMENTER
     au FileType sql call SqlInit()
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
-    au BufNewFile call Ctags()
+    if executable("ctags")
+        au VimEnter !ctags -R ~
+    endif
 aug END
 " }}}
 
@@ -897,9 +946,6 @@ if executable('pdftotext')
     au! FileType pdf call PdfInit()
 endif
 " }}}
-if executable('dos2unix')
-    command! Dos2Unix !dos2unix %:p | edit
-endif
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
 command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | topleft lopen
 " }}}
@@ -954,7 +1000,7 @@ nnoremap <Leader>/ :History/<CR>
 nnoremap <Leader>: :History:<CR>
 nnoremap <Leader><Leader> :Commands!<CR>
 nnoremap <C-n> :GitFiles<CR>
-nnoremap <C-S-n> :Locate! ~<CR>
+"nnoremap <C-S-n> :Locate! ~<CR>
 
 " intellij
 nnoremap <Leader>f<Leader> :Files! .<CR>

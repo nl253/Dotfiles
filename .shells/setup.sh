@@ -1,11 +1,11 @@
 
 # SETUP 
 
-ensure-dir-exists(){  # {{{
+ensure-dir-exists(){  # {{{ {{{ 
   for i in $@; do
     [[ ! -e $i ]] && mkdir -p $i
   done
-}   
+} # }}} 
 
 ensure-dir-exists ~/.{bin,applications,shells,zsh,bash,shells} 
 ensure-dir-exists ~/.vim/{swap,backup,undo}
@@ -19,8 +19,9 @@ unset -f ensure-dir-exists
 [[ ! -e ~/Downloads ]] && ln -s /tmp ~/Downloads
 # }}}
 
-# fetch necessary files and dirs # {{{{
-fetch-dir(){ 
+# Fetch necessary files and dirs # {{{{
+
+fetch-dir(){  # {{{
   # arg1 : ~/${DIR RELATIVE TO ~}
   # arg2 : https://github.com/${} 
   # pull scripts if needed 
@@ -37,9 +38,9 @@ fetch-dir(){
       echo -e "OK.\nNothing to be done.\n"
     fi
   fi
-} 
+}  # }}}
 
-fetch-dotfile() {
+fetch-dotfile() { # {{{
   [ $# = 0 ] && echo -e "\n$(basename $0) : You need to specify at least 1 dotfile.\nAborting.\n\n" && return 1
   for i in "$@"; do
     if [ ! -e "${HOME}/${i}" ]; then
@@ -54,21 +55,22 @@ fetch-dotfile() {
       fi
     fi
   done
-}
+} # }}}
 
-fetch-dir Scripts nl253/Scripts 
-fetch-dir .dicts nl253/Dictionaries
+fetch-dir Projects/Scripts nl253/Scripts 
 fetch-dir .applications/sqlite nl253/SQLiteREPL
 fetch-dir .applications/project nl253/ProjectGenerator
 fetch-dir .applications/ranger ranger/ranger
 fetch-dir .applications/fzf junegunn/fzf.git 
 
+unset -f fetch-dir  # done using fetch-dir 
+
 fetch-dotfile .bashrc .zshrc .inputrc .gitconfig
 
 unset -f fetch-dotfile # done using fetch-dotfile 
+# }}}
 
-unset -f fetch-dir  # done using fetch-dir }}}
-
+# Sym-Link executables {{{
 # set path...
 source ~/.shells/variables.sh
 
@@ -79,3 +81,4 @@ source ~/.shells/variables.sh
 [[ ! -x $(which extractor) ]]  && ln -s ~/Scripts/extractor.sh ~/.bin/extractor
 [[ ! -x $(which download-dotfile) ]]  && ln -s ~/Scripts/download-dotfile.sh ~/.bin/download-dotfile
 [[ ! -x $(which grf) ]]  && ln -s ~/Scripts/grf.sh ~/.bin/grf
+# }}}

@@ -44,10 +44,13 @@
 --exclude=node_modules/**
 --exclude=.cache/**
 --exclude=**vim/undo**
+--exclude=.steam/*
 --exclude=.vim/colors/**
+--exclude=.vim/plugged/*
 --langdef=markdown 
 --langmap=markdown:.md
---regex-markdown=/^[ \t]*#+[ \t]*.{2,6}?\n/heading/
+--regex-markdown=/^[ \t]*#+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)/\1/
 --langdef=vimwiki 
 --langmap=vimwiki:.wiki
---regex-vimwiki=/^[ \t]*=+[ \t]*.{2,8}+?\n/heading/
+--regex-vimwiki=/^[ \t]*=+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)[ \t]*=+/\1/
+# vim: ft= nospell
