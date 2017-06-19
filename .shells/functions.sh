@@ -1,24 +1,8 @@
 
-# {{{ SCRIPT OUTLINE
-# -----------------------------------------------------------------------
-# DESCRIPTION 
-#
-# -----------------------------------------------------------------------
-# REQUIRES :: internet connection, git, coreutils [grep, sed, ... ]
-# -----------------------------------------------------------------------
-# DEPENDENCIES :: ... ... ...
-# -----------------------------------------------------------------------
-# USAGE EXAMPLES 
-#
-# download-dotfile.sh .bashrc 
-# download-dotfile.sh ".gitconfig"
-# download-dotfile.sh .bashrc .gitconfig .gitignore
-# -----------------------------------------------------------------------
-# }}}
+# THIS FILE MUST USE POSIX COMPLIANT SYNTAX
+# IT IS SOURCED BY BOTH `zsh` AND `bash`
 
-# UTILS  {{{{
-# checks if an executable is in $PATH
-in-path() {
+in-path() { # {{{{
 for i in $(echo "$PATH" | sed "s/:/\n/g"); do
     if [ -x "$i/$1" ]; then
         return 0

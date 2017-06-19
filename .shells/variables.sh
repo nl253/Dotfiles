@@ -1,5 +1,8 @@
 
-# VARIABLES - SOURCED BY `zsh` and `bash`
+# THIS FILE MUST USE POSIX COMPLIANT SYNTAX
+# IT IS SOURCED BY BOTH `zsh` AND `bash`
+
+# VARIABLES 
 
 # $COLORS {{{
 # set variables to produce colored output later 

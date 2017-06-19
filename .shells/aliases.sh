@@ -4,9 +4,8 @@
 
 # ALIASES
 # --------
-# UTILS  {{{{
+in-path() { # {{{
 # checks if an executable is in $PATH
-in-path() {
 for i in $(echo "$PATH" | sed "s/:/\n/g"); do
     if [ -x "$i/$1" ]; then
         return 0
@@ -21,7 +20,6 @@ alias sudo='sudo '                   # Enable aliases to be sudo’ed
 alias e='$EDITOR'                    # quicker access to vim
 alias show-path='echo -e ${PATH//:/\\n}'  # split path on ":"
 $(in-path ranger) && alias r='ranger'
- # 
 
 # utils : timer, clipboard, 
 $(in-path aspell) && alias aspell="aspell -c -l en_GB"
@@ -39,9 +37,6 @@ alias logout="pkill -KILL -u "
 alias battery="acpi -V"
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
-# alias note=note.sh       # refer to ~/Scripts/note.sh
-
-
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
 
 # }}}
@@ -56,7 +51,6 @@ $(in-path setxkbmap) && alias map-caps-lock-to-ctrl='setxkbmap -layout gb -optio
 
 # dirs and files  {{{
 alias -- -='cd -' # Go back
-
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -71,7 +65,7 @@ alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                   
 # NOTE: with this one you don't wanna misspell, better not write then write wrong
 # f [filename] # will search recursively using dense regexp to ensure quality, slow
 alias f=find-approx.sh
-# refer to ~/Scripts/fzf-filtered-grep.sh
+# refer to ~/.scripts/fzf-filtered-grep.sh
 $(in-path fzf) && alias gr=fzf-filtered-grep.sh
 #  }}}
 

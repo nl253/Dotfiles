@@ -4,7 +4,7 @@ if ! has('unix')
     exit 
 endif
 
-" VARIABLES  {{{
+" VARIABLES  {{{ {{{
 
 " MARKUP languages you actively use  {{{
 let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
@@ -64,6 +64,7 @@ else " if vim
 endif
 " }}}
 
+" SET DIRS {{{
 " where you store templates [format is $TEMPLATE_DIR/template.{sh,py,js}]
 let g:TEMPLATE_DIR = expand(g:VIMDIR.'templates/')
 " where scratchpads will be kept
@@ -78,23 +79,22 @@ let g:BACKUP_DIR = expand(g:VIMDIR.'backup/')
 let g:SWAP_DIR = expand(g:VIMDIR.'swap/')
 
 " MAKE MISSING DIRS {{{
+execute "set shell=".system('which bash')
 for d in [g:VIMDIR, g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, g:UNDO_DIR, g:SWAP_DIR, g:LICENSE_DIR]
     call system('[ ! -e '.d.' ] && mkdir -p '.d)
 endfor
-" }}} }}} 
+" }}} }}} }}} }}}
 
 " LICENSES - download from GitHub if missing {{{
 let g:LICENSES = [ 'apache-v2.0.md', 'bsd-3.md', 'gnu-agpl-v3.0.md', 'gnu-gpl-v3.0.md', 'mit.md' ]
 
-" All Available:  (uncomment in need) {{{
-" let g:LICENSES = [ 'apache-v2.0.md', 'artistic-v2.0.md', 
-            " \'bsd-2.md', 'bsd-3.md', 'CREDITS.md', 
-            " \'epl-v1.0.md', 'gnu-agpl-v3.0.md', 
-            " \'gnu-fdl-v1.3.md', 'gnu-gpl-v1.0.md', 
-            " \'gnu-gpl-v2.0.md', 'gnu-gpl-v3.0.md', 
-            " \'gnu-lgpl-v2.1.md', 'gnu-lgpl-v3.0.md', 
-            " \'mit.md', 'mpl-v2.0.md', 'README.md', 'unlicense.md' ] }}}
+" Other Available:  (uncomment in need) {{{
+" let g:LICENSES += [ 'artistic-v2.0.md', 'bsd-2.md', 'epl-v1.0.md', 
+            " \ 'gnu-fdl-v1.3.md', 'gnu-gpl-v1.0.md', 
+            " \ 'gnu-gpl-v2.0.md', 'gnu-lgpl-v2.1.md', 'gnu-lgpl-v3.0.md', 
+            " \ 'mpl-v2.0.md', 'unlicense.md' ] }}}
 
+" Fetch using `curl` {{{
 if executable('curl')
     for license in g:LICENSES
         if ! filereadable(g:LICENSE_DIR.license)
@@ -108,7 +108,7 @@ for license in split(system("ls ".g:LICENSE_DIR))
         call system("rm ".g:LICENSE_DIR.license)
     endif
 endfor
-" }}}
+" }}} }}}
 
 " DICTIONARIES - download from GitHub if missing {{{
 let g:DICTS = [ 'frequent.dict', 'thesaurus.txt' ] " English dictionary and Thesaurus
@@ -117,11 +117,11 @@ let g:DICTS = [ 'frequent.dict', 'thesaurus.txt' ] " English dictionary and Thes
 let g:DICTS += [ 'php.dict', 'css.dict', 'sql.dict', 'sh.dict', 'javascript.dict' ]
 "
 " All Available: (uncomment in need) {{{
-" let g:DICTS += [ 'erlang.dict', 'haskell.dict', 'perl.dict', 
-            " \'java.dict', 'frequent.dict', 'thesaurus.txt', 
-            " \'php.dict', 'css.dict', 'sql.dict',
-            " \ 'sh.dict', 'javascript.dict' ] }}}
-            "
+" let g:DICTS += [ 'erlang.dict', 'haskell.dict', 'perl.dict', 'java.dict', 'frequent.dict', 
+            " \ 'thesaurus.txt', 'sql.dict',
+            " \'php.dict', 'css.dict', 'sh.dict', 'javascript.dict' ] }}}
+            
+" Fetch using `curl` {{{
 if executable('curl')
     for dict in g:DICTS
         if ! filereadable(g:DICT_DIR.dict) 
@@ -135,25 +135,22 @@ for f in split(system("ls ".g:DICT_DIR))
         call system("rm ".g:DICT_DIR.f)
     endif
 endfor
+" }}}
+"
 if filereadable(g:DICT_DIR.'thesaurus.txt')
     execute 'set thesaurus='.g:DICT_DIR.'thesaurus.txt'
 endif
 if filereadable(g:DICT_DIR.'frequent.dict')
     execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
 endif
-" }}} }}}
+" }}} }}} 
 
 " TEMPLATES - download from GitHub if missing {{{
 let g:TEMPLATES = [ 'template.css', 'template.html', 'template.js', 
             \'template.md', 'template.php', 'template.py', 'template.rst', 
             \'template.sh', 'template.tex', 'template.txt', 'template.wiki' ]
 
-" All Available: (uncomment in need) {{{
-"let g:TEMPLATES = [ 'template.css', 'template.html', 
-            " \ 'template.js', 'template.md', 'template.php', 
-            " \ 'template.py', 'template.rst', 'template.sh', 
-            " \ 'template.tex', 'template.txt', 'template.wiki' ] " }}}
-
+" Fetch using `curl` {{{
 if executable('curl')
     for template in g:TEMPLATES 
         if ! filereadable(g:TEMPLATE_DIR.template)
@@ -168,23 +165,7 @@ for template in split(system("ls ".g:TEMPLATE_DIR))
         call system("rm ".g:TEMPLATE_DIR.template)
     endif
 endfor
-" }}}
-
-" Plug - download if missing {{{
-if ! filereadable(g:PLUG_FILE) && executable('curl')
-    call system('curl -flo '.g:PLUG_FILE.' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    PlugInstall
-    source $MYVIMRC
-endif
-" }}}
-
-" Plug init :: set variables {{{
-if has('nvim')
-    call plug#begin('~/.local/share/nvim/plugged/')
-else
-    call plug#begin('~/.vim/plugged')
-endif
-" }}}
+" }}} }}}
 
 " OPTIONS {{{   
 let g:OPTIONS = [ 'ignorecase', 'smartcase', 'foldmethod=marker', 'autochdir',
@@ -216,8 +197,24 @@ let mapleader = " "
 let maplocalleader = ","
 " }}}
 
-" PLUGINS {{{ 
+" Plug {{{
+" Download if missing {{{
+if ! filereadable(g:PLUG_FILE) && executable('curl')
+    call system('curl -flo '.g:PLUG_FILE.' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    PlugInstall
+    source $MYVIMRC
+endif
+" }}}
 
+" Begin {{{
+if has('nvim')
+    call plug#begin('~/.local/share/nvim/plugged/')
+else
+    call plug#begin('~/.vim/plugged')
+endif
+" }}} }}}
+
+" PLUGINS {{{ 
 let loaded_matchit = 1
 
 " place plugins here
@@ -880,6 +877,8 @@ aug VIMENTER
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold  * silent!  checktime
+    au BufLeave * write
+    au BufEnter * checktime
     " by default blank files are markdown notes
     au VimEnter * if &filetype == "" | setl ft=markdown | endif
     au FocusLost   * silent!  wall

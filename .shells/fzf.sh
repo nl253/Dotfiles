@@ -1,4 +1,7 @@
 
+# THIS FILE MUST USE POSIX COMPLIANT SYNTAX
+# IT IS SOURCED BY BOTH `zsh` AND `bash`
+
 # FZF init 
 
 # chech if on system 

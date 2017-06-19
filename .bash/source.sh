@@ -16,3 +16,5 @@ safe-source ~/.applications/fzf/shell/{completion,key-bindings}.bash 2> /dev/nul
 
 # added by travis gem
 safe-source /home/norbert/.travis/travis.sh
+
+unset -f safe-source
