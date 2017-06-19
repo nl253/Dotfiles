@@ -766,14 +766,12 @@ aug VIMENTER
     " automatically change dir to the file you are editing
     au BufEnter * try | lchdir %:p:h | catch /.*/ | endtry
     " automatically reload external changes NOTE: doesn't always work properly
-    au CursorHold  * silent!  checktime
+    au CursorHold,BufEnter  * silent! checktime
     au BufLeave * try | write | catch /.*/ | endtry
-    au BufEnter * checktime
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
     au BufNewFile * call Template() 
-    au FileType python call PythonInit()
     au FileType * call Init()
     execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()' 
     execute 'au! FileType '.join(g:MARKUP, ',').' call Markup()'
@@ -787,6 +785,7 @@ aug VIMENTER
     au FileType sql call SqlInit()
     au FileType qf call QfInit()
     au FileType javascript,json call JavascriptInit()
+    au FileType python call PythonInit()
     au FileType css call CssInit()
     if has('php')
         au FileType php call PhpInit()
@@ -794,7 +793,7 @@ aug VIMENTER
     au FileType sql call SqlInit()
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
-    au VimEnter * call system('[[ -x $(which ctags) ]] && cd ~ && ctags -R &>/dev/null') 
+    au VimEnter * silent call system('[[ -x $(which ctags) ]] && cd ~ && ctags -R &>/dev/null') 
 aug END
 " }}}
 
