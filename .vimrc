@@ -1,6 +1,7 @@
 
 if ! has('unix')
     echo "You need to be running a UNIX-like system for this script to work."
+    !echo "You need to be running a UNIX-like system for this script to work."
     exit 
 endif
 
@@ -89,10 +90,13 @@ endif
 " SET DIRS {{{
 " where you store templates [format is $TEMPLATE_DIR/template.{sh,py,js}]
 let g:TEMPLATE_DIR = expand(g:VIMDIR.'templates/')
+
 " where scratchpads will be kept
 let g:SCRATCHPAD_DIR = expand(g:VIMDIR.'scratchpads/')
+
 " where dictionaries will be kept
 let g:DICT_DIR = expand(g:VIMDIR.'dicts/')
+
 " where licenses will be kept
 let g:LICENSE_DIR = expand(g:VIMDIR.'licenses/')
 
@@ -107,7 +111,7 @@ for d in [g:VIMDIR, g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, 
 endfor
 " }}} }}} }}} }}}
 
-" LICENSES - download from GitHub if missing {{{
+" LICENSES {{{
 let g:LICENSES = split(expand('{apache-v2.0,bsd-3,gnu-agpl-v3.0,gnu-gpl-v3.0,mit}.md'))
 
 " Other Available:  (uncomment in need) {{{
@@ -120,7 +124,7 @@ call RemoveRedundantFiles(g:LICENSE_DIR, g:LICENSES)
 
 " }}} }}}
 
-" DICTIONARIES - download from GitHub if missing {{{
+" DICTIONARIES {{{ {{{
 let g:DICTS = [ 'frequent.dict', 'thesaurus.txt' ] " English dictionary and Thesaurus
 
 " Extra dicts
@@ -142,7 +146,7 @@ endif
 if filereadable(g:DICT_DIR.'frequent.dict')
     execute 'set dictionary='.g:DICT_DIR.'frequent.dict'
 endif
-" }}} }}} 
+" }}} }}}
 
 " TEMPLATES - download from GitHub if missing {{{
 let g:TEMPLATES = split(expand('template.{css,php,html,js,md,sh,tex,rst,wiki,py,txt}'))
@@ -769,9 +773,7 @@ aug VIMENTER
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
     au BufNewFile * call Template() 
-    if has('python3')
-        au FileType python call PythonInit()
-    endif
+    au FileType python call PythonInit()
     au FileType * call Init()
     execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()' 
     execute 'au! FileType '.join(g:MARKUP, ',').' call Markup()'
@@ -792,9 +794,7 @@ aug VIMENTER
     au FileType sql call SqlInit()
     au FileType markdown call MarkdownInit()
     au BufNewFile,BufRead *.txt setl ft=asciidoc
-    if executable("ctags")
-        au VimEnter !ctags -R ~
-    endif
+    au VimEnter * call system('[[ -x $(which ctags) ]] && cd ~ && ctags -R &>/dev/null') 
 aug END
 " }}}
 
@@ -838,7 +838,6 @@ command! -complete=shellcmd -nargs=+ Capture lexpr(system(expand(<q-args>))) | t
 " KEYBINDINGS {{{
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-nnoremap <expr> <Leader>mS &filetype != 'python' ? ":Neomake\<CR>" : ":PymodeLint\<CR>"
 
 " Move by screen lines instead of file lines.
 " http://vim.wikia.com/wiki/Moving_by_screen_lines_instead_of_file_lines

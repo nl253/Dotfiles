@@ -62,11 +62,6 @@ alias lr=recent-files.sh                                                        
 alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                      # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                                                        # list recursively just dirs
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                                       # list recursively just files
-# NOTE: with this one you don't wanna misspell, better not write then write wrong
-# f [filename] # will search recursively using dense regexp to ensure quality, slow
-alias f=find-approx.sh
-# refer to ~/.scripts/fzf-filtered-grep.sh
-$(in-path fzf) && alias gr=fzf-filtered-grep.sh
 #  }}}
 
 # pattern matching  {{{
