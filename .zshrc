@@ -145,7 +145,7 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 
 # source ~/.shells and ~/.zsh here to overwite some settings {{{
 for file in ~/.{shells,zsh}/** ; do  # Custom dirs with general shell configuration
-  [[ -f $file ]] && [[ $file =~ [a-zA-Z]\.z?sh$ ]] && [[ ! -v "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED" ]] && source $file 
+  [[ -f $file ]] && [[ $file =~ [a-zA-Z]\.z?sh$ ]] && [[ ! "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED" ]] && source $file 
   eval "export _"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED=1"
 done
 
