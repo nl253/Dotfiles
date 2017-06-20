@@ -25,7 +25,8 @@ add-to-path(){
 
 export PATH="/usr/local/sbin:/bin:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin:"
 
-add-to-path ~/{.local,.cabal,.cargo,.gem,go,anaconda3}/bin  ~/{.bin,.config/composer/vendor/bin} /usr/local/go/bin ~/.gem/ruby/*/bin 2>/dev/null
+add-to-path ~/{.local,.cabal,.cargo,.gem,go,anaconda3}/bin ~/{.bin,.config/composer/vendor/bin} /usr/local/go/bin 2>/dev/null
+add-to-path ~/.gem/ruby/*/bin 2>/dev/null
 
 unset -f add-to-path
 
