@@ -61,7 +61,7 @@ let g:WORKING_DIRS = split(expand('~/.{zsh,shells,bash,shells,}')) +
             \ split(expand("~/.vim/{templates,licenses}")) + 
             \ split(expand("~/Projects/{Scripts,}")) + split(expand("~/{Notes,}"))
 
-if ! has('nvim')  " filter non-existent (lambdas not in nvim...)
+if ! has('nvim') && v:version >= 800 " filter non-existent (lambdas not in nvim...)
     let g:WORKING_DIRS = filter(g:WORKING_DIRS, {x -> ! empty(x)})
 endif
 
