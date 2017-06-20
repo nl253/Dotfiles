@@ -191,8 +191,8 @@ let maplocalleader = ","
 " Download if missing {{{
 if ! filereadable(g:PLUG_FILE) && executable('curl')
     call system('mkdir -p $(dirname '.g:PLUG_FILE.') && curl -flo '.g:PLUG_FILE.' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    execute 'source '.g:PLUG_FILE
     PlugInstall
-    source $MYVIMRC
 endif
 " }}}
 
