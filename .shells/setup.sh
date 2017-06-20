@@ -62,17 +62,12 @@ install-app(){ # {{{
 }
 # }}}
 
-if  [[ ! -e ~/anaconda3 ]]; then
-  cd /tmp
-  wget https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh
-  bash Anaconda3-4.4.0-Linux-x86_64.sh 
-  cd
-fi
+[[ ! -e ~/.pyenv ]] && curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash && exec $SHELL && pyenv update && pyenv install 3.6.1 && git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv && cd && pyenv global 3.6.1 system
 
 # set path...
 [[ ! -v $_SHELLS_VARIABLES_SOURCED ]] && source ~/.shells/variables.sh && export _SHELLS_VARIABLES_SOURCED=1
 
-mkdir -p ~/.{bin,applications,shells,zsh,bash,shells} ~/.vim/{swap,backup,undo}
+mkdir -p ~/.{bin,applications,shells,zsh,bash,shells} 
 
 install-app ranger/ranger ranger ranger.py 
 install-app nl253/ProjectGenerator project project

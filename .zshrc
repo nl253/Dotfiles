@@ -61,18 +61,19 @@ export ZSH=~/.oh-my-zsh # Path to your oh-my-zsh installation.
 # THEME {{{
 # -----
 # Custom Themes :: https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# configuration for themes needs to be placed after ZSH_THEME else the settings will be overriden by defaults
+# configuration for themes needs to be placed after ZSH_THEME 
+# else the settings will be overriden by defaults
  ZSH_THEME="robbyrussell"
 
 # OTHER DECENT THEMES {{{
-# refined # minimalist, blue prompt, subtle git info
+# refined - minimalist, blue prompt, subtle git info
 # pygmalion jonathan half-life
-# Optionally, you can set it to "random" }}}
+# you can set it to "random" }}}
 # }}}
 
 # FURTHER CONFIGURATION {{{
 # ---------------------
-# CASE_SENSITIVE="true" # case-sensitive completion.
+CASE_SENSITIVE="false" # case-sensitive completion.
 
 # Hyphen-insensitive completion. Case sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
@@ -87,14 +88,12 @@ ENABLE_CORRECTION="false" # Enable command auto-correction.
 
 COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
+# Disable marking untracked files under VCS as dirty. 
+# This makes repository status check for large repositories much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# Change the command execution time stamp shown in the history command output.
+# Formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # HIST_STAMPS="mm/dd/yyyy"
 # }}}
 
@@ -102,30 +101,29 @@ COMPLETION_WAITING_DOTS="true" # Display red dots whilst waiting for completion.
 # -------
 # Plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
+# eg: plugins=(rails git textmate ruby lighthouse)
 #
 # Description of plugins: {{{
 # -----------------------
-# - `sudo` will insert sudo when ESC is pressed twice
-# - `gitignore` will generate `.gitignore` files when you type gi [python|java ... ]
-# - `pip` utilities for python and pip : clean cache ...
-# - `npm` adds aliases and completion
-# - `git-extras` add completion
-# - `colorize` adds a `colorize` command to color file content (it will try to guess)
-# - `k` a more pretty, git aware `ls` when you press `k`
-# - `tmuxinator` adds completion with description
-# - `taskwarrior` adds a `t` alias for `task` and completion
+# - `sudo` - will insert sudo when ESC is pressed twice
+# - `gitignore` - will generate `.gitignore` files when you type gi [python|java ... ]
+# - `pip` - utilities for python and pip : clean cache ...
+# - `npm` - adds aliases and completion
+# - `git-extras` - add completion
+# - `colorize` - adds a `colorize` command to color file content (it will try to guess)
+# - `k` - a more pretty, git aware `ls` when you press `k`
+# - `tmuxinator` - adds completion with description
+# - `taskwarrior` - adds a `t` alias for `task` and completion
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
 # Custom plugins:
 # --------------
-# `zsh-syntax-highlighting` adds fish-like highlighting of typed words
-# `zsh-completions` extra completions
-# `zsh-autosuggestions` smart, fish-like autosuggestions pop up when you type
-# `fast-syntax-highlighting` tweaks to `zsh-syntax-highlighting`
-# `git-extra-commands` a large collection of git commands for reference : 
-#  https://github.com/unixorn/git-extra-commands/blob/master/git-extra-commands.plugin.zsh
+# `zsh-syntax-highlighting` - adds fish-like highlighting of typed words
+# `zsh-completions` - extra completions
+# `zsh-autosuggestions` - smart, fish-like autosuggestions pop up when you type
+# `fast-syntax-highlighting` - tweaks to `zsh-syntax-highlighting`
+# `git-extra-commands` - a large collection of git commands for reference : 
 #
 # }}}
 plugins=(fast-syntax-highlighting zsh-syntax-highlighting zsh-autosuggestions compleat)
@@ -145,11 +143,11 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 
 # source ~/.shells and ~/.zsh here to overwite some settings {{{
 for file in ~/.{shells,zsh}/** ; do  # Custom dirs with general shell configuration
-  [[ -f $file ]] && [[ $file =~ [a-zA-Z]\.z?sh$ ]] && [[ ! "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED" ]] && source $file 
-  eval "export _"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED=1"
+  [[ -f $file ]] && [[ $file =~ [a-zA-Z]\.z?sh$ ]] && [[ ! -v "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED" ]] && source $file 
+  eval "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED=1"
 done
 
-# }}} # if this was sourced successfully then we have all the variables set properly
+# }}} # if this was sourced successfully then all variables are set properly
 
 # CUSTOM PLUGINS {{{
 # --------------
@@ -160,12 +158,11 @@ done
 # {{{
 function fetch-custom-plug-gh(){  
   for arg in $@; do
-    plug_name=$(echo $arg | sed -E 's/\S+\///')
+    plug_name=$(echo $arg | sed -E 's/\S+\///g')
     if [[ -x $(which git) ]] && [[ ! -e ${ZSH_CUSTOM}/plugins/${plug_name}/${plug_name}.plugin.zsh ]] ; then
       cd ${ZSH_CUSTOM}/plugins
-      git clone https://github.com/$1 $plug_name 
+      git clone https://www.github.com/$1 $plug_name 
       cd  
-      source ~/.zshrc
     fi
   done
 } 
