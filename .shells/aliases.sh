@@ -21,33 +21,18 @@ alias e='$EDITOR'                    # quicker access to vim
 alias show-path='echo -e ${PATH//:/\\n}'  # split path on ":"
 $(in-path ranger) && alias r='ranger'
 
-# utils : timer, clipboard, 
-$(in-path aspell) && alias aspell="aspell -c -l en_GB"
-
-alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date' # stopwatch
-
-$(in-path xclip) && alias pbcopy='xclip -selection clipboard' && alias pbpaste='xclip -selection clipboard -o' 
-
 # dmenu # a good alternative to rofi # this modifies the prompt and coloring
 $(in-path dmenu_run) && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
-alias freq='cut -f1 -d" " "$HISTFILE" | sort | uniq -c | sort -nr | head -n 30' # frequent entries from history
 alias logout="pkill -KILL -u "
 alias battery="acpi -V"
+alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
 
 # }}}
-
-# keymap  {{{
-if $(in-path xmodmap); then
-    alias map-caps-to-esc='xmodmap -e "clear lock"; xmodmap -e "keycode 0x42 = Escape"'
-    alias unmap-caps-from-esc='xmodmap -e "keycode 0x42 = Caps_Lock"; xmodmap -e "add lock = Caps_Lock"'
-fi
-$(in-path setxkbmap) && alias map-caps-lock-to-ctrl='setxkbmap -layout gb -option ctrl:nocaps && echo -e "${MAGENTA}capslock remapped to ctrl${DEFCOLOR}"'
-#  }}}
 
 # dirs and files  {{{
 alias -- -='cd -' # Go back
@@ -84,7 +69,7 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 # set up logging in ~/Downloads/Torrents/aria2c.log
 # and a default location for download of Torrents in ~/Downloads/Torrents/
 if $(in-path rsync); then
-    alias rsync-copy="rsync -avz --progress -h"
+    alias rsync-copy="rsync --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
     alias rsync-move="rsync -avz --progress -h --remove-source-files"
     alias rsync-update="rsync -avzu --progress -h"
     alias rsync-synchronize="rsync -avzu --delete --progress -h"
@@ -111,7 +96,7 @@ fi #  }}}
 # REQUIRES :: git hub
 # ------------------------
 if $(in-path git); then
-    alias todo="git grep -n --word-regexp --break --heading TODO" # look for TODOs in the current repo
+    alias todo="git grep -n --word-regexp --break --heading --after-context 3 TODO" # look for TODOs in the current repo
     if $(in-path hub); then
         alias g=hub
         eval "$(hub alias -s)"

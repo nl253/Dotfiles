@@ -16,7 +16,7 @@ ensure-dir-exists(){  # {{{
 [[ ! -e ~/Downloads ]] && ln -s /tmp ~/Downloads
 # }}}
 
-fetch-dir(){  # {{{
+clone-repo(){  # {{{
   # arg1 : ~/${DIR RELATIVE TO ~}
   # arg2 : https://github.com/${RELATIVE TO GitHub} 
   # pull scripts if needed 
@@ -54,7 +54,7 @@ source ~/.shells/variables.sh
 link-script(){ 
   for script in $@ ; do
     out=$(echo $script | sed -E "s/\.\w+$//")
-    if [[ ! -x $(which $script 2>/dev/null) ]] && [[ ! -e ~/.bin/$out ]] && [[ -f ~/.scripts/$script ]]; then 
+    if [[ ! -x $(which $out 2>/dev/null) ]] && [[ ! -e ~/.bin/$out ]] && [[ -f ~/.scripts/$script ]]; then 
       ln -s ~/.scripts/$script ~/.bin/$out
     fi
   done
@@ -64,7 +64,7 @@ link-script(){
 install-app(){ # {{{
   [[ $# != 4 ]] && return 1
 
-  fetch-dir $1 $2 
+  clone-repo $1 $2 
 
   if [[ ! -x $(which $4 2>/dev/null) ]] && [[ -x ~/.applications/$3 ]] && [[ ! -e ~/.bin/$3 ]]; then 
     ln -s ~/.applications/$3 ~/.bin/$4
@@ -79,15 +79,15 @@ install-app ranger/ranger .applications/ranger ranger/ranger.py ranger
 install-app nl253/ProjectGenerator .applications/project project/project project 
 install-app nl253/SQLiteREPL .applications/sqlite sqlite/main.py sqlite
 
-fetch-dir nl253/Scripts Projects/Scripts
-fetch-dir nl253/Scripts .scripts
-fetch-dir junegunn/fzf.git .applications/fzf
+clone-repo nl253/Scripts Projects/Scripts
+clone-repo nl253/Scripts .scripts
+clone-repo junegunn/fzf.git .applications/fzf
 
-link-script grf.sh csv-preview.sh extractor.sh show-ip.sh download-dotfile 
+link-script grf.sh csv-preview.sh extractor.sh show-ip.sh download-dotfile.sh p.sh ipython.sh env.sh pandoc.sh csv-preview.sh
 
 # unset functions {{{
 unset -f link-script 
-unset -f fetch-dir  
+unset -f clone-repo  
 unset -f install-app  
 unset -f ensure-dir-exists
 # }}}

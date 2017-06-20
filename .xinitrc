@@ -69,7 +69,7 @@ get_session(){
 
 exec $(get_session)
 
-feh --bg-fill /home/norbert/Dropbox/Backup/ciervo.png
+feh --bg-fill  ~/Pictures/ciervo.png
 setxkbmap -layout gb  
 
 #check if dropbox is running

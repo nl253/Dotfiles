@@ -17,6 +17,10 @@
 *.png
 *.pyc
 *.ri
+*cargo*
+.cargo/*
+*git*
+*steam*
 *.so
 *.swp
 *.xhtml

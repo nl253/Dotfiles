@@ -37,7 +37,7 @@ export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xte
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
 
-function add-to-path(){
+add-to-path(){
   for directory in $@; do
     if [[ -d $directory ]]; then
       export PATH="${directory}:${PATH}:"
@@ -46,8 +46,6 @@ function add-to-path(){
 }
 
 export PATH="/usr/local/sbin:/bin:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin:"
-
-[ ! -e ~/.scripts ] && mkdir -p ~/.scripts && git clone https://github.com/nl253/Scripts ~/.scripts                                         # MY SCRIPTS
 
 add-to-path ~/{.local,.cabal,.cargo,.gem,go,anaconda3}/bin  ~/{.bin,.config/composer/vendor/bin} /usr/local/go/bin ~/.gem/ruby/*/bin
 
@@ -83,7 +81,7 @@ export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs" # }}}
 
 export GREP_COLOR='1;33' # makes it yellow # by default red
 
-export LSCOLORS=ExFxCxdxBxegedabagacad
+#export LSCOLORS=ExFxCxdxBxegedabagacad
 
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
@@ -120,14 +118,14 @@ fi
 # ---------------------------------------------------------------------- 
 # attempt to set to neo-vim if available, fall back on vim and then vi
 # ----------------------------------------------------------------------
-if [ -x $(which vim) ] ; then # if vim but not neovim
+if [[ -x $(which vim) ]] ; then # if vim but not neovim
   export EDITOR=$(which vim)
   alias vi=$(which vim)
   # set up vim plugins
-elif [ -x /usr/bin/vi ] || [ -x /bin/vi ]; then # if not neovim and not vim then fall back on vi
+elif [[ -x $(which vi) ]]; then # if not neovim and not vim then fall back on vi
   export EDITOR=$(which vi)
   alias vim=$(which vi)
-elif [ -x $(which nvim) ]; then 
+elif [[ -x $(which nvim) ]]; then 
   export EDITOR=$(which nvim)
   alias vim=$(which nvim)
 fi

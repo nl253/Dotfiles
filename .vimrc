@@ -1,9 +1,9 @@
 
-if ! has('unix')
-    echo "You need to be running a UNIX-like system for this script to work."
+" Exit if not UNIX {{{
+if ! has('unix') 
     !echo "You need to be running a UNIX-like system for this script to work."
     exit 
-endif
+endif " }}}
 
 " UTIL functions {{{
 "
@@ -889,4 +889,4 @@ nnoremap <C-n> :GitFiles<CR>
 nnoremap <Leader>f<Leader> :Files! .<CR>
 nnoremap <Leader>m<Leader> :Marks!<CR>
 
-" vim: nospell foldmethod=marker foldlevel=1 formatoptions=o
+" vim: nospell foldmethod=marker foldlevel=1 formatoptions=o foldcolumn=3

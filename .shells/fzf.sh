@@ -19,7 +19,7 @@ if [ ! -x /usr/bin/fzf ] && [ ! -x ~/.bin/fzf ] && [ ! -x /bin/fzf ] ; then
 fi
 # }}}
 
-if [ -x /bin/fzf ] || [ -x ~/.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
+if [ -x /bin/fzf ] || [ -e ~/.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
 
    # h - repeat history {{{
   h() { 
@@ -64,9 +64,6 @@ if [ -x /bin/fzf ] || [ -x ~/.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
 
   # preview configured to `cat` for files and use `tree` for dirs
   alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"' # [FZF] with [P]REVIEW
-
-  #alias c=fzf-cd.sh     # [C]D
-  alias p=fzf-pkill.sh  # [P]ROCESSES 
 
 else # non fzf solution 
 
