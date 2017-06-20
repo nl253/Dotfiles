@@ -62,6 +62,13 @@ install-app(){ # {{{
 }
 # }}}
 
+if  [[ ! -e ~/anaconda3 ]]; then
+  cd /tmp
+  wget https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh
+  bash Anaconda3-4.4.0-Linux-x86_64.sh 
+  cd
+fi
+
 # set path...
 [[ ! -v $_SHELLS_VARIABLES_SOURCED ]] && source ~/.shells/variables.sh && export _SHELLS_VARIABLES_SOURCED=1
 
