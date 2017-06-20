@@ -13,3 +13,4 @@ safe-source(){
 safe-source ~/.travis/travis.sh
 
 unset -f safe-source  # done using safe-source
+export _SOURCE_SOURCED=1

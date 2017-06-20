@@ -64,7 +64,7 @@ install-app(){ # {{{
 # }}}
 
 # set path...
-source ~/.shells/variables.sh
+[[ ! $_VARIABLES_SOURCED ]] && source ~/.shells/variables.sh
 
 mkdir -p ~/.{bin,applications,shells,zsh,bash,shells} ~/.vim/{swap,backup,undo}
 
@@ -92,3 +92,5 @@ unset -f link-script
 unset -f clone-repo  
 unset -f install-app  
 # }}}
+
+export _SETUP_SOURCED=1

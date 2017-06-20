@@ -106,4 +106,6 @@ fi
 
 [[ -x $(which setxkbmap) ]] && setxkbmap -layout gb  
 
+export _VARIABLES_SOURCED=1
+
 # vim: foldmethod=marker foldlevel=0 
