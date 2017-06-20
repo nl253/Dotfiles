@@ -7,7 +7,7 @@
 # chech if on system 
 # set up aliases in case it is and isn't
 
-[[ ! $_SETUP_SOURCED ]] && source ~/.shells/setup.sh
+[[ ! $_SHELLS_SETUP_SOURCED ]] && source ~/.shells/setup.sh && export _SHELLS_SETUP_SOURCED=1
 
 if [[ -x $(which fzf) ]]; then # {{{
 
@@ -65,4 +65,3 @@ else # non fzf solution
 
 fi # }}}
 
-export _FZF_SOURCED=1

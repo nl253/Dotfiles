@@ -108,6 +108,4 @@ fi
 
 unset -f in-path
 
-export _ALIASES_SOURCED=1
-
 # vim: foldmethod=marker foldlevel=0 

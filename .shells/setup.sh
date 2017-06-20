@@ -13,8 +13,7 @@ clone-repo(){  # {{{
   # arg1 : ~/${DIR RELATIVE TO ~}
   # arg2 : https://github.com/${RELATIVE TO GitHub} 
   # pull scripts if needed 
-  [[ $# != 2 ]] && return 1
-  if [[ ! -e ~/$2 ]] && [[ -x $(which git 2>/dev/null) ]]; then
+  if [[ $# == 2 ]] && [[ ! -e ~/$2 ]] && [[ -x $(which git 2>/dev/null) ]]; then
     echo -e "You don't appear to have ~/${2}."
     echo -e "Would you like to download ${2} from https://github.com/${1} ?\nNote, this will clone them into ~/${2}."
     REGEX="^[Yy]es"
@@ -52,25 +51,25 @@ link-script(){
 # }}}
 
 install-app(){ # {{{
-  [[ $# != 4 ]] && echo "$0 : You must pass 4 args." && return 1
+  [[ $# != 3 ]] && echo "$0 : You must pass 3 args." && return 1
 
-  clone-repo $1 $2 
+  clone-repo $1 .applications/$2 
 
-  if [[ ! -x $(which $4 2>/dev/null) ]] && [[ -x ~/.applications/$3 ]] && [[ ! -e ~/.bin/$3 ]]; then 
-    ln -s ~/.applications/$3 ~/.bin/$4
+  if [[ ! -x $(which $2 2>/dev/null) ]] && [[ -e ~/.applications/$2 ]] && [[ ! -e ~/.bin/$2 ]]; then 
+    ln -s ~/.applications/$2/$3 ~/.bin/$2
   fi
   
 }
 # }}}
 
 # set path...
-[[ ! $_VARIABLES_SOURCED ]] && source ~/.shells/variables.sh
+[[ ! -v $_SHELLS_VARIABLES_SOURCED ]] && source ~/.shells/variables.sh && export _SHELLS_VARIABLES_SOURCED=1
 
 mkdir -p ~/.{bin,applications,shells,zsh,bash,shells} ~/.vim/{swap,backup,undo}
 
-install-app ranger/ranger .applications/ranger ranger/ranger.py ranger 
-install-app nl253/ProjectGenerator .applications/project project/project project 
-install-app nl253/SQLiteREPL .applications/sqlite sqlite/main.py sqlite
+install-app ranger/ranger ranger ranger.py 
+install-app nl253/ProjectGenerator project project
+install-app nl253/SQLiteREPL sqlite main.py 
 
 clone-repo nl253/Scripts Projects/Scripts
 clone-repo nl253/Scripts .scripts
@@ -93,4 +92,3 @@ unset -f clone-repo
 unset -f install-app  
 # }}}
 
-export _SETUP_SOURCED=1

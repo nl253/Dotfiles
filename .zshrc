@@ -145,19 +145,11 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 
 # source ~/.shells and ~/.zsh here to overwite some settings {{{
 for file in ~/.{shells,zsh}/** ; do  # Custom dirs with general shell configuration
-  [[ -f $file ]] && source $file # all of these use POSIX compliant syntax
+  [[ -f $file ]] && [[ $file =~ [a-zA-Z]\.z?sh$ ]] && [[ ! -v "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED" ]] && source $file 
+  eval "export _"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED=1"
 done
 
 # }}} # if this was sourced successfully then we have all the variables set properly
-
-# Python virtual env manager  {{{ # 
-# NOTE needs to be sourced AFTER sourcing general shells configuration
-#if [[ -e ~/.pyenv/bin/pyenv ]]; then
-  #eval "$(pyenv init -)"
-  #source "$(pyenv root)/completions/pyenv.zsh"
-  #[[ -e ~/.pyenv/plugins/pyenv-virtualenv/bin/pyenv-activate ]] && eval "$(pyenv virtualenv-init -)"
-#fi
-# }}}
 
 # CUSTOM PLUGINS {{{
 # --------------
@@ -167,21 +159,19 @@ done
 # ARG2: repo owner/Repo_name
 # {{{
 function fetch-custom-plug-gh(){  
-  if [[ -x $(which git) ]] && [[ ! -e ${ZSH_CUSTOM}/plugins/$1/$1.plugin.zsh ]] ; then
-    cd ${ZSH_CUSTOM}/plugins
-    git clone https://github.com/$2 $1 
-    cd  
-    source ~/.zshrc
-  fi
+  for arg in $@; do
+    plug_name=$(echo $arg | sed -E 's/\S+\///')
+    if [[ -x $(which git) ]] && [[ ! -e ${ZSH_CUSTOM}/plugins/${plug_name}/${plug_name}.plugin.zsh ]] ; then
+      cd ${ZSH_CUSTOM}/plugins
+      git clone https://github.com/$1 $plug_name 
+      cd  
+      source ~/.zshrc
+    fi
+  done
 } 
 # }}}
 
-fetch-custom-plug-gh zsh-autosuggestions zsh-users/zsh-autosuggestions
-fetch-custom-plug-gh zsh-completions zsh-users/zsh-completions
-fetch-custom-plug-gh zsh-syntax-highlighting zsh-users/zsh-syntax-highlighting.git
-fetch-custom-plug-gh fast-syntax-highlighting zdharma/fast-syntax-highlighting.git
-fetch-custom-plug-gh git-extra-commands unixorn/git-extra-commands.git
-fetch-custom-plug-gh zsh-history-substring-search zsh-users/zsh-history-substring-search
+fetch-custom-plug-gh zsh-users/zsh-{autosuggestions,completions,syntax-highlighting,history-substring-search} zdharma/fast-syntax-highlighting unixorn/git-extra-commands 
 
 unset -f fetch-custom-plug-gh
 
