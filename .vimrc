@@ -89,24 +89,30 @@ endif
 
 " SET DIRS {{{
 " where you store templates [format is $TEMPLATE_DIR/template.{sh,py,js}]
-let g:TEMPLATE_DIR = expand(g:VIMDIR.'templates/')
+let g:TEMPLATE_DIR = g:VIMDIR.'templates/'
+let g:SNIPPET_DIR = g:VIMDIR.'snippets/'
+
+for language in g:PROGRAMMING + g:MARKUP
+    call system('mkdir -p '.g:TEMPLATE_DIR.language)
+    call system('mkdir -p '.g:SNIPPET_DIR.language)
+endfor
 
 " where scratchpads will be kept
-let g:SCRATCHPAD_DIR = expand(g:VIMDIR.'scratchpads/')
+let g:SCRATCHPAD_DIR = g:VIMDIR.'scratchpads/'
 
 " where dictionaries will be kept
-let g:DICT_DIR = expand(g:VIMDIR.'dicts/')
+let g:DICT_DIR = g:VIMDIR.'dicts/'
 
 " where licenses will be kept
-let g:LICENSE_DIR = expand(g:VIMDIR.'licenses/')
+let g:LICENSE_DIR = g:VIMDIR.'licenses/'
 
-let g:UNDO_DIR = expand(g:VIMDIR.'undo/')
-let g:BACKUP_DIR = expand(g:VIMDIR.'backup/')
-let g:SWAP_DIR = expand(g:VIMDIR.'swap/')
+let g:UNDO_DIR = g:VIMDIR.'undo/'
+let g:BACKUP_DIR = g:VIMDIR.'backup/'
+let g:SWAP_DIR = g:VIMDIR.'swap/'
 
 " MAKE MISSING DIRS {{{
 execute "set shell=".system('which bash')
-for d in [g:VIMDIR, g:TEMPLATE_DIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, g:UNDO_DIR, g:SWAP_DIR, g:LICENSE_DIR]
+for d in [g:VIMDIR, g:SCRATCHPAD_DIR, g:DICT_DIR, g:BACKUP_DIR, g:UNDO_DIR, g:SWAP_DIR, g:LICENSE_DIR]
     call system('[ ! -e '.d.' ] && mkdir -p '.d)
 endfor
 " }}} }}} }}} }}}
@@ -744,16 +750,58 @@ endfunction
 
 endif " }}}
 
-" Template(){{{
-function! Template()
-    if expand('%:e') != "" && filereadable(g:TEMPLATE_DIR."template.".expand("%:e")) 
-        %d
-        execute 'read '.g:TEMPLATE_DIR."template.".expand("%:e")
-        1,2d
-        write
+function! _ListSnippets(A,L,P)
+    return system("ls ".g:SNIPPET_DIR.&filetype." | sed -E 's/\\.\\w+$//'")
+endfunction
+
+function! _ReadSnippet(snip_file)
+    if expand('%:e') == ''
+        echom 'You need an extension in current file.'
+        return 0
+    endif
+    execute 'read 'g:SNIPPET_DIR.&filetype.'/'.a:snip_file.'.'.expand("%:e")
+    normal dd
+endfunction
+
+command! -complete=custom,_ListSnippets -nargs=1 Snippet call _ReadSnippet(<q-args>)
+
+" --------------------------------------------------
+
+function! _ListTemplates(A,L,P)
+    return system("ls ".g:TEMPLATE_DIR.&filetype." | sed -E 's/\\.\\w+$//'")
+endfunction
+
+function! _ReadTemplate(...)
+    if expand('%:e') == ''
+        echom 'You need an extension in current file.'
+        return 0
+    endif
+    if a:0 == 1 && len(a:1) > 1
+        %delete
+        execute 'read '.g:TEMPLATE_DIR.&filetype.'/'.a:1.'.'.expand('%:e')
+        1delete
+    else
+        %delete
+        execute 'read '.g:TEMPLATE_DIR.'template.'.expand('%:e')
+        1delete
     endif
 endfunction
-command! Template call Template() 
+
+function! _DropTemplates(...)
+    if expand('%:e') == ''
+        echom 'You need an extension in current file.'
+        return 0
+    endif
+    echo system('cp '.g:TEMPLATE_DIR.&filetype.'/{'.join(split(join(a:000)),',').'}.'.expand('%:e').' '.expand('%:p:h').'/')
+endfunction
+
+command! -complete=custom,_ListTemplates -nargs=? Template call _ReadTemplate(<q-args>)
+
+command! -complete=custom,_ListTemplates -nargs=+ DropTemplates call _DropTemplates(<q-args>)
+
+
+
+
 "}}} }}}
 
 " }}}
@@ -771,7 +819,7 @@ aug VIMENTER
     au FocusLost   * silent!  wall
     au CmdwinEnter * setlocal updatetime=2000
     au CmdwinLeave * setlocal updatetime=200
-    au BufNewFile * call Template() 
+    au BufNewFile * Template
     au FileType * call Init()
     execute 'au! FileType '.join(g:PROGRAMMING, ',').' call Programming()' 
     execute 'au! FileType '.join(g:MARKUP, ',').' call Markup()'
