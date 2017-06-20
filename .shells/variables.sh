@@ -4,27 +4,6 @@
 
 # VARIABLES 
 
-# $COLORS {{{
-# set variables to produce colored output later 
-export RED="\e[31m"
-export CYAN="\e[96m"
-export DARKMAGENTA="\e[35m"
-export MAGENTA="\e[95m"
-export BLUE="\e[34mB"
-export GREEN="\e[32m"
-export WHITE="\e[97mW"
-export DEFCOLOR="\e[39m"
-export YELLOW="\e[93m"
-export DARKYELLOW="\e[33m"
-export GREY="\e[37m"
-export DARKGREY="\e[90m"
-
-PYTHON="${YELLOW}PYTHON${DEFCOLOR}"
-HASKELL="${BLUE}HASKELL${DEFCOLOR}"
-RUBY="${RED}RUBY${DEFCOLOR}"
-JAVSCRIPT="${DARKYELLOW}JAVSCRIPT${DEFCOLOR}"
-# }}}
-
 # GENERAL {{{
 export TERM=xterm-256color
 unset MAILCHECK                                                        # Don't check mail when opening terminal.
@@ -36,7 +15,6 @@ export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xte
 # ------------------------------------------------------------------------
 # FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
 # ------------------------------------------------------------------------
-
 add-to-path(){
   for directory in $@; do
     if [[ -d $directory ]]; then
@@ -52,13 +30,6 @@ add-to-path ~/{.local,.cabal,.cargo,.gem,go,anaconda3}/bin  ~/{.bin,.config/comp
 unset -f add-to-path
 
 [ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'  # JAVA
-
-#if [ -e ~/.pyenv/bin/pyenv ]; then
-  #export PYENV_ROOT="${HOME}/.pyenv"
-  #export PATH="${PYENV_ROOT}/bin:${PATH}:"
-  ##export PYENV_VERSION='pypy3.5-5.7.1-beta'
-  #export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-#fi
 
 # }}}
 
@@ -94,7 +65,7 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 if [ -x /usr/bin/less ] || [ -x /bin/less ]; then
   alias less='less -x4RFsX' && export PAGER=less
 else
-  [ -x /usr/bin/more ] && export PAGER=more && alias less=more
+  [ -x $(which more) ] && export PAGER=more && alias less=more
 fi
 # }}}
 
@@ -103,14 +74,14 @@ fi
 # uses `google chrome` if available ie if running on a gui 
 # fall back on 1. `elinks` 2. `lynx` 3. `w3m`
 # -------------------------------------------------
-if [ -x /usr/bin/google-chrome-stable ] || [ -x /bin/google-chrome-stable ]; then
-  export BROWSER=google-chrome-stable
-elif [ -x /bin/elinks ] || [ -x /usr/bin/elinks ]; then
-  export BROWSER=elinks
-elif [ -x /bin/lynx ] || [ -x /usr/bin/lynx ]; then
-  export BROWSER=lynx
-elif [ -x /bin/w3m ] || [ -x /usr/bin/w3m ]; then
-  export BROWSER=w3m
+if [[ -x $(which google-chrome-stable) ]]; then
+  export BROWSER=$(which google-chrome-stable)
+elif [[ -x $(which elinks) ]]; then
+  export BROWSER=$(which elinks)
+elif [[ -x $(which lynx) ]]; then
+  export BROWSER=$(which lynx)
+elif [[ -x $(which w3m) ]]; then
+  export BROWSER=$(which w3m)
 fi
 # }}}
 
@@ -132,6 +103,6 @@ fi
 
 # }}}
 
-[ -x /usr/bin/setxkbmap ] || [ -x /bin/setxkbmap ] && setxkbmap -layout gb  
+[[ -x $(which setxkbmap) ]] && setxkbmap -layout gb  
 
 # vim: foldmethod=marker foldlevel=0 

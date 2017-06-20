@@ -3,7 +3,7 @@
 
 safe-source(){ # {{{
   for i in $@; do
-    [[ -f $i ]] && source $i
+    [[ -r $i ]] && source $i
   done
 } # }}}
 

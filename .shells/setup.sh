@@ -4,13 +4,6 @@
 
 # SETUP 
 
-ensure-dir-exists(){  # {{{ 
-  [[ $# == 0 ]] && return 1
-  for i in $@; do
-    [[ ! -e $i ]] && mkdir -p $i
-  done
-} # }}} 
-
 # automatically link /tmp to ~/Downloads  {{{
 [[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rm -rf ~/Downloads
 [[ ! -e ~/Downloads ]] && ln -s /tmp ~/Downloads
@@ -38,14 +31,11 @@ clone-repo(){  # {{{
 
 # remove dead links {{{
 for link in $(ls ~/.bin); do
-  if [[ ! -x ~/.bin/$link ]]; then
+  if [[ ! -x ~/.bin/$link ]] || [[ -L ~/.bin/$link ]] && [[ $(readlink -e ~/.bin/$link) == "" ]]; then
     rm ~/.bin/$link
   fi
 done
 # }}}
-
-# set path...
-source ~/.shells/variables.sh
 
 # fetch-script() {{{
 # FUNCTION
@@ -54,7 +44,7 @@ source ~/.shells/variables.sh
 link-script(){ 
   for script in $@ ; do
     out=$(echo $script | sed -E "s/\.\w+$//")
-    if [[ ! -x $(which $out 2>/dev/null) ]] && [[ ! -e ~/.bin/$out ]] && [[ -f ~/.scripts/$script ]]; then 
+    if [[ ! -e ~/.bin/$out ]] && [[ -f ~/.scripts/$script ]]; then 
       ln -s ~/.scripts/$script ~/.bin/$out
     fi
   done
@@ -62,7 +52,7 @@ link-script(){
 # }}}
 
 install-app(){ # {{{
-  [[ $# != 4 ]] && return 1
+  [[ $# != 4 ]] && echo "$0 : You must pass 4 args." && return 1
 
   clone-repo $1 $2 
 
@@ -73,7 +63,10 @@ install-app(){ # {{{
 }
 # }}}
 
-ensure-dir-exists ~/.{bin,applications,shells,zsh,bash,shells} ~/.vim/{swap,backup,undo}
+# set path...
+source ~/.shells/variables.sh
+
+mkdir -p ~/.{bin,applications,shells,zsh,bash,shells} ~/.vim/{swap,backup,undo}
 
 install-app ranger/ranger .applications/ranger ranger/ranger.py ranger 
 install-app nl253/ProjectGenerator .applications/project project/project project 
@@ -81,13 +74,21 @@ install-app nl253/SQLiteREPL .applications/sqlite sqlite/main.py sqlite
 
 clone-repo nl253/Scripts Projects/Scripts
 clone-repo nl253/Scripts .scripts
+
+# {{{ fzf not found ... Install ... 
+if [[ ! -x $(which fzf) ]]; then       
+  cd /tmp && wget https://github.com/junegunn/fzf-bin/releases/download/0.16.8/fzf-0.16.8-linux_amd64.tgz || exit 1
+  tar xfvz fzf-0.16.8-linux_amd64.tgz && mv ./fzf ~/.bin/fzf
+  cd
+fi
+# }}}
+
 clone-repo junegunn/fzf.git .applications/fzf
 
-link-script grf.sh csv-preview.sh extractor.sh show-ip.sh download-dotfile.sh p.sh ipython.sh env.sh pandoc.sh csv-preview.sh
+link-script {show-ip,grf,csv-preview,extractor,download-dotfile,p,env,ipython,pandoc,csv-preview}.sh  
 
 # unset functions {{{
 unset -f link-script 
 unset -f clone-repo  
 unset -f install-app  
-unset -f ensure-dir-exists
 # }}}

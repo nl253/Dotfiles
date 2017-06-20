@@ -144,11 +144,9 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 # }}}
 
 # source ~/.shells and ~/.zsh here to overwite some settings {{{
-if [[ -d ~/.zsh ]] && [[ -d ~/.shells ]]; then
-  for file in ~/.{shells,zsh}/** ; do  # Custom dirs with general shell configuration
-    [[ -f $file ]] && source $file # all of these use POSIX compliant syntax
-  done
-fi
+for file in ~/.{shells,zsh}/** ; do  # Custom dirs with general shell configuration
+  [[ -f $file ]] && source $file # all of these use POSIX compliant syntax
+done
 
 # }}} # if this was sourced successfully then we have all the variables set properly
 

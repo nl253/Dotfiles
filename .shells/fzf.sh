@@ -9,17 +9,7 @@
 
 source ~/.shells/setup.sh
 
- # }}}
-
-# {{{ executeable not found ... Install ... 
-if [ ! -x /usr/bin/fzf ] && [ ! -x ~/.bin/fzf ] && [ ! -x /bin/fzf ] ; then       
-  cd /tmp && wget https://github.com/junegunn/fzf-bin/releases/download/0.16.8/fzf-0.16.8-linux_amd64.tgz || exit 1
-  tar xfvz fzf-0.16.8-linux_amd64.tgz && mv ./fzf ~/.bin/fzf
-  cd
-fi
-# }}}
-
-if [ -x /bin/fzf ] || [ -e ~/.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
+if [[ -x $(which fzf) ]]; then # {{{
 
    # h - repeat history {{{
   h() { 
@@ -67,7 +57,7 @@ if [ -x /bin/fzf ] || [ -e ~/.bin/fzf ] || [ -x /usr/bin/fzf ] ; then # {{{
 
 else # non fzf solution 
 
-  if [ -x /usr/bin/htop ] || [ -x /bin/htop ] ; then
+  if [[ -x $(which htop) ]]; then
     alias p=htop 
   else 
     alias p=top # [P]ROCESSES 
