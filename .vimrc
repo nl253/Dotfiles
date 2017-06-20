@@ -75,13 +75,13 @@ endfor
 
 " NVIM/VIM {{{
 if has('nvim')
-    let g:VIMDIR = glob('~/.config/nvim/')
-    let g:PLUG_FILE = glob('~/.local/share/nvim/site/autoload/plug.vim')
+    let g:VIMDIR = expand('~/.config/nvim/')
+    let g:PLUG_FILE = expand('~/.local/share/nvim/site/autoload/plug.vim')
     tnoremap <esc> <c-\><c-n>
 else " if vim
-    let g:VIMDIR = glob('~/.vim/')
-    let g:PLUG_FILE = glob('~/.vim/autoload/plug.vim')
-    let $MYVIMRC = glob('~/.vimrc')  " set automatically in nvim
+    let g:VIMDIR = expand('~/.vim/')
+    let g:PLUG_FILE = expand('~/.vim/autoload/plug.vim')
+    let $MYVIMRC = expand('~/.vimrc')  " set automatically in nvim
     syntax enable  " enable sane-defaults (already present in nvim)
     filetype plugin indent on
 endif
@@ -325,7 +325,7 @@ Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 " }}} }}}
 "
 " FZF {{{
-if empty(glob("~/.applications"))
+if empty(expand("~/.applications"))
     !mkdir -p /home/norbert/.applications/
 endif
 Plug 'junegunn/fzf', { 'dir': '~/.applications/fzf', 'do': './install --all' }
