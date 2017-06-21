@@ -190,6 +190,7 @@ seaborn-data/
 .ssh/
 .stack/
 .steam/
+.vim/
 .steam*
 .swt/
 tags

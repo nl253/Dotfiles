@@ -8,7 +8,6 @@ endif
 " VIMDIR - NVIM/VIM 
 if has('nvim')
     let g:VIMDIR = expand('~/.config/nvim/')
-    tnoremap <esc> <c-\><c-n>
 else " if vim
     let g:VIMDIR = expand('~/.vim/')
     let $MYVIMRC = expand('~/.vimrc')  " set automatically in nvim
