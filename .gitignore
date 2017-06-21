@@ -153,6 +153,8 @@ Notes/
 .npm/
 .nvimlog
 .oh-my-zsh/
+*.png
+.antigen/
 OneDrive/
 .pc
 .pdepend/

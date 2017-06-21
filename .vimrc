@@ -23,7 +23,7 @@ endfor
 
 let g:EXTRAS_DIR = g:VIMDIR.'extras/'
 
-for file in split(glob(g:EXTRAS_DIR.'*'))
+for file in split(glob(g:EXTRAS_DIR.'*.vim'))
     if filereadable(file)
         execute 'source '.file
     endif
