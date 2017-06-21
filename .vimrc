@@ -17,13 +17,13 @@ endif
 
 let g:CORE_DIR = g:VIMDIR.'core/'
 
-for i in split(expand('{options,variables,init,utils}.vim')) 
+for i in split(expand('{options,variables,init,functions,autocommands}.vim')) 
     execute 'source '.g:CORE_DIR.i
 endfor
 
 let g:EXTRAS_DIR = g:VIMDIR.'extras/'
 
-for file in split(glob(g:EXTRAS_DIR.'*'))
+for file in split(glob(g:EXTRAS_DIR.'*.vim'))
     if filereadable(file)
         execute 'source '.file
     endif

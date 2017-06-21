@@ -48,9 +48,9 @@ shopt -s histreedit # Allow use to re-edit a faild history substitution.
 # source all .sh in ~/.shells/ (general shell configuration) 
 # source all .sh in ~/.bash/ (bash-specific configuration)
 # this will set `$PATH` and allow me to use my scripts 
-for file in ~/.{shells,bash}/**; do
-  [[ -f $file ]] && [[ $file =~ [a-zA-Z]\.sh$ ]] && [[ ! -v "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED" ]] && source $file 
-  eval "_"$(basename $(dirname $file) | grep -Eo "\w+" | tr /a-z/ /A-Z/)"_"$(basename $file | sed -E 's/\.\w+$//' | tr /a-z/ /A-Z/)"_SOURCED=1"
+
+for i in ~/.shells/{variables,source,setup,fzf,aliases}.sh ~/.bash/{source,functions,aliases}.sh ; do
+  source $i
 done
 
 # BY HERE $PATH AND OTHER VARIABLES HAVE BEEN SET !
@@ -60,5 +60,3 @@ done
 # }}}
 
 # vim: foldmethod=marker foldlevel=0
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
