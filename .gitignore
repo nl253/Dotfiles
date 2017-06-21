@@ -203,8 +203,13 @@ tags
 */undo/*
 undo/*
 .vagrant.d/
-.vim/
 .viminfo
+.vim/autoload/plug.vim
+.vim/autoload/plug.vim.old
+.vim/swap/
+.vim/backup/
+.vim/undo/
+.vim/templates/
 vimwiki/
 vimwiki_html/
 VMs/

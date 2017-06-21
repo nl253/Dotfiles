@@ -75,6 +75,8 @@ install-app nl253/SQLiteREPL sqlite main.py
 
 clone-repo nl253/Scripts Projects/Scripts
 clone-repo nl253/Scripts .scripts
+[[ ! -e ~/.vim/.git ]] && rm -rf ~/.vim
+clone-repo nl253/Vim .vim
 
 # {{{ fzf not found ... Install ... 
 if [[ ! -x $(which fzf) ]]; then       
