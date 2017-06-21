@@ -60,3 +60,5 @@ done
 # }}}
 
 # vim: foldmethod=marker foldlevel=0
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

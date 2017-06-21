@@ -184,3 +184,5 @@ unset -f fetch-custom-plug-gh
 # }}}
 
 # vim: foldmethod=marker
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
