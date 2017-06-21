@@ -44,6 +44,14 @@ setopt mark_dirs                        # Add "/" if completes directory
 unsetopt correct_all
 # }}}
 
+# Enable Ctrl-x-e to edit command line
+autoload -U edit-command-line
+
+# Emacs style
+zle -N edit-command-line
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
+
 for i in ~/.shells/{variables,source,setup,fzf,aliases}.sh ~/.zsh/{source,functions,aliases}.zsh ; do
     source $i
 done

@@ -4,10 +4,7 @@
 
 # FZF init 
 
-# chech if on system 
-# set up aliases in case it is and isn't
-
-[[ ! $_SHELLS_SETUP_SOURCED ]] && source ~/.shells/setup.sh && export _SHELLS_SETUP_SOURCED=1
+# chech if on system, set up aliases in case it is and isn't
 
 if [[ -x $(which fzf) ]]; then # {{{
 
