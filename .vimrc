@@ -17,7 +17,7 @@ endif
 
 let g:CORE_DIR = g:VIMDIR.'core/'
 
-for i in split(expand('{options,variables,init,utils}.vim')) 
+for i in split(expand('{options,variables,init,functions,autocommands}.vim')) 
     execute 'source '.g:CORE_DIR.i
 endfor
 
