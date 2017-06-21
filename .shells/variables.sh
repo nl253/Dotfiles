@@ -30,6 +30,8 @@ add-to-path ~/.gem/ruby/*/bin 2>/dev/null
 
 unset -f add-to-path
 
+export PATH=${PATH//::/}
+
 # PYENV {{{
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
@@ -47,68 +49,38 @@ export HISTFILESIZE=20000
 export HISTCONTROL="ignoreboth:erasedups"
 export HISTTIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
-
-# HISTIGNORE
-# ----------------------------------------------------------------------------------------------------------
-# A colon-separated list of patterns used to decide which command lines should be saved on the history list.
-# It must match the complete line (no implicit `*' is appended).
-# The pattern is tested against the line after the checks specified by HISTCONTROL are applied.
-# In addition to the normal shell pattern matching characters, `&' matches the previous  history  line.
-# The pattern  matching honors the setting of the extglob shell option.
-# ----------------------------------------------------------------------------------------------------------
-export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs" # }}}
+export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs" 
+# }}}
 
 export GREP_COLOR='1;33' # makes it yellow # by default red
-
-#export LSCOLORS=ExFxCxdxBxegedabagacad
-
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
 # $PAGER {{{
-# ------------------------------------------------------------------
-# if available enable syntax highlighting # fall back on `more` if `less` not available
-# tries to set default pager as `less` and add coloring to the output if possible
-# falls back on `more` if available
-# ------------------------------------------------------------------
-if [ -x /usr/bin/less ] || [ -x /bin/less ]; then
+if [[ -x /usr/bin/less ]] || [ -x /bin/less ]; then
   alias less='less -x4RFsX' && export PAGER=less
 else
-  [ -x $(which more) ] && export PAGER=more && alias less=more
+  [[ -x $(which more) ]] && export PAGER=more && alias less=more
 fi
 # }}}
 
 # $BROWSER {{{
-# -------------------------------------------------
-# uses `google chrome` if available ie if running on a gui 
-# fall back on 1. `elinks` 2. `lynx` 3. `w3m`
-# -------------------------------------------------
-if [[ -x $(which google-chrome-stable) ]]; then
-  export BROWSER=$(which google-chrome-stable)
-elif [[ -x $(which elinks) ]]; then
-  export BROWSER=$(which elinks)
-elif [[ -x $(which lynx) ]]; then
-  export BROWSER=$(which lynx)
-elif [[ -x $(which w3m) ]]; then
-  export BROWSER=$(which w3m)
-fi
+for i in google-chrome-stable elinks lynx w3m; do
+  if [[ -x $(which $i) ]]; then 
+    export BROWSER=$(which $i)
+    break
+  fi
+done
+
 # }}}
 
 # $EDITOR  {{{
-# ---------------------------------------------------------------------- 
-# attempt to set to neo-vim if available, fall back on vim and then vi
-# ----------------------------------------------------------------------
-if [[ -x $(which vim) ]] ; then # if vim but not neovim
-  export EDITOR=$(which vim)
-  alias vi=$(which vim)
-  # set up vim plugins
-elif [[ -x $(which vi) ]]; then # if not neovim and not vim then fall back on vi
-  export EDITOR=$(which vi)
-  alias vim=$(which vi)
-elif [[ -x $(which nvim) ]]; then 
-  export EDITOR=$(which nvim)
-  alias vim=$(which nvim)
-fi
-
+for i in vim nvim vi; do
+  if [[ -x $(which $i) ]]; then
+    export EDITOR=$(which $i)
+    [[ $i != vim ]] && eval 'alias '$i=vim
+    break
+  fi
+done
 # }}}
 
 [[ -x $(which setxkbmap) ]] && setxkbmap -layout gb  

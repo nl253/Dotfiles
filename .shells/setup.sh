@@ -5,8 +5,7 @@
 # SETUP 
 
 # automatically link /tmp to ~/Downloads  {{{
-[[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rm -rf ~/Downloads
-[[ ! -e ~/Downloads ]] && ln -s /tmp ~/Downloads
+[[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rmdir ~/Downloads && ln -s /tmp ~/Downloads || echo '~/Downloads not empty - symlinking to /tmp failed.'
 # }}}
 
 clone-repo(){  # {{{
@@ -75,8 +74,6 @@ fi
 # }}}
 
 # set path...
-[[ ! -v $_SHELLS_VARIABLES_SOURCED ]] && source ~/.shells/variables.sh && export _SHELLS_VARIABLES_SOURCED=1
-
 mkdir -p ~/.{bin,applications,shells,zsh,bash,shells} 
 
 install-app ranger/ranger ranger ranger.py 
@@ -92,7 +89,7 @@ clone-repo nl253/Vim .vim
 
 clone-repo junegunn/fzf.git .applications/fzf
 
-link-script {show-ip,grf,csv-preview,extractor,download-dotfile,p,env,ipython,pandoc,csv-preview}.sh  
+link-script {show-ip,grf,csv-preview,extractor,download-dotfile,p,env,csv-preview}.sh  
 
 # unset functions {{{
 unset -f link-script 
