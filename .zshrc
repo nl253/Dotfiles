@@ -53,3 +53,5 @@ for i in ~/.shells/{variables,source,setup,fzf,aliases}.sh ~/.zsh/{source,functi
 done
 
 # vim: foldmethod=marker
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
