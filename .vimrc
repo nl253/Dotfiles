@@ -22,7 +22,9 @@ if ! has('nvim')
 endif
 
 if ! filereadable(g:VIMDIR.'plugins.vim')
-	echo system('curl -fLo')
+	echo system('curl -fLo '.g:VIMDIR.'plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
 endif
+
+exec 'source '.g:VIMDIR.'plugins.vim'
 
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
