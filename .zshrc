@@ -5,11 +5,15 @@
 
 source ~/.antigen/antigen.zsh
 
-for i in jreese/zsh-titles zsh-users/zsh-{autosuggestions,completions} srijanshetty/zsh-pandoc-completion RobSis/zsh-completion-generator voronkovich/gitignore.plugin.zsh zdharma/fast-syntax-highlighting; do
+plugins=(jreese/zsh-titles zsh-users/zsh-{autosuggestions,completions} \
+    srijanshetty/zsh-pandoc-completion RobSis/zsh-completion-generator \
+    voronkovich/gitignore.plugin.zsh zdharma/fast-syntax-highlighting)
+
+for i in $plugins; do
     antigen bundle $i
 done
-    
-antigen apply
+
+antigen apply && unset -v plugins
 
 # OPTIONS {{{
              
@@ -43,14 +47,6 @@ setopt glob_complete                    # Expand globs when completion
 setopt mark_dirs                        # Add "/" if completes directory
 unsetopt correct_all
 # }}}
-
-# Enable Ctrl-x-e to edit command line
-autoload -U edit-command-line
-
-# Emacs style
-zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
 
 for i in ~/.shells/{variables,source,setup,fzf,aliases}.sh ~/.zsh/{source,functions,aliases}.zsh ; do
     source $i

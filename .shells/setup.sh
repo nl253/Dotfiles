@@ -5,7 +5,7 @@
 # SETUP 
 
 # automatically link /tmp to ~/Downloads  {{{
-[[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rmdir ~/Downloads && ln -s /tmp ~/Downloads || echo '~/Downloads not empty - symlinking to /tmp failed.'
+[[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rmdir ~/Downloads && ln -s /tmp ~/Downloads || [[ ! -L ~/Downloads ]] && echo '~/Downloads not empty - symlinking to /tmp failed.'
 # }}}
 
 clone-repo(){  # {{{
