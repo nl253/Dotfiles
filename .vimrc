@@ -5,8 +5,15 @@ if ! has('unix')
     exit 
 endif 
 
+" VARIABLES  
 " VIMDIR - NVIM/VIM 
 let g:VIMDIR = expand('~/.vim/')
+
+" MARKUP languages you actively use  
+let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
+
+" PROGRAMMING LANGUAGES you code in 
+let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
 
 if ! has('nvim')
     let $MYVIMRC = expand('~/.vimrc')  " set automatically in nvim
@@ -14,16 +21,8 @@ if ! has('nvim')
     filetype plugin indent on
 endif
 
-let g:CORE_DIR = g:VIMDIR.'core/'
-
-for i in split(expand('{options,variables,init,autocommands}.vim')) 
-    execute 'source '.g:CORE_DIR.i
-endfor
-
-let g:EXTRAS_DIR = g:VIMDIR.'extras/'
-
-for file in split(expand('{plugins,snippets,dicts,colors,keybindings,programming}.vim'))
-    execute 'source '.g:EXTRAS_DIR.file
-endfor
+if ! filereadable(g:VIMDIR.'plugins.vim')
+	echo system('curl -fLo')
+endif
 
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
