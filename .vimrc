@@ -6,10 +6,9 @@ if ! has('unix')
 endif 
 
 " VIMDIR - NVIM/VIM 
-if has('nvim')
-    let g:VIMDIR = expand('~/.config/nvim/')
-else " if vim
-    let g:VIMDIR = expand('~/.vim/')
+let g:VIMDIR = expand('~/.vim/')
+
+if ! has('nvim')
     let $MYVIMRC = expand('~/.vimrc')  " set automatically in nvim
     syntax enable  " enable sane-defaults (already present in nvim)
     filetype plugin indent on
