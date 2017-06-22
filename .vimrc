@@ -22,7 +22,8 @@ if ! has('nvim')
 endif
 
 if ! filereadable(g:VIMDIR.'plugins.vim')
-	echo system('curl -fLo '.g:VIMDIR.'plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
+    echo system('mkdir -p '.g:VIMDIR)
+    echo system('curl -fLo '.g:VIMDIR.'plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
 endif
 
 exec 'source '.g:VIMDIR.'plugins.vim'
