@@ -171,7 +171,7 @@ if empty(expand('~/.applications'))
     !mkdir -p ~/.applications/
 endif
 
-Plug 'junegunn/fzf', { 'dir': '~/.applications/fzf', 'do': './install --all' }
+"Plug 'junegunn/fzf', { 'dir': '~/.zplug/repos/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'up': '~40%' }
@@ -204,7 +204,7 @@ Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
 Plug 'nl253/vim-colors'
 Plug 'nl253/vim-vim', { 'for': 'vim' }
-"Plug 'nl253/vim-fzf-extensions'
+Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-fugative-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
