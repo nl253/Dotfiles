@@ -54,6 +54,8 @@ config/
 .config/nvim/dicts/cpp*
 .config/nvim/dicts/scala.*
 .config/nvim/dicts/scheme.*
+.config/nvim/init.vim
+*.swp
 .config/nvim/init.vim.backup
 .config/nvim/spell/en.utf-8.add.spl
 .config/okular*

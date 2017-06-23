@@ -13,3 +13,4 @@ __fzf_readline ()
 
 builtin bind -x '"\C-x2": __fzf_readline';
 builtin bind '"\C-x1": "\C-x2\C-x3"'
+
