@@ -5,11 +5,11 @@
 # SETUP 
 
 # automatically link /tmp to ~/Downloads  {{{
-[[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rmdir ~/Downloads && ln -s /tmp ~/Downloads || [[ ! -L ~/Downloads ]] && echo '~/Downloads not empty - symlinking to /tmp failed.'
+# [[ -d ~/Downloads ]] && [[ ! -L ~/Downloads ]] && rmdir ~/Downloads && ln -s /tmp ~/Downloads || [[ ! -L ~/Downloads ]] && echo '~/Downloads not empty - symlinking to /tmp failed.'
 # }}}
 
 # if nvim, link to ~/.vimrc
-[[ -x $(which nvim) ]] && [[ ! -e ~/.config/nvim/init.vim ]] && ln -s ~/.vimrc ~/.config/nvim/init.vim
+# [[ -x $(which nvim) ]] && [[ ! -e ~/.config/nvim/init.vim ]] && ln -s ~/.vimrc ~/.config/nvim/init.vim
 
 # PYENV {{{
 #if [[ ! -e ~/.pyenv ]]; then 

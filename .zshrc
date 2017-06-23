@@ -5,10 +5,11 @@
 
 source ~/.zplug/init.zsh
 
-#zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 #zplug "RobSis/zsh-completion-generator"
 #zplug "joepvd/zsh-hints"
 #zplug "srijanshetty/zsh-pandoc-completion"
+
 zplug "jreese/zsh-titles"
 zplug "zdharma/fast-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
