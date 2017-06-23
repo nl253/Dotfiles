@@ -22,6 +22,7 @@ endif
 
 " BUILT-IN PLUGINS 
 " ================
+" {{{
 if v:version >= 800
     packadd! matchit
 else
@@ -47,8 +48,10 @@ let g:zsh_fold_enable = 1
 " YAML
 let g:yaml_schema = 'pyyaml'
 
-" place plugins here
-" -------------------
+" }}}
+
+" Place plugins here
+" ==================
 " GENERAL {{{
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating' | Plug 'tpope/vim-repeat'
 if executable('tmux')
@@ -135,7 +138,7 @@ Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 
 " WEB DEV {{{
 "
-" HTML {{{
+" HTML
 Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
 Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
 Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ]}
@@ -145,12 +148,9 @@ let g:html_font = ["Sans Serif", "DejaVu Sans Mono", 'Consolas', 'monospace']
 let g:html_use_xhtml = 1 | let g:html_dynamic_folds = 1
 let g:html_no_foldcolumn = 1 | let g:html_use_encoding = "UTF-8"
 let html_wrong_comments=1
-" }}}
 
-
-" PHP{{{
+" PHP
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
-" }}} }}}
 
 " FZF {{{
 if empty(expand('~/.applications'))
@@ -182,14 +182,16 @@ endif
 
 " }}}
 
+" }}}
+
 " MY PLUGINS
+" ==========
 Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
 Plug 'nl253/vim-colors'
 Plug 'nl253/vim-vim', {'for': 'vim'}
-Plug 'nl253/vim-keybindings'
 Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-scratchpads'
-"Plug 'nl253/vim-expand', {'for': g:MARKUP}
+Plug 'nl253/vim-templates'
 
 call plug#end()
