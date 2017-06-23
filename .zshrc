@@ -30,7 +30,10 @@ zplug "nl253/DictGen", as:command, use:"dict-gen", if:"[[ -x $(which python3) ]]
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:"fzf", use:"*linux*amd64*"
 
 zplug "~/.shells", from:local, use:"{variables,source,setup,fzf,aliases}.sh"
-zplug "~/.zsh", from:local, use:"{options,source,functions,aliases}.zsh"
+zplug "~/.zsh", from:local, use:"{variables,options,source,functions,aliases}.zsh"
+
+zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", ignore:'*'
+
 #zplug voronkovich/gitigore.plugin.zsh
 
 zplug load 
