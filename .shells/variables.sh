@@ -29,38 +29,35 @@ unset -f add-to-path
 
 export PATH=${PATH//::/}
 
-# PYENV {{{
+# PYENV 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
+[[ -d /usr/lib/jvm/java-8-openjdk ]] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'  # JAVA
+
 # }}}
 
-[ -d /usr/lib/jvm/java-8-openjdk ] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'  # JAVA
-
-# }}}
-
-# HISTORY {{{
+# HISTORY 
 export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTCONTROL="ignoreboth:erasedups"
 export HISTTIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs" 
-# }}}
 
 export GREP_COLOR='1;33' # makes it yellow # by default red
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
-# $PAGER {{{
+# $PAGER 
 if [[ -x $(which less) ]]; then
   alias less='less -x4RFsX' && export PAGER=less
 else
   [[ -x $(which more) ]] && export PAGER=more && alias less=more
 fi
-# }}}
 
-# $BROWSER {{{
+# $BROWSER 
 for i in google-chrome-stable elinks lynx w3m; do
   if [[ -x $(which $i) ]]; then 
     export BROWSER=$(which $i)
@@ -68,9 +65,7 @@ for i in google-chrome-stable elinks lynx w3m; do
   fi
 done
 
-# }}}
-
-# $EDITOR  {{{
+# $EDITOR  
 for i in vim nvim vi; do
   if [[ -x $(which $i) ]]; then
     export EDITOR=$(which $i)
@@ -78,7 +73,7 @@ for i in vim nvim vi; do
     break
   fi
 done
-# }}}
+# 
 
 [[ -x $(which setxkbmap) ]] && setxkbmap -layout gb  
 

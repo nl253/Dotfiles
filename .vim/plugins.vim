@@ -1,4 +1,5 @@
 
+" PLUG {{{
 if has('nvim')
     let g:PLUG_FILE = expand('~/.local/share/nvim/site/autoload/plug.vim')
 else " if vim
@@ -19,6 +20,7 @@ if has('nvim')
 else
     call plug#begin('~/.vim/plugged')
 endif
+" }}}
 
 " BUILT-IN PLUGINS 
 " ================
@@ -198,3 +200,5 @@ Plug 'nl253/vim-licenses', { 'on': 'License' }
 Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
 
 call plug#end()
+
+" vim: foldlevel=0

@@ -70,9 +70,9 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 # and a default location for download of Torrents in ~/Downloads/Torrents/
 if $(in-path rsync); then
     alias rsync-copy="rsync --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
-    alias rsync-move="rsync -avz --progress -h --remove-source-files"
-    alias rsync-update="rsync -avzu --progress -h"
-    alias rsync-synchronize="rsync -avzu --delete --progress -h"
+    # alias rsync-move="rsync -avz --progress -h --remove-source-files"
+    # alias rsync-update="rsync -avzu --progress -h"
+    # alias rsync-synchronize="rsync -avzu --delete --progress -h"
 fi #  }}}
 
 # pacman aliases, yaourt colors  {{{
