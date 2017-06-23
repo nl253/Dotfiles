@@ -3,8 +3,8 @@
 # IT IS SOURCED BY BOTH `zsh` AND `bash`
 
 # ALIASES
-# --------
-in-path() { # {{{
+
+in-path() { # 
 # checks if an executable is in $PATH
 for i in $(echo "$PATH" | sed "s/:/\n/g"); do
     if [ -x "$i/$1" ]; then
@@ -13,9 +13,8 @@ for i in $(echo "$PATH" | sed "s/:/\n/g"); do
 done
 return 1
 }
-#  }}}
 
-# general   {{{
+# general   
 alias sudo='sudo '                   # Enable aliases to be sudo’ed
 alias e='$EDITOR'                    # quicker access to vim
 alias show-path='echo -e ${PATH//:/\\n}'  # split path on ":"
@@ -32,9 +31,8 @@ alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
 
-# }}}
 
-# dirs and files  {{{
+# dirs and files  
 alias -- -='cd -' # Go back
 alias ..="cd .."
 alias ...="cd ../.."
@@ -47,16 +45,16 @@ alias lr=recent-files.sh                                                        
 alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                      # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                                                        # list recursively just dirs
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                                       # list recursively just files
-#  }}}
+#  
 
-# pattern matching  {{{
+# pattern matching  
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-#  }}}
+#  
 
-# networking, ssh, rsync  {{{
+# networking, ssh, rsync  
 # -----------------------------------
 # REQUIRES :: sshfs aria2c rsync python3
 # -----------------------------------
@@ -73,9 +71,9 @@ if $(in-path rsync); then
     # alias rsync-move="rsync -avz --progress -h --remove-source-files"
     # alias rsync-update="rsync -avzu --progress -h"
     # alias rsync-synchronize="rsync -avzu --delete --progress -h"
-fi #  }}}
+fi #  
 
-# pacman aliases, yaourt colors  {{{
+# pacman aliases, yaourt colors  
 # -----------------------------------
 # REQUIRES :: pacman yaourt expac
 # -----------------------------------
@@ -89,9 +87,9 @@ if $(in-path pacman); then
     alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
     alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
     $(in-path yaourt) && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
-fi #  }}}
+fi 
 
-# git {{{
+# git 
 # ------------------------
 # REQUIRES :: git hub
 # ------------------------
@@ -104,8 +102,8 @@ if $(in-path git); then
         alias g=git
     fi
 fi
-# }}}
+# 
 
 unset -f in-path
 
-# vim: foldmethod=marker foldlevel=0 
+# vim: foldmethod=marker foldlevel=0 foldmarker=if,fi
