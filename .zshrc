@@ -5,15 +5,16 @@
 
 source ~/.antigen/antigen.zsh
 
-plugins=(jreese/zsh-titles zsh-users/zsh-{autosuggestions,completions} \
-    srijanshetty/zsh-pandoc-completion RobSis/zsh-completion-generator \
-    voronkovich/gitignore.plugin.zsh zdharma/fast-syntax-highlighting)
+antigen bundle jreese/zsh-titles
+antigen bundle zsh-users/zsh-completions
+antigen bundle srijanshetty/zsh-pandoc-completion
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle joepvd/zsh-hints
+antigen bundle RobSis/zsh-completion-generator
+antigen bundle voronkovich/gitignore.plugin.zsh
+antigen bundle zdharma/fast-syntax-highlighting
 
-for i in $plugins; do
-    antigen bundle $i
-done
-
-antigen apply && unset -v plugins
+antigen apply 
 
 # OPTIONS {{{
              
@@ -53,5 +54,3 @@ for i in ~/.shells/{variables,source,setup,fzf,aliases}.sh ~/.zsh/{source,functi
 done
 
 # vim: foldmethod=marker
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
