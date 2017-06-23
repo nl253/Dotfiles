@@ -4,17 +4,16 @@
 
 # VARIABLES 
 
-# GENERAL {{{
+# GENERAL 
 export TERM=xterm-256color
-unset MAILCHECK                                                        # Don't check mail when opening terminal.
-export SHORT_HOSTNAME=$(hostname -s)                                   # Set Xterm/screen/Tmux title with only a short hostname
-[ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
-[ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false # }}}
+# Don't check mail when opening terminal.
+unset MAILCHECK                                                        
+# Set Xterm/screen/Tmux title with only a short hostname
+export SHORT_HOSTNAME=$(hostname -s)                                   
+[[ -f ~/.makepkg.conf ]] && export MAKEPKG_CONF=~/.makepkg.conf
+[[ -f ~/.config/ranger/rc.conf ]] && export RANGER_LOAD_DEFAULT_RC=false 
 
-# $PATH (and JAVA_HOME and JRE_HOME and Python) {{{
-# ------------------------------------------------------------------------
-# FUNCTION :: add packages from all package managers to $PATH if these paths exist along with my own scripts in ~/Scripts/
-# ------------------------------------------------------------------------
+# $PATH 
 add-to-path(){
   for directory in $@; do
     if [[ -d $directory ]]; then
@@ -23,9 +22,7 @@ add-to-path(){
   done
 }
 
-export PATH="/usr/local/sbin:/bin:/usr/local/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/bin:"
-
-add-to-path ~/{.local,.cabal,.cargo,.gem,go,anaconda3}/bin ~/{.bin,.config/composer/vendor/bin} /usr/local/go/bin 2>/dev/null
+add-to-path ~/{.local,.cabal,.cargo,.gem,go,anaconda3,.zplug}/bin ~/{.config/composer/vendor/bin} /usr/local/go/bin 2>/dev/null
 add-to-path ~/.gem/ruby/*/bin 2>/dev/null
 
 unset -f add-to-path
@@ -85,5 +82,4 @@ done
 
 [[ -x $(which setxkbmap) ]] && setxkbmap -layout gb  
 
-
-# vim: foldmethod=marker foldlevel=0 
+# vim: foldmethod=marker foldlevel=0 foldmarker={,}
