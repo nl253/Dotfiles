@@ -1,20 +1,31 @@
 
 # ~/.zshrc
 
-[[ ! -e ~/.antigen ]] && git clone https://github.com/zsh-users/antigen.git ~/.antigen
+[[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 
-source ~/.antigen/antigen.zsh
+source ~/.zplug/init.zsh
 
-antigen bundle jreese/zsh-titles
-antigen bundle zsh-users/zsh-completions
-antigen bundle srijanshetty/zsh-pandoc-completion
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle joepvd/zsh-hints
-antigen bundle RobSis/zsh-completion-generator
-antigen bundle voronkovich/gitignore.plugin.zsh
-antigen bundle zdharma/fast-syntax-highlighting
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+#zplug "nl253/Dotfiles", use:.zshrc
+zplug "RobSis/zsh-completion-generator"
+zplug "joepvd/zsh-hints"
+zplug "jreese/zsh-titles"
+zplug "srijanshetty/zsh-pandoc-completion"
+zplug "zdharma/fast-syntax-highlighting"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-history-substring-search"
+#zplug voronkovich/gitigore.plugin.zsh
 
-antigen apply 
+zplug load 
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
 
 # OPTIONS {{{
              

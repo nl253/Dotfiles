@@ -61,4 +61,3 @@ else # non fzf solution
   fi
 
 fi # }}}
-

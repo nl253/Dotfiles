@@ -152,6 +152,7 @@ node_modules/
 Notes/
 .npm/
 .nvimlog
+.zplug/
 Projects/
 .oh-my-zsh/
 *.png
