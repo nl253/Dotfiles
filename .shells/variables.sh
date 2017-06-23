@@ -27,13 +27,8 @@ add-to-path ~/.gem/ruby/*/bin 2>/dev/null
 
 unset -f add-to-path
 
-export PATH=${PATH//::/}
+#export PATH=${PATH/:://}
 
-# PYENV 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 [[ -d /usr/lib/jvm/java-8-openjdk ]] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'  # JAVA
 
