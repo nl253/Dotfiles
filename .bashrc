@@ -1,3 +1,4 @@
+
 # ~/.bashrc
 
 # NOTE THIS SCRIPT ASSUMES THAT YOU GOT THIS FILE BY CLONING https://github.com/nl253/Dot-files
@@ -15,7 +16,7 @@ echo -e "${HOME}/.bashrc loaded"
 # source all .sh in ~/.bash/ (bash-specific configuration)
 # this will set `$PATH` and allow me to use my scripts 
 
-for i in ~/.shells/{variables,source,setup,fzf,aliases}.sh ~/.bash/{options,variables,source,functions,aliases}.sh ; do
+for i in ~/.{shells,bash}/{options,variables,source,functions,setup,fzf,aliases}.sh; do
   [[ -r $i ]] && source $i
 done
 
