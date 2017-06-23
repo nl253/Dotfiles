@@ -22,6 +22,18 @@ else
 endif
 " }}}
 
+" VARIABLES {{{
+if ! exists('g:MARKUP')
+    " MARKUP languages you actively use  
+    let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
+endif
+
+if ! exists('g:PROGRAMMING')
+    " PROGRAMMING LANGUAGES you code in 
+    let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
+endif
+" }}}
+
 " BUILT-IN PLUGINS 
 " ================
 " {{{
@@ -192,7 +204,7 @@ Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
 Plug 'nl253/vim-colors'
 Plug 'nl253/vim-vim', { 'for': 'vim' }
-Plug 'nl253/vim-fzf-extensions'
+"Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-fugative-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'

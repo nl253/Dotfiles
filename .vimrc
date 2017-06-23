@@ -8,24 +8,15 @@ endif
 " VARIABLES  
 let g:VIMDIR = expand('~/.vim/')
 
-" MARKUP languages you actively use  
-let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
-
-" PROGRAMMING LANGUAGES you code in 
-let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
-
 if ! has('nvim')
-    let $MYVIMRC = expand('~/.vimrc')  " set automatically in nvim
-    syntax enable  " enable sane-defaults (already present in nvim)
-    filetype plugin indent on
+    "this is set automatically in `Neovim`
+    let $MYVIMRC = expand('~/.vimrc')
 endif
 
 if ! filereadable(g:VIMDIR.'plugins.vim')
-    echo system('mkdir -p '.g:VIMDIR)
-    echo system('curl -fLo '.g:VIMDIR.'plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
+    echo system('mkdir -p '.g:VIMDIR.' && curl -fLo '.g:VIMDIR.'plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
 endif
 
 exec 'source '.g:VIMDIR.'plugins.vim'
 
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
-
