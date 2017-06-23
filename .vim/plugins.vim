@@ -210,7 +210,7 @@ Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
 Plug 'nl253/vim-licenses', { 'on': 'License' }
 Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
+Plug 'nl253/vim-gitignore', { 'on': 'GitIgnore' }
 
 call plug#end()
-
-" vim: foldlevel=0
+" vim: foldlevel=0 foldmarker={{{,}}} foldmethod=marker
