@@ -189,10 +189,12 @@ endif
 Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
 Plug 'nl253/vim-colors'
-Plug 'nl253/vim-vim', {'for': 'vim'}
+Plug 'nl253/vim-vim', { 'for': 'vim' }
 Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-fugative-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
+Plug 'nl253/vim-licenses', { 'on': 'License' }
+Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
 
 call plug#end()
