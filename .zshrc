@@ -5,16 +5,31 @@
 
 source ~/.zplug/init.zsh
 
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-#zplug "nl253/Dotfiles", use:.zshrc
-zplug "RobSis/zsh-completion-generator"
-zplug "joepvd/zsh-hints"
+#zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+#zplug "RobSis/zsh-completion-generator"
+#zplug "joepvd/zsh-hints"
+#zplug "srijanshetty/zsh-pandoc-completion"
 zplug "jreese/zsh-titles"
-zplug "srijanshetty/zsh-pandoc-completion"
 zplug "zdharma/fast-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-history-substring-search"
+
+zplug "ranger/ranger", as:command, use:"ranger.py", rename-to:'ranger'
+
+zplug "nl253/Scripts", as:command, rename-to:"csv-preview", use:"csv-preview.sh"
+zplug "nl253/Scripts", as:command, rename-to:"extractor", use:"extractor.sh"
+zplug "nl253/Scripts", as:command, rename-to:"download-dotfile", use:"download-dotfile.sh"
+zplug "nl253/Scripts", as:command, rename-to:"grf", use:"grf.sh"
+
+zplug "nl253/SQLiteREPL", as:command, rename-to:"sqlite", use:"main.py", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
+zplug "nl253/ProjectGenerator", as:command, use:"project", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
+zplug "nl253/DictGen", as:command, use:"dict-gen", if:"[[ -x $(which python3) ]]"
+
+zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:"fzf", use:"*linux*amd64*"
+
+zplug "~/.shells", from:local, use:"{variables,source,setup,fzf,aliases}.sh"
+zplug "~/.zsh", from:local, use:"{options,source,functions,aliases}.zsh"
 #zplug voronkovich/gitigore.plugin.zsh
 
 zplug load 
@@ -26,42 +41,5 @@ if ! zplug check --verbose; then
         echo; zplug install
     fi
 fi
-
-# OPTIONS {{{
-             
-export HISTFILE=~/.zsh_history
-export SAVEHIST=10000
-
-setopt NO_BG_NICE                       # don't nice background tasks
-setopt NO_HUP
-setopt NO_LIST_BEEP
-setopt LOCAL_OPTIONS                    # allow functions to have local options
-setopt LOCAL_TRAPS                      # allow functions to have local traps
-setopt HIST_IGNORE_ALL_DUPS             # don't record dupes in history
-setopt HIST_REDUCE_BLANKS
-setopt COMPLETE_IN_WORD
-setopt NO_BEEP
-setopt BRACE_CCL                        # {a-c} -> a b c
-
-setopt list_types
-
-# Compact completion
-setopt auto_list
-setopt auto_param_slash
-setopt auto_param_keys
-setopt list_packed
-setopt auto_pushd
-setopt pushd_minus
-setopt pushd_ignore_dups
-setopt complete_aliases                 # Check original command in alias completion
-setopt hist_ignore_space                # Ignore add history if space
-setopt glob_complete                    # Expand globs when completion
-setopt mark_dirs                        # Add "/" if completes directory
-unsetopt correct_all
-# }}}
-
-for i in ~/.shells/{variables,source,setup,fzf,aliases}.sh ~/.zsh/{source,functions,aliases}.zsh ; do
-    source $i
-done
 
 # vim: foldmethod=marker

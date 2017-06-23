@@ -1,12 +1,11 @@
 
-" Exit if not UNIX TODO
+" Exit if not UNIX 
 if ! has('unix') 
     !echo "You need to be running a UNIX-like system for this script to work."
     exit 
 endif 
 
 " VARIABLES  
-" VIMDIR - NVIM/VIM 
 let g:VIMDIR = expand('~/.vim/')
 
 " MARKUP languages you actively use  

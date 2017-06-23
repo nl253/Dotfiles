@@ -191,6 +191,7 @@ Plug 'nl253/vim-dicts'
 Plug 'nl253/vim-colors'
 Plug 'nl253/vim-vim', {'for': 'vim'}
 Plug 'nl253/vim-fzf-extensions'
+Plug 'nl253/vim-fugative-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
 

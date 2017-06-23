@@ -65,34 +65,32 @@ install-app(){ # {{{
 # }}}
 
 # PYENV {{{
-if [[ ! -e ~/.pyenv ]]; then 
-  curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash 
-  exec $SHELL 
-  pyenv update 
-  pyenv install 3.6.1 
-  git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv 
-  cd 
-  [[ ! -f ~/.python-version ]] && pyenv global 3.6.1 system
-fi
+#if [[ ! -e ~/.pyenv ]]; then 
+  #curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash 
+  #exec $SHELL 
+  #pyenv update 
+  #pyenv install 3.6.1 
+  #git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv 
+  #cd 
+  #[[ ! -f ~/.python-version ]] && pyenv global 3.6.1 system
+#fi
 # }}}
 
 # set path...
-mkdir -p ~/.{bin,applications,shells,zsh,bash,shells} 
+#install-app ranger/ranger ranger ranger.py 
+#install-app nl253/ProjectGenerator project project
+#install-app nl253/SQLiteREPL sqlite main.py 
 
-install-app ranger/ranger ranger ranger.py 
-install-app nl253/ProjectGenerator project project
-install-app nl253/SQLiteREPL sqlite main.py 
+#clone-repo nl253/Scripts Projects/Scripts
+#clone-repo nl253/Scripts .scripts
 
-clone-repo nl253/Scripts Projects/Scripts
-clone-repo nl253/Scripts .scripts
+#[[ ! -e ~/.vim/.git ]] && [[ -d ~/.vim ]] && rm -rf ~/.vim
 
-[[ ! -e ~/.vim/.git ]] && [[ -d ~/.vim ]] && rm -rf ~/.vim
+#clone-repo nl253/Vim .vim
 
-clone-repo nl253/Vim .vim
+#clone-repo junegunn/fzf.git .applications/fzf
 
-clone-repo junegunn/fzf.git .applications/fzf
-
-link-script {show-ip,grf,csv-preview,extractor,download-dotfile,p,env,csv-preview}.sh  
+#link-script {show-ip,grf,csv-preview,extractor,download-dotfile,p,env,csv-preview}.sh  
 
 # unset functions {{{
 unset -f link-script 
