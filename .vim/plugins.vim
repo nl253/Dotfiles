@@ -66,17 +66,22 @@ let g:yaml_schema = 'pyyaml'
 
 " Place plugins here
 " ==================
+
 " GENERAL {{{
 Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating' | Plug 'tpope/vim-repeat'
-if executable('tmux')
-    Plug 'tmux-plugins/vim-tmux-focus-events' " a must have if you work with tmux
-endif
 
-Plug 'tpope/vim-fugitive'
+" A must have if you work with tmux
+if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
+
+Plug 'tpope/vim-fugitive' | Plug 'rhysd/committia.vim'
 
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \
+
 Plug 'konfekt/fastfold' 
+
+
 Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
+
 Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find', 
             \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
             \'SudoWrite', 'Unlink', 'Rename' ]}
@@ -104,20 +109,23 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:jedi#rename_command = ",r"
     let g:jedi#use_splits_not_buffers = "right"
     Plug 'nvie/vim-flake8', {'for': 'python'}
+    command! PyLint call Flake8()
+    au! FileType python nnoremap <buffer> <Leader>mS :PyLint<CR>
     let g:flake8_show_in_file = 1  
     let g:flake8_show_in_gutter=1  
 endif
 
 " }}}
-"
+
 " MARKUP {{{ {{{
 
-Plug 'dkarter/bullets.vim' | Plug 'reedes/vim-textobj-sentence'
-
+Plug 'dkarter/bullets.vim' 
 let g:bullets_enabled_file_types = [ 'markdown' ]
 
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent','DittoSentOn' ]}
-Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ] }
+let g:ditto_mode = "paragraph"
+
+Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ], 'for': 'vimwiki' }
 
 " TABLE MODE {{{
 Plug 'dhruvasagar/vim-table-mode', { 'on': [ 'TableModeEnable' ] }
@@ -169,12 +177,6 @@ let html_wrong_comments=1
 " PHP
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 
-" FZF {{{
-if empty(expand('~/.applications'))
-    !mkdir -p ~/.applications/
-endif
-
-"Plug 'junegunn/fzf', { 'dir': '~/.zplug/repos/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'up': '~40%' }
@@ -195,11 +197,7 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-" }}} 
-
-" }}}
-
-" }}}
+" }}} }}} }}}
 
 " MY PLUGINS
 " ==========
@@ -209,15 +207,13 @@ Plug 'nl253/vim-colors'
 Plug 'nl253/vim-vim', { 'for': 'vim' }
 Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-fugative-extensions'
+Plug 'nl253/vim-vimwiki-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
 Plug 'nl253/vim-sh'
-Plug 'nl253/vim-licenses', { 'on': 'License' }
+Plug 'nl253/vim-licenses'
+Plug 'nl253/vim-gitignore'
 "Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
-Plug 'nl253/vim-gitignore', { 'on': 'GitIgnore' }
-
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
 
 call plug#end()
 " vim: foldlevel=0 foldmarker={{{,}}} foldmethod=marker

@@ -6,9 +6,6 @@
 source ~/.zplug/init.zsh
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-#zplug "RobSis/zsh-completion-generator"
-#zplug "joepvd/zsh-hints"
-#zplug "srijanshetty/zsh-pandoc-completion"
 
 zplug "jreese/zsh-titles"
 zplug "zdharma/fast-syntax-highlighting"
@@ -39,13 +36,4 @@ zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", 
 #zplug voronkovich/gitigore.plugin.zsh
 
 zplug load 
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
 # vim: foldmethod=marker
