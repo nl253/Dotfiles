@@ -1,7 +1,7 @@
 
 " Exit if not UNIX 
 if ! has('unix') 
-    !echo "You need to be running a UNIX-like system for this script to work."
+     !echo "You need to be running a UNIX-like system for this script to work."
     exit 
 endif 
 
