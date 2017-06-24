@@ -84,8 +84,11 @@ Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find',
 
 " COMPLETION {{{
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
-    Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
     let g:ultisnipsexpandtrigger="<tab>"
+    let g:UltiSnipsJumpForwardTrigger="<C-j>"
+    let g:UltiSnipsJumpBackwardTrigger="<C-k>"
     Plug 'maralla/completor.vim'
     let g:completor_blacklist = [ 'tagbar', 'sql',
                 \'qf', 'netrw', 'unite', 'vim', 
@@ -208,9 +211,13 @@ Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-fugative-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
+Plug 'nl253/vim-sh'
 Plug 'nl253/vim-licenses', { 'on': 'License' }
-Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
+"Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
 Plug 'nl253/vim-gitignore', { 'on': 'GitIgnore' }
+
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
 
 call plug#end()
 " vim: foldlevel=0 foldmarker={{{,}}} foldmethod=marker

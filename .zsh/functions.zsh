@@ -46,16 +46,16 @@ pacman-sign-keys() {
 
 # GIT {{{
 # The name of the current branch
-# Back-compatibility wrapper for when this function was defined here in
+# Back-compatibility wrapper for when this was defined here in
 # the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
 # to fix the core -> git plugin dependency.
 
-function current_branch() {
+current_branch() {
   git_current_branch
 }
 
 # The list of remotes
-function current_repository() {
+current_repository() {
   if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
     return
   fi
@@ -63,14 +63,14 @@ function current_repository() {
 }
 
 # Pretty log messages
-function _git_log_prettily(){
+_git_log_prettily(){
   if ! [ -z $1 ]; then
     git log --pretty=$1
   fi
 }
 
 # Warn if the current branch is a WIP
-function work_in_progress() {
+work_in_progress() {
   if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
     echo "WIP!!"
   fi
@@ -88,5 +88,26 @@ fzf-locate-widget() {
 zle     -N    fzf-locate-widget
 bindkey '\ei' fzf-locate-widget # alt-i
 # }}}
+
+cdUndoKey() {
+  popd
+  zle       reset-prompt
+  echo
+  ls
+  zle       reset-prompt
+}
+
+cdParentKey() {
+  pushd ..
+  zle      reset-prompt
+  echo
+  ls
+  zle       reset-prompt
+}
+
+zle -N                 cdParentKey
+zle -N                 cdUndoKey
+bindkey '^[[1;3A'      cdParentKey
+bindkey '^[[1;3D'      cdUndoKey
 
 # vim: foldmethod=marker

@@ -22,6 +22,7 @@ zplug "nl253/Scripts", as:command, rename-to:"csv-preview", use:"csv-preview.sh"
 zplug "nl253/Scripts", as:command, rename-to:"extractor", use:"extractor.sh"
 zplug "nl253/Scripts", as:command, rename-to:"download-dotfile", use:"download-dotfile.sh"
 zplug "nl253/Scripts", as:command, rename-to:"grf", use:"grf.sh"
+zplug "nl253/Scripts", as:command, rename-to:"p", use:"processes.sh"
 
 zplug "nl253/SQLiteREPL", as:command, rename-to:"sqlite", use:"main.py", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
 zplug "nl253/ProjectGenerator", as:command, use:"project", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
