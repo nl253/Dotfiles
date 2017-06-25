@@ -34,57 +34,38 @@ if ! exists('g:PROGRAMMING')
 endif
 " }}}
 
-" BUILT-IN PLUGINS 
-" ================
-" {{{
-if v:version >= 800
-    packadd! matchit
-else
-    runtime macros/matchit.vim
-endif
-
-" NETRW 
-let g:netrw_scpport = "-P 22" | let g:netrw_sshport = "-p 22"
-let g:netrw_preview = 1 | let g:netrw_mousemaps = 0
-
-" SQL
-let g:sql_type_default = 'mysql' | let msql_sql_query = 1
-let g:ftPlugin_sql_omni_key = ',' " shadows localleader
-Plug 'alcesleo/vim-uppercase-sql', { 'for': 'sql' }
-
-" SHELL 
-let readline_has_bash = 1 | let g:is_bash = 1
-let g:sh_fold_enabled = 4
-
-" ZSH 
-let g:zsh_fold_enable = 1
-
-" YAML
-let g:yaml_schema = 'pyyaml'
-
-" }}}
-
 " Place plugins here
 " ==================
 
 " GENERAL {{{
-Plug 'tpope/vim-sleuth' | Plug 'tpope/vim-speeddating' | Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sleuth' 
+Plug 'tpope/vim-speeddating' 
+Plug 'tpope/vim-repeat'
 
 " A must have if you work with tmux
 if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
-Plug 'tpope/vim-fugitive' | Plug 'rhysd/committia.vim'
+Plug 'tpope/vim-fugitive' 
+Plug 'junegunn/gv.vim'
 
-set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \
+set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \ 
 
 Plug 'konfekt/fastfold' 
-
-
-Plug 'scrooloose/nerdcommenter' | Plug 'wellle/targets.vim'
-
+Plug 'scrooloose/nerdcommenter' 
+Plug 'wellle/targets.vim'
 Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find', 
             \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
             \'SudoWrite', 'Unlink', 'Rename' ]}
+
+Plug 'junegunn/fzf.vim'
+
+let g:fzf_layout = { 'up': '~40%' }
+
+let g:fzf_action = {
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-s': 'split',
+            \ 'ctrl-v': 'vsplit' }
+
 " }}}
 
 " COMPLETION {{{
@@ -109,34 +90,31 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:jedi#rename_command = ",r"
     let g:jedi#use_splits_not_buffers = "right"
     Plug 'nvie/vim-flake8', {'for': 'python'}
-    command! PyLint call Flake8()
-    au! FileType python nnoremap <buffer> <Leader>mS :PyLint<CR>
     let g:flake8_show_in_file = 1  
     let g:flake8_show_in_gutter=1  
 endif
 
 " }}}
 
-" MARKUP {{{ {{{
+" MARKUP {{{ 
 
 Plug 'dkarter/bullets.vim' 
 let g:bullets_enabled_file_types = [ 'markdown' ]
 
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn', 'DittoSent','DittoSentOn' ]}
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ]}
 let g:ditto_mode = "paragraph"
 
 Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ], 'for': 'vimwiki' }
 
-" TABLE MODE {{{
+" TABLE MODE 
 Plug 'dhruvasagar/vim-table-mode', { 'on': [ 'TableModeEnable' ] }
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 | let g:loaded_table_mode = 1
 let g:table_mode_syntax = 1 | let g:table_mode_update_time = 800
 au! BufEnter *.md let g:table_mode_corner = '|'
 au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
-" }}}
 
-" VIMWIKI {{{
+" VIMWIKI 
 Plug 'vimwiki/vimwiki'
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_html_header_numbering = 2
@@ -150,14 +128,12 @@ let g:vimwiki_list = [{ 'path': '~/Notes/',
             \ 'syntax': 'default',
             \ 'ext': '.wiki',
             \ 'path_html': '~/.Notes_html/' }]
-" }}}
 
-" MARKDOWN {{{
-let g:markdown_fenced_languages = g:PROGRAMMING 
+
+" MARKDOWN 
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 Plug 'rhysd/vim-gfm-syntax', { 'for' : 'markdown' }
 Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
-" }}}
 
 " }}} 
 
@@ -168,23 +144,11 @@ Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
 Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
 Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ]}
 "let g:xml_syntax_folding = 1
-let g:emmet_html5 = 1 | let g:html_hover_unfold = 1
-let g:html_font = ["Sans Serif", "DejaVu Sans Mono", 'Consolas', 'monospace']
-let g:html_use_xhtml = 1 | let g:html_dynamic_folds = 1
-let g:html_no_foldcolumn = 1 | let g:html_use_encoding = "UTF-8"
-let html_wrong_comments=1
+let g:emmet_html5 = 1 
 
 " PHP
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 
-Plug 'junegunn/fzf.vim'
-
-let g:fzf_layout = { 'up': '~40%' }
-
-let g:fzf_action = {
-            \ 'ctrl-t': 'tab split',
-            \ 'ctrl-s': 'split',
-            \ 'ctrl-v': 'vsplit' }
 " }}}
 
 " FOR NVIM {{{
@@ -197,12 +161,13 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-" }}} }}} }}}
+" }}} 
 
 " MY PLUGINS
 " ==========
 Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
+let g:dicts_load = [ 'computer_science', 'unix_programmers' ]
 Plug 'nl253/vim-colors'
 Plug 'nl253/vim-vim', { 'for': 'vim' }
 Plug 'nl253/vim-fzf-extensions'
