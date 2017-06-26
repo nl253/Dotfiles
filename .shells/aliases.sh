@@ -7,7 +7,7 @@
 in-path() { # 
 # checks if an executable is in $PATH
 for i in $(echo "$PATH" | sed "s/:/\n/g"); do
-    if [ -x "$i/$1" ]; then
+    if [[ -x "$i/$1" ]]; then
         return 0
     fi
 done
