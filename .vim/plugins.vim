@@ -180,9 +180,10 @@ Plug 'nl253/vim-gitignore'
 
 let g:dicts_markup = [ 'computer-science', 'unix-programmers' ]
 
-colorscheme fabulous
-
 "Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
 
 call plug#end()
+
+colorscheme fabulous
+
 " vim: foldlevel=0 foldmarker={{{,}}} foldmethod=marker
