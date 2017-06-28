@@ -29,8 +29,8 @@ zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:"fzf", use:"*linux*am
 
 zplug "tmux-plugins/tpm", as:command, ignore:'*'
 
-zplug "~/.shells", from:local, use:"{variables,source,setup,fzf,aliases}.sh"
-zplug "~/.zsh", from:local, use:"{variables,options,source,functions,aliases}.zsh"
+zplug "~/.shells", from:local, use:"{variables,source,fzf,aliases}.sh"
+zplug "~/.zsh", from:local, ignore:'*.sh', use:"{variables,source,functions,aliases,options}.zsh"
 
 zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", ignore:'*'
 #zplug voronkovich/gitigore.plugin.zsh

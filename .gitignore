@@ -2,6 +2,7 @@
 .alacritty
 anaconda3/
 .antigen/
+.zsh/*.sh
 .applications/
 .athome
 .autojump/

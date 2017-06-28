@@ -38,9 +38,11 @@ unsetopt CORRECT_ALL
 zstyle ':completion:*' menu select
 bindkey '^[[Z' reverse-menu-complete
 
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
 #bindkey -v
 #typeset -g -A key
-bindkey '^?' backward-delete-char
+#bindkey '^?' backward-delete-char
 #bindkey '^[[5~' up-line-or-history
 #bindkey '^[[3~' delete-char
 #bindkey '^[[6~' down-line-or-history

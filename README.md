@@ -25,5 +25,3 @@ http://www.thesaurus.com/browse/sunny?s=t
 + [My uni notes](https://github.com/nl253/Notes) :: for easy access across repos
 
 <!-- vim: nospell
-
-
