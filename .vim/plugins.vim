@@ -51,8 +51,8 @@ Plug 'junegunn/gv.vim'
 set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \ 
 
 Plug 'konfekt/fastfold' 
-Plug 'scrooloose/nerdcommenter' 
 Plug 'wellle/targets.vim'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find', 
             \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
             \'SudoWrite', 'Unlink', 'Rename' ]}
@@ -167,8 +167,7 @@ endif
 " ==========
 Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
-let g:dicts_load = [ 'computer_science', 'unix_programmers' ]
-Plug 'nl253/vim-colors'
+Plug 'nl253/Fabulous'
 Plug 'nl253/vim-vim', { 'for': 'vim' }
 Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-fugative-extensions'
@@ -178,6 +177,11 @@ Plug 'nl253/vim-templates'
 Plug 'nl253/vim-sh'
 Plug 'nl253/vim-licenses'
 Plug 'nl253/vim-gitignore'
+
+let g:dicts_markup = [ 'computer-science', 'unix-programmers' ]
+
+colorscheme fabulous
+
 "Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
 
 call plug#end()

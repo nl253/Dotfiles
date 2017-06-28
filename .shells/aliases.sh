@@ -40,11 +40,11 @@ alias ....="cd ../../.."
 alias le="ls -lo"                                                                                                   # list everything
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'                        # long listing
 alias ls='ls --color=auto --group-directories-first'                                                                # tweak default ls
-alias lr=recent-files.sh                                                                                            # list recent
 ! $(in-path tree) && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system
 alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                      # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                                                        # list recursively just dirs
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                                       # list recursively just files
+alias gists='ls ~/.gists/*/*'
 #  
 
 # pattern matching  
