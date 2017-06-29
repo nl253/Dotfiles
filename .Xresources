@@ -16,9 +16,9 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
 # colors
-XTerm*background: Black
-XTerm*foreground: White
-XTerm*pointerColor: Orange
+XTerm*background: #000000
+XTerm*foreground: #ffffff
+#XTerm*pointerColor: Orange
 
 XTerm.vt100.color0: #000000
 XTerm.vt100.color1: #ce1e1e
@@ -39,6 +39,10 @@ XTerm.vt100.color13: #fda8ff
 XTerm.vt100.color14: #35e0ff
 XTerm.vt100.color15: #2a2a2a
 
+# XTerm.vt100.metaSendsEscape: true
+# XTerm.vt100.backarrowKey: false
+# XTerm.ttyModes: erase ^?
+
 XTerm*faceName: Fixed
 XTerm*faceSize: 15
 
@@ -47,6 +51,31 @@ XTerm.vt100.reverseVideo: true
 XTerm.vt100.foreground: black
 XTerm.vt100.background: white
 
-URxvt.font: xft:Monospace:pixelsize=16:antialias=true:hinting=true
+URxvt.font: xft:Monospace:pixelsize=18:antialias=true:hinting=true
 URxvt.boldFont: xft:Monospace:bold:pixelsize=16:antialias=true:hinting=true
 URxvt*termName: rxvt-unicode
+
+# colors
+URxvt.color0: #000000
+URxvt.color1: #ce1e1e
+URxvt.color2: #56bf2a
+URxvt.color3: #eef207
+URxvt.color4: #443bed
+URxvt.color5: #c200c6
+URxvt.color6: #00ddcb
+URxvt.color7: #424242
+URxvt.color8: #666666
+URxvt.color9: #f96868
+URxvt.color10: #68ff95
+URxvt.color11: #e7c547
+URxvt.color12: #5998ff
+URxvt.color13: #fda8ff
+URxvt.color14: #35e0ff
+URxvt.color15: #2a2a2a
+
+URxvt.keysym.Home: \033[1~
+URxvt.keysym.End: \033[4~
+URxvt.keysym.KP_Home: \033[1~
+URxvt.keysym.KP_End:  \033[4~
+
+

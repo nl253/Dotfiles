@@ -1,5 +1,6 @@
 ﻿*~
 .alacritty
+Pro
 anaconda3/
 .antigen/
 .zsh/*.sh
@@ -171,7 +172,7 @@ Pictures
 *.png
 *.ppt
 *.pptx
-Projects/
+Projects/*
 .proselint/
 .PyCharm2017.1/
 .PyCharmCE2017.1/
