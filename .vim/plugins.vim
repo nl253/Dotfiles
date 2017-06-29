@@ -92,6 +92,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:jedi#rename_command = ",r"
     let g:jedi#use_splits_not_buffers = "right"
     Plug 'nvie/vim-flake8', {'for': 'python'}
+    Plug 'tmhedberg/SimpylFold', {'for': 'python'}
     let g:flake8_show_in_file = 1  
     let g:flake8_show_in_gutter=1  
 endif
