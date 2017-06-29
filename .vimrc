@@ -1,32 +1,22 @@
 
 " Exit if not UNIX 
 if ! has('unix') 
-    !echo "You need to be running a UNIX-like system for this script to work."
+     !echo "You need to be running a UNIX-like system for this script to work."
     exit 
 endif 
 
-" VIMDIR - NVIM/VIM 
-if has('nvim')
-    let g:VIMDIR = expand('~/.config/nvim/')
-else " if vim
-    let g:VIMDIR = expand('~/.vim/')
-    let $MYVIMRC = expand('~/.vimrc')  " set automatically in nvim
-    syntax enable  " enable sane-defaults (already present in nvim)
-    filetype plugin indent on
+" VARIABLES  
+let g:VIMDIR = expand('~/.vim/')
+
+if ! has('nvim')
+    "this is set automatically in `Neovim`
+    let $MYVIMRC = expand('~/.vimrc')
 endif
 
-let g:CORE_DIR = g:VIMDIR.'core/'
+if ! filereadable(g:VIMDIR.'plugins.vim')
+    echo system('mkdir -p '.g:VIMDIR.' && curl -fLo '.g:VIMDIR.'plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
+endif
 
-for i in split(expand('{options,variables,init,functions,autocommands}.vim')) 
-    execute 'source '.g:CORE_DIR.i
-endfor
-
-let g:EXTRAS_DIR = g:VIMDIR.'extras/'
-
-for file in split(glob(g:EXTRAS_DIR.'*'))
-    if filereadable(file)
-        execute 'source '.file
-    endif
-endfor
+exec 'source '.g:VIMDIR.'plugins.vim'
 
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
