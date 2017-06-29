@@ -19,7 +19,7 @@ endif
 
 exec 'source '.g:VIMDIR.'plugins.vim'
 
-command! HLCW execute 'match Special "\c'.escape(expand("<cword>"), "'").'"'
-noremap <localleader><localleader> :HLCW<CR>
+"command! HLCW execute 'match Special "\c'.escape(expand("<cword>"), "'").'"'
+"noremap <localleader><localleader> :HLCW<CR>
 
 "vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
