@@ -5,7 +5,6 @@
 # VARIABLES 
 
 # GENERAL 
-export TERM=xterm-256color
 # Don't check mail when opening terminal.
 unset MAILCHECK                                                        
 # Set Xterm/screen/Tmux title with only a short hostname
@@ -68,7 +67,8 @@ for i in vim nvim vi; do
     break
   fi
 done
-# 
+
+stty sane
 
 [[ -x $(which setxkbmap) ]] && setxkbmap -layout gb  
 

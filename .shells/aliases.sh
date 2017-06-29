@@ -31,6 +31,8 @@ alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
 
+alias tmux='tmux -2'
+#export TERM=xterm-256color
 
 # dirs and files  
 alias -- -='cd -' # Go back
@@ -40,8 +42,7 @@ alias ....="cd ../../.."
 alias le="ls -lo"                                                                                                   # list everything
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'                        # long listing
 alias ls='ls --color=auto --group-directories-first'                                                                # tweak default ls
-! $(in-path tree) && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system
-alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                      # list symlinks recursively from CWD
+! $(in-path tree) && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                      # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                                                        # list recursively just dirs
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                                       # list recursively just files
 alias gists='ls ~/.gists/*/*'
@@ -68,7 +69,7 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 # and a default location for download of Torrents in ~/Downloads/Torrents/
 if $(in-path rsync); then
     alias rsync-copy="rsync --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
-    # alias rsync-move="rsync -avz --progress -h --remove-source-files"
+    # alias rsync-move="rsync -avz --progress -h --remove-source-files" # alias rsync-update="rsync -avzu --progress -h"
     # alias rsync-update="rsync -avzu --progress -h"
     # alias rsync-synchronize="rsync -avzu --delete --progress -h"
 fi #  
@@ -102,7 +103,6 @@ if $(in-path git); then
         alias g=git
     fi
 fi
-# 
 
 unset -f in-path
 

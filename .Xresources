@@ -15,11 +15,38 @@ Xft.autohint: false
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
-XTerm*background: #2b2b2b
-XTerm*foreground: #e7e7e7
-XTerm*pointerColor: #16A085
+# colors
+XTerm*background: Black
+XTerm*foreground: White
+XTerm*pointerColor: Orange
+
+XTerm.vt100.color0: #000000
+XTerm.vt100.color1: #ce1e1e
+XTerm.vt100.color2: #56bf2a
+XTerm.vt100.color3: #eef207
+XTerm.vt100.color4: #443bed
+XTerm.vt100.color5: #c200c6
+XTerm.vt100.color6: #00ddcb
+XTerm.vt100.color7: #424242
+
+# Bright colors
+XTerm.vt100.color8: #666666
+XTerm.vt100.color9: #f96868
+XTerm.vt100.color10: #68ff95
+XTerm.vt100.color11: #e7c547
+XTerm.vt100.color12: #5998ff
+XTerm.vt100.color13: #fda8ff
+XTerm.vt100.color14: #35e0ff
+XTerm.vt100.color15: #2a2a2a
+
 XTerm*faceName: Fixed
-XTerm*faceSize: 11
+XTerm*faceSize: 15
+
+XTerm.vt100.saveLines: 4096
+XTerm.vt100.reverseVideo: true
+XTerm.vt100.foreground: black
+XTerm.vt100.background: white
 
 URxvt.font: xft:Monospace:pixelsize=16:antialias=true:hinting=true
 URxvt.boldFont: xft:Monospace:bold:pixelsize=16:antialias=true:hinting=true
+URxvt*termName: rxvt-unicode

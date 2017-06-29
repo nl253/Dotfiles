@@ -39,6 +39,7 @@ zstyle ':completion:*' menu select
 bindkey '^[[Z' reverse-menu-complete
 
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# set -o monitor
 
 #bindkey -v
 #typeset -g -A key
