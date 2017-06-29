@@ -170,20 +170,18 @@ endif
 " ==========
 Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
-Plug 'nl253/vim-python'
-Plug 'nl253/fabulous'
-Plug 'nl253/vim-vim', { 'for': 'vim' }
+Plug 'nl253/vim-python-extensions'
+Plug 'nl253/vim-extensions', { 'for': 'vim' }
 Plug 'nl253/vim-fzf-extensions'
-Plug 'nl253/vim-fugative-extensions'
-Plug 'nl253/vim-vimwiki-extensions'
+Plug 'nl253/fugative-extensions'
+Plug 'nl253/vimwiki-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
 Plug 'nl253/vim-chunks'
-Plug 'nl253/vim-sh'
+Plug 'nl253/vim-sh-extensions'
 Plug 'nl253/vim-licenses'
 Plug 'nl253/vim-gitignore'
-
-let g:dicts_markup = [ 'computer-science', 'unix-programmers' ]
+Plug 'nl253/fabulous'
 
 call plug#end()
 
