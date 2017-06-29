@@ -72,9 +72,11 @@ let g:fzf_action = {
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
+    let g:UltiSnipsEditSplit = 'vertical'
     let g:ultisnipsexpandtrigger="<tab>"
     let g:UltiSnipsJumpForwardTrigger="<C-j>"
     let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+    let g:UltiSnipsListSnippets = '<LocalLeader><Tab>'                
     Plug 'maralla/completor.vim'
     let g:completor_blacklist = [ 'tagbar', 'sql',
                 \'qf', 'netrw', 'unite', 'vim', 
@@ -140,9 +142,9 @@ Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 " WEB DEV {{{
 "
 " HTML
-Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
-Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ]}
-Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ]}
+Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
+Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
+Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ] }
 "let g:xml_syntax_folding = 1
 let g:emmet_html5 = 1 
 
@@ -167,20 +169,20 @@ endif
 " ==========
 Plug 'nl253/vim-saner'
 Plug 'nl253/vim-dicts'
-Plug 'nl253/Fabulous'
+Plug 'nl253/vim-python'
+Plug 'nl253/fabulous'
 Plug 'nl253/vim-vim', { 'for': 'vim' }
 Plug 'nl253/vim-fzf-extensions'
 Plug 'nl253/vim-fugative-extensions'
 Plug 'nl253/vim-vimwiki-extensions'
 Plug 'nl253/vim-scratchpads'
 Plug 'nl253/vim-templates'
+Plug 'nl253/vim-chunks'
 Plug 'nl253/vim-sh'
 Plug 'nl253/vim-licenses'
 Plug 'nl253/vim-gitignore'
 
 let g:dicts_markup = [ 'computer-science', 'unix-programmers' ]
-
-"Plug 'nl253/vim-snippets', { 'on': [ 'Snippet', 'SnippetModify' ] }
 
 call plug#end()
 

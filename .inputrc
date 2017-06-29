@@ -1,40 +1,46 @@
 
+
 # DEFAULTS {{{
 # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
 set meta-flag on
 set input-meta on
 set convert-meta off
 set output-meta on
+# }}}
 
 $if mode=emacs
 
-# for linux console and RH/Debian xterm
-"\e[1~": beginning-of-line
-"\e[4~": end-of-line
+# for linux console and RH/Debian xterm {{{
 "\e[5~": beginning-of-history
 "\e[6~": end-of-history
-"\e[7~": beginning-of-line
+
 "\e[3~": delete-char
 "\e[2~": quoted-insert
-"\e[5C": forward-word
+
 "\e[5D": backward-word
-"\e\e[C": forward-word
 "\e\e[D": backward-word
-"\e[1;5C": forward-word
 "\e[1;5D": backward-word
 
-# for rxvt
-"\e[8~": end-of-line
+"\e\e[C": forward-word
+"\e[5C": forward-word
+"\e[1;5C": forward-word
 
-# for non RH/Debian xterm, can't hurt for RH/DEbian xterm
+"\e[1~": beginning-of-line
+"\e[7~": beginning-of-line
 "\eOH": beginning-of-line
-"\eOF": end-of-line
-
-# for freebsd console
 "\e[H": beginning-of-line
-"\e[F": end-of-line
 
+"\eOF": end-of-line
+"\e[4~": end-of-line
+"\e[8~": end-of-line
+"\e[F": end-of-line
 # }}}
+
+# rxvt
+
+# non RH/Debian xterm, can't hurt for RH/DEbian xterm
+
+# freebsd console
 
 # smarter completion, list all options once and then cycle through them {{{
 # TAB cycle forward
@@ -88,3 +94,5 @@ set show-all-if-ambiguous on
 set show-all-if-unmodified on
 set colored-completion-prefix on 
 # }}}
+#
+# vim: foldmethod=marker foldmarker={{{,}}}
