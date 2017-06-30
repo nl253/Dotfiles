@@ -73,7 +73,6 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:ultisnipsexpandtrigger="<tab>"
     let g:UltiSnipsJumpForwardTrigger="<C-j>"
     let g:UltiSnipsJumpBackwardTrigger="<C-k>"
-    let g:UltiSnipsListSnippets = '<LocalLeader><Tab>'                
     Plug 'maralla/completor.vim'
     let g:completor_whitelist = [ 'python' ]
     let g:completor_python_binary = 'python3'
@@ -94,7 +93,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 endif
 
 if has('patch8') || has('nvim')
-    Plug 'w0rp/ale'
+    Plug 'w0rp/ale', { 'do' : '[[ -x $(which pip) ]] && [[ ! -x $(which vint) ]] && pip install vim-vint' }
 else
     Plug 'vim-syntastic/syntastic'
 endif
@@ -177,6 +176,9 @@ if ! isdirectory(expand('~').'/Projects/VimPlugins/vim-extensions')
 else
     Plug '~/Projects/VimPlugins/vim-extensions', { 'for': 'vim' }
 endif
+
+let g:vim_dicts = { 'vimwiki': [ 'unix-programmers', 'computer-science' ], 
+            \ 'markdown': [ 'unix-programmers', 'computer-science' ] } 
 
 call plug#end()
 

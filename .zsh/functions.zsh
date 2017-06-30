@@ -1,7 +1,7 @@
 
 # FUNCTIONS
 
-# PACMAN {{{
+# PACMAN 
 paclist() {
   # Source: https://bbs.archlinux.org/viewtopic.php?id=93683
   LC_ALL=C pacman -Qei $(pacman -Qu | cut -d " " -f 1) | \
@@ -42,9 +42,9 @@ pacman-sign-keys() {
       --no-permission-warning --command-fd 0 --edit-key $key
   done
 }
-# }}}
 
-# GIT {{{
+
+# GIT 
 # The name of the current branch
 # Back-compatibility wrapper for when this was defined here in
 # the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
@@ -75,9 +75,9 @@ work_in_progress() {
     echo "WIP!!"
   fi
 }
-# }}}
 
-# ALT-I - Paste the selected entry from locate output into the command line {{{
+
+# ALT-I - Paste the selected entry from locate output into the command line 
 fzf-locate-widget() {
   local selected
   if selected=$(locate / | fzf -q "$LBUFFER"); then
@@ -87,7 +87,7 @@ fzf-locate-widget() {
 }
 zle     -N    fzf-locate-widget
 bindkey '\ei' fzf-locate-widget # alt-i
-# }}}
+
 
 cdUndoKey() {
   popd
