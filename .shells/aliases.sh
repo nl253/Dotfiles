@@ -62,6 +62,7 @@ alias egrep='egrep --color=auto'
 alias http-server-python="python3 -m http.server" # open using 0.0.0.0:{PORT}
 # note the php server requires index.php in the root dir 
 alias http-server-php="php -S 0.0.0.0:8000" # open using 0.0.0.0:{PORT}
+alias http-server-ruby="ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'"
 # mount a remote hard-drive
 $(in-path sshfs) && alias mount-raptor="mkdir -p ${HOME}/Raptor && sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ${HOME}/Raptor"
 $(in-path curl) && alias my-ip='curl ipinfo.io/ip'

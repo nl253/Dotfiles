@@ -2,8 +2,8 @@
 # SOURCE
 
 safe-source(){ # {{{
-  for i in $@; do
-    [[ -r $i ]] && source $i
+  for i in "$@"; do
+    [[ -r "$i" ]] && source "$i"
   done
 } # }}}
 
@@ -11,7 +11,7 @@ safe-source(){ # {{{
 # - fzf Key bindings
 safe-source ~/.applications/fzf/shell/{completion,key-bindings}.bash 2> /dev/null
 
-# execute only by my PC at home 
+# execute only by my PC at home
 [[ -f ~/.pc ]] && safe-source ~/.pc.sh
 
 # added by travis gem

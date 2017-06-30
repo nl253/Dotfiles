@@ -36,8 +36,5 @@ zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", 
 #zplug voronkovich/gitigore.plugin.zsh
 
 zplug load 
-
-bindkey "${terminfo[khome]}" beginning-of-line
-bindkey "${terminfo[kend]}" end-of-line
-
+setopt monitor
 # vim: foldmethod=marker
