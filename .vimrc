@@ -16,6 +16,10 @@ if ! filereadable(g:VIMDIR.'plugins.vim')
     echo system('mkdir -p '.g:VIMDIR.' && curl -fLo '.g:VIMDIR.'plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
 endif
 
+" KEYBINDINGS 
+let mapleader = " "
+let maplocalleader = ","
+
 exec 'source '.g:VIMDIR.'plugins.vim'
 
 "vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
