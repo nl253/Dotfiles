@@ -1,5 +1,4 @@
-
-" PLUG {{{
+" PLUG 
 if has('nvim')
     let g:PLUG_FILE = expand('~/.local/share/nvim/site/autoload/plug.vim')
 else " if vim
@@ -20,9 +19,9 @@ if has('nvim')
 else
     call plug#begin('~/.vim/plugged')
 endif
-" }}}
+" 
 
-" VARIABLES {{{
+" VARIABLES 
 if ! exists('g:MARKUP')
     " MARKUP languages you actively use  
     let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
@@ -32,12 +31,11 @@ if ! exists('g:PROGRAMMING')
     " PROGRAMMING LANGUAGES you code in 
     let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
 endif
-" }}}
 
 " Place plugins here
 " ==================
 
-" GENERAL {{{
+" GENERAL 
 Plug 'tpope/vim-sleuth' 
 Plug 'tpope/vim-speeddating' 
 Plug 'tpope/vim-repeat'
@@ -45,10 +43,11 @@ Plug 'tpope/vim-repeat'
 " A must have if you work with tmux
 if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
+" GIT
 Plug 'tpope/vim-fugitive' 
 Plug 'junegunn/gv.vim'
 
-set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \ 
+set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \  
 
 Plug 'konfekt/fastfold' 
 Plug 'wellle/targets.vim'
@@ -66,9 +65,7 @@ let g:fzf_action = {
             \ 'ctrl-s': 'split',
             \ 'ctrl-v': 'vsplit' }
 
-" }}}
-
-" COMPLETION {{{
+" COMPLETION 
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
@@ -78,12 +75,11 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:UltiSnipsJumpBackwardTrigger="<C-k>"
     let g:UltiSnipsListSnippets = '<LocalLeader><Tab>'                
     Plug 'maralla/completor.vim'
-    let g:completor_blacklist = [ 'tagbar', 'sql',
-                \'qf', 'netrw', 'unite', 'vim', 
-                \'help' ]
+    let g:completor_whitelist = [ 'python' ]
     let g:completor_python_binary = 'python3'
     Plug 'davidhalter/jedi-vim', {'for': 'python'}
-    let g:jedi#completions_enabled = 0
+    "let g:jedi#completions_enabled = 1
+    let g:jedi#force_py_version = 3
     let g:jedi#goto_command = "<C-]>"
     let g:jedi#goto_assignments_command = ",a"
     let g:jedi#goto_definitions_command = ",d"
@@ -91,20 +87,24 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:jedi#usages_command = ",u"
     let g:jedi#rename_command = ",r"
     let g:jedi#use_splits_not_buffers = "right"
-    Plug 'nvie/vim-flake8', {'for': 'python'}
+    let g:jedi#show_call_signatures_delay = 200
     Plug 'tmhedberg/SimpylFold', {'for': 'python'}
-    let g:flake8_show_in_file = 1  
-    let g:flake8_show_in_gutter=1  
+    Plug 'editorconfig/editorconfig-vim'
+    let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 endif
 
-" }}}
+if has('patch8') || has('nvim')
+    Plug 'w0rp/ale'
+else
+    Plug 'vim-syntastic/syntastic'
+endif
 
-" MARKUP {{{ 
-
+" MARKUP
 Plug 'dkarter/bullets.vim' 
 let g:bullets_enabled_file_types = [ 'markdown' ]
 
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ]}
+
 let g:ditto_mode = "paragraph"
 
 Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ], 'for': 'vimwiki' }
@@ -138,9 +138,7 @@ Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 Plug 'rhysd/vim-gfm-syntax', { 'for' : 'markdown' }
 Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 
-" }}} 
-
-" WEB DEV {{{
+" WEB DEV 
 "
 " HTML
 Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
@@ -152,9 +150,7 @@ let g:emmet_html5 = 1
 " PHP
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 
-" }}}
-
-" FOR NVIM {{{
+" FOR NVIM 
 if has('nvim')
     Plug 'kassio/neoterm', { 'on' : [
                 \'TREPLSendSelection', 
@@ -164,27 +160,26 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-" }}} 
+"  
 
 " MY PLUGINS
 " ==========
-Plug 'nl253/vim-saner'
-Plug 'nl253/vim-dicts'
-Plug 'nl253/vim-python-extensions'
-Plug 'nl253/vim-extensions', { 'for': 'vim' }
-Plug 'nl253/vim-fzf-extensions'
-Plug 'nl253/fugative-extensions'
-Plug 'nl253/vimwiki-extensions'
-Plug 'nl253/vim-scratchpads'
-Plug 'nl253/vim-templates'
-Plug 'nl253/vim-chunks'
-Plug 'nl253/vim-sh-extensions'
-Plug 'nl253/vim-licenses'
-Plug 'nl253/vim-gitignore'
-Plug 'nl253/fabulous'
+for plugin in [ 'fabulous', 'vim-saner', 'vim-dicts', 'vim-python-extensions', 'vim-saner', 'vim-dicts', 'vim-python-extensions', 'vim-fzf-extensions', 'fugative-extensions', 'vimwiki-extensions', 'vim-scratchpads', 'vim-templates', 'vim-chunks', 'vim-sh-extensions', 'vim-licenses', 'vim-gitignore', 'fabulous', 'vim-utils', 'vim-markdown', 'vim-webdev' ] 
+    if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
+        Plug 'nl253/'.plugin
+    else
+        Plug '~/Projects/VimPlugins/'.plugin
+    endif
+endfor
+
+if ! isdirectory(expand('~').'/Projects/VimPlugins/vim-extensions')
+    Plug 'nl253/vim-extensions'
+else
+    Plug '~/Projects/VimPlugins/vim-extensions', { 'for': 'vim' }
+endif
 
 call plug#end()
 
 colorscheme fabulous
 
-" vim: foldlevel=0 foldmarker={{{,}}} foldmethod=marker
+" vim: foldlevel=0 foldmethod=marker
