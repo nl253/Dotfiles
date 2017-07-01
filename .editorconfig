@@ -9,6 +9,11 @@ insert_final_newline = true
 charset = utf-8
 tab_width = 4
 
+[*.{md,wiki,rst}]
+trim_trailing_whitespace = true
+indent_size = 4
+indent_style = tab
+
 [*.{sh,zsh}]
 trim_trailing_whitespace = true
 indent_size = 2
@@ -30,15 +35,15 @@ max_line_length = 79
 [Makefile]
 indent_style = tab
 
-# Indentation override for all JS under lib directory
-# [lib/**.js]
-# indent_style = space
-# indent_size = 2
-
 # Matches the exact files either package.json or .travis.yml
 [{package.json,.travis.yml}]
 indent_style = space
 indent_size = 2
+
+# Indentation override for all JS under lib directory
+# [lib/**.js]
+# indent_style = space
+# indent_size = 2
 
 # Vim plugin supports the following EditorConfig properties:
 #	- indent_style

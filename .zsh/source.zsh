@@ -1,11 +1,11 @@
 
 # SOURCE 
 
-safe-source(){ # {{{
+safe-source(){ 
   for i in $@; do
     [[ -f $i ]] && source $i
   done
-} # }}}
+} 
 
 # FZF Completion and Key Bindings
 safe-source ~/.applications/fzf/shell/{completion,key-bindings}.zsh 2> /dev/null

@@ -5,8 +5,8 @@
 # SOURCE
 
 safe-source(){
-  for i in $@; do
-    [[ -f $i ]] && source $i
+  for i in "$@"; do
+    [[ -f $i ]] && source "$i"
   done
 }
 
