@@ -1,11 +1,11 @@
-" PLUG 
+" PLUG
 if has('nvim')
     let g:PLUG_FILE = expand('~/.local/share/nvim/site/autoload/plug.vim')
 else " if vim
     let g:PLUG_FILE = expand('~/.vim/autoload/plug.vim')
 endif
 
-" Plug - Download if missing 
+" Plug - Download if missing:
 if ! filereadable(g:PLUG_FILE) && executable('curl')
     echo system('mkdir -p $(dirname '.g:PLUG_FILE.') && curl -flo '.g:PLUG_FILE.' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     execute 'source '.g:PLUG_FILE
@@ -32,7 +32,7 @@ if ! exists('g:PROGRAMMING')
     let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
 endif
 
-" Place plugins here
+" Place Plugins Here:
 " ==================
 
 " GENERAL 
@@ -73,6 +73,9 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:ultisnipsexpandtrigger="<tab>"
     let g:UltiSnipsJumpForwardTrigger="<C-j>"
     let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+    let g:snips_author = "nl253"
+    let g:snips_email = "nl253@kent.ac.uk"
+    let g:snips_github = "https://github.com/nl253"
     Plug 'maralla/completor.vim'
     let g:completor_whitelist = [ 'python' ]
     let g:completor_python_binary = 'python3'
@@ -132,7 +135,7 @@ let g:vimwiki_list = [{ 'path': '~/Notes/',
             \ 'path_html': '~/.Notes_html/' }]
 
 
-" MARKDOWN 
+" MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 Plug 'rhysd/vim-gfm-syntax', { 'for' : 'markdown' }
 Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
@@ -163,7 +166,7 @@ endif
 
 " MY PLUGINS
 " ==========
-for plugin in [ 'fabulous', 'vim-saner', 'vim-dicts', 'vim-python-extensions', 'vim-saner', 'vim-dicts', 'vim-python-extensions', 'vim-fzf-extensions', 'fugative-extensions', 'vimwiki-extensions', 'vim-scratchpads', 'vim-templates', 'vim-chunks', 'vim-sh-extensions', 'vim-licenses', 'vim-gitignore', 'fabulous', 'vim-utils', 'vim-markdown', 'vim-webdev' ] 
+for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 'vim-chunks', 'fabulous', 'vim-utils', 'vim-webdev', 'git-ready' ] 
     if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
         Plug 'nl253/'.plugin
     else
