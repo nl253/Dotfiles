@@ -166,19 +166,13 @@ endif
 
 " MY PLUGINS
 " ==========
-for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 'vim-chunks', 'fabulous', 'vim-utils', 'vim-webdev', 'git-ready' ] 
+for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 'vim-chunks', 'fabulous', 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
     if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
         Plug 'nl253/'.plugin
     else
         Plug '~/Projects/VimPlugins/'.plugin
     endif
 endfor
-
-if ! isdirectory(expand('~').'/Projects/VimPlugins/vim-extensions')
-    Plug 'nl253/vim-extensions'
-else
-    Plug '~/Projects/VimPlugins/vim-extensions', { 'for': 'vim' }
-endif
 
 let g:vim_dicts = { 'vimwiki': [ 'unix-programmers', 'computer-science' ], 
             \ 'markdown': [ 'unix-programmers', 'computer-science' ] } 
