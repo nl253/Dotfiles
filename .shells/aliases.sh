@@ -43,7 +43,7 @@ alias ....="cd ../../.."
 alias le="ls -lo"                                                                                                   # list everything
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'                        # long listing
 alias ls='ls --color=auto --group-directories-first'                                                                # tweak default ls
-!$(in-path tree) && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                      # list symlinks recursively from CWD
+#!$(in-path tree) && alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'" # in case tree is not present on the system alias symlinks='find -type l 2>/dev/null | sed -E "s/^\.\///"'                                                      # list symlinks recursively from CWD
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'                                                        # list recursively just dirs
 alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'                                                       # list recursively just files
 alias gists='ls ~/.gists/*/*'
@@ -86,9 +86,9 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
         alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
       fi
 
-    alias pacman='pacman --conf "${HOME}/.pacman.conf"'
-    alias pacman-reinstall-all-native-packages="sudo pacman -Qnq | pacman -S -"
-    alias pacman-reinstall-all-foreign-packages="sudo pacman -Qmq | pacman -S -"
+    alias pacman='pacman --config "${HOME}/.pacman.conf"'
+    alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
+    alias pacman-reinstall-all-foreign-packages="pacman -Qmq | pacman -S -"
     alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
     $(in-path yaourt) && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
