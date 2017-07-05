@@ -1,0 +1,426 @@
+
+snippet modules "All modules [python]"
+`!p 
+import sys
+snip.rv = str(sys.modules)
+`
+endsnippet
+
+snippet "url(o(p(en?)?)?)?" "Read from a website [python]" r
+from urllib.request import urlopen
+with urlopen('https://www.some.com', timeout=10) as website:
+    if website.msg == 'OK' and website.readable():
+        HTML: Text = website.read().decode('utf-8')
+    website.close()
+endsnippet
+
+snippet "argp(ar(se?)?)?" "Argparse boilerplate [python]" r
+from argparse import Namespace, ArgumentParser
+
+parser: ArgumentParser = ArgumentParser(
+        prog="project",
+        description="",
+        epilog="")
+
+parser.add_argument(
+        "-v",
+        "--verbosity",
+        help="increase output verbosity",
+        action="count")
+
+parser.add_argument(
+        "argument",
+        help="",
+        choices=[])
+
+parser.add_argument(
+        '--arg2',
+        metavar="ARG2",
+        nargs="+",
+        help="Project name.")
+
+args: Namespace = parser.parse_args()
+
+endsnippet
+
+snippet class "Class [python]"
+class ${1:NewClass}(InheritFrom):
+    def __init__(self):
+        super().__init__()
+        pass
+
+    @property
+    def fname(self):
+        """docstring for fname"""
+
+    def __str__():
+        pass
+endsnippet
+
+snippet "exp(an)?d" "Expand variables [python]" r
+import os
+
+def expand(text: str) -> str:
+    return os.path.expandvars(os.path.expanduser(text))
+endsnippet
+
+snippet doc "Doc string [python]"
+"""
+File: `!p 
+import re
+snip.rv = re.sub("\.\w+$", "", snip.fn)`
+Author: `echo $USER`
+Email: $EMAIL
+Github: $GITHUB
+Description: Project Description
+"""
+
+endsnippet
+
+snippet "(faker)|(gen)" "Fake data generator [python]" r
+import faker
+generator = faker.Faker()
+
+endsnippet
+
+snippet write "Write to a file [python]" 
+with open('${1:file_name.txt}', encoding='utf-8', mode="w") as f:
+    if f.writable():
+        text = f.write()
+        f.close()
+    else:
+        pass
+endsnippet
+
+snippet read "Read from a file [python]"
+with open('${1:file_name.txt}', encoding='utf-8') as f:
+    if f.readable():
+        text = f.read()
+        f.close()
+    else:
+        pass
+endsnippet
+
+snippet "while?" "While loop [python]" r
+while ${1:True}:
+	if condition:
+		continue
+	else:
+		break
+endsnippet
+
+snippet "prop(erty)?" "Property [python]" r
+@property
+def ${1:function}() -> Any:
+    return self._${2:value}
+
+endsnippet
+
+snippet "log((ger)|(ging))?" "Logging boilerplate [python]" r
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    filemode='w',
+    format='%(processName)s %(threadName)s %(module)s %(levelname)s [%(asctime)s] [%(lineno)s] %(message)s.',
+    datefmt="%M:%S")
+
+# GENERAL
+general_log = logging.getLogger(name=__name__)
+
+endsnippet
+
+snippet "(breakp(oint)?)|(bp)|(deb(bug)?)" "Debugging break-point [python]" r
+import ipdb ; ipdb.set_trace() # XXX
+endsnippet
+
+snippet "(downl(oad)?)|(fetch(er)?)" "Download or read file [python]" r
+import re
+import os
+from typing import Dict
+import shutil
+
+def fetcher(variables: Dict[str, str], source: str, output: str) -> None:
+
+    source: str = source.strip()
+    output: str = expand(output).strip()
+
+    if not os.path.exists(output):
+
+        if re.compile('^https?').search(source):
+
+                local_file.close()
+
+        elif isfile(expand(source)):
+
+            source = expand(source)
+            print('file_fetcher: a valid file detected: {source}')
+            print('file_fetcher: copying')
+            shutil.copy(source, output)
+
+        else:
+            print(f'Invalid source {source}.')
+endsnippet
+
+
+snippet "templ(ate)?" "Templating boilerplate [python]" r
+from typing import Dict
+
+variables: Dict[str, str] = {}
+
+def template_substitute(file_name: str, variables: Dict[str, str]) -> str:
+    with open(file_name, encoding='utf-8') as target_file:
+        template = string.Template(target_file.read())
+        target_file.close()
+
+    with open(file_name, mode="w", encoding='utf-8') as target_file:
+        target_file.write(template.safe_substitute(variables))
+        target_file.close()
+endsnippet
+
+snippet "jsonr(ead)?" "JSON read from file [python]" r
+import json
+from typing import Any, Dict, Optional
+
+def json_read() -> Optional[Dict[Any, Any]]:
+    with open(os.path.expanduser('~/.projectrc.json'), encoding="utf-8") as json_file:
+        if json_file.readable():
+            user_configuration = json.loads(json_file.read(), encoding="utf-8")
+            json_file.close()
+            return user_configuration
+        else:
+            print(f'{json_file} is not readable.')
+endsnippet
+
+snippet "(stack)|(sci(py?)?)" "Import the whole scipy stack [python]" r
+import numpy as np
+import pandas as pd
+import scipy as sc
+from scipy import stats, stats
+endsnippet
+
+snippet "subp(ar(sers)?)?" "Argparse expanded with subparsers [python]" r
+from argparse import ArgumentParser
+from sys import exit
+
+parser: ArgumentParser = ArgumentParser()
+
+subparsers = parser.add_subparsers()
+
+install_parser: ArgumentParser = subparsers.add_parser('install')
+
+install_parser.add_argument('package')
+
+install_subparsers = install_parser.add_subparsers()
+
+install_parent_parser = ArgumentParser(add_help=False)
+
+install_parent_parser.add_argument('-o', '--output', '--as', dest='as', nargs=1)
+
+install_parent_parser.add_argument('source')
+
+github_parser: ArgumentParser = install_subparsers.add_parser('github', aliases=['gh'], parents=[install_parent_parser])
+
+curl_parser: ArgumentParser = install_subparsers.add_parser('curl', parents=[install_parent_parser])
+
+curl_parser.add_argument('--insecure', default=True, dest='secure', action='store_false')
+
+curl_parser.add_argument('--add-to-path', '--executable', '--symlink', dest='executable')
+
+group = curl_parser.add_mutually_exclusive_group()
+
+group.add_argument('--POST', dest='method', nargs=1, default='GET')
+
+group.add_argument('--GET', dest='method', nargs=1, default='GET')
+
+gist_parser: ArgumentParser = install_subparsers.add_parser('gist', parents=[install_parent_parser])
+
+gist_parser.add_argument('--add-to-path', '--executable', '--symlink', dest='executable')
+
+verify_parser: ArgumentParser = subparsers.add_parser('verify', aliases=['check'])
+
+verify_parser.add_argument('what', choices=['curl', 'symlinks', 'repos', 'gists'])
+
+list_parser: ArgumentParser = subparsers.add_parser('list', aliases=['show'])
+
+list_parser.add_argument('what', choices=['repos', 'curl', 'links', 'gists', 'available'])
+
+uninstall_parser: ArgumentParser = subparsers.add_parser('uninstall', aliases=['remove'])
+
+uninstall_parser.add_argument('source', choices=['gist', 'github', 'curl'])
+
+uninstall_parser.add_argument('name', choices="")
+
+info_parser: ArgumentParser = subparsers.add_parser('info', aliases=['details'])
+
+info_parser.add_argument('source', choices=['gist', 'github', 'curl'])
+
+info_parser.add_argument('name')
+
+args = parser.parse_args()
+
+if not vars(args):
+    print('')
+    parser.print_help()
+    print('')
+    exit()
+endsnippet
+
+snippet "complet[oe]r" "Prompt Toolkit completer [python]" r 
+import shlex
+from typing import List
+
+from prompt_toolkit.completion import Completer
+from prompt_toolkit.document import Document
+from completions import sql_completions
+
+class MyCustomCompleter(Completer):
+    def get_completions(self, document: Document, complete_event):
+        try:
+            line: str = document.current_line
+            args: List[str] = shlex.split(document.current_line)
+            if len(args) > 0:
+                curr_word: str = document.get_word_under_cursor(WORD=True)
+                first_word: str = shlex.split(document.current_line)[0]
+                previous_word: str = shlex.split(
+                    document.current_line_before_cursor)[
+                        len(shlex.split(document.current_line_before_cursor)) -
+                        1]
+
+                for i in sql_completions(document):
+                    if i.text.startswith(
+                            curr_word.upper()) or i.text.startswith(curr_word):
+                        yield i
+
+        except (NameError, ValueError):
+            pass
+endsnippet
+
+snippet "(sql(i(te?)?)?)|(datab(ase)?)" "SQLite3 [python]" r
+import sqlite3
+from sqlite3 import Cursor, Connection
+from typing import Tuple, Callable, Union
+import os
+
+SQLiteDataType = Union[str, float, int, None]
+Row = Tuple[SQLiteDataType, ...]
+
+database_path: str = 'db_path'
+
+if os.path.exists(database_path):
+    print('Existing database detected...')
+else:
+    print(f'New database will be dropped in {database_path}.')
+connection: Connection = sqlite3.connect(database_path)
+cursor: Cursor = connection.cursor()
+query: Callable[str, None] = cursor.execute
+endsnippet
+
+snippet "type(ing)?" "Import types from typing [python]" r
+from typing import List, Tuple, Dict, Any, Union, Iterable, Callable
+endsnippet
+
+snippet "(path(lib)?)|(osp(ath)?)" "File access utils [python]" r
+import os
+from os.path import exists, isfile, isdir
+from pathlib import Path
+endsnippet
+
+snippet "co?py?" "Copy objects [python]" r
+from copy import copy
+endsnippet
+
+snippet "ppr(int)?" "PPrinting [python]" r
+from pprint import pprint
+endsnippet
+
+snippet "isl(ice)?" "Itertools iterator slice [python]" r
+from itertools import islice
+endsnippet
+
+snippet "red(uce)?" "Functools reduce [python]" r
+from functools import reduce
+endsnippet
+
+snippet glob "UNIX-style globs [python]" 
+from glob import glob, iglob
+nodes = glob('${1:dirname/**}', recursive=True)
+endsnippet
+
+snippet "fnm(at(ch)?)?" "File name match [python]" r
+import fnmatch
+
+for file in ${1:files}:
+    if fnmatch.fnmatch(file, '*.txt'):
+        print('MATCH!')
+
+endsnippet
+
+snippet "fnf(il(t(er?)?)?)?" "File name match [python]" r
+import fnmatch
+
+filetered_nodes = fnmatch.filter(file, '*.txt')
+
+endsnippet
+
+snippet "temp(f(ile?)?)" "Temporary file [python]" r
+from tempfile import TemporaryFile
+fp = TemporaryFile()
+endsnippet
+
+snippet "temp(d(ir?))?" "Temporary dir [python]" r
+from tempfile import TemporaryDirectory
+fp = TemporaryFile()
+endsnippet
+
+snippet "(op?)conc(at)?" "Concat function [python]" r
+form operator import concat
+endsnippet
+
+snippet "(op?)?add" "Add function [python]" r
+form operator import add
+endsnippet
+
+snippet "(op?)cont(ains?)?" "Add function [python]" r
+form operator import contains
+endsnippet
+
+snippet "(op?)?count([Oo]f)?" "countOf function [python]" r
+form operator import countOf # number occurrences of b in a.
+endsnippet
+
+snippet "(op?)?xor" "XOR function [python]" r
+form operator import xor 
+endsnippet
+
+snippet "(op?)?or" "OR function [python]" r
+form operator import or 
+endsnippet
+
+snippet "(op?)?neg" "OR function [python]" r
+form operator import neg 
+endsnippet
+
+snippet "(op?)?mod" "Modulus function [python]" r
+form operator import mod 
+endsnippet
+
+snippet "csv(read(er)?)?" "CSV reader [python]" r
+import csv
+with open('${1:CSV_FILENAME}.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        print(', '.join(row))
+endsnippet
+
+snippet "csvw(riter?)?" "CSV writer [python]" r
+import csv
+with open('${1:CSV_FILENAME}.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['Spam'] * 5 + ['Baked Beans'])
+    writer.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
+endsnippet
+
+snippet
+
+endsnippet
