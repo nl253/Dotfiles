@@ -4,6 +4,7 @@ Pro
 anaconda3/
 .antigen/
 .zsh/*.sh
+*.vorg
 .applications/
 .athome
 .autojump/

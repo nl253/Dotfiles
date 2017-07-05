@@ -33,8 +33,15 @@ zplug "~/.shells", from:local, use:"{variables,source,fzf,aliases}.sh"
 zplug "~/.zsh", from:local, ignore:'*.sh', use:"{variables,source,functions,aliases,options}.zsh"
 
 zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", ignore:'*'
-#zplug voronkovich/gitigore.plugin.zsh
 
 zplug load 
+
+[[ ! -d ~/.gists/ ]] && mkdir -p ~/.gists/
+for i in 122b12050f5fb267e75f 7001839 8172796 8294792; do
+	if [[ ! -d ~/.gists/$i ]]; then
+			git clone "https://gist.github.com/${i}.git" ~/.gists/$i
+	fi
+done
+
 setopt monitor
-# vim: foldmethod=marker
+# vim: foldmethod=marker sw=4 ts=4
