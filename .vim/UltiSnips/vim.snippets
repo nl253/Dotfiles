@@ -3,7 +3,7 @@ command! CommandName call s:script_function()
 endsnippet
 
 snippet fun "function [vim]"
-function! s:function_name()
+function! ${VISUAL:s:function_name()}
 	" DO STH HERE
 endfunction
 endsnippet
@@ -13,4 +13,20 @@ try
 	" DO STH HERE
 catch /.*/
 endtry
+endsnippet
+
+snippet has "Feature check [vim]"
+if has('python3')
+	" DO STH
+endif
+endsnippet
+
+snippet if "If statement [vim]"
+if has('python3')
+	" DO STH
+elseif has('python3')
+	" DO STH
+else
+	" DO STH
+endif
 endsnippet
