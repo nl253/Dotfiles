@@ -12,6 +12,7 @@ with urlopen('https://www.some.com', timeout=10) as website:
     if website.msg == 'OK' and website.readable():
         HTML: Text = website.read().decode('utf-8')
     website.close()
+
 endsnippet
 
 snippet "argp(ar(se?)?)?" "Argparse boilerplate [python]" r
@@ -45,19 +46,52 @@ endsnippet
 
 snippet class "Class [python]"
 class ${1:NewClass}(InheritFrom):
+
     def __init__(self):
         super().__init__()
         pass
 
-    @property
     def fname(self):
         """docstring for fname"""
 
     def __str__():
         pass
+
 endsnippet
 
-snippet "exp(an)?d" "Expand variables [python]" r
+snippet "(re(g(ex?)?)?)|(pat(te(rn?)?)?)" "Regex [python]" r
+import re
+from re import findall, finditer
+from typing import Pattern
+
+pattern: Pattern = re.compile("${1:PATTERN}")
+
+pattern.findall(${2:STRING_VARIABLE})
+
+endsnippet
+
+snippet "(re(g(ex?)?)?)?groups" "Match object with groups" r
+groups: Tuple[str, str] = regex_object.groups(${1:0})
+endsnippet
+
+snippet "set(t(er?)?)?" "Setter [python]" r
+@${1:PROPERTY}.setter
+def ${2:PROPERTY}(new_value: Any):
+    self._${3:PROPERTY} = new_value
+
+endsnippet
+
+snippet "docs(t(r(i(ng?)?)?)?)?" "Function docstring [python]" r
+"""This function ${1:DOES_THIS_AND_THAT}.
+"""
+endsnippet
+
+snippet "(fun((ct?)ion)?)|(meth(od?)?)" "Function [python]" r
+def ${1:FUNCTION}():
+    pass
+endsnippet
+
+snippet "exp(an)?d" "expand variables [python]" r
 import os
 
 def expand(text: str) -> str:
@@ -264,6 +298,7 @@ if not vars(args):
     parser.print_help()
     print('')
     exit()
+
 endsnippet
 
 snippet "complet[oe]r" "Prompt Toolkit completer [python]" r 
@@ -294,6 +329,7 @@ class MyCustomCompleter(Completer):
 
         except (NameError, ValueError):
             pass
+
 endsnippet
 
 snippet "(sql(i(te?)?)?)|(datab(ase)?)" "SQLite3 [python]" r
@@ -314,16 +350,19 @@ else:
 connection: Connection = sqlite3.connect(database_path)
 cursor: Cursor = connection.cursor()
 query: Callable[str, None] = cursor.execute
+
 endsnippet
 
 snippet "type(ing)?" "Import types from typing [python]" r
 from typing import List, Tuple, Dict, Any, Union, Iterable, Callable
+
 endsnippet
 
 snippet "(path(lib)?)|(osp(ath)?)" "File access utils [python]" r
 import os
 from os.path import exists, isfile, isdir
 from pathlib import Path
+
 endsnippet
 
 snippet "co?py?" "Copy objects [python]" r
@@ -344,13 +383,14 @@ endsnippet
 
 snippet glob "UNIX-style globs [python]" 
 from glob import glob, iglob
-nodes = glob('${1:dirname/**}', recursive=True)
+nodes = glob('${1:DIRNAME}/**', recursive=True)
+
 endsnippet
 
 snippet "fnm(at(ch)?)?" "File name match [python]" r
 import fnmatch
 
-for file in ${1:files}:
+for file in ${1:LIST_OF_FILES}:
     if fnmatch.fnmatch(file, '*.txt'):
         print('MATCH!')
 
@@ -366,43 +406,53 @@ endsnippet
 snippet "temp(f(ile?)?)" "Temporary file [python]" r
 from tempfile import TemporaryFile
 fp = TemporaryFile()
+
 endsnippet
 
 snippet "temp(d(ir?))?" "Temporary dir [python]" r
 from tempfile import TemporaryDirectory
 fp = TemporaryFile()
+
 endsnippet
 
 snippet "(op?)conc(at)?" "Concat function [python]" r
-form operator import concat
+from operator import concat
+
 endsnippet
 
-snippet "(op?)?add" "Add function [python]" r
-form operator import add
+snippet "(op{,2})?add" "Add function [python]" r
+from operator import add
+
 endsnippet
 
-snippet "(op?)cont(ains?)?" "Add function [python]" r
-form operator import contains
+snippet "(op{,2})cont(ains?)?" "Add function [python]" r
+from operator import contains
+
 endsnippet
 
-snippet "(op?)?count([Oo]f)?" "countOf function [python]" r
-form operator import countOf # number occurrences of b in a.
+snippet "(op{,2})?count([Oo]f)?" "countOf function [python]" r
+from operator import countOf # number occurrences of b in a.
+
 endsnippet
 
-snippet "(op?)?xor" "XOR function [python]" r
-form operator import xor 
+snippet "(op{,2})?xor" "XOR function [python]" r
+from operator import xor 
+
 endsnippet
 
-snippet "(op?)?or" "OR function [python]" r
-form operator import or 
+snippet "(op{,2})?or" "OR function [python]" r
+from operator import or 
+
 endsnippet
 
-snippet "(op?)?neg" "OR function [python]" r
-form operator import neg 
+snippet "(op{,2})?neg" "OR function [python]" r
+from operator import neg 
+
 endsnippet
 
-snippet "(op?)?mod" "Modulus function [python]" r
-form operator import mod 
+snippet "(op{,2})?mod" "Modulus function [python]" r
+from operator import mod 
+
 endsnippet
 
 snippet "csv(read(er)?)?" "CSV reader [python]" r
@@ -411,6 +461,7 @@ with open('${1:CSV_FILENAME}.csv') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         print(', '.join(row))
+
 endsnippet
 
 snippet "csvw(riter?)?" "CSV writer [python]" r
