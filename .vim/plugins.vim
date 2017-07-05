@@ -104,7 +104,7 @@ endif
 
 " MARKUP
 Plug 'dkarter/bullets.vim' 
-let g:bullets_enabled_file_types = [ 'markdown' ]
+let g:bullets_enabled_file_types = [ 'markdown', 'vorg' ]
 
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ]}
 
@@ -138,7 +138,6 @@ let g:vimwiki_list = [{ 'path': '~/Notes/',
 
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
-Plug 'rhysd/vim-gfm-syntax', { 'for' : 'markdown' }
 Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 
 " WEB DEV 
@@ -164,13 +163,13 @@ if has('nvim')
     let g:neoterm_size = 50
 endif
 "  
-
-Plug 'Rykka/riv.vim'
+let g:rst_syntax_code_list = [ 'vim', 'sh', 'python' ]
+Plug 'Rykka/riv.vim', { 'for': 'rst' }
 Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
 
 " MY PLUGINS
 " ==========
-for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 'vim-chunks', 'fabulous', 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
+for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 'fabulous', 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
     if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
         Plug 'nl253/'.plugin
     else

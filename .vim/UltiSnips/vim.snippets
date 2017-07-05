@@ -1,9 +1,101 @@
-snippet com "command [vim]"
+snippet "com(m(a(nd?)?)?)?" "Command [vim]" r
 command! CommandName call s:script_function()
 endsnippet
 
-snippet fun "function [vim]"
-function! ${VISUAL:s:function_name()}
+snippet curl "Fetch with `curl` [vim]"
+function! FetchWithCurl(files, githubaddress, outputloc)
+    if executable('curl')
+        for file in a:files
+            if ! filereadable(a:outputloc.file)
+                call system('Downloading '.file.' from https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file)
+                try
+                    silent execute '!curl -fLo '.a:outputloc.file.' https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file
+                catch /.*/
+                endtry
+            endif
+        endfor
+    else
+        echom "You need \`curl\` for this to work."
+    endif
+endfunction
+endsnippet
+
+snippet "ifn(v(im?)?)?" "Nvim / Vim [vim]" r
+if !has('nvim')
+    let g:VIMDIR = expand('~/.vim/') 
+else
+    let g:VIMDIR = expand('~/.config/nvim/') 
+endif
+endsnippet
+
+snippet "sfi(le?)?" "Script file [vim]" r
+let s:${1:DIR} = expand('<sfile>:p:h:h').'/${2:dicts}/'
+endsnippet 
+
+snippet rrf "Remove redundant files from a dir [vim]"
+function! RemoveRedundantFiles(directory, files) 
+    execute 'set shell='.system('which bash')
+    for f in split(system("ls ".a:directory))
+        if index(a:files, f) < 0  
+            call system("[[ -f ".a:directory.f." ]] && rm ".a:directory.f)
+        endif
+    endfor
+endfunction 
+endsnippet
+
+snippet omni "Omni completion [vim]"
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+endsnippet
+
+snippet "g(it)?root" "Find git root [vim]" r
+function! GitRoot()
+    let root = systemlist('git rev-parse --show-toplevel')[0]
+    if v:shell_error
+        echo 'Not in git repo'                                   
+    else
+        execute 'lcd' root
+        echo 'Changed directory to: '.root
+    endif
+endfunction
+command! GitRoot call GitRoot()
+endsnippet
+
+snippet "com(m(a(nd?)?)?)?compl(e(t(i(on?)?)?)?)?" "Command with completion [vim]" r
+command! ${1:COMMAND_NAME} call s:${2:SCRIPT_FUNCTION_NAME}()
+    return system("ls ".s:${3:DIR}.&filetype." | sed -E 's/\\.\\w+$//'")
+endfunction
+
+function! s:Drop(input)
+    if len(a:input) > 1
+        echom 'You need an extension in current file.'
+        return 0
+    else
+        echo 'do'
+    endif
+endfunction
+
+command! -args=? ${1:COMMAND_NAME} call s:List(<q-args>)
+endsnippet
+
+snippet "ex(i(s(ts?)?)?)?" "Check if var exists [vim]" r
+if exists("g:${1:variable}")
+	"DO_STUFF
+endif
+endsnippet 
+
+snippet "exe(c(u(t(a(b(le?)?)?)?)?)?)?" "Check if executable [vim]" r
+if executable("${1:EXECUTABLE}")
+	"DO_STUFF
+endif
+endsnippet 
+
+snippet "fun(c(t(i(on?)?)?)?)?" "function [vim]" r
+function! s:${1:function_name}()
 	" DO STH HERE
 endfunction
 endsnippet
@@ -30,3 +122,10 @@ else
 	" DO STH
 endif
 endsnippet
+
+snippet "while?" "While loop [vim]" r
+while ${1:CONDITION}
+	continue
+endwhile
+endsnippet
+# vim: ts=4 sw=4 
