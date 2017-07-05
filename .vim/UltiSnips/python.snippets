@@ -86,6 +86,33 @@ snippet "docs(t(r(i(ng?)?)?)?)?" "Function docstring [python]" r
 """
 endsnippet
 
+snippet "unitt?(e(st?)?)?" "Unit test [python]" r
+import unittest
+
+class MyObjectTest(unittest.TestCase):
+
+     def setUp(self):
+        pass # prepare
+
+     def tearDown(self):
+        pass # clean up 
+
+    def test_method1(self):
+        self.assertEqual('foo'.upper(), 'FOO')
+
+if __name__ == '__main__':
+    unittest.main()
+endsnippet
+
+snippet "main" "If __name__ == __main__ [python]" r
+def main():
+    pass 
+
+if __name__ == '__main__':
+    main()
+endsnippet
+
+
 snippet "(fun((ct?)ion)?)|(meth(od?)?)" "Function [python]" r
 def ${1:FUNCTION}():
     pass
@@ -472,6 +499,9 @@ with open('${1:CSV_FILENAME}.csv', 'w') as csvfile:
     writer.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
 endsnippet
 
-snippet
-
+snippet with "With statement [python]"
+with open(${1:FILE}) as f:
+    pass
 endsnippet
+
+
