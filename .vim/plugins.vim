@@ -24,7 +24,7 @@ endif
 " VARIABLES 
 if ! exists('g:MARKUP')
     " MARKUP languages you actively use  
-    let g:MARKUP = [ 'markdown', 'vimwiki', 'rst' ]
+    let g:MARKUP = [ 'markdown', 'vimwiki', 'rst', 'vorg' ]
 endif
 
 if ! exists('g:PROGRAMMING')
@@ -73,6 +73,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:ultisnipsexpandtrigger="<tab>"
     let g:UltiSnipsJumpForwardTrigger="<C-j>"
     let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+    let g:UltiSnipsSnippetDir = g:VIMDIR.'UltiSnips'
     let g:snips_author = "nl253"
     let g:snips_email = "nl253@kent.ac.uk"
     let g:snips_github = "https://github.com/nl253"
@@ -163,6 +164,9 @@ if has('nvim')
     let g:neoterm_size = 50
 endif
 "  
+
+Plug 'Rykka/riv.vim'
+Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
 
 " MY PLUGINS
 " ==========

@@ -53,4 +53,10 @@
 --langdef=vimwiki 
 --langmap=vimwiki:.wiki
 --regex-vimwiki=/^[ \t]*=+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)[ \t]*=+/\1/
+--langdef=vorg 
+--langmap=vorg:.vorg
+--regex-vorg=/( {4}|\t)*#([A-Z]+)|/\2/
+--regex-vorg=/( {4}|\t)*=> (.+)/\2/
+--regex-vorg=/( {4}|\t)*>{1,6} (.+)|/\2/
+--regex-vorg=/( {4}|\t)*\({1,6} (.+)|/\2/
 # vim: ft= nospell
