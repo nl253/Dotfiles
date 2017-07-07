@@ -6,6 +6,12 @@ snip.rv = str(sys.modules)
 `
 endsnippet
 
+snippet init "Constructor [python]"
+def __init__(self, value: str):
+    self._something = value
+    ${1:DO_STUFF_HERE}
+endsnippet
+
 snippet "url(o(p(en?)?)?)?" "Read from a website [python]" r
 from urllib.request import urlopen
 with urlopen('https://www.some.com', timeout=10) as website:
