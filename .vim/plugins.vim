@@ -113,12 +113,24 @@ let g:ditto_mode = "paragraph"
 Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ], 'for': 'vimwiki' }
 
 " TABLE MODE 
-Plug 'dhruvasagar/vim-table-mode', { 'on': [ 'TableModeEnable' ] }
+Plug 'dhruvasagar/vim-table-mode', { 'for': [ 'rst', 'markdown', 'vorg' ] }
 let g:table_mode_disable_mappings = 1
-let g:table_mode_verbose = 0 | let g:loaded_table_mode = 1
-let g:table_mode_syntax = 1 | let g:table_mode_update_time = 800
-au! BufEnter *.md let g:table_mode_corner = '|'
-au! BufEnter *.rst let g:table_mode_corner_corner='+' | let g:table_mode_header_fillchar='='
+let g:table_mode_verbose = 0 
+let g:table_mode_syntax = 1 
+let g:table_mode_update_time = 800
+
+aug TableModeActivation
+    au!
+    au BufEnter *.md let g:table_mode_corner = '|'
+    au BufEnter *.rst let g:table_mode_corner_corner='+' 
+    au BufEnter *.rst let g:table_mode_header_fillchar='='
+    au BufEnter *.rst let g:table_mode_header_fillchar='='
+    au BufEnter *.vorg let g:table_mode_corner_corner='+' 
+    au BufEnter *.rst let g:table_mode_corner_corner='+' 
+    au BufEnter *.rst let g:table_mode_corner = '+'
+    au BufEnter *.{rst,md,vorg} nnoremap \\ :TableModeRealign<CR>
+    au BufEnter *.{rst,md,vorg} nnoremap \, :Tableize<CR>
+aug END
 
 " VIMWIKI 
 Plug 'vimwiki/vimwiki'
@@ -134,7 +146,6 @@ let g:vimwiki_list = [{ 'path': '~/Notes/',
             \ 'syntax': 'default',
             \ 'ext': '.wiki',
             \ 'path_html': '~/.Notes_html/' }]
-
 
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
@@ -164,7 +175,7 @@ if has('nvim')
 endif
 "  
 let g:rst_syntax_code_list = [ 'vim', 'sh', 'python' ]
-Plug 'Rykka/riv.vim', { 'for': 'rst' }
+"Plug 'Rykka/riv.vim', { 'for': 'rst' }
 Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
 
 " MY PLUGINS
