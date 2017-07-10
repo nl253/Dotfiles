@@ -24,7 +24,7 @@ endif
 " VARIABLES 
 if ! exists('g:MARKUP')
     " MARKUP languages you actively use  
-    let g:MARKUP = [ 'markdown', 'vimwiki', 'rst', 'vorg' ]
+    let g:MARKUP = [ 'markdown', 'rst', 'vorg' ]
 endif
 
 if ! exists('g:PROGRAMMING')
@@ -35,7 +35,8 @@ endif
 " Place Plugins Here:
 " ==================
 
-" GENERAL 
+" GENERAL:
+Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
 Plug 'tpope/vim-sleuth' 
 Plug 'tpope/vim-speeddating' 
 Plug 'tpope/vim-repeat'
@@ -43,7 +44,7 @@ Plug 'tpope/vim-repeat'
 " A must have if you work with tmux
 if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
-" GIT
+" GIT:
 Plug 'tpope/vim-fugitive' 
 Plug 'junegunn/gv.vim'
 
@@ -65,7 +66,7 @@ let g:fzf_action = {
             \ 'ctrl-s': 'split',
             \ 'ctrl-v': 'vsplit' }
 
-" COMPLETION 
+" PYTHON PLUGINS:
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
@@ -103,7 +104,7 @@ else
     Plug 'vim-syntastic/syntastic'
 endif
 
-" MARKUP
+" MARKUP:
 Plug 'dkarter/bullets.vim' 
 let g:bullets_enabled_file_types = [ 'markdown', 'vorg', 'rst' ]
 
@@ -113,7 +114,7 @@ let g:ditto_mode = "paragraph"
 
 Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ], 'for': 'vimwiki' }
 
-" TABLE MODE 
+" TABLE MODE:
 Plug 'dhruvasagar/vim-table-mode', { 'for': [ 'rst', 'markdown', 'vorg' ] }
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 
@@ -137,19 +138,19 @@ aug END
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 
-" WEB DEV 
+" WEB DEV:
 "
-" HTML
+" HTML:
 Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
 Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
 Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ] }
 "let g:xml_syntax_folding = 1
 let g:emmet_html5 = 1 
 
-" PHP
+" PHP:
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 
-" FOR NVIM 
+" FOR NVIM:
 if has('nvim')
     Plug 'kassio/neoterm', { 'on' : [
                 \'TREPLSendSelection', 
@@ -159,16 +160,16 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-"  
-let g:rst_syntax_code_list = [ 'vim', 'sh', 'python', 'javascript' ]
 
-Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
+" RST:
+let g:rst_syntax_code_list = [ 'vim', 'sh', 'python', 'javascript', 'rust' ]
 
+" RUST:
 let g:rustfmt_autosave = 1
+Plug 'cespare/vim-toml', { 'for': 'toml' }
 
-command! H echo SyntaxAttr()
 
-" MY PLUGINS
+" MY PLUGINS:
 " ==========
 for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 'fabulous', 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
     if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
