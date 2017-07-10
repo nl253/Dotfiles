@@ -2,6 +2,11 @@ snippet "com(m(a(nd?)?)?)?" "Command [vim]" r
 command! CommandName call s:script_function()
 endsnippet
 
+snippet let
+let g:${1:var_name} = ${2:1}
+$0
+endsnippet
+
 snippet curl "Fetch with `curl` [vim]"
 function! FetchWithCurl(files, githubaddress, outputloc)
     if executable('curl')

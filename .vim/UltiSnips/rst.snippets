@@ -6,7 +6,7 @@ import re
 snip.rv = "############\n" + re.sub("\.\w+$", "", snip.fn).capitalize() + "\n############\n"`
 endsnippet
 
-snippet h2 "Heading Level 2 [rst]"
+snippet "h?2" "Heading Level 2 [rst]" r
 ${1:Heading Level 2}
 ------------
 
@@ -16,19 +16,19 @@ snippet "capt(u(re?)?)?" "Capture program output [rst]" r
 .. program-output:: python -V
 endsnippet
 
-snippet h3 "Heading Level 3 [rst]"
+snippet "h?3" "Heading Level 3 [rst]" r
 ${1:Heading Level 3 [rst]}
 ==============
 
 endsnippet
 
-snippet h4 "Heading Level 4 [rst]"
+snippet "h?4" "Heading Level 4 [rst]" r
 ${1:Heading Level 4 [rst]}
 ~~~~~~~~~~~~~~
 
 endsnippet
 
-snippet h5 "Heading Level 5 [rst]"
+snippet "h?5" "Heading Level 5 [rst]" r
 ${1:Heading Level 5 [rst]}
 ...............
 
