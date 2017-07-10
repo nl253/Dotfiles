@@ -78,8 +78,9 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:snips_email = "nl253@kent.ac.uk"
     let g:snips_github = "https://github.com/nl253"
     Plug 'maralla/completor.vim'
-    let g:completor_whitelist = [ 'python' ]
+    let g:completor_whitelist = [ 'python', 'rust' ]
     let g:completor_python_binary = 'python3'
+    let g:completor_racer_binary = expand('~/.cargo/bin/racer')
     Plug 'davidhalter/jedi-vim', {'for': 'python'}
     "let g:jedi#completions_enabled = 1
     let g:jedi#force_py_version = 3
@@ -104,7 +105,7 @@ endif
 
 " MARKUP
 Plug 'dkarter/bullets.vim' 
-let g:bullets_enabled_file_types = [ 'markdown', 'vorg' ]
+let g:bullets_enabled_file_types = [ 'markdown', 'vorg', 'rst' ]
 
 Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ]}
 
@@ -131,21 +132,6 @@ aug TableModeActivation
     au BufEnter *.{rst,md,vorg} nnoremap \\ :TableModeRealign<CR>
     au BufEnter *.{rst,md,vorg} nnoremap \, :Tableize<CR>
 aug END
-
-" VIMWIKI 
-Plug 'vimwiki/vimwiki'
-let g:vimwiki_table_mappings = 0
-let g:vimwiki_html_header_numbering = 2
-let g:vimwiki_hl_headers = 1
-let g:vimwiki_use_calendar = 0
-let g:vimwiki_dir_link = 'index'
-let g:vimwiki_hl_cb_checked = 1
-let g:vimwiki_valid_html_tags = 'b,i,s,u,sub,sup,kbd,br,hr,h1,h2,h3,h4,h5,h6,pre,code'
-let g:vimwiki_list = [{ 'path': '~/Notes/',
-            \ 'auto_toc': 1,
-            \ 'syntax': 'default',
-            \ 'ext': '.wiki',
-            \ 'path_html': '~/.Notes_html/' }]
 
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
@@ -174,9 +160,13 @@ if has('nvim')
     let g:neoterm_size = 50
 endif
 "  
-let g:rst_syntax_code_list = [ 'vim', 'sh', 'python' ]
-"Plug 'Rykka/riv.vim', { 'for': 'rst' }
+let g:rst_syntax_code_list = [ 'vim', 'sh', 'python', 'javascript' ]
+
 Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
+
+let g:rustfmt_autosave = 1
+
+command! H echo SyntaxAttr()
 
 " MY PLUGINS
 " ==========
@@ -188,8 +178,7 @@ for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-f
     endif
 endfor
 
-let g:vim_dicts = { 'vimwiki': [ 'unix-programmers', 'computer-science' ], 
-            \ 'markdown': [ 'unix-programmers', 'computer-science' ] } 
+let g:vim_dicts = { 'markdown': [ 'unix-programmers', 'computer-science' ] } 
 
 call plug#end()
 

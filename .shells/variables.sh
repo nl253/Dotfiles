@@ -70,4 +70,5 @@ stty sane
 
 [[ -x $(which setxkbmap) ]] && setxkbmap -layout gb
 
+export RUST_SRC_PATH=/home/norbert/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
 # vim: foldmethod=marker foldlevel=0 foldmarker={{{,}}}
