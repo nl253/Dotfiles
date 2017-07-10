@@ -14,3 +14,5 @@ echo "~/.profile loaded"
 # UTF-8 all the way.
 export LC_ALL='en_GB.UTF-8';
 export LANG='en_GB';
+
+export PATH="$HOME/.cargo/bin:$PATH"

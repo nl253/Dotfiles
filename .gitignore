@@ -1,14 +1,24 @@
+
 *~
-.Notes_html/
 .alacritty
-.vorg/*
-Pro
+.gists/
 anaconda3/
+.cargo/
 .antigen/
-.zsh/*.sh
-*.vorg
+.config/Mousepad/
+.config/fontforge/
+.config/pcmanfm/
+.config/viewnior/
+.emacs.d/
+.multirust/
+*CLion*/**
+case/
+.config/libfm/
+.config/Mousepad/
 .applications/
+.aspell.*
 .athome
+# Auto-generated tag files
 .autojump/
 *.backup
 *.bak
@@ -55,14 +65,12 @@ config/
 .config/menus/
 .config/mimeapps.list
 .config/nitrogen/
+.config/nvim/
 .config/nvim/dicts/c.*
 .config/nvim/dicts/cpp*
 .config/nvim/dicts/scala.*
 .config/nvim/dicts/scheme.*
 .config/nvim/init.vim
-*.swp
-.config/nvim/
-.aspell.*
 .config/nvim/init.vim.backup
 .config/nvim/spell/en.utf-8.add.spl
 .config/okular*
@@ -91,6 +99,7 @@ config/
 *.ctxt
 .dbshell
 .dicts/
+.directory
 .dlv/
 Downloads
 .dropbox
@@ -101,6 +110,7 @@ Dropbox/
 .elinks/
 .esd_auth
 .fonts/
+.fuse_hidden*
 .fzf/
 .gcalcli*
 .gdrive/
@@ -130,9 +140,11 @@ IdeaProjects
 .ipython/profile_me/startup/README
 .java/
 .jupyter/migrated
+# KDE directory preferences
 .keras/
 .laptop
 .lesshst
+# Linux trash folder which might appear on any partition or disk
 .local/bin/
 .local/include/python*
 .local/lib/
@@ -154,12 +166,16 @@ IdeaProjects
 miniconda3/
 .mycli-history
 .mycli.log
+.netrwhist
 .newsbeuter/
+.nfs*
+# .nfs files are created when an open file is removed but is still being accessed
 nl253
 nltk_data/
 node_modules/
 .node_repl*
 Notes/
+.Notes_html/
 .npm/
 .nvimlog
 .oh-my-zsh/
@@ -175,6 +191,7 @@ Pictures
 *.png
 *.ppt
 *.pptx
+Pro
 Projects/*
 .proselint/
 .PyCharm2017.1/
@@ -189,11 +206,15 @@ Regular-Expressions/
 .rnd
 *.ropeprojec*
 .rustup/
+[._]*.s[a-v][a-z]
+[._]s[a-v][a-z]
 .scripts/
 Scripts
 seaborn-data/
 .semantic-highlight-cache
 *session*
+# Session
+Session.vim
 .sncli/sncli.log
 .split
 .sqlite
@@ -201,24 +222,34 @@ seaborn-data/
 .stack/
 .steam/
 .steam*
+[._]*.sw[a-p]
+[._]sw[a-p]
+# Swap
+*.swp
 .swt/
 tags
 .task/
+# Temporary
+# temporary files which can be created if a process still has a handle open of a deleted file
 .thumbnails/
 .*.tmp
 .tmux/
 .tooling/
 .tor-browser/
+.Trash-*
 .travis/
 */undo/*
 undo/*
 .vagrant.d/
 .vim/
+# vim: ft=conf nospell
 .viminfo
 .vimtags
 vimwiki/
 vimwiki_html/
 VMs/
+.vorg/*
+*.vorg
 .wget*
 */wn/*
 workspace/
@@ -236,7 +267,7 @@ xiki-project/
 .zplug/
 .zsh_history
 .zshrc.pre-oh-my-zsh
+.zsh/*.sh
 .zsh-update
 .zsh/zsh-autosuggestions
 .zsh/zsh-interactive-cd.plugin.zsh
-# vim: ft=conf nospell

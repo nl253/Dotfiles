@@ -1,4 +1,3 @@
-
 snippet modules "All modules [python]"
 `!p 
 import sys
@@ -10,6 +9,12 @@ snippet init "Constructor [python]"
 def __init__(self, value: str):
     self._something = value
     ${1:DO_STUFF_HERE}
+endsnippet
+
+snippet "elif?" "Else if [python]" r
+
+elif ${1:CONDITION}:
+    pass
 endsnippet
 
 snippet "url(o(p(en?)?)?)?" "Read from a website [python]" r

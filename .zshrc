@@ -7,6 +7,24 @@ source ~/.zplug/init.zsh
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
+#zplug "modules/environment", from:prezto
+zplug "modules/directory", from:prezto
+zplug "modules/history", from:prezto
+#zplug "modules/python", from:prezto
+zplug "modules/utility", from:prezto
+
+zplug "plugins/cargo", from:oh-my-zsh
+zplug "plugins/gitignore", from:oh-my-zsh
+zplug "plugins/gitignore", from:oh-my-zsh
+zplug "plugins/z", from:oh-my-zsh
+
+zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
+
+#zplug "Eriner/zim", use:"modules/input/init.zsh"
+#zplug "Eriner/zim", use:"modules/archive/*"
+zplug "plugins/extract", from:oh-my-zsh
+zplug "plugins/pip", from:oh-my-zsh
+
 zplug "jreese/zsh-titles"
 zplug "zdharma/fast-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
@@ -16,7 +34,6 @@ zplug "zsh-users/zsh-history-substring-search"
 zplug "ranger/ranger", as:command, use:"ranger.py", rename-to:'ranger'
 
 zplug "nl253/Scripts", as:command, rename-to:"csv-preview", use:"csv-preview.sh"
-zplug "nl253/Scripts", as:command, rename-to:"extractor", use:"extractor.sh"
 zplug "nl253/Scripts", as:command, rename-to:"download-dotfile", use:"download-dotfile.sh"
 zplug "nl253/Scripts", as:command, rename-to:"grf", use:"grf.sh"
 zplug "nl253/Scripts", as:command, rename-to:"p", use:"processes.sh"
@@ -29,8 +46,8 @@ zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:"fzf", use:"*linux*am
 
 zplug "tmux-plugins/tpm", as:command, ignore:'*'
 
-zplug "~/.shells", from:local, use:"{variables,source,fzf,aliases}.sh"
-zplug "~/.zsh", from:local, ignore:'*.sh', use:"{variables,source,functions,aliases,options}.zsh"
+zplug "~/.shells", from:local, use:"{variables,source,fzf,aliases}.sh", defer:2
+zplug "~/.zsh", from:local, ignore:'*.sh', use:"{variables,source,functions,aliases,options}.zsh", defer:3
 
 zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", ignore:'*'
 
