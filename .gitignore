@@ -1,4 +1,3 @@
-
 *~
 .alacritty
 .gists/
@@ -19,7 +18,6 @@ Projects/
 .applications/
 .aspell.*
 .athome
-# Auto-generated tag files
 .autojump/
 *.backup
 *.bak
@@ -272,3 +270,4 @@ xiki-project/
 .zsh-update
 .zsh/zsh-autosuggestions
 .zsh/zsh-interactive-cd.plugin.zsh
+.case/
