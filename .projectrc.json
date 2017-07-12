@@ -7,10 +7,14 @@
             "$EDITOR main.py"
         ],
         "fetch": {
-            "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
-            ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore",
-            "main.py": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.py",
-            "README.md": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md"
+            "LICENSE":
+            "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
+            ".gitignore":
+            "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore",
+            "main.py":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.py",
+            "README.md":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md"
         }
     },
     "bash": {
@@ -20,9 +24,12 @@
             "$EDITOR script.sh"
         ],
         "fetch": {
-            "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
-            ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore",
-            "script.sh": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.sh"
+            "LICENSE":
+            "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
+            ".gitignore":
+            "https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore",
+            "script.sh":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.sh"
         }
     },
     "html": {
@@ -33,14 +40,39 @@
             "$EDITOR html/index.html css/sheets.css"
         ],
         "fetch": {
-            "LICENSE": "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
-            "README.md": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md",
-            "html/index.html": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.html",
-            "css/sheets.css": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.css",
-            "js/script.js": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.js",
-            "php/script.php": "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.php",
-            ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Global/Vim.gitignore"
+            "LICENSE":
+            "https://raw.githubusercontent.com/IQAndreas/markdown-licenses/master/bsd-3.md",
+            "README.md":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md",
+            "html/index.html":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.html",
+            "css/sheets.css":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.css",
+            "js/script.js":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.js",
+            "php/script.php":
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.php",
+            ".gitignore":
+            "https://raw.githubusercontent.com/github/gitignore/master/Global/Vim.gitignore"
         }
+    },
+    "clojure": {
+        "dirs": [],
+        "files": ["script.clj"],
+        "execute": [
+            "$EDITOR script.clj"
+        ],
+        "fetch": {
+            ".gitignore": "https://raw.githubusercontent.com/github/gitignore/master/Clojure.gitignore"
+        }
+    },
+    "vim": {
+        "dirs": [],
+        "files": ["script.vim"],
+        "execute": [
+            "$EDITOR script.vim"
+        ],
+        "fetch": {}
     },
     "default": {
         "location": "~/Projects"
