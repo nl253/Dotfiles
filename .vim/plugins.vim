@@ -29,7 +29,8 @@ endif
 
 if ! exists('g:PROGRAMMING')
     " PROGRAMMING LANGUAGES you code in 
-    let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'python', 'php', 'sql', 'sh', 'zsh' ]
+    let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 
+                \ 'python', 'php', 'sql', 'sh', 'zsh' ]
 endif
 
 " Place Plugins Here:
@@ -48,7 +49,7 @@ if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 Plug 'tpope/vim-fugitive' 
 Plug 'junegunn/gv.vim'
 
-set statusline=%<%f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%q\ %w\ %y\ %p\ of\ %l%)\ \  
+set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%{&complete}\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
 
 Plug 'konfekt/fastfold' 
 Plug 'wellle/targets.vim'
@@ -168,10 +169,13 @@ let g:rst_syntax_code_list = [ 'vim', 'sh', 'python', 'javascript', 'rust' ]
 let g:rustfmt_autosave = 1
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 
-
 " MY PLUGINS:
 " ==========
-for plugin in [ 'fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 'fabulous', 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
+for plugin in [ 
+            \ 'fabulous', 'vim-saner', 'vim-markup',
+            \  'vim-programming', 'vim-fzf-extensions', 
+            \ 'vim-scratchpads', 'vim-templates', 'fabulous', 
+            \ 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
     if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
         Plug 'nl253/'.plugin
     else

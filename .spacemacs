@@ -49,6 +49,7 @@ values."
      ;; spell-checking
      ;; syntax-checking
      version-control
+     rst
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -320,7 +321,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (unfill mwim fuzzy company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete smeargle org-plus-contrib mmm-mode markdown-toc s markdown-mode magit-gitflow gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md evil-magit magit magit-popup git-commit with-editor diff-hl which-key wgrep use-package smex pcre2el macrostep ivy-hydra hydra help-fns+ helm-make helm helm-core popup flx exec-path-from-shell evil-visualstar evil-escape evil goto-chg undo-tree elisp-slime-nav diminish counsel-projectile projectile pkg-info epl counsel swiper ivy bind-map bind-key auto-compile packed dash async ace-window avy))))
+    (org-plus-contrib which-key wgrep use-package unfill smex smeargle pcre2el mwim mmm-mode markdown-toc magit-gitflow macrostep ivy-hydra help-fns+ helm-make gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flx exec-path-from-shell evil-visualstar evil-magit evil-escape elisp-slime-nav diff-hl counsel-projectile company-statistics bind-map auto-yasnippet auto-compile ace-window ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

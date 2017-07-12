@@ -7,15 +7,10 @@ source ~/.zplug/init.zsh
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-#zplug "modules/environment", from:prezto
 zplug "modules/directory", from:prezto
 zplug "modules/history", from:prezto
-#zplug "modules/python", from:prezto
-zplug "modules/utility", from:prezto
 
 zplug "plugins/cargo", from:oh-my-zsh
-zplug "plugins/gitignore", from:oh-my-zsh
-zplug "plugins/gitignore", from:oh-my-zsh
 zplug "plugins/z", from:oh-my-zsh
 
 zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
