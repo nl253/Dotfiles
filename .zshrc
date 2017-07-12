@@ -1,6 +1,15 @@
 
 # ~/.zshrc
 
+[[ ! -d ~/.gists/ ]] && mkdir -p ~/.gists/
+for i in 122b12050f5fb267e75f 7001839 8172796 8294792; do
+	if [[ ! -d ~/.gists/$i ]]; then
+			git clone "https://gist.github.com/${i}.git" ~/.gists/$i
+	fi
+done
+
+[[ -e ~/.pc ]] && return 0
+
 [[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 
 source ~/.zplug/init.zsh
@@ -47,13 +56,6 @@ zplug "~/.zsh", from:local, ignore:'*.sh', use:"{variables,source,functions,alia
 zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", ignore:'*'
 
 zplug load 
-
-[[ ! -d ~/.gists/ ]] && mkdir -p ~/.gists/
-for i in 122b12050f5fb267e75f 7001839 8172796 8294792; do
-	if [[ ! -d ~/.gists/$i ]]; then
-			git clone "https://gist.github.com/${i}.git" ~/.gists/$i
-	fi
-done
 
 setopt monitor
 # vim: foldmethod=marker sw=4 ts=4
