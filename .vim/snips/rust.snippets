@@ -1,4 +1,4 @@
-snippet "whi(le?)?" "While loop [rust]" r 
+snippet while "While loop [rust]" Ab
 
 while ${1:condition} {
 
@@ -6,11 +6,19 @@ while ${1:condition} {
 
 endsnippet 
 
-snippet use "Standard Library [rust]" 
-use std::${1:};
+snippet for "While loop [rust]" Ab
+
+for item in ${1:iterable} {
+
+}
+
 endsnippet 
 
-snippet "mat(ch)?" "match ... (match)" r
+snippet use "Standard Library [rust]" Ab
+use std::${1:collections}::${2:HashMap};
+endsnippet 
+
+snippet "(match)|(switch)" "Switch (match) [rust]" rAb
 match ${1:expression} {
 	${2:pattern} => ${3:expression},
 	${4:pattern} => ${5:expression},
@@ -19,36 +27,33 @@ match ${1:expression} {
 endsnippet
 
 snippet elif "else if ... (elif)"
-else if (${1:condition}) {
+else if ${1:condition} {
 	${VISUAL}${2:${VISUAL/(.*)//}}
 } ${0}
 endsnippet
 
-snippet "stru(ct?)?" "Struct [rust]" r
+snippet "stru(ct?)?" "Struct [rust]" rAb
 
 struct ${1:Point} {
-    x: i32,
-    y: i32,
+    ${2:x}: ${3:i32},
+    ${4:y}: ${5:i32},
 }
 
 endsnippet 
 
-snippet "pr(i(nt?)?)?" "Print [rust]" r
-println!("The value is: {}", ${1:value});
+snippet print "Print [rust]" Ab
+println!("${2:The value is: \{\}}", ${1:value});
 endsnippet 
 
-snippet letm "Let mutable [rust]" 
-let mut ${1:variable_name}: i32 = 23;
+snippet let "Let mutable [rust]" Ab
+let ${2:} ${1:VARIABLE_NAME}: i32 = 23;
 endsnippet 
 
-
-snippet enum "Enum [rust]" 
+snippet enum "Enum [rust]" Ab
 
 enum ${1:Message} {
-    Quit,
-    ChangeColor(i32, i32, i32),
-    Move { x: i32, y: i32 },
-    Write(String),
+    ${2:Quit},
+    ${3:ChangeColor}: i32,
 }
 
 endsnippet 
