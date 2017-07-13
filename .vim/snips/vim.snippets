@@ -2,9 +2,12 @@ snippet "com(m(a(nd?)?)?)?" "Command [vim]" r
 command! CommandName call s:script_function()
 endsnippet
 
-snippet let
-let g:${1:var_name} = ${2:1}
-$0
+snippet let "Variable definition [vim]" Ab
+let ${3:g}:${1:var_name} = ${2:1}
+endsnippet
+
+snippet Plug "Plugin [vim]" Ab
+Plug "${1:author}/${2:repo}"
 endsnippet
 
 snippet curl "Fetch with `curl` [vim]"
@@ -25,12 +28,28 @@ function! FetchWithCurl(files, githubaddress, outputloc)
 endfunction
 endsnippet
 
-snippet "ifn(v(im?)?)?" "Nvim / Vim [vim]" r
-if !has('nvim')
-    let g:VIMDIR = expand('~/.vim/') 
-else
-    let g:VIMDIR = expand('~/.config/nvim/') 
+snippet if "If [vim]" b
+
+if ${1:!has}('${2:nvim}')
+    let g:${3:VIMDIR} = ${4:expand('')}
 endif
+
+endsnippet
+
+snippet "if h" "If has [vim]" bAr
+
+if has('${2:nvim}')
+    let g:${3:VIMDIR} = ${4:expand('')}
+endif
+
+endsnippet
+
+snippet "if isd" "If is directory [vim]" bAr
+
+if isdirectory('${2:DIRNAME}')
+    let g:${3:VIMDIR} = ${4:expand('')}
+endif
+
 endsnippet
 
 snippet "sfi(le?)?" "Script file [vim]" r
@@ -87,50 +106,38 @@ endfunction
 command! -args=? ${1:COMMAND_NAME} call s:List(<q-args>)
 endsnippet
 
-snippet "ex(i(s(ts?)?)?)?" "Check if var exists [vim]" r
-if exists("g:${1:variable}")
-	"DO_STUFF
+snippet "if exi" "Check if var exists [vim]" rAb
+if exists("${1:g:variable}")
+	${2:"DO_STUFF}
 endif
 endsnippet 
 
-snippet "exe(c(u(t(a(b(le?)?)?)?)?)?)?" "Check if executable [vim]" r
+snippet "if exe" "Check if executable [vim]" rAb
+
 if executable("${1:EXECUTABLE}")
-	"DO_STUFF
+    ${2:" DO STUFF}
 endif
+
 endsnippet 
 
-snippet "fun(c(t(i(on?)?)?)?)?" "function [vim]" r
+snippet fun "function [vim]" Ab
 function! s:${1:function_name}()
-	" DO STH HERE
+	${2:" DO STH HERE}
 endfunction
 endsnippet
 
-snippet try "try catch [vim]"
+snippet try "try catch [vim]" Ab
 try
-	" DO STH HERE
+	${1:" DO STH HERE}
 catch /.*/
 endtry
 endsnippet
 
-snippet has "Feature check [vim]"
-if has('python3')
-	" DO STH
-endif
-endsnippet
+snippet while "While loop [vim]" Ab
 
-snippet if "If statement [vim]"
-if has('python3')
-	" DO STH
-elseif has('python3')
-	" DO STH
-else
-	" DO STH
-endif
-endsnippet
-
-snippet "while?" "While loop [vim]" r
 while ${1:CONDITION}
-	continue
+	${2:break}
 endwhile
+
 endsnippet
 # vim: ts=4 sw=4 
