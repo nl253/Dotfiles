@@ -3,6 +3,8 @@
 .gists/
 anaconda3/
 .cargo/
+.multirust
+.pylint.d/
 .antigen/
 .config/Mousepad/
 .config/fontforge/
