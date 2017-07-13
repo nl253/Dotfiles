@@ -142,6 +142,12 @@ aug END
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 
+Plug 'tpope/vim-liquid', { 'for' : 'markdown' }
+
+let g:markdown_fenced_languages =  [ 'vim', 'sh', 'python', 'javascript', 'rust' ]
+let g:liquid_highlight_types = g:markdown_fenced_languages
+let g:rst_syntax_code_list = g:markdown_fenced_languages
+
 " WEB DEV:
 "
 " HTML:
@@ -164,9 +170,6 @@ if has('nvim')
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-
-" RST:
-let g:rst_syntax_code_list = [ 'vim', 'sh', 'python', 'javascript', 'rust' ]
 
 " RUST:
 let g:rustfmt_autosave = 1

@@ -6,6 +6,16 @@ while ${1:condition} {
 
 endsnippet 
 
+
+snippet "fn " "Function [rust]" rAb
+
+fn ${1:area}(${2:rectangle}: ${3:&Rectangle}) -> ${4:u32} {
+    ${5:return rectangle.length * rectangle.width}
+}
+
+endsnippet 
+
+
 snippet for "While loop [rust]" Ab
 
 for item in ${1:iterable} {
@@ -61,6 +71,12 @@ endsnippet
 snippet "((h(ash)?)?set)" "HashSet [rust]" r
 let mut set: HashSet<${1:i32}> = HashSet::new();
 endsnippet 
+
+snippet impl "Rust implement method block [rust]" Ab
+impl ${1:Circle} {
+
+}
+endsnippet
 
 snippet "((h(ash)?)?map|dict)" "HashMap [rust]" r
 let mut dictionary: HashMap<${1:i32}> = HashMap::new();
