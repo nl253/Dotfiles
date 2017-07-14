@@ -31,7 +31,7 @@ hide_edge_borders none
 font xft:monospace 13
 
 # start a terminal
-bindsym $WINKEY+Return exec alacritty -e tmux -2
+bindsym $WINKEY+Return exec termite -e tmux
 
 # kill focused window (Just like in Windows)
 bindsym $ALTKEY+F4 kill
