@@ -72,34 +72,31 @@ eval "$(pyenv virtualenv-init -)"
 
 [[ ! -e ~/.python-version ]] && pyenv global 3.6.1 system && cd
 
-if [[ -x pip ]]; then
-	[[ ! -x ranger ]] && pip install --user git+http://www.github.com/ranger/ranger.git
-	[[ ! -x ipython ]] && pip install --user git+http://www.github.com/ipython/ipython.git
-	[[ ! -x pylint ]] && pip install --user git+http://www.github.com/PyCQA/pylint.git
-	[[ ! -x flake8 ]] && pip install --user git+http://www.github.com/PyCQA/flake8.git
-	[[ ! -x pycodestyle ]] && pip install --user git+http://www.github.com/PyCQA/pycodestyle.git
-	[[ ! -x pyflakes ]] && pip install --user git+http://www.github.com/PyCQA/pyflakes.git
-	[[ ! -x mypy ]] && pip install --user git+http://www.github.com/python/mypy.git
-	[[ ! -x yapf ]] && pip install --user git+http://www.github.com/google/yapf.git
-	[[ ! -x vint ]] && pip install --user git+http://www.github.com/Kuniwak/vint.git
-	[[ ! -x yamlint ]] && pip install --user git+http://www.github.com/adrienverge/yamllint.git
-	[[ ! -x isort ]] && pip install --user git+http://www.github.com/timothycrosley/isort.git
-	[[ ! -x proselint ]] && pip install --user git+http://www.github.com/amperser/proselint.git
-	[[ ! -x profiling ]] && pip install --user git+http://www.github.com/what-studio/profiling.git
-	[[ ! -x mycli ]] && pip install --user git+http://www.github.com/dbcli/mycli.git
-	[[ ! -x pytest ]] && pip install --user git+http://www.github.com/pytest-dev/pytest.git
-	[[ ! -x pudb ]] && pip install --user git+http://www.github.com/inducer/pudb.git
-	[[ ! -x j ]] && [[ ! -x z ]] && pip install --user git+http://www.github.com/wting/autojump.git
-	[[ ! -x youtube-dl ]] && pip install --user git+http://www.github.com/rg3/youtube-dl.git
-fi
+[[ ! -x $(which ranger) ]] && pip install --user git+http://www.github.com/ranger/ranger.git
+[[ ! -x $(which ipython) ]] && pip install --user git+http://www.github.com/ipython/ipython.git
+[[ ! -x $(which pylint) ]] && pip install --user git+http://www.github.com/PyCQA/pylint.git
+[[ ! -x $(which flake8) ]] && pip install --user git+http://www.github.com/PyCQA/flake8.git
+[[ ! -x $(which pycodestyle) ]] && pip install --user git+http://www.github.com/PyCQA/pycodestyle.git
+[[ ! -x $(which pyflakes) ]] && pip install --user git+http://www.github.com/PyCQA/pyflakes.git
+[[ ! -x $(which mypy) ]] && pip install --user git+http://www.github.com/python/mypy.git
+[[ ! -x $(which yapf) ]] && pip install --user git+http://www.github.com/google/yapf.git
+[[ ! -x $(which vint) ]] && pip install --user git+http://www.github.com/Kuniwak/vint.git
+[[ ! -x $(which yamllint) ]] && pip install --user git+http://www.github.com/adrienverge/yamllint.git
+[[ ! -x $(which isort) ]] && pip install --user git+http://www.github.com/timothycrosley/isort.git
+[[ ! -x $(which proselint) ]] && pip install --user git+http://www.github.com/amperser/proselint.git
+[[ ! -x $(which profiling) ]] && pip install --user git+http://www.github.com/what-studio/profiling.git
+[[ ! -x $(which mycli) ]] && pip install --user git+http://www.github.com/dbcli/mycli.git
+[[ ! -x $(which pytest) ]] && pip install --user git+http://www.github.com/pytest-dev/pytest.git
+[[ ! -x $(which pudb) ]] && pip install --user git+http://www.github.com/inducer/pudb.git
+[[ ! -x $(which j) ]] && [[ ! -x $(which z) ]] && pip install --user git+http://www.github.com/wting/autojump.git
+[[ ! -x $(which youtube-dl) ]] && pip install --user git+http://www.github.com/rg3/youtube-dl.git
 
 # python << EOF
 # import subprocess, sys
 
-# for i in ['better-exceptions', 'faker', 'numpy', 'pandas', 'ipdb']:
+# for i in ['better-exceptions', 'faker', 'numpy', 'pandas', 'ipdb', 'jedi']:
 #   if i not in list(sys.modules):
 #     subprocess.run(['pip', 'install', '--user', i])
-
 
 # EOF 
 
