@@ -16,6 +16,10 @@ echo -e "${HOME}/.bashrc loaded"
 # source all .sh in ~/.bash/ (bash-specific configuration)
 # this will set `$PATH` and allow me to use my scripts 
 
+for i in /{etc,usr/share/bash-completion}/bash_completion; do
+  [[ -f $i ]] && . $i && break
+done
+
 for i in ~/.{shells,bash}/{options,variables,source,functions,setup,fzf,aliases}.sh; do
   [[ -r $i ]] && source $i
 done
