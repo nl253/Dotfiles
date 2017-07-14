@@ -97,7 +97,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 endif
 
-let g:LintHook = '[[ -x $(which pip) ]] && [[ ! -x $(which vint) ]] && pip install --user vim-vint ; [[ -x $(which pip) ]] && [[ ! -x $(which flake8) ]] && pip install --user flake8 ; [[ -x $(which cabal) ]] && [[ ! -x $(which shellcheck) ]] && cabal update && cabal install ShellCheck ; [[ -x $(which gem) ]] && [[ ! -x $(which mdl) ]] && gem install mdl ; [[ -x $(which pip) ]] && [[ ! -x $(which proselint) ]] && pip install --user proselint ; [[ -x $(which pip) ]] && [[ ! -x $(which mypy) ]] && pip install --user mypy ; [[ -x $(which npm) ]] && [[ ! -x $(which standard) ]] && npm install standard --save-dev ; [[ -x $(which npm) ]] && [[ ! -x $(which eslint) ]] && npm install eslint ; [[ -x $(which gem) ]] && [[ ! -x $(which sqlint) ]] && gem install sqlint ; [[ -x $(which pip) ]] && [[ ! -x $(which isort) ]] && pip install --user isort'
+let g:LintHook = '[[ ! -x $(which shellcheck) ]] && cabal update && cabal install ShellCheck ; [[ -x $(which gem) ]] && [[ ! -x $(which mdl) ]] && gem install mdl ; [[ -x $(which npm) ]] && [[ ! -x $(which standard) ]] && npm install --user standard --save-dev ; [[ -x $(which npm) ]] && [[ ! -x $(which eslint) ]] && npm install --user eslint ; [[ -x $(which gem) ]] && [[ ! -x $(which sqlint) ]] && gem install sqlint'
 
 if has('patch8') || has('nvim')
     Plug 'w0rp/ale', { 'do' : g:LintHook }
