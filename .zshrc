@@ -16,9 +16,6 @@ source ~/.zplug/init.zsh
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-zplug "modules/directory", from:prezto
-zplug "modules/history", from:prezto
-
 zplug "plugins/cargo", from:oh-my-zsh
 zplug "plugins/z", from:oh-my-zsh
 
@@ -48,14 +45,13 @@ zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:"fzf", use:"*linux*am
 
 zplug "tmux-plugins/tpm", as:command, ignore:'*'
 
-zplug "~/.shells", from:local, use:"{variables,source,fzf,aliases}.sh", defer:2
-zplug "~/.zsh", from:local, ignore:'*.sh', use:"{variables,source,functions,aliases,options}.zsh", defer:3
+#zplug "getpelican/pelican-plugins", as:command, ignore:'*'
 
-for i in {variables,source,functions,aliases,options}; 
-	if [[ -e ~/Projects/ShellPlugins/zsh/$i ]]; then
-		zplug "~/Projects/ShellPlugins/zsh/${i}", from:local, use:'*.zsh', defer:3
+for i in {variables,source,functions,aliases,options,fzf}; do
+	if [[ -e ~/Projects/ZshPlugins/$i ]]; then
+		zplug "~/Projects/ZshPlugins/${i}", from:local, use:'*.zsh', defer:3
 	else
-		zplug "nl253/zsh-config-${i}", from:local, use:'*.zsh', defer:3
+		zplug "nl253/zsh-config-${i}", defer:3
 	fi
 done
 
@@ -64,4 +60,4 @@ zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", 
 zplug load 
 
 setopt monitor
-# vim: foldmethod=marker sw=4 ts=4
+# vim: foldmethod=marker sw=2 ts=2
