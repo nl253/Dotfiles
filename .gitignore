@@ -133,6 +133,8 @@ go/
 IdeaProjects
 .idlerc/
 .ipython/profile_default/db*
+.z.*
+.emacs.d/
 .ipython/profile_default/startup/README
 .ipython/profile_me/db/dhist
 .ipython/profile_me/startup/README
