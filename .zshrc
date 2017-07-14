@@ -1,5 +1,7 @@
 
 # ~/.zshrc
+#
+[[ -e ~/.pc ]] && return 0
 
 [[ ! -d ~/.gists/ ]] && mkdir -p ~/.gists/
 for i in 122b12050f5fb267e75f 7001839 8172796 8294792; do
@@ -7,8 +9,6 @@ for i in 122b12050f5fb267e75f 7001839 8172796 8294792; do
 			git clone "https://gist.github.com/${i}.git" ~/.gists/$i
 	fi
 done
-
-[[ -e ~/.pc ]] && return 0
 
 [[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 
