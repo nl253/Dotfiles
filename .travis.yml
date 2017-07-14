@@ -1,18 +1,16 @@
 sudo: false
 language: python
 python:
-    - "nightly" 
+    - "nightly"
 
 # command to run tests
-script: 
-    - pip install prompt_toolkit
-    - bash -c ranger
+script:
     - bash -c "project --help"
     - sh
     - sh -c "sqlite --help"
 
 # blocklist
-branches: 
+branches:
     only:
         - master
 
