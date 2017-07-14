@@ -1,1 +1,0 @@
-tmux -c zsh
