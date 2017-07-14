@@ -30,7 +30,7 @@ zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-history-substring-search"
 
-zplug "ranger/ranger", as:command, use:"ranger.py", rename-to:'ranger'
+#zplug "ranger/ranger", as:command, use:"ranger.py", rename-to:'ranger'
 
 zplug "nl253/Scripts", as:command, rename-to:"csv-preview", use:"csv-preview.sh"
 zplug "nl253/Scripts", as:command, rename-to:"download-dotfile", use:"download-dotfile.sh"
@@ -45,7 +45,7 @@ zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:"fzf", use:"*linux*am
 
 zplug "tmux-plugins/tpm", as:command, ignore:'*'
 
-#zplug "getpelican/pelican-plugins", as:command, ignore:'*'
+zplug "getpelican/pelican-plugins", as:command, ignore:'*'
 
 for i in {variables,source,functions,aliases,options,fzf}; do
 	if [[ -e ~/Projects/ZshPlugins/$i ]]; then
