@@ -24,8 +24,6 @@ zplug "plugins/z", from:oh-my-zsh
 
 zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
 
-#zplug "Eriner/zim", use:"modules/input/init.zsh"
-#zplug "Eriner/zim", use:"modules/archive/*"
 zplug "plugins/extract", from:oh-my-zsh
 zplug "plugins/pip", from:oh-my-zsh
 
@@ -52,6 +50,14 @@ zplug "tmux-plugins/tpm", as:command, ignore:'*'
 
 zplug "~/.shells", from:local, use:"{variables,source,fzf,aliases}.sh", defer:2
 zplug "~/.zsh", from:local, ignore:'*.sh', use:"{variables,source,functions,aliases,options}.zsh", defer:3
+
+for i in {variables,source,functions,aliases,options}; 
+	if [[ -e ~/Projects/ShellPlugins/zsh/$i ]]; then
+		zplug "~/Projects/ShellPlugins/zsh/${i}", from:local, use:'*.zsh', defer:3
+	else
+		zplug "nl253/zsh-config-${i}", from:local, use:'*.zsh', defer:3
+	fi
+done
 
 zplug "pyenv/pyenv", as:command, hook-load:"source ${HOME}/.zsh/variables.zsh", ignore:'*'
 

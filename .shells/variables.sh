@@ -5,6 +5,11 @@
 # VARIABLES
 
 # GENERAL
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+if [[ ! -e ~/.pelican-plugins ]]; then
+  git clone --recursive https://github.com/getpelican/pelican-plugins ~/.pelican-plugins
+fi
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
