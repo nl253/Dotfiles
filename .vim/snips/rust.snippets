@@ -7,6 +7,33 @@ while ${1:condition} {
 endsnippet 
 
 
+snippet main "Main [rust]" 
+
+fn main() {
+	
+	${1:// DO STUFF HERE.}
+
+}
+
+endsnippet 
+
+snippet trait "Trait (Interface) [rust]" Ab
+
+trait ${1:HasArea} {
+    fn ${2:area}(&self) -> ${3:f64};
+}
+
+endsnippet 
+
+snippet "clojure|lambda" "Clojure (Lambda) [rust]" rA
+|x: ${1:i32}| ${2:x + 1}
+endsnippet
+
+snippet "(derive)?debug" "Debugging printing [rust]"
+#[derive(Debug)]
+endsnippet
+
+
 snippet "fn " "Function [rust]" rAb
 
 fn ${1:area}(${2:rectangle}: ${3:&Rectangle}) -> ${4:u32} {
@@ -56,7 +83,7 @@ println!("${2:The value is: \{\}}", ${1:value});
 endsnippet 
 
 snippet let "Let mutable [rust]" Ab
-let ${2:} ${1:VARIABLE_NAME}: i32 = 23;
+let ${2:} ${1:VARIABLE_NAME}: ${3:i32} = ${4:23};
 endsnippet 
 
 snippet enum "Enum [rust]" Ab
