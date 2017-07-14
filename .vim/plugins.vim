@@ -70,7 +70,6 @@ let g:fzf_action = {
 " PYTHON PLUGINS:
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
     Plug 'SirVer/ultisnips'
-    Plug 'honza/vim-snippets'
     let g:UltiSnipsEditSplit = 'vertical'
     "let g:UltiSnipsSnippetDir = g:VIMDIR.'snips'
     let g:UltiSnipsSnippetDirectories = [ g:VIMDIR.'snips' ]
