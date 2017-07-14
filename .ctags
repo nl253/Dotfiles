@@ -70,8 +70,6 @@
 --langmap=sass:.scss
 --regex-sass=/^[[:space:]]*([A-Za-z0-9#-_[:space:]]+)\{/\1/,selector/
 
---langdef=Go
---langmap=Go:.go
 --regex-Go=/func([ \t]+\([^)]+\))?[ \t]+([a-zA-Z0-9_]+)/\2/d,func/
 --regex-Go=/var[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/d,var/
 --regex-Go=/type[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/d,type/
@@ -151,7 +149,7 @@
 --langdef=vorg 
 --langmap=vorg:.vorg
 
---regex-vorg=/[^\w]#([A-Z]+)\1 - hashtag [vorg]/
+--regex-vorg=/[^\w]#([A-Z]+)/\1 - hashtag [vorg]/
 
 --regex-vorg=/( {4}|\t)*=> (.+)/\2 - defition [vorg]/
 
@@ -194,4 +192,4 @@
 --regex-rust=/^[ \t]*(pub[ \t]+)?(unsafe[ \t]+)?impl([ \t\n]*<[^>]*>)?[ \t]+(([a-zA-Z0-9_:]+)[ \t]*(<[^>]*>)?[ \t]+(for)[ \t]+)?([a-zA-Z0-9_]+)/\5 \7 \8/i,impls,trait implementations/
 --regex-rust=/^[ \t]*macro_rules![ \t]+([a-zA-Z0-9_]+)/\1/d,macros,macro definitions/
 
---languages=sh,zsh,python,rust,css,html,mediawiki,markdown,asciidoc,rst,javascript,vorg,vim,java
+--languages=sh,python,rust,css,html,mediawiki,markdown,rst,javascript,vorg,vim,java
