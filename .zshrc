@@ -62,7 +62,7 @@ setopt monitor
 [[ ! -e ~/.pyenv ]] && curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
 
 export PYENV_ROOT=~/.pyenv
-export PATH=$PYENV_ROOT/bin:$PATH 
+export PATH="${PATH}:${PYENV_ROOT}/bin"
 eval "$(pyenv init -)" 
 eval "$(pyenv virtualenv-init -)"
 
@@ -73,7 +73,7 @@ eval "$(pyenv virtualenv-init -)"
 [[ ! -e ~/.python-version ]] && pyenv global 3.6.1 system && cd
 
 [[ ! -x $(which ranger) ]] && pip install --user git+http://www.github.com/ranger/ranger.git
-[[ ! -x $(which ipython) ]] && pip install --user git+http://www.github.com/ipython/ipython.git
+#[[ ! -x $(which ipython) ]] && pip install --user git+http://www.github.com/ipython/ipython.git
 [[ ! -x $(which pylint) ]] && pip install --user git+http://www.github.com/PyCQA/pylint.git
 [[ ! -x $(which flake8) ]] && pip install --user git+http://www.github.com/PyCQA/flake8.git
 [[ ! -x $(which pycodestyle) ]] && pip install --user git+http://www.github.com/PyCQA/pycodestyle.git
@@ -87,8 +87,8 @@ eval "$(pyenv virtualenv-init -)"
 [[ ! -x $(which profiling) ]] && pip install --user git+http://www.github.com/what-studio/profiling.git
 [[ ! -x $(which mycli) ]] && pip install --user git+http://www.github.com/dbcli/mycli.git
 [[ ! -x $(which pytest) ]] && pip install --user git+http://www.github.com/pytest-dev/pytest.git
-[[ ! -x $(which pudb) ]] && pip install --user git+http://www.github.com/inducer/pudb.git
-[[ ! -x $(which j) ]] && [[ ! -x $(which z) ]] && pip install --user git+http://www.github.com/wting/autojump.git
+[[ ! -x $(which pudb3) ]] && pip install --user git+http://www.github.com/inducer/pudb.git
+#[[ ! -x $(which j) ]] && [[ ! -x $(which z) ]] && pip install --user git+http://www.github.com/wting/autojump.git
 [[ ! -x $(which youtube-dl) ]] && pip install --user git+http://www.github.com/rg3/youtube-dl.git
 
 # python << EOF
