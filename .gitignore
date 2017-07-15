@@ -266,6 +266,7 @@ seaborn-data/
 tags
 undo/*
 vimwiki/
+.rbenv/
 vimwiki_html/
 workspace/
 xiki-project/
