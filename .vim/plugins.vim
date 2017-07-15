@@ -1,3 +1,4 @@
+
 " PLUG
 if has('nvim')
     let g:PLUG_FILE = expand('~/.local/share/nvim/site/autoload/plug.vim')
@@ -47,6 +48,7 @@ if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
 Plug 'tpope/vim-fugitive' 
+Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%{&complete}\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
@@ -62,10 +64,10 @@ Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'up': '~40%' }
 
-let g:fzf_action = {
-            \ 'ctrl-t': 'tab split',
-            \ 'ctrl-s': 'split',
-            \ 'ctrl-v': 'vsplit' }
+let g:fzf_action = { 'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit' }
+
+" RUST:
+let g:rustfmt_autosave = 1
 
 " PYTHON PLUGINS:
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
@@ -81,7 +83,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:completor_whitelist = [ 'python', 'rust' ]
     let g:completor_python_binary = 'python3'
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
-    Plug 'davidhalter/jedi-vim', {'for': 'python'}
+    Plug 'davidhalter/jedi-vim', {'for': 'python' }
     "let g:jedi#completions_enabled = 1
     let g:jedi#force_py_version = 3
     let g:jedi#goto_command = "<C-]>"
@@ -92,7 +94,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:jedi#rename_command = ",r"
     let g:jedi#use_splits_not_buffers = "right"
     let g:jedi#show_call_signatures_delay = 200
-    Plug 'tmhedberg/SimpylFold', {'for': 'python'}
+    Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
     Plug 'editorconfig/editorconfig-vim'
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 endif
@@ -111,7 +113,7 @@ unlet g:LintHook
 Plug 'dkarter/bullets.vim' 
 let g:bullets_enabled_file_types = [ 'markdown', 'vorg', 'rst' ]
 
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ]}
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ] }
 
 let g:ditto_mode = "paragraph"
 
@@ -160,19 +162,16 @@ let g:emmet_html5 = 1
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 
 " FOR NVIM:
+" ========
 if has('nvim')
     Plug 'kassio/neoterm', { 'on' : [
                 \'TREPLSendSelection', 
                 \'TREPLSendLine', 
-                \'TREPLSendFile' ]}
+                \'TREPLSendFile' ] }
     let g:neoterm_position = 'vertical'
     let g:neoterm_keep_term_open = 0
     let g:neoterm_size = 50
 endif
-
-" RUST:
-let g:rustfmt_autosave = 1
-Plug 'cespare/vim-toml', { 'for': 'toml' }
 
 " MY PLUGINS:
 " ==========
