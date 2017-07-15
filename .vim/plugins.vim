@@ -1,5 +1,5 @@
 
-" PLUG
+" PLUG:
 if has('nvim')
     let g:PLUG_FILE = expand('~/.local/share/nvim/site/autoload/plug.vim')
 else " if vim
@@ -22,7 +22,7 @@ else
 endif
 " 
 
-" VARIABLES 
+" VARIABLES:
 if ! exists('g:MARKUP')
     " MARKUP languages you actively use  
     let g:MARKUP = [ 'markdown', 'rst', 'vorg' ]
@@ -96,7 +96,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:jedi#show_call_signatures_delay = 200
     Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
     Plug 'editorconfig/editorconfig-vim'
-    let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+    let g:EditorConfig_exclude_patterns = [ 'fugitive://.*' ]
 endif
 
 let g:LintHook = '[[ ! -x $(which shellcheck) ]] && cabal update && cabal install ShellCheck ; [[ -x $(which gem) ]] && [[ ! -x $(which mdl) ]] && gem install mdl ; [[ -x $(which npm) ]] && [[ ! -x $(which standard) ]] && npm install --user standard --save-dev ; [[ -x $(which npm) ]] && [[ ! -x $(which eslint) ]] && npm install --user eslint ; [[ -x $(which gem) ]] && [[ ! -x $(which sqlint) ]] && gem install sqlint'

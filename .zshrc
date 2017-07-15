@@ -91,13 +91,31 @@ eval "$(pyenv virtualenv-init -)"
 #[[ ! -x $(which j) ]] && [[ ! -x $(which z) ]] && pip install --user git+http://www.github.com/wting/autojump.git
 [[ ! -x $(which youtube-dl) ]] && pip install --user git+http://www.github.com/rg3/youtube-dl.git
 
-# python << EOF
+# pyenv exec python << EOF
 # import subprocess, sys
-
+#
 # for i in ['better-exceptions', 'faker', 'numpy', 'pandas', 'ipdb', 'jedi']:
 #   if i not in list(sys.modules):
 #     subprocess.run(['pip', 'install', '--user', i])
-
 # EOF 
 
-# vim: foldmethod=marker sw=2 ts=2
+
+if [[ ! -e ~/.rbenv ]]; then
+	git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+	cd ~/.rbenv && src/configure && make -C src 
+	cd
+fi
+
+export PATH="${HOME}/.rbenv/bin:${PATH}"
+eval "$(rbenv init -)"
+
+[[ ! -e ~/.rbenv/plugins/ruby-build ]] && git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+[[ ! $(rbenv versions) =~ '2\.4\.0' ]] && rbenv install 2.4.0 && rbenv global 2.4.0 system
+
+for i in travis; do
+	[[ ! -x $(which $i) ]] && gem install $i
+done
+
+
+# vim: foldmethod=marker sw=2 ts=2 nowrap
