@@ -1,6 +1,6 @@
 
 # ~/.zshrc
-#
+
 if [[ -e ~/.pc ]] || [[ ! -e ~/.home ]] || [[ ! -x $(which git) ]] || [[ ! -x $(which curl) ]] || [[ ! -x $(which python3) ]]; then
 	echo -e "requirements not satified .zshrc not sourced" && return 0
 fi
@@ -86,11 +86,7 @@ done
 
 # RUBY
 
-if [[ ! -e ~/.rbenv ]]; then
-	git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-	cd ~/.rbenv && src/configure && make -C src 
-	cd
-fi
+[[ ! -e ~/.rbenv ]] && git clone https://github.com/rbenv/rbenv.git ~/.rbenv && cd ~/.rbenv && src/configure && make -C src && cd
 
 export PATH="${HOME}/.rbenv/bin:${PATH}"
 eval "$(rbenv init -)"

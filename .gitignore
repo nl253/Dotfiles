@@ -267,6 +267,7 @@ tags
 undo/*
 vimwiki/
 .rbenv/
+.npmrc
 vimwiki_html/
 workspace/
 xiki-project/
