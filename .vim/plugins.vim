@@ -68,6 +68,7 @@ let g:fzf_action = { 'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit
 
 " RUST:
 let g:rustfmt_autosave = 1
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 
 " PYTHON PLUGINS:
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
