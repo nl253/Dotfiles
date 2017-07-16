@@ -72,24 +72,15 @@ eval "$(pyenv virtualenv-init -)"
 
 [[ ! -e ~/.python-version ]] && pyenv global 3.6.1 system && cd
 
-[[ ! -x $(which ranger) ]] && pip install --user git+http://www.github.com/ranger/ranger.git
-#[[ ! -x $(which ipython) ]] && pip install --user git+http://www.github.com/ipython/ipython.git
-[[ ! -x $(which pylint) ]] && pip install --user git+http://www.github.com/PyCQA/pylint.git
-[[ ! -x $(which flake8) ]] && pip install --user git+http://www.github.com/PyCQA/flake8.git
-[[ ! -x $(which pycodestyle) ]] && pip install --user git+http://www.github.com/PyCQA/pycodestyle.git
-[[ ! -x $(which pyflakes) ]] && pip install --user git+http://www.github.com/PyCQA/pyflakes.git
-[[ ! -x $(which mypy) ]] && pip install --user git+http://www.github.com/python/mypy.git
-[[ ! -x $(which yapf) ]] && pip install --user git+http://www.github.com/google/yapf.git
-[[ ! -x $(which vint) ]] && pip install --user git+http://www.github.com/Kuniwak/vint.git
-[[ ! -x $(which yamllint) ]] && pip install --user git+http://www.github.com/adrienverge/yamllint.git
-[[ ! -x $(which isort) ]] && pip install --user git+http://www.github.com/timothycrosley/isort.git
-[[ ! -x $(which proselint) ]] && pip install --user git+http://www.github.com/amperser/proselint.git
-[[ ! -x $(which profiling) ]] && pip install --user git+http://www.github.com/what-studio/profiling.git
-[[ ! -x $(which mycli) ]] && pip install --user git+http://www.github.com/dbcli/mycli.git
-[[ ! -x $(which pytest) ]] && pip install --user git+http://www.github.com/pytest-dev/pytest.git
-[[ ! -x $(which pudb3) ]] && pip install --user git+http://www.github.com/inducer/pudb.git
-#[[ ! -x $(which j) ]] && [[ ! -x $(which z) ]] && pip install --user git+http://www.github.com/wting/autojump.git
-[[ ! -x $(which youtube-dl) ]] && pip install --user git+http://www.github.com/rg3/youtube-dl.git
+for i in ranger ipython pylint flake8 pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl; do
+	[[ ! -x $(which $i) ]] && [[ ! -e ~/.local/bin/$i ]] && pip install --user $i
+done
+
+[[ ! -e ~/.local/bin/vint ]] && pip install --user git+http://www.github.com/Kuniwak/vint.git
+
+for i in 'better_exceptions' 'faker' 'numpy' 'pandas' 'ipdb' 'jedi'; do
+	[[ ! -e ~/.local/lib/python3.6/site-packages/${i} ]] && pip install --user $i
+done
 
 if [[ ! -e ~/.rbenv ]]; then
 	git clone https://github.com/rbenv/rbenv.git ~/.rbenv
@@ -108,22 +99,12 @@ for i in travis; do
 	[[ ! -x $(which $i) ]] && gem install $i
 done
 
-# pyenv exec python3.6 << EOF
-
-# import subprocess, sys
-
-# for i in ['better-exceptions', 'faker', 'numpy', 'pandas', 'ipdb', 'jedi']:
-#   try:
-#   	import i
-#   except:
-#     subprocess.run(['pip', 'install', '--user', i])
-#
-# EOF 
 
 if [[ -x $(which npm) ]]; then
 	for i in jshint js-beautify stylelint textlint write-good csslint tern eslint remark stylus coffee coffeelint prettier; do
 		[[ ! -x $(which $i) ]] && npm install $i
 	done
 fi
+
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
