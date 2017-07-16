@@ -59,6 +59,8 @@ zplug load
 
 setopt monitor
 
+# PYTHON
+
 [[ ! -e ~/.pyenv ]] && curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
 
 export PYENV_ROOT=~/.pyenv
@@ -70,7 +72,7 @@ eval "$(pyenv virtualenv-init -)"
 
 [[ ! $(pyenv versions) =~ '3\.6\.1' ]] && pyenv install 3.6.1
 
-[[ ! -e ~/.python-version ]] && pyenv global 3.6.1 system && cd
+export PYENV_VERSION="3.6.1"
 
 for i in ranger ipython pylint flake8 pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl; do
 	[[ ! -x $(which $i) ]] && [[ ! -e ~/.local/bin/$i ]] && pip install --user $i
@@ -81,6 +83,8 @@ done
 for i in 'better_exceptions' 'faker' 'numpy' 'pandas' 'ipdb' 'jedi'; do
 	[[ ! -e ~/.local/lib/python3.6/site-packages/${i} ]] && pip install --user $i
 done
+
+# RUBY
 
 if [[ ! -e ~/.rbenv ]]; then
 	git clone https://github.com/rbenv/rbenv.git ~/.rbenv
@@ -93,18 +97,18 @@ eval "$(rbenv init -)"
 
 [[ ! -e ~/.rbenv/plugins/ruby-build ]] && git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 
-[[ ! $(rbenv versions) =~ '2\.4\.0' ]] && rbenv install 2.4.0 && rbenv global 2.4.0 system
+export RBENV_VERSION="2.4.0"
 
 for i in travis; do
 	[[ ! -x $(which $i) ]] && gem install $i
 done
 
+# JAVASCRIPT 
 
 if [[ -x $(which npm) ]]; then
 	for i in jshint js-beautify stylelint textlint write-good csslint tern eslint remark stylus coffee coffeelint prettier; do
 		[[ ! -x $(which $i) ]] && npm install $i
 	done
 fi
-
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
