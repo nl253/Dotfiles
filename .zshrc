@@ -107,4 +107,12 @@ if [[ -x $(which npm) ]]; then
 	done
 fi
 
+# RUST
+
+[[ ! -x $(which rustc) ]] && curl https://sh.rustup.rs -sSf | sh && rustup toolchain install nightly && rustup default nightly
+
+for i in rustfmt racer; do
+	[[ ! -x $(which i) ]] && [[ ! -e ~/.cargo/bin/${i} ]] && cargo install $i
+done
+
 # vim: foldmethod=marker sw=2 ts=2 nowrap
