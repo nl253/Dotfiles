@@ -100,7 +100,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:EditorConfig_exclude_patterns = [ 'fugitive://.*' ]
 endif
 
-let g:LintHook = '[[ ! -x $(which shellcheck) ]] && cabal update && cabal install ShellCheck ; [[ -x $(which gem) ]] && [[ ! -x $(which mdl) ]] && gem install mdl ; [[ -x $(which npm) ]] && [[ ! -x $(which standard) ]] && npm install --user standard --save-dev ; [[ -x $(which npm) ]] && [[ ! -x $(which eslint) ]] && npm install --user eslint ; [[ -x $(which gem) ]] && [[ ! -x $(which sqlint) ]] && gem install sqlint'
+let g:LintHook = '[[ ! -x $(which shellcheck) ]] && cabal update && cabal install ShellCheck'
 
 if has('patch8') || has('nvim')
     Plug 'w0rp/ale', { 'do' : g:LintHook }

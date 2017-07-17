@@ -1,5 +1,4 @@
 snippet while "While loop [rust]" Ab
-
 while ${1:condition} {
 
 }
@@ -18,7 +17,6 @@ fn main() {
 endsnippet 
 
 snippet trait "Trait (Interface) [rust]" Ab
-
 trait ${1:HasArea} {
     fn ${2:area}(&self) -> ${3:f64};
 }
@@ -35,7 +33,6 @@ endsnippet
 
 
 snippet "fn " "Function [rust]" rAb
-
 fn ${1:area}(${2:rectangle}: ${3:&Rectangle}) -> ${4:u32} {
     ${5:return rectangle.length * rectangle.width}
 }
@@ -44,7 +41,6 @@ endsnippet
 
 
 snippet for "While loop [rust]" Ab
-
 for item in ${1:iterable} {
 
 }
@@ -78,8 +74,8 @@ struct ${1:Point} {
 
 endsnippet 
 
-snippet print "Print [rust]" Ab
-println!("${2:The value is: \{\}}", ${1:value});
+snippet print "Print [rust]" A
+println!("${2:The value is: \{\}}", ${1:item});
 endsnippet 
 
 snippet let "Let mutable [rust]" Ab
@@ -87,7 +83,6 @@ let ${2:} ${1:VARIABLE_NAME}: ${3:i32} = ${4:23};
 endsnippet 
 
 snippet enum "Enum [rust]" Ab
-
 enum ${1:Message} {
     ${2:Quit},
     ${3:ChangeColor}: i32,
@@ -96,7 +91,7 @@ enum ${1:Message} {
 endsnippet 
 
 snippet "((h(ash)?)?set)" "HashSet [rust]" r
-let mut set: HashSet<${1:i32}> = HashSet::new();
+let mut ${1:set}: HashSet<${2:i32}> = HashSet::new();
 endsnippet 
 
 snippet impl "Rust implement method block [rust]" Ab
@@ -106,28 +101,29 @@ impl ${1:Circle} {
 endsnippet
 
 snippet "((h(ash)?)?map|dict)" "HashMap [rust]" r
-let mut dictionary: HashMap<${1:i32}> = HashMap::new();
+let ${3:mut} ${2:dictionary}: HashMap<${1:i32}> = HashMap::new();
 endsnippet 
 
 snippet bmap "BTreeMap [rust]" 
-let mut dictionary: BTreeMap<${1:i32}> = BTreeMap::new();
+let ${3:mut} ${2:dictionary}: BTreeMap<${1:i32}> = BTreeMap::new();
 endsnippet 
 
 snippet "deq(ue)?" "VecDeque [rust]" r
-let mut deque: VecDeque<${1:i32}> = VecDeque::new();
+let ${3:mut} ${2:deque}: VecDeque<${1:i32}> = VecDeque::new();
 endsnippet 
 
-snippet "vec(t(or?)?)?" "Vector [rust]" r
-let mut vector: Vec<${1:i32}> = Vec::new();
+snippet "vect(or?)?" "Vector [rust]" r
+let ${3:mut} ${1:vector}: Vec<${1:i32}> = Vec::new();
+endsnippet 
+
+snippet vec "Vector [rust]" 
+let ${3:mut} ${1:vector} = vec![${2:}];
 endsnippet 
 
 snippet "(p?que(ue)?|heap)" "BinaryHeap [rust]" r
-let mut queue: BinaryHeap<${1:i32}> = BinaryHeap::new();
+let ${3:mut} ${2:queue}: BinaryHeap<${1:i32}> = BinaryHeap::new();
 endsnippet 
 
 snippet "(l(i(n(k(ed?)?)?)?)?)?list" "LinkedList [rust]" r
-let mut list: LinkedList<${1:i32}> = LinkedList::new();
+let ${3:mut} ${2:list}: LinkedList<${1:i32}> = LinkedList::new();
 endsnippet 
-
-#snippet 
-#endsnippet 
