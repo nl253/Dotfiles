@@ -100,7 +100,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:EditorConfig_exclude_patterns = [ 'fugitive://.*' ]
 endif
 
-let g:LintHook = '[[ ! -x $(which shellcheck) ]] && cabal update && cabal install ShellCheck'
+let g:LintHook = '[[ ! -x $(which shellcheck) ]] && [[ -x $(which cabal) ]] && cabal update && cabal install ShellCheck'
 
 if has('patch8') || has('nvim')
     Plug 'w0rp/ale', { 'do' : g:LintHook }
