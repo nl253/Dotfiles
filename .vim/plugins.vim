@@ -1,3 +1,4 @@
+" vim: foldlevel=0 foldmethod=marker nowrap
 
 " PLUG:
 if has('nvim')
@@ -81,6 +82,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:snips_email = "nl253@kent.ac.uk"
     let g:snips_github = "https://github.com/nl253"
     Plug 'maralla/completor.vim'
+    let g:completor_min_chars = 1
     let g:completor_whitelist = [ 'python', 'rust' ]
     let g:completor_python_binary = 'python3'
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
@@ -193,5 +195,3 @@ let g:vim_dicts = { 'markdown': [ 'unix-programmers', 'computer-science' ] }
 call plug#end()
 
 colorscheme fabulous
-
-" vim: foldlevel=0 foldmethod=marker nowrap
