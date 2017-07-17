@@ -7,7 +7,7 @@ fi
 
 [[ ! -d ~/.gists/ ]] && mkdir -p ~/.gists/
 
-for i in 122b12050f5fb267e75f 7001839 8172796 8294792; do
+for i in "122b12050f5fb267e75f" "7001839" "8172796" "8294792"; do
 	if [[ ! -d ~/.gists/$i ]]; then
 			git clone "https://gist.github.com/${i}.git" ~/.gists/$i
 	fi
@@ -17,9 +17,9 @@ done
 
 source ~/.zplug/init.zsh
 
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug 'zplug/zplug', hook-build:'zplug --self-manage' 
 
-zplug "plugins/cargo", from:oh-my-zsh
+zplug "plugins/cargo", from:oh-my-zsh 
 zplug "plugins/z", from:oh-my-zsh
 
 zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
