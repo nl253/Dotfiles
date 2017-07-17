@@ -1,3 +1,5 @@
+"vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
+
 " Exit if not UNIX 
 if ! has('unix') 
      !echo "You need to be running a UNIX-like system for this script to work."
@@ -21,5 +23,3 @@ let mapleader = " "
 let maplocalleader = ","
 
 exec 'source '.g:VIMDIR.'plugins.vim'
-
-"vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
