@@ -5,6 +5,17 @@ while ${1:condition} {
 
 endsnippet 
 
+snippet if "If statement [rust]" 
+if ${1:condition} { ${2:do stuff} } else { ${3:do stuff} }
+endsnippet 
+
+snippet if "If statement [rust]" Ab
+if ${1:condition} {
+
+}
+
+endsnippet 
+
 
 snippet main "Main [rust]" 
 
@@ -31,8 +42,7 @@ snippet "(derive)?debug" "Debugging printing [rust]"
 #[derive(Debug)]
 endsnippet
 
-
-snippet "fn " "Function [rust]" rAb
+snippet fn "Function [rust]" b
 fn ${1:area}(${2:rectangle}: ${3:&Rectangle}) -> ${4:u32} {
     ${5:return rectangle.length * rectangle.width}
 }
@@ -51,7 +61,7 @@ snippet use "Standard Library [rust]" Ab
 use std::${1:collections}::${2:HashMap};
 endsnippet 
 
-snippet "(match)|(switch)" "Switch (match) [rust]" rAb
+snippet "match|switch" "Switch (match) [rust]" rAb
 match ${1:expression} {
 	${2:pattern} => ${3:expression},
 	${4:pattern} => ${5:expression},
@@ -74,11 +84,11 @@ struct ${1:Point} {
 
 endsnippet 
 
-snippet print "Print [rust]" A
+snippet print "Print [rust]" Ab
 println!("${2:The value is: \{\}}", ${1:item});
 endsnippet 
 
-snippet let "Let mutable [rust]" Ab
+snippet let "Let mutable [rust]" b
 let ${2:} ${1:VARIABLE_NAME}: ${3:i32} = ${4:23};
 endsnippet 
 
@@ -100,7 +110,7 @@ impl ${1:Circle} {
 }
 endsnippet
 
-snippet "((h(ash)?)?map|dict)" "HashMap [rust]" r
+snippet "(h(ash)?)?map|dict" "HashMap [rust]" r
 let ${3:mut} ${2:dictionary}: HashMap<${1:i32}> = HashMap::new();
 endsnippet 
 
@@ -120,7 +130,7 @@ snippet vec "Vector [rust]"
 let ${3:mut} ${1:vector} = vec![${2:}];
 endsnippet 
 
-snippet "(p?que(ue)?|heap)" "BinaryHeap [rust]" r
+snippet "p?que(ue)?|heap" "BinaryHeap [rust]" r
 let ${3:mut} ${2:queue}: BinaryHeap<${1:i32}> = BinaryHeap::new();
 endsnippet 
 
