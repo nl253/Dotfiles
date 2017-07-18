@@ -37,7 +37,6 @@ endif
 
 " Place Plugins Here:
 " ==================
-
 " GENERAL:
 Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
 Plug 'tpope/vim-speeddating' 
@@ -85,7 +84,8 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:completor_whitelist = [ 'python', 'rust' ]
     let g:completor_python_binary = 'python3'
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
-    Plug 'davidhalter/jedi-vim', {'for': 'python' }
+	"let g:completor_disable_buffer = [ 'vim' ]
+    Plug 'davidhalter/jedi-vim', { 'for': 'python' }
     "let g:jedi#completions_enabled = 1
     let g:jedi#force_py_version = 3
     let g:jedi#goto_command = "<C-]>"
