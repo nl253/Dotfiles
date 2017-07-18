@@ -51,7 +51,7 @@ Plug 'tpope/vim-fugitive'
 "Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
 
-set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%{&complete}\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
+set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%{&complete}\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \   
 
 Plug 'konfekt/fastfold' 
 Plug 'wellle/targets.vim'
