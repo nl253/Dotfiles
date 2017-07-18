@@ -21,6 +21,7 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 zplug "plugins/cargo", from:oh-my-zsh 
 zplug "plugins/z", from:oh-my-zsh
+#zplug "plugins/fasd", from:oh-my-zsh
 
 zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
 
@@ -47,7 +48,7 @@ zplug "tmux-plugins/tpm", as:command, ignore:'*'
 zplug "getpelican/pelican-plugins", as:command, ignore:'*'
 zplug "getpelican/pelican-themes", as:command, ignore:'*'
 
-for i in {variables,source,functions,aliases,options,fzf}; do
+for i in {variables,source,functions,aliases,options,fzf,completion}; do
 	if [[ -e ~/Projects/ZshPlugins/$i ]]; then
 		zplug "~/Projects/ZshPlugins/${i}", from:local, use:'*.zsh', defer:3
 	else
