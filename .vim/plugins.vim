@@ -40,7 +40,6 @@ endif
 
 " GENERAL:
 Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
-Plug 'tpope/vim-sleuth' 
 Plug 'tpope/vim-speeddating' 
 Plug 'tpope/vim-repeat'
 
@@ -49,7 +48,7 @@ if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
 Plug 'tpope/vim-fugitive' 
-Plug 'airblade/vim-gitgutter'
+"Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%{&complete}\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
@@ -114,16 +113,16 @@ unlet g:LintHook
 
 " MARKUP:
 Plug 'dkarter/bullets.vim' 
-let g:bullets_enabled_file_types = [ 'markdown', 'vorg', 'rst' ]
+let g:bullets_enabled_file_types = g:MARKUP
 
-Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ] }
+Plug 'dbmrq/vim-ditto', { 'on': [ 'ToggleDitto', 'DittoOn' ], 'for': g:MARKUP }
 
 let g:ditto_mode = "paragraph"
 
-Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ], 'for': 'vimwiki' }
+Plug 'reedes/vim-wordy', { 'on': [ 'Wordy', 'WordyWordy' ], 'for': g:MARKUP }
 
 " TABLE MODE:
-Plug 'dhruvasagar/vim-table-mode', { 'for': [ 'rst', 'markdown', 'vorg' ] }
+Plug 'dhruvasagar/vim-table-mode', { 'for': g:MARKUP }
 let g:table_mode_disable_mappings = 1
 let g:table_mode_verbose = 0 
 let g:table_mode_syntax = 1 

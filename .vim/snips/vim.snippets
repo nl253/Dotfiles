@@ -1,9 +1,9 @@
 snippet "com(m(a(nd?)?)?)?" "Command [vim]" r
-command! CommandName call s:script_function()
+command! ${1:CommandName} ${2:call s:script_function()}
 endsnippet
 
 snippet let "Variable definition [vim]" Ab
-let ${3:g}:${1:var_name} = ${2:1}
+let ${1:g}:${2:var_name} = ${3:1}
 endsnippet
 
 snippet Plug "Plugin [vim]" Ab
@@ -29,7 +29,6 @@ endfunction
 endsnippet
 
 snippet if "If [vim]" b
-
 if ${1:!has}('${2:nvim}')
     let g:${3:VIMDIR} = ${4:expand('')}
 endif
@@ -45,9 +44,8 @@ endif
 endsnippet
 
 snippet "if isd" "If is directory [vim]" bAr
-
 if isdirectory('${2:DIRNAME}')
-    let g:${3:VIMDIR} = ${4:expand('')}
+    ${2:let g:VIMDIR = expand('')}
 endif
 
 endsnippet
@@ -120,7 +118,7 @@ endif
 
 endsnippet 
 
-snippet fun "function [vim]" Ab
+snippet function "function [vim]" Ab
 function! s:${1:function_name}()
 	${2:" DO STH HERE}
 endfunction
@@ -129,12 +127,11 @@ endsnippet
 snippet try "try catch [vim]" Ab
 try
 	${1:" DO STH HERE}
-catch /.*/
+catch /${2:.*}/
 endtry
 endsnippet
 
 snippet while "While loop [vim]" Ab
-
 while ${1:CONDITION}
 	${2:break}
 endwhile
