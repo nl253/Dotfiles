@@ -1,11 +1,11 @@
 
-snippet if "If statement [zsh]" bA
+snippet if "If statement [zsh]" b
 if [[ -${1:x} ${2:$(which pip)} ]]; then
     ${3:# DO STUFF}
 fi
 endsnippet
 
-snippet fori "For i in ... [zsh]" bA
+snippet fori "For i in ... [zsh]" 
 for ${3:i} in ${1:a b c d}; do
     ${4:# DO STUFF}
 done
@@ -18,3 +18,5 @@ endsnippet
 snippet "echo?" "Echo [zsh]" r
 echo -e "${1:Say!}"
 endsnippet
+
+# vim: ft=snippets 
