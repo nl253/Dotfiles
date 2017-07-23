@@ -167,7 +167,7 @@ endsnippet
 
 snippet "(py)?code" "Code block [rst]" r
 
-.. code:: python
+.. code-block:: python
     :number-lines: 
 
     ${1:def my_function():
@@ -182,6 +182,12 @@ snippet "maths?" "Math block [rst]" r
 
     ${1:α_t(i) = P(O_1, O_2, … O_t, q_t = S_i λ)}
 
+endsnippet
+
+snippet "pelican|meta" "Meta tags for a Pelican Blog" r
+:date: `date`
+:modified: `date`
+:tags: ${1:thats}, ${2:awesome}
 endsnippet
 
 snippet "rub(r(i(k?)?))?" "Rubric [rst]" r

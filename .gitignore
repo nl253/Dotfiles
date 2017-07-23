@@ -1,8 +1,11 @@
 *~
 .config/LightTable/
+.config/Code/
 .alacritty
+.gitbook/
+.config/Code - OSS/
+.bundle/
 anaconda3/
-\#**
 .antigen/
 .applications/
 .aspell.*
@@ -27,7 +30,7 @@ boosterclapps/
 .case/
 case/
 *.class
-*CLion*/**
+*CLion*
 conda/
 .conda/environments.txt
 .conf/fontconfig/

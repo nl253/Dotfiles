@@ -1,7 +1,7 @@
 {
     "python": {
-        "dirs": ["tests", "utils"],
-        "files": [],
+        "dirs": ["tests", "utils", "docs"],
+        "files": ["CHANGES.txt"],
         "execute": [
             "git init",
             "$EDITOR main.py"
@@ -14,7 +14,11 @@
             "main.py":
             "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.py",
             "README.md":
-            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md"
+            "https://raw.githubusercontent.com/nl253/Dot-files/master/.templates/template.md",
+			"setup.py":
+			"https://raw.githubusercontent.com/numpy/numpy/master/setup.py",
+			".travis.yml":
+			"https://raw.githubusercontent.com/numpy/numpy/master/.travis.yml"
         }
     },
     "bash": {

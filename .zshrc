@@ -14,8 +14,9 @@ export NODE_PACKAGES=(jshint js-beautify stylelint textlint write-good csslint t
 export GISTS=("122b12050f5fb267e75f" "7001839" "8172796" "8294792")
 export RUBY_GEMS=(travis)
 export RUST_CRATES=(rustfmt racer mdbook)
-export RBENV_VERSION="2.4.0"
-export PYENV_VERSION="3.6.1"
+# export RBENV_VERSION="2.4.0"
+# export PYENV_VERSION="3.6.1"
+export DEFAULT_TOOLCHAIN=nightly-x86_64-unknown-linux-gnu
 
 [[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 
@@ -43,7 +44,7 @@ zplug "nl253/Scripts", as:command, rename-to:"download-dotfile", use:"download-d
 zplug "nl253/Scripts", as:command, rename-to:"grf", use:"grf.sh"
 zplug "nl253/Scripts", as:command, rename-to:"p", use:"processes.sh"
 
-zplug "nl253/SQLiteREPL", as:command, rename-to:"sqlite", use:"main.py", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
+#zplug "nl253/SQLiteREPL", as:command, rename-to:"sqlite", use:"main.py", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
 zplug "nl253/ProjectGenerator", as:command, use:"project", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
 zplug "nl253/DictGen", as:command, use:"dict-gen", if:"[[ -x $(which python3) ]]"
 
@@ -69,6 +70,7 @@ setopt monitor
 for i in 'better_exceptions' 'faker' 'numpy' 'pandas' 'ipdb' 'jedi'; do
 	[[ ! -e ~/.local/lib/python3.6/site-packages/${i} ]] && pip install --user $i
 done
-[[ ! -e ~/.local/bin/vint ]] && pip install --user git+http://www.github.com/Kuniwak/vint.git
+
+[[ ! -e ~/.local/bin/vint ]] && pip install --user vim-vint
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
