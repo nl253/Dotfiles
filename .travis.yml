@@ -7,8 +7,7 @@ python:
 
 # command to run tests
 script:
-    - bash -c "project --help"
-    - zsh 
+    - bash
 
 # blocklist
 branches:
