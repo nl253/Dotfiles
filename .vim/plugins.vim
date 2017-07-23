@@ -31,7 +31,7 @@ endif
 
 if ! exists('g:PROGRAMMING')
     " PROGRAMMING LANGUAGES you code in 
-    let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 
+    let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'rust',
                 \ 'python', 'php', 'sql', 'sh', 'zsh' ]
 endif
 
@@ -143,7 +143,7 @@ aug END
 
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
-Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
+" Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 
 Plug 'tpope/vim-liquid', { 'for' : 'markdown' }
 

@@ -118,6 +118,10 @@ snippet "(h(ash)?)?map|dict" "HashMap [rust]" r
 let ${3:mut} ${2:dictionary}: HashMap<${1:i32}> = HashMap::new();
 endsnippet 
 
+snippet "strf(t(i(me?)?)?)?" "Strftime [rust]" r
+println!("The value is: {:?}", time::strftime("%c", &time::now()).unwrap());
+endsnippet 
+
 snippet bmap "BTreeMap [rust]" 
 let ${3:mut} ${2:dictionary}: BTreeMap<${1:i32}> = BTreeMap::new();
 endsnippet 
