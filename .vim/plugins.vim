@@ -99,6 +99,16 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
     Plug 'editorconfig/editorconfig-vim'
     let g:EditorConfig_exclude_patterns = [ 'fugitive://.*' ]
+	Plug 'racer-rust/vim-racer'
+	let g:racer_cmd = expand("~/.cargo/bin/racer")
+	let g:racer_experimental_completer = 1
+	aug RustKeybindings
+		au! 
+		au FileType rust nmap <CR> <Plug>(rust-def)
+		au FileType rust nmap <C-]> <Plug>(rust-def)
+		au FileType rust nmap K <Plug>(rust-doc)
+		au FileType rust imap <C-Space> <C-x><C-o>
+	aug END
 endif
 
 let g:LintHook = '[[ ! -x $(which shellcheck) ]] && [[ -x $(which cabal) ]] && cabal update && cabal install ShellCheck'
@@ -157,6 +167,7 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
 Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
 Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ] }
+Plug 'wavded/vim-stylus'
 "let g:xml_syntax_folding = 1
 let g:emmet_html5 = 1 
 
