@@ -41,20 +41,19 @@ endif
 Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
 Plug 'tpope/vim-speeddating' 
 Plug 'tpope/vim-repeat'
+Plug 'scrooloose/nerdcommenter'
 
 " A must have if you work with tmux
 if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
 Plug 'tpope/vim-fugitive' 
-"Plug 'airblade/vim-gitgutter'
-Plug 'junegunn/gv.vim'
+Plug 'junegunn/gv.vim', { 'on': [ 'GV' ] }
 
-set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(%{&complete}\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \   
+set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \   
 
 Plug 'konfekt/fastfold' 
 Plug 'wellle/targets.vim'
-Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find', 
             \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
             \'SudoWrite', 'Unlink', 'Rename' ]}
@@ -81,7 +80,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:snips_github = "https://github.com/nl253"
     Plug 'maralla/completor.vim'
     let g:completor_min_chars = 1
-    let g:completor_whitelist = [ 'python', 'rust' ]
+    let g:completor_whitelist = [ 'python', 'rust', 'javascript' ]
     let g:completor_python_binary = 'python3'
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
 	"let g:completor_disable_buffer = [ 'vim' ]
@@ -153,7 +152,6 @@ aug END
 
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
-" Plug 'nelstrom/vim-markdown-folding', { 'for' : 'markdown' }
 
 Plug 'tpope/vim-liquid', { 'for' : 'markdown' }
 
@@ -167,32 +165,31 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
 Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
 Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ] }
-Plug 'wavded/vim-stylus'
+Plug 'cakebaker/scss-syntax.vim'
 "let g:xml_syntax_folding = 1
 let g:emmet_html5 = 1 
+
+Plug 'pangloss/vim-javascript', { 'for': [ 'javascript' ] }
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': [ 'javascript' ] }
+Plug 'ternjs/tern_for_vim', { 'for': [ 'javascript' ] }
+Plug 'isRuslan/vim-es6', { 'for': [ 'javascript' ] }
+
+" autocmd BufReadPre *.js let b:javascript_lib_use_jquery = 1
+" autocmd BufReadPre *.js let b:javascript_lib_use_underscore = 1
+" autocmd BufReadPre *.js let b:javascript_lib_use_backbone = 1
+" autocmd BufReadPre *.js let b:javascript_lib_use_prelude = 0
+" autocmd BufReadPre *.js let b:javascript_lib_use_angularjs = 0
 
 " PHP:
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 
-" FOR NVIM:
-" ========
-if has('nvim')
-    Plug 'kassio/neoterm', { 'on' : [
-                \'TREPLSendSelection', 
-                \'TREPLSendLine', 
-                \'TREPLSendFile' ] }
-    let g:neoterm_position = 'vertical'
-    let g:neoterm_keep_term_open = 0
-    let g:neoterm_size = 50
-endif
-
 " MY PLUGINS:
 " ==========
-for plugin in [ 
-            \ 'fabulous', 'vim-saner', 'vim-markup',
-            \  'vim-programming', 'vim-fzf-extensions', 
+for plugin in [ 'fabulous', 'vim-saner', 'vim-markup',
+            \ 'vim-programming', 'vim-fzf-extensions', 
             \ 'vim-scratchpads', 'vim-templates', 'fabulous', 
             \ 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
+
     if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
         Plug 'nl253/'.plugin
     else

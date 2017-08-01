@@ -124,9 +124,9 @@ if __name__ == '__main__':
 endsnippet
 
 
-snippet "(fun((ct?)ion)?)|(meth(od?)?)" "Function [python]" r
-def ${1:FUNCTION}():
-    pass
+snippet "fun((ct?)ion)?|meth(od?)?|def" "Function [python]" r
+def ${1:FUNCTION}(${2:})${3:}:
+    ${4:}
 endsnippet
 
 snippet "exp(an)?d" "expand variables [python]" r

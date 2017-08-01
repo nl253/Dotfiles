@@ -1,0 +1,43 @@
+[general]
+datestamp = %Y-%m-%d %H:%M UTC
+stylesheet-path = static/css/blog.css
+language_code = en-GB
+
+[parsers]
+[restructuredtext parser]
+pep_references = yes
+rfc_references = yes
+smart_quotes = yes
+
+[writers]
+[html4css1 writer]
+cloak_email_addresses = yes
+embed-stylesheet = no
+footnote_referencesa = superscript
+
+math-output: mathjax
+             https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
+
+template = docutils-template
+
+[pep_html writer]
+cloak_email_addresses = yes
+embed-stylesheet = no
+footnote_referencesa = superscript
+
+math-output: mathjax
+             https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
+
+template = docutils-template
+
+[html5 writer]
+cloak_email_addresses = yes
+embed-stylesheet = no
+footnote_referencesa = superscript
+
+math-output: mathjax
+             https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
+
+template = docutils-template
+
+# vim: ft=cfg

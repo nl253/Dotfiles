@@ -1,6 +1,7 @@
 *~
 .Gogland1.0/
 .config/LightTable/
+.node-gyp/
 .config/Code/
 .alacritty
 .gitbook/
