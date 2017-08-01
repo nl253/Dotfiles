@@ -11,8 +11,8 @@ for i in ~/.home; do
 	[[ ! -e $i ]] && echo -e "not detected ${i} - .zshrc not sourced" && return 0
 done
 
-export PYTHON_PACKAGES=(ranger ipython pylint pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl)
-export NODE_PACKAGES=(jshint js-beautify stylelint textlint write-good csslint tern eslint remark stylus coffee coffeelint prettier)
+export PYTHON_PACKAGES=(ranger ipython pylint pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl cookiecutter)
+export NODE_PACKAGES=(jshint js-beautify stylelint textlint write-good csslint tern eslint stylus coffee coffeelint prettier)
 export GISTS=("122b12050f5fb267e75f" "7001839" "8172796" "8294792")
 export RUBY_GEMS=(travis)
 export RUST_CRATES=(rustfmt racer mdbook)
@@ -69,7 +69,7 @@ setopt monitor
 
 # PYTHON
 
-for i in 'better_exceptions' 'faker' 'numpy' 'pandas' 'ipdb' 'jedi'; do
+for i in 'better_exceptions' 'numpy' 'pandas' 'ipdb' 'jedi'; do
 	[[ ! -e ~/.local/lib/python3.6/site-packages/${i} ]] && pip install --user $i
 done
 
