@@ -13,19 +13,16 @@ smart_quotes = yes
 [writers]
 [html4css1 writer]
 cloak_email_addresses = yes
-footnote_referencesa = superscript
 math-output: mathjax
              https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
 
 [pep_html writer]
 cloak_email_addresses = yes
-footnote_referencesa = superscript
 math-output: mathjax
              https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
 
 [html5 writer]
 cloak_email_addresses = yes
-footnote_referencesa = superscript
 math-output: mathjax
              https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
 # vim: ft=cfg
