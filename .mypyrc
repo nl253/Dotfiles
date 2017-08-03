@@ -1,0 +1,8 @@
+[mypy]
+python_version = 3.6
+warn_redundant_casts = True
+strict_optional = True
+warn_return_any = True
+show_column_numbers = True
+
+# vim: ft=cfg

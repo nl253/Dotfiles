@@ -10,11 +10,12 @@ done
 for i in ~/.home; do
 	[[ ! -e $i ]] && echo -e "not detected ${i} - .zshrc not sourced" && return 0
 done
-
-export PYTHON_PACKAGES=(ranger ipython pylint pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl cookiecutter)
-export NODE_PACKAGES=(jshint js-beautify stylelint textlint write-good csslint tern eslint stylus coffee coffeelint prettier)
+export DOCUTILSCONFIG=~/.docutils
+export PYTHON_PACKAGES=(ranger ipython flake8 vulture mypy pylint pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl cookiecutter)
+export NODE_PACKAGES=(js-beautify stylelint textlint write-good csslint tern eslint prettier) 
+# flow typescript eslint-plugin-prettier eslint-plugin-compat eslint-plugin-flowtype babel-eslint eslint-plugin-flowtype-errors babel-cli babel-preset-flow flow-bin
 export GISTS=("122b12050f5fb267e75f" "7001839" "8172796" "8294792")
-export RUBY_GEMS=(travis)
+export RUBY_GEMS=(travis sass)
 export RUST_CRATES=(rustfmt racer mdbook)
 # export RBENV_VERSION="2.4.0"
 # export PYENV_VERSION="3.6.1"
