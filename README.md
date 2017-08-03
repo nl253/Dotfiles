@@ -1,4 +1,3 @@
-
 # Dot-files
 
 ### [Tmux](https://github.com/tmux/tmux) with [Alacritty](https://github.com/jwilm/alacritty) and [Neovim](https://neovim.io/) and a few plugins.
