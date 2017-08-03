@@ -25,13 +25,13 @@ endif
 
 " VARIABLES:
 if ! exists('g:MARKUP')
-    " MARKUP languages you actively use  
+    " MARKUP languages you actively use
     let g:MARKUP = [ 'markdown', 'rst', 'vorg' ]
 endif
 
 if ! exists('g:PROGRAMMING')
     " PROGRAMMING LANGUAGES you code in 
-    let g:PROGRAMMING =  [ 'xhtml', 'html', 'css', 'javascript', 'rust',
+    let g:PROGRAMMING = [ 'xhtml', 'html', 'css', 'javascript', 'rust',
                 \ 'python', 'php', 'sql', 'sh', 'zsh' ]
 endif
 
@@ -113,9 +113,11 @@ endif
 let g:LintHook = '[[ ! -x $(which shellcheck) ]] && [[ -x $(which cabal) ]] && cabal update && cabal install ShellCheck'
 
 if has('patch8') || has('nvim')
-    Plug 'w0rp/ale', { 'do' : g:LintHook }
+	Plug 'neomake/neomake'
+	let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
+	let g:neomake_python_enabled_makers = ['mypy', 'flake8', 'vulture', 'pylint']
 else
-    Plug 'vim-syntastic/syntastic', { 'do' : g:LintHook }
+    Plug 'vim-syntastic/syntastic', { 'do': g:LintHook }
 endif
 
 unlet g:LintHook
@@ -155,7 +157,7 @@ Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 
 Plug 'tpope/vim-liquid', { 'for' : 'markdown' }
 
-let g:markdown_fenced_languages =  [ 'vim', 'sh', 'python', 'javascript', 'rust' ]
+let g:markdown_fenced_languages = [ 'vim', 'sh', 'python', 'javascript', 'rust' ]
 let g:liquid_highlight_types = g:markdown_fenced_languages
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
@@ -170,9 +172,13 @@ Plug 'cakebaker/scss-syntax.vim'
 let g:emmet_html5 = 1 
 
 Plug 'pangloss/vim-javascript', { 'for': [ 'javascript' ] }
+let g:javascript_plugin_flow = 1
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': [ 'javascript' ] }
 Plug 'ternjs/tern_for_vim', { 'for': [ 'javascript' ] }
 Plug 'isRuslan/vim-es6', { 'for': [ 'javascript' ] }
+Plug 'Quramy/tsuquyomi', { 'for': [ 'typescript' ] }
+Plug 'leafgarland/typescript-vim', { 'for': [ 'typescript' ] }
+Plug 'flowtype/vim-flow', { 'for': [ 'javascript' ] }
 
 " autocmd BufReadPre *.js let b:javascript_lib_use_jquery = 1
 " autocmd BufReadPre *.js let b:javascript_lib_use_underscore = 1
