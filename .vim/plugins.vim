@@ -8,11 +8,11 @@ else " if vim
 endif
 
 " Plug - Download if missing:
-if ! filereadable(g:PLUG_FILE) && executable('curl')
+if !filereadable(g:PLUG_FILE) && executable('curl')
     echo system('mkdir -p $(dirname '.g:PLUG_FILE.') && curl -flo '.g:PLUG_FILE.' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     execute 'source '.g:PLUG_FILE
     PlugInstall
-elseif ! filereadable(g:PLUG_FILE) 
+elseif !filereadable(g:PLUG_FILE) 
     finish
 endif
 
@@ -24,12 +24,12 @@ endif
 " 
 
 " VARIABLES:
-if ! exists('g:MARKUP')
+if !exists('g:MARKUP')
     " MARKUP languages you actively use
     let g:MARKUP = [ 'markdown', 'rst', 'vorg' ]
 endif
 
-if ! exists('g:PROGRAMMING')
+if !exists('g:PROGRAMMING')
     " PROGRAMMING LANGUAGES you code in 
     let g:PROGRAMMING = [ 'xhtml', 'html', 'css', 'javascript', 'rust',
                 \ 'python', 'php', 'sql', 'sh', 'zsh' ]
@@ -72,7 +72,6 @@ Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
     Plug 'SirVer/ultisnips'
     let g:UltiSnipsEditSplit = 'vertical'
-    "let g:UltiSnipsSnippetDir = g:VIMDIR.'snips'
     let g:UltiSnipsSnippetDirectories = [ g:VIMDIR.'snips' ]
     let g:UltiSnipsEnableSnipMate = 0
     let g:snips_author = "nl253"
@@ -83,9 +82,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:completor_whitelist = [ 'python', 'rust', 'javascript' ]
     let g:completor_python_binary = 'python3'
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
-	"let g:completor_disable_buffer = [ 'vim' ]
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
-    "let g:jedi#completions_enabled = 1
     let g:jedi#force_py_version = 3
     let g:jedi#goto_command = "<C-]>"
     let g:jedi#goto_assignments_command = ",a"
@@ -101,13 +98,6 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	Plug 'racer-rust/vim-racer'
 	let g:racer_cmd = expand("~/.cargo/bin/racer")
 	let g:racer_experimental_completer = 1
-	aug RustKeybindings
-		au! 
-		au FileType rust nmap <CR> <Plug>(rust-def)
-		au FileType rust nmap <C-]> <Plug>(rust-def)
-		au FileType rust nmap K <Plug>(rust-doc)
-		au FileType rust imap <C-Space> <C-x><C-o>
-	aug END
 endif
 
 let g:LintHook = '[[ ! -x $(which shellcheck) ]] && [[ -x $(which cabal) ]] && cabal update && cabal install ShellCheck'
@@ -164,9 +154,10 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 " WEB DEV:
 "
 " HTML:
-Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
-Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php' ] }
-Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php' ] }
+Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php', 'htmldjango' ] }
+Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php', 'htmldjango' ] }
+Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php', 'htmldjango' ] }
+let g:user_emmet_install_global = 0
 Plug 'cakebaker/scss-syntax.vim'
 "let g:xml_syntax_folding = 1
 let g:emmet_html5 = 1 
@@ -196,7 +187,7 @@ for plugin in [ 'fabulous', 'vim-saner', 'vim-markup',
             \ 'vim-scratchpads', 'vim-templates', 'fabulous', 
             \ 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
 
-    if ! isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
+    if !isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
         Plug 'nl253/'.plugin
     else
         Plug '~/Projects/VimPlugins/'.plugin
