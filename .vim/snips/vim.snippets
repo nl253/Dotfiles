@@ -2,11 +2,11 @@ snippet "com(m(a(nd?)?)?)?" "Command [vim]" r
 command! ${1:CommandName} ${2:call s:script_function()}
 endsnippet
 
-snippet let "Variable definition [vim]" Ab
+snippet let "Variable definition [vim]" b
 let ${1:g}:${2:var_name} = ${3:1}
 endsnippet
 
-snippet Plug "Plugin [vim]" Ab
+snippet Plug "Plugin [vim]" b
 Plug "${1:author}/${2:repo}"
 endsnippet
 
@@ -35,7 +35,7 @@ endif
 
 endsnippet
 
-snippet "if h" "If has [vim]" bAr
+snippet "if h" "If has [vim]" br
 
 if has('${2:nvim}')
     let g:${3:VIMDIR} = ${4:expand('')}
@@ -43,7 +43,7 @@ endif
 
 endsnippet
 
-snippet "if isd" "If is directory [vim]" bAr
+snippet "if isd" "If is directory [vim]" br
 if isdirectory('${2:DIRNAME}')
     ${2:let g:VIMDIR = expand('')}
 endif
@@ -104,13 +104,13 @@ endfunction
 command! -args=? ${1:COMMAND_NAME} call s:List(<q-args>)
 endsnippet
 
-snippet "if exi" "Check if var exists [vim]" rAb
+snippet "if exi" "Check if var exists [vim]" rb
 if exists("${1:g:variable}")
 	${2:"DO_STUFF}
 endif
 endsnippet 
 
-snippet "if exe" "Check if executable [vim]" rAb
+snippet "if exe" "Check if executable [vim]" rb
 
 if executable("${1:EXECUTABLE}")
     ${2:" DO STUFF}
@@ -118,20 +118,20 @@ endif
 
 endsnippet 
 
-snippet function "function [vim]" Ab
+snippet function "function [vim]" b
 function! s:${1:function_name}()
 	${2:" DO STH HERE}
 endfunction
 endsnippet
 
-snippet try "try catch [vim]" Ab
+snippet try "try catch [vim]" b
 try
 	${1:" DO STH HERE}
 catch /${2:.*}/
 endtry
 endsnippet
 
-snippet while "While loop [vim]" Ab
+snippet while "While loop [vim]" b
 while ${1:CONDITION}
 	${2:break}
 endwhile

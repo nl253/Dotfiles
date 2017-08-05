@@ -21,7 +21,6 @@ if has('nvim')
 else
     call plug#begin('~/.vim/plugged')
 endif
-" 
 
 " VARIABLES:
 if !exists('g:MARKUP')
@@ -50,7 +49,7 @@ if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 Plug 'tpope/vim-fugitive' 
 Plug 'junegunn/gv.vim', { 'on': [ 'GV' ] }
 
-set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \   
+set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \    
 
 Plug 'konfekt/fastfold' 
 Plug 'wellle/targets.vim'
@@ -100,17 +99,13 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:racer_experimental_completer = 1
 endif
 
-let g:LintHook = '[[ ! -x $(which shellcheck) ]] && [[ -x $(which cabal) ]] && cabal update && cabal install ShellCheck'
-
 if has('patch8') || has('nvim')
 	Plug 'neomake/neomake'
-	let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
-	let g:neomake_python_enabled_makers = ['mypy', 'flake8', 'vulture', 'pylint']
+	let g:neomake_javascript_enabled_makers = [ 'eslint', 'flow' ]
+	let g:neomake_python_enabled_makers = [ 'mypy', 'flake8', 'vulture', 'pylint' ]
 else
-    Plug 'vim-syntastic/syntastic', { 'do': g:LintHook }
+    Plug 'vim-syntastic/syntastic'
 endif
-
-unlet g:LintHook
 
 " MARKUP:
 Plug 'dkarter/bullets.vim' 
@@ -164,18 +159,11 @@ let g:emmet_html5 = 1
 
 Plug 'pangloss/vim-javascript', { 'for': [ 'javascript' ] }
 let g:javascript_plugin_flow = 1
-Plug 'othree/javascript-libraries-syntax.vim', { 'for': [ 'javascript' ] }
 Plug 'ternjs/tern_for_vim', { 'for': [ 'javascript' ] }
 Plug 'isRuslan/vim-es6', { 'for': [ 'javascript' ] }
 Plug 'Quramy/tsuquyomi', { 'for': [ 'typescript' ] }
 Plug 'leafgarland/typescript-vim', { 'for': [ 'typescript' ] }
 Plug 'flowtype/vim-flow', { 'for': [ 'javascript' ] }
-
-" autocmd BufReadPre *.js let b:javascript_lib_use_jquery = 1
-" autocmd BufReadPre *.js let b:javascript_lib_use_underscore = 1
-" autocmd BufReadPre *.js let b:javascript_lib_use_backbone = 1
-" autocmd BufReadPre *.js let b:javascript_lib_use_prelude = 0
-" autocmd BufReadPre *.js let b:javascript_lib_use_angularjs = 0
 
 " PHP:
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }

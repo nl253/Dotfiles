@@ -1,4 +1,4 @@
-# vi: ft=dosini
+# vi: ft=cfg
 [main]
 
 # Enables context sensitive auto-completion. If this is disabled the all
@@ -115,7 +115,7 @@ less_chatty = True
 # \h - Hostname of the server
 # \d - Database name
 # \n - Newline
-prompt = '\u@\h:\d> '
+prompt = '\u@\h:\d ~> '
 
 # Number of lines to reserve for the suggestion menu
 min_num_menu_lines = 4
