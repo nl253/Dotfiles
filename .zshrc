@@ -10,6 +10,7 @@ done
 for i in ~/.home; do
 	[[ ! -e $i ]] && echo -e "not detected ${i} - .zshrc not sourced" && return 0
 done
+
 export DOCUTILSCONFIG=~/.docutils
 export PYTHON_PACKAGES=(ranger ipython flake8 vulture mypy pylint pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl cookiecutter)
 export NODE_PACKAGES=(js-beautify stylelint textlint write-good csslint tern eslint prettier) 
