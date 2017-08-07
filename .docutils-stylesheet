@@ -1,4 +1,5 @@
-// vim: ft=css
+
+/* RestructuredText Docutils Custom Stylesheet */
 
 /* global scope */
 
@@ -8,7 +9,7 @@
   box-sizing: border-box; }
 
 html {
-  font-family: Amiri, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: Amiri, "Times New Roman", serif !important;
   font-size: 20px;
   line-height: 1.35; 
 }
@@ -23,19 +24,19 @@ body {
 
 @media screen and (min-width: 1440px) {
 	body {
-		margin: 1em 20em;
+		margin: 4em 20em;
 	}
 }
 
 @media screen and (min-width: 1280px) and (max-width: 1440px) {
 	body {
-		margin: 1em 8em;
+		margin: 4em 8em;
 	}
 }
 
 @media screen and (min-width: 1000px) and (max-width: 1280px) {
 	body {
-		margin: 1em 8em;
+		margin: 4em 8em;
 	}
 }
 
@@ -375,7 +376,6 @@ caption {
 	font-size: 1rem;
 }
 
-
 /* media - images etc */
 
 img {
@@ -387,3 +387,5 @@ img {
 figure {
   margin: 0 0 1rem;
 }
+
+// vim: ft=css
