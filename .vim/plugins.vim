@@ -35,7 +35,8 @@ if !exists('g:PROGRAMMING')
 endif
 
 " Place Plugins Here:
-" ==================
+" ===================  
+
 " GENERAL:
 Plug 'https://github.com/vim-scripts/SyntaxAttr.vim'
 Plug 'tpope/vim-speeddating' 
@@ -152,10 +153,79 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php', 'htmldjango' ] }
 Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php', 'htmldjango' ] }
 Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php', 'htmldjango' ] }
-let g:user_emmet_install_global = 0
 Plug 'cakebaker/scss-syntax.vim'
 "let g:xml_syntax_folding = 1
-let g:emmet_html5 = 1 
+let g:user_emmet_complete_tag = 1
+let g:user_emmet_install_global = 0
+let g:emmet_html5 = 1
+
+"let g:user_emmet_settings = {
+			"\	'variables' : {
+			"\       "lang": "en",
+			"\       "locale": "en-GB",
+			"\       "charset": "UTF-8",
+			"\       "indentation": "\t",
+			"\       "newline": "\n",
+			"\		'html' : {
+			"\		   'filters' : 'html,c',
+			"\		   'indentation' : ' ',
+			"\          'quote_char': '"',
+			"\          'abbreviations' : {
+			"\		   	   'ol': 'ol>li*3',
+			"\		   	   'ul': 'ul>li*3',
+			"\		   	   'dl': 'dl>(dt+dd)',
+			"\		   	   'datalist': 'datalist>(option*3)',
+			"\		   	   'fieldset': 'fieldset>(legend+(input*2))',
+			"\		   	   'footer': 'footer>p',
+			"\		   	   'head': 'head>(title+base+meta+link+script)',
+			"\		   	   'body': 'body>header>nav^^(main+footer)',
+			"\		   	   'html': '(html+head)>(title+base+meta+link+script)^body',
+			"\		   	   'figure': 'figure>img',
+			"\		   	   'details': 'details>(summary+p)',
+			"\           },
+			"\		   'default_attributes': {
+			"\			   'option': {'value': ''},
+			"\			   'input': [
+			"\                  {'value': ''}, 
+			"\                  {'type': 'text'}, 
+			"\                  {'name': ''}, 
+			"\                  {'autocomplete': 'on'}],
+			"\			   'img': [{'src': ''}, {'alt': 'an image'}, {'height': 'auto'}],
+			"\			   'a': {'href': '#'},
+			"\			   'button': {'type': 'button'},
+			"\			   'embed': {'src': ''},
+			"\			   'script': [
+			"\                  {'src': '/static/js/script.js'},
+			"\                  {'type': 'text/javascript'}],
+			"\		   	   'link': [
+			"\	               {'rel': 'stylesheet'}, 
+			"\	               {'type': 'text/css'}, 
+			"\	               {'href': '/static/css/styles.css'}],
+			"\	 		 	},
+			"\		   'aliases': {
+			"\			   'bq': 'blockquote',
+			"\			   'obj': 'object',
+			"\			   'src': 'source', 
+			"\			},
+			"\		   'empty_elements': 'area,base,basefont,...,isindex,link,meta,...',
+			"\		   'block_elements': 'address,applet,blockquote,...,li,link,map,...',
+			"\		   'inline_elements': 'a,abbr,acronym,...', 
+			"\		   'empty_element_suffix': ' />',
+			"\	   },
+			"\		'php' : {
+			"\			'extends' : 'html',
+			"\			'filters' : 'html',
+			"\	   },
+			"\		'jinja' : {
+			"\			'extends' : 'html',
+			"\			'filters' : 'html',
+			"\	   },
+			"\		'htmldjango' : {
+			"\			'extends' : 'html',
+			"\			'filters' : 'html',
+			"\	   },
+			"\	},
+			"\}
 
 Plug 'pangloss/vim-javascript', { 'for': [ 'javascript' ] }
 let g:javascript_plugin_flow = 1
@@ -164,6 +234,7 @@ Plug 'isRuslan/vim-es6', { 'for': [ 'javascript' ] }
 Plug 'Quramy/tsuquyomi', { 'for': [ 'typescript' ] }
 Plug 'leafgarland/typescript-vim', { 'for': [ 'typescript' ] }
 Plug 'flowtype/vim-flow', { 'for': [ 'javascript' ] }
+Plug 'Glench/Vim-Jinja2-Syntax'
 
 " PHP:
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
