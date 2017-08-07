@@ -10,112 +10,30 @@ snippet Plug "Plugin [vim]" b
 Plug "${1:author}/${2:repo}"
 endsnippet
 
-snippet curl "Fetch with `curl` [vim]"
-function! FetchWithCurl(files, githubaddress, outputloc)
-    if executable('curl')
-        for file in a:files
-            if ! filereadable(a:outputloc.file)
-                call system('Downloading '.file.' from https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file)
-                try
-                    silent execute '!curl -fLo '.a:outputloc.file.' https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file
-                catch /.*/
-                endtry
-            endif
-        endfor
-    else
-        echom "You need \`curl\` for this to work."
-    endif
-endfunction
-endsnippet
-
 snippet if "If [vim]" b
 if ${1:!has}('${2:nvim}')
     let g:${3:VIMDIR} = ${4:expand('')}
 endif
-
 endsnippet
 
-snippet "if h" "If has [vim]" br
-
-if has('${2:nvim}')
-    let g:${3:VIMDIR} = ${4:expand('')}
-endif
-
+snippet has "If has [vim]" 
+has('${1:nvim}')
 endsnippet
 
-snippet "if isd" "If is directory [vim]" br
-if isdirectory('${2:DIRNAME}')
-    ${2:let g:VIMDIR = expand('')}
-endif
-
+snippet isdir "If is directory [vim]" 
+isdirectory('${1:DIRNAME}')
 endsnippet
 
-snippet "sfi(le?)?" "Script file [vim]" r
+snippet sfile "Script file [vim]" 
 let s:${1:DIR} = expand('<sfile>:p:h:h').'/${2:dicts}/'
 endsnippet 
 
-snippet rrf "Remove redundant files from a dir [vim]"
-function! RemoveRedundantFiles(directory, files) 
-    execute 'set shell='.system('which bash')
-    for f in split(system("ls ".a:directory))
-        if index(a:files, f) < 0  
-            call system("[[ -f ".a:directory.f." ]] && rm ".a:directory.f)
-        endif
-    endfor
-endfunction 
-endsnippet
-
-snippet omni "Omni completion [vim]"
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-endsnippet
-
-snippet "g(it)?root" "Find git root [vim]" r
-function! GitRoot()
-    let root = systemlist('git rev-parse --show-toplevel')[0]
-    if v:shell_error
-        echo 'Not in git repo'                                   
-    else
-        execute 'lcd' root
-        echo 'Changed directory to: '.root
-    endif
-endfunction
-command! GitRoot call GitRoot()
-endsnippet
-
-snippet "com(m(a(nd?)?)?)?compl(e(t(i(on?)?)?)?)?" "Command with completion [vim]" r
-command! ${1:COMMAND_NAME} call s:${2:SCRIPT_FUNCTION_NAME}()
-    return system("ls ".s:${3:DIR}.&filetype." | sed -E 's/\\.\\w+$//'")
-endfunction
-
-function! s:Drop(input)
-    if len(a:input) > 1
-        echom 'You need an extension in current file.'
-        return 0
-    else
-        echo 'do'
-    endif
-endfunction
-
-command! -args=? ${1:COMMAND_NAME} call s:List(<q-args>)
-endsnippet
-
-snippet "if exi" "Check if var exists [vim]" rb
-if exists("${1:g:variable}")
-	${2:"DO_STUFF}
-endif
+snippet exists "Check if var exists [vim]" 
+exists("${1:g:variable}")
 endsnippet 
 
-snippet "if exe" "Check if executable [vim]" rb
-
-if executable("${1:EXECUTABLE}")
-    ${2:" DO STUFF}
-endif
-
+snippet exe "Check if executable [vim]" 
+executable("${1:EXECUTABLE}")
 endsnippet 
 
 snippet function "function [vim]" b
@@ -135,6 +53,101 @@ snippet while "While loop [vim]" b
 while ${1:CONDITION}
 	${2:break}
 endwhile
+endsnippet
 
+snippet for "For loop [vim]" b
+for i in ${1:[1, 2, 3]}
+	${2:break}
+endfor
+endsnippet
+
+snippet "\{" "Dictrionary Literal [vim]" r
+{ '${1:KEY}': '${2:VALUE}'}
+endsnippet
+
+snippet "\[" "List Literal [vim]" r
+[ '${1:ITEM_A}', '${2:ITEM_B}']
+endsnippet
+
+snippet call "Function Call [vim]" 
+call ${1:expand('~/')}
+endsnippet
+
+snippet "===" "Fat Line [vim]" r
+================
+endsnippet
+
+snippet "---" "Line [vim]" r
+----------------
+endsnippet
+
+# ---------------------------------------------------------------------- 
+
+snippet curl "Fetch with `curl` [vim]"
+function! FetchWithCurl(files, githubaddress, outputloc)
+    if executable('curl')
+        for file in a:files
+            if ! filereadable(a:outputloc.file)
+                call system('Downloading '.file.' from https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file)
+                try
+                    silent execute '!curl -fLo '.a:outputloc.file.' https://raw.githubusercontent.com/'.a:githubaddress.'/master/'.file
+                catch /.*/
+                endtry
+            endif
+        endfor
+    else
+        echom "You need \`curl\` for this to work."
+    endif
+endfunction
+endsnippet
+
+snippet "com(m(a(nd?)?)?)?compl(e(t(i(on?)?)?)?)?" "Command with completion [vim]" r
+command! ${1:COMMAND_NAME} call s:${2:SCRIPT_FUNCTION_NAME}()
+    return system("ls ".s:${3:DIR}.&filetype." | sed -E 's/\\.\\w+$//'")
+endfunction
+
+function! s:Drop(input)
+    if len(a:input) > 1
+        echom 'You need an extension in current file.'
+        return 0
+    else
+        echo 'do'
+    endif
+endfunction
+
+command! -args=? ${1:COMMAND_NAME} call s:List(<q-args>)
+endsnippet
+
+snippet "g(it)?root" "Find git root [vim]" r
+function! GitRoot()
+    let root = systemlist('git rev-parse --show-toplevel')[0]
+    if v:shell_error
+        echo 'Not in git repo'                                   
+    else
+        execute 'lcd' root
+        echo 'Changed directory to: '.root
+    endif
+endfunction
+command! GitRoot call GitRoot()
+endsnippet
+
+snippet omni "Omni completion [vim]"
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+endsnippet
+
+snippet rrf "Remove redundant files from a dir [vim]"
+function! RemoveRedundantFiles(directory, files) 
+    execute 'set shell='.system('which bash')
+    for f in split(system("ls ".a:directory))
+        if index(a:files, f) < 0  
+            call system("[[ -f ".a:directory.f." ]] && rm ".a:directory.f)
+        endif
+    endfor
+endfunction 
 endsnippet
 # vim: ts=4 sw=4 

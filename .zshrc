@@ -77,4 +77,8 @@ done
 
 [[ ! -e ~/.local/bin/vint ]] && pip install --user vim-vint
 
+if [[ -x $(which pgcli) ]]; then
+    alias pgconnect="pgcli postgresql://norbert:regix@localhost/playground"
+fi
+
 # vim: foldmethod=marker sw=2 ts=2 nowrap
