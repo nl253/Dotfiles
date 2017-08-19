@@ -29,7 +29,7 @@ trim_trailing_whitespace = true
 indent_size = 4
 indent_style = tab
 
-[*.{sh,zsh}]
+[*.{sh,zsh,yml,yaml}]
 trim_trailing_whitespace = true
 indent_size = 2
 indent_style = space

@@ -1,4 +1,10 @@
 *~
+.IntelliJIdea2017.2/
+.PyCharm2017*
+.templateengine/
+.WebStorm2017.2/
+.RubyMine2017.2/
+.Rider2017.1/
 .Gogland1.0/
 .config/LightTable/
 .node-gyp/
