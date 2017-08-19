@@ -87,6 +87,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
 	let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
 	let g:completor_scss_omni_trigger = g:completor_css_omni_trigger
+	let g:completor_rust_omni_trigger = '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=) )'
 	let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
 	let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 	let g:completor_html_omni_trigger = '<[a-z]{,6}|\S+ [-a-z]{2,}'
