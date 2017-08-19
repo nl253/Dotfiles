@@ -52,6 +52,7 @@ Plug 'junegunn/gv.vim', { 'on': [ 'GV' ] }
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \    
 
+Plug 'editorconfig/editorconfig-vim'
 Plug 'konfekt/fastfold' 
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find', 
@@ -79,9 +80,20 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:snips_github = "https://github.com/nl253"
     Plug 'maralla/completor.vim'
     let g:completor_min_chars = 1
-    let g:completor_whitelist = [ 'python', 'rust', 'javascript' ]
+	let g:completor_whitelist = [ 'python', 'rust', 'yaml',
+				\ 'javascript', 'css', 'rst', 'html', 'jinja', 'scss.css',
+				\ 'gitcommit', 'markdown',  'scss', 'php' ]
     let g:completor_python_binary = 'python3'
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
+	let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
+	let g:completor_scss_omni_trigger = g:completor_css_omni_trigger
+	let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
+	let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
+	let g:completor_html_omni_trigger = '<[a-z]{,6}|\S+ [-a-z]{2,}'
+	let g:completor_jinja_omni_trigger = g:completor_html_omni_trigger 
+	let g:completor_htmldjango_omni_trigger = g:completor_html_omni_trigger 
+	let g:completor_gitcommit_omni_trigger = '\w{2,}'
+	let g:completor_yaml_omni_trigger = '\w{5,}'
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
     let g:jedi#force_py_version = 3
     let g:jedi#goto_command = "<C-]>"
@@ -93,17 +105,24 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
     let g:jedi#use_splits_not_buffers = "right"
     let g:jedi#show_call_signatures_delay = 200
     Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
-    Plug 'editorconfig/editorconfig-vim'
-    let g:EditorConfig_exclude_patterns = [ 'fugitive://.*' ]
-	Plug 'racer-rust/vim-racer'
+	Plug 'racer-rust/vim-racer', { 'for': 'rust' }
 	let g:racer_cmd = expand("~/.cargo/bin/racer")
 	let g:racer_experimental_completer = 1
 endif
 
 if has('patch8') || has('nvim')
 	Plug 'neomake/neomake'
+	let g:neomake_yaml_enabled_makers = [ 'yamllint' ]
+	let g:neomake_vim_enabled_makers = [ 'vint' ]
+	let g:neomake_sql_enabled_makers = [ 'sqlint' ]
+	let g:neomake_bash_enabled_makers = [ 'sh', 'shellcheck' ]
+	let g:neomake_scss_enabled_makers = [ 'stylelint', 'scss-lint' ]
+	let g:neomake_css_enabled_makers = [ 'stylelint' ]
 	let g:neomake_javascript_enabled_makers = [ 'eslint', 'flow' ]
-	let g:neomake_python_enabled_makers = [ 'mypy', 'flake8', 'vulture', 'pylint' ]
+	let g:neomake_python_enabled_makers = [ 
+				\'mypy', 'flake8', 'vulture', 
+				\ 'pyflakes', 'pep8', 
+				\ 'pylama', 'python' ]
 else
     Plug 'vim-syntastic/syntastic'
 endif
@@ -134,106 +153,37 @@ aug TableModeActivation
     au BufEnter *.vorg let g:table_mode_corner_corner='+' 
     au BufEnter *.rst let g:table_mode_corner_corner='+' 
     au BufEnter *.rst let g:table_mode_corner = '+'
-    au BufEnter *.{rst,md,vorg} nnoremap \\ :TableModeRealign<CR>
-    au BufEnter *.{rst,md,vorg} nnoremap \, :Tableize<CR>
+    au BufEnter *.{rst,md,vorg} nnoremap <buffer> \\ :TableModeRealign<CR>
+    au BufEnter *.{rst,md,vorg} nnoremap <buffer> \, :Tableize<CR>
 aug END
 
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', { 'for' : 'markdown' }
 
-Plug 'tpope/vim-liquid', { 'for' : 'markdown' }
-
 let g:markdown_fenced_languages = [ 'vim', 'sh', 'python', 'javascript', 'rust' ]
-let g:liquid_highlight_types = g:markdown_fenced_languages
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
 "
 " HTML:
-Plug 'othree/html5.vim', { 'for': [ 'html', 'xhtml', 'php', 'htmldjango' ] }
-Plug 'othree/html5-syntax.vim', { 'for': [ 'html', 'xhtml', 'php', 'htmldjango' ] }
-Plug 'mattn/emmet-vim', { 'for': [ 'xml', 'html', 'xhtml', 'css', 'php', 'htmldjango' ] }
+Plug 'othree/html5.vim', { 'for': 
+			\ [ 'html', 'xhtml', 'php', 'htmldjango', 'jinja' ] }
+Plug 'othree/html5-syntax.vim', { 'for': 
+			\ [ 'html', 'xhtml', 'php', 'htmldjango', 'jinja' ] }
+Plug 'mattn/emmet-vim', { 'for': 
+			\ [ 'xml', 'html', 'xhtml', 'css', 'php', 'htmldjango', 'jinja' ] }
 Plug 'cakebaker/scss-syntax.vim'
+Plug 'othree/csscomplete.vim'
 "let g:xml_syntax_folding = 1
 let g:user_emmet_complete_tag = 1
-let g:user_emmet_install_global = 0
 let g:emmet_html5 = 1
 
-"let g:user_emmet_settings = {
-			"\	'variables' : {
-			"\       "lang": "en",
-			"\       "locale": "en-GB",
-			"\       "charset": "UTF-8",
-			"\       "indentation": "\t",
-			"\       "newline": "\n",
-			"\		'html' : {
-			"\		   'filters' : 'html,c',
-			"\		   'indentation' : ' ',
-			"\          'quote_char': '"',
-			"\          'abbreviations' : {
-			"\		   	   'ol': 'ol>li*3',
-			"\		   	   'ul': 'ul>li*3',
-			"\		   	   'dl': 'dl>(dt+dd)',
-			"\		   	   'datalist': 'datalist>(option*3)',
-			"\		   	   'fieldset': 'fieldset>(legend+(input*2))',
-			"\		   	   'footer': 'footer>p',
-			"\		   	   'head': 'head>(title+base+meta+link+script)',
-			"\		   	   'body': 'body>header>nav^^(main+footer)',
-			"\		   	   'html': '(html+head)>(title+base+meta+link+script)^body',
-			"\		   	   'figure': 'figure>img',
-			"\		   	   'details': 'details>(summary+p)',
-			"\           },
-			"\		   'default_attributes': {
-			"\			   'option': {'value': ''},
-			"\			   'input': [
-			"\                  {'value': ''}, 
-			"\                  {'type': 'text'}, 
-			"\                  {'name': ''}, 
-			"\                  {'autocomplete': 'on'}],
-			"\			   'img': [{'src': ''}, {'alt': 'an image'}, {'height': 'auto'}],
-			"\			   'a': {'href': '#'},
-			"\			   'button': {'type': 'button'},
-			"\			   'embed': {'src': ''},
-			"\			   'script': [
-			"\                  {'src': '/static/js/script.js'},
-			"\                  {'type': 'text/javascript'}],
-			"\		   	   'link': [
-			"\	               {'rel': 'stylesheet'}, 
-			"\	               {'type': 'text/css'}, 
-			"\	               {'href': '/static/css/styles.css'}],
-			"\	 		 	},
-			"\		   'aliases': {
-			"\			   'bq': 'blockquote',
-			"\			   'obj': 'object',
-			"\			   'src': 'source', 
-			"\			},
-			"\		   'empty_elements': 'area,base,basefont,...,isindex,link,meta,...',
-			"\		   'block_elements': 'address,applet,blockquote,...,li,link,map,...',
-			"\		   'inline_elements': 'a,abbr,acronym,...', 
-			"\		   'empty_element_suffix': ' />',
-			"\	   },
-			"\		'php' : {
-			"\			'extends' : 'html',
-			"\			'filters' : 'html',
-			"\	   },
-			"\		'jinja' : {
-			"\			'extends' : 'html',
-			"\			'filters' : 'html',
-			"\	   },
-			"\		'htmldjango' : {
-			"\			'extends' : 'html',
-			"\			'filters' : 'html',
-			"\	   },
-			"\	},
-			"\}
-
 Plug 'pangloss/vim-javascript', { 'for': [ 'javascript' ] }
-let g:javascript_plugin_flow = 1
 Plug 'ternjs/tern_for_vim', { 'for': [ 'javascript' ] }
 Plug 'isRuslan/vim-es6', { 'for': [ 'javascript' ] }
-Plug 'Quramy/tsuquyomi', { 'for': [ 'typescript' ] }
-Plug 'leafgarland/typescript-vim', { 'for': [ 'typescript' ] }
-Plug 'flowtype/vim-flow', { 'for': [ 'javascript' ] }
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': [ 'javascript' ] }
+let g:used_javascript_libs = 'jquery,'
+
 Plug 'Glench/Vim-Jinja2-Syntax'
 
 " PHP:

@@ -7,7 +7,7 @@ if ! has('unix')
 endif 
 
 " VARIABLES  
-let g:VIMDIR = expand('~/.vim/')
+let g:VIMDIR = !has('nvim') ? expand('~/.vim/') : expand('~/.config/nvim/') 
 
 if ! has('nvim')
     "this is set automatically in `Neovim`

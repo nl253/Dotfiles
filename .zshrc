@@ -1,6 +1,8 @@
 
 # ~/.zshrc
 
+fpath+=~/.zsh/zfunc
+
 export GOPATH=/usr/lib64/go
 
 for i in ~/.pc; do
@@ -11,13 +13,15 @@ for i in ~/.home; do
 	[[ ! -e $i ]] && echo -e "not detected ${i} - .zshrc not sourced" && return 0
 done
 
-export DOCUTILSCONFIG=~/.docutils
+# export DOCUTILSCONFIG=~/.docutils
 export PYTHON_PACKAGES=(ranger ipython flake8 vulture mypy pylint pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl cookiecutter)
 export NODE_PACKAGES=(js-beautify stylelint textlint write-good csslint tern eslint prettier) 
 # flow typescript eslint-plugin-prettier eslint-plugin-compat eslint-plugin-flowtype babel-eslint eslint-plugin-flowtype-errors babel-cli babel-preset-flow flow-bin
 export GISTS=("122b12050f5fb267e75f" "7001839" "8172796" "8294792")
 export RUBY_GEMS=(travis sass)
-export RUST_CRATES=(rustfmt racer mdbook)
+# scss_lint
+export RUST_CRATES=(rustfmt racer mdbook cargo-count cargo-find)
+
 # export RBENV_VERSION="2.4.0"
 # export PYENV_VERSION="3.6.1"
 export DEFAULT_TOOLCHAIN=nightly-x86_64-unknown-linux-gnu
@@ -78,7 +82,7 @@ done
 [[ ! -e ~/.local/bin/vint ]] && pip install --user vim-vint
 
 if [[ -x $(which pgcli) ]]; then
-    alias pgconnect="pgcli postgresql://norbert:regix@localhost/playground"
+    alias pgconnect="pgcli postgresql://postgres:regix@localhost/fake"
 fi
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
