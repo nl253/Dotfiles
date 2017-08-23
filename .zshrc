@@ -14,16 +14,13 @@ for i in ~/.home; do
 done
 
 # export DOCUTILSCONFIG=~/.docutils
-export PYTHON_PACKAGES=(ranger ipython flake8 vulture mypy pylint pycodestyle yapf yamllint isort proselint profiling pytest pudb3 youtube-dl cookiecutter)
+export PYTHON_PACKAGES=(ranger ipython flake8 vulture mypy pylint pycodestyle yapf yamllint isort proselint profiling pytest youtube-dl cookiecutter)
 export NODE_PACKAGES=(js-beautify stylelint textlint write-good csslint tern eslint prettier) 
-# flow typescript eslint-plugin-prettier eslint-plugin-compat eslint-plugin-flowtype babel-eslint eslint-plugin-flowtype-errors babel-cli babel-preset-flow flow-bin
-export GISTS=("122b12050f5fb267e75f" "7001839" "8172796" "8294792")
+export GISTS=('122b12050f5fb267e75f' '7001839' '8172796' '8294792')
 export RUBY_GEMS=(travis sass)
 # scss_lint
-export RUST_CRATES=(rustfmt racer mdbook cargo-count cargo-find)
+export RUST_CRATES=(rustfmt racer mdbook cargo-count cargo-find tokei)
 
-# export RBENV_VERSION="2.4.0"
-# export PYENV_VERSION="3.6.1"
 export DEFAULT_TOOLCHAIN=nightly-x86_64-unknown-linux-gnu
 
 [[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
@@ -53,17 +50,13 @@ zplug "nl253/Scripts", as:command, rename-to:"grf", use:"grf.sh"
 zplug "nl253/Scripts", as:command, rename-to:"p", use:"processes.sh"
 
 #zplug "nl253/SQLiteREPL", as:command, rename-to:"sqlite", use:"main.py", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
-zplug "nl253/ProjectGenerator", as:command, use:"project", if:"(( $(python --version | grep -Eo '[0-9]\.[0-9]\.[0-9]' | sed -E 's/\.//g') >= 360 ))"
-zplug "nl253/DictGen", as:command, use:"dict-gen", if:"[[ -x $(which python3) ]]"
 
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:"fzf", use:"*linux*amd64*"
 zplug "tmux-plugins/tpm", as:command, ignore:'*'
-zplug "getpelican/pelican-plugins", as:command, ignore:'*'
-zplug "getpelican/pelican-themes", as:command, ignore:'*'
 
 for i in {completion,variables,source,functions,aliases,options,fzf,packages}; do
-	if [[ -e ~/Projects/ZshPlugins/$i ]]; then
-		zplug "~/Projects/ZshPlugins/${i}", from:local, use:'*.zsh', defer:3
+	if [[ -e ~/Projects/Sh/ZshPlugins/$i ]]; then
+		zplug "~/Projects/Sh/ZshPlugins/${i}", from:local, use:'*.zsh', defer:3
 	else
 		zplug "nl253/zsh-config-${i}", defer:3
 	fi

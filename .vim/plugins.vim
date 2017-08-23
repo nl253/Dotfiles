@@ -197,10 +197,10 @@ for plugin in [ 'fabulous', 'vim-saner', 'vim-markup',
             \ 'vim-scratchpads', 'vim-templates', 'fabulous', 
             \ 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
 
-    if !isdirectory(expand('~').'/Projects/VimPlugins/'.plugin)
+    if !isdirectory(expand('~').'/Projects/Vim/'.plugin)
         Plug 'nl253/'.plugin
     else
-        Plug '~/Projects/VimPlugins/'.plugin
+        Plug '~/Projects/Vim/'.plugin
     endif
 endfor
 
