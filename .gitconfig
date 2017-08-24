@@ -14,38 +14,37 @@
 	# tool = vimdiff
 
 [help]
-	autocorrect = 1  # Automatically correct and execute mistyped commands
+	 # Automatically correct and execute mistyped commands
+	autocorrect = 0  
 
 [apply]
-	whitespace = fix # Detect whitespace errors when applying a patch
+	# Detect whitespace errors when applying a patch
+	whitespace = fix 
 
 [color]
 	ui = true
-	#diff = auto
-	#status = auto
-	#branch = auto
 
 [color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
+	current = magenta bold
+	local = normal
+	remote = yellow
 
 [color "diff"]
-	meta = yellow bold
+	meta = "127"
 	frag = magenta bold # line info
-	old = red # deletions
-	new = green # additions
+	old = "167" # deletions
+	new = "78" # additions
 
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = "red bold 52"
-	newNormal = "green bold"
-	newHighlight = "green bold 22"
+	oldNormal = "167 bold"
+	oldHighlight = "167 reverse"
+	newNormal = "78"
+	newHighlight = "78 reverse"
 
 [color "status"]
-	added = yellow
-	changed = green
-	untracked = cyan
+	added = green
+	changed = "yellow bold"
+	untracked = "normal bold"
 
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
@@ -58,31 +57,36 @@
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 
 [alias]
+
+	add = "add -v"
+
+	back = "!function p() { git checkout HEAD^1 }; p"
+	forward = "!function n() { git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout }; n"
+
 	# form tpope
-	cherry-lick = !sh -c 'hub checkout HEAD^{} -- && hub cherry-pick \"$@\"' _
+	cherry-lick = !sh -c 'git checkout HEAD^{} -- && git cherry-pick \"$@\"' _
 	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
 
 	# quick add unstaged, commit using "Quick Commit" as a message and push upstream.
 	qq = "!git add -u ; git commit -m \"Quick commit. Nothing important ...\" ; git push -u" 
-	back = "!function p() { git checkout HEAD^1 }; p"
-	forward = "!function n() { git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout }; n"
 
-	remember = "!git config --global credential.helper \"cache --timeout=120\"" # long session, remember password for 120 min
-	rem = "!git config --global credential.helper \"cache --timeout=20\"" # short session, remember password for 20 min
+	whatchanged = whatchanged --format=\"%n_________________________________________%n%n%C(93)%H%n%CresetAuthor: %C(yellow bold)%an%Creset [%ae]%nDate:   %C(173)%aD%Creset%n%n%C(204)%s%Creset%n%b\"
+
+	 # long session, remember password for 120 min
+	remember-long-session = "!git config --global credential.helper \"cache --timeout=120\"" 
+
+	 # short session, remember password for 20 min
+	remember = "!git config --global credential.helper \"cache --timeout=20\"" 
+
+	blame = blame --pretty=full --date=rfc --indent-heuristic --color-words --dense --date-order --extended-regexp --minimal --show-number 
 	
-	contributors = shortlog --summary --numbered  # List contributors with number of commits
-	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"  # Credit an author on the latest commit
+	 # List contributors with number of commits
+	contributors = shortlog --summary --numbered  
+
+	 # Credit an author on the latest commit
+	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"  
 
 	branches = for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes
-
-	# CLONE
-	# -------------------
-	cl = clone --recursive  # Clone a repository including all submodules
-	
-	# DIFF
-	# -------------------
-	d = difftool
-	;dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"  # Remove branches that have already been merged with master # a.k.a. ‘delete merged’
 
 	# FIND
 	# -------------------
@@ -96,32 +100,17 @@
 	
 	# LOG
 	# -------------------
-	l = log --pretty=oneline -n 20 --graph --abbrev-commit   # SHORT VERSION abbreviated SHA, description, and history graph for the latest 20 commits
-	;lg = log --graph --pretty=format:'%C(bold)%h%Creset%C(magenta)%d%Creset %s %C(yellow)<%an> %C(cyan)(%cr)%Creset' --abbrev-commit --date=relative
-	log = log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=relative 
-
-	
-	# Merge GitHub pull request on top of the current branch or,
-	# if a branch name is specified, on top of the specified branch
-	mpr = "!f() { \
-		declare currentBranch=\"$(git symbolic-ref --short HEAD)\"; \
-		declare branch=\"${2:-$currentBranch}\"; \
-		if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
-			git fetch origin refs/pull/$1/head:pr/$1 && \
-			git checkout -B $branch && \
-			git rebase $branch pr/$1 && \
-			git checkout -B $branch && \
-			git merge pr/$1 && \
-			git branch -D pr/$1 && \
-			git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
-		fi \
-	}; f"
+	log = log --format=\"%C(93)%H%n%C(yellow bold)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204)%s%Creset%n%b\"
 
 	# PUSH
 	# -------------------
 	remotes = remote -vu = pull --rebase upstream master
-	reb = "!r() { git rebase -i HEAD~$1; }; r"  # Interactive rebase with the given number of latest commits
-	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r" # Remove the old tag with this name and tag the latest commit with it.
+
+	 # Interactive rebase with the given number of latest commits
+	reb = "!r() { git rebase -i HEAD~$1; }; r"  
+
+	 # Remove the old tag with this name and tag the latest commit with it.
+	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r" 
 
 [github]
 	password = Kruszynka96**
@@ -148,11 +137,11 @@
 
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"interactive = auto
+
 [difftool]
 	prompt = false
-[gg]
-	username = nl253
+
 [credential]
-	helper = cache --timeout=120
+	helper = cache --timeout=320
 
 # vim: ts=4 sw=4
