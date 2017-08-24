@@ -102,8 +102,9 @@
 	
 	# LOG
 	# -------------------
-	log = log --format=\"%C(93)%H%n%C(yellow bold)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204)%s%Creset%n%b\"
-
+ 
+	log = log --format=\"_________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\"
+ 
 	# PUSH
 	# -------------------
 	remotes = remote -vu = pull --rebase upstream master
