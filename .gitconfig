@@ -45,6 +45,8 @@
 	added = green
 	changed = "yellow bold"
 	untracked = "normal bold"
+	header = "white dim "
+	nobranch = "red dim "
 
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
