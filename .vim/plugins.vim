@@ -48,6 +48,7 @@ if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
 Plug 'tpope/vim-fugitive' 
+Plug 'vim-scripts/dbext.vim'
 Plug 'junegunn/gv.vim', { 'on': [ 'GV' ] }
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \    

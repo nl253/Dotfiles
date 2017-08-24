@@ -12,6 +12,7 @@
 .yarnrc
 package-lock.json
 .local/README.creole
+.m2/
 .mono/registry/last-btime
 .config/NuGet/
 .dotnet/
