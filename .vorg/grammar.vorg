@@ -1,0 +1,87 @@
+Author: nl253@github
+Email: nl253@kent.ac.uk
+Tags: #PARSING #MARKUP #VIM #LEXICAL_ANALYSIS 
+
+    > Grammar for Vorg
+
+Formal definiton and analysis of the grammmar of the Vorg Markup Format.
+
+    >> Meta Sections
+
+Relate to:
+# paragraphs
+# lists
+    - definition
+    - alpha
+    - numeric
+    - bullet
+# code blocks
+# section-wide ?
+# multimedia - images, videos, gifs
+# tables
+# document-wide in meta header
+
+    >> Paragraphs
+
+Chunks of text between 2 newlines.
+
+This IS a paragraph.
+`Takes particular values, unlike continuous data, which can take on any value. Continuous data can take a range of values. Between 2 continuous
+data points, there is an infinite values.`
+
+** This isn't >this is 2 distinct chunks):
+
+Takes particular values, unlike continuous data, which can take on any value.
+
+Continuous data can take a range of values. Between 2 continuous.
+
+    >> @directives
+
+    >> @Userdirectives
+
+    >> Headings 1-6
+
+`>>` or `))` style headings are interchangable.
+
+    >> IMPORTANT HEADINGS
+
+    *???*
+
+    >> Lists
+
+`#` and `-` and `+` all produce the same bulletpoints >for now).
+
+    >> Code Blocks
+
+    >> Tables 
+
+Similar as org-mode tables ie `+` for corners and `-` or `=` for lines.
+
+    >> Horizontal Rule
+
+Either `-` x5 or `=` x5.
+
+1. pattern = re.compile(r"^((?: {4}|\t)*\( )(.*?)$", flags=re.M)
+2. pattern = re.compile(r"^((?: {4}|\t)*\({2} )(.*?)$", flags=re.M)
+3. pattern = re.compile(r"^((?: {4}|\t)*\({3} )(.*?)$", flags=re.M)
+4. pattern = re.compile(r"^((?: {4}|\t)*\({4} )(.*?)$", flags=re.M)
+5. pattern = re.compile(r"^((?: {4}|\t)*\({5} )(.*?)$", flags=re.M)
+6. pattern = re.compile(r"^((?: {4}|\t)*\({6} )(.*?)$", flags=re.M)
+ 
+1. pattern = re.compile(r"^((?: {4}|\t)*> )(.*?)$", flags=re.M)
+2. pattern = re.compile(r"^((?: {4}|\t)*>{2} )(.*?)$", flags=re.M)
+3. pattern = re.compile(r"^((?: {4}|\t)*>{3} )(.*?)$", flags=re.M)
+4. pattern = re.compile(r"^((?: {4}|\t)*>{4} )(.*?)$", flags=re.M)
+5. pattern = re.compile(r"^((?: {4}|\t)*>{5} )(.*?)$", flags=re.M)
+6. pattern = re.compile(r"^((?: {4}|\t)*>{6} )(.*?)$", flags=re.M)
+
+IMPORTANT HEADER
+pattern = re.compile("^(?:(( {4}|\t))*)([,'A-Z0-9 \?\!]+)$", re.M)
+
+    ((( Hortizontal Ruler
+
+pattern = re.compile("^-{5,79}$", re.M)
+
+    ((( Meta Header
+
+pattern = re.compile("^([A-Z][a-z]+\:.*?\n)+")

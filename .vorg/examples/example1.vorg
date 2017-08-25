@@ -1,0 +1,46 @@
+
+    ( These tags can actually be used to highlight the text.
+
+
+    >>> For example
+
+    @research
+    Find out if regular expressions can be better optimized...
+
+@highlight
+In information technology, a Uniform Resource Identifier (URI) is a string
+of characters used to identify a resource. Such identification enables
+interaction with representations of the resource over a network, typically
+the World Wide Web, using specific protocols.
+
+
+    (( Further Features
+
+ Incorrect Indentations is highlighted automatically.
+
+THE SYNTAX ENFORCES INDENTATION WITH FOUR SPACES OR TABS
+
+    (( Convervative vs Colourful Headings
+
+
+    These grey headings are very much like the markdown headings we are used to with the difference that they can be indented.
+
+>> HEADING2
+>>> HEADING3 - all feature conceal ! 
+>>>> HEADING4
+>>>>> HEADING5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

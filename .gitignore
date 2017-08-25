@@ -10,7 +10,6 @@
 *.pptx
 *.ropeprojec*
 *.swp
-*.vorg
 *.xml
 */undo/*
 */wn/*
@@ -241,7 +240,6 @@
 .vim/*
 .viminfo
 .vimtags
-.vorg/*
 .vscode*
 .vue-templates/
 .wget*

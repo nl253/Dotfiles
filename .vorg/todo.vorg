@@ -1,0 +1,77 @@
+:type: todo list
+:tags: #TODO 
+:title: Items to do 
+
+		SHORT TERM
+@Task
+Learn git!
+
+More specifically:
+
+- [ ] revert
+- [ ] show
+- [ ] log (--grep, -G, -S)
+- [ ] checkout
+- [ ] reset
+- [ ] add
+- [ ] commit
+- [ ] rm
+- [ ] branch
+- [ ] remote
+
+@Task
+Modify and add Pycharm templates and export settings afterwards!
+
+@Fix
+Issue with <https://github.com/nl253/Documentation>
+
+@Task
+Learn PostgreSQL with Datagrip
+<https://www.khanacademy.org/computing/hour-of-code/hour-of-sql>
+<https://www.khanacademy.org/computing/computer-programming/sql>
+
+@Flask
+Tutorial <http://flask.pocoo.org/docs/0.12/tutorial/packaging/#tutorial-packaging>
+SQLAlchemy integration - <https://github.com/mitsuhiko/flask-sqlalchemy>
+
+@Library
+SQLAlchemy <https://www.sqlalchemy.org/>
+
+@Library
+Lxml <http://lxml.de/>
+
+@Pandas
+<https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
+
+@Django
+<file:http://www.tornadoweb.org/en/stable/>
+
+
+		MEDIUM TERM
+
+@Task
+Learn to use django and flask cookiecutters for full-stack Flask and Django
+development.
+
+@Testing
+Tox <https://tox.readthedocs.io/en/latest/>
+
+@Testing
+Coverage.py <https://coverage.readthedocs.io/en/coverage-4.4.1/config.html>
+
+
+@Framework
+Tornado <file:http://www.tornadoweb.org/en/stable/>
+High performance, asynchronous, popular 14k start on GitHub.
+
+
+		LONG TERM
+
+@Server
+Gunicorn - wsgi server <http://docs.gunicorn.org/en/stable/settings.html>
+
+@Future
+Celery - task queue library <https://github.com/celery/celery/>
+Design Patterns <http://www.blackwasp.co.uk/gofpatterns.aspx>
+
+--- vim: conceallevel=3 

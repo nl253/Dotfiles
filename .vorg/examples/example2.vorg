@@ -1,0 +1,66 @@
+
+Name: nl253
+Title: TODO list
+Created: 3rd of July 2017
+GitHub: nl253
+
+--------------------------------------------
+
+                    > TODO
+
+@Task
+    :type: todo list
+    :subject: made up subject
+    :metadata: certainly
+Finish off.
+Root <dir:~/Projects/scrapeit/>
+
+@Task
+Call Uni
+Number on their website.
+
+@important
+Remeber about the rubbish!!!
+
+
+@critical
+In information technology, a Uniform Resource Identifier (URI) is a string
+of characters used to identify a resource. Such identification enables
+interaction with representations of the resource over a network, typically
+the World Wide Web, using specific protocols.
+
+@important
+In information technology, a Uniform Resource Identifier (URI) is a string
+of characters used to identify a resource. Such identification enables
+interaction with representations of the resource over a network, typically
+the World Wide Web, using specific protocols.
+
+:what: reasearch reminder
+
+@research
+In information technology, a Uniform Resource Identifier (URI) is a string
+of characters used to identify a resource. Such identification enables
+interaction with representations of the resource over a network, typically
+the World Wide Web, using specific protocols.
+
+--- notice the conceal feature! 
+@string
+In information technology, a Uniform Resource Identifier (URI) is a string
+of characters used to identify a resource. Such identification enables
+interaction with representations of the resource over a network, typically
+the World Wide Web, using specific protocols.
+
+The text can be styled to be *BOLD* or _UNDERLINED_ #COOL #WILL_USE_IT
+
+
+List headings are automatically made to be bold iff there is a bullet point underneath:
+--- a comment and a few errors for demonstration 
+
+# soemthing to say
+    # soemthing to say 
+        # soemthing to say   #SHOW_IT_TO_MUM #POST
+
+
++ bad indent
+
+--- vim: conceallevel=2
