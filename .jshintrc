@@ -1,0 +1,14 @@
+{
+	"undef": true,
+	"nonew": true,
+	"esversion": 6,
+	"maxstatements": 50,
+	"maxparams": 5,
+	"maxdepth": 3,
+	"evil": true,
+	"devel": true,
+	"unused": true,
+	"globals": {
+		"MY_GLOBAL": true
+	}
+}

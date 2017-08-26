@@ -11,6 +11,7 @@
 *.ropeprojec*
 *.swp
 *.xml
+.oracle_jre_usage/
 */undo/*
 */wn/*
 *CLion*

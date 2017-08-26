@@ -70,6 +70,4 @@ linters:
   UrlFormat:
     enabled: false
 
-
-
 # vim: sw=2 ts=3
