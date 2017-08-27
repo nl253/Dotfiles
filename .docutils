@@ -6,6 +6,7 @@ template = /home/norbert/.docutils-template
 footnote_references = brackets
 embed_stylesheet= yes
 stylesheet_path = /home/norbert/.docutils.css
+initial_header_level = 1
 
 math-output: mathjax 
 			 https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
