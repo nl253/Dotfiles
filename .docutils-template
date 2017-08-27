@@ -13,7 +13,7 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="/home/norbert/.docutils-stylesheet">
+	<link rel="stylesheet" href="/home/norbert/.docutils.css">
 
 %(body_prefix)s
 %(body_pre_docinfo)s
