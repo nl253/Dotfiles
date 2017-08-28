@@ -1,3 +1,4 @@
+
 " vim: foldlevel=0 foldmethod=marker nowrap
 
 " PLUG:
@@ -60,6 +61,7 @@ Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find',
             \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
             \'SudoWrite', 'Unlink', 'Rename' ]}
 
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'up': '~40%' }
@@ -196,7 +198,7 @@ Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 for plugin in [ 'fabulous', 'vim-saner', 'vim-markup',
             \ 'vim-programming', 'vim-fzf-extensions', 
             \ 'vim-scratchpads', 'vim-templates', 'fabulous', 
-            \ 'vim-utils', 'vim-webdev', 'git-ready', 'vorg-mode' ] 
+            \ 'vim-webdev', 'git-ready', 'vorg-mode' ] 
 
     if !isdirectory(expand('~').'/Projects/Vim/'.plugin)
         Plug 'nl253/'.plugin

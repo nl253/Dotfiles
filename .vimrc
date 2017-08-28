@@ -1,4 +1,5 @@
-"vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
+
+" vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
 
 " Exit if not UNIX 
 if ! has('unix') 
