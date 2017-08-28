@@ -1,8 +1,6 @@
 
 # ~/.bash_profile
  
-echo "${HOME}/.bash_profile loaded" # indicate
-
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
 # bash-completion {{{
@@ -20,8 +18,4 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-
- # }}}
-
-export PATH="$HOME/.cargo/bin:$PATH"
+# }}}

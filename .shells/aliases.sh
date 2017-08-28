@@ -14,7 +14,7 @@ return 1
 }
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
+if [[ -x /usr/bin/dircolors ]]; then
     test -r ~/.dir_colors && eval "$(dircolors -b ~/.dir_colors)" || eval "$(dircolors -b)"
 fi
 
@@ -31,8 +31,7 @@ if [[ -z EDITOR ]]; then
   alias e='$EDITOR'                    # quicker
   access to vim
 else
-  alias e=vim                          #
-  quicker access to vim
+  alias e=vim                          # quicker access to vim
 fi
 
 # split path on ":"
@@ -75,9 +74,9 @@ alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'
 
 # pattern matching
 alias df='df --color=auto'
-alias grep='nocorrect grep --color=auto'
-alias fgrep='nocorrect fgrep --color=auto'
-alias egrep='nocorrect egrep --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 alias diff='diff --color=auto'
 
 # networking, ssh, rsync
@@ -107,8 +106,10 @@ fi
 # pacman aliases, yaourt
 # colors
 # -----------------------------------
-# REQUIRES :: pacman yaourt
-# expac
+# REQUIRES
+# - pacman
+# - yaourt
+# - expac
 # -----------------------------------
 if $(in-path pacman); then
 
@@ -124,8 +125,7 @@ if $(in-path pacman); then
   $(in-path yaourt) && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
 
-# prcess
-# viewing
+# prcess viewing
 # ------------------------
 # REQUIRES
 # - top
@@ -159,17 +159,7 @@ fi
 unset -f in-path
 
 # Better mv, cp, mkdir
-alias mv='nocorrect mv'
-alias cp='nocorrect cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps'
-alias mkdir='nocorrect mkdir'
-alias sudo='nocorrect sudo'
-
-# disable correction.
-alias cd='nocorrect cd'
-alias cp='nocorrect cp'
-alias ln='nocorrect ln'
-alias man='nocorrect man'
-alias rm='nocorrect rm'
+alias cp=' cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps'
 
 # Disable
 # globbing.
@@ -177,5 +167,9 @@ alias find='noglob find'
 alias ftp='noglob ftp'
 alias sftp='noglob sftp'
 alias locate='noglob locate'
+
+if [[ -x $(which pgcli) ]]; then
+    alias pgconnect="pgcli postgresql://postgres:regix@localhost/fake"
+fi
 
 # vim: foldmethod=marker foldlevel=0 foldmarker={{{,}}} nowrap formatoptions=
