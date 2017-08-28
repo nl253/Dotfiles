@@ -89,6 +89,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
+export PATH=~/.pyenv/bin:$PATH
+eval "$(pyenv virtualenv-init -)"
+eval "$(pyenv init -)"
+
 # VARIABLES
 
 # $PS1 aka PROMPT 
