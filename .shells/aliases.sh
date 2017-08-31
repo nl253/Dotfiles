@@ -63,8 +63,7 @@ alias ....="cd ../../.."
 alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 
 # long listing
-alias ls='ls --color=auto
---group-directories-first'
+alias ls='ls --color=auto --group-directories-first'
 # tweak default ls
 alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'
 # list recursively just dirs

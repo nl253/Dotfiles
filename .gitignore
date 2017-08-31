@@ -1,4 +1,7 @@
 *.backup
+.config/chromium/
+.config/goa-1.0/
+.config/yad.conf
 *.bak
 *.bluej
 *.class

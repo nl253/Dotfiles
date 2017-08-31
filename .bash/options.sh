@@ -27,3 +27,5 @@ shopt -s globstar
 
 ## turn off control character echoing
 #stty -ctlecho
+
+complete -cf sudo
