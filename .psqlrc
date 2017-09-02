@@ -2,10 +2,6 @@
 \set PROMPT2 '%M %n@%/%R %# '
 \set COMP_KEYWORD_CASE upper
 
--- Pager settings to support color
-
-\pset pager always
-
 -- Prevent noisy loading of psqlrc file
 
 \set QUIET yes

@@ -160,15 +160,17 @@ unset -f in-path
 # Better mv, cp, mkdir
 alias cp=' cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps'
 
-# Disable
-# globbing.
-alias find='noglob find'
-alias ftp='noglob ftp'
-alias sftp='noglob sftp'
-alias locate='noglob locate'
-
-if [[ -x $(which pgcli) ]]; then
-    alias pgconnect="pgcli postgresql://postgres:regix@localhost/fake"
+if [[ -x $(which psql) ]]; then
+  alias psql='psql --single-line'
 fi
+
+if [[ -x $(which mycli) ]]; then
+  alias mycli='mycli mysql://root@localhost/fake'
+fi
+
+if [[ -x $(which isort) ]]; then
+  alias isort='isort '
+fi
+
 
 # vim: foldmethod=marker foldlevel=0 foldmarker={{{,}}} nowrap formatoptions=

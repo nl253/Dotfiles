@@ -17,6 +17,7 @@ done
 
 export DOCUTILSCONFIG=~/.docutils
 export PYTHON_PACKAGES=(ranger-fm \
+  psycopg2 mycli \
 	ipython flake8 vulture mypy pylint \
 	pycodestyle yapf jedi SQLAlchemy yamllint isort \
 	proselint profiling pytest \
@@ -71,3 +72,5 @@ setopt monitor
 bindkey -e
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
