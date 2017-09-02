@@ -2,6 +2,7 @@
 .config/chromium/
 .config/goa-1.0/
 .config/yad.conf
+.config/totem/
 *.bak
 *.bluej
 *.class
