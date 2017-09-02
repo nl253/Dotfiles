@@ -1,0 +1,19 @@
+\set PROMPT1 '%M:%[%033[1;31m%]%>%[%033[0m%] %n@%/%R%#%x '
+\set PROMPT2 '%M %n@%/%R %# '
+\set COMP_KEYWORD_CASE upper
+
+-- Pager settings to support color
+
+\pset pager always
+
+-- Prevent noisy loading of psqlrc file
+
+\set QUIET yes
+
+-- Allow pasting of values to avoid stupid indenting
+
+\set paste
+
+-- Protect against results floods
+
+\set FETCH_COUNT 1000
