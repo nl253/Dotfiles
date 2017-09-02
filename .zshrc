@@ -16,8 +16,12 @@ for i in ~/.{home,pc}; do
 done
 
 export DOCUTILSCONFIG=~/.docutils
-export PYTHON_PACKAGES=(ranger ipython flake8 vulture mypy pylint pycodestyle yapf yamllint isort proselint profiling pytest youtube-dl cookiecutter)
-export NODE_PACKAGES=(js-beautify stylelint textlint write-good csslint tern eslint prettier) 
+export PYTHON_PACKAGES=(ranger-fm \
+	ipython flake8 vulture mypy pylint \
+	pycodestyle yapf jedi SQLAlchemy yamllint isort \
+	proselint profiling pytest \
+	requests Jinja2 Django Flask youtube-dl cookiecutter)
+export NODE_PACKAGES=(js-beautify textlint write-good tern eslint prettier) 
 export GISTS=('122b12050f5fb267e75f' '7001839' '8172796' '8294792')
 export RUBY_GEMS=(travis sass)
 # scss_lint
