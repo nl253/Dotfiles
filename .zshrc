@@ -71,5 +71,3 @@ setopt monitor
 bindkey -e
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
