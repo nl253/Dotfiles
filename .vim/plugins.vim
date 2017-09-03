@@ -196,15 +196,15 @@ Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
 " MY PLUGINS:
 " ==========
 for plugin in [ 'fabulous', 'vim-saner', 'vim-markup',
-            \ 'vim-programming', 'vim-fzf-extensions', 
-            \ 'vim-scratchpads', 'vim-templates', 'fabulous', 
+			\ 'vim-programming', 'vim-fzf-extensions', 
+			\ 'vim-scratchpads', 'vim-templates', 'fabulous', 
 			\ 'vim-webdev', 'git-ready', 'vorg-mode' ] 
 
-    if !isdirectory(expand('~').'/Projects/Vim/'.plugin)
-        Plug 'nl253/'.plugin
-    else
-        Plug '~/Projects/Vim/'.plugin
-    endif
+	if !isdirectory(expand('~').'/Projects/Vim/'.plugin)
+		Plug 'nl253/'.plugin
+	else
+		Plug '~/Projects/Vim/'.plugin
+	endif
 endfor
 
 let g:vim_dicts = { 'markdown': [ 'unix-programmers', 'computer-science' ] } 

@@ -17,7 +17,7 @@ done
 
 export DOCUTILSCONFIG=~/.docutils
 export PYTHON_PACKAGES=(ranger-fm \
-  psycopg2 mycli \
+  psycopg2 mycli docutils \
 	ipython flake8 vulture mypy pylint \
 	pycodestyle yapf jedi SQLAlchemy yamllint isort \
 	proselint profiling pytest \

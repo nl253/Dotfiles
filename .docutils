@@ -2,10 +2,9 @@
 datestamp = %Y-%m-%d %H:%M UTC
 source-link = no
 language_code = en-GB
-template = /home/norbert/.docutils-template
 footnote_references = brackets
-embed_stylesheet= yes
-stylesheet_path = /home/norbert/.docutils.css
+stylesheet_dirs = /home/norbert
+stylesheet_path = .docutils.css
 initial_header_level = 1
 
 math-output: mathjax 
