@@ -16,20 +16,24 @@ for i in ~/.{home,pc}; do
 done
 
 export DOCUTILSCONFIG=~/.docutils
-export PYTHON_PACKAGES=(ranger-fm \
-  psycopg2 mycli docutils \
-	ipython flake8 vulture mypy pylint \
+export PYTHON_PACKAGES=(\
+	ipython flake8 vulture mypy pylint ranger-fm \
 	pycodestyle yapf jedi SQLAlchemy yamllint isort \
-	proselint profiling pytest \
+	proselint profiling pytest psycopg2 mycli docutils \
 	requests Jinja2 Django Flask youtube-dl cookiecutter)
-export NODE_PACKAGES=(js-beautify textlint write-good tern eslint prettier) 
+export NODE_PACKAGES=(\
+	js-beautify textlint write-good \
+	tern eslint prettier) 
 export GISTS=('122b12050f5fb267e75f' '7001839' '8172796' '8294792')
 export RUBY_GEMS=(travis sass)
 # scss_lint
-export RUST_CRATES=(rustfmt racer mdbook cargo-count cargo-find tokei)
+export RUST_CRATES=(\
+	rustfmt racer mdbook \
+	cargo-count cargo-find tokei)
 export DEFAULT_TOOLCHAIN=nightly-x86_64-unknown-linux-gnu
 
-[[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+[[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https \
+	https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 
 source ~/.zplug/init.zsh
 
@@ -72,5 +76,3 @@ setopt monitor
 bindkey -e
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
