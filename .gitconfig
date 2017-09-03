@@ -60,20 +60,31 @@
 
 [alias]
 
+	aliases = "!git config -l | grep alias | sed 's/^alias\\.//g'"
+
+	backup-untracked = "!git ls-files --others -i --exclude-standard | xargs zip untracked.zip"
+
+	unpushed = log --branches --not --remotes
+
+	grep = grep --perl-regexp --line-number --color=always --full-name --heading 
+
+	untracked = ls-files --others
+
+	version-tree = log --pretty=oneline --graph --decorate --all
+ 
 	add = add -v
+
 	blame = blame --pretty=full --date=rfc --indent-heuristic --color-words --dense --date-order --extended-regexp --minimal --show-number 
+
 	branch = branch -vv
-	;log = log --stat 
+
 	log = log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\"
+
 	cherry = cherry --verbose
 
-	# ----------------------------------------------------------------------------
+	back = checkout HEAD^1
 
-	back = "!function p() { git checkout HEAD^1 }; p"
-	forward = "!function n() { git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout }; n"
-
-	# remember password for X minutes
-	remember = "!git config --global credential.helper \"cache --timeout=$1\"" 
+	forward = "!git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout"
 
 	# quick add unstaged, commit using "Quick Commit" as a message and push upstream.
 	qq = "!git commit -a -m \"Quick commit. Nothing important ...\" ; git push" 
@@ -96,23 +107,6 @@
 	# form tpope
 	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
 
-	# same as log
-	;whatchanged = whatchanged --stat 
-
-	whatchanged = whatchanged --stat --format=\"%n________________________________________________________________%n%n%C(93)%H%n%CresetAuthor: %C(yellow bold)%an%Creset [%ae]%nDate:   %C(173)%aD%Creset%n%n%C(204)%s%Creset%n%b\"
-
-	 # Credit an author on the latest commit
-	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"  
-
-	branches = for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes
-
-	remotes = remote -vu = pull --rebase upstream master
-
-	 # Interactive rebase with the given number of latest commits
-	reb = "!r() { git rebase -i HEAD~$1; }; r"  
-
-	 # Remove the old tag with this name and tag the latest commit with it.
-	retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r" 
 
 [web]
 	browser = google-chrome-stable
