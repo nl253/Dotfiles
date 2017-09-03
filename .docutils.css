@@ -23,18 +23,23 @@ body {
   margin: 2em;
 }
 
+/* 3 breakpoints */
+
+/* large */
 @media screen and (min-width: 1440px) {
   body {
     margin: 4em 20em;
   }
 }
 
+/* medium */
 @media screen and (min-width: 1280px) and (max-width: 1440px) {
   body {
     margin: 4em 8em;
   }
 }
 
+/* small */
 @media screen and (min-width: 1000px) and (max-width: 1280px) {
   body {
     margin: 4em 8em;
@@ -86,7 +91,7 @@ a:hover, a:focus {
   text-decoration: underline;
 }
 
-/* list */
+/* lists */
 
 ul, ol, dl {
   margin-top: 0;
@@ -94,19 +99,6 @@ ul, ol, dl {
 }
 
 dt {  font-weight: bold;  }
-
-p {
-  padding: 0;
-  margin-top: 2px;
-}
-
-hr {
-  position: relative;
-  margin: 1.5rem 0;
-  border: 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #fff;
-}
 
 /* media - images etc */
 
@@ -255,6 +247,19 @@ address {
   margin-bottom: 1rem;
   font-style: normal;
   line-height: inherit;
+}
+
+p {
+  padding: 0;
+  margin-top: 2px;
+}
+
+hr {
+  position: relative;
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #fff;
 }
 
 /* forms */
