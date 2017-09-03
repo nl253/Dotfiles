@@ -22,8 +22,11 @@ export SHORT_HOSTNAME=$(hostname -s)
 [[ -f ~/.makepkg.conf ]] && export MAKEPKG_CONF=~/.makepkg.conf
 [[ -f ~/.config/ranger/rc.conf ]] && export RANGER_LOAD_DEFAULT_RC=false
 
- # JAVA
-[[ -d /usr/lib/jvm/java-8-openjdk ]] && export JAVA_HOME='/usr/lib/jvm/java-8-openjdk' && export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
+# JAVA
+if [[ -d /usr/lib/jvm/java-8-openjdk ]]; then
+  export JAVA_HOME='/usr/lib/jvm/java-8-openjdk'
+  export JRE_HOME='/usr/lib/jvm/java-8-openjdk/jre'
+fi
 
 # }}}
 
