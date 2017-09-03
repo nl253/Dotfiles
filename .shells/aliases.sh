@@ -3,24 +3,25 @@
 
 # SOURCED BY BOTH `zsh` AND `bash`
 
-in-path() { #
-# checks  an executable is in $PATH
-for i in $(echo "$PATH" | sed "s/:/\n/g"); do
-  if [[ -x "$i/$1" ]]; then
-    return 0
-  fi
-done
-return 1
+in-path() {
+  # checks  an executable is in $PATH
+  for i in $(echo "$PATH" | sed "s/:/\n/g"); do
+    if [[ -x "$i/$1" ]]; then
+      return 0
+    fi
+  done
+  return 1
 }
 
 # enable color support of ls and also add handy aliases
 if [[ -x /usr/bin/dircolors ]]; then
-    test -r ~/.dir_colors && eval "$(dircolors -b ~/.dir_colors)" || eval "$(dircolors -b)"
+  test -r ~/.dir_colors && eval "$(dircolors -b ~/.dir_colors)" || eval "$(dircolors -b)"
 fi
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" \
+  "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 alias j=z
 
@@ -49,7 +50,8 @@ alias logout="pkill -KILL -u $USER"
 $(in-path ipython) && alias ipython="ipython --profile=me"
 alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
-alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
+alias show-term-capabilities=\
+  "infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
 
@@ -88,9 +90,11 @@ $(in-path python3) && alias http-server-python="python3 -m http.server"
 # root dir
 # open using 0.0.0.0:{PORT}
 $(in-path php) && alias http-server-php="php -S 0.0.0.0:8000"
-$(in-path ruby) && alias http-server-ruby="ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'"
+$(in-path ruby) && alias http-server-ruby=\
+  "ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'"
 # mount a remote hard-drive
-$(in-path sshfs) && alias mount-raptor="mkdir -p ${HOME}/Raptor && sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ${HOME}/Raptor"
+$(in-path sshfs) && alias mount-raptor="mkdir -p ${HOME}/Raptor && \
+  sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ${HOME}/Raptor"
 
 $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 
@@ -99,7 +103,9 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 # and a default location for download of
 # Torrents in ~/Downloads/Torrents/
 if $(in-path rsync); then
-  alias rsync-copy="rsync --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-le --perms --executability --verbose --human-readable  --copy-links"
+  alias rsync-copy="rsync --itemize-changes --stats --partial \
+    --rsh=bash --progress --recursive --times --whole-le \
+    --perms --executability --verbose --human-readable  --copy-links"
 fi
 
 # pacman aliases, yaourt
@@ -121,7 +127,9 @@ if $(in-path pacman); then
   alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
   alias pacman-reinstall-all-foreign-packages="pacman -Qmq | pacman -S -"
   alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
-  $(in-path yaourt) && export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+  $(in-path yaourt) && \
+    export YAOURT_COLORS=\
+    "nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
 
 # prcess viewing
@@ -171,6 +179,5 @@ fi
 if [[ -x $(which isort) ]]; then
   alias isort='isort '
 fi
-
 
 # vim: foldmethod=marker foldlevel=0 foldmarker={{{,}}} nowrap formatoptions=
