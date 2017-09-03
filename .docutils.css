@@ -1,15 +1,15 @@
 
 /* RestructuredText Docutils Custom Stylesheet */
 
-@import url('https://fonts.googleapis.com/css?family=Raleway|Roboto|Lobster|Amiri|Oxygen+Mono');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css');
+/* fonts */
+/* serif - Amiri */
+/* sans-serif - Raleway */
+/* monospaced - Oxygen Mono */
+@import url('https://fonts.googleapis.com/css?family=Raleway|Amiri|Oxygen+Mono');
 
 /* global scope */
 
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
+* {  box-sizing: border-box; }
 
 html {
   font-family: Amiri, "Times New Roman", serif !important;
@@ -44,7 +44,7 @@ body {
 /* headings */
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Raleway, Roboto, "Helvetica Neue", Helvetica, sans-serif;
+  font-family: Raleway, "Helvetica Neue", Helvetica, sans-serif;
   color: #5a6875;
 }
 
@@ -80,9 +80,7 @@ a {
   text-decoration: none;
 }
 
-a strong {
-  color: inherit;
-}
+a strong {  color: inherit;  }
 
 a:hover, a:focus {
   text-decoration: underline;
@@ -95,9 +93,7 @@ ul, ol, dl {
   margin-bottom: 1rem;
 }
 
-dt {
-  font-weight: bold;
-}
+dt {  font-weight: bold;  }
 
 p {
   padding: 0;
@@ -361,7 +357,6 @@ footer ul {
 .admonition-title {  font-size: 1rem;  }
 
 /* pygments */
-
 
 .keyword {  color: #8352a5;  font-weight: bold;  }
 .name {  color: #985759;  }
