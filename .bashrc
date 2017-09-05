@@ -17,3 +17,5 @@ xhost +local:root > /dev/null 2>&1
 for i in ~/.{shells,bash}/*.sh; do
 	[[ -f $i ]] && source $i
 done 
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
