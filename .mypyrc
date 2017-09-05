@@ -1,8 +1,86 @@
 [mypy]
-python_version = 3.6
-warn_redundant_casts = True
-strict_optional = True
-warn_return_any = True
-show_column_numbers = True
 
+#  use Python x.y
+python_version = 3.6
+
+# silently ignore imports of missing modules
+ignore_missing_imports = true
+
+# how to treat imports (default normal) {normal,silent,skip,error}
+follow_imports = normal
+
+# disallow calling functions without type annotations from functions with type annotations
+disallow_untyped_calls = false
+allow_untyped_calls = true
+                            
+# disallow defining functions without type annotations or with incomplete type annotations
+allow_untyped_defs = false
+disallow_untyped_defs = true
+
+# type check the interior of functions without type annotations 
+no_check_untyped_defs = false
+check_untyped_defs = true
+
+# disallow subclassing values of type 'Any' when defining classes 
+allow_subclassing_any = false
+disallow_subclassing_any = true
+                            
+# warn if missing type annotation in typeshed, only relevant with check_untyped_defs enabled 
+no_warn_incomplete_stub = true
+warn_incomplete_stub = false
+
+# warn about casting an expression to its inferred type
+no_warn_redundant_casts = false
+warn_redundant_casts = true
+
+# do not warn about functions that end without returning 
+warn_no_return = false
+no_warn_no_return = true
+
+# warn about returning values of type Any from non_ Any typed functions 
+no_warn_return_any  = false
+warn_return_any = true
+
+# Precede errors with "note:" messages explaining
+hide_error_context = false
+show_error_context = true
+
+# don't assume arguments with default values of None are Optional #
+implicit_optional = false
+no_implicit_optional = true
+
+# enable module cache
+no_incremental = false
+incremental = true
+
+# use cache even if dependencies out of date 
+# (implies incremental)
+quick_and_dirty = false
+
+# enable experimental strict Optional checks
+no_strict_optional = false
+strict_optional = true
+
+# allow using cache written by older mypy version
+skip_version_check = false
+
+# invoke pdb on fatal error                           
+pdb = false
+
+# show traceback on fatal error
+show_traceback = false
+
+# dump stats
+stats =  false
+
+# dump type inference stats
+inferstats = false
+
+# Script x becomes module x instead of __main__
+scripts_are_modules = false
+
+# Show column numbers in error messages 
+hide_column_numbers = false
+show_column_numbers = true
+                            
 # vim: ft=cfg

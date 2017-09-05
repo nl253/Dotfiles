@@ -1,3 +1,12 @@
 [flake8]
-max-line-length = 99
-ignore = E221
+exclude = .git,__pycache__,docs,.svn,CVS,.bzr,.hg,.tox,.eggs,*.egg,manage.py
+max-line-length = 120
+# F812: list comprehension redefines ...
+# H301: one import per line
+# H306: imports not in alphabetical order (time, os)
+# H401: docstring should not start with a space
+# H403: multi line docstrings should end on a new line
+# H404: multi line docstring should start without a leading new line
+# H405: multi line docstring summary not separated with an empty line
+ignore = F812,H301,H306,H401,H403,H404,H405
+# vim: ft=cfg

@@ -17,8 +17,8 @@ done
 
 export DOCUTILSCONFIG=~/.docutils
 export PYTHON_PACKAGES=(\
-	ipython flake8 vulture mypy pylint ranger-fm \
-	pycodestyle yapf jedi SQLAlchemy yamllint isort \
+	yapf jedi SQLAlchemy yamllint isort \
+	ipython flake8 vulture pycallgraph mypy pylint ranger-fm \
 	proselint profiling pytest psycopg2 mycli docutils \
 	requests Jinja2 Django Flask youtube-dl cookiecutter)
 export NODE_PACKAGES=(\
