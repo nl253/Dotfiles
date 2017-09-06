@@ -47,7 +47,7 @@ for i in ['https://github.com/vim-scripts/SyntaxAttr.vim', 'scrooloose/nerdcomme
 	Plug i
 endfor
 
-for i in split(expand('tpope/vim-{speeddating,repeat,fugative}')) + split(expand('junegunn/{fzf,fzf.vim}'))
+for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}')) + split(expand('junegunn/{fzf,fzf.vim}'))
 	Plug i
 endfor
 
@@ -58,7 +58,7 @@ if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 if has('perl') | Plug 'vim-scripts/dbext.vim' | endif
 Plug 'junegunn/gv.vim', {'on': ['GV']}
 
-set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \    
+set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
 
 Plug 'tpope/vim-eunuch', {'on' : [
 			\ 'Move', 'Remove', 'Find', 
