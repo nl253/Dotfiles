@@ -18,4 +18,5 @@ for i in ~/.{shells,bash}/*.sh; do
 	[[ -f $i ]] && source $i
 done 
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[[ $- == *i* ]] && source ~/.fzf/shell/completion.bash 2> /dev/null
+source ~/.fzf/shell/key-bindings.bash

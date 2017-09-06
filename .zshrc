@@ -16,16 +16,21 @@ for i in ~/.{home,pc}; do
 done
 
 export DOCUTILSCONFIG=~/.docutils
-export PYTHON_PACKAGES=(yapf jedi SQLAlchemy yamllint isort \
+export PYTHON_PACKAGES=(\
+	yapf jedi SQLAlchemy yamllint isort \
 	ipython flake8 vulture pycallgraph mypy pylint ranger-fm \
 	proselint profiling pytest psycopg2 mycli docutils \
 	requests Jinja2 Django Flask youtube-dl cookiecutter)
-export NODE_PACKAGES=(js-beautify prettier tern eslint textlint \
-	write-good pug-cli uglifgy-es nodemon babel-cli)
+export NODE_PACKAGES=(\
+	js-beautify prettier tern \
+	eslint textlint write-good \
+	pug-cli uglifgy-es nodemon babel-cli)
 export GISTS=('122b12050f5fb267e75f' '7001839' '8172796' '8294792')
 export RUBY_GEMS=(travis sass)
 # scss_lint
-export RUST_CRATES=(rustfmt racer mdbook cargo-count cargo-find tokei)
+export RUST_CRATES=(\
+	rustfmt racer mdbook \
+	cargo-count cargo-find tokei)
 export DEFAULT_TOOLCHAIN=nightly-x86_64-unknown-linux-gnu
 
 [[ ! -e ~/.zplug ]] && curl -sL --proto-redir -all,https \
@@ -71,5 +76,7 @@ setopt monitor
 
 bindkey -e
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# vim: foldmethod=marker sw=2 ts=2 nowrap 
+[[ $- == *i* ]] && source "${HOME}/.fzf/shell/completion.zsh" 2> /dev/null
+[[ -f ~/.fzf/shell/key-bindings.zsh ]] && source ~/.fzf/shell/key-bindings.zsh 
+
+# vim: foldmethod=marker sw=2 ts=2 nowrap
