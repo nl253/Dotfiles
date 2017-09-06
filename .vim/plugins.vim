@@ -31,8 +31,10 @@ endif
 
 if !exists('g:PROGRAMMING')
     " PROGRAMMING LANGUAGES you code in 
-    let g:PROGRAMMING = [ 'xhtml', 'html', 'css', 'javascript', 'rust',
-                \ 'python', 'php', 'sql', 'sh', 'zsh' ]
+    let g:PROGRAMMING = [ 
+				\ 'xhtml', 'html', 'css', 
+				\ 'javascript', 'rust', 'python', 
+				\ 'php', 'sql', 'sh', 'zsh' ]
 endif
 
 " Place Plugins Here:
@@ -49,7 +51,7 @@ if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
 Plug 'tpope/vim-fugitive' 
-Plug 'vim-scripts/dbext.vim'
+if has('perl') | Plug 'vim-scripts/dbext.vim' | endif
 Plug 'junegunn/gv.vim', { 'on': [ 'GV' ] }
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \    
@@ -57,11 +59,12 @@ set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%
 Plug 'editorconfig/editorconfig-vim'
 Plug 'konfekt/fastfold' 
 Plug 'wellle/targets.vim'
-Plug 'tpope/vim-eunuch', { 'on' : [ 'Move', 'Remove', 'Find', 
-            \'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
-            \'SudoWrite', 'Unlink', 'Rename' ]}
+Plug 'tpope/vim-eunuch', { 'on' : [ 
+			\ 'Move', 'Remove', 'Find', 
+            \ 'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
+            \ 'SudoWrite', 'Unlink', 'Rename' ]}
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'up': '~40%' }
@@ -87,6 +90,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 				\ 'javascript', 'css', 'rst', 'html', 'jinja', 'scss.css',
 				\ 'gitcommit', 'markdown',  'scss', 'php' ]
     let g:completor_python_binary = 'python3'
+	let g:completor_node_binary = '/bin/node'
     let g:completor_racer_binary = expand('~/.cargo/bin/racer')
 	let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
 	let g:completor_scss_omni_trigger = g:completor_css_omni_trigger
@@ -94,6 +98,9 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
 	let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 	let g:completor_html_omni_trigger = '<[a-z]{,6}|\S+ [-a-z]{2,}'
+	let g:completor_jade_omni_trigger = '\w{2,}'
+	let g:completor_javascript_omni_trigger = '\w{2,}'
+	let g:completor_pug_omni_trigger = g:completor_jade_omni_trigger
 	let g:completor_jinja_omni_trigger = g:completor_html_omni_trigger 
 	let g:completor_htmldjango_omni_trigger = g:completor_html_omni_trigger 
 	let g:completor_gitcommit_omni_trigger = '\w{2,}'
@@ -120,15 +127,15 @@ if has('patch8') || has('nvim')
 	let g:neomake_vim_enabled_makers = [ 'vint' ]
 	let g:neomake_sql_enabled_makers = [ 'sqlint' ]
 	let g:neomake_bash_enabled_makers = [ 'sh', 'shellcheck' ]
-	let g:neomake_scss_enabled_makers = [ 'stylelint', 'scss-lint' ]
+	let g:neomake_scss_enabled_makers = [ 'scss-lint' ]
 	let g:neomake_css_enabled_makers = [ 'stylelint' ]
-	let g:neomake_javascript_enabled_makers = [ 'eslint', 'flow' ]
+	let g:neomake_javascript_enabled_makers = [ 'eslint' ]
 	let g:neomake_python_enabled_makers = [ 
-				\'mypy', 'flake8', 'vulture', 
-				\ 'pyflakes', 'pep8', 
-				\ 'pylama', 'python' ]
+				\ 'mypy', 'flake8', 
+				\ 'vulture',  'pylint',
+				\ 'pyflakes', 'pylama' ]
 else
-    Plug 'vim-syntastic/syntastic'
+	Plug 'vim-syntastic/syntastic'
 endif
 
 " MARKUP:
@@ -178,17 +185,45 @@ Plug 'mattn/emmet-vim', { 'for':
 			\ [ 'xml', 'html', 'xhtml', 'css', 'php', 'htmldjango', 'jinja' ] }
 Plug 'cakebaker/scss-syntax.vim'
 Plug 'othree/csscomplete.vim'
-"let g:xml_syntax_folding = 1
+"let g:xml_syntax_folding = 1 " might be computationally demanding
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
 Plug 'pangloss/vim-javascript', { 'for': [ 'javascript' ] }
-Plug 'ternjs/tern_for_vim', { 'for': [ 'javascript' ] }
 Plug 'isRuslan/vim-es6', { 'for': [ 'javascript' ] }
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': [ 'javascript' ] }
+
+" Libraries:
+" ---------
+" jQuery
+" underscore.js
+" lo-dash
+" Backbone.js
+" prelude.ls
+" AngularJS
+" AngularUI
+" AngularUI Router
+" React
+" Flux
+" RequireJS
+" Sugar.js
+" Jasmine
+" Chai
+" Handlebars
+" Ramda
+" Vue
+" d3
+
 let g:used_javascript_libs = 'jquery,'
 
+" Plug 'dNitro/vim-pug-complete', { 'for': ['jade', 'pug'] }
+" Plug 'digitaltoad/vim-pug', { 'for': ['jade', 'pug'] }
+
 Plug 'Glench/Vim-Jinja2-Syntax'
+aug TemplateFiletypes
+	au!
+	au BufNew,BufNewFile *.twig,*.nunj setl ft=jinja 
+aug END
 
 " PHP:
 Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
