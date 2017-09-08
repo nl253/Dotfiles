@@ -2,70 +2,105 @@
 :tags: #TODO 
 :title: Items to do 
 
-		SHORT TERM
-@Task
-Learn git!
+			    SHORT TERM
 
-More specifically:
+( Node.js
 
-- [ ] revert
-- [ ] show
-- [ ] log (--grep, -G, -S)
-- [ ] checkout
-- [ ] reset
-- [ ] add
-- [ ] commit
-- [ ] rm
-- [ ] rebase
-- [ ] branch
-- [ ] remote
+@Orm
+MongoDB <http://mongoosejs.com/>
+SQL <http://docs.sequelizejs.com/>
 
-@Task
-Modify and add Pycharm templates and export settings afterwards!
+@Express
+Repo <https://github.com/expressjs/express>
+Mozilla's guide <https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs>
+API <https://expressjs.com/en/4x/api.html>
+
+Middleware
+
+- Tutorial <http://expressjs.com/en/guide/writing-middleware.htm0l>
+- Tutorial2 <http://expressjs.com/en/guide/using-middleware.html>
+- <http://expressjs.com/en/resources/middleware/body-parser.html>
+
+@Auth
+<http://passportjs.org/>
+
+@Mail
+<https://github.com/nodemailer/nodemailer>
+
+@Tutorial
+Recipe App Using Node.js & PostgreSQL
+<https://www.youtube.com/watch?v=ijSzX3S5Qco>
+
+@Mongo
+NodeJS MongoDB Tutorial
+<https://www.youtube.com/watch?v=Do_Hsb_Hs3c>
+
+
+( Python
 
 @Django
 Follow tutorial: <https://docs.djangoproject.com/en/1.11/intro/tutorial02/>
 
-@Fix
-Issue with <https://github.com/nl253/Documentation>
-
-@Task
-Learn PostgreSQL with Datagrip
-<https://www.khanacademy.org/computing/hour-of-code/hour-of-sql>
-<https://www.khanacademy.org/computing/computer-programming/sql>
-
 @Flask
 Tutorial <http://flask.pocoo.org/docs/0.12/tutorial/packaging/#tutorial-packaging>
 
-@Library
+@Orm
 SQLAlchemy <https://www.sqlalchemy.org/>
 
 @Library
 Lxml <http://lxml.de/>
 
-@Pandas
-<https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
+@Library
+Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
 
-@Tornado
-<file:http://www.tornadoweb.org/en/stable/>
 
-		MEDIUM TERM
-@Testing
-Tox <https://tox.readthedocs.io/en/latest/>
+		    MEDIUM TERM
 
-@Testing
-Coverage.py <https://coverage.readthedocs.io/en/coverage-4.4.1/config.html>
+( Node.js
 
-@Framework
-Tornado <file:http://www.tornadoweb.org/en/stable/>
-High performance, asynchronous, popular 14k start on GitHub.
+@Learn
+Web crawler <https://github.com/bda-research/node-crawler>
 
-		LONG TERM
+
+( General
+
+@Learn
+Learn git!
+
+More specifically:
+
+- [ ] show
+- [ ] log (--grep, -G, -S)
+- [ ] rebase
+
+@Learn
+Static site generator: <https://github.com/gohugoio/hugo>
+
+@Learn
+Learn PostgreSQL with Datagrip
+<https://www.khanacademy.org/computing/hour-of-code/hour-of-sql>
+<https://www.khanacademy.org/computing/computer-programming/sql>
+
+
+		    LONG TERM
+
+( Python
+
 @Server
 Gunicorn - wsgi server <http://docs.gunicorn.org/en/stable/settings.html>
 
-@Future
+@Learn
 Celery - task queue library <https://github.com/celery/celery/>
 Design Patterns <http://www.blackwasp.co.uk/gofpatterns.aspx>
+
+( NLP
+
+@Node
+<https://github.com/nlp-compromise/compromise>
+
+@Python
+<https://github.com/explosion/spaCy>
+<https://github.com/nltk/nltk>
+<https://github.com/RaRe-Technologies/gensim>
 
 --- vim: conceallevel=3 

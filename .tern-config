@@ -2,9 +2,5 @@
     "plugins": {
         "es_modules": {}
     },
-    "libs": [
-        "ecma5",
-        "ecma6"
-    ],
     "ecmaVersion": 6
 }

@@ -1,4 +1,3 @@
-
 " vim: foldlevel=0 foldmethod=marker nowrap
 
 " PLUG:
@@ -23,18 +22,32 @@ else
     call plug#begin('~/.vim/plugged')
 endif
 
-" VARIABLES:
-if !exists('g:MARKUP')
-    " MARKUP languages you actively use
-    let g:MARKUP = ['markdown', 'rst', 'vorg']
-endif
+" Add to $PATH bin dirs for package managers in case they aren't in $PATH already
+for i in ['~/node_modules/.bin', '~/.gem/ruby/*/bin'] + split(expand('~/{.fzf,.cargo,.local}/bin'))
+	let bin_dir = expand(i)
+	if !empty(bin_dir) && !($PATH =~ bin_dir)
+		let $PATH = expand(i).':'.$PATH
+	endif
+endfor
 
+
+" VARIABLES:
+
+" MARKUP languages you actively use
+if !exists('g:MARKUP') | let g:MARKUP = ['markdown', 'rst', 'vorg'] | endif
+
+" PROGRAMMING LANGUAGES you code in 
 if !exists('g:PROGRAMMING')
-    " PROGRAMMING LANGUAGES you code in 
-    let g:PROGRAMMING = [
-				\ 'xhtml', 'html', 'css', 
-				\ 'javascript', 'rust', 'python', 
-				\ 'php', 'sql', 'sh', 'zsh']
+    let g:PROGRAMMING = ['xhtml', 
+					   \ 'html', 
+					   \ 'css', 
+					   \ 'javascript', 
+					   \ 'rust', 
+					   \ 'python', 
+					   \ 'php', 
+					   \ 'sql', 
+					   \ 'sh', 
+					   \ 'zsh']
 endif
 
 " Place Plugins Here:
@@ -42,8 +55,11 @@ endif
 
 " GENERAL:
 "
-for i in ['https://github.com/vim-scripts/SyntaxAttr.vim', 'scrooloose/nerdcommenter', 
-			\ 'editorconfig/editorconfig-vim', 'konfekt/fastfold', 'wellle/targets.vim'] 
+for i in ['https://github.com/vim-scripts/SyntaxAttr.vim', 
+	    \ 'scrooloose/nerdcommenter', 
+	  	\ 'editorconfig/editorconfig-vim', 
+	   	\ 'konfekt/fastfold', 
+	   	\ 'wellle/targets.vim'] 
 	Plug i
 endfor
 
@@ -60,10 +76,16 @@ Plug 'junegunn/gv.vim', {'on': ['GV']}
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
 
-Plug 'tpope/vim-eunuch', {'on' : [
-			\ 'Move', 'Remove', 'Find', 
-            \ 'Mkdir', 'Wall', 'SudoEdit', 'Chmod',
-            \ 'SudoWrite', 'Unlink', 'Rename']}
+Plug 'tpope/vim-eunuch', {'on' : ['Move', 
+								\ 'Remove', 
+								\ 'Find', 
+								\ 'Mkdir', 
+								\ 'Wall', 
+								\ 'SudoEdit', 
+								\ 'Chmod',
+								\ 'SudoWrite', 
+								\ 'Unlink', 
+								\ 'Rename']}
 
 let g:fzf_layout = {'up': '~40%'}
 
@@ -75,21 +97,66 @@ Plug 'rust-lang/rust.vim', {'for': 'rust'}
 
 " PYTHON PLUGINS:
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
-    Plug 'SirVer/ultisnips'
-    let g:UltiSnipsEditSplit = 'vertical'
-    let g:UltiSnipsSnippetDirectories = [g:VIMDIR.'snips']
-    let g:UltiSnipsEnableSnipMate = 0
-    let g:snips_author = "nl253"
-    let g:snips_email = "nl253@kent.ac.uk"
-    let g:snips_github = "https://github.com/nl253"
-    Plug 'maralla/completor.vim'
-    let g:completor_min_chars = 1
-	let g:completor_whitelist = ['python', 'rust', 'yaml',
-				\ 'javascript', 'css', 'rst', 'html', 'jinja', 'scss.css',
-				\ 'gitcommit', 'markdown',  'scss', 'php']
-    let g:completor_python_binary = 'python3'
-	let g:completor_node_binary = '/bin/node'
-    let g:completor_racer_binary = expand('~/.cargo/bin/racer')
+	Plug 'SirVer/ultisnips'
+	let g:UltiSnipsEditSplit = 'vertical'
+	let g:UltiSnipsSnippetDirectories = [g:VIMDIR.'snips']
+	let g:UltiSnipsEnableSnipMate = 0
+	let g:snips_author = "nl253"
+	let g:snips_email = "nl253@kent.ac.uk"
+	let g:snips_github = "https://github.com/nl253"
+
+	if executable("npm") 
+		for i in ['tern', 
+				\ 'scss-lint', 
+				\ 'js-beautify', 
+				\ 'eslint', 
+				\ 'textlint', 
+				\ 'write-good']
+			try
+				if !executable(i) 
+					echo system('cd && npm i '.i) 
+				endif
+			catch /.*/
+				break
+			endtry
+		endfor
+	endif
+
+	if executable("cargo") && !executable("racer")
+		echo system('cd && cargo install racer')
+	endif
+
+	if executable('pip')
+		let pip_packages = systemlist("pip list --format legacy \| grep -Eo '^\\w+'")
+		for i in ['jedi', 'mypy', 'pyflakes', 'vulture', 'isort', 'pylint']
+			try
+				if index(pip_packages, i) < 0
+					echo system('cd && pip install --user --pre '.i)
+				endif
+			catch /.*/
+				break
+			endtry
+		endfor
+	endif
+
+	Plug 'maralla/completor.vim'
+	let g:completor_min_chars = 1
+	let g:completor_whitelist = ['python', 
+							   \ 'rust', 
+							   \ 'yaml', 
+							   \ 'javascript',
+							   \ 'css', 
+							   \ 'rst', 
+							   \ 'html', 
+							   \ 'jinja', 
+							   \ 'scss.css',
+							   \ 'gitcommit', 
+							   \ 'markdown',  
+							   \ 'scss', 
+							   \ 'php']
+	let g:completor_python_binary = '/usr/bin/env python3'
+	let g:completor_node_binary = '/usr/bin/env node --harmony --expose-http2 --harmony_typeof'
+	let g:completor_racer_binary = expand('~/.cargo/bin/racer')
 	let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
 	let g:completor_scss_omni_trigger = g:completor_css_omni_trigger
 	let g:completor_rust_omni_trigger = 
@@ -98,23 +165,23 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 	let g:completor_html_omni_trigger = '<[a-z]{,6}|\S+ [-a-z]{2,}'
 	let g:completor_jade_omni_trigger = '\w{2,}'
-	let g:completor_javascript_omni_trigger = '\w{2,}'
+	let g:completor_javascript_omni_trigger = '\.\w*| (=>|>|<|=) '
 	let g:completor_pug_omni_trigger = g:completor_jade_omni_trigger
 	let g:completor_jinja_omni_trigger = g:completor_html_omni_trigger 
 	let g:completor_htmldjango_omni_trigger = g:completor_html_omni_trigger 
 	let g:completor_gitcommit_omni_trigger = '\w{2,}'
 	let g:completor_yaml_omni_trigger = '\w{5,}'
-    Plug 'davidhalter/jedi-vim', {'for': 'python'}
-    let g:jedi#force_py_version = 3
-    let g:jedi#goto_command = "<C-]>"
-    let g:jedi#goto_assignments_command = ",a"
-    let g:jedi#goto_definitions_command = ",d"
-    let g:jedi#documentation_command = ",D"
-    let g:jedi#usages_command = ",u"
-    let g:jedi#rename_command = ",r"
-    let g:jedi#use_splits_not_buffers = "right"
-    let g:jedi#show_call_signatures_delay = 200
-    Plug 'tmhedberg/SimpylFold', {'for': 'python'}
+	Plug 'davidhalter/jedi-vim', {'for': 'python'}
+	let g:jedi#force_py_version = 3
+	let g:jedi#goto_command = "<C-]>"
+	let g:jedi#goto_assignments_command = ",a"
+	let g:jedi#goto_definitions_command = ",d"
+	let g:jedi#documentation_command = ",D"
+	let g:jedi#usages_command = ",u"
+	let g:jedi#rename_command = ",r"
+	let g:jedi#use_splits_not_buffers = "right"
+	let g:jedi#show_call_signatures_delay = 200
+	Plug 'tmhedberg/SimpylFold', {'for': 'python'}
 	Plug 'racer-rust/vim-racer', {'for': 'rust'}
 	let g:racer_cmd = expand("~/.cargo/bin/racer")
 	let g:racer_experimental_completer = 1
@@ -129,10 +196,12 @@ if has('patch8') || has('nvim')
 	let g:neomake_scss_enabled_makers = ['scss-lint']
 	let g:neomake_css_enabled_makers = ['stylelint']
 	let g:neomake_javascript_enabled_makers = ['eslint']
-	let g:neomake_python_enabled_makers = [
-				\ 'mypy', 'flake8', 
-				\ 'vulture',  'pylint',
-				\ 'pyflakes', 'pylama']
+	let g:neomake_python_enabled_makers = ['mypy', 
+										 \ 'flake8', 
+ 										 \ 'vulture',  
+										 \ 'pylint',
+										 \ 'pyflakes', 
+										 \ 'pylama']
 else
 	Plug 'vim-syntastic/syntastic'
 endif
@@ -176,7 +245,14 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 " WEB DEV:
 
 for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
-	Plug i, {'for': ['xml', 'html', 'xhtml', 'css', 'php', 'htmldjango', 'jinja']}
+
+	Plug i, {'for': ['xml', 
+				   \ 'html', 
+				   \ 'xhtml', 
+				   \ 'css', 
+				   \ 'php', 
+				   \ 'htmldjango', 
+				   \ 'jinja']}
 endfor
 
 Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim'
@@ -226,11 +302,8 @@ Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 
 " MY PLUGINS:
 " ==========
-for plugin in ['fabulous', 'vim-saner', 'vim-markup', 'vim-programming', 
-			\ 'vim-fzf-extensions', 'vim-scratchpads', 'vim-templates', 
-			\ 'fabulous', 'vim-webdev', 'git-ready', 'vorg-mode'] 
-
-	if !isdirectory(expand('~').'/Projects/Vim/'.plugin)
+for plugin in ['fabulous', 'fabulous', 'git-ready', 'vorg-mode'] + split(expand('vim-{saner,markup,programming,scratchpads,fzf-extensions,webdev,templates}'))
+	if !isdirectory(expand('~/Projects/Vim/'.plugin))
 		Plug 'nl253/'.plugin
 	else
 		Plug '~/Projects/Vim/'.plugin
