@@ -4,6 +4,7 @@
     "target": "ES2017",
     "removeComments": true,
     "noImplicitAny": true,
+	"jsx": "react",
     "types" : ["node", "express"],
     "moduleResolution": "node",
     "sourceMap": true,
