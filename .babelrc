@@ -1,0 +1,6 @@
+{
+  "presets": ["es2015", "es2016", "es2017"],
+  "minified": true,
+  "compact": "true",
+  "ignore": ["node_modules/**", "*.ts"]
+}

@@ -1,0 +1,203 @@
+{
+  "{\"filename\":\"/home/norbert/Projects/Javascript/Node/src/db.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false,\"spec\":false}],[[],null],[[],null],[[],{\"spec\":false}],[[],null],[[],{\"loose\":false}],[[],null],[[],null],[[],null],[[],{\"loose\":false}],[[],{\"loose\":false}],[[],null],[[],null],[[],null],[[],{\"loose\":false}],[[],null],[[],{\"loose\":false}],[[],null],[[],null],[[],{\"loose\":false}],[[],{\"async\":false,\"asyncGenerators\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/home/norbert/Projects/Javascript/Node/src\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [],
+      "marked": [],
+      "modules": {
+        "imports": [
+          {
+            "source": "sequelize",
+            "imported": [
+              "Sequelize"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "Sequelize",
+                "local": "Sequelize"
+              }
+            ]
+          }
+        ],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/home/norbert/Projects/Javascript/Node/src/db.js",
+      "filenameRelative": "/home/norbert/Projects/Javascript/Node/src/db.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false,
+            "spec": false
+          }
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          {
+            "spec": false
+          }
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          {
+            "loose": false
+          }
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          {
+            "loose": false
+          }
+        ],
+        [
+          [],
+          {
+            "loose": false
+          }
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          {
+            "loose": false
+          }
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          {
+            "loose": false
+          }
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          null
+        ],
+        [
+          [],
+          {
+            "loose": false
+          }
+        ],
+        [
+          [],
+          {
+            "async": false,
+            "asyncGenerators": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "db.js",
+      "sourceFileName": "db.js",
+      "sourceRoot": "/home/norbert/Projects/Javascript/Node/src",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/home/norbert/Projects/Javascript/Node/src",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "db"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nvar _sequelize = require('sequelize');\n\nrequire('babel-core/register');\nrequire('babel-polyfill');\n\nvar context = {};\n\nvar database = new _sequelize.Sequelize('postgres://postgres:regix@localhost/express_test');\n\nfunction test_connection(database) {\n    database.authenticate().then(function () {\n        return console.log('Connection has been established successfully.');\n    }).catch(function (err) {\n        return console.error('Unable to connect to the database:', err);\n    });\n}\n\ntest_connection(database);\n\nvar User = database.define('user', {\n    username: {\n        type: _sequelize.Sequelize.STRING\n    },\n    password: {\n        type: _sequelize.Sequelize.STRING\n    },\n    email: {\n        type: _sequelize.Sequelize.STRING\n    }\n});\n\n// force: true will drop the table if it already exists\n// Table created\nUser.sync().then(function () {\n    return User.create({\n        username: 'john22',\n        password: 'butter22',\n        email: 'jsmith@gmail.com'\n    });\n});\n\nUser.findAll().then(function (x) {\n    context['user'] = user;\n});\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImRiLmpzIl0sIm5hbWVzIjpbInJlcXVpcmUiLCJjb250ZXh0IiwiZGF0YWJhc2UiLCJ0ZXN0X2Nvbm5lY3Rpb24iLCJhdXRoZW50aWNhdGUiLCJ0aGVuIiwiY29uc29sZSIsImxvZyIsImNhdGNoIiwiZXJyb3IiLCJlcnIiLCJVc2VyIiwiZGVmaW5lIiwidXNlcm5hbWUiLCJ0eXBlIiwiU1RSSU5HIiwicGFzc3dvcmQiLCJlbWFpbCIsInN5bmMiLCJjcmVhdGUiLCJmaW5kQWxsIiwidXNlciJdLCJtYXBwaW5ncyI6Ijs7QUFNQTs7QUFMQUEsUUFBUSxxQkFBUjtBQUNBQSxRQUFRLGdCQUFSOztBQUVBLElBQUlDLFVBQVUsRUFBZDs7QUFNQSxJQUFNQyxXQUFXLHlCQUFjLGtEQUFkLENBQWpCOztBQUVBLFNBQVNDLGVBQVQsQ0FBeUJELFFBQXpCLEVBQW1DO0FBQy9CQSxhQUFTRSxZQUFULEdBQ0tDLElBREwsQ0FDVTtBQUFBLGVBQU1DLFFBQVFDLEdBQVIsQ0FBWSwrQ0FBWixDQUFOO0FBQUEsS0FEVixFQUVLQyxLQUZMLENBRVc7QUFBQSxlQUFPRixRQUFRRyxLQUFSLENBQWMsb0NBQWQsRUFBb0RDLEdBQXBELENBQVA7QUFBQSxLQUZYO0FBR0g7O0FBRURQLGdCQUFnQkQsUUFBaEI7O0FBRUEsSUFBTVMsT0FBT1QsU0FBU1UsTUFBVCxDQUFnQixNQUFoQixFQUF3QjtBQUNqQ0MsY0FBVTtBQUNOQyxjQUFNLHFCQUFVQztBQURWLEtBRHVCO0FBSWpDQyxjQUFVO0FBQ05GLGNBQU0scUJBQVVDO0FBRFYsS0FKdUI7QUFPakNFLFdBQU87QUFDSEgsY0FBTSxxQkFBVUM7QUFEYjtBQVAwQixDQUF4QixDQUFiOztBQVlBO0FBQ0E7QUFDQUosS0FBS08sSUFBTCxHQUFZYixJQUFaLENBQWlCO0FBQUEsV0FBTU0sS0FBS1EsTUFBTCxDQUFZO0FBQy9CTixrQkFBVSxRQURxQjtBQUUvQkcsa0JBQVUsVUFGcUI7QUFHL0JDLGVBQU87QUFId0IsS0FBWixDQUFOO0FBQUEsQ0FBakI7O0FBTUFOLEtBQUtTLE9BQUwsR0FBZWYsSUFBZixDQUFvQixhQUFLO0FBQ3JCSixZQUFRLE1BQVIsSUFBa0JvQixJQUFsQjtBQUNILENBRkQiLCJmaWxlIjoiZGIuanMiLCJzb3VyY2VSb290IjoiL2hvbWUvbm9yYmVydC9Qcm9qZWN0cy9KYXZhc2NyaXB0L05vZGUvc3JjIiwic291cmNlc0NvbnRlbnQiOlsiXG5yZXF1aXJlKCdiYWJlbC1jb3JlL3JlZ2lzdGVyJyk7XG5yZXF1aXJlKCdiYWJlbC1wb2x5ZmlsbCcpO1xuXG52YXIgY29udGV4dCA9IHt9XG5cbmltcG9ydCB7XG4gICAgU2VxdWVsaXplXG59IGZyb20gXCJzZXF1ZWxpemVcIlxuXG5jb25zdCBkYXRhYmFzZSA9IG5ldyBTZXF1ZWxpemUoJ3Bvc3RncmVzOi8vcG9zdGdyZXM6cmVnaXhAbG9jYWxob3N0L2V4cHJlc3NfdGVzdCcpO1xuXG5mdW5jdGlvbiB0ZXN0X2Nvbm5lY3Rpb24oZGF0YWJhc2UpIHtcbiAgICBkYXRhYmFzZS5hdXRoZW50aWNhdGUoKVxuICAgICAgICAudGhlbigoKSA9PiBjb25zb2xlLmxvZygnQ29ubmVjdGlvbiBoYXMgYmVlbiBlc3RhYmxpc2hlZCBzdWNjZXNzZnVsbHkuJykpXG4gICAgICAgIC5jYXRjaChlcnIgPT4gY29uc29sZS5lcnJvcignVW5hYmxlIHRvIGNvbm5lY3QgdG8gdGhlIGRhdGFiYXNlOicsIGVycikpXG59XG5cbnRlc3RfY29ubmVjdGlvbihkYXRhYmFzZSlcblxuY29uc3QgVXNlciA9IGRhdGFiYXNlLmRlZmluZSgndXNlcicsIHtcbiAgICB1c2VybmFtZToge1xuICAgICAgICB0eXBlOiBTZXF1ZWxpemUuU1RSSU5HXG4gICAgfSxcbiAgICBwYXNzd29yZDoge1xuICAgICAgICB0eXBlOiBTZXF1ZWxpemUuU1RSSU5HXG4gICAgfSxcbiAgICBlbWFpbDoge1xuICAgICAgICB0eXBlOiBTZXF1ZWxpemUuU1RSSU5HXG4gICAgfVxufSk7XG5cbi8vIGZvcmNlOiB0cnVlIHdpbGwgZHJvcCB0aGUgdGFibGUgaWYgaXQgYWxyZWFkeSBleGlzdHNcbi8vIFRhYmxlIGNyZWF0ZWRcblVzZXIuc3luYygpLnRoZW4oKCkgPT4gVXNlci5jcmVhdGUoe1xuICAgIHVzZXJuYW1lOiAnam9objIyJyxcbiAgICBwYXNzd29yZDogJ2J1dHRlcjIyJyxcbiAgICBlbWFpbDogJ2pzbWl0aEBnbWFpbC5jb20nXG59KSlcblxuVXNlci5maW5kQWxsKCkudGhlbih4ID0+IHtcbiAgICBjb250ZXh0Wyd1c2VyJ10gPSB1c2VyXG59KSJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "db.js"
+      ],
+      "names": [
+        "require",
+        "context",
+        "database",
+        "test_connection",
+        "authenticate",
+        "then",
+        "console",
+        "log",
+        "catch",
+        "error",
+        "err",
+        "User",
+        "define",
+        "username",
+        "type",
+        "STRING",
+        "password",
+        "email",
+        "sync",
+        "create",
+        "findAll",
+        "user"
+      ],
+      "mappings": ";;AAMA;;AALAA,QAAQ,qBAAR;AACAA,QAAQ,gBAAR;;AAEA,IAAIC,UAAU,EAAd;;AAMA,IAAMC,WAAW,yBAAc,kDAAd,CAAjB;;AAEA,SAASC,eAAT,CAAyBD,QAAzB,EAAmC;AAC/BA,aAASE,YAAT,GACKC,IADL,CACU;AAAA,eAAMC,QAAQC,GAAR,CAAY,+CAAZ,CAAN;AAAA,KADV,EAEKC,KAFL,CAEW;AAAA,eAAOF,QAAQG,KAAR,CAAc,oCAAd,EAAoDC,GAApD,CAAP;AAAA,KAFX;AAGH;;AAEDP,gBAAgBD,QAAhB;;AAEA,IAAMS,OAAOT,SAASU,MAAT,CAAgB,MAAhB,EAAwB;AACjCC,cAAU;AACNC,cAAM,qBAAUC;AADV,KADuB;AAIjCC,cAAU;AACNF,cAAM,qBAAUC;AADV,KAJuB;AAOjCE,WAAO;AACHH,cAAM,qBAAUC;AADb;AAP0B,CAAxB,CAAb;;AAYA;AACA;AACAJ,KAAKO,IAAL,GAAYb,IAAZ,CAAiB;AAAA,WAAMM,KAAKQ,MAAL,CAAY;AAC/BN,kBAAU,QADqB;AAE/BG,kBAAU,UAFqB;AAG/BC,eAAO;AAHwB,KAAZ,CAAN;AAAA,CAAjB;;AAMAN,KAAKS,OAAL,GAAef,IAAf,CAAoB,aAAK;AACrBJ,YAAQ,MAAR,IAAkBoB,IAAlB;AACH,CAFD",
+      "file": "db.js",
+      "sourceRoot": "/home/norbert/Projects/Javascript/Node/src",
+      "sourcesContent": [
+        "\nrequire('babel-core/register');\nrequire('babel-polyfill');\n\nvar context = {}\n\nimport {\n    Sequelize\n} from \"sequelize\"\n\nconst database = new Sequelize('postgres://postgres:regix@localhost/express_test');\n\nfunction test_connection(database) {\n    database.authenticate()\n        .then(() => console.log('Connection has been established successfully.'))\n        .catch(err => console.error('Unable to connect to the database:', err))\n}\n\ntest_connection(database)\n\nconst User = database.define('user', {\n    username: {\n        type: Sequelize.STRING\n    },\n    password: {\n        type: Sequelize.STRING\n    },\n    email: {\n        type: Sequelize.STRING\n    }\n});\n\n// force: true will drop the table if it already exists\n// Table created\nUser.sync().then(() => User.create({\n    username: 'john22',\n    password: 'butter22',\n    email: 'jsmith@gmail.com'\n}))\n\nUser.findAll().then(x => {\n    context['user'] = user\n})"
+      ]
+    },
+    "mtime": 1504722297691
+  }
+}

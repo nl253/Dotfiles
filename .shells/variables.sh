@@ -16,6 +16,8 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
+export TERMINAL=gnome-terminal
+
 # Set Xterm/screen/Tmux title with only a short hostname
 export SHORT_HOSTNAME=$(hostname -s)
 

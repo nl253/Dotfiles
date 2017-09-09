@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2017",
+    "removeComments": true,
+    "noImplicitAny": true,
+    "types" : ["node", "express"],
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "baseUrl": "."
+  },
+  "include": ["src/**"]
+}
