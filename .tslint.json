@@ -1,13 +1,12 @@
 {
   "lintOptions": {"typeCheck": true},
-  "extends": "tslint:recommended",
   "rules": {
     "cyclomatic-complexity": true,
     "newline-before-return": false,
     "no-parameter-properties": false,
     "no-parameter-reassignment": false,
     "no-unused-variable": false,
-    "no-var-requires": true,
+    "no-var-requires": false,
     "no-irregular-whitespace": true,
     "no-trailing-whitespace": true,
     "arrow-return-shorthand": true,
@@ -64,7 +63,7 @@
       "static-before-instance",
       "variables-before-functions"
     ],
-    "no-console": {"options": ["log"]},
+    "no-console": false,
     "no-switch-case-fall-through": true,
     "strict-boolean-expressions": [true, "allow-boolean-or-undefined"],
     "switch-default": false,

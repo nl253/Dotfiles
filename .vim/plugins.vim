@@ -105,39 +105,47 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:snips_email = "nl253@kent.ac.uk"
 	let g:snips_github = "https://github.com/nl253"
 
-	if executable("npm") 
-		for i in ['tern', 
-				\ 'scss-lint', 
-				\ 'js-beautify', 
-				\ 'eslint', 
-				\ 'textlint', 
-				\ 'write-good']
-			try
-				if !executable(i) 
-					echo system('cd && npm i '.i) 
-				endif
-			catch /.*/
-				break
-			endtry
-		endfor
-	endif
+	function! SyncPackages()
 
-	if executable("cargo") && !executable("racer")
-		echo system('cd && cargo install racer')
-	endif
+		if executable("yarn") 
 
-	if executable('pip')
-		let pip_packages = systemlist("pip list --format legacy \| grep -Eo '^\\w+'")
-		for i in ['jedi', 'mypy', 'pyflakes', 'vulture', 'isort', 'pylint']
-			try
-				if index(pip_packages, i) < 0
-					echo system('cd && pip install --user --pre '.i)
-				endif
-			catch /.*/
-				break
-			endtry
-		endfor
-	endif
+			let yarn_packages = system('yarn global list 2>/dev/null')
+
+			for i in ['tern', 
+						\ 'scss-lint', 
+						\ 'js-beautify', 
+						\ 'eslint', 
+						\ 'textlint', 
+						\ 'write-good']
+				try
+					if !(yarn_packages =~ $i)
+						echo system('cd && yarn global add '.i) 
+					endif
+				catch /.*/
+					break
+				endtry
+			endfor
+		endif
+
+		if executable("cargo") && !executable("racer")
+			echo system('cd && cargo install racer')
+		endif
+
+		if executable('pip')
+			let pip_packages = systemlist("pip list --format legacy \| grep -Eo '^\\w+'")
+			for i in ['jedi', 'mypy', 'pyflakes', 'vulture', 'isort', 'pylint']
+				try
+					if index(pip_packages, i) < 0
+						echo system('cd && pip install --user --pre '.i)
+					endif
+				catch /.*/
+					break
+				endtry
+			endfor
+		endif
+	endfunction
+
+	command! SyncPackages call SyncPackages()
 
 	Plug 'maralla/completor.vim'
 	let g:completor_min_chars = 1
@@ -285,7 +293,8 @@ endfor
 " - Vue
 " - d3
 
-let g:used_javascript_libs = 'jquery,'
+let g:used_javascript_libs = 'jquery,react,'
+au! BufRead,BufNewFile *.ts,*.tsx setl ft=javascript
 
 " Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
 " Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
