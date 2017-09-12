@@ -247,7 +247,7 @@ aug END
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 
-let g:markdown_fenced_languages = ['vim', 'sh', 'python', 'javascript', 'rust']
+let g:markdown_fenced_languages = ['sh', 'python', 'javascript', 'css', 'scss']
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
@@ -301,10 +301,6 @@ au! BufRead,BufNewFile *.ts,*.tsx setl ft=javascript
 
 Plug 'Glench/Vim-Jinja2-Syntax'
 
-aug TemplateFiletypes
-	au!
-	au BufNew,BufNewFile *.twig,*.nunj setl ft=jinja 
-aug END
 
 " PHP:
 Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}

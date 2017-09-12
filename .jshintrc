@@ -1,14 +1,18 @@
 {
-	"undef": true,
-	"nonew": true,
-	"esversion": 6,
-	"maxstatements": 50,
-	"maxparams": 5,
-	"maxdepth": 3,
-	"evil": true,
-	"devel": true,
-	"unused": true,
-	"globals": {
-		"MY_GLOBAL": true
-	}
+  "devel": true,
+  "esversion": 7,
+  "evil": true,
+  "maxdepth": 3,
+  "maxparams": 5,
+  "maxstatements": 50,
+  "nonew": true,
+  "undef": true,
+  "unused": true,
+  "freeze": true,
+  "node": true,
+  "typed": true,
+  "jquery": true,
+  "browser": true,
+  "asi": true,
+  "mocha": true
 }
