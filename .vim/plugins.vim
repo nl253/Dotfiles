@@ -272,6 +272,8 @@ for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6', 'othree/javascript-libr
 	Plug i, {'for': ['javascript']}
 endfor
 
+Plug 'elzr/vim-json', {'for': 'json'}
+
 " Libraries:
 " ---------
 " - jQuery

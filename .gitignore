@@ -307,3 +307,27 @@ xiki-project/
 xiki/
 .config/discord/
 .thunderbird/
+.config/yarn/global/package.json
+.config/yarn/global/yarn.lock
+.standard-cache/.cache_8wd09f
+.standard-cache/.cache_9dfmba
+.v8flags.6.0.286.52.3095dbfcb9273218857172b1e75e7cd5.json
+.yarn/bin/create-react-app
+.yarn/bin/css-beautify
+.yarn/bin/eslint
+.yarn/bin/gitbook
+.yarn/bin/heroku
+.yarn/bin/html-beautify
+.yarn/bin/js-beautify
+.yarn/bin/tern
+.yarn/bin/textlint
+.yarn/bin/webpack
+.yarn/bin/write-good
+.yarn/bin/writegood
+.yarn/bin/yo
+.yarn/bin/yo-complete
+Empty Bash
+Empty Desktop File.desktop
+Empty File
+Readme
+yarn.lock
