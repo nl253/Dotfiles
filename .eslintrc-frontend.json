@@ -9,6 +9,7 @@
 		"babel",
 		"optimize-regex",
 		"json",
+		"html",
 		"fp",
 		"filenames"
 	],
@@ -33,6 +34,10 @@
 		"ecmaFeatures": { "jsx": true, "impliedStrict": true },
 		"codeFrame": false
 
+	},
+	"settings": {
+		"html/html-extensions": [".html", ".xhtml", ".twig", ".nunj", "handlebars", ".hbs"],
+        "html/report-bad-indent": 1
 	},
 	"rules": {
 		"arrow-spacing": 1,

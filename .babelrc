@@ -1,6 +1,16 @@
 {
-  "presets": ["es2015", "es2016", "es2017"],
+  "presets": [
+    ["env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
   "minified": true,
-  "compact": "true",
+  "compact": true,
+  "sourceMaps": true,
+  "comments": false,
   "ignore": ["node_modules/**", "*.ts"]
 }

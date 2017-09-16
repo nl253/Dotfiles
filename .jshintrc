@@ -1,6 +1,6 @@
 {
   "devel": true,
-  "esversion": 7,
+  "esversion": 6,
   "evil": true,
   "maxdepth": 3,
   "maxparams": 5,

@@ -1,4 +1,7 @@
 *.backup
+.WebStorm*
+.config/Electron/
+.electron/
 .config/chromium/
 .config/goa-1.0/
 .config/yad.conf

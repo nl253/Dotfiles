@@ -272,6 +272,8 @@ for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6', 'othree/javascript-libr
 	Plug i, {'for': ['javascript']}
 endfor
 
+let g:javascript_plugin_jsdoc = 1
+
 Plug 'elzr/vim-json', {'for': 'json'}
 
 " Libraries:
@@ -298,8 +300,8 @@ Plug 'elzr/vim-json', {'for': 'json'}
 let g:used_javascript_libs = 'jquery,react,'
 au! BufRead,BufNewFile *.ts,*.tsx setl ft=javascript
 
-" Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
-" Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
+Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
+Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
 
 Plug 'Glench/Vim-Jinja2-Syntax'
 
