@@ -1,0 +1,106 @@
+{
+  "name": "Backend",
+  "version": "0.0.1-alpha",
+  "private": true,
+  "scripts": {
+    "start": "node_modules/.bin/nodemon ./bin/www",
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "read": "cd docs && python3 -m http.server",
+    "babel": "node_modules/.bin/babel --out-dir dist $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "morgan": "~1.8.1",
+    "pg": "^7.3.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.8.3",
+    "serve-favicon": "~2.4.2",
+    "twig": "~0.10.3",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.0",
+    "eslint": "^4.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jest": "^21.0.2",
+    "eslint-plugin-jsdoc": "^3.1.2",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-optimize-regex": "^1.1.4",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "faker": "^4.1.0",
+    "jest": "^21.0.2",
+    "jsdoc": "^3.5.5",
+    "nodemon": "^1.12.0"
+  },
+  "jest": {
+    "verbose": true
+  },
+  "eslintConfig": {
+    "root": true,
+    "plugins": [
+      "node",
+      "jest",
+      "standard",
+      "promise",
+      "mongodb",
+      "optimize-regex",
+      "json"
+    ],
+    "extends": [
+      "standard",
+      "plugin:node/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:jest/recommended",
+      "plugin:promise/recommended"
+    ],
+    "parser": "babel-eslint",
+    "env": {
+      "jest/globals": true,
+      "es6": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "module",
+      "codeFrame": false,
+      "ecmaFeatures": {
+        "jsx": false,
+        "impliedStrict": true
+      }
+    }
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current",
+            "browsers": [
+              "last 4 versions"
+            ]
+          }
+        }
+      ]
+    ],
+    "minified": true,
+    "compact": true,
+    "sourceMaps": true,
+    "comments": false,
+    "ignore": [
+      "node_modules/**",
+      "*.ts"
+    ]
+  }
+}

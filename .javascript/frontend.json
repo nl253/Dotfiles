@@ -1,0 +1,83 @@
+{
+  "name": "Frontend",
+  "version": "0.0.1-alpha",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "read": "cd docs && python3 -m http.server",
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')"
+  },
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.13"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.0",
+    "eslint": "^4.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jest": "^21.0.2",
+    "eslint-plugin-jsdoc": "^3.1.2",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-optimize-regex": "^1.1.4",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "jest": "^21.0.2",
+    "jsdoc": "^3.5.5"
+  },
+  "jest": {
+    "verbose": true
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "unit-whitelist": ["em", "rem", "px"]
+    }
+  },
+  "eslintConfig": {
+    "root": true,
+    "plugins": [
+      "jest",
+      "compat",
+      "react",
+      "promise",
+      "optimize-regex",
+      "json",
+      "html"
+    ],
+    "extends": [
+      "standard",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:jest/recommended",
+      "plugin:react/recommended",
+      "plugin:fp/recommended",
+      "plugin:promise/recommended"
+    ],
+    "parser": "babel-eslint",
+    "env": {
+      "browser": true,
+      "es6": true,
+      "jest/globals": true,
+      "jquery": false
+    },
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true,
+        "impliedStrict": true
+      },
+      "codeFrame": false
+
+	},
+	"settings": {
+	  "html/html-extensions": [".html", ".xhtml", ".twig", ".nunj", "handlebars", ".hbs"],
+	  "html/report-bad-indent": 1
+	}
+  }
+}
