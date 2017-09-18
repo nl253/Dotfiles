@@ -1,7 +1,5 @@
-
-"set scrolloff=50
 let mapleader = " "
-set clipboard+=unnamed
+set clipboard=unnamedplus,unnamed
 set diffopt=filler,vertical
 set foldmethod=marker
 set gdefault
@@ -28,34 +26,7 @@ set wrap
 nnoremap g<c-o> <c-o>
 nnoremap g<c-i> <c-i>
 
-
 nnoremap J :action EditorJoinLines<CR>
-
-" enter newlines
-inoremap <CR> <C-o>:action EditorEnter<CR>
-
-" Leader
-nnoremap <CR> :action GotoImplementation<CR>
-nnoremap <Leader>c<Leader> :action CommentByLineComment<CR>
-nnoremap <C-w>s :action SplitHorizontally<CR>
-
-nnoremap gh :action FileChooser.GotoHome<CR>
-nnoremap gp :action FileChooser.GotoProject<CR>
-
-nnoremap cf :action FileChooser.NewFile<CR>
-nnoremap cd :action FileChooser.NewFolder<CR>
-nnoremap sh :action FileChooser.ShowHiddens<CR>
-nnoremap sp :action FileChooser.TogglePathShowing<CR>
-
-nnoremap <Leader>r :action Refactorings.QuickListPopupAction<CR>
-nnoremap <Leader>u :action ShowUsages<CR>
-
-nnoremap <Leader>f :action GotoFile<CR>
-nnoremap <Leader>t :action GotoSymbol<CR>
-nnoremap <Leader>s :action GotoSymbol<CR>
-nnoremap <Leader>C :action GotoClass<CR>
-
-nnoremap <Leader>h :action TypeHierarchy<CR>
 
 nnoremap <Esc> <Esc>:action HideSideWindows<CR>
 
@@ -70,14 +41,4 @@ nnoremap g, :action JumpToNextChange<CR>
 " just like in vim
 nnoremap <c-o> :action Back<CR>
 nnoremap <c-i> :action Forward<CR>
-
-" GIT
-nnoremap <Leader>ga :action Git.Add<CR>
-nnoremap <Leader>gb :action Git.Branches<CR>
-nnoremap <Leader>gs :action ChangesView.Commit<CR>
-nnoremap <Leader>gD :action ChangesView.Diff<CR>
-nnoremap <Leader>gl :action Vcs.Show.Log<CR>
-nnoremap <Leader>gp :action Vcs.Push<CR>
-nnoremap <Leader>gU :action Git.Uncommit<CR>
-nnoremap <Leader>gg :action Vcs.QuickListPopupAction<CR>
 " vim: noreadonly modifiable

@@ -8,7 +8,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "read": "cd docs && python3 -m http.server",
-    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')"
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "test": "node_modules/.bin/jest"
   },
   "dependencies": {
     "react": "^15.6.1",
@@ -30,6 +31,7 @@
     "jsdoc": "^3.5.5"
   },
   "jest": {
+    "rootDir": "dist",
     "verbose": true
   },
   "stylelint": {
@@ -51,6 +53,7 @@
     ],
     "extends": [
       "standard",
+      "standard-jsx",
       "plugin:import/errors",
       "plugin:import/warnings",
       "plugin:jest/recommended",
@@ -73,11 +76,17 @@
         "impliedStrict": true
       },
       "codeFrame": false
-
-	},
-	"settings": {
-	  "html/html-extensions": [".html", ".xhtml", ".twig", ".nunj", "handlebars", ".hbs"],
-	  "html/report-bad-indent": 1
-	}
+    },
+    "settings": {
+      "html/html-extensions": [
+        ".html",
+        ".xhtml",
+        ".twig",
+        ".nunj",
+        "handlebars",
+        ".hbs"
+      ],
+      "html/report-bad-indent": 1
+    }
   }
 }

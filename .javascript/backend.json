@@ -5,14 +5,18 @@
   "scripts": {
     "start": "node_modules/.bin/nodemon ./bin/www",
     "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "clean": "find -name tags -and -type f -exec rm {} +; rm -rf {docs,dist}/*",
+    "eslint": "node_modules/.bin/eslint $(find {src,public}/ -type f -and -name '*.js')",
     "read": "cd docs && python3 -m http.server",
-    "babel": "node_modules/.bin/babel --out-dir dist $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')"
+    "babel": "node_modules/.bin/babel --out-dir dist $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "test": "node_modules/.bin/jest"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.26.0",
+    "babel-polyfill": "*",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
@@ -27,6 +31,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.0.0",
+    "js-beautify": "^1.6.14",
     "eslint": "^4.6.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
@@ -43,7 +48,8 @@
     "nodemon": "^1.12.0"
   },
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "rootDir": "dist"
   },
   "eslintConfig": {
     "root": true,

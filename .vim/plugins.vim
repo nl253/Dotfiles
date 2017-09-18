@@ -112,11 +112,11 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 			let yarn_packages = system('yarn global list 2>/dev/null')
 
 			for i in ['tern', 
-						\ 'scss-lint', 
-						\ 'js-beautify', 
-						\ 'eslint', 
-						\ 'textlint', 
-						\ 'write-good']
+				    \ 'scss-lint', 
+				    \ 'js-beautify', 
+				  	\ 'eslint', 
+				   	\ 'textlint', 
+				   	\ 'write-good']
 				try
 					if !(yarn_packages =~ $i)
 						echo system('cd && yarn global add '.i) 
@@ -163,7 +163,6 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 							   \ 'scss', 
 							   \ 'php']
 	let g:completor_python_binary = '/usr/bin/env python3'
-	let g:completor_node_binary = '/usr/bin/env node --harmony --expose-http2 --harmony_typeof'
 	let g:completor_racer_binary = expand('~/.cargo/bin/racer')
 	let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
 	let g:completor_scss_omni_trigger = g:completor_css_omni_trigger
@@ -173,7 +172,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 	let g:completor_html_omni_trigger = '<[a-z]{,6}|\S+ [-a-z]{2,}'
 	let g:completor_jade_omni_trigger = '\w{2,}'
-	let g:completor_javascript_omni_trigger = '\.\w*| (=>|>|<|=) '
+	let g:completor_javascript_omni_trigger = '\.(\w+)?| (=>|>|<|=) '
 	let g:completor_pug_omni_trigger = g:completor_jade_omni_trigger
 	let g:completor_jinja_omni_trigger = g:completor_html_omni_trigger 
 	let g:completor_htmldjango_omni_trigger = g:completor_html_omni_trigger 
@@ -203,13 +202,21 @@ if has('patch8') || has('nvim')
 	let g:neomake_bash_enabled_makers = ['sh', 'shellcheck']
 	let g:neomake_scss_enabled_makers = ['scss-lint']
 	let g:neomake_css_enabled_makers = ['stylelint']
-	let g:neomake_javascript_enabled_makers = ['eslint']
+	let g:neomake_javascript_enabled_makers = ['eslint', 'standard']
+	let g:neomake_json_enabled_makers = ['eslint', 'standard']
 	let g:neomake_python_enabled_makers = ['mypy', 
 										 \ 'flake8', 
  										 \ 'vulture',  
 										 \ 'pylint',
 										 \ 'pyflakes', 
 										 \ 'pylama']
+
+	if executable('yarn')
+		for i in ['eslint', 'standard', 'stylelint']
+			execute 'let g:neomake_javascript_'.i.'_exe = "'.expand('~/.yarn/bin/'.i).'"'
+		endfor
+	endif
+	Plug 'benjie/neomake-local-eslint.vim'
 else
 	Plug 'vim-syntastic/syntastic'
 endif
@@ -247,7 +254,7 @@ aug END
 " MARKDOWN:
 Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
 
-let g:markdown_fenced_languages = ['sh', 'python', 'javascript', 'css', 'scss']
+let g:markdown_fenced_languages = ['sh', 'python', 'javascript', 'css', 'html']
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:

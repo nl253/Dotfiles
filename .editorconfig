@@ -14,17 +14,18 @@ trim_trailing_whitespace = false
 tab_width = 8
 indent_size = 4
 
-[*.{js,ts,jsx,json}]
+[*.{js,ts,jsx,json,css,md,yml}]
 trim_trailing_whitespace = true
 tab_width = 4
-indent_size = 4
+indent_size = 2
+indent_style = space
 
-[*.{rs}]
+[*.{rs,py}]
 trim_trailing_whitespace = true
 indent_size = 4
 indent_style = space
 
-[*.{md,wiki,rst}]
+[*.{wiki,rst}]
 trim_trailing_whitespace = true
 indent_size = 4
 indent_style = tab
@@ -40,25 +41,8 @@ trim_trailing_whitespace = false
 indent_size = 4
 indent_style = tab
 
-[*.py]
-indent_style = space
-indent_size = 4
-trim_trailing_whitespace = true
-max_line_length = 120
-
-# Tab indentation (no size specified)
 [Makefile]
 indent_style = tab
-
-# Matches the exact files either package.json or .travis.yml
-[{package.json,.travis.yml}]
-indent_style = space
-indent_size = 2
-
-# Indentation override for all JS under lib directory
-# [lib/**.js]
-# indent_style = space
-# indent_size = 2
 
 # Vim plugin supports the following EditorConfig properties:
 #	- indent_style

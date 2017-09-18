@@ -335,3 +335,6 @@ Empty File
 Readme
 yarn.lock
 .yarn/
+.PhpStorm20**
+.webpack-dashboard-cache/
+.standard-cache/
