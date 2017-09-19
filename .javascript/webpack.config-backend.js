@@ -91,8 +91,11 @@ const jsRule = {
       presets: [
         ['env', {
           targets: {
-            node: 'current',
-            browsers: ['last 4 versions']
+            node: '6.11.3',
+            chrome: 49,
+            safari: 9,
+            firefox: 52,
+            edge: 14
           }
         }]
       ],
