@@ -12,81 +12,21 @@
     "test": "node_modules/.bin/jest"
   },
   "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-scripts": "1.0.13"
+    "react": "*",
+    "react-dom": "*",
+    "react-scripts": "*"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.0",
-    "eslint": "^4.6.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jest": "^21.0.2",
-    "eslint-plugin-jsdoc": "^3.1.2",
-    "eslint-plugin-json": "^1.2.0",
-    "eslint-plugin-optimize-regex": "^1.1.4",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "faker": "^4.1.0",
+    "eslint-config-frontend-react": "https://github.com/nl253/eslint-config-frontend-react",
     "jest": "^21.0.2",
-    "jsdoc": "^3.5.5"
-  },
-  "jest": {
-    "rootDir": "dist",
-    "verbose": true
+    "js-beautify": "*",
+    "jsdoc": "*"
   },
   "stylelint": {
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "unit-whitelist": ["em", "rem", "px"]
-    }
+    "extends": "stylelint-config-standard"
   },
   "eslintConfig": {
-    "root": true,
-    "plugins": [
-      "jest",
-      "compat",
-      "react",
-      "promise",
-      "optimize-regex",
-      "json",
-      "html"
-    ],
-    "extends": [
-      "standard",
-      "standard-jsx",
-      "plugin:import/errors",
-      "plugin:import/warnings",
-      "plugin:jest/recommended",
-      "plugin:react/recommended",
-      "plugin:fp/recommended",
-      "plugin:promise/recommended"
-    ],
-    "parser": "babel-eslint",
-    "env": {
-      "browser": true,
-      "es6": true,
-      "jest/globals": true,
-      "jquery": false
-    },
-    "parserOptions": {
-      "ecmaVersion": 8,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "jsx": true,
-        "impliedStrict": true
-      },
-      "codeFrame": false
-    },
-    "settings": {
-      "html/html-extensions": [
-        ".html",
-        ".xhtml",
-        ".twig",
-        ".nunj",
-        "handlebars",
-        ".hbs"
-      ],
-      "html/report-bad-indent": 1
-    }
+    "extends": "eslint-config-frontend-react"
   }
 }

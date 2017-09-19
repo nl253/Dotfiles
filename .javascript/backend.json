@@ -3,110 +3,43 @@
   "version": "0.0.1-alpha",
   "private": true,
   "scripts": {
-    "start": "node_modules/.bin/nodemon ./bin/www",
-    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "build": "webpack",
     "clean": "find -name tags -and -type f -exec rm {} +; rm -rf {docs,dist}/*",
-    "eslint": "node_modules/.bin/eslint $(find {src,public}/ -type f -and -name '*.js')",
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "eslint": "node_modules/.bin/eslint $(find -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
     "read": "cd docs && python3 -m http.server",
-    "babel": "node_modules/.bin/babel --out-dir dist $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "start": "node --harmony dist/app.js",
     "test": "node_modules/.bin/jest"
   },
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-register": "^6.26.0",
+    "babel-cli": "*",
+    "babel-core": "*",
     "babel-polyfill": "*",
+    "babel-preset-env": "*",
+    "babel-register": "*",
     "body-parser": "~1.17.1",
-    "cookie-parser": "~1.4.3",
+    "express-session": "*",
+    "express-validator": "*",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "mongoose": "^4.11.11",
     "morgan": "~1.8.1",
-    "pg": "^7.3.0",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^4.8.3",
-    "serve-favicon": "~2.4.2",
-    "twig": "~0.10.3",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "validator": "*",
+    "webpack": "^3.6.0",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.0",
-    "js-beautify": "^1.6.14",
-    "eslint": "^4.6.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jest": "^21.0.2",
-    "eslint-plugin-jsdoc": "^3.1.2",
-    "eslint-plugin-json": "^1.2.0",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-optimize-regex": "^1.1.4",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
     "faker": "^4.1.0",
+    "eslint-config-backend-express": "https://github.com/nl253/eslint-config-backend-express",
     "jest": "^21.0.2",
-    "jsdoc": "^3.5.5",
-    "nodemon": "^1.12.0"
-  },
-  "jest": {
-    "verbose": true,
-    "rootDir": "dist"
+    "js-beautify": "*",
+    "jsdoc": "*",
+    "nodemon": "*",
+    "webpack-dev-server": "^2.8.2"
   },
   "eslintConfig": {
-    "root": true,
-    "plugins": [
-      "node",
-      "jest",
-      "standard",
-      "promise",
-      "mongodb",
-      "optimize-regex",
-      "json"
-    ],
-    "extends": [
-      "standard",
-      "plugin:node/recommended",
-      "plugin:import/errors",
-      "plugin:import/warnings",
-      "plugin:jest/recommended",
-      "plugin:promise/recommended"
-    ],
-    "parser": "babel-eslint",
-    "env": {
-      "jest/globals": true,
-      "es6": true,
-      "node": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 8,
-      "sourceType": "module",
-      "codeFrame": false,
-      "ecmaFeatures": {
-        "jsx": false,
-        "impliedStrict": true
-      }
-    }
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current",
-            "browsers": [
-              "last 4 versions"
-            ]
-          }
-        }
-      ]
-    ],
-    "minified": true,
-    "compact": true,
-    "sourceMaps": true,
-    "comments": false,
-    "ignore": [
-      "node_modules/**",
-      "*.ts"
-    ]
+    "extends": "eslint-config-backend-express"
   }
 }

@@ -212,11 +212,22 @@ if has('patch8') || has('nvim')
 										 \ 'pylama']
 
 	if executable('yarn')
-		for i in ['eslint', 'standard', 'stylelint']
-			execute 'let g:neomake_javascript_'.i.'_exe = "'.expand('~/.yarn/bin/'.i).'"'
+		for i in ['eslint', 'standard']
+			for j in ['javascript', 'json']
+				execute 'let g:neomake_'.j.'_'.i.'_exe = "'.expand('~/.yarn/bin/'.i).'"'
+			endfor
 		endfor
+		if executable('proselint')
+			for i in g:MARKUP
+				execute 'let g:neomake_'.i.'_enabled_makers = '.string(['proselint', 'writegood'])
+				execute 'let g:neomake_'.i.'_writegood_exe = "'.expand('~/.yarn/bin/write-good').'"'
+			endfor
+		endif
 	endif
-	Plug 'benjie/neomake-local-eslint.vim'
+
+	if executable('mdl')
+		let g:neomake_markdown_enabled_makers += ['mdl', 'markdownlint']
+	endif
 else
 	Plug 'vim-syntastic/syntastic'
 endif

@@ -1,11 +1,15 @@
  {
   "plugins": {
     "node": {},
-    "es_modules": {}
+    "es_modules": {},
+		"commonjs": {},
+		"node_resolve": {},
+		"modules": {},
+		"webpack": {}
   },
   "libs": [
+		"browser",
     "ecma5",
     "ecma6"
-  ],
-  "ecmaVersion": 6
+  ]
 }
