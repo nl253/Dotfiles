@@ -8,7 +8,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "read": "cd docs && python3 -m http.server",
-    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(git ls-files | grep -E '\.js$')",
     "test": "node_modules/.bin/jest"
   },
   "dependencies": {

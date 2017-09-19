@@ -5,8 +5,8 @@
   "scripts": {
     "build": "webpack",
     "clean": "find -name tags -and -type f -exec rm {} +; rm -rf {docs,dist}/*",
-    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(find src/ -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
-    "eslint": "node_modules/.bin/eslint $(find -type f -and -not -path '*node_modules/*' -and -not -path '*.git/*' -and -not -path '*docs/*' -and -not -path '*.idea/*' -and -not -path '*dist/*' -and -name '*.js')",
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(git ls-files | grep -E '\.js$')",
+    "eslint": "node_modules/.bin/eslint $(git ls-files | grep -E '\.js$')",
     "read": "cd docs && python3 -m http.server",
     "start": "node --harmony dist/app.js",
     "test": "node_modules/.bin/jest"
