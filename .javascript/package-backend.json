@@ -14,8 +14,10 @@
   "dependencies": {
     "@types/body-parser": "*",
     "@types/express-session": "*",
+    "@types/express-validator": "*",
     "@types/faker": "*",
     "@types/jest": "*",
+    "@types/morgan": "*",
     "@types/mongoose": "*",
     "@types/node": "*",
     "@types/passport": "*",
@@ -35,11 +37,12 @@
     "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "validator": "*",
-    "webpack": "^3.6.0",
-    "whatwg-fetch": "^2.0.3"
+    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "eslint-config-backend-express": "https://github.com/nl253/eslint-config-backend-express",
+    "tslint-config-standard": "*",
+    "tslint": "*",
     "faker": "^4.1.0",
     "jest": "^21.0.2",
     "js-beautify": "*",

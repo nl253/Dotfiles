@@ -1,22 +1,5 @@
 {
   "root": true,
-  "plugins": [
-    "jest",
-    "promise",
-    "optimize-regex",
-    "compat",
-    "html",
-    "json"
-  ],
-  "extends": [
-    "standard",
-    "plugin:node/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:jest/recommended",
-    "plugin:promise/recommended"
-  ],
-  "parser": "babel-eslint",
   "env": {
     "jest/globals": true,
     "es6": true,
