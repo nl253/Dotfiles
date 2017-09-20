@@ -18,7 +18,7 @@
       "always-prefix"
     ],
     "completed-docs": true,
-    "cyclomatic-complexity": true,
+    "cyclomatic-complexity": [true, 5],
     "encoding": true,
     "indent": [
       true,
@@ -55,6 +55,8 @@
     "no-empty-interface": true,
     "no-inferrable-types": false,
     "no-import-side-effect": false,
+    "import-spacing": false,
+    "space-within-parens": [true, 0],
     "no-irregular-whitespace": true,
     "no-magic-numbers": false,
     "no-object-literal-type-assertion": false,
