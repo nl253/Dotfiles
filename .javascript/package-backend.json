@@ -1,12 +1,15 @@
 {
   "name": "Backend",
+  "author": "nl253 <nl253@kent.ac.uk>",
   "version": "0.0.1-alpha",
+  "license": "MIT",
   "private": true,
+  "main": "dist/app.js",
   "scripts": {
-    "build": "webpack",
+    "build": "node_modules/.bin/webpack",
     "clean": "find -name tags -and -type f -exec rm {} +; rm -rf {docs,dist}/*",
-    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(git ls-files | grep -E '\\.js$')",
-    "eslint": "node_modules/.bin/eslint $(git ls-files | grep -E '\\.js$')",
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(git ls-files | grep -E '\\.[jt]s$')",
+    "tslint": "node_modules/.bin/tslint $(git ls-files | grep -E '\\.[tj]s$')",
     "read": "cd docs && python3 -m http.server",
     "start": "node --harmony dist/app.js",
     "test": "node_modules/.bin/jest"
@@ -26,13 +29,13 @@
     "babel-core": "*",
     "babel-polyfill": "*",
     "babel-preset-env": "*",
-    "babel-register": "*",
     "body-parser": "~1.17.1",
     "express": "~4.15.2",
     "express-session": "*",
     "express-validator": "*",
     "mongoose": "^4.11.11",
     "morgan": "~1.8.1",
+    "ts-loader": "*",
     "typescript": "*",
     "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22",
     "uglifyjs-webpack-plugin": "^0.4.6",
@@ -40,17 +43,13 @@
     "webpack": "^3.6.0"
   },
   "devDependencies": {
-    "eslint-config-backend-express": "https://github.com/nl253/eslint-config-backend-express",
-    "tslint-config-standard": "*",
     "tslint": "*",
+    "ts-jest": "*",
+    "tslint-config-standard": "*",
     "faker": "^4.1.0",
     "jest": "^21.0.2",
     "js-beautify": "*",
     "jsdoc": "*",
-    "nodemon": "*",
-    "webpack-dev-server": "^2.8.2"
-  },
-  "eslintConfig": {
-    "extends": "eslint-config-backend-express"
+    "nodemon": "*"
   }
 }

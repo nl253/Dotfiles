@@ -2,5 +2,8 @@
   "lintOptions": {
     "typeCheck": true
   },
-  "extends": "tslint-config-standard"
+  "extends": [
+    "tslint:latest",
+    "tslint-config-standard"
+  ]
 }
