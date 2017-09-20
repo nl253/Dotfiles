@@ -286,7 +286,7 @@ Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim'
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
-for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6', 'othree/javascript-libraries-syntax.vim']
+for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6', 'othree/javascript-libraries-syntax.vim', 'moll/vim-node']
 	Plug i, {'for': ['javascript']}
 endfor
 

@@ -7,28 +7,34 @@
  * @license MIT
  * @copyright nl253 2017
  *
- * The build dependencies
- * ----------------------
+ * Build dependencies
+ * ------------------
+ * @requires webpack
+ *
+ *  Javascript
+ *  ----------
  * @requires babel-cli
  * @requires babel-core
  * @requires babel-loader
  * @requires babel-polyfill
  * @requires babel-preset-env
- * @requires webpack
- * @requires whatwg-fetch
- * @requires git://github.com/mishoo/UglifyJS2#harmony-v2.8.22
  *
  * Typescript
  * ----------
  * @requires typescript
  * @requires ts-loader
- * @requires @types/node
- * @requires @types/jest
  * @requires @types/body-parser
- * @requires @types/validator
- * @requires @types/mongoose
- * @requires @types/passport
  * @requires @types/express-session
+ * @requires @types/jest
+ * @requires @types/mongoose
+ * @requires @types/node
+ * @requires @types/passport
+ * @requires @types/validator
+ *
+ * Other
+ * -----
+ * @requires whatwg-fetch
+ * @requires git://github.com/mishoo/UglifyJS2#harmony-v2.8.22
  */
 
 /**
@@ -55,27 +61,6 @@ const globals = {
   excludes: /node_modules|bower_components/
 }
 
-/**
- * Rules for all filetypes.
- */
-
-const fileRule = {
-  test: /\.(png|jpg|gif)$/,
-  exclude: globals.excludes,
-  use: [{
-    loader: 'file-loader',
-    options: {
-      outputPath: ''
-    }
-  }]
-}
-
-// load as is ie utf-8 file content
-const rawRule = {
-  test: /\.txt$|LICENSE/,
-  exclude: globals.excludes,
-  use: 'raw-loader'
-}
 
 /**
  * Javascript. Use babel to compile to lower versions of ECMAScript.
@@ -108,38 +93,6 @@ const jsRule = {
 }
 
 /**
- * Jsx. Looks for *.jsx files.
- * Will also optimize the build.
- * After jsx is transformed into js, jsRule starts to apply.
- * NOTE the react preset includes *.jsx to *.js
- * transformation as well as flow type stripping.
- */
-
-let jsxRule = {
-  test: /\.jsx$/,
-  exclude: globals.excludes,
-  use: [{
-    loader: 'babel-loader',
-    options: {
-      presets: [
-        'react',
-        'react-optimize', ['env', {
-          targets: {
-            node: '7',
-            browsers: ['last 4 versions']
-          }
-        }]
-      ],
-      minified: true,
-      compact: true,
-      sourceMaps: true,
-      comments: false,
-      ignore: ['node_modules/**', '*.ts']
-    }
-  }]
-}
-
-/**
  * Typescript.
  * Adds types for node, express, jest
  * as well as: dom, es[567] support
@@ -153,15 +106,14 @@ const tsRule = {
     options: {
       compilerOptions: {
         importHelpers: true,
-        jsx: 'React',
-        lib: ['es2015', 'es2016', 'es2017'],
+        lib: ['ES2015', 'ES2016', 'ES2017', 'ESNext'],
         moduleResolution: 'node',
         removeComments: true,
         sourceMap: true,
         types: [
           'node',
           'passport',
-          'express-session'
+          'express-session',
           'express',
           'jest',
           'validator',
@@ -174,34 +126,6 @@ const tsRule = {
   }]
 }
 
-const tsxRule = {
-  test: /\.tsx$/,
-  exclude: globals.excludes,
-  use: jsRule.use + [{
-    loader: 'ts-loader',
-    options: {
-      compilerOptions: {
-        jsx: 'React',
-        importHelpers: true,
-        lib: ['es2015', 'es2016', 'es2017', 'dom'],
-        module: 'commonjs',
-        removeComments: true,
-        sourceMap: true,
-        types: [
-          'node',
-          'passport',
-          'express-session'
-          'express',
-          'jest',
-          'validator',
-          'body-parser',
-          'mongoose',
-          'faker'
-        ]
-      }
-    }
-  }]
-}
 
 module.exports = {
   entry: {
@@ -218,13 +142,7 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
-    rules: [
-      jsxRule,
-      tsRule,
-      tsxRule,
-      jsRule,
-      rawRule
-    ]
+    rules: [tsRule, jsRule]
   },
   devtool: 'source-map',
   plugins: [

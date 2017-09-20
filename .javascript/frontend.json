@@ -14,9 +14,12 @@
   "dependencies": {
     "react": "*",
     "react-dom": "*",
-    "react-scripts": "*"
+    "react-scripts": "*",
+    "bootstrap@4.0.0-beta": "*"
   },
   "devDependencies": {
+    "stylelint": "*",
+    "stylelint-config-standard": "*",
     "faker": "^4.1.0",
     "eslint-config-frontend-react": "https://github.com/nl253/eslint-config-frontend-react",
     "jest": "^21.0.2",

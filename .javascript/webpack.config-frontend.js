@@ -174,7 +174,7 @@ const tsRule = {
     options: {
       compilerOptions: {
         importHelpers: true,
-        lib: ['es2015', 'es2016', 'es2017', 'dom'],
+        lib: ['ES2015', 'ES2016', 'ES2017', 'ESNext', 'DOM'],
         removeComments: true,
         sourceMap: true,
         types: [
