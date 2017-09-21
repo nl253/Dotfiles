@@ -18,7 +18,10 @@
       "always-prefix"
     ],
     "completed-docs": true,
-    "cyclomatic-complexity": [true, 5],
+    "cyclomatic-complexity": [
+      true,
+      5
+    ],
     "encoding": true,
     "indent": [
       true,
@@ -43,7 +46,7 @@
     "member-access": true,
     "member-ordering": true,
     "no-angle-bracket-type-assertion": false,
-    "newline-before-return": true,
+    "newline-before-return": false,
     "number-literal-format": true,
     "no-boolean-literal-compare": false,
     "no-any": false,
@@ -56,7 +59,10 @@
     "no-inferrable-types": false,
     "no-import-side-effect": false,
     "import-spacing": false,
-    "space-within-parens": [true, 0],
+    "space-within-parens": [
+      true,
+      0
+    ],
     "no-irregular-whitespace": true,
     "no-magic-numbers": false,
     "no-object-literal-type-assertion": false,
@@ -76,7 +82,7 @@
     ],
     "array-type": [
       true,
-      "generic"
+      "array-simple"
     ],
     "no-unbound-method": false,
     "no-unnecessary-qualifier": true,
@@ -120,7 +126,13 @@
     ],
     "space-before-function-paren": [
       true,
-      "never"
+      {
+        "anonymous": "always",
+        "named": "never",
+        "method": "never",
+        "constructor": "never",
+        "asyncArrow": "always"
+      }
     ],
     "type-literal-delimiter": false,
     "semicolon": [
@@ -141,7 +153,10 @@
     "use-isnan": true,
     "triple-equals": true,
     "typedef": true,
-    "curly": true,
+    "curly": [
+      true,
+      "ignore-same-line"
+    ],
     "no-bitwise": true,
     "no-conditional-assignment": false,
     "no-console": false,

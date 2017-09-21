@@ -20,33 +20,11 @@
     }
   },
   "rules": {
-    "array-bracket-newline": [
-      1,
-      {
-        "minItems": 4
-      },
-      {
-        "multiline": true
-      }
-    ],
+    "array-bracket-newline": [ 1, { "minItems": 4,  "multiline": true }],
     "array-bracket-spacing": 1,
     "array-callback-return": 1,
-    "array-element-newline": [
-      1,
-      {
-        "minItems": 4
-      },
-      {
-        "multiline": true
-      }
-    ],
-    "arrow-body-style": [
-      1,
-      "as-needed",
-      {
-        "requireReturnForObjectLiteral": true
-      }
-    ],
+    "array-element-newline": [ 1, { "minItems": 4, "multiline": true } ],
+    "arrow-body-style": [ 1, "as-needed", { "requireReturnForObjectLiteral": true } ],
     "block-scoped-var": 1,
     "callback-return": 1,
     "capitalized-comments": 0,
@@ -81,9 +59,7 @@
       1,
       {
         "afterBlockComment": true,
-        "allowObjectEnd": true
-      },
-      {
+        "allowObjectEnd": true,
         "beforeLineComment": true
       }
     ],

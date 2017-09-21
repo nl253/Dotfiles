@@ -21,9 +21,9 @@ export PYTHON_PACKAGES=(\
 	ipython flake8 vulture pycallgraph mypy pylint ranger-fm \
 	proselint profiling pytest psycopg2 mycli docutils \
 	requests Jinja2 Django Flask youtube-dl cookiecutter)
-export NODE_PACKAGES=(jest typescript write-good \
-	htmlhint heroku-cli yo js-beautify create-react-app standard \
-	uglify-es tern gitbook textlint express-generator)
+export NODE_PACKAGES=(jest typescript write-good htmlhint jsonlint heroku-cli \
+	yo js-beautify create-react-app standard uglify-es tern gitbook textlint \
+	express-generator)
 export GISTS=('122b12050f5fb267e75f' '7001839' '8172796' '8294792')
 export RUBY_GEMS=(travis jekyll sass sqlint mdl scss_lint)
 export RUST_CRATES=(rustfmt racer mdbook cargo-count cargo-find tokei)

@@ -166,11 +166,11 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:completor_python_binary = '/usr/bin/env python3'
 	let g:completor_racer_binary = expand('~/.cargo/bin/racer')
 	let g:completor_rust_omni_trigger = 
-				\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=) )'
+				\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=|&&|\|{2}) )'
 	let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
     let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 	for i in ['javascript', 'typescript', 'coffee']
-		exec 'let g:completor_'.i.'_omni_trigger = "\.([_a-zA-Z]+)?| (=>|>|<|=) "'
+		exec 'let g:completor_'.i.'_omni_trigger = "\.|\w{4,}| (=>|>|<|=) |(import|as|export|default|new|await|async|public|static|get|protected|private|instanceof|throw|yield|in|extends) "'
 	endfor
 	for i in ['jinja', 'jinja2', 'twig', 'nunjucks', 'html', 'htmldjango']
 		exec 'let g:completor_'.i.'_omni_trigger = "<[a-z]{,6}|\S+ [-a-z]{2,}"'
@@ -208,8 +208,8 @@ if has('patch8') || has('nvim')
 	let g:neomake_bash_enabled_makers = ['sh', 'shellcheck']
 	let g:neomake_scss_enabled_makers = ['scss-lint']
 	let g:neomake_css_enabled_makers = ['stylelint']
-	let g:neomake_javascript_enabled_makers = ['eslint', 'standard']
-	let g:neomake_json_enabled_makers = ['eslint', 'standard']
+	let g:neomake_javascript_enabled_makers = ['standard']
+	let g:neomake_json_enabled_makers = ['jsonlint']
 	let g:neomake_python_enabled_makers = ['mypy', 
 										 \ 'flake8', 
  										 \ 'vulture',  
@@ -351,5 +351,7 @@ endfor
 let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 
 call plug#end()
+
+call neomake#configure#automake('rw', 1000)
 
 colorscheme fabulous
