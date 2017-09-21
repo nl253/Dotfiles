@@ -537,7 +537,7 @@
       {
         "overrides": {
           "?": "before",
-          ":": "before"
+          "": "before"
         }
       }
     ],

@@ -9,11 +9,11 @@ endif
 
 " Plug - Download if missing:
 if !filereadable(g:PLUG_FILE) && executable('curl')
-    echo system('mkdir -p $(dirname '.g:PLUG_FILE.') && curl -flo '.g:PLUG_FILE.' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    execute 'source '.g:PLUG_FILE
-    PlugInstall
+	echo system('mkdir -p $(dirname '.g:PLUG_FILE.') && curl -flo '.g:PLUG_FILE.' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+	execute 'source '.g:PLUG_FILE
+	PlugInstall
 elseif !filereadable(g:PLUG_FILE) 
-    finish
+	finish
 endif
 
 if has('nvim')
@@ -114,6 +114,8 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 			for i in ['tern', 
 				    \ 'scss-lint', 
 				    \ 'js-beautify', 
+					\ 'typescript',
+					\ 'tslint',
 				  	\ 'eslint', 
 				   	\ 'textlint', 
 				   	\ 'write-good']
@@ -157,28 +159,31 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 							   \ 'rst', 
 							   \ 'html', 
 							   \ 'jinja', 
-							   \ 'scss.css',
 							   \ 'gitcommit', 
 							   \ 'markdown',  
 							   \ 'scss', 
 							   \ 'php']
 	let g:completor_python_binary = '/usr/bin/env python3'
 	let g:completor_racer_binary = expand('~/.cargo/bin/racer')
-	let g:completor_css_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
-	let g:completor_scss_omni_trigger = g:completor_css_omni_trigger
 	let g:completor_rust_omni_trigger = 
 				\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=) )'
 	let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
 	let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
-	let g:completor_html_omni_trigger = '<[a-z]{,6}|\S+ [-a-z]{2,}'
-	let g:completor_jade_omni_trigger = '\w{2,}'
-	let g:completor_javascript_omni_trigger = '\.(\w+)?| (=>|>|<|=) '
-	let g:completor_pug_omni_trigger = g:completor_jade_omni_trigger
-	let g:completor_jinja_omni_trigger = g:completor_html_omni_trigger 
-	let g:completor_htmldjango_omni_trigger = g:completor_html_omni_trigger 
-	let g:completor_gitcommit_omni_trigger = '\w{2,}'
-	let g:completor_yaml_omni_trigger = '\w{5,}'
-	Plug 'davidhalter/jedi-vim', {'for': 'python'}
+	for i in ['javascript', 'typescript', 'coffee']
+		exec 'let g:completor_'.i.'_omni_trigger = "\.([_a-zA-Z]+)?| (=>|>|<|=) "'
+	endfor
+	for i in ['jinja', 'jinja2', 'twig', 'nunjucks', 'html', 'htmldjango']
+		exec 'let g:completor_'.i.'_omni_trigger = "<[a-z]{,6}|\S+ [-a-z]{2,}"'
+	endfor
+	for i in ['markdown', 'rst', 'vorg', 'gitcommit', 'yaml']
+		exec 'let g:completor_'.i.'_omni_trigger = "\w{4,}" '
+	endfor
+	for i in ['less', 'css', 'scss', 'sass']
+		exec 'let g:completor_'.i.'_omni_trigger = "(  |\t)+[-a-z]+|@([\w-]+)?|(  |\t)+-?\w+: [-\w]*"'
+	endfor
+	let g:completor_disable_buffer = ['less', 'css', 'scss', 'sass', 'jinja', 'jinja2', 'twig', 'nunjucks', 'html', 'htmldjango', 'javascript', 'typescript', 'coffee', 'rust', 'python', 'php'] 
+
+	Plug 'davidhalter/jedi-vim', {'for': 'python'} 
 	let g:jedi#force_py_version = 3
 	let g:jedi#goto_command = "<C-]>"
 	let g:jedi#goto_assignments_command = ",a"
@@ -286,8 +291,16 @@ Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim'
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
-for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6', 'othree/javascript-libraries-syntax.vim', 'moll/vim-node']
+for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template']
+	Plug i, {'for': ['javascript', 'typescript']}
+endfor
+
+for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6']
 	Plug i, {'for': ['javascript']}
+endfor
+
+for i in ['Quramy/tsuquyomi', 'leafgarland/typescript-vim']
+	Plug i, {'for': ['typescript']}
 endfor
 
 let g:javascript_plugin_jsdoc = 1
@@ -318,11 +331,9 @@ Plug 'elzr/vim-json', {'for': 'json'}
 let g:used_javascript_libs = 'jquery,react,'
 au! BufRead,BufNewFile *.ts,*.tsx setl ft=javascript
 
-Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
-Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
-
-Plug 'Glench/Vim-Jinja2-Syntax'
-
+"Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
+"Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
+"Plug 'Glench/Vim-Jinja2-Syntax'
 
 " PHP:
 Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}

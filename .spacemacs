@@ -36,7 +36,8 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     rust
+     typescript
+     javascript
      helm
      auto-completion
      emacs-lisp
@@ -50,13 +51,12 @@ values."
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     ;; html
-     ;; javascript
+     html
      ;; spell-checking
      ;; php
-     ;; git
+     git
      ;; python
-     ;; markdown
+     markdown
      ;; better-defaults
      )
    ;; List of additional packages that will be installed without being
@@ -328,7 +328,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yapfify yaml-mode pyvenv pytest pyenv-mode py-isort pip-requirements org-plus-contrib markdown-mode magit-gh-pulls live-py-mode insert-shebang hy-mode helm-pydoc helm-gitignore request github-search github-clone github-browse-file fringe-helper git-gutter+ git-gutter gist gh marshal logito pcache ht flyspell-correct-helm flyspell-correct flycheck-rust seq flycheck-pos-tip pos-tip flycheck fish-mode magit magit-popup git-commit with-editor cython-mode company-shell company-anaconda auto-dictionary anaconda-mode pythonic helm-company helm-c-yasnippet company yasnippet auto-complete toml-mode racer f s cargo rust-mode helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag ace-jump-helm-line which-key wgrep use-package unfill smex smeargle pcre2el mwim mmm-mode markdown-toc magit-gitflow macrostep ivy-hydra help-fns+ helm-make gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flx exec-path-from-shell evil-visualstar evil-magit evil-escape elisp-slime-nav diff-hl counsel-projectile company-statistics bind-map auto-yasnippet auto-compile ace-window ac-ispell))))
+    (web-mode tagedit smeargle slim-mode scss-mode sass-mode pug-mode org-plus-contrib magit-gitflow less-css-mode helm-gitignore request helm-css-scss haml-mode gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit emmet-mode company-web web-completion-data tide typescript-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode yaml-mode which-key use-package toml-mode racer pcre2el mmm-mode markdown-toc magit-gh-pulls macrostep insert-shebang hydra help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag github-search github-clone github-browse-file git-gutter-fringe git-gutter-fringe+ gist gh-md fuzzy flycheck-rust flycheck-pos-tip fish-mode exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav diff-hl company-statistics company-shell cargo bind-map auto-yasnippet auto-compile ace-window ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

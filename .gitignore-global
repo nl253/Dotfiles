@@ -1,9 +1,9 @@
-tags
+*.db
+*.sqlite
+*.sqlite3
+.git/
 .idea/ 
 .vscode/
-.git/
 node_modules/
-*.sqlite
-*.db
-*.sqlite3
 package-lock.json
+tags
