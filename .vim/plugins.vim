@@ -168,7 +168,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:completor_rust_omni_trigger = 
 				\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=) )'
 	let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
-	let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
+    let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 	for i in ['javascript', 'typescript', 'coffee']
 		exec 'let g:completor_'.i.'_omni_trigger = "\.([_a-zA-Z]+)?| (=>|>|<|=) "'
 	endfor
@@ -181,8 +181,9 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	for i in ['less', 'css', 'scss', 'sass']
 		exec 'let g:completor_'.i.'_omni_trigger = "(  |\t)+[-a-z]+|@([\w-]+)?|(  |\t)+-?\w+: [-\w]*"'
 	endfor
-	let g:completor_disable_buffer = ['less', 'css', 'scss', 'sass', 'jinja', 'jinja2', 'twig', 'nunjucks', 'html', 'htmldjango', 'javascript', 'typescript', 'coffee', 'rust', 'python', 'php'] 
-
+	let g:completor_disable_buffer = 
+				\ ['less', 'css', 'scss', 'sass', 'jinja', 'jinja2', 'twig', 'nunjucks', 
+				\ 'html', 'htmldjango', 'javascript', 'typescript', 'coffee', 'rust', 'python', 'php'] 
 	Plug 'davidhalter/jedi-vim', {'for': 'python'} 
 	let g:jedi#force_py_version = 3
 	let g:jedi#goto_command = "<C-]>"
@@ -215,7 +216,6 @@ if has('patch8') || has('nvim')
 										 \ 'pylint',
 										 \ 'pyflakes', 
 										 \ 'pylama']
-
 	if executable('yarn')
 		for i in ['eslint', 'standard']
 			for j in ['javascript', 'json']
@@ -286,7 +286,7 @@ for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
 				   \ 'jinja']}
 endfor
 
-Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim'
+Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim', {'for': ['less', 'css', 'scss', 'sass']}
 "let g:xml_syntax_folding = 1 " might be computationally demanding
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
