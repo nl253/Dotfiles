@@ -5,7 +5,7 @@
 
 in-path() {
   # checks  an executable is in $PATH
-  for i in $(echo "$PATH" | sed "s/:/\n/g"); do
+  for i in $(echo -e ${PATH//:/\\n} | sort | uniq); do
     if [[ -x "$i/$1" ]]; then
       return 0
     fi
@@ -15,34 +15,20 @@ in-path() {
 
 # enable color support of ls and also add handy aliases
 if [[ -x /usr/bin/dircolors ]]; then
-  test -r ~/.dir_colors && eval "$(dircolors -b ~/.dir_colors)" || eval "$(dircolors -b)"
+  if [[ -r  ~/.dir_colors ]]; then
+   eval "$(dircolors -b ~/.dir_colors)"
+ else
+   eval "$(dircolors -b)"
+ fi
 fi
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" \
-  "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 alias j=z
 
 # general
 alias sudo='sudo '                     # Enable
 
-if [[ -z EDITOR ]]; then
-  alias e='$EDITOR'                    # quicker
-  access to vim
-else
-  alias e=vim                          # quicker access to vim
-fi
-
 # split path on ":"
 alias show-path='echo -e ${PATH//:/\\n} | sort | grep -P "^.{3,}$"'
-
-$(in-path ranger) && alias r='ranger'
-
-# dmenu # a good alternative to ro # this
-# modifies the prompt and coloring
-$(in-path dmenu_run) && alias dmenu_run="dmenu_run -p ' >> ' -nb black -nf white"
 
 alias df='df --human-readable --si'
 alias info='info --vi-keys'
@@ -62,16 +48,9 @@ alias -- -='cd -' # Go back
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-alias ll='ls -l -a --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
 
 # long listing
 alias ls='ls --color=auto --group-directories-first'
-# tweak default ls
-alias dirs='find . -type d 2>/dev/null | sed -E "s/^\.\///"'
-# list recursively just dirs
-alias files='find . -type f 2>/dev/null | sed -E "s/^\.\///"'
-# list recursively just files
-[[ -e ~/.gists ]] && alias gists='ls ~/.gists/*/*'
 
 # pattern matching
 alias df='df --color=auto'
@@ -89,7 +68,7 @@ $(in-path python3) && alias http-server-python="python3 -m http.server"
 # note the php server requires index.php in the
 # root dir
 # open using 0.0.0.0:{PORT}
-$(in-path php) && alias http-server-php="php -S 0.0.0.0:8000"
+$(in-path php) && alias http-server-php="php -S 0.0.0.0:5000"
 $(in-path ruby) && alias http-server-ruby=\
   "ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'"
 # mount a remote hard-drive
@@ -104,7 +83,7 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 # Torrents in ~/Downloads/Torrents/
 if $(in-path rsync); then
   alias rsync-copy="rsync --itemize-changes --stats --partial \
-    --rsh=bash --progress --recursive --times --whole-le \
+    --rsh=bash --progress --recursive --times --whole-file \
     --perms --executability --verbose --human-readable  --copy-links"
 fi
 
@@ -117,7 +96,6 @@ fi
 # - expac
 # -----------------------------------
 if $(in-path pacman); then
-
   if $(in-path expac); then
     alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' %'%l\t%n' %| sort | %tail %-n 20"
     alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
@@ -154,22 +132,23 @@ fi
 # ------------------------
 if $(in-path git); then
   alias todo="git grep -n --word-regexp --break --heading --after-context 3 TODO"
+  alias fixme="git grep -n --word-regexp --break --heading --after-context 3 FIXME"
   # look for TODOs in the current repo
   if $(in-path hub); then
-    alias g=hub
     eval "$(hub alias -s)"
-  else
-    alias g=git
   fi
 fi
 
 unset -f in-path
 
-# Better mv, cp, mkdir
 alias cp=' cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps'
 
 if [[ -x $(which psql) ]]; then
   alias psql='psql --single-line'
+fi
+
+if [[ -x $(which psql) ]]; then
+  alias sqlite3="sqlite3 -init ${HOME}/.sqliterc"
 fi
 
 if [[ -x $(which mycli) ]]; then

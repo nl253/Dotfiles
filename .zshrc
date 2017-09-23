@@ -1,6 +1,12 @@
 
 # ~/.zshrc
 
+# POSTGRES
+
+export PGUSER=postgres
+export PGHOST=localhost
+export PGDATABASE=testing
+
 fpath+=~/.zsh/zfunc
 
 export GOPATH=/usr/lib64/go
@@ -45,6 +51,8 @@ zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
 zplug "plugins/extract", from:oh-my-zsh
 zplug "plugins/pip", from:oh-my-zsh
 
+zplug "lukechilds/zsh-nvm"
+
 zplug "jreese/zsh-titles"
 zplug "zdharma/fast-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
@@ -76,3 +84,4 @@ bindkey -e
 [[ -f ~/.fzf/shell/key-bindings.zsh ]] && source ~/.fzf/shell/key-bindings.zsh 
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap
+

@@ -33,7 +33,7 @@
     "new-parens": false,
     "max-classes-per-file": [
       true,
-      1
+      3
     ],
     "max-line-length": [
       true,

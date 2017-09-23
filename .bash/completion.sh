@@ -9,5 +9,3 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 fi
-
-[ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion

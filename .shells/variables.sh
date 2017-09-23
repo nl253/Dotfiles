@@ -75,9 +75,12 @@ add-to-path /usr/local/go/bin 2>/dev/null
 
 unset -f add-to-path
 
+# remove duplicates
+export PATH=$(echo -e ${PATH//:/\\n} | sort | uniq | xargs | sed -E 's/ /:/g')
+
 export HISTFILE=~/.zsh_history
 export SAVEHIST=10000
 
 export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 
-# vim: foldmethod=marker foldlevel=0 foldmarker={{{,}}}
+# vim: foldmethod=marker foldlevel=0 foldmarker={,}

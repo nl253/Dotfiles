@@ -1,36 +1,5 @@
 " vim: foldlevel=0 foldmethod=marker nowrap
 
-" PLUG:
-if has('nvim')
-    let g:PLUG_FILE = expand('~/.local/share/nvim/site/autoload/plug.vim')
-else " if vim
-    let g:PLUG_FILE = expand('~/.vim/autoload/plug.vim')
-endif
-
-" Plug - Download if missing:
-if !filereadable(g:PLUG_FILE) && executable('curl')
-	echo system('mkdir -p $(dirname '.g:PLUG_FILE.') && curl -flo '.g:PLUG_FILE.' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-	execute 'source '.g:PLUG_FILE
-	PlugInstall
-elseif !filereadable(g:PLUG_FILE) 
-	finish
-endif
-
-if has('nvim')
-    call plug#begin('~/.local/share/nvim/plugged/')
-else
-    call plug#begin('~/.vim/plugged')
-endif
-
-" Add to $PATH bin dirs for package managers in case they aren't in $PATH already
-for i in ['~/node_modules/.bin', '~/.gem/ruby/*/bin'] + split(expand('~/{.fzf,.cargo,.local}/bin'))
-	let bin_dir = expand(i)
-	if !empty(bin_dir) && !($PATH =~ bin_dir)
-		let $PATH = expand(i).':'.$PATH
-	endif
-endfor
-
-
 " VARIABLES:
 
 " MARKUP languages you actively use
@@ -54,7 +23,7 @@ endif
 " ===================  
 
 " GENERAL:
-"
+
 for i in ['https://github.com/vim-scripts/SyntaxAttr.vim', 
 	    \ 'scrooloose/nerdcommenter', 
 	  	\ 'editorconfig/editorconfig-vim', 
@@ -189,7 +158,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:jedi#goto_command = "<C-]>"
 	let g:jedi#goto_assignments_command = ",a"
 	let g:jedi#goto_definitions_command = ",d"
-	let g:jedi#documentation_command = ",D"
+	let g:jedi#documentation_command = ",d"
 	let g:jedi#usages_command = ",u"
 	let g:jedi#rename_command = ",r"
 	let g:jedi#use_splits_not_buffers = "right"
@@ -268,15 +237,12 @@ aug TableModeActivation
 aug END
 
 " MARKDOWN:
-Plug 'mzlogin/vim-markdown-toc', {'for' : 'markdown'}
-
 let g:markdown_fenced_languages = ['sh', 'python', 'javascript', 'css', 'html']
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
 
 for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
-
 	Plug i, {'for': ['xml', 
 				   \ 'html', 
 				   \ 'xhtml', 
@@ -291,7 +257,7 @@ Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim', {'for': ['less
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
-for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template']
+for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
 	Plug i, {'for': ['javascript', 'typescript']}
 endfor
 
@@ -299,10 +265,11 @@ for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6']
 	Plug i, {'for': ['javascript']}
 endfor
 
-for i in ['Quramy/tsuquyomi', 'leafgarland/typescript-vim']
-	Plug i, {'for': ['typescript']}
-endfor
+Plug 'leafgarland/typescript-vim', {'for': ['typescript']}
 
+let g:tsuquyomi_completion_detail = 1
+let g:tsuquyomi_javascript_support = 1
+let g:tsuquyomi_completion_preview = 1
 let g:javascript_plugin_jsdoc = 1
 
 Plug 'elzr/vim-json', {'for': 'json'}
@@ -329,10 +296,10 @@ Plug 'elzr/vim-json', {'for': 'json'}
 " - d3
 
 let g:used_javascript_libs = 'jquery,react,'
-au! BufRead,BufNewFile *.ts,*.tsx setl ft=javascript
 
 "Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
 "Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
+" Jinja / Twig / Nunjucks
 "Plug 'Glench/Vim-Jinja2-Syntax'
 
 " PHP:
@@ -352,6 +319,6 @@ let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']}
 
 call plug#end()
 
-call neomake#configure#automake('rw', 1000)
+call neomake#configure#automake('rw', 1000) 
 
 colorscheme fabulous
