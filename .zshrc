@@ -2,7 +2,6 @@
 # ~/.zshrc
 
 # POSTGRES
-
 export PGUSER=postgres
 export PGHOST=localhost
 export PGDATABASE=testing

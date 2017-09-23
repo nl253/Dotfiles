@@ -2,13 +2,14 @@
 .mode column
 .width 30
 .print
+.print WELCOME TO SQLITE3
+.print
 .print ------
 .print TABLES
 .print ------
 .print
 .tables
 .print
-.limit 100
 .prompt 'SQLite3 ~> ' ~
 -- .timer on
 -- .stats on

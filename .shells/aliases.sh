@@ -36,8 +36,7 @@ alias logout="pkill -KILL -u $USER"
 $(in-path ipython) && alias ipython="ipython --profile=me"
 alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
-alias show-term-capabilities=\
-  "infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
+alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
 
@@ -69,11 +68,9 @@ $(in-path python3) && alias http-server-python="python3 -m http.server"
 # root dir
 # open using 0.0.0.0:{PORT}
 $(in-path php) && alias http-server-php="php -S 0.0.0.0:5000"
-$(in-path ruby) && alias http-server-ruby=\
-  "ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'"
+$(in-path ruby) && alias http-server-ruby="ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'"
 # mount a remote hard-drive
-$(in-path sshfs) && alias mount-raptor="mkdir -p ${HOME}/Raptor && \
-  sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ${HOME}/Raptor"
+$(in-path sshfs) && alias mount-raptor="mkdir -p ${HOME}/Raptor && sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: ${HOME}/Raptor"
 
 $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 
@@ -82,40 +79,34 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 # and a default location for download of
 # Torrents in ~/Downloads/Torrents/
 if $(in-path rsync); then
-  alias rsync-copy="rsync --itemize-changes --stats --partial \
-    --rsh=bash --progress --recursive --times --whole-file \
-    --perms --executability --verbose --human-readable  --copy-links"
+  alias rsync-copy="rsync --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
 fi
 
-# pacman aliases, yaourt
-# colors
-# -----------------------------------
+# pacman aliases, yaourt colors
+# -----------------------------
 # REQUIRES
-# - pacman
-# - yaourt
-# - expac
-# -----------------------------------
+# ========
+# pacman
+# yaourt
+# expac
+# -----------------------------
 if $(in-path pacman); then
   if $(in-path expac); then
     alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' %'%l\t%n' %| sort | %tail %-n 20"
     alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
   fi
-
   alias pacman='pacman --config "${HOME}/.pacman.conf"'
   alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
   alias pacman-reinstall-all-foreign-packages="pacman -Qmq | pacman -S -"
   alias pacman-remove-orphans="sudo pacman -Rns $(pacman -Qtdq)"
   $(in-path yaourt) && \
-    export YAOURT_COLORS=\
-    "nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+    export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
 
 # prcess viewing
 # ------------------------
 # REQUIRES
-# - top
-# - or
-# - htop
+# top || htop
 # ------------------------
 if [[ -x $(which htop) ]]; then
   alias p=htop
@@ -124,12 +115,6 @@ else
   alias p=top
 fi
 
-# git
-# ------------------------
-# REQUIRES
-# - git
-# - hub
-# ------------------------
 if $(in-path git); then
   alias todo="git grep -n --word-regexp --break --heading --after-context 3 TODO"
   alias fixme="git grep -n --word-regexp --break --heading --after-context 3 FIXME"
@@ -139,24 +124,19 @@ if $(in-path git); then
   fi
 fi
 
-unset -f in-path
+alias cp='cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps'
 
-alias cp=' cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps'
-
-if [[ -x $(which psql) ]]; then
+if $(in-path psql); then
   alias psql='psql --single-line'
 fi
 
-if [[ -x $(which psql) ]]; then
+if $(in-path sqlite3); then
   alias sqlite3="sqlite3 -init ${HOME}/.sqliterc"
 fi
 
-if [[ -x $(which mycli) ]]; then
+if $(in-path mycli); then
   alias mycli='mycli mysql://root@localhost/fake'
 fi
 
-if [[ -x $(which isort) ]]; then
-  alias isort='isort '
-fi
-
+unset -f in-path
 # vim: foldmethod=marker foldlevel=0 foldmarker={{{,}}} nowrap formatoptions=

@@ -17,6 +17,3 @@ xhost +local:root > /dev/null 2>&1
 for i in ~/.{shells,bash}/*.sh; do
 	[[ -f $i ]] && source $i
 done 
-
-[[ $- == *i* ]] && source ~/.fzf/shell/completion.bash 2> /dev/null
-source ~/.fzf/shell/key-bindings.bash
