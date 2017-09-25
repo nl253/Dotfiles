@@ -253,7 +253,6 @@ for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
 endfor
 
 Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim', {'for': ['less', 'css', 'scss', 'sass']}
-"let g:xml_syntax_folding = 1 " might be computationally demanding
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
@@ -276,31 +275,36 @@ Plug 'elzr/vim-json', {'for': 'json'}
 
 " Libraries:
 " ---------
-" - jQuery
-" - underscore.js
-" - lo-dash
-" - Backbone.js
-" - prelude.ls
 " - AngularJS
 " - AngularUI
 " - AngularUI Router
-" - React
+" - Backbone.js
+" - Chai
 " - Flux
+" - Handlebars
+" - Jasmine
+" - Ramda
+" - React
 " - RequireJS
 " - Sugar.js
-" - Jasmine
-" - Chai
-" - Handlebars
-" - Ramda
 " - Vue
 " - d3
+" - jQuery
+" - lo-dash
+" - prelude.ls
+" - underscore.js
 
 let g:used_javascript_libs = 'jquery,react,'
 
+" Templating Engines:
+" -------------------
+" Pug:
 "Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
 "Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
-" Jinja / Twig / Nunjucks
+"au! FileType jade setl ft=pug 
+" Jinja Twig Nunjucks:
 "Plug 'Glench/Vim-Jinja2-Syntax'
+" au! BufNewFile,BufRead *.{twig,njk} setl fs=jinja
 
 " PHP:
 Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
