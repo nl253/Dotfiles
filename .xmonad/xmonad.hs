@@ -1,5 +1,6 @@
 --
--- DEPENDENCIES:
+-- DEPENDENCIES
+-- -------------
 -- rofi :: launcher
 -- alacritty :: terminal emulator
 -- tmux :: terminal multiplexer

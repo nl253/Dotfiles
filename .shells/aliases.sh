@@ -52,7 +52,6 @@ alias ....="cd ../../.."
 alias ls='ls --color=auto --group-directories-first'
 
 # pattern matching
-alias df='df --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
@@ -132,10 +131,6 @@ fi
 
 if $(in-path sqlite3); then
   alias sqlite3="sqlite3 -init ${HOME}/.sqliterc"
-fi
-
-if $(in-path mycli); then
-  alias mycli='mycli mysql://root@localhost/fake'
 fi
 
 unset -f in-path
