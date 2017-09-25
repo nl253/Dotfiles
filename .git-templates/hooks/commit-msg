@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Regular expression to match against the commit message.
-validator_regexp='[A-Z][-A-Za-z,.:;_]'
+validator_regexp='[A-Z][-A-Za-z,.:;_]+'
 
 # If it doesn't match, don't allow to commit!
 if [[ ! $1 =~ $validator_regexp ]]; then
