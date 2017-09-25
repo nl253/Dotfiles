@@ -29,8 +29,8 @@ alias sudo='sudo '                     # Enable
 
 # split path on ":"
 alias show-path='echo -e ${PATH//:/\\n} | sort | grep -P "^.{3,}$"'
-
-alias df='df --human-readable --si'
+alias df='df --human-readable --si --total'
+alias du='du --human-readable --si --summarize --total'
 alias info='info --vi-keys'
 alias logout="pkill -KILL -u $USER"
 $(in-path ipython) && alias ipython="ipython --profile=me"
@@ -78,7 +78,7 @@ $(in-path curl) && alias my-ip='curl ipinfo.io/ip'
 # and a default location for download of
 # Torrents in ~/Downloads/Torrents/
 if $(in-path rsync); then
-  alias rsync-copy="rsync --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
+  alias copy="rsync --ignore-missing-args --group --xattrs --special --hard-links --executability --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
 fi
 
 # pacman aliases, yaourt colors
@@ -107,7 +107,7 @@ fi
 # REQUIRES
 # top || htop
 # ------------------------
-if [[ -x $(which htop) ]]; then
+if $(in-path htop); then
   alias p=htop
   # [P]ROCESSES
 else
