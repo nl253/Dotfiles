@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Regular expression to match against the commit message.
+validator_regexp='[A-Z][-A-Za-z,.:;_]'
+
+# If it doesn't match, don't allow to commit!
+if [[ ! $1 =~ $validator_regexp ]]; then
+	cat <<EOF
+The commit message does not adhere to standard format.
+
+THE MESSAGE
+-----------
+$0
+
+Please fix it before comitting.
+EOF
+	exit 1
+fi
