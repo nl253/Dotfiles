@@ -22,7 +22,11 @@ if [[ -x $(command which fzf) ]]; then # {
 
   # preview configured to `cat` for files and use `tree` for dirs
   # [FZF] with [P]REVIEW
-  alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
+  #if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
+  alias fzfp='fzf --preview="[[ -f {} ]] && head -n 38 {} | pygmentize -l $(pygmentize -N {}) || [[ -d {} ]] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
+  #else
+    #alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
+  #fi
 
   [[ -e ~/.gists ]] && alias gists='ls ~/.gists/*/* | fzfp'
 
