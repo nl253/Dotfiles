@@ -43,18 +43,18 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 # zplug "plugins/rust", from:oh-my-zsh 
 zplug "plugins/z", from:oh-my-zsh
 
-zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
+zplug "denysdovhan/spaceship-zsh-theme", use:spaceship.zsh, from:github, as:theme
 
 # zplug "plugins/extract", from:oh-my-zsh
 # zplug "plugins/pip", from:oh-my-zsh
 
-zplug "lukechilds/zsh-nvm"
+# zplug "lukechilds/zsh-nvm"
 
-zplug "jreese/zsh-titles"
+# zplug "jreese/zsh-titles"
 zplug "zdharma/fast-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-history-substring-search"
+# zplug "zsh-users/zsh-history-substring-search"
 
 # zplug "nl253/Scripts", as:command, rename-to:"csv-preview", use:"csv-preview.sh"
 # zplug "nl253/Scripts", as:command, rename-to:"download-dotfile", use:"download-dotfile.sh"
@@ -67,13 +67,13 @@ for i in completion options packages; do
 	zplug "nl253/zsh-config-${i}", defer:3
 done
 
-zplug load 
 
 setopt monitor
 
 bindkey -e
 
-[[ $- == *i* ]] && source "${HOME}/.fzf/shell/completion.zsh" 2> /dev/null
-[[ -f ~/.fzf/shell/key-bindings.zsh ]] && source ~/.fzf/shell/key-bindings.zsh 
+# [[ $- == *i* ]] && source "${HOME}/.fzf/shell/completion.zsh" 2> /dev/null
+# [[ -f ~/.fzf/shell/key-bindings.zsh ]] && source ~/.fzf/shell/key-bindings.zsh 
 
+zplug load 
 # vim: foldmethod=marker sw=2 ts=2 nowrap 

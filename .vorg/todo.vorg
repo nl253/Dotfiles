@@ -4,10 +4,14 @@
 
 			    SHORT TERM
 
+
 WIFI PASSWORD
 2EC53A496BBB
 
 ( Node.js
+
+@Todo
+Fix zsh-config-packages plugin
 
 @Orm
 MongoDB <http://mongoosejs.com/>
