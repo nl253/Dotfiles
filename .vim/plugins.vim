@@ -7,12 +7,12 @@ if !exists('g:MARKUP') | let g:MARKUP = ['markdown', 'rst', 'vorg'] | endif
 
 " PROGRAMMING LANGUAGES you code in 
 if !exists('g:PROGRAMMING')
-    let g:PROGRAMMING = ['xhtml', 
-					   \ 'html', 
+	let g:PROGRAMMING = ['xhtml',
+					   \ 'html',
 					   \ 'css', 
-					   \ 'javascript', 
-					   \ 'rust', 
-					   \ 'python', 
+					   \ 'javascript',
+					   \ 'rust',
+					   \ 'python',  
 					   \ 'php', 
 					   \ 'sql', 
 					   \ 'sh', 
@@ -152,7 +152,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	endfor
 	let g:completor_disable_buffer = 
 				\ ['less', 'css', 'scss', 'sass', 'jinja', 'jinja2', 'twig', 'nunjucks', 
-				\ 'html', 'htmldjango', 'javascript', 'typescript', 'coffee', 'rust', 'python', 'php'] 
+				\  'html', 'htmldjango', 'javascript', 'typescript', 'coffee', 'rust', 'python', 'php'] 
 	Plug 'davidhalter/jedi-vim', {'for': 'python'} 
 	let g:jedi#force_py_version = 3
 	let g:jedi#goto_command = "<C-]>"
@@ -311,18 +311,12 @@ Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 
 " MY PLUGINS:
 " ==========
-for plugin in ['fabulous', 'fabulous', 'git-ready', 'vorg-mode'] + split(expand('vim-{saner,markup,programming,scratchpads,fzf-extensions,webdev,templates}'))
-	if !isdirectory(expand('~/Projects/Vim/'.plugin))
-		Plug 'nl253/'.plugin
-	else
-		Plug '~/Projects/Vim/'.plugin
-	endif
+for plugin in ['fabulous', 'git-ready', 'vorg-mode'] + split(expand('vim-{saner,markup,programming,scratchpads,fzf-extensions,webdev,templates}'))
+	Plug 'nl253/'.plugin
 endfor
 
 let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 
 call plug#end()
-
 call neomake#configure#automake('rw', 1000) 
-
 colorscheme fabulous

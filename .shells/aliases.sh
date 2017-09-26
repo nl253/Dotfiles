@@ -3,7 +3,7 @@
 
 # SOURCED BY BOTH `zsh` AND `bash`
 
-in-path() {
+in-path(){
   # checks  an executable is in $PATH
   for i in $(echo -e ${PATH//:/\\n} | sort | uniq); do
     if [[ -x "$i/$1" ]]; then
@@ -89,6 +89,7 @@ fi
 # yaourt
 # expac
 # -----------------------------
+
 if $(in-path pacman); then
   if $(in-path expac); then
     alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' %'%l\t%n' %| sort | %tail %-n 20"

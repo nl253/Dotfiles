@@ -51,7 +51,7 @@ zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
 # zplug "lukechilds/zsh-nvm"
 
 # zplug "jreese/zsh-titles"
-# zplug "zdharma/fast-syntax-highlighting"
+zplug "zdharma/fast-syntax-highlighting"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
 # zplug "zsh-users/zsh-history-substring-search"
