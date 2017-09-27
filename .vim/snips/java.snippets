@@ -13,6 +13,12 @@ for (Item i : iter) {
 }
 endsnippet
 
+snippet rof "Reverse for loop [java]"
+for (int i = ${1:iterable}.length--; i <= 0; i--) {
+  ${2:// do stuff}
+}
+endsnippet
+
 snippet for "For loop [java]"
 for (int i = 0; i < 10; i++) {
   ${1:// do stuff}
