@@ -2,16 +2,12 @@
 :tags: #TODO 
 :title: Items to do 
 
-			    SHORT TERM
-
+			    >> SHORT TERM
 
 WIFI PASSWORD
 2EC53A496BBB
 
 ( Node.js
-
-@Todo
-Fix zsh-config-packages plugin
 
 @Orm
 MongoDB <http://mongoosejs.com/>
@@ -42,11 +38,13 @@ Recipe App Using Node.js & PostgreSQL
 NodeJS MongoDB Tutorial
 <https://www.youtube.com/watch?v=Do_Hsb_Hs3c>
 
-
 ( Python
 
 @Django
 Follow tutorial: <https://docs.djangoproject.com/en/1.11/intro/tutorial02/>
+
+NOTE
+Django 2 is coming out soon.
 
 @Flask
 Tutorial <http://flask.pocoo.org/docs/0.12/tutorial/packaging/#tutorial-packaging>
@@ -60,9 +58,7 @@ Lxml <http://lxml.de/>
 @Library
 Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
 
-
-		    MEDIUM TERM
-
+		        >> MEDIUM TERM
 ( Node.js
 
 @Learn
@@ -88,8 +84,7 @@ Learn PostgreSQL with Datagrip
 <https://www.khanacademy.org/computing/hour-of-code/hour-of-sql>
 <https://www.khanacademy.org/computing/computer-programming/sql>
 
-		    LONG TERM
-
+		    >> LONG TERM
 ( Python
 
 @Server

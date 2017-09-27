@@ -196,7 +196,7 @@ if has('patch8') || has('nvim')
 			endfor
 		endfor
 		if executable('proselint')
-			for i in g:MARKUP
+			for i in ['rst', 'markdown']
 				execute 'let g:neomake_'.i.'_enabled_makers = '.string(['proselint', 'writegood'])
 				execute 'let g:neomake_'.i.'_writegood_exe = "'.expand('~/.yarn/bin/write-good').'"'
 			endfor

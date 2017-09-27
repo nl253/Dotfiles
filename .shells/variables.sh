@@ -19,7 +19,7 @@ export SHORT_HOSTNAME=$(hostname -s)
 
 # }}}
 
-eval $(dircolors -b)
+[[ -f ~/.dir_colors ]] && eval $(dircolors ~/.dir_colors)
 
 # HISTORY
 export HISTSIZE=20000
