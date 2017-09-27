@@ -28,7 +28,7 @@ if [[ -x $(command which fzf) ]]; then # {
     #alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
   #fi
 
-  [[ -e ~/.gists ]] && alias gists='ls ~/.gists/*/* | fzfp'
+  [[ -e ~/.gists ]] && alias gists="find ~/.gists/*/ -type f -and -not -path '**.git**' | fzfp"
 
 fi # }
 
