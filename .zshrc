@@ -59,9 +59,6 @@ setopt monitor
 
 bindkey -e
 
-[[ $- == *i* ]] && source "${HOME}/.fzf/shell/completion.zsh" 2> /dev/null
-[[ -f ~/.fzf/shell/key-bindings.zsh ]] && source ~/.fzf/shell/key-bindings.zsh 
-
 zplug load 
 
 # vim: foldmethod=marker sw=2 ts=2 nowrap 

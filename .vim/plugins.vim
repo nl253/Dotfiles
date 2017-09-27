@@ -32,7 +32,11 @@ for i in ['https://github.com/vim-scripts/SyntaxAttr.vim',
 	Plug i
 endfor
 
-for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}')) + split(expand('junegunn/{fzf,fzf.vim}'))
+" bin == just the binary, all == bin + shell keybindings
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+
+for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}'))
 	Plug i
 endfor
 
