@@ -74,7 +74,7 @@
  
 	add = add -v
 
-	blame = blame --pretty=full --date=rfc --indent-heuristic --color-words --dense --date-order --extended-regexp --minimal --show-number 
+	# blame = "!f(){ less -XRI <<< git blame --pretty=full --date=rfc --indent-heuristic --color-words --dense --date-order --extended-regexp --minimal --show-number $@ | pygmentize -l $(pygmentize -N $@) }; f"
 
 	branch = branch -vv
 
@@ -106,7 +106,6 @@
 
 	# form tpope
 	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
-
 
 [web]
 	browser = google-chrome-stable

@@ -1,5 +1,5 @@
 
-# FZF init
+# FZF init (tested on zsh and bash)
 
 # chech if on system, set up aliases in case it is and isn't
 

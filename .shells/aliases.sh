@@ -1,5 +1,5 @@
 
-# ALIASES
+# ALIASES (tested on zsh and bash)
 
 # SOURCED BY BOTH `zsh` AND `bash`
 
@@ -12,15 +12,6 @@ in-path(){
   done
   return 1
 }
-
-# enable color support of ls and also add handy aliases
-if [[ -x /usr/bin/dircolors ]]; then
-  if [[ -r  ~/.dir_colors ]]; then
-   eval "$(dircolors -b ~/.dir_colors)"
- else
-   eval "$(dircolors -b)"
- fi
-fi
 
 alias j=z
 

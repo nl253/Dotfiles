@@ -1,15 +1,18 @@
 
-# DEFAULTS {{{
-# Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
+# DEFAULTS {
 set meta-flag on
 set input-meta on
 set convert-meta off
 set output-meta on
-# }}}
+# }
 
-$if mode=emacs
+set editing-mode emacs
+set keymap emacs
 
-# for linux console and RH/Debian xterm {{{
+ # EMACS {
+$if mode=emacs 
+
+# KEYBINDINGS {
 "\e[5~": beginning-of-history
 "\e[6~": end-of-history
 
@@ -33,24 +36,18 @@ $if mode=emacs
 "\e[4~": end-of-line
 "\e[8~": end-of-line
 "\e[F": end-of-line
-# }}}
+# }
 
-# rxvt
-
-# non RH/Debian xterm, can't hurt for RH/DEbian xterm
-
-# freebsd console
-
-# smarter completion, list all options once and then cycle through them {{{
+# smarter completion, list all options once and then cycle through them {
 # TAB cycle forward
 Tab: menu-complete 
 
 # Shift-Tab 
 "\e[Z": "\e-1\C-i" 
 
-# # cycle back in menu-complete }}}
+# # cycle back in menu-complete }
 
-# MACROS {{{
+# MACROS {
 
 # sudo Esc Esc
 "\e\e": "\C-asudo \C-e"
@@ -63,35 +60,91 @@ Tab: menu-complete
 
 # nullify stderr Ctrl-x Ctrl-n[ullify]
 "\C-x\C-n":"\C-e 2>/dev/null " 
-# }}}
+# }
 
 $endif
+# }
 
-# OPTIONS {{{
+# OPTIONS {
+ 
+# If set to ‘on’, Readline attempts to briefly move the cursor to an {
+# opening parenthesis when a closing parenthesis is inserted. The default
+# is ‘off’. }
+# set blink-matching-paren on
+
+
+# If set to ‘on’, tilde expansion is performed when Readline attempts {
+# word completion. The default is ‘off’. }
 set expand-tilde on
-# Be more intelligent when autocompleting by also looking at the text after
-# the cursor. For example, when the current line is "cd ~/src/mozil", and
-# the cursor is on the "z", pressing Tab will not autocomplete it to "cd
-# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
-# Readline used by Bash 4.)
+
+# If set to ‘on’, menu completion displays the common prefix of the {
+# list of possible completions (which may be empty) before cycling through
+# the list. The default is ‘off’. }
+set menu-complete-display-prefix on
+
+# If set to ‘on’, add a character to the beginning of the prompt {
+# indicating the editing mode: emacs, vi command, or vi insertion. The mode
+# strings are user-settable. The default value is ‘off’. }
+#set show-mode-in-prompt on
+
+# If set to ‘on’, this alters the default completion behavior when {
+# inserting a single match into the line. It’s only active when performing
+# completion in the middle of a word. If enabled, readline does not insert
+# characters from the completion that match characters after point in the
+# word being completed, so portions of the word following the cursor are
+# not duplicated. For instance, if this is enabled, attempting completion
+# when the cursor is after the ‘e’ in ‘Makefile’ will result in
+# ‘Makefile’ rather than ‘Makefilefile’, assuming there is a single
+# possible completion. The default value is ‘off’. }
 set skip-completed-text on
-set echo-control-characters off
+
+# If set to ‘on’, the history code attempts to place the point (the {
+# current cursor position) at the same location on each history line retrieved
+# with previous-history or next-history. The default is ‘off’. }
+set history-preserve-point on
+
 # If there are more than 250 possible completions for a word, ask to show them all
 set completion-query-items 250
+
 # Show all autocomplete results at once
 set page-completions off
-# Immediately add a trailing slash when autocompleting symlinks to directories
+
+# If set to ‘on’, completed names which are symbolic links to directories {
+# have a slash appended (subject to the value of mark-directories). The
+# default is ‘off’. }
 set mark-symlinked-directories on
-set bell-style none 
-# Make Tab autocomplete regardless of filename case
+
+# If set to ‘on’, and completion-ignore-case is enabled, Readline treats {
+# hyphens (‘-’) and underscores (‘_’) as equivalent when performing
+# case-insensitive filename matching and completion. }
 set completion-ignore-case on 
+
 # Show extra file information when completing, like `ls -F` does
 set visible-stats on
-set colored-stats on
+
 # List all matches in case multiple possible completions are possible
 set show-all-if-ambiguous on
+
 set show-all-if-unmodified on
+
+# If set to ‘on’, when listing completions, Readline displays the common {
+# prefix of the set of possible completions using a different color. The
+# color definitions are taken from the value of the LS_COLORS environment
+# variable. The default is ‘off’. }
 set colored-completion-prefix on 
-# }}}
-#
-# vim: foldmethod=marker foldmarker={{{,}}}
+
+set echo-control-characters off
+
+# If set to ‘on’, Readline displays possible completions using different {
+# colors to indicate their file type. The color definitions are taken from
+# the value of the LS_COLORS environment variable. The default is ‘off’. }
+set colored-stats on
+
+# Controls what happens when Readline wants to ring the terminal bell. If {
+# set to ‘none’, Readline never rings the bell. If set to ‘visible’,
+# Readline uses a visible bell if one is available. If set to ‘audible’
+# (the default), Readline attempts to ring the terminal’s bell. }
+set bell-style none 
+
+# }
+# vim: foldmethod=marker foldmarker={,}

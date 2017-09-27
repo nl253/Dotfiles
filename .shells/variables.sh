@@ -1,6 +1,11 @@
 
 # VARIABLES
 
+# POSTGRES
+export PGUSER=postgres
+export PGHOST=localhost
+export PGDATABASE=testing
+
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
@@ -14,6 +19,8 @@ export SHORT_HOSTNAME=$(hostname -s)
 
 # }}}
 
+eval $(dircolors -b)
+
 # HISTORY
 export HISTSIZE=20000
 export HISTFILESIZE=20000
@@ -21,19 +28,19 @@ export HISTCONTROL="ignoreboth:erasedups"
 export HISTTIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
-export GREP_COLOR='1;33' # makes it yellow # by default red
-export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
 # $PAGER
 if [[ -x $(command which less) ]]; then
-  alias less='less -x4RFsX' && export PAGER=less
+  alias less='less -4RIX' && export PAGER=less
 else
   [[ -x $(command which more) ]] && export PAGER=more && alias less=more
 fi
 
 # $BROWSER
 for i in google-chrome-stable chromium elinks lynx w3m; do
-  [[ -x $(command which $i 2>/dev/null) ]] && export BROWSER=$(command which $i) && break
+  if [[ -x $(command which $i 2>/dev/null) ]]; then
+    export BROWSER=$(command which $i) && break
+  fi
 done
 
 # $EDITOR

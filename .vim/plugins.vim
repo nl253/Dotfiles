@@ -200,7 +200,7 @@ if has('patch8') || has('nvim')
 	endif
 
 	if executable('mdl')
-		let g:neomake_markdown_enabled_makers += ['mdl', 'markdownlint']
+		let g:neomake_markdown_enabled_makers += ['mdl']
 	endif
 else
 	Plug 'vim-syntastic/syntastic'
