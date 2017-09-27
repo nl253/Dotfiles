@@ -1,0 +1,118 @@
+snippet main "The main method [java]"
+public class Main {
+
+  public static void main(String[] args) {
+    ${1:// do stuff}
+  }
+}
+endsnippet
+
+snippet foreach "Foreach loop [java]"
+for (Item i : iter) {
+  // do stuff
+}
+endsnippet
+
+snippet for "For loop [java]"
+for (int i = 0; i < 10; i++) {
+  ${1:// do stuff}
+}
+endsnippet
+
+snippet while "While loop [java]"
+while (true) {
+  ${1:// do stuff}
+}
+endsnippet
+
+snippet "echo|print" "Sysout [java]" r
+System.out.println("${1:message}");
+endsnippet
+
+snippet if "If statement [java]"
+if (i == 2) {
+  doSomething();
+} 
+endsnippet
+
+snippet "case|switch" "Switch statement [java]" r
+switch (${1:variable}) {
+  case ${2:'A'}:
+	${3:doSomething(); // Triggered if variable == 'A'}
+	break;
+  default:
+	${4:doSomethingDifferent(); // Triggered in any other case}
+	break;
+}
+endsnippet
+
+snippet queue "Queue [java]"
+Queue<Integer> deque = new SynchronousQueue<Integer>();
+endsnippet
+
+snippet hmap "Hash map [java]"
+Map<Integer> map = new HashMap<>();
+endsnippet
+
+snippet hset "Hash set [java]"
+Set<Integer> set = new HashSet<>();
+endsnippet
+
+snippet tset "Tree set [java]"
+Set<Integer> set = new TreeSet<>();
+endsnippet
+
+snippet heap "Heap (priority queue) [java]"
+Queue<Integer> heap = new PriorityQueue<>();
+endsnippet
+
+snippet deque "Deque [java]"
+Deque<Integer> deque = new ArrayDeque<>();
+endsnippet
+
+snippet "vec(t(or)?)?" "Vector [java]" r
+Collection<Integer> vector = new Vector<>();
+endsnippet
+
+snippet stack "Stack [java]"
+List<Integer> stack = new Stack<>();
+endsnippet
+
+snippet "\{" "Linked list [java]" r
+{
+  ${1:// do stuff}
+}
+endsnippet
+
+snippet llist "Linked list [java]"
+List<Object> list = new LinkedList<>();
+endsnippet
+
+snippet alist "Array list [java]"
+List<Object> list = new ArrayList<>();
+endsnippet
+
+snippet "log(ger)?" "Logging [java]" r
+final static Logger log = Logger.getLogger("${1:Main logger}");
+log.setLevel(Level.${2:INFO});
+endsnippet
+
+snippet array "Array [java]"
+${1:int}[] ${2:array} = new ${3:int}[${4:10}];
+endsnippet
+
+snippet do "Do while loop [java]"
+do {
+  ${1:// do stuff}
+} while (${2:true});
+endsnippet
+
+
+snippet try "Try, catch [java]"
+try {
+  ${1:// attempt}
+} 
+catch (Exception e) {
+  ${2:// on failure}
+}
+endsnippet
