@@ -1,6 +1,9 @@
 
 # VARIABLES
 
+# point doctuils (rst) to config file
+export DOCUTILSCONFIG=~/.docutils
+
 # POSTGRES
 export PGUSER=postgres
 export PGHOST=localhost
