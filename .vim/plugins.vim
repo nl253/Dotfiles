@@ -44,7 +44,7 @@ endfor
 if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
-if has('perl') | Plug 'vim-scripts/dbext.vim' | endif
+if has('perl') | Plug 'vim-scripts/dbext.vim', {'for': ['sql', 'plsql', 'mysql']} | endif
 Plug 'junegunn/gv.vim', {'on': ['GV']}
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  

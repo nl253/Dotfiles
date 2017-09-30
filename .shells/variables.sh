@@ -14,6 +14,19 @@ unset MAILCHECK
 
 export TERMINAL=alacritty
 
+_add_to_cdpath() {
+	for directory in "$@"; do
+		[[ -d $directory ]] && [[ ! $CDPATH =~ $directory ]] && export CDPATH="$directory:$CDPATH:" 2>/dev/null
+	done
+}
+
+export CDPATH="${HOME}:"
+
+_add_to_cdpath $HOME/{Projects,Notes,.vim/plugged,.shells}
+
+unset -f _add_to_cdpath
+
+
 # Set Xterm/screen/Tmux title with only a short hostname
 export SHORT_HOSTNAME=$(hostname -s)
 

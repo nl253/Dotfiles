@@ -466,6 +466,7 @@ _packages_pacman() {
 main() {
 
     _check_requirements
+    _add_to_path ~/.fzf/bin
 
 	local _cwd=$(pwd)
 
