@@ -237,11 +237,11 @@ _install_python(){
 }
 
 _packages_python() {
-	if [[ -n $PYTHON_PACKAGES ]] && _in_path pip; then
-		local packages=$(pip list --format=legacy | sed -E 's/\(.*\)//')
+	if [[ -n $PYTHON_PACKAGES ]] && _in_path pip3; then
+		local packages=$(pip3 list --format=legacy | sed -E 's/\(.*\)//')
 		for i in "${PYTHON_PACKAGES[@]}"; do
 			if _in_array "${i}" "${packages}"; then
-				pip install --retries 3 --timeout 10 --pre --user "${i}" &
+				pip3 install --retries 3 --timeout 10 --pre --user "${i}" &
 			fi
 		done
 
