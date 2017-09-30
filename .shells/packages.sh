@@ -264,11 +264,8 @@ _packages_ruby() {
 	if [[ -n $RUBY_GEMS ]] && _in_path gem; then
 		local packages=$(gem list | sed -E 's/\(.*\)//')
 		for i in "${RUBY_GEMS[@]}"; do
-			if _in_array "${i}" "${packages}"; then
-				gem install "${i}" &
-			fi
+            ! _in_array "${i}" "${packages}" && gem install "${i}" &
 		done
-
     else
         echo -e "[WARN] Either ruby not installed or you didn't specify any gems to install." >&2
 	fi
