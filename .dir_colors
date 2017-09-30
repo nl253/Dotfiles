@@ -172,7 +172,7 @@ EXEC 01;32
 .zoo 00;31
 .zst 00;31
 
-# configuration
+# configuration 
 
 .cfg 00;33
 .cnf 00;33
@@ -200,85 +200,85 @@ EXEC 01;32
 
 # code
 
-.R 01;37
-.awk 01;37
-.php 01;37
-.groovy 01;37
-.idr 01;37
-.ksh 01;37
-.scm 01;37
-.lisp 01;37
-.ml 01;37
-.pl 01;37
-.c 01;37
-.cpp 01;37
-.cs 01;37
-.csh 01;37
-.el 01;37
-.go 01;37
-.h 01;37
-.hh 01;37
-.hs 01;37
-.java 01;37
-.jl 01;37
-.js 01;37
-.kt 01;37
-.lua 01;37
-.njk 01;37
-.py 01;37
-.rb 01;37
-.rs 01;37
-.sh 01;37
-.ml 01;37
-.pl 01;37
-.c 01;37
-.cpp 01;37
-.cs 01;37
-.csh 01;37
-.el 01;37
-.go 01;37
-.h 01;37
-.hh 01;37
-.hs 01;37
-.java 01;37
-.jl 01;37
-.js 01;37
-.kt 01;37
-.lua 01;37
-.njk 01;37
-.py 01;37
-.rb 01;37
-.rs 01;37
-.sh 01;37
-.sql 01;37
-.tcl 01;37
-.ts 01;37
-.twig 01;37
-.vim 01;37
-.vue 01;37
-.zsh 01;37
-
-# markup
-
-.asciidoc 01;37
-.html 01;37
-.markdown 01;37
-.md 01;37
-.rst 01;37
-.textile 01;37
-.creole 01;37
-.tex 01;37
-.txt 01;37
-.wiki 01;37
-.xhtml 01;37
-
-# stylesheet language
-
-.css 01;37
-.stylus 01;37
-.scss 01;37
-.sass 01;37
-.less 01;37
+# .R 01;37
+# .awk 01;37
+# .php 01;37
+# .groovy 01;37
+# .idr 01;37
+# .ksh 01;37
+# .scm 01;37
+# .lisp 01;37
+# .ml 01;37
+# .pl 01;37
+# .c 01;37
+# .cpp 01;37
+# .cs 01;37
+# .csh 01;37
+# .el 01;37
+# .go 01;37
+# .h 01;37
+# .hh 01;37
+# .hs 01;37
+# .java 01;37
+# .jl 01;37
+# .js 01;37
+# .kt 01;37
+# .lua 01;37
+# .njk 01;37
+# .py 01;37
+# .rb 01;37
+# .rs 01;37
+# .sh 01;37
+# .ml 01;37
+# .pl 01;37
+# .c 01;37
+# .cpp 01;37
+# .cs 01;37
+# .csh 01;37
+# .el 01;37
+# .go 01;37
+# .h 01;37
+# .hh 01;37
+# .hs 01;37
+# .java 01;37
+# .jl 01;37
+# .js 01;37
+# .kt 01;37
+# .lua 01;37
+# .njk 01;37
+# .py 01;37
+# .rb 01;37
+# .rs 01;37
+# .sh 01;37
+# .sql 01;37
+# .tcl 01;37
+# .ts 01;37
+# .twig 01;37
+# .vim 01;37
+# .vue 01;37
+# .zsh 01;37
+# 
+# # markup
+# 
+# .asciidoc 01;37
+# .html 01;37
+# .markdown 01;37
+# .md 01;37
+# .rst 01;37
+# .textile 01;37
+# .creole 01;37
+# .tex 01;37
+# .txt 01;37
+# .wiki 01;37
+# .xhtml 01;37
+# 
+# # stylesheet language
+# 
+# .css 01;37
+# .stylus 01;37
+# .scss 01;37
+# .sass 01;37
+# .less 01;37
 
 # database (sqlite)
 

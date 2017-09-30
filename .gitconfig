@@ -66,7 +66,7 @@
 
 	unpushed = log --branches --not --remotes
 
-	grep = grep --perl-regexp --line-number --color=always --full-name --heading --break
+	grep = grep --perl-regexp --line-number --color=always --full-name --heading --break 
 
 	untracked = ls-files --others
 

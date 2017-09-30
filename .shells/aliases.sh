@@ -27,6 +27,7 @@ alias logout="pkill -KILL -u $USER"
 $(in-path ipython) && alias ipython="ipython --profile=me"
 alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
+alias mv="mv --verbose"
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
 $(in-path libreoffice) && alias libreoffice="libreoffice --norestore"
@@ -124,6 +125,11 @@ fi
 if $(in-path sqlite3); then
   alias sqlite3="sqlite3 -init ${HOME}/.sqliterc"
 fi
+
+# stack (it wraps a number of haskell-related tools, for each access ...)
+for i in ghc{i,} hoogle haddock; do
+  eval "alias "${i}"='stack "${i}"'"
+done
 
 unset -f in-path
 # vim: foldmethod=marker foldlevel=0 foldmarker={{{,}}} nowrap formatoptions=

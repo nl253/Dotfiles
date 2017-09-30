@@ -1,3 +1,4 @@
 [Desktop]
 Language=en_GB.utf8
 Session=i3
+# vim: ft=cfg

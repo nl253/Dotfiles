@@ -14,6 +14,12 @@ fi
 
 xhost +local:root > /dev/null 2>&1
 
+# Check if bash version is at least 4 to run some of my scripts.
+if ! (( $BASH_VERSINFO >= 4 )); then
+    echo "Your bash is outdated. Install bash >= 4."
+    return 0 
+fi
+
 for i in ~/.{shells,bash}/*.sh; do
-	[[ -f $i ]] && source $i
+	[[ -f $i ]] && source "${i}"
 done 

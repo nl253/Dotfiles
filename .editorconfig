@@ -4,42 +4,43 @@
 root = true
 
 [*]
-end_of_line = lf
-insert_final_newline = true
 charset = utf-8
+end_of_line = lf
+indent_style = space
+insert_final_newline = true
 tab_width = 4
 
 [*.vorg]
-trim_trailing_whitespace = false
-tab_width = 8
 indent_size = 4
+tab_width = 8
+trim_trailing_whitespace = false
 
 [*.{js,ts,jsx,json,css,md,yml}]
-trim_trailing_whitespace = true
-tab_width = 4
 indent_size = 2
 indent_style = space
+tab_width = 4
+trim_trailing_whitespace = true
 
 [*.{rs,py}]
-trim_trailing_whitespace = true
 indent_size = 4
 indent_style = space
+trim_trailing_whitespace = true
 
 [*.{wiki,rst}]
-trim_trailing_whitespace = true
 indent_size = 4
 indent_style = tab
+trim_trailing_whitespace = true
 
 [*.{sh,zsh,yml,yaml}]
-trim_trailing_whitespace = true
 indent_size = 2
 indent_style = space
 max_line_length = 120
+trim_trailing_whitespace = true
 
-[*.{vim}]
-trim_trailing_whitespace = false
+[*.vim]
 indent_size = 4
 indent_style = tab
+trim_trailing_whitespace = false
 
 [{Makefile,makefile}]
 indent_size = 2

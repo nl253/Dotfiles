@@ -122,6 +122,8 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 
 	command! SyncPackages call SyncPackages()
 
+	"Plug 'tpope/vim-fireplace', {'for': 'clojure'}
+	"Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 	Plug 'maralla/completor.vim'
 	let g:completor_min_chars = 1
 	let g:completor_whitelist = ['python', 
@@ -141,7 +143,10 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:completor_rust_omni_trigger = 
 				\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=|&&|\|{2}) )'
 	let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
+    "let g:completor_haskell_omni_trigger = 'import |\w{2,}|\.|( (->|=>|=|::|\w{2,}|\|) .+)$' 
+    "let g:completor_clojure_omni_trigger = '\w{2,}' 
     let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
+	"let g:haskellmode_completion_ghc = 0
 	for i in ['javascript', 'typescript', 'coffee']
 		exec 'let g:completor_'.i.'_omni_trigger = "\.|\w{4,}| (=>|>|<|=) |(import|as|export|default|new|await|async|public|static|get|protected|private|instanceof|throw|yield|in|extends) "'
 	endfor
@@ -215,7 +220,6 @@ Plug 'dkarter/bullets.vim'
 let g:bullets_enabled_file_types = g:MARKUP
 
 Plug 'dbmrq/vim-ditto', {'on': ['ToggleDitto', 'DittoOn'], 'for': g:MARKUP}
-
 let g:ditto_mode = "paragraph"
 
 Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:MARKUP}
