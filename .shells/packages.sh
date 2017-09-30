@@ -7,9 +7,8 @@ $GOPATH
 $GOROOT
 $GO_VERSION
 $GVM_ROOT=~/.gvm
-$RBENV_ROOT=~/.rbenv
-$RUBY_VERSION
-$RUBY_VERSION=~/.rbenv
+# $RBENV_ROOT=~/.rbenv
+# $RUBY_VERSION
 $RUST_SRC_PATH=~/.multirust/toolchains/${DEFAULT_TOOLCHAIN}/lib/rustlib/src/rust/src
 
 ADDITIONAL NOTES
@@ -254,11 +253,11 @@ _packages_python() {
 }
 
 _init_ruby() {
-	[[ -z $RUBY_VERSION ]] && export RUBY_VERSION=2.4.1
-	[[ -z $RBENV_ROOT ]] && export RBENV_ROOT=~/.rbenv
+	#[[ -z $RUBY_VERSION ]] && export RUBY_VERSION=2.4.1
+	#[[ -z $RBENV_ROOT ]] && export RBENV_ROOT=~/.rbenv
 	_add_to_path "${RBENV_ROOT}/bin"
 	_add_to_path ~/.gem/ruby/*/bin
-	eval "$(rbenv init -)"
+	#eval "$(rbenv init -)"
 }
 
 _packages_ruby() {
@@ -278,23 +277,23 @@ _packages_ruby() {
 }
 
 _install_ruby() {
-	if [[ ! -e $RBENV_ROOT ]]; then
-		git clone https://github.com/rbenv/rbenv.git "${RBENV_ROOT}" &
-	fi
-	if [[ ! -e "${RBENV_ROOT}/plugins/ruby-build" ]]; then
-        wait $!
-		git clone https://github.com/rbenv/ruby-build.git "${RBENV_ROOT}/plugins/ruby-build" &
-		if [[ $HAS_ADMIN == 1 ]]; then
-          wait $!
-          sudo ~/.rbenv/plugins/ruby-build/install.sh &
-        fi
-	fi
-	if [[ $(rbenv versions) =~ $(echo $RUBY_VERSION | sed -E 's/\./\\./g') ]]; then
-        wait $!
-		rbenv install $RUBY_VERSION
-	fi
+	#if [[ ! -e $RBENV_ROOT ]]; then
+		#git clone https://github.com/rbenv/rbenv.git "${RBENV_ROOT}" &
+	#fi
+	#if [[ ! -e "${RBENV_ROOT}/plugins/ruby-build" ]]; then
+        #wait $!
+		#git clone https://github.com/rbenv/ruby-build.git "${RBENV_ROOT}/plugins/ruby-build" &
+		#if [[ $HAS_ADMIN == 1 ]]; then
+          #wait $!
+          #sudo ~/.rbenv/plugins/ruby-build/install.sh &
+        #fi
+	#fi
+	#if [[ $(rbenv versions) =~ $(echo $RUBY_VERSION | sed -E 's/\./\\./g') ]]; then
+        #wait $!
+		#rbenv install $RUBY_VERSION
+	#fi
 
-    # run rbenv init
+    ## run rbenv init
     _init_ruby
 }
 
