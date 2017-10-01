@@ -157,7 +157,7 @@ _check_requirements() {
 	# if any of the requirements aren't met, exit
 	for i in "${REQUIREMENTS[@]}"; do
 		if ! _in_path $i; then
-            echo -e "[ERROR] Requirement ${i} not satisfied. Aborting." >&2
+			echo -e "[ERROR] Requirement ${i} not satisfied. Aborting." >&2
 			exit 1
 		fi
 	done
@@ -186,15 +186,15 @@ _gists() {
 		[[ ! -e $GIST_DIR ]] && mkdir -p $GIST_DIR
 		for i in "${GISTS[@]}"; do
 			if [[ ! -e ${GIST_DIR}/${i} ]]; then
-                # in the background
+				# in the background
 				git clone "https://gist.github.com/${i}.git" "${GIST_DIR}/${i}" &
-            else
-                echo -e "[INFO] Gist ${i} already present." >&2
+			else
+				echo -e "[INFO] Gist ${i} already present." >&2
 			fi
 
 		done
-    else
-        echo -e "[INFO] GISTS not set. Nothing to do." >&2
+	else
+		echo -e "[INFO] GISTS not set. Nothing to do." >&2
 	fi
 }
 
@@ -211,29 +211,32 @@ _init_python() {
 	eval "$(pyenv virtualenv-init -)"
 }
 
-_install_python(){
+_install_python() {
+
+	# intialise pyenv init
+	_init_python
 
 	# install pyenv if missing
 	[[ ! -e $PYENV_ROOT ]] && git clone https://github.com/pyenv/pyenv.git "${PYENV_ROOT}" &
 
-    # if the above async process (git) hasn't (yet) created those dirs, make them
-    [[ ! -e $PYENV_ROOT/plugins ]] && mkdir -p "${PYENV_ROOT}/plugins"
+	# if the above async process (git) hasn't (yet) created those dirs, make them
+	[[ ! -e $PYENV_ROOT/plugins ]] && mkdir -p "${PYENV_ROOT}/plugins"
 
 	# install the viruatlenv plugin if missing
 	if [[ ! -e "${PYENV_ROOT}/plugins/pyenv-virtualenv" ]]; then
 		git clone https://github.com/pyenv/pyenv-virtualenv.git "${PYENV_ROOT}/plugins/pyenv-virtualenv" &
-      else
-        echo -e "[INFO] Pyenv virtualenv plugin already present. Nothing to do." >&2
+	else
+		echo -e "[INFO] Pyenv virtualenv plugin already present. Nothing to do." >&2
 	fi
 
 	if [[ $(pyenv versions) =~ $(echo $PYENV_VERSION | sed -E 's/\./\\./g') ]]; then
 		pyenv install $PYENV_VERSION 2>/dev/null
-    else
-        echo -e "[INFO] Pyenv has the correct version of python. Nothing to do." >&2
+	else
+		echo -e "[INFO] Pyenv has the correct version of python. Nothing to do." >&2
 	fi
 
-    # intialise pyenv init
-    _init_python
+	# intialise pyenv init
+	_init_python
 }
 
 _packages_python() {
@@ -245,8 +248,8 @@ _packages_python() {
 			fi
 		done
 
-    else
-        echo -e "[WARN] Either python not installed or you didn't specify any packages to install." >&2
+	else
+		echo -e "[WARN] Either python not installed or you didn't specify any packages to install." >&2
 	fi
 	# await last loop
 	wait $!
@@ -264,10 +267,10 @@ _packages_ruby() {
 	if [[ -n $RUBY_GEMS ]] && _in_path gem; then
 		local packages=$(gem list | sed -E 's/\(.*\)//')
 		for i in "${RUBY_GEMS[@]}"; do
-            ! _in_array "${i}" "${packages}" && gem install "${i}" &
+			! _in_array "${i}" "${packages}" && gem install "${i}" &
 		done
-    else
-        echo -e "[WARN] Either ruby not installed or you didn't specify any gems to install." >&2
+	else
+		echo -e "[WARN] Either ruby not installed or you didn't specify any gems to install." >&2
 	fi
 	# await last loop
 	wait $!
@@ -275,30 +278,30 @@ _packages_ruby() {
 
 _install_ruby() {
 	#if [[ ! -e $RBENV_ROOT ]]; then
-		#git clone https://github.com/rbenv/rbenv.git "${RBENV_ROOT}" &
+	#git clone https://github.com/rbenv/rbenv.git "${RBENV_ROOT}" &
 	#fi
 	#if [[ ! -e "${RBENV_ROOT}/plugins/ruby-build" ]]; then
-        #wait $!
-		#git clone https://github.com/rbenv/ruby-build.git "${RBENV_ROOT}/plugins/ruby-build" &
-		#if [[ $HAS_ADMIN == 1 ]]; then
-          #wait $!
-          #sudo ~/.rbenv/plugins/ruby-build/install.sh &
-        #fi
+	#wait $!
+	#git clone https://github.com/rbenv/ruby-build.git "${RBENV_ROOT}/plugins/ruby-build" &
+	#if [[ $HAS_ADMIN == 1 ]]; then
+	#wait $!
+	#sudo ~/.rbenv/plugins/ruby-build/install.sh &
+	#fi
 	#fi
 	#if [[ $(rbenv versions) =~ $(echo $RUBY_VERSION | sed -E 's/\./\\./g') ]]; then
-        #wait $!
-		#rbenv install $RUBY_VERSION
+	#wait $!
+	#rbenv install $RUBY_VERSION
 	#fi
 
-    ## run rbenv init
-    _init_ruby
+	## run rbenv init
+	_init_ruby
 }
 
 _init_node() {
-    if [[ -s "/home/norbert/.gvm/scripts/gvm" ]]; then
-        source "/home/norbert/.gvm/scripts/gvm"
-    fi
-    # for yarn and npm
+	if [[ -s "/home/norbert/.gvm/scripts/gvm" ]]; then
+		source "/home/norbert/.gvm/scripts/gvm"
+	fi
+	# for yarn and npm
 	_add_to_path ~/{.yarn,node_modules}/bin
 }
 
@@ -311,23 +314,23 @@ _install_node() {
 
 _packages_node() {
 
-    if _in_path yarn; then
-        local install_command="yarn global add"
-        local packages=$(yarn global list 2>/dev/null)
+	if _in_path yarn; then
+		local install_command="yarn global add"
+		local packages=$(yarn global list 2>/dev/null)
 
-    else
-        echo "[ERROR] Yarn not installed! Node.js packages not synced." >&2
-        return 1
-    fi
+	else
+		echo "[ERROR] Yarn not installed! Node.js packages not synced." >&2
+		return 1
+	fi
 
-    for i in "${NODE_PACKAGES[@]}"; do
-        if ! _in_array "${i}" "${packages}"; then
-            eval "${install_command} ${i}" &
-        fi
-    done
+	for i in "${NODE_PACKAGES[@]}"; do
+		if ! _in_array "${i}" "${packages}"; then
+			eval "${install_command} ${i}" &
+		fi
+	done
 
-    # await last loop
-    wait $!
+	# await last loop
+	wait $!
 }
 
 _init_haskell() {
@@ -344,27 +347,27 @@ _init_haskell() {
 
 _install_haskell() {
 	if ! _in_path stack; then
-      curl -sSL https://get.haskellstack.org/ | sh
-      _init_haskell
-    else
-      echo "[INFO] Stack seems to be installed. No need to install haskell." >&2
+		curl -sSL https://get.haskellstack.org/ | sh
+		_init_haskell
+	else
+		echo "[INFO] Stack seems to be installed. No need to install haskell." >&2
 	fi
 }
 
 _packages_haskell() {
 
 	if _in_path stack; then
-      for i in "${HASKELL_PACKAGES[@]}"; do
-          stack install "${i}" &
-      done
-    else
-      echo -e "[ERROR] Attempting to use stack to install haskell packages while stack is not installed.
+		for i in "${HASKELL_PACKAGES[@]}"; do
+			stack install "${i}" &
+		done
+	else
+		echo -e "[ERROR] Attempting to use stack to install haskell packages while stack is not installed.
             Install stack first and rerun." >&2
-      return 1
-    fi
+		return 1
+	fi
 
-    # await last loop
-    wait $!
+	# await last loop
+	wait $!
 }
 
 _packages_rust() {
@@ -374,14 +377,14 @@ _packages_rust() {
 				rustup run "${DEFAULT_TOOLCHAIN}" cargo install --all-features "${i}" 2>/dev/null &
 			fi
 		done
-    else
-      echo -e "[ERROR] Rust doesn't seem to be installed.
+	else
+		echo -e "[ERROR] Rust doesn't seem to be installed.
             Cargo not present so packages could not be installed.
             Install Rust using rustup and rerun." >&2
 	fi
 
-    # await last loop
-    wait $!
+	# await last loop
+	wait $!
 }
 
 _init_rust() {
@@ -390,15 +393,15 @@ _init_rust() {
 	_add_to_path ~/.cargo/bin
 }
 
-_install_rust(){
+_install_rust() {
 	# install Rust using rustup if Rust is missing
 	if ! _in_path rustup && _in_path curl; then
 		curl https://sh.rustup.rs -sSf | sh
 		rustup toolchain install "${DEFAULT_TOOLCHAIN}" &
 		rustup default "${DEFAULT_TOOLCHAIN}" &
-        _init_rust
-    else
-        echo -e "[INFO] Rust is already installed.  Nothing to do." >&2
+		_init_rust
+	else
+		echo -e "[INFO] Rust is already installed.  Nothing to do." >&2
 	fi
 }
 
@@ -411,25 +414,25 @@ _init_go() {
 _install_go() {
 	if [[ ! -e ~/.gvm ]]; then
 		curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
-        _init_go
-    else
-        echo -e "[INFO] GVM (golang) is already installed.  Nothing to do." >&2
+		_init_go
+	else
+		echo -e "[INFO] GVM (golang) is already installed.  Nothing to do." >&2
 	fi
 
 	if [[ ! $(gvm version) == $GO_VERSION ]]; then
 		gvm install "${GO_VERSION}"
-        _init_go
-    else
-        echo -e "[INFO] GVM has the correct GO_VERSION. Nothing to do." >&2
+		_init_go
+	else
+		echo -e "[INFO] GVM has the correct GO_VERSION. Nothing to do." >&2
 	fi
 }
 
 _packages_go() {
 
 	#for i in "${GO_PACKAGES[@]}"; do
-	  #go install
+	#go install
 	#done
-    echo "" &
+	echo "" &
 }
 
 _init_php() {
@@ -446,9 +449,9 @@ _install_php() {
 
 _packages_pacman() {
 
-    # only run on systems that have pacman
+	# only run on systems that have pacman
 	if _in_path pacman && [[ -n $PACMAN_PACKAGES ]] && [[ "${HAS_ADMIN}" == 1 ]]; then
-	    # query local database, quiet mode, just names
+		# query local database, quiet mode, just names
 		local packages=$(pacman -Qq | xargs)
 		# break immediately on any isse to avoid endless loops
 		for i in "${PACMAN_PACKAGES[@]}"; do
@@ -461,14 +464,14 @@ _packages_pacman() {
 
 main() {
 
-    _check_requirements
-    _add_to_path ~/.fzf/bin
+	_check_requirements
+	_add_to_path ~/.fzf/bin
 
 	local _cwd=$(pwd)
 
 	cd
 
-    # do it in the background
+	# do it in the background
 	for language in python ruby haskell go node php; do
 		eval "_init_${language}"
 	done
@@ -476,28 +479,28 @@ main() {
 	cd "${_cwd}"
 }
 
-install_package_managers(){
+install_package_managers() {
 
-  _check_requirements
+	_check_requirements
 
-  _packages_pacman
+	_packages_pacman
 
-  coproc _gists
-
-  for i in python ruby haskell php go rust node; do
-  # FIXME have the _install_* call init
-  # this repetition IS necessary!
-    eval "_init_${i}" # must not be run by a subshell - it sets vars
-    eval "_install_${i}"
-    eval "_packages_${i}" &
-  done
+	coproc _gists for i in \
+		python \
+		ruby haskell php go rust node; do
+		# FIXME have the _install_* call init
+		# this repetition IS necessary!
+		eval "_init_${i}" # must not be run by a subshell - it sets vars
+		eval "_install_${i}"
+		eval "_packages_${i}" &
+	done
 }
 
 main
 
 # unset created functions
 for i in main; do
-  eval "unset -f ${i}"
+	eval "unset -f ${i}"
 done
 
 # vim: nowrap foldmarker={,} foldmethod=marker
