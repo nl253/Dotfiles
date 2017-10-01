@@ -1,0 +1,65 @@
+# variables
+SHELL=/bin/bash
+PATH=/home/norbert/.cargo/bin:/home/norbert/.gem/ruby/2.4.0/bin:/home/norbert/.gvm/bin:/home/norbert/.local/bin:/home/norbert/.yarn/bin:/usr/bin:/usr/bin/core_perl:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/lib/jvm/default/bin:/usr/local/bin:/usr/local/sbin
+
+# day of week (0 - 6) (Sunday=0)
+# month (1 - 12)
+# day of        month (1 - 31)
+# hour (0 - 23)
+# min (0 - 59)
+
+# Every day at 21:15 save list of installed packages
+15 21 * * * pacman -Qq > ~/.backup/pacman/installed.txt
+
+# Every hour remove tag files (tags) created by ctags
+0 * * * * rm -f $(find -type f -and -readable -and -name 'tags') 
+
+# Run scripts in ~/.cron 
+# ======================
+# NOTE both python3 and bash scripts will be executed. 
+# They MUST:
+# - be readable
+# - be executable
+# - end with .bash OR .sh OR .py
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# Min     Hour    Day     Month   Weekday    Command
+# ---------------------------------------------------------------------------------------------------------------------------------------
+
+# Every hour
+0         *       *      *       *	    find ~/.cron/hourly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.hourly.log
+
+1         *       *      *       *	    find ~/.cron/hourly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.hourly.log
+
+# Every day at 15:45
+45       15       *      *       *	    find ~/.cron/daily -regextype posix-extended -type f -and -and executable -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.daily.log
+
+46       15       *      *       *	    find ~/.cron/daily -regextype posix-extended -type f -and -and executable -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.daily.log
+
+# 15:05 Monday - Friday 
+5        15       *      *      1-5	    find ~/.cron/weekdaily -regextype posix-extended -type f -and executable -and -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.weekdaily.log
+
+6        15       *      *      1-5	    find ~/.cron/weekdaily -regextype posix-extended -type f -and executable -and -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.weekdaily.log
+
+# 15:10, Monday once a week
+10       15       *      *       1	    find ~/.cron/weekly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.weekly.log
+
+11       15       *      *       1	    find ~/.cron/weekly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.weekly.log
+
+# 15:15, once a month on the very first day
+15       15       1      *       *	    find ~/.cron/monthly -type f -and executable -and -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.monthly.log
+
+16       15       1      *       *	    find ~/.cron/monthly -type f -and executable -and -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.monthly.log
+
+# 15:25 Monday every other week 
+25       15       7      *       *	    find ~/.cron/fortnightly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.fortnightly.log
+25       15      21      *       *	    find ~/.cron/fortnightly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.fortnightly.log
+
+26       15       7      *       *	    find ~/.cron/fortnightly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.fortnightly.log
+26       15      21      *       *	    find ~/.cron/fortnightly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.lfortnightly.og
+
+# 15:30 on the Christmas Day
+30       15      24     12       *	    find ~/.cron/yearly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.(ba)?sh$' -exec bash {} + &>/tmp/cron.yearly.log
+
+31       15      24     12       *	    find ~/.cron/yearly -regextype posix-extended -type f -and executable -and -readable -and -regex '\.py$' -exec python3 {} + &>/tmp/cron.yearly.log
+

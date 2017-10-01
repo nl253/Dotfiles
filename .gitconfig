@@ -58,6 +58,8 @@
 	# [default] trailing-space: looks for spaces at the end of a line
 	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+	compression = 9
+	pager = less -R
 
 [alias]
 
@@ -109,7 +111,7 @@
 	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
 
 [web]
-	browser = google-chrome-stable
+	browser = chromium
 
 [difftool]
 	prompt = false
