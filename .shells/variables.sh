@@ -47,7 +47,7 @@ export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
 
 # $PAGER
 if [[ -x $(command which less) ]]; then
-  alias less='less -4RIX' && export PAGER=less
+  alias less='less -R' && export PAGER=less
 else
   [[ -x $(command which more) ]] && export PAGER=more && alias less=more
 fi
