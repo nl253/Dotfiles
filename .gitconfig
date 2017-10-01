@@ -2,7 +2,7 @@
 	templatedir = ~/.git-templates
 
 [user]
-	email = nl253@kent.ac.uk
+	email = norbertlogiewa96@gmail.com
 	name = nl253
 
 [diff]
@@ -11,7 +11,8 @@
 
 [merge]
 	# Include summaries of merged commits in newly created merge commit messages
-	log = true  
+	tool = vimdiff
+	conflictstyle = diff3
 
 [help]
 	 # Automatically correct and execute mistyped commands
@@ -110,29 +111,15 @@
 [web]
 	browser = google-chrome-stable
 
-# ---------------
-# URL shorthands
-# ---------------
-[url "git@github.com:"]
-	insteadOf = "gh:"
-	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
-
-[url "git://github.com/"]
-	insteadOf = "github:"
-
-[url "git@gist.github.com:"]
-	insteadOf = "gst:"
-	pushInsteadOf = "gist:"
-	pushInsteadOf = "git://gist.github.com/"
-
-[url "git://gist.github.com/"]
-	insteadOf = "gist:"interactive = auto
-
 [difftool]
 	prompt = false
 
 [credential]
-	helper = cache --timeout=320
+	helper = cache --timeout=900
 
 # vim: ts=4 sw=4
+[sendemail]
+	smtpserver = smtp.gmail.com
+	smtpserverport = 587
+	smtpencryption = tls
+	smtpuser = norbertlogiewa96@gmail.com
