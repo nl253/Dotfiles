@@ -74,7 +74,6 @@ colord-gtk
 composer
 compositeproto
 coreutils
-cppcheck
 cpplint
 cpupower
 cracklib
@@ -680,6 +679,8 @@ manjaro-wallpapers-17.0
 mariadb
 mariadb-clients
 mathjax
+maven
+maven-bash-completion-git
 mdadm
 mediainfo
 memtest86+
@@ -980,7 +981,6 @@ videoproto
 vim-runtime
 vim-spell-en
 vino
-visual-studio-code
 volume_key
 vpnc
 vte-common

@@ -10,6 +10,14 @@
 WIFI PASSWORD
 2EC53A496BBB
 
+Local IP adresses
+
+- 192.168.1.2 (ME)
+- 192.168.1.3
+- 192.168.1.8
+- 192.168.1.10
+- 192.168.1.12
+
 ( Node.js
 
 @Orm

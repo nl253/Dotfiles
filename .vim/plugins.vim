@@ -125,6 +125,7 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 
 	"Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 	"Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
+	
 	Plug 'maralla/completor.vim'
 	let g:completor_min_chars = 1
 	let g:completor_whitelist = ['python', 
