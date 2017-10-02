@@ -7,6 +7,37 @@ public class Main {
 }
 endsnippet
 
+
+snippet "to[sS]tr(ing)?" "toString() [java]" r
+@Override
+public String toString() {
+  return super.toString();
+}
+endsnippet
+
+snippet collect "Collect [java]"
+List<String> list = Arrays.stream(strArray).collect(Collectors.toList());
+endsnippet 
+
+snippet readFile "Read file [java]"
+private List<String> readFile(String filename) {
+  List<String> records = new ArrayList<String>();
+  try {
+    BufferedReader reader = new BufferedReader(new FileReader(filename));
+    String line;
+    while ((line = reader.readLine()) != null) {
+      records.add(line);
+    }
+    reader.close();
+    return records;
+  } catch (Exception e) {
+    System.err.format("Exception occurred trying to read '%s'.", filename);
+    e.printStackTrace();
+    return null;
+  }
+} 
+endsnippet
+
 snippet foreach "Foreach loop [java]"
 for (Item i : iter) {
   // do stuff
@@ -31,7 +62,7 @@ while (true) {
 }
 endsnippet
 
-snippet "echo|print" "Sysout [java]" r
+snippet "echo|print|sysout" "Sysout [java]" r
 System.out.println("${1:message}");
 endsnippet
 

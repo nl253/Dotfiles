@@ -1,35 +1,35 @@
---
+
 -- DEPENDENCIES
 -- -------------
--- rofi :: launcher
--- alacritty :: terminal emulator
--- tmux :: terminal multiplexer
--- xbacklight :: brightness control
--- amixer :: volume control
--- notify-send :: notifications
--- scrot :: screen-shots
--- dropbox :: 2 way backup / sync
--- feh :: wallpaper
---
+-- rofi              launcher
+-- alacritty         terminal emulator
+-- tmux              terminal multiplexer
+-- xbacklight        brightness control
+-- amixer            volume control
+-- notify-send       notifications
+-- scrot             screen-shots
+-- dropbox           2 way backup / sync
+-- feh               wallpaper
+
 import           XMonad
-import           Data.Monoid
+-- import           Data.Monoid
 import           System.Exit
 import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
---
+
 -- layouts
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.NoBorders
-import XMonad.Layout.Fullscreen
+-- import XMonad.Layout.Fullscreen
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 --
-import XMonad.Hooks.DynamicLog
+-- import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.SetWMName
---
+-- import XMonad.Hooks.SetWMName
+
 -- ADDED
 -- import XMonad.Layout.Fullscreen
 -- import XMonad.Layout.NoBorders
@@ -40,7 +40,8 @@ import XMonad.Hooks.SetWMName
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 -- MODIFIED :: changed from xterminal to terminix
---
+
+-- myTerminal :: [Char]
 myTerminal      = "alacritty -e tmux"
 
 -- Whether focus follows the mouse pointer.
@@ -66,9 +67,9 @@ myModMask       = mod4Mask
 -- By default we use numeric strings, but any string may be used as a
 -- workspace name. The number of workspaces is determined by the length
 -- of this list.
---
+
 -- A tagging example:
---
+
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 -- DEFAULT :: myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 myWorkspaces    = ["1:NVIM", "2:BROWSER", "3:EMACS", "4:OTHER","5:POWERPOINT"] ++ map show [6..9]
@@ -79,7 +80,7 @@ myFocusedBorderColor = "#ff0000"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
---
+
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
@@ -159,7 +160,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
-    , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
+    , ((modm .|. shiftMask, xK_q     ), io exitSuccess)
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
@@ -190,11 +191,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
 
 ------------------------------------------------------------------------
---
+
 -- FOR MOUSE USERS
 -- ----------------
 -- Mouse bindings: default actions bound to mouse events
---
+
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- mod-button1, Set the window to floating mode and move by dragging
@@ -218,18 +219,18 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- If you change layout bindings be sure to use 'mod-shift-space' after
 -- restarting (with 'mod-q') to reset your layout state to the new
 -- defaults, as xmonad preserves your old layout settings by default.
---
+
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
---
+
 -- myLayout =  ThreeColMid 1 (3/100) (1/2) ||| tiled ||| Mirror tiled ||| spiral (6/7) ||| Full
---
+
 -- "smartBorders" modifier makes it so the borders on windows only
 -- appear if there is more than one visible window.
---
+
 -- "avoidStruts" modifier makes it so that the layout provides
 -- space for the status bar at the top of the screen.
---
+
 myLayout =  spacing 5 $ gaps [(U,5),(D,5),(L,5),(R,5)] $ smartBorders(avoidStruts(ThreeColMid 1 (3/100) (1/2) ||| Tall 1 (3/100) (60/100) ||| spiral (58/100) ||| Full))
 ------------------------------------------------------------------------
 -- Window rules:
@@ -238,14 +239,14 @@ myLayout =  spacing 5 $ gaps [(U,5),(D,5),(L,5),(R,5)] $ smartBorders(avoidStrut
 -- a new window. You can use this to, for example, always float a
 -- particular program, or have a client always appear on a particular
 -- workspace.
---
+
 -- To find the property name associated with a program, use
 -- > xprop | grep WM_CLASS
 -- and click on the client you're interested in.
---
+
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
---
+
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Google-chrome"  --> doShift "2:BROWSER"
@@ -261,11 +262,11 @@ myManageHook = composeAll
 -- Event handling
 
 -- * EwmhDesktops users should change this to ewmhDesktopsEventHook
---
+
 -- Defines a custom handler function for X Events. The function should
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
---
+
 myEventHook = mempty
 
 ------------------------------------------------------------------------
@@ -273,7 +274,7 @@ myEventHook = mempty
 
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
+
 myLogHook = return ()
 
 ------------------------------------------------------------------------
@@ -282,7 +283,7 @@ myLogHook = return ()
 -- Perform an arbitrary action each time xmonad starts or is restarted
 -- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
 -- per-workspace layout choices.
---
+
 -- By default, do nothing.
 -- MODIFIED :: start dropbox, change wallpaper
 myStartupHook = do
@@ -292,15 +293,15 @@ myStartupHook = do
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
---
-  main = xmonad defaults
+
+main = xmonad defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
 -- use the defaults defined in xmond/XMonad/Config.hs
---
+
 -- No need to modify this.
---
+
 defaults = def {
       -- simple stuff
         terminal           = myTerminal,

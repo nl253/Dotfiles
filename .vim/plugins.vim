@@ -13,6 +13,7 @@ if !exists('g:PROGRAMMING')
 					   \ 'javascript',
 					   \ 'rust',
 					   \ 'python',  
+					   \ 'java',  
 					   \ 'php', 
 					   \ 'sql', 
 					   \ 'sh', 
@@ -245,7 +246,7 @@ aug TableModeActivation
 aug END
 
 " MARKDOWN:
-let g:markdown_fenced_languages = ['sh', 'python', 'javascript', 'css', 'html']
+let g:markdown_fenced_languages = ['sh', 'python', 'javascript', 'css', 'html', 'java']
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
