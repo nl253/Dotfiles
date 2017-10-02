@@ -111,7 +111,7 @@
 	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
 
     zipit = "archive --format=zip --output=repo.zip --verbose -9 HEAD"
-    tarit = "archive --format=zip --output=repo.tar --verbose -9 HEAD"
+    tarit = "archive --format=tar --output=repo.tar --verbose HEAD"
     clean = "clean --interactive"
 
 [web]
