@@ -11,10 +11,10 @@ if !exists('g:PROGRAMMING')
 					   \ 'html',
 					   \ 'css', 
 					   \ 'javascript',
-					   \ 'rust',
 					   \ 'python',  
 					   \ 'java',  
 					   \ 'php', 
+					   \ 'typescript',  
 					   \ 'sql', 
 					   \ 'sh', 
 					   \ 'zsh']
@@ -25,13 +25,15 @@ endif
 
 " GENERAL:
 
-for i in ['https://github.com/vim-scripts/SyntaxAttr.vim', 
+for i in [
 	    \ 'scrooloose/nerdcommenter', 
-	  	\ 'editorconfig/editorconfig-vim', 
 	   	\ 'konfekt/fastfold', 
 	   	\ 'wellle/targets.vim'] 
 	Plug i
 endfor
+
+" 'https://github.com/vim-scripts/SyntaxAttr.vim', 
+" \ 'editorconfig/editorconfig-vim', 
 
 " bin == just the binary, all == bin + shell keybindings
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
@@ -45,7 +47,7 @@ endfor
 if executable('tmux') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
-if has('perl') | Plug 'vim-scripts/dbext.vim', {'for': ['sql', 'plsql', 'mysql']} | endif
+"if has('perl') | Plug 'vim-scripts/dbext.vim', {'for': ['sql', 'plsql', 'mysql']} | endif
 Plug 'junegunn/gv.vim', {'on': ['GV']}
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
@@ -66,8 +68,11 @@ let g:fzf_layout = {'up': '~40%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
 
 " RUST:
-let g:rustfmt_autosave = 1
-Plug 'rust-lang/rust.vim', {'for': 'rust'}
+
+if index(g:PROGRAMMING, 'rust') >= 0
+	let g:rustfmt_autosave = 1
+	Plug 'rust-lang/rust.vim', {'for': 'rust'}
+endif
 
 " PYTHON PLUGINS:
 if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
@@ -80,7 +85,6 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:snips_github = "https://github.com/nl253"
 
 	function! SyncPackages()
-
 		if executable("yarn") 
 
 			let yarn_packages = system('yarn global list 2>/dev/null')
@@ -102,11 +106,9 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 				endtry
 			endfor
 		endif
-
 		if executable("cargo") && !executable("racer")
 			echo system('cd && cargo install racer')
 		endif
-
 		if executable('pip')
 			let pip_packages = systemlist("pip list --format legacy \| grep -Eo '^\\w+'")
 			for i in ['jedi', 'mypy', 'pyflakes', 'vulture', 'isort', 'pylint']
@@ -120,8 +122,6 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 			endfor
 		endif
 	endfunction
-
-	command! SyncPackages call SyncPackages()
 
 	"Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 	"Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
@@ -223,15 +223,16 @@ let g:bullets_enabled_file_types = g:MARKUP
 
 Plug 'dbmrq/vim-ditto', {'on': ['ToggleDitto', 'DittoOn'], 'for': g:MARKUP}
 let g:ditto_mode = "paragraph"
+exec "au! FileType ".join(g:MARKUP, ',')." DittoOn"
 
 Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:MARKUP}
 
 " TABLE MODE:
-Plug 'dhruvasagar/vim-table-mode', {'for': g:MARKUP}
-let g:table_mode_disable_mappings = 1
-let g:table_mode_verbose = 0 
-let g:table_mode_syntax = 1 
-let g:table_mode_update_time = 800
+"Plug 'dhruvasagar/vim-table-mode', {'for': g:MARKUP}
+"let g:table_mode_disable_mappings = 1
+"let g:table_mode_verbose = 0 
+"let g:table_mode_syntax = 1 
+"let g:table_mode_update_time = 800
 
 aug TableModeActivation
     au!
@@ -247,7 +248,7 @@ aug TableModeActivation
 aug END
 
 " MARKDOWN:
-let g:markdown_fenced_languages = ['sh', 'python', 'javascript', 'css', 'html', 'java']
+let g:markdown_fenced_languages = g:PROGRAMMING
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
@@ -262,24 +263,30 @@ for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
 				   \ 'jinja']}
 endfor
 
-Plug 'cakebaker/scss-syntax.vim' | Plug 'othree/csscomplete.vim', {'for': ['less', 'css', 'scss', 'sass']}
+"Plug 'cakebaker/scss-syntax.vim' 
+Plug 'othree/csscomplete.vim', {'for': ['less', 'css', 'scss', 'sass']}
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
-for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
-	Plug i, {'for': ['javascript', 'typescript']}
-endfor
 
-for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6']
-	Plug i, {'for': ['javascript']}
-endfor
+if index(g:PROGRAMMING, 'javascript') >= 0
+	for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
+		Plug i, {'for': ['javascript', 'typescript']}
+	endfor
 
-Plug 'leafgarland/typescript-vim', {'for': ['typescript']}
+	for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6']
+		Plug i, {'for': ['javascript']}
+	endfor
 
-let g:tsuquyomi_completion_detail = 1
-let g:tsuquyomi_javascript_support = 1
-let g:tsuquyomi_completion_preview = 1
-let g:javascript_plugin_jsdoc = 1
+	if index(g:PROGRAMMING, 'rust') >= 0
+		Plug 'leafgarland/typescript-vim', {'for': ['typescript']}
+	endif
+
+	let g:tsuquyomi_completion_detail = 1
+	let g:tsuquyomi_javascript_support = 1
+	let g:tsuquyomi_completion_preview = 1
+	let g:javascript_plugin_jsdoc = 1 
+endif
 
 Plug 'elzr/vim-json', {'for': 'json'}
 
@@ -309,15 +316,27 @@ let g:used_javascript_libs = 'jquery,react,'
 " Templating Engines:
 " -------------------
 " Pug:
-"Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
-"Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
-"au! FileType jade setl ft=pug 
+
+if index(g:PROGRAMMING, 'php') >= 0 ||  index(g:PROGRAMMING, 'jade') >= 0 
+	Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
+	Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
+	au! FileType jade setl ft=pug 
+endif
+
 " Jinja Twig Nunjucks:
-"Plug 'Glench/Vim-Jinja2-Syntax'
-" au! BufNewFile,BufRead *.{twig,njk} setl fs=jinja
+for i in ["twig", "jinja", "jinja2", "njk", "nunjucks"]
+	if index(g:PROGRAMMING, i) >= 0
+		Plug 'Glench/Vim-Jinja2-Syntax'
+		au! BufNewFile,BufRead *.{twig,njk} setl fs=jinja
+		break
+	endif
+endfor
 
 " PHP:
-Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+"
+if index(g:PROGRAMMING, 'php') >= 0
+	Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+endif
 
 " MY PLUGINS:
 " ==========
@@ -330,3 +349,4 @@ let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']}
 call plug#end()
 call neomake#configure#automake('rw', 1000) 
 colorscheme fabulous
+" vim: foldmethod=indent

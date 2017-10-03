@@ -45,7 +45,7 @@ else
 endif
 
 " Add to $PATH bin dirs for package managers in case they aren't in $PATH already
-for i in ['~/node_modules/.bin', '~/.gem/ruby/*/bin'] + split(expand('~/{.fzf,.cargo,.local}/bin'))
+for i in ['~/node_modules/.bin', '~/.gem/ruby/*/bin'] + split(expand('~/.{fzf,cargo,local,stack,cabal}/bin'))
 	let bin_dir = expand(i)
 	if !empty(bin_dir) && !($PATH =~ bin_dir)
 		let $PATH = expand(i).':'.$PATH

@@ -60,7 +60,7 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
 # declare used python packages
 PYTHON_PACKAGES=(
 	'yapf' 'jedi' 'SQLAlchemy' 'yamllint' 'isort'
-	'ipython' 'pylama' 'flake8' 'vulture' 'pycallgraph' 'mypy' 'pylint' 'ranger-fm'
+	'ipython' 'neovim' 'pylama' 'flake8' 'vulture' 'pycallgraph' 'mypy' 'pylint' 'ranger-fm'
 	'proselint' 'profiling' 'pytest' 'psycopg2' 'mycli' 'docutils'
 	'requests' 'Jinja2' 'Django' 'Flask' 'youtube-dl' 'cookiecutter')
 

@@ -367,3 +367,7 @@ Empty*
 *.tar
 
 .config/hub
+.multirust/
+.local/share/JetBrains/
+.local/share/icc/
+.local/share/xfce4/
