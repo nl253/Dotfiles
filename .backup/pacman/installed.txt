@@ -81,6 +81,9 @@ crda
 cronie
 cryptsetup
 ctags
+cups
+cups-filters
+cups-pdf
 cups-pk-helper
 curl
 damageproto
@@ -140,6 +143,7 @@ flac
 flex
 fontconfig
 fontsproto
+foomatic-db-engine
 freeglut
 freetype2
 fribidi
@@ -161,6 +165,8 @@ gdm
 gegl02
 geoclue2
 geocode-glib
+geoip
+geoip-database
 gettext
 ghostscript
 giflib
@@ -251,6 +257,7 @@ gts
 gucharmap
 gufw
 guile
+gutenprint
 gvfs
 gvfs-afc
 gvfs-goa
@@ -266,6 +273,7 @@ hdparm
 hexchat
 hicolor-icon-theme
 highlight
+hplip
 hspell
 htop
 http-parser
@@ -472,6 +480,7 @@ libjpeg-turbo
 libksba
 liblangtag
 libldap
+liblouis
 liblqr
 libmariadbclient
 libmbim
@@ -670,6 +679,7 @@ manjaro-hello
 manjaro-hotfixes
 manjaro-icons
 manjaro-keyring
+manjaro-printer
 manjaro-pulse
 manjaro-release
 manjaro-settings-manager
@@ -720,6 +730,7 @@ nautilus-empty-file
 nautilus-sendto
 ncurses
 neon
+net-snmp
 net-tools
 netctl
 nettle
@@ -734,6 +745,7 @@ nfsidmap
 nghttp2
 ngrep
 nm-connection-editor
+nmap
 nodejs
 noto-fonts
 npm
@@ -742,6 +754,7 @@ nspr
 nss
 nss-mdns
 ntfs-3g
+ntop
 ntp
 numlockx
 ocl-icd
@@ -780,6 +793,8 @@ pcre
 pcre2
 pcsclite
 perl
+perl-clone
+perl-dbi
 perl-encode-locale
 perl-error
 perl-file-listing
@@ -797,6 +812,10 @@ perl-net-http
 perl-try-tiny
 perl-uri
 perl-www-robotrules
+perl-xml-libxml
+perl-xml-namespacesupport
+perl-xml-sax
+perl-xml-sax-base
 php
 php-apache
 php-cgi
@@ -834,11 +853,15 @@ pulseaudio-zeroconf
 pygobject-devel
 pygobject2-devel
 pygtk
+pyqt5-common
 python
 python-appdirs
 python-atspi
+python-cairo
 python-chardet
 python-dateutil
+python-dbus
+python-dbus-common
 python-decorator
 python-gobject
 python-idna
@@ -854,11 +877,15 @@ python-pexpect
 python-pickleshare
 python-prompt_toolkit
 python-ptyprocess
+python-pycups
+python-pycurl
 python-pygments
 python-pyparsing
+python-pyqt5
 python-pyzmq
 python-requests
 python-setuptools
+python-sip
 python-six
 python-terminado
 python-tornado
@@ -871,6 +898,7 @@ python2-cairo
 python2-gobject
 python2-gobject2
 python2-nautilus
+qpdf
 qt5-base
 qt5-styleplugins
 qt5-svg
@@ -892,6 +920,7 @@ rfkill
 rhash
 rlwrap
 rpcbind
+rrdtool
 rsync
 rtkit
 rtmpdump
@@ -911,6 +940,7 @@ shadow
 shared-color-targets
 shared-mime-info
 shfmt
+sip
 slang
 slock
 smbclient
@@ -921,6 +951,7 @@ spandsp
 speedtest-cli
 speex
 speexdsp
+splix
 spotify-stable
 sqlite
 startup-notification
@@ -928,6 +959,7 @@ subversion
 sudo
 sushi
 sysfsutils
+system-config-printer
 systemd
 systemd-sysvcompat
 t1lib
