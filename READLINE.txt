@@ -2,16 +2,22 @@
 
 # learn 
 # =====
+"\e*": insert-completions
+"\e\\": delete-horizontal-space
+"\e\C-]": character-search-backward
 "\e\C-e": shell-expand-line
+"\e.": insert-last-argument
 "\C-x\C-x": exchange-point-and-mark
 "\C-t": transpose-chars
 "\ec": capitalize-word
 "\C-]": character-search
 "\e ": set-mark
 "\er": revert-line
+
+"\e#": insert-comment
  
-# macros
-# ======
+# macros !!!
+# ==========
 
 "\C-x(": start-kbd-macro
 "\C-x)": end-kbd-macro
@@ -19,24 +25,9 @@
 
 "\e\C-g": abort
 
-# info
-# ====
 
-"\C-x\C-v": display-shell-version
-
-"\e[200~": bracketed-paste-begin
-"\e\C-]": character-search-backward
-"\e\\": delete-horizontal-space
-"\e#": insert-comment
-"\e.": insert-last-argument
-"\e_": insert-last-argument
-"\C-o": operate-and-get-next
-
-# completion
-# ==========
-
-"\C-i": menu-complete
-"\e*": insert-completions
+# completion !!!
+# ==============
 
 "\eg": glob-complete-word
 "\C-x*": glob-expand-word
@@ -55,29 +46,19 @@
 "\C-x@": possible-hostname-completions
 "\C-x/": possible-filename-completions
 
-# history
-# =======
-
-# ???
-# ===
-
 "\e\C-i": dynamic-complete-history
-"\C-q": quoted-insert
-"\C-v": quoted-insert
-
-# kill 
-# ====
-
-"\ed": kill-word
-"\C-k": kill-line
-"\e\C-?": backward-kill-word
-"\e\C-h": backward-kill-word
-"\C-x\C-?": backward-kill-line
 
 # yank
 # ====
 
-"\C-y": yank
 "\e.": yank-last-arg
 "\e\C-y": yank-nth-arg
 "\ey": yank-pop
+
+# ???
+# ===
+
+"\C-q": quoted-insert
+"\C-v": quoted-insert
+
+"\e[200~": bracketed-paste-begin

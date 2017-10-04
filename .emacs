@@ -1,1 +1,1 @@
-(setq x 22)
+(setq x)
