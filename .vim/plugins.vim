@@ -5,19 +5,22 @@
 " MARKUP languages you actively use
 if !exists('g:MARKUP') | let g:MARKUP = ['markdown', 'rst', 'vorg'] | endif
 
+" medium strong method
+"
+if has('crypt-blowfish2')
+	set cm=blowfish2  
+endif
+
 " PROGRAMMING LANGUAGES you code in 
 if !exists('g:PROGRAMMING')
-	let g:PROGRAMMING = ['xhtml',
-					   \ 'html',
+	let g:PROGRAMMING = ['html',
 					   \ 'css', 
 					   \ 'javascript',
 					   \ 'python',  
 					   \ 'java',  
 					   \ 'php', 
 					   \ 'typescript',  
-					   \ 'sql', 
-					   \ 'sh', 
-					   \ 'zsh']
+					   \ 'sh']
 endif
 
 " Place Plugins Here:
@@ -32,7 +35,9 @@ for i in [
 	Plug i
 endfor
 
-" 'https://github.com/vim-scripts/SyntaxAttr.vim', 
+if index(g:PROGRAMMING, 'vim') >= 0
+	Plug 'vim-scripts/SyntaxAttr.vim'
+endif
 " \ 'editorconfig/editorconfig-vim', 
 
 " bin == just the binary, all == bin + shell keybindings
