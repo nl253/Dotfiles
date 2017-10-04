@@ -6,17 +6,10 @@
 
 - <https://en.wikipedia.org/wiki/Test-driven_development>
 - <https://en.wikipedia.org/wiki/Agile_software_development>-
+- <https://wiki.archlinux.org/index.php/tmux>
 
 WIFI PASSWORD
 2EC53A496BBB
-
-Local IP adresses
-
-- 192.168.1.2 (ME)
-- 192.168.1.3
-- 192.168.1.8
-- 192.168.1.10
-- 192.168.1.12
 
 ( Node.js
 
@@ -69,23 +62,10 @@ Lxml <http://lxml.de/>
 @Library
 Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
 
+
 		        >> MEDIUM TERM
-( Node.js
-
-@Learn
-Web crawler <https://github.com/bda-research/node-crawler>
-
 
 ( General
-
-@Learn
-Learn git!
-
-More specifically:
-
-- [ ] show
-- [ ] log (--grep, -G, -S)
-- [ ] rebase
 
 @Learn
 Static site generator: <https://github.com/gohugoio/hugo>
@@ -98,21 +78,7 @@ Learn PostgreSQL with Datagrip
 		    >> LONG TERM
 ( Python
 
-@Server
-Gunicorn - wsgi server <http://docs.gunicorn.org/en/stable/settings.html>
-
 @Learn
-Celery - task queue library <https://github.com/celery/celery/>
 Design Patterns <http://www.blackwasp.co.uk/gofpatterns.aspx>
-
-( NLP
-
-@Node
-<https://github.com/nlp-compromise/compromise>
-
-@Python
-<https://github.com/explosion/spaCy>
-<https://github.com/nltk/nltk>
-<https://github.com/RaRe-Technologies/gensim>
 
 --- vim: conceallevel=3 
