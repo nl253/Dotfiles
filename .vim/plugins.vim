@@ -1,3 +1,49 @@
+" vim: foldlevel=0 foldmethod=marker nowrap
+
+" VARIABLES:
+
+" MARKUP languages you actively use
+if !exists('g:MARKUP') | let g:MARKUP = ['markdown', 'rst', 'vorg'] | endif
+
+" PROGRAMMING LANGUAGES you code in 
+if !exists('g:PROGRAMMING')
+	let g:PROGRAMMING = ['html',
+					   \ 'css', 
+					   \ 'sql', 
+					   \ 'javascript',
+					   \ 'python',  
+					   \ 'java',  
+					   \ 'php', 
+					   \ 'typescript',  
+					   \ 'sh']
+endif
+
+" Place Plugins Here:
+" ===================  
+
+" GENERAL:
+
+for i in ['scrooloose/nerdcommenter', 
+	   	\ 'konfekt/fastfold', 
+	   	\ 'wellle/targets.vim'] 
+	Plug i
+endfor
+
+if index(g:PROGRAMMING, 'vim') >= 0
+	Plug 'vim-scripts/SyntaxAttr.vim'
+endif
+
+if !executable('fzf')
+	" bin == just the binary, all == bin + shell keybindings
+	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+endif
+
+Plug 'junegunn/fzf.vim'
+
+let g:fzf_layout = {'up': '~40%'}
+let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
+
+for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}'))
 	Plug i
 endfor
 
