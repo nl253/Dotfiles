@@ -232,7 +232,7 @@ _install_python() {
 	_init_python
 
 	# install pyenv if missing
-	[[ ! -e $PYENV_ROOT ]] && git clone https://github.com/pyenv/pyenv.git "${PYENV_ROOT}" &
+	[[ ! -e $PYENV_ROOT ]] && git clone https://github.com/pyenv/pyenv.git "${PYENV_ROOT}"
 
 	# if the above async process (git) hasn't (yet) created those dirs, make them
 	[[ ! -e $PYENV_ROOT/plugins ]] && mkdir -p "${PYENV_ROOT}/plugins"
@@ -259,7 +259,7 @@ _packages_python() {
 		local packages=$(pip3 list --format=legacy | sed -E 's/\(.*\)//')
 		for i in "${PYTHON_PACKAGES[@]}"; do
 			if _in_array "${i}" "${packages}"; then
-				pip3 install --retries 3 --timeout 10 --pre --user "${i}" &
+			    pip3 install --retries 3 --timeout 10 --pre --user "${i}" &
 			fi
 		done
 
@@ -505,7 +505,7 @@ install_package_managers() {
 
 	for i in python ruby haskell php go rust node; do
 
-		[[ $(eval 'echo $MANAGE_'${language^^*}) != 1 ]] && continue
+		[[ $(eval 'echo $MANAGE_'${language^^*}) == 0 ]] && continue
 
 		# FIXME have the _install_* call init
 		# this repetition IS necessary!
