@@ -17,6 +17,14 @@ Some languages may not build without the correct libraries such as gcc-libs or l
 If you dont have superuser privilidges then there is little you can do.
 If you do have them, simply use the OS package manger to install them.
 
+To enable a langauge set the variable:
+
+eg
+
+MANAGE_HASKELL=0
+MANAGE_PHP=1
+
+
 SUDO
 ----
 If you dont mind running sudo commands you might want to set HAS_ADMIN=1,
