@@ -53,13 +53,21 @@ else
 fi
 
 # $BROWSER
-for i in google-chrome-stable chromium elinks lynx w3m; do
+for i in firefox-developer firefox google-chrome-stable chromium elinks lynx w3m; do
   if [[ -x $(command which $i 2>/dev/null) ]]; then
     export BROWSER=$(command which $i) && break
   fi
 done
 
 # $EDITOR
+
+for i in gvim idea pycharm; do
+  if [[ -x $(command which $i 2>/dev/null) ]]; then
+    export VISUAL=$(command which $i)
+    break
+  fi
+done
+
 for i in vim nvim vi; do
   if [[ -x $(command which $i 2>/dev/null) ]]; then
     export EDITOR=$(command which $i)
@@ -68,7 +76,7 @@ for i in vim nvim vi; do
   fi
 done
 
-export HISTFILE=~/.zsh_history
+export HISTFILE=~/.shell_history
 export SAVEHIST=10000
 
 if [[ -x $(command which yaourt) ]]; then

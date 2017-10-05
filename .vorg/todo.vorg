@@ -2,7 +2,7 @@
 :tags: #TODO 
 :title: Items to do 
 
-			    >> SHORT TERM
+>> SHORT TERM
 
 - <https://en.wikipedia.org/wiki/Test-driven_development>
 - <https://en.wikipedia.org/wiki/Agile_software_development>-
@@ -10,6 +10,79 @@
 
 WIFI PASSWORD
 2EC53A496BBB
+
+( Java
+
+> Stuff to go over
+
+>> Interfaces
+
+- Map
+- List
+- Set
+- Iterator
+- Splitterator
+- Optional
+- Serializable
+- Tree
+
+>> Classes
+
+- Queue
+- URL
+- Deque
+- File
+- ArrayDeque
+- Collection
+- Collections
+- CharSeqeunce
+- Future
+- Random
+- Map.Entry
+- System
+- Comparator
+- Stream
+- StringBuilder
+- Logger
+
+>> Packages
+
+- java.util.regex <https://docs.oracle.com/javase/tutorial/essential/regex/index.html>
+- java.io <http://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html>
+- java.net
+- java.nio
+- java.util.concurrent <https://docs.oracle.com/javase/tutorial/essential/concurrency/index.html>
+
+>> Other
+
+- IO <https://docs.oracle.com/javase/tutorial/essential/io/index.html>
+- Annotations <http://docs.oracle.com/javase/8/docs/technotes/guides/language/annotations.html>
+- Static Imports <http://docs.oracle.com/javase/8/docs/technotes/guides/language/static-import.html>
+- Autoboxing <http://docs.oracle.com/javase/8/docs/technotes/guides/language/autoboxing.html>
+- Generics <http://docs.oracle.com/javase/8/docs/technotes/guides/language/generics.html>
+- Fork and Join framework
+- Nashorn ?
+- Invariants <http://docs.oracle.com/javase/8/docs/technotes/guides/language/assert.html>
+- javadoc (`man javadoc`)
+- javac (`man javadoc`)
+- maven (`mvn -h`)
+- jar and MANIFEST files
+- reflection api <https://docs.oracle.com/javase/tutorial/reflect/index.html>
+- default methods in interfaces <http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html>
+- jaxp <https://docs.oracle.com/javase/tutorial/jaxp/index.html>
+- jdbc <https://docs.oracle.com/javase/tutorial/jdbc/index.html>
+- For-each Loop <http://docs.oracle.com/javase/8/docs/technotes/guides/language/foreach.html>
+- type annotations
+- Advanced Exception Handling <http://docs.oracle.com/javase/8/docs/technotes/guides/language/catch-multiple.html> <http://docs.oracle.com/javase/8/docs/technotes/guides/language/try-with-resources.html>
+
+>> Review
+
+- Enums <http://docs.oracle.com/javase/8/docs/technotes/guides/language/enums.html> 
+
+>> Resources
+
+- <https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/#refs>
+- <https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html>
 
 ( Node.js
 
