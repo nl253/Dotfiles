@@ -43,7 +43,6 @@ to intialise variables so that a new shell doesnt need to be spawned.
 
 # 1 or 0
 HAS_ADMIN=1
-
 PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
 	'automake' 'bash' 'bash-completion' 'bashmount' 'bc' 'binutils' 'bison' 'clang'
 	'composer' 'coreutils' 'cronie' 'ctags' 'curl' 'elinks' 'erlang' 'flex' 'fzf' 'gawk'
@@ -57,6 +56,7 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
 	'transmission-cli' 'tree' 'zsh')
 
 # declare used python packages
+MANAGE_PYTHON=1
 PYTHON_PACKAGES=(
 	'yapf' 'jedi' 'SQLAlchemy' 'yamllint' 'isort'
 	'ipython' 'neovim' 'pylama' 'flake8' 'vulture' 'pycallgraph' 'mypy' 'pylint' 'ranger-fm'
@@ -64,26 +64,33 @@ PYTHON_PACKAGES=(
 	'requests' 'Jinja2' 'Django' 'Flask' 'youtube-dl' 'cookiecutter')
 
 # declare used Node.js packages
+MANAGE_NODE=1
 NODE_PACKAGES=('jest' 'typescript' 'write-good' 'htmlhint'
 	'jsonlint' 'heroku-cli' 'yo' 'js-beautify' 'standard' 'uglify-es'
 	'tern' 'gitbook' 'textlint' 'express-generator')
 
 # declare used Php packages
+MANAGE_PHP=0
 PHP_PACKAGES=()
 
 # declare used Haskell packages
+MANAGE_HASKELL=0
 HASKELL_PACKAGES=('pandoc' 'happy' 'shellcheck')
 
 # declare used Go packages
+MANAGE_GO=0
 GO_PACKAGES=()
 
 # declare gists to keep in $GIST_DIR
+MANAGE_GISTS=0
 GISTS=('122b12050f5fb267e75f' '7001839' '8172796' '8294792')
 
 # declare used ruby gems
+MANAGE_RUBY=1
 RUBY_GEMS=('travis' 'jekyll' 'sass' 'sqlint' 'mdl' 'scss_lint')
 
 # declare used Rust crates
+MANAGE_RUST=1
 RUST_CRATES=('rustfmt' 'racer' 'mdbook' 'cargo-count' 'cargo-find' 'tokei')
 
 # toolchain to use for Rust
@@ -472,7 +479,8 @@ main() {
 
 	# do it in the background
 	for language in python ruby haskell go node php; do
-		eval "_init_${language}"
+	    local l=${language^^*} # uppercase
+	    [[ $(eval 'echo $MANAGE_'${l}) == 1 ]] && eval "_init_${language}"
 	done
 
 	cd "${_cwd}"
@@ -484,9 +492,12 @@ install_package_managers() {
 
 	_packages_pacman
 
-	coproc _gists for i in \
-		python \
-		ruby haskell php go rust node; do
+	coproc _gists
+
+	for i in python ruby haskell php go rust node; do
+
+		[[ $(eval 'echo $MANAGE_'${language^^*}) != 1 ]] && continue
+
 		# FIXME have the _install_* call init
 		# this repetition IS necessary!
 		eval "_init_${i}" # must not be run by a subshell - it sets vars
