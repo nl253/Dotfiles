@@ -131,7 +131,6 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 			"endfor
 		"endif
 	"endfunction
-
 	
 	Plug 'maralla/completor.vim'
 	let g:completor_min_chars = 1
@@ -188,9 +187,22 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	for i in ['less', 'css', 'scss', 'sass']
 		exec 'let g:completor_'.i.'_omni_trigger = "(  |\t)+[-a-z]+|@([\w-]+)?|(  |\t)+-?\w+: [-\w]*"'
 	endfor
-	let g:completor_disable_buffer = 
-				\ ['less', 'css', 'scss', 'sass', 'jinja', 'jinja2', 'twig', 'nunjucks', 
-				\  'html', 'htmldjango', 'javascript', 'typescript', 'coffee', 'rust', 'python', 'php'] 
+	let g:completor_disable_buffer = ['less', 
+									\ 'css', 
+									\ 'scss', 
+									\ 'sass', 
+									\ 'jinja', 
+									\ 'jinja2', 
+									\ 'twig', 
+									\ 'nunjucks', 
+									\ 'html', 
+									\ 'htmldjango', 
+									\ 'javascript', 
+									\ 'typescript', 
+									\ 'coffee', 
+									\ 'rust', 
+									\ 'python', 
+									\ 'php'] 
 
 	if index(g:PROGRAMMING, 'python') >= 0
 		Plug 'davidhalter/jedi-vim', {'for': 'python'} 
@@ -217,12 +229,14 @@ if has('patch8') || has('nvim')
 	let g:neomake_css_enabled_makers = ['stylelint']
 	let g:neomake_javascript_enabled_makers = ['standard']
 	let g:neomake_json_enabled_makers = ['jsonlint']
-	let g:neomake_python_enabled_makers = ['mypy', 
-										 \ 'flake8', 
- 										 \ 'vulture',  
-										 \ 'pylint',
-										 \ 'pyflakes', 
-										 \ 'pylama']
+	let g:neomake_python_enabled_makers
+
+	for i in ['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama']
+		if executable(i)
+			call add(g:neomake_python_enabled_makers, i)
+		endif
+	endfor
+
 	if executable('yarn')
 		for i in ['eslint', 'standard']
 			for j in ['javascript', 'json']
