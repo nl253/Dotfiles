@@ -40,7 +40,6 @@ bison
 bluez
 bluez-libs
 boost-libs
-bridge-utils
 btrfs-progs
 bzip2
 c-ares
@@ -62,7 +61,6 @@ chromium
 cifs-utils
 ckbcomp
 clang
-clojure
 clucene
 clutter
 clutter-gst
@@ -74,6 +72,7 @@ colord-gtk
 composer
 compositeproto
 coreutils
+cppcheck
 cpplint
 cpupower
 cracklib
@@ -104,14 +103,11 @@ dmidecode
 dmraid
 dnsmasq
 dnssec-anchors
-docker
 dosfstools
 double-conversion
 doxygen
 dunstify
 e2fsprogs
-eclipse-common
-eclipse-javascript
 ecryptfs-utils
 efibootmgr
 efivar
@@ -138,6 +134,7 @@ file
 file-roller
 filesystem
 findutils
+firefox-developer
 fixesproto
 flac
 flex
@@ -293,7 +290,6 @@ imlib2
 inetutils
 inputproto
 intel-ucode
-intellij-jdk
 inxi
 iproute2
 iptables
@@ -307,15 +303,15 @@ jack
 jansson
 jasper
 java-environment-common
+java-rhino
 java-runtime-common
 jbig2dec
-jdk8-openjdk
-jdk9-openj9-bin
+jdk9-openjdk
 jemalloc
 jfsutils
 jq
-jre8-openjdk
-jre8-openjdk-headless
+jre9-openjdk
+jre9-openjdk-headless
 js
 js38
 json-glib
@@ -336,7 +332,6 @@ lcms
 lcms2
 ldb
 ldns
-leiningen
 leiningen-completions
 less
 lib32-alsa-lib
@@ -690,7 +685,6 @@ mariadb
 mariadb-clients
 mathjax
 maven
-maven-bash-completion-git
 mdadm
 mediainfo
 memtest86+
@@ -711,6 +705,7 @@ mjpegtools
 mkinitcpio
 mkinitcpio-busybox
 mkinitcpio-openswap
+mlocate
 mobile-broadband-provider-info
 mod_dnssd
 modemmanager
@@ -763,6 +758,7 @@ openal
 openconnect
 opencore-amr
 openexr
+openjdk9-doc
 openjpeg2
 openmotif
 openresolv
@@ -982,6 +978,7 @@ thunar-volman
 thunderbird
 tlp
 tmux
+tmux-bash-completion
 totem
 totem-plparser
 tracker

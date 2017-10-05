@@ -61,12 +61,12 @@ done
 
 # $EDITOR
 
-for i in gvim idea pycharm; do
-  if [[ -x $(command which $i 2>/dev/null) ]]; then
-    export VISUAL=$(command which $i)
-    break
-  fi
-done
+#for i in gvim idea pycharm; do
+  #if [[ -x $(command which $i 2>/dev/null) ]]; then
+    #export VISUAL=$(command which $i)
+    #break
+  #fi
+#done
 
 for i in vim nvim vi; do
   if [[ -x $(command which $i 2>/dev/null) ]]; then

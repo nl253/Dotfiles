@@ -5,12 +5,6 @@
 " MARKUP languages you actively use
 if !exists('g:MARKUP') | let g:MARKUP = ['markdown', 'rst', 'vorg'] | endif
 
-" medium strong method
-"
-if has('crypt-blowfish2')
-	set cm=blowfish2  
-endif
-
 " PROGRAMMING LANGUAGES you code in 
 if !exists('g:PROGRAMMING')
 	let g:PROGRAMMING = ['html',
@@ -38,10 +32,12 @@ endfor
 if index(g:PROGRAMMING, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
-" \ 'editorconfig/editorconfig-vim', 
 
-" bin == just the binary, all == bin + shell keybindings
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+if !executable('fzf')
+	" bin == just the binary, all == bin + shell keybindings
+	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+endif
+
 Plug 'junegunn/fzf.vim'
 
 for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}'))
@@ -272,7 +268,6 @@ endfor
 Plug 'othree/csscomplete.vim', {'for': ['less', 'css', 'scss', 'sass']}
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
-
 
 if index(g:PROGRAMMING, 'javascript') >= 0
 	for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
