@@ -40,6 +40,9 @@ endif
 
 Plug 'junegunn/fzf.vim'
 
+let g:fzf_layout = {'up': '~40%'}
+let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
+
 for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}'))
 	Plug i
 endfor
@@ -63,10 +66,6 @@ Plug 'tpope/vim-eunuch', {'on' : ['Move',
 								\ 'SudoWrite', 
 								\ 'Unlink', 
 								\ 'Rename']}
-
-let g:fzf_layout = {'up': '~40%'}
-
-let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
 
 " RUST:
 
