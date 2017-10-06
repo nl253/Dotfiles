@@ -10,6 +10,7 @@ if !exists('g:PROGRAMMING')
 	let g:PROGRAMMING = ['html',
 					   \ 'css', 
 					   \ 'sql', 
+					   \ 'cpp', 
 					   \ 'javascript',
 					   \ 'python',  
 					   \ 'java',  
@@ -28,6 +29,8 @@ for i in ['scrooloose/nerdcommenter',
 	   	\ 'wellle/targets.vim'] 
 	Plug i
 endfor
+
+let g:NERDSpaceDelims = 1
 
 if index(g:PROGRAMMING, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
@@ -66,6 +69,9 @@ Plug 'tpope/vim-eunuch', {'on' : ['Move',
 								\ 'SudoWrite', 
 								\ 'Unlink', 
 								\ 'Rename']}
+
+" CPP:
+Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
 
 " RUST:
 
@@ -143,6 +149,12 @@ if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('ti
 	let g:completor_python_binary = '/usr/bin/env python3'
 
     let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
+
+	if index(g:PROGRAMMING, 'cpp') >= 0
+		for i in ['c', 'cpp']
+			exec 'let g:completor_'.i.'_omni_trigger = "\w{2,}|\.|->"'
+		endfor
+	endif
 
 	if index(g:PROGRAMMING, 'rust') >= 0
 		if executable('~/.cargo/bin/racer')
