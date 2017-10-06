@@ -1,0 +1,92 @@
+snippet for "For Loop [javascript]"
+for (let i of ${1:iterable}) {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet fun "Function [javascript]"
+function ${1:do_stuff}(${2:}) {
+  ${3:// do stuff here}
+}
+endsnippet
+
+snippet try "Try Catch Finally [javascript]"
+try {
+    ${1:// Block of code to try}
+}
+catch(${2:err}) {
+    ${3:// Block of code to handle errors}
+} 
+finally {
+    ${4:// Block of code to be executed regardless of the try / catch result}
+}
+endsnippet
+
+snippet req "Require node.js module [javascript]"
+require("${1:fs}")
+endsnippet 
+
+snippet while "While loop [javascript]"
+while (${1:condition}) {
+    ${2:// code block to be executed}
+}
+endsnippet 
+
+snippet mod "module.exports [javascript - node.js]"
+module.exports = ${1:}
+endsnippet 
+
+snippet "\[" "Array [javascript]" r
+[${1:}]
+endsnippet 
+
+snippet "\(" "Parenthesis [javascript]" r
+(${1:})
+endsnippet 
+
+snippet switch "Switch statement [javascript]"
+switch(${1:expression}) {
+    case ${2:n}:
+        ${3:// code block
+        break;}
+    default:
+        ${4:// code block}
+}
+endsnippet
+
+
+
+snippet fori "For let i = 0 [javascript]"
+for (let i = 0; i < ${1:iterable}.lenght; i++) {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet if "If statement [javascript]"
+if (${1:true}) {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet else "Else statement [javascript]"
+else {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet #! "Shebang node.js [javascript]"
+#!/usr/bin/env node --expose-http2 --harmony --harmony_typeof
+endsnippet
+
+snippet { "Object [javascript]"
+{
+	${1:key}: ${2:"value"},
+}
+endsnippet
+
+snippet "," "Next item in an object [javascript]" r
+
+${1:next_item}: ${2:"next_value"},
+endsnippet
+
+
