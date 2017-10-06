@@ -58,7 +58,7 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
 	'hugo' 'jdk9-openjdk' 'jq' 'json-glib' 'jupyter-nbformat' 'jupyter-notebook'
 	'less' 'lsb-release' 'lshw' 'lua' 'make' 'man-db' 'man-pages' 'mariadb' 'mariadb-clients' 'mathjax'
 	'mongodb' 'mongodb-tools' 'mutt' 'ncurses' 'ngrep' 'nodejs' 'npm' 'openssh' 'parted' 'perl' 'php'
-	'php-apache' 'php-cgi' 'php-codesniffer' 'php-mongodb' 'php-pgsql' 'php-phpdbg' 'php-sqlite' 'phpmyadmin'
+	'php-apache' 'cppcheck' 'php-cgi' 'php-codesniffer' 'php-mongodb' 'php-pgsql' 'php-phpdbg' 'php-sqlite' 'phpmyadmin'
 	'phppgadmin' 'postgresql' 'postgresql-libs' 'powertop' 'ranger' 'redis' 'rsync' 'ruby' 'ruby-docs' 'sed'
 	'shfmt' 'speedtest-cli' 'spotify-stable' 'sqlite' 'subversion' 'tar' 'thunderbird' 'tmux' 'tracker'
 	'transmission-cli' 'tree' 'zsh')
@@ -67,7 +67,7 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
 MANAGE_PYTHON=1
 PYTHON_PACKAGES=(
 	'yapf' 'jedi' 'SQLAlchemy' 'yamllint' 'isort'
-	'ipython' 'neovim' 'pylama' 'flake8' 'vulture' 'pycallgraph' 'mypy' 'pylint' 'ranger-fm'
+	'ipython' 'cpplint' 'neovim' 'pylama' 'flake8' 'vulture' 'pycallgraph' 'mypy' 'pylint' 'ranger-fm'
 	'proselint' 'profiling' 'pytest' 'psycopg2' 'mycli' 'docutils'
 	'requests' 'Jinja2' 'Django' 'Flask' 'youtube-dl' 'cookiecutter')
 
