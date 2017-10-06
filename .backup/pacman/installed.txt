@@ -20,6 +20,7 @@ archlinux-appstream-data
 archlinux-keyring
 aria2
 aspell
+astyle
 at-spi2-atk
 at-spi2-core
 atk

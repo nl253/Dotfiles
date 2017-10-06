@@ -2,21 +2,24 @@
 
 " VARIABLES:
 
-" MARKUP languages you actively use
-if !exists('g:MARKUP') | let g:MARKUP = ['markdown', 'rst', 'vorg'] | endif
+" MARKUP languages you actively use (markdown, rst asciidoc etc.)
+if !exists('g:MARKUP_LANGUAGES') 
+	let g:MARKUP_LANGUAGES = ['markdown', 'rst', 'vorg'] 
+endif
 
-" PROGRAMMING LANGUAGES you code in 
-if !exists('g:PROGRAMMING')
-	let g:PROGRAMMING = ['html',
-					   \ 'css', 
-					   \ 'sql', 
-					   \ 'cpp', 
-					   \ 'javascript',
-					   \ 'python',  
-					   \ 'java',  
-					   \ 'php', 
-					   \ 'typescript',  
-					   \ 'sh']
+" TEMPLATE languages you actively use (jinja, pug etc.)
+if !exists('g:TEMPLATE_LANGUAGES') 
+	let g:TEMPLATE_LANGUAGES = ['jinja'] 
+endif
+
+" STYLESHEET lanugages (css, pcss, postcss, stylus, sass etc.)
+if !exists('g:STYLESHEET_LANGUAGES') 
+	let g:STYLESHEET_LANGUAGES = ['css'] 
+endif
+
+" PROGRAMMING LANGUAGES you code in  (python, c, cpp etc.)
+if !exists('g:PROGRAMMING_LANGUAGES')
+	let g:PROGRAMMING_LANGUAGES = ['html', 'sql', 'cpp', 'python', 'sh']
 endif
 
 " Place Plugins Here:
@@ -32,7 +35,7 @@ endfor
 
 let g:NERDSpaceDelims = 1
 
-if index(g:PROGRAMMING, 'vim') >= 0
+if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
@@ -71,11 +74,14 @@ Plug 'tpope/vim-eunuch', {'on' : ['Move',
 								\ 'Rename']}
 
 " CPP:
-Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
+
+if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 && (executable("g++") || executable("clang"))
+	Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
+endif
 
 " RUST:
 
-if index(g:PROGRAMMING, 'rust') >= 0
+if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0 && executable("rustc")
 	for i in ["rust-lang/rust.vim"]
 		Plug i, {'for': 'rust'}
 	endfor
@@ -90,145 +96,169 @@ if index(g:PROGRAMMING, 'rust') >= 0
 endif
 
 " PYTHON PLUGINS:
-if (has('python') || has('python3')) && ((has('lambda') && has('job') && has('timers')) || has('nvim'))
-	Plug 'SirVer/ultisnips'
-	let g:UltiSnipsEditSplit = 'vertical'
-	let g:UltiSnipsSnippetDirectories = [g:VIMDIR.'snips']
-	let g:UltiSnipsEnableSnipMate = 0
-	let g:snips_author = "nl253"
-	let g:snips_email = "norbertlogiewa96@gmail.com"
-	let g:snips_github = "https://github.com/nl253"
 
-	"function! SyncPackages()
-		"if executable("yarn") 
+if executable("pacman") && system("hostname") =~ "Chummy-Laptop"
+	if has('python') || has('python3')
+		if (has('lambda') && has('job') && has('timers') && has("patch-7.4.1578")) || has('nvim')
+			Plug 'SirVer/ultisnips'
+			let g:UltiSnipsEditSplit = 'vertical'
+			let g:UltiSnipsSnippetDirectories = [g:VIMDIR.'snips']
+			let g:UltiSnipsEnableSnipMate = 0
+			let g:snips_author = "nl253"
+			let g:snips_email = "norbertlogiewa96@gmail.com"
+			let g:snips_github = "https://github.com/nl253"
+
+			"function! SyncPackages()
+			"if executable("yarn") 
 
 			"let yarn_packages = system('yarn global list 2>/dev/null')
 
 			"for i in ['tern', 
-					"\ 'scss-lint', 
-					"\ 'js-beautify', 
-					"\ 'typescript',
-					"\ 'tslint',
-					  "\ 'eslint', 
-					   "\ 'textlint', 
-					   "\ 'write-good']
-				"try
-					"if !(yarn_packages =~ $i)
-						"echo system('cd && yarn global add '.i) 
-					"endif
-				"catch /.*/
-					"break
-				"endtry
+			"\ 'scss-lint', 
+			"\ 'js-beautify', 
+			"\ 'typescript',
+			"\ 'tslint',
+			"\ 'eslint', 
+			"\ 'textlint', 
+			"\ 'write-good']
+			"try
+			"if !(yarn_packages =~ $i)
+			"echo system('cd && yarn global add '.i) 
+			"endif
+			"catch /.*/
+			"break
+			"endtry
 			"endfor
-		"endif
-		"if executable("cargo") && !executable("racer")
+			"endif
+			"if executable("cargo") && !executable("racer")
 			"echo system('cd && cargo install racer')
-		"endif
-		"if executable('pip')
+			"endif
+			"if executable('pip')
 			"let pip_packages = systemlist("pip list --format legacy \| grep -Eo '^\\w+'")
 			"for i in ['jedi', 'mypy', 'pyflakes', 'vulture', 'isort', 'pylint']
-				"try
-					"if index(pip_packages, i) < 0
-						"echo system('cd && pip install --user --pre '.i)
-					"endif
-				"catch /.*/
-					"break
-				"endtry
+			"try
+			"if index(pip_packages, i) < 0
+			"echo system('cd && pip install --user --pre '.i)
+			"endif
+			"catch /.*/
+			"break
+			"endtry
 			"endfor
-		"endif
-	"endfunction
-	
-	Plug 'maralla/completor.vim'
-	let g:completor_min_chars = 1
-	let g:completor_whitelist = ['yaml', 
-							   \ 'css', 
-							   \ 'html', 
-							   \ 'jinja', 
-							   \ 'gitcommit'] + g:PROGRAMMING + g:MARKUP
+			"endif
+			"endfunction
 
-	let g:completor_python_binary = '/usr/bin/env python3'
+			" function! BuildYCM(info)
+			" if a:info.status == 'installed' || a:info.force
+			" !./install.py --tern-completer --racer-completer --clang-completer --system-libclang
 
-    let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
+			" " javascript
+			" if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 || index(g:PROGRAMMING_LANGUAGES, 'typescript') >= 0 
+			" cd ~/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/tern_runtim
+			" !npm install --production
+			" endif
 
-	if index(g:PROGRAMMING, 'cpp') >= 0
-		for i in ['c', 'cpp']
-			exec 'let g:completor_'.i.'_omni_trigger = "\w{2,}|\.|->"'
-		endfor
-	endif
+			" " rust
+			" if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0
+			" cd ~/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/racerd
+			" !cargo build --release.
 
-	if index(g:PROGRAMMING, 'rust') >= 0
-		if executable('~/.cargo/bin/racer')
-			let g:completor_racer_binary = expand('~/.cargo/bin/racer')
+			" endif
+
+			" " c and cpp
+			" if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 || index(g:PROGRAMMING_LANGUAGES, 'c') >= 0 
+			" cd ~/
+			" ![[ -e ycm_build ]] && rm -rf ycm_build
+			" !mkdir ycm_build
+			" cd ycm_build
+			" !cmake -G "Unix Makefiles" . ~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp
+			" endif
+			" endif
+			" endfunction
+
+			" Plug 'Valloric/YouCompleteMe', {'do': function('BuildYCM')}
+			" let g:ycm_server_python_interpreter = substitute(system("command readlink -e $(which python2.7)"), " ", "", "g")
+			" Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
+			" let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
+			Plug 'maralla/completor.vim'
+
+			au! Filetype * if !exists("g:completor_".&ft."_omni_trigger") | exec "let g:completor_".&ft."_omni_trigger = '\w{2,}'" | endif
+
+			let g:completor_min_chars = 1
+			let g:completor_whitelist = ['yaml', 'html', 'gitcommit'] + g:PROGRAMMING_LANGUAGES 
+						\ + g:MARKUP_LANGUAGES + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES
+
+			let g:completor_python_binary = substitute(system("/usr/bin/env python3"), " ", "", "g")
+
+			let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
+
+			for i in ['c', 'cpp', 'objc']
+				if index(g:PROGRAMMING_LANGUAGES, i) >= 0
+					exec 'let g:completor_'.i.'_omni_trigger = "\w{2,}|\.|->|::"'
+				endif
+			endfor
+
+			if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0
+				if executable('~/.cargo/bin/racer')
+					let g:completor_racer_binary = expand('~/.cargo/bin/racer')
+				endif
+				let g:completor_rust_omni_trigger = 
+							\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=|&&|\|{2}) )'
+			endif
+
+			if index(g:PROGRAMMING_LANGUAGES, 'php') >= 0
+				let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
+			endif
+
+			if index(g:PROGRAMMING_LANGUAGES, 'haskell') >= 0
+				let g:haskellmode_completion_ghc = 0
+				let g:completor_haskell_omni_trigger = 'import |\w{2,}|\.|( (->|=>|=|::|\w{2,}|\|) .+)$' 
+			endif
+
+			if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0
+				for i in ['javascript', 'typescript', 'coffee']
+					exec 'let g:completor_'.i.'_omni_trigger = "\.|\w{4,}| (=>|>|<|=) |(import|as|export|default|new|await|async|public|static|get|protected|private|instanceof|throw|yield|in|extends) "'
+				endfor
+			endif
+
+			for i in g:TEMPLATE_LANGUAGES
+				exec 'let g:completor_'.i.'_omni_trigger = "<[a-z]{,6}|\S+ [-a-z]{2,}"'
+			endfor
+
+			for i in g:STYLESHEET_LANGUAGES
+				exec 'let g:completor_'.i.'_omni_trigger = "(  |\t)+[-a-z]+|@([\w-]+)?|(  |\t)+-?\w+: [-\w]*"'
+			endfor
+
+			let g:completor_disable_buffer = g:PROGRAMMING_LANGUAGES + g:STYLESHEET_LANGUAGES
+			call add(g:completor_disable_buffer, 'html')
+
+			if index(g:PROGRAMMING_LANGUAGES, 'python') >= 0 && executable("python")
+				Plug 'davidhalter/jedi-vim', {'for': 'python'} 
+				let g:jedi#force_py_version = 3
+				let g:jedi#goto_command = "<C-]>"
+				let g:jedi#goto_assignments_command = ",a"
+				let g:jedi#goto_definitions_command = ",d"
+				let g:jedi#documentation_command = ",d"
+				let g:jedi#usages_command = ",u"
+				let g:jedi#rename_command = ",r"
+				let g:jedi#use_splits_not_buffers = "right"
+				let g:jedi#show_call_signatures_delay = 200
+				Plug 'tmhedberg/SimpylFold', {'for': 'python'}
+			endif
 		endif
-		let g:completor_rust_omni_trigger = 
-					\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=|&&|\|{2}) )'
 	endif
+endif
 
-	if index(g:PROGRAMMING, 'php') >= 0
-		let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
-	endif
+" Haskell:
 
-	if index(g:PROGRAMMING, 'clojure') >= 0
-		Plug 'tpope/vim-fireplace', {'for': 'clojure'}
-		let g:completor_clojure_omni_trigger = '\w{2,}' 
-	endif
-	
-	if index(g:PROGRAMMING, 'haskell') >= 0
-		Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
-		let g:haskellmode_completion_ghc = 0
-		let g:completor_haskell_omni_trigger = 'import |\w{2,}|\.|( (->|=>|=|::|\w{2,}|\|) .+)$' 
-	endif
+if index(g:PROGRAMMING_LANGUAGES, 'haskell') >= 0
+	Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
+endif
 
-	for i in ['sql', 'mysql', 'plsql']
-		exec 'let g:completor_'.i.'_omni_trigger = "\w{2,}"'
-	endfor
+" Clojure:
 
-	if index(g:PROGRAMMING, 'javascript') >= 0
-		for i in ['javascript', 'typescript', 'coffee']
-			exec 'let g:completor_'.i.'_omni_trigger = "\.|\w{4,}| (=>|>|<|=) |(import|as|export|default|new|await|async|public|static|get|protected|private|instanceof|throw|yield|in|extends) "'
-		endfor
-	endif
-
-	for i in ['jinja', 'jinja2', 'twig', 'nunjucks', 'html', 'htmldjango']
-		exec 'let g:completor_'.i.'_omni_trigger = "<[a-z]{,6}|\S+ [-a-z]{2,}"'
-	endfor
-
-	for i in ['gitcommit', 'yaml'] + g:MARKUP
-		exec 'let g:completor_'.i.'_omni_trigger = "\w{4,}" '
-	endfor
-	for i in ['less', 'css', 'scss', 'sass']
-		exec 'let g:completor_'.i.'_omni_trigger = "(  |\t)+[-a-z]+|@([\w-]+)?|(  |\t)+-?\w+: [-\w]*"'
-	endfor
-	let g:completor_disable_buffer = ['less', 
-									\ 'css', 
-									\ 'scss', 
-									\ 'sass', 
-									\ 'jinja', 
-									\ 'jinja2', 
-									\ 'twig', 
-									\ 'nunjucks', 
-									\ 'html', 
-									\ 'htmldjango', 
-									\ 'javascript', 
-									\ 'typescript', 
-									\ 'coffee', 
-									\ 'rust', 
-									\ 'python', 
-									\ 'php'] 
-
-	if index(g:PROGRAMMING, 'python') >= 0
-		Plug 'davidhalter/jedi-vim', {'for': 'python'} 
-		let g:jedi#force_py_version = 3
-		let g:jedi#goto_command = "<C-]>"
-		let g:jedi#goto_assignments_command = ",a"
-		let g:jedi#goto_definitions_command = ",d"
-		let g:jedi#documentation_command = ",d"
-		let g:jedi#usages_command = ",u"
-		let g:jedi#rename_command = ",r"
-		let g:jedi#use_splits_not_buffers = "right"
-		let g:jedi#show_call_signatures_delay = 200
-		Plug 'tmhedberg/SimpylFold', {'for': 'python'}
-	endif
+if index(g:PROGRAMMING_LANGUAGES, 'clojure') >= 0
+	Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 endif
 
 if has('patch8') || has('nvim')
@@ -243,18 +273,22 @@ if has('patch8') || has('nvim')
 	let g:neomake_json_enabled_makers = ['jsonlint']
 	let g:neomake_python_enabled_makers = []
 
-	for i in ['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama']
-		if executable(i)
-			call add(g:neomake_python_enabled_makers, i)
-		endif
-	endfor
+	if index(g:PROGRAMMING_LANGUAGES, 'python') >= 0 
+		for i in ['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama']
+			if executable(i)
+				call add(g:neomake_python_enabled_makers, i)
+			endif
+		endfor
+	endif
 
 	if executable('yarn')
-		for i in ['eslint', 'standard']
-			for j in ['javascript', 'json']
-				execute 'let g:neomake_'.j.'_'.i.'_exe = "'.expand('~/.yarn/bin/'.i).'"'
+		if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 
+			for i in ['eslint', 'standard']
+				for j in ['javascript', 'json']
+					execute 'let g:neomake_'.j.'_'.i.'_exe = "'.expand('~/.yarn/bin/'.i).'"'
+				endfor
 			endfor
-		endfor
+		endif
 		if executable('proselint')
 			for i in ['rst', 'markdown']
 				execute 'let g:neomake_'.i.'_enabled_makers = '.string(['proselint', 'writegood'])
@@ -271,17 +305,20 @@ else
 endif
 
 " MARKUP:
+
 Plug 'dkarter/bullets.vim' 
-let g:bullets_enabled_file_types = g:MARKUP
 
-Plug 'dbmrq/vim-ditto', {'on': ['ToggleDitto', 'DittoOn'], 'for': g:MARKUP}
+let g:bullets_enabled_file_types = g:MARKUP_LANGUAGES
+
+Plug 'dbmrq/vim-ditto', {'on': ['ToggleDitto', 'DittoOn'], 'for': g:MARKUP_LANGUAGES}
 let g:ditto_mode = "paragraph"
-exec "au! FileType ".join(g:MARKUP, ',')." DittoOn"
 
-Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:MARKUP}
+exec "au! FileType ".join(g:MARKUP_LANGUAGES, ',')." DittoOn"
+
+Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:MARKUP_LANGUAGES}
 
 " TABLE MODE:
-"Plug 'dhruvasagar/vim-table-mode', {'for': g:MARKUP}
+"Plug 'dhruvasagar/vim-table-mode', {'for': g:MARKUP_LANGUAGES}
 "let g:table_mode_disable_mappings = 1
 "let g:table_mode_verbose = 0 
 "let g:table_mode_syntax = 1 
@@ -301,7 +338,7 @@ Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:MARKUP}
 "aug END
 
 " MARKDOWN:
-let g:markdown_fenced_languages = g:PROGRAMMING
+let g:markdown_fenced_languages = g:PROGRAMMING_LANGUAGES
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
@@ -316,11 +353,11 @@ for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
 				   \ 'jinja']}
 endfor
 
-Plug 'othree/csscomplete.vim', {'for': ['less', 'css', 'scss', 'sass']}
+Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES}
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
-if index(g:PROGRAMMING, 'javascript') >= 0
+if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 
 	for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
 		Plug i, {'for': ['javascript', 'typescript']}
 	endfor
@@ -329,7 +366,7 @@ if index(g:PROGRAMMING, 'javascript') >= 0
 		Plug i, {'for': ['javascript']}
 	endfor
 
-	if index(g:PROGRAMMING, 'typescript') >= 0
+	if index(g:PROGRAMMING_LANGUAGES, 'typescript') >= 0 && executable("tsc")
 		Plug 'leafgarland/typescript-vim', {'for': ['typescript']}
 	endif
 
@@ -366,9 +403,9 @@ let g:used_javascript_libs = 'jquery,react,'
 
 " Templating Engines:
 " -------------------
-" Pug:
 
-if index(g:PROGRAMMING, 'pug') >= 0 ||  index(g:PROGRAMMING, 'jade') >= 0 
+" Pug:
+if index(g:TEMPLATE_LANGUAGES, 'pug') >= 0 ||  index(g:TEMPLATE_LANGUAGES, 'jade') >= 0 
 	Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
 	Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
 	au! FileType jade setl ft=pug 
@@ -376,7 +413,7 @@ endif
 
 " Jinja Twig Nunjucks:
 for i in ["twig", "jinja", "jinja2", "njk", "nunjucks"]
-	if index(g:PROGRAMMING, i) >= 0
+	if index(g:TEMPLATE_LANGUAGES, i) >= 0
 		Plug 'Glench/Vim-Jinja2-Syntax'
 		au! BufNewFile,BufRead *.{twig,njk} setl fs=jinja
 		break
@@ -384,8 +421,8 @@ for i in ["twig", "jinja", "jinja2", "njk", "nunjucks"]
 endfor
 
 " PHP:
-"
-if index(g:PROGRAMMING, 'php') >= 0
+
+if index(g:PROGRAMMING_LANGUAGES, 'php') >= 0 && executable("php")
 	Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 endif
 
