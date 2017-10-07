@@ -1,3 +1,6 @@
+
+# loops
+
 snippet while "While loop [rust]" b
 while ${1:condition} {
 
@@ -17,7 +20,6 @@ if ${1:condition} {
 
 }
 endsnippet 
-
 
 snippet main "Main [rust]" 
 fn main() {
@@ -93,7 +95,7 @@ enum ${1:Message} {
 
 endsnippet 
 
-snippet "((h(ash)?)?set)" "HashSet [rust]" r
+snippet "(h(ash)?)?set" "HashSet [rust]" r
 let mut ${1:set}: HashSet<${2:i32}> = HashSet::new();
 endsnippet 
 
@@ -119,18 +121,14 @@ snippet "deq(ue)?" "VecDeque [rust]" r
 let ${3:mut} ${2:deque}: VecDeque<${1:i32}> = VecDeque::new();
 endsnippet 
 
-snippet "vect(or?)?" "Vector [rust]" r
-let ${3:mut} ${1:vector}: Vec<${1:i32}> = Vec::new();
-endsnippet 
-
 snippet vec "Vector [rust]" 
 let ${3:mut} ${1:vector} = vec![${2:}];
 endsnippet 
 
-snippet "p?que(ue)?|heap" "BinaryHeap [rust]" r
+snippet heap "BinaryHeap [rust]" 
 let ${3:mut} ${2:queue}: BinaryHeap<${1:i32}> = BinaryHeap::new();
 endsnippet 
 
-snippet "(l(i(n(k(ed?)?)?)?)?)?list" "LinkedList [rust]" r
+snippet llist "LinkedList [rust]" 
 let ${3:mut} ${2:list}: LinkedList<${1:i32}> = LinkedList::new();
 endsnippet 
