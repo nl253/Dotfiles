@@ -10,6 +10,22 @@ int main(int argc, const char *argv[]) {
 }
 endsnippet
 
+snippet try "Try catch [c]"
+try {
+  risky();
+} catch (const exception &e) {
+  const chae *msg = e.what();
+}
+endsnippet
+
+# loops 
+
+snippet fore "Enchanced for loop (fore) [cpp]"
+for (auto i : container) {
+  cout << i;
+}
+endsnippet
+
 snippet iter "Iterator [cpp]"
 vector<int> vec;
 for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
@@ -26,12 +42,12 @@ enum dayOfWeek { x, y, z };
 endsnippet
 
 snippet class "Class [cpp]"
-class MedalCount {
+class ${1:MedalCount} {
 public:
-  const char *country;
+  ${2:const char *country;
   int gold;
   int silver;
-  int bronze;
+  int bronze;}
 };
 endsnippet
 
@@ -49,24 +65,32 @@ if (0 != f.fail()) {
 }
 endsnippet
 
+# collections
+
 snippet map "std::map [cpp]"
-map<${1:key}, ${2:value}> map$0;
+map<${1:key}, ${2:value}> myMap$0;
+endsnippet
+
+snippet unomap "std::unordered_map [cpp]"
+unordered_map <${1:key}, ${2:value}> myMap$0;
+endsnippet
+
+snippet set "std::set [cpp]"
+set<${1:key}, ${2:value}> mySet$0;
+endsnippet
+
+snippet unoset "std::unordered_set [cpp]"
+unordered_set<${1:key}, ${2:value}> mySet$0;
 endsnippet
 
 snippet "vec(t(or)?)?" "std::vector [cpp]" r
-vector<${1:char}> v$0;
+vector<${1:char}> vec$0;
 endsnippet
 
-snippet try "Try catch [c]"
-try {
-  risky();
-} catch (const exception &e) {
-  const chae *msg = e.what();
-}
+snippet pair "Pair [cpp]"
+auto myPair = make_pair(${1:_T1 &&__x}, ${2:_T2 &&__y});
 endsnippet
 
-snippet fore "Enchanced for loop (fore) [cpp]"
-for (auto i : container) {
-  cout << i;
-}
+snippet tuple "Tuple [cpp]"
+auto t = make_tuple(${1:_Elements &&__args...});
 endsnippet

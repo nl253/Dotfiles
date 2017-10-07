@@ -1,12 +1,24 @@
 priority -50
 
-snippet while "While loop [javascript]"
-while (${1:condition}) {
+snippet ret "Return [cfamily]"
+return ${1:0};
+endsnippet 
+
+# loops
+
+snippet while "While loop [cfamily]"
+while (${1:true}) {
     ${2:// code block to be executed}
 }
 endsnippet 
 
-snippet "switch|case" "Switch statement [cfamiliy]" r
+snippet do "Do while loop [cfamily]"
+do { 
+  ${1:// do stuff and then check}
+} while (${2:true});
+endsnippet 
+
+snippet "switch|case" "Switch statement [cfamily]" r
 switch(${1:expression}) {
     case ${2:n}:
         ${3:// code block
@@ -16,31 +28,31 @@ switch(${1:expression}) {
 }
 endsnippet
 
-snippet if "If statement [javascript]"
+snippet if "If statement [cfamily]"
 if (${1:true}) {
   ${2:// do stuff here}
 }
 endsnippet
 
-snippet else "Else statement [cfamiliy]"
+snippet else "Else statement [cfamily]"
 else {
   ${2:// do stuff here}
 }
 endsnippet
 
-snippet fun "Function [cfamiliy]" b
+snippet fun "Function [cfamily]" b
 ${1:void} ${2:function_name}($3) {
   ${VISUAL}$0
 }
 endsnippet
 
-snippet fori "For i loop [c]" 
+snippet fori "For i loop [cfamily]" 
 for (int i = 0; i < argc; i++) {
   printf("arg %d: %s\n", i, argv[i]);
 }
 endsnippet 
 
-snippet eli "else if .. (eli) [c]"
+snippet eli "else if ... (eli) [cfamily]"
 else if (${1:/* condition */}) {
     ${VISUAL}$0
 }

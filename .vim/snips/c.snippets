@@ -1,5 +1,9 @@
 extends cfamily
 
+snippet rand "Random int [c]"
+rand() % ${1:100}; // rand int with upper bound
+endsnippet
+
 snippet main "Main method [c]"
 #include <stdio.h>
 int main(int argc, const char *argv[]) {
