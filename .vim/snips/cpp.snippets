@@ -1,4 +1,5 @@
 extends c  
+
 # don't extend cfamily (c already does that!)
 
 snippet main "Main method [cpp]"
@@ -33,6 +34,15 @@ for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
 }
 endsnippet
 
+snippet "opt(ional)?" "std::optional [cpp]" r
+optional<string> ${1:optionallyReturn}(${2:bool returnOrNot}) {
+  ${3:// optional can be used as the return type of a factory that may fail
+  if (b) return "Godzilla";
+  return {};}
+}
+endsnippet
+
+
 snippet "cout|print" "Print [cpp]" r
 cout << ${1:"message\n"};
 endsnippet
@@ -51,24 +61,22 @@ public:
 };
 endsnippet
 
-snippet write "Write to a file [cpp]"
-#include <fstream>
-ofstream f("/tmp/test4");
-int i;
-
-for (i = 0; i < 10; ++i) {
-  f << i << endl;
-}
-f.close();
-if (0 != f.fail()) {
-  // handle error
-}
-endsnippet
-
 # collections
 
 snippet map "std::map [cpp]"
 map<${1:key}, ${2:value}> myMap$0;
+endsnippet
+
+snippet "deque|queue" "std::deque [cpp]" r 
+deque<${1:int}> ${2:myDeque}${3: = {7, 5, 16, 8}};
+endsnippet
+
+snippet heap "std::priority_queue [cpp]"
+priority_queue<${1:int}> ${2:heap};
+endsnippet 
+
+snippet list "std::list [cpp]"
+list<${1:int}> ${2:myList}${3: = { 7, 5, 16, 8 }};
 endsnippet
 
 snippet unomap "std::unordered_map [cpp]"
@@ -94,3 +102,29 @@ endsnippet
 snippet tuple "Tuple [cpp]"
 auto t = make_tuple(${1:_Elements &&__args...});
 endsnippet
+
+snippet array "std::array [cpp]" 
+array<${1:int}, ${2:3}> ${4:arrayOfInts}${5:{1, 2, 3}}; 
+endsnippet
+
+snippet "var(iant)" "std::variant [cpp]" r
+std::variant<${1:int}, ${2:float}> ${3:myVariant};
+endsnippet
+
+# utils
+
+snippet write "Write to a file [cpp]"
+#include <fstream>
+ofstream f("/tmp/test4");
+int i;
+
+for (i = 0; i < 10; ++i) {
+  f << i << endl;
+}
+f.close();
+if (0 != f.fail()) {
+  // handle error
+}
+endsnippet
+
+
