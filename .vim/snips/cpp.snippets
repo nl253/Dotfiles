@@ -28,6 +28,13 @@ while (${1:true}) {
 }
 endsnippet
 
+snippet iter "Iterator [cpp]"
+vector<int> vec;
+for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
+      std::cout << ' ' << *it;
+}
+endsnippet
+
 snippet try "Try catch [cpp]"
 try {
   risky();

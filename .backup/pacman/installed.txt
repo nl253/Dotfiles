@@ -58,7 +58,6 @@ cgmanager
 cheese
 chromaprint
 chrome-gnome-shell
-chromium
 cifs-utils
 ckbcomp
 clang
@@ -157,6 +156,8 @@ gcc-libs
 gconf
 gcr
 gd
+gdb
+gdb-common
 gdbm
 gdk-pixbuf2
 gdm
@@ -255,6 +256,7 @@ gts
 gucharmap
 gufw
 guile
+guile2.0
 gutenprint
 gvfs
 gvfs-afc
@@ -701,7 +703,6 @@ mhwd-nvidia-304xx
 mhwd-nvidia-340xx
 mhwd-tui
 mime-types
-minizip
 mjpegtools
 mkinitcpio
 mkinitcpio-busybox
@@ -904,7 +905,6 @@ randrproto
 ranger
 raptor
 rasqal
-re2
 readline
 recode
 recordproto

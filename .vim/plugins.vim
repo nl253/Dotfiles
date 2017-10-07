@@ -87,10 +87,13 @@ if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 && (executable("g++") || executabl
 		let g:clang_library_path='/usr/lib/libclang.so.5.0'
 		let g:clang_complete_optional_args_in_snippets = 1
 		let g:clang_complete_auto = 1
+		let g:clang_trailing_placeholder = 1
+		let g:clang_snippets = 1
+		let g:clang_snippets_engine = 'ultisnips'
 		let g:clang_close_preview = 1
 		let g:clang_complete_macros = 1
 		let g:clang_complete_patterns = 1
-		let g:clang_user_options = '-std=c++14'
+		let g:clang_user_options = '-std=c++17 -faligned-allocation -Wdeprecated -frelaxed-template-template-args -fsized-deallocation -fno-dollars-in-identifiers -fmodules -fcxx-exceptions -fcoroutines-ts -fblocks -fexceptions -I/usr/include/c++/7.2.0/ -I/usr/include/'
 	else
 		Plug 'vim-scripts/OmniCppComplete', {'for': ['c', 'cpp']}
 		" OmniCppComplete
@@ -134,72 +137,72 @@ if executable("pacman") && system("hostname") =~ "Chummy-Laptop"
 			let g:snips_email = "norbertlogiewa96@gmail.com"
 			let g:snips_github = "https://github.com/nl253"
 			
-			let g:COMPLETOR_FILETYPES = g:PROGRAMMING_LANGUAGES + 
-						\ g:TEMPLATE_LANGUAGES + g:STYLESHEET_LANGUAGES + ['html', 'yaml', 'gitcommit', 'xhtml'] + g:MARKUP_LANGUAGES
+			" let g:COMPLETOR_FILETYPES = g:PROGRAMMING_LANGUAGES + 
+						" \ g:TEMPLATE_LANGUAGES + g:STYLESHEET_LANGUAGES + ['html', 'yaml', 'gitcommit', 'xhtml'] + g:MARKUP_LANGUAGES
 
 			" for i in ['c', 'cpp'] " managed by clang complete
 				" call remove(g:COMPLETOR_FILETYPES, i)
 			" endfor
 
-			let g:completor_whitelist = g:COMPLETOR_FILETYPES
+			" let g:completor_whitelist = g:COMPLETOR_FILETYPES
 
-			Plug 'maralla/completor.vim', {'for': g:COMPLETOR_FILETYPES}
+			" Plug 'maralla/completor.vim', {'for': g:COMPLETOR_FILETYPES}
 
-			au! Filetype * if !exists("g:completor_".&ft."_omni_trigger") | exec "let g:completor_".&ft."_omni_trigger = '\w{2,}'" | endif
+			" au! Filetype * if !exists("g:completor_".&ft."_omni_trigger") | exec "let g:completor_".&ft."_omni_trigger = '\w{2,}'" | endif
 
-			let g:completor_min_chars = 1
-			let g:completor_python_binary = substitute(system("/usr/bin/env python3"), " ", "", "g")
-			let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
+			" let g:completor_min_chars = 1
+			" let g:completor_python_binary = substitute(system("/usr/bin/env python3"), " ", "", "g")
+			" let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 
-			for i in ['c', 'cpp']
-				if index(g:PROGRAMMING_LANGUAGES, i) >= 0
-					exec 'let g:completor_'.i.'_omni_trigger = "\w{2,}|\.|->|::"'
-				endif
-			endfor
+			" for i in ['c', 'cpp']
+				" if index(g:PROGRAMMING_LANGUAGES, i) >= 0
+					" exec 'let g:completor_'.i.'_omni_trigger = "\w{2,}|\.|->|::"'
+				" endif
+			" endfor
 
-			if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0
-				if executable('~/.cargo/bin/racer')
-					let g:completor_racer_binary = expand('~/.cargo/bin/racer')
-				endif
-				let g:completor_rust_omni_trigger = 
-							\ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=|&&|\|{2}) )'
-			endif
+			" if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0
+				" if executable('~/.cargo/bin/racer')
+					" let g:completor_racer_binary = expand('~/.cargo/bin/racer')
+				" endif
+				" let g:completor_rust_omni_trigger = 
+							" \ '(\w{3,}|\.\w*|::\{?|(use|unsafe|type|struct|fn|\w>|pub|impl|extern create|\w:) | (->|=>|=|&&|\|{2}) )'
+			" endif
 
-			if index(g:PROGRAMMING_LANGUAGES, 'php') >= 0
-				let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
-			endif
+			" if index(g:PROGRAMMING_LANGUAGES, 'php') >= 0
+				" let g:completor_php_omni_trigger = '\$?[a-zA-Z_]{2,}|<[a-z]{,6}|\S+ [-a-z]{2,}|-> ?'
+			" endif
 
-			if index(g:PROGRAMMING_LANGUAGES, 'haskell') >= 0
-				let g:haskellmode_completion_ghc = 0
-				let g:completor_haskell_omni_trigger = 'import |\w{2,}|\.|( (->|=>|=|::|\w{2,}|\|) .+)$' 
-			endif
+			" if index(g:PROGRAMMING_LANGUAGES, 'haskell') >= 0
+				" let g:haskellmode_completion_ghc = 0
+				" let g:completor_haskell_omni_trigger = 'import |\w{2,}|\.|( (->|=>|=|::|\w{2,}|\|) .+)$' 
+			" endif
 
-			if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0
-				for i in ['javascript', 'typescript']
-					exec 'let g:completor_'.i.'_omni_trigger = "\.|\w{4,}| (=>|>|<|=) |(import|as|export|default|new|await|async|public|static|get|protected|private|instanceof|throw|yield|in|extends) "'
-				endfor
-			endif
+			" if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0
+				" for i in ['javascript', 'typescript']
+					" exec 'let g:completor_'.i.'_omni_trigger = "\.|\w{4,}| (=>|>|<|=) |(import|as|export|default|new|await|async|public|static|get|protected|private|instanceof|throw|yield|in|extends) "'
+				" endfor
+			" endif
 
-			for i in g:TEMPLATE_LANGUAGES
-				exec 'let g:completor_'.i.'_omni_trigger = "<[a-z]{,6}|\S+ [-a-z]{2,}"'
-			endfor
+			" for i in g:TEMPLATE_LANGUAGES
+				" exec 'let g:completor_'.i.'_omni_trigger = "<[a-z]{,6}|\S+ [-a-z]{2,}"'
+			" endfor
 
-			for i in g:STYLESHEET_LANGUAGES
-				exec 'let g:completor_'.i.'_omni_trigger = "(  |\t)+[-a-z]+|@([\w-]+)?|(  |\t)+-?\w+: [-\w]*"'
-			endfor
+			" for i in g:STYLESHEET_LANGUAGES
+				" exec 'let g:completor_'.i.'_omni_trigger = "(  |\t)+[-a-z]+|@([\w-]+)?|(  |\t)+-?\w+: [-\w]*"'
+			" endfor
 
-			let g:completor_disable_buffer = g:PROGRAMMING_LANGUAGES + g:STYLESHEET_LANGUAGES
-			call add(g:completor_disable_buffer, 'html')
+			" let g:completor_disable_buffer = g:PROGRAMMING_LANGUAGES + g:STYLESHEET_LANGUAGES
+			" call add(g:completor_disable_buffer, 'html')
 
 			if index(g:PROGRAMMING_LANGUAGES, 'python') >= 0 && executable("python")
 				Plug 'davidhalter/jedi-vim', {'for': 'python'} 
 				let g:jedi#force_py_version = 3
 				let g:jedi#goto_command = "<C-]>"
-				let g:jedi#goto_assignments_command = ",a"
-				let g:jedi#goto_definitions_command = ",d"
-				let g:jedi#documentation_command = ",d"
-				let g:jedi#usages_command = ",u"
-				let g:jedi#rename_command = ",r"
+				let g:jedi#goto_assignments_command = "<localleader>a"
+				let g:jedi#goto_definitions_command = "<localleader>d"
+				let g:jedi#documentation_command = "<localleader>d"
+				let g:jedi#usages_command = "<localleader>u"
+				let g:jedi#rename_command = "<localleader>r"
 				let g:jedi#use_splits_not_buffers = "right"
 				let g:jedi#show_call_signatures_delay = 200
 				Plug 'tmhedberg/SimpylFold', {'for': 'python'}
