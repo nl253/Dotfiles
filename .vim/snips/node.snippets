@@ -1,3 +1,16 @@
+priority -50
+
 snippet "server?" "http.createServer" r
 http.createServer($1).listen(${2:3000});
+endsnippet
+ 
+snippet ncs "net.createServer"
+net.createServer(function(${1:socket}){
+  $1.on('data', function(${3:data}){$4}); 
+  $1.on('end', () => { $5 });
+}).listen(${6:8124});
+endsnippet
+
+snippet #! "shebang"
+#!/usr/bin/env node
 endsnippet

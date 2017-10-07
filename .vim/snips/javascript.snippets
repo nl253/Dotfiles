@@ -1,4 +1,5 @@
 extends node
+extends jsdoc
 
 snippet for "For Loop [javascript]"
 for (let i of ${1:iterable}) {
@@ -87,55 +88,4 @@ endsnippet
 snippet "," "Next item in an object [javascript]" r
 
 ${1:next_item}: ${2:"next_value"},
-endsnippet
-
-# jsdoc
-
-snippet /* "A JSDoc comment" b
-/**
- * ${1:${VISUAL}}$0
- */
-endsnippet
-
-snippet @p "@param {Type} varname Description"
-@param {${1:Type}} ${2:varname} ${3:Description}
-endsnippet
-
-snippet @ret "@return {Type} Description"
-@return {${1:Type}} ${2:Description}
-endsnippet
-
-snippet @pri "@private"
-@private
-endsnippet
-
-snippet @over "@override"
-@override
-endsnippet
-
-snippet @pro "@protected"
-@protected
-endsnippet
-
-snippet @fileo "@fileoverview Description" b
-/**
- * @fileoverview ${1:${VISUAL:A description of the file}}$0
- */
-endsnippet
-
-snippet @constr "@constructor"
-@constructor
-endsnippet
-
-snippet @li "@license Description"
-@license ${1:MIT}$0
-endsnippet
-
-snippet @ver "@version Semantic version"
-@version ${1:0.1.0}$0
-endsnippet
- 
-snippet @au "@author email (First Last)"
-@author ${1:`!v g:snips_author`} [${2:`!v g:snips_author_email`}]
-endsnippet
-
+endsnippet 
