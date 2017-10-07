@@ -1,30 +1,11 @@
+extends c
+
 snippet main "Main method [cpp]"
 #include <stdio.h>
 #include <vector>
 #include <iostream> 
 int main(int argc, const char *argv[]) {
-  // Prints each argument on the command line.
-}
-endsnippet
-
-snippet fori "For i loop [cpp]" 
-for (int i = 0; i < argc; i++) {
-  printf("arg %d: %s\n", i, argv[i]);
-}
-endsnippet 
-
-snippet "switch|case" "Case statement [cpp]" r
-switch (n) {
-  case 0:
-  default:
-  bin_digit = INVALID_BINARY_DIGIT;
-  break;
-}
-endsnippet
-
-snippet while "While loop [cpp]" 
-while (${1:true}) {
-  ${2:++i;}
+  
 }
 endsnippet
 
@@ -35,12 +16,22 @@ for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
 }
 endsnippet
 
-snippet try "Try catch [cpp]"
-try {
-  risky();
-} catch (const exception &e) {
-  const chae *msg = e.what();
-}
+snippet "cout|print" "Print [cpp]" r
+cout << ${1:"message\n"};
+endsnippet
+
+snippet enum "Enum [cpp]"
+enum dayOfWeek { x, y, z };
+endsnippet
+
+snippet class "Class [cpp]"
+class MedalCount {
+public:
+  const char *country;
+  int gold;
+  int silver;
+  int bronze;
+};
 endsnippet
 
 snippet write "Write to a file [cpp]"
@@ -57,60 +48,16 @@ if (0 != f.fail()) {
 }
 endsnippet
 
-snippet "run|popen|subprocess" "Read stdout from a pipe [cpp]" r
-optional<string> run(string &command) {
+snippet map "std::map [cpp]"
+map<${1:key}, ${2:value}> map$0;
+endsnippet
 
-  FILE *fp = popen(command.c_str(), "r");
+snippet "vec(t(or)?)?" "std::vector [cpp]" r
+vector<${1:char}> v$0;
+endsnippet
 
-  if (fp == NULL)
-    return {};
-
-  string result;
-
-  const int max_buffer = 256;
-
-  char buffer[max_buffer];
-
-  while (!feof(fp))
-
-    if (fgets(buffer, max_buffer, fp) != NULL)
-      result.append(buffer);
-
-  pclose(fp);
-  return result;
+snippet fore "Enchanced for loop (fore) [cpp]"
+for (auto i : container) {
+  cout << i;
 }
-endsnippet
-
-snippet dirname "Dirname [cpp]"
-#include <libgen.h>
-string s1 = dirname("/etc/hosts");
-endsnippet
-
-snippet "cout|print" "Print [cpp]" r
-cout << ${1:"message\n"};
-endsnippet
-
-snippet if "If statement [cpp]"
-if (${1:!inFile}) {
-  ${2:exit(1);   // call system to stop}
-}
-endsnippet
-
-snippet basename "Basename [cpp]"
-#include <libgen.h>
-string s2 = basename("/etc/hosts");
-endsnippet
-
-snippet enum "Enum [cpp]"
-enum dayOfWeek { x, y, z };
-endsnippet
-
-snippet class "Class [cpp]"
-class MedalCount {
-public:
-  const char *country;
-  int gold;
-  int silver;
-  int bronze;
-};
 endsnippet
