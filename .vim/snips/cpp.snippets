@@ -1,4 +1,5 @@
-extends c
+extends c  
+# don't extend cfamily (c already does that!)
 
 snippet main "Main method [cpp]"
 #include <stdio.h>
@@ -54,6 +55,14 @@ endsnippet
 
 snippet "vec(t(or)?)?" "std::vector [cpp]" r
 vector<${1:char}> v$0;
+endsnippet
+
+snippet try "Try catch [c]"
+try {
+  risky();
+} catch (const exception &e) {
+  const chae *msg = e.what();
+}
 endsnippet
 
 snippet fore "Enchanced for loop (fore) [cpp]"

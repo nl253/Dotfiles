@@ -1,0 +1,48 @@
+snippet /* "A JSDoc comment [jsdoc]" b
+/**
+ * ${1:${VISUAL}}$0
+ */
+endsnippet
+
+snippet @p "@param {Type} varname Description [jsdoc]"
+@param {${1:Type}} ${2:varname} ${3:Description}
+endsnippet
+
+snippet @ret "@return {Type} Description [jsdoc]"
+@return {${1:Type}} ${2:Description}
+endsnippet
+
+snippet "@priv?" "@private [jsdoc]" r
+@private
+endsnippet
+
+snippet @over "@override [jsdoc]"
+@override
+endsnippet
+
+snippet "@prot?" "@protected [jsdoc]" r
+@protected
+endsnippet
+
+snippet "@f(ile)?o(ver)?" "@fileoverview Description [jsdoc]" br
+/**
+ * @fileoverview ${1:${VISUAL:A description of the file}}$0
+ */
+endsnippet
+
+snippet "@con(s(t(r?)?)?)?" "@constructor [jsdoc]" r
+@constructor
+endsnippet
+
+snippet "@li(c(e(n(se?)?)?)?)?" "@license Description [jsdoc]" r 
+@license ${1:MIT}$0
+endsnippet
+
+snippet "@ver(s(ion)?)?" "@version Semantic version [jsdoc]"
+@version ${1:0.1.0}$0
+endsnippet
+ 
+snippet @au "@author email (First Last) [jsdoc]"
+@author ${1:`!v g:snips_author`} [${2:`!v g:snips_author_email`}]
+endsnippet
+

@@ -1,46 +1,13 @@
+extends cfamily
+
 snippet main "Main method [c]"
 #include <stdio.h>
 int main(int argc, const char *argv[]) {
-
+  ${1:}
 }
 endsnippet
 
-snippet fori "For i loop [c]" 
-for (int i = 0; i < argc; i++) {
-  printf("arg %d: %s\n", i, argv[i]);
-}
-endsnippet 
-
-snippet "switch|case" "Case statement [c]" r
-switch (n) {
-  case 0:
-  default:
-    bin_digit = INVALID_BINARY_DIGIT;
-    break;
-}
-endsnippet
-
-snippet while "While loop [c]" 
-while (${1:true}) {
-  ${2:++i;}
-}
-endsnippet
-
-snippet fun "Function [c]" b
-${1:void} ${2:function_name}($3) {
-  ${VISUAL}$0
-}
-endsnippet
-
-snippet try "Try catch [c]"
-try {
-  risky();
-} catch (const exception &e) {
-  const chae *msg = e.what();
-}
-endsnippet
-
-snippet "run|popen|subpr(o?c(ess)?)" "Read stdout from a pipe [c]" r
+snippet "run|popen|capture|subpr(o?c(ess)?)" "Read stdout from a pipe [c]" r
 optional<string> run(string &command) {
 
   FILE *fp = popen(command.c_str(), "r");
@@ -78,19 +45,7 @@ snippet "printf?" "Print [c]" r
 printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
 endsnippet
 
-snippet if "If statement [c]"
-if (${1:!inFile}) {
-  ${2:exit(1);   // call system to stop}
-}
-endsnippet
-
 snippet basename "Basename [c]"
 #include <libgen.h>
 string s2 = basename("/etc/hosts");
 endsnippet 
-
-snippet eli "else if .. (eli) [c]"
-else if (${1:/* condition */}) {
-    ${VISUAL}$0
-}
-endsnippet

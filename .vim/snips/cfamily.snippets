@@ -1,1 +1,47 @@
 priority -50
+
+snippet while "While loop [javascript]"
+while (${1:condition}) {
+    ${2:// code block to be executed}
+}
+endsnippet 
+
+snippet "switch|case" "Switch statement [cfamiliy]" r
+switch(${1:expression}) {
+    case ${2:n}:
+        ${3:// code block
+        break;}
+    default:
+        ${4:// code block}
+}
+endsnippet
+
+snippet if "If statement [javascript]"
+if (${1:true}) {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet else "Else statement [cfamiliy]"
+else {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet fun "Function [cfamiliy]" b
+${1:void} ${2:function_name}($3) {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet fori "For i loop [c]" 
+for (int i = 0; i < argc; i++) {
+  printf("arg %d: %s\n", i, argv[i]);
+}
+endsnippet 
+
+snippet eli "else if .. (eli) [c]"
+else if (${1:/* condition */}) {
+    ${VISUAL}$0
+}
+endsnippet
