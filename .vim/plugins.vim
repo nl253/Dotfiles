@@ -76,19 +76,33 @@ Plug 'tpope/vim-eunuch', {'on' : ['Move',
 " CPP:
 
 if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 && (executable("g++") || executable("clang"))
-	for i in ['octol/vim-cpp-enhanced-highlight', 'vim-scripts/OmniCppComplete']
+	for i in ['octol/vim-cpp-enhanced-highlight', ]
 		Plug i, {'for': ['c', 'cpp']}
 	endfor
-     
-	" OmniCppComplete
-	let OmniCpp_NamespaceSearch = 1
-	let OmniCpp_GlobalScopeSearch = 1
-	let OmniCpp_ShowAccess = 1
-	let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
-	let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-	let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
-	let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-	let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+
+	if has('python') || has('python3')
+		Plug 'Rip-Rip/clang_complete', {'for': ['c', 'cpp'], 'do': 'make install'}
+		" path to directory where library can be found
+		"
+		let g:clang_library_path='/usr/lib/libclang.so.5.0'
+		let g:clang_complete_optional_args_in_snippets = 1
+		let g:clang_complete_auto = 1
+		let g:clang_close_preview = 1
+		let g:clang_complete_macros = 1
+		let g:clang_complete_patterns = 1
+		let g:clang_user_options = '-std=c++14'
+	else
+		Plug 'vim-scripts/OmniCppComplete', {'for': ['c', 'cpp']}
+		" OmniCppComplete
+		let OmniCpp_NamespaceSearch = 1
+		let OmniCpp_GlobalScopeSearch = 1
+		let OmniCpp_ShowAccess = 1
+		let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
+		let OmniCpp_MayCompleteDot = 1 " autocomplete after .
+		let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
+		let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
+		let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+	endif
 endif
 
 " RUST:
@@ -119,92 +133,25 @@ if executable("pacman") && system("hostname") =~ "Chummy-Laptop"
 			let g:snips_author = "nl253"
 			let g:snips_email = "norbertlogiewa96@gmail.com"
 			let g:snips_github = "https://github.com/nl253"
+			
+			let g:COMPLETOR_FILETYPES = g:PROGRAMMING_LANGUAGES + 
+						\ g:TEMPLATE_LANGUAGES + g:STYLESHEET_LANGUAGES + ['html', 'yaml', 'gitcommit', 'xhtml'] + g:MARKUP_LANGUAGES
 
-			"function! SyncPackages()
-			"if executable("yarn") 
+			" for i in ['c', 'cpp'] " managed by clang complete
+				" call remove(g:COMPLETOR_FILETYPES, i)
+			" endfor
 
-			"let yarn_packages = system('yarn global list 2>/dev/null')
+			let g:completor_whitelist = g:COMPLETOR_FILETYPES
 
-			"for i in ['tern', 
-			"\ 'scss-lint', 
-			"\ 'js-beautify', 
-			"\ 'typescript',
-			"\ 'tslint',
-			"\ 'eslint', 
-			"\ 'textlint', 
-			"\ 'write-good']
-			"try
-			"if !(yarn_packages =~ $i)
-			"echo system('cd && yarn global add '.i) 
-			"endif
-			"catch /.*/
-			"break
-			"endtry
-			"endfor
-			"endif
-			"if executable("cargo") && !executable("racer")
-			"echo system('cd && cargo install racer')
-			"endif
-			"if executable('pip')
-			"let pip_packages = systemlist("pip list --format legacy \| grep -Eo '^\\w+'")
-			"for i in ['jedi', 'mypy', 'pyflakes', 'vulture', 'isort', 'pylint']
-			"try
-			"if index(pip_packages, i) < 0
-			"echo system('cd && pip install --user --pre '.i)
-			"endif
-			"catch /.*/
-			"break
-			"endtry
-			"endfor
-			"endif
-			"endfunction
-
-			" function! BuildYCM(info)
-			" if a:info.status == 'installed' || a:info.force
-			" !./install.py --tern-completer --racer-completer --clang-completer --system-libclang
-
-			" " javascript
-			" if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 || index(g:PROGRAMMING_LANGUAGES, 'typescript') >= 0 
-			" cd ~/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/tern_runtim
-			" !npm install --production
-			" endif
-
-			" " rust
-			" if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0
-			" cd ~/.vim/plugged/YouCompleteMe/third_party/ycmd/third_party/racerd
-			" !cargo build --release.
-
-			" endif
-
-			" " c and cpp
-			" if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 || index(g:PROGRAMMING_LANGUAGES, 'c') >= 0 
-			" cd ~/
-			" ![[ -e ycm_build ]] && rm -rf ycm_build
-			" !mkdir ycm_build
-			" cd ycm_build
-			" !cmake -G "Unix Makefiles" . ~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp
-			" endif
-			" endif
-			" endfunction
-
-			" Plug 'Valloric/YouCompleteMe', {'do': function('BuildYCM')}
-			" let g:ycm_server_python_interpreter = substitute(system("command readlink -e $(which python2.7)"), " ", "", "g")
-			" Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
-			" let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-
-			Plug 'maralla/completor.vim'
+			Plug 'maralla/completor.vim', {'for': g:COMPLETOR_FILETYPES}
 
 			au! Filetype * if !exists("g:completor_".&ft."_omni_trigger") | exec "let g:completor_".&ft."_omni_trigger = '\w{2,}'" | endif
 
 			let g:completor_min_chars = 1
-			let g:completor_whitelist = ['yaml', 'html', 'gitcommit'] + g:PROGRAMMING_LANGUAGES 
-						\ + g:MARKUP_LANGUAGES + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES
-
 			let g:completor_python_binary = substitute(system("/usr/bin/env python3"), " ", "", "g")
-
 			let g:completor_xhtml_omni_trigger = '<\[A-Z]{,6}|\S+ [-a-z]{2,}'
 
-			for i in ['c', 'cpp', 'objc']
+			for i in ['c', 'cpp']
 				if index(g:PROGRAMMING_LANGUAGES, i) >= 0
 					exec 'let g:completor_'.i.'_omni_trigger = "\w{2,}|\.|->|::"'
 				endif
@@ -228,7 +175,7 @@ if executable("pacman") && system("hostname") =~ "Chummy-Laptop"
 			endif
 
 			if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0
-				for i in ['javascript', 'typescript', 'coffee']
+				for i in ['javascript', 'typescript']
 					exec 'let g:completor_'.i.'_omni_trigger = "\.|\w{4,}| (=>|>|<|=) |(import|as|export|default|new|await|async|public|static|get|protected|private|instanceof|throw|yield|in|extends) "'
 				endfor
 			endif
