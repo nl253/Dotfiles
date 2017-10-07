@@ -76,7 +76,19 @@ Plug 'tpope/vim-eunuch', {'on' : ['Move',
 " CPP:
 
 if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 && (executable("g++") || executable("clang"))
-	Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
+	for i in ['octol/vim-cpp-enhanced-highlight', 'vim-scripts/OmniCppComplete']
+		Plug i, {'for': ['c', 'cpp']}
+	endfor
+     
+	" OmniCppComplete
+	let OmniCpp_NamespaceSearch = 1
+	let OmniCpp_GlobalScopeSearch = 1
+	let OmniCpp_ShowAccess = 1
+	let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
+	let OmniCpp_MayCompleteDot = 1 " autocomplete after .
+	let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
+	let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
+	let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 endif
 
 " RUST:
