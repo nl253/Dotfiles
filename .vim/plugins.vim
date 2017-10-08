@@ -309,10 +309,10 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 " WEB DEV:
 
 for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
-	Plug i, {'for': ['xml' 'html', 'xhtml', 'php'] + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES}
+	Plug i, {'for': ['xml', 'html', 'xhtml', 'php'] + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES}
 endfor
 
-Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES + ['xml' 'html', 'xhtml', 'php']}
+Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES + ['xml', 'html', 'xhtml', 'php']}
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 

@@ -7,7 +7,6 @@
 *.db
 *.lock
 *.log
-*cache*
 *.sqlite
 *.sqlite3
 *.swap

@@ -192,7 +192,7 @@ snippet "breakp(oint)?|bp" "Debugging break-point [python]" r
 import ipdb ; ipdb.set_trace() # XXX
 endsnippet
 
-snippet try "Try [python]" 
+snippet try "Try except [python]" 
 try:
     exec(f'import {i}')
 except Exception as e:
@@ -258,74 +258,6 @@ import numpy as np
 import pandas as pd
 import scipy as sc
 from scipy import stats, stats
-endsnippet
-
-snippet "subp(ar(sers)?)?" "Argparse expanded with subparsers [python]" r
-from argparse import ArgumentParser
-from sys import exit
-
-parser: ArgumentParser = ArgumentParser()
-
-subparsers = parser.add_subparsers()
-
-install_parser: ArgumentParser = subparsers.add_parser('install')
-
-install_parser.add_argument('package')
-
-install_subparsers = install_parser.add_subparsers()
-
-install_parent_parser = ArgumentParser(add_help=False)
-
-install_parent_parser.add_argument('-o', '--output', '--as', dest='as', nargs=1)
-
-install_parent_parser.add_argument('source')
-
-github_parser: ArgumentParser = install_subparsers.add_parser('github', aliases=['gh'], parents=[install_parent_parser])
-
-curl_parser: ArgumentParser = install_subparsers.add_parser('curl', parents=[install_parent_parser])
-
-curl_parser.add_argument('--insecure', default=True, dest='secure', action='store_false')
-
-curl_parser.add_argument('--add-to-path', '--executable', '--symlink', dest='executable')
-
-group = curl_parser.add_mutually_exclusive_group()
-
-group.add_argument('--POST', dest='method', nargs=1, default='GET')
-
-group.add_argument('--GET', dest='method', nargs=1, default='GET')
-
-gist_parser: ArgumentParser = install_subparsers.add_parser('gist', parents=[install_parent_parser])
-
-gist_parser.add_argument('--add-to-path', '--executable', '--symlink', dest='executable')
-
-verify_parser: ArgumentParser = subparsers.add_parser('verify', aliases=['check'])
-
-verify_parser.add_argument('what', choices=['curl', 'symlinks', 'repos', 'gists'])
-
-list_parser: ArgumentParser = subparsers.add_parser('list', aliases=['show'])
-
-list_parser.add_argument('what', choices=['repos', 'curl', 'links', 'gists', 'available'])
-
-uninstall_parser: ArgumentParser = subparsers.add_parser('uninstall', aliases=['remove'])
-
-uninstall_parser.add_argument('source', choices=['gist', 'github', 'curl'])
-
-uninstall_parser.add_argument('name', choices="")
-
-info_parser: ArgumentParser = subparsers.add_parser('info', aliases=['details'])
-
-info_parser.add_argument('source', choices=['gist', 'github', 'curl'])
-
-info_parser.add_argument('name')
-
-args = parser.parse_args()
-
-if not vars(args):
-    print('')
-    parser.print_help()
-    print('')
-    exit()
-
 endsnippet
 
 snippet "complet[oe]r" "Prompt Toolkit completer [python]" r 
@@ -406,7 +338,7 @@ from itertools import islice
 slice: Iterable = islice(${1:iterable}, ${2:start}, ${3:stop})
 endsnippet
 
-snippet reduce "Functools reduce [python]" 
+snippet "red(uce)?" "Functools reduce [python]" r
 from functools import reduce
 reduced: Iterable = reduce(${1:function}, ${2:iterable})
 endsnippet
@@ -424,83 +356,6 @@ for file in ${1:LIST_OF_FILES}:
         print('MATCH!')
 endsnippet
 
-snippet "[Dd]ir(ect(ory)?)?" "Directory wrapper class [python]" r
-import os
-from os.path import basename, expanduser
-from typing import List
-import fnmatch
-
-
-class Directory:
-    """Wrapper for a directory to make it easier to list nodes of a certain type eg files, dirs,  links.
-    Allows to control output - basename (default) or full paths.
-    Use ls() for everything.
-    """
-
-    def __init__(self, path: str):
-        self._path: str = expanduser(path)
-
-    def make(self, files: List[str] = [], dirs: List[str] = []):
-        if not os.path.exists(self.path):
-            os.makedirs(self.path, exist_ok=True)
-        for f in files:
-            p = os.path.join(self.path, f)
-            if not os.path.exists(p):
-                os.mkdnod(p)
-        for d in dirs:
-            p = os.path.join(self.path, d)
-            if not os.path.exists(d):
-                os.mkdir(p)
-
-    @property
-    def _nodes(self) -> List[str]:
-        return os.listdir(self.path)
-
-    @property
-    def _files(self) -> List[str]:
-        return [basename(node) for node in self._full_paths(self._nodes) if os.path.isfile(node)]
-
-    @property
-    def _dirs(self) -> List[str]:
-        return [basename(node) for node in self._full_paths(self._nodes) if os.path.isdir(node)]
-
-    @property
-    def _symlinks(self) -> List[str]:
-        return [basename(node) for node in self._full_paths(self._nodes) if os.path.islink(node)]
-
-    def _full_paths(self, nodes: List[str]) -> List[str]:
-        return [os.path.join(self.path, node) for node in nodes]
-
-    def ls(self, what='all', full_paths=False, filter_pattern="", hidden=True) -> List[str]:
-        data = None
-
-        assert what in ['links', 'dirs', 'files', 'all'], f'Choose from all, files, dirs or links {what} is not valid.'
-
-        if what == 'all':
-            data: List[str] = self._nodes
-
-        elif what == 'dirs':
-            data: List[str] = self._dirs
-
-        elif what == 'files':
-            data: List[str] = self._files
-
-        if full_paths:
-            data: List[str] = self._full_paths(data)
-
-        if filter_pattern:
-            data = fnmatch.filter(filter_pattern)
-
-        if not hidden:
-            data = fnmatch.filter(data, "[!.]*")
-
-        return data
-
-    @property
-    def path(self) -> str:
-        return self._path
-endsnippet
-
 snippet "fori?" "For loop [python]" r
 for i in ${1:iterable}:
     ${2:# DO_SOMETHING}
@@ -512,48 +367,47 @@ import fnmatch
 filetered_nodes: List[Text] = fnmatch.filter(${1:file}, '*.${2:txt}')
 endsnippet
 
-snippet "temp(f(ile?)?)" "Temporary file [python]" r
+snippet "tempf(ile?)?" "Temporary file [python]" r
 from tempfile import TemporaryFile
 fp = TemporaryFile()
 
 endsnippet
 
-snippet "temp(d(ir?))?" "Temporary dir [python]" r
+snippet "tempd(ir?)?" "Temporary dir [python]" r
 from tempfile import TemporaryDirectory
 fp = TemporaryFile()
 
 endsnippet
 
-snippet "(op?)conc(at)?" "Concat function [python]" r
+snippet "op?conc(at)?" "Concat function [python]" r
 from operator import concat
-
 endsnippet
 
-snippet "(op{,2})?add" "Add function [python]" r
+snippet "op{,2}?add" "Add function [python]" r
 from operator import add
 endsnippet
 
-snippet "(op{,2})cont(ains?)?" "Add function [python]" r
+snippet "op{,2}cont(ains?)?" "Add function [python]" r
 from operator import contains
 endsnippet
 
-snippet "(op{,2})?count([Oo]f)?" "countOf function [python]" r
+snippet "op{,2}?count([Oo]f)?" "countOf function [python]" r
 from operator import countOf # number occurrences of b in a.
 endsnippet
 
-snippet "(op{,2})?xor" "XOR function [python]" r
+snippet "op{,2}?xor" "XOR function [python]" r
 from operator import xor 
 endsnippet
 
-snippet "(op{,2})?or" "OR function [python]" r
+snippet "op{,2}?or" "OR function [python]" r
 from operator import or 
 endsnippet
 
-snippet "(op{,2})?neg" "OR function [python]" r
+snippet "op{,2}?neg" "OR function [python]" r
 from operator import neg 
 endsnippet
 
-snippet "(op{,2})?mod" "Modulus function [python]" r
+snippet "op{,2}?mod" "Modulus function [python]" r
 from operator import mod 
 endsnippet
 

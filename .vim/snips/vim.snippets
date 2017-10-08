@@ -6,7 +6,7 @@ snippet let "Variable definition [vim]" b
 let ${1:g}:${2:var_name} = ${3:1}
 endsnippet
 
-snippet Plug "Plugin [vim]" b
+snippet "[Pp]lug" "Plugin [vim]" br
 Plug '${1:author}/${2:repo}'
 endsnippet
 
@@ -36,7 +36,7 @@ snippet exe "Check if executable [vim]"
 executable("${1:EXECUTABLE}")
 endsnippet 
 
-snippet "func?|function" "function [vim]" br
+snippet "fun(c(t(i(on?)?)?)?)?" "function [vim]" br
 function! s:${1:function_name}()
 	${2:" DO STH HERE}
 endfunction
@@ -71,14 +71,6 @@ endsnippet
 
 snippet call "Function Call [vim]" 
 call ${1:expand('~/')}
-endsnippet
-
-snippet "===" "Fat Line [vim]" r
-================
-endsnippet
-
-snippet "---" "Line [vim]" r
-----------------
 endsnippet
 
 # ---------------------------------------------------------------------- 
