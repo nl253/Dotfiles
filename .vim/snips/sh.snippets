@@ -38,6 +38,19 @@ snippet dec "Declare a variable [sh]"
 declare -a 
 endsnippet
 
+snippet "case|switch" "Case statement [sh]"
+case $filename in
+"$quit")
+    echo "Exiting."
+    break
+    ;;
+*)
+    echo "You picked $filename ($REPLY)"
+    ;;
+esac
+endsnippet
+
+
 snippet select "Select loop [sh]"
 select filename in *; do
 	case $filename in

@@ -3,7 +3,7 @@ def __init__(self, ${1:value}: ${2:Text}):
     self._${3:something} = ${4:value}
 endsnippet
 
-snippet #! "Shebang node.js [javascript]"
+snippet #! "Shebang python [python]"
 #!/usr/bin/env python3 
 endsnippet
 
@@ -120,7 +120,7 @@ def expand(text: str) -> str:
     return os.path.expandvars(os.path.expanduser(text))
 endsnippet
 
-snippet doc "Doc string [python]"
+snippet "doc(str(ing)?)?" "Doc string [python]" r
 """
 File: `!p 
 import re
@@ -167,11 +167,11 @@ snippet "warn(ing)?" "Log [python]" r
 log.warn(f"${1:variable} is {${2:variable}}")
 endsnippet
 
-snippet error "Log [python]" 
+snippet "err(or)?" "Log [python]" r
 log.error(f"${1:variable} is {${2:variable}}")
 endsnippet
 
-snippet critical "Log [python]" 
+snippet "crit(i(c(al?)?)?)?" "Log [python]" r
 log.critical(f"${1:variable} is {${2:variable}}")
 endsnippet
 
@@ -194,7 +194,7 @@ endsnippet
 
 snippet try "Try [python]" 
 try:
-	exec(f'import {i}')
+    exec(f'import {i}')
 except Exception as e:
     print(f"ERROR {e}")
 endsnippet

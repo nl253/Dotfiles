@@ -93,7 +93,10 @@ if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 && (executable("g++") || executabl
 		let g:clang_close_preview = 1
 		let g:clang_complete_macros = 1
 		let g:clang_complete_patterns = 1
-		let g:clang_user_options = '-std=c++17 -faligned-allocation -Wdeprecated -frelaxed-template-template-args -fsized-deallocation -fno-dollars-in-identifiers -fmodules -fcxx-exceptions -fcoroutines-ts -fblocks -fexceptions -I/usr/include/c++/7.2.0/ -I/usr/include/'
+		let g:clang_user_options = '-std=c++17 -faligned-allocation -Wdeprecated '.
+					\ '-frelaxed-template-template-args -fsized-deallocation '.
+					\ '-fno-dollars-in-identifiers -fmodules -fcxx-exceptions '.
+					\ '-fcoroutines-ts -fblocks -fexceptions -I/usr/include/c++/7.2.0/ -I/usr/include/'
 	else
 		Plug 'vim-scripts/OmniCppComplete', {'for': ['c', 'cpp']}
 		" OmniCppComplete
@@ -108,7 +111,7 @@ if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 && (executable("g++") || executabl
 	endif
 endif
 
-" RUST:
+" RUST: 
 
 if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0 && executable("rustc")
 	for i in ["rust-lang/rust.vim"]
@@ -306,26 +309,20 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 " WEB DEV:
 
 for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
-	Plug i, {'for': ['xml', 
-				   \ 'html', 
-				   \ 'xhtml', 
-				   \ 'css', 
-				   \ 'php', 
-				   \ 'htmldjango', 
-				   \ 'jinja']}
+	Plug i, {'for': ['xml' 'html', 'xhtml', 'php'] + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES}
 endfor
 
-Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES}
+Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES + ['xml' 'html', 'xhtml', 'php']}
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 
 if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 
 	for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
-		Plug i, {'for': ['javascript', 'typescript']}
+		Plug i, {'for': ['javascript', 'typescript', 'xml' 'html', 'xhtml', 'php']}
 	endfor
 
 	for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6']
-		Plug i, {'for': ['javascript']}
+		Plug i, {'for': ['javascript','xml' 'html', 'xhtml', 'php']}
 	endfor
 
 	if index(g:PROGRAMMING_LANGUAGES, 'typescript') >= 0 && executable("tsc")
