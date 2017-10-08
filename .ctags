@@ -1,5 +1,8 @@
+--maxdepth=3
 --recurse=yes
 --tag-relative=yes
+--sort=yes
+--guess-language-eagerly
 
 --exclude=node_modules/*
 --exclude=*node_modules/*
@@ -12,53 +15,55 @@
 --exclude=.pyenv/*
 --exclude=.config/*
 --exclude=.*201*/*
+--exclude=*.json
+--exclude=*.yaml
+--exclude=*.yml
 --exclude=.local/*
 
---langdef=markdown 
---langmap=markdown:.md
---langmap=markdown:+.markdown
---langmap=markdown:+.mdown
---regex-markdown=/^[ \t]*#+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)/\1 - heading/
+--langdef=Markdown 
+--langmap=Markdown:.md
+--langmap=Markdown:+.markdown
+--langmap=Markdown:+.mdown
+--regex-Markdown=/^[ \t]*#+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)/\1 - heading/
 
---langdef=mediawiki 
---langmap=mediawiki:.wiki
---regex-mediawiki=/^[ \t]*=+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)[ \t]*=+/\1 - heading/
+--langdef=Mediawiki 
+--langmap=Mediawiki:.wiki
+--regex-Mediawiki=/^[ \t]*=+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)[ \t]*=+/\1 - heading/
 
---langdef=vorg 
---langmap=vorg:.vorg
---regex-vorg=/[^\w]#([A-Z]+)/\1 - hashtag/
---regex-vorg=/( {4}|\t)*=> (.+)/\2 - defition/
---regex-vorg=/( {4}|\t)*(>|\(){1,6} (.+)/\3 - heading/
+--langdef=Vorg 
+--langmap=Vorg:.vorg
+--regex-Vorg=/[^\w]#([A-Z]+)/\1 - hashtag/
+--regex-Vorg=/( {4}|\t)*=> (.+)/\2 - defition/
+--regex-Vorg=/( {4}|\t)*(>|\(){1,6} (.+)/\3 - heading/
 
---langdef=rst
---langmap=rst:.rst
---regex-rst=/^[ \t]*\.{2} ([-a-z_]+):: (.{2,78}?)$/\2 - \1/
---regex-rst=/^[ \t]*((\w+ ?)+):$/\1 - list/
---regex-rst=/^[ \t]*((\w+ ?)+)::$/\1 - paragraph/
---regex-rst=/^[ \t]*([A-Z]?[a-z]+)$/\1/
---regex-rst=/^[ \t]*([A-Z]?[a-z]+) : (.*)$/\1: \2 - defintion/
---regex-rst=/^[ \t]*([A-Z]?[a-z]+) : (.*) : (.*)$/\1: \2: \3 - defintion/
---regex-rst=/^\.{2} _(.*): .*$/\1 - external hyperlink/
---regex-rst=/`((.*) )?<?(.*)>?`_{1,2}/\1 - hyperlink/
---regex-rst=/_`(.*)`/\1 - inline internal reference/
---regex-rst=/__ (\S+)/\1 - anonymous hyperlink/
---regex-rst=/<a href=["'](.*)["']>(.*)<\/a>/\2 - html embedded hyperlink/
---regex-rst=/(\w+)_{1,2}/\1 - anonymous inline reference/
+--langdef=Rst
+--langmap=Rst:.rst
+--regex-Rst=/^[ \t]*\.{2} ([-a-z_]+):: (.{2,78}?)$/\2 - \1/
+--regex-Rst=/^[ \t]*((\w+ ?)+):$/\1 - list/
+--regex-Rst=/^[ \t]*((\w+ ?)+)::$/\1 - paragraph/
+--regex-Rst=/^[ \t]*([A-Z]?[a-z]+)$/\1/
+--regex-Rst=/^[ \t]*([A-Z]?[a-z]+) : (.*)$/\1: \2 - defintion/
+--regex-Rst=/^[ \t]*([A-Z]?[a-z]+) : (.*) : (.*)$/\1: \2: \3 - defintion/
+--regex-Rst=/^\.{2} _(.*): .*$/\1 - external hyperlink/
+--regex-Rst=/`((.*) )?<?(.*)>?`_{1,2}/\1 - hyperlink/
+--regex-Rst=/_`(.*)`/\1 - inline internal reference/
+--regex-Rst=/__ (\S+)/\1 - anonymous hyperlink/
+--regex-Rst=/<a href=["'](.*)["']>(.*)<\/a>/\2 - html embedded hyperlink/
+--regex-Rst=/(\w+)_{1,2}/\1 - anonymous inline reference/
 
---langdef=asciidoc
---langmap=asciidoc:.ad.adoc.asciidoc
---regex-asciidoc=/^=[ \t]+(.*)/# \1/h/
---regex-asciidoc=/^==[ \t]+(.*)/. \1/h/
---regex-asciidoc=/^===[ \t]+(.*)/. . \1/h/
---regex-asciidoc=/^====[ \t]+(.*)/. . . \1/h/
---regex-asciidoc=/^=====[ \t]+(.*)/. . . . \1/h/
---regex-asciidoc=/^======[ \t]+(.*)/. . . . \1/h/
---regex-asciidoc=/^=======[ \t]+(.*)/. . . . \1/h/
---regex-asciidoc=/\[\[([^]]+)\]\]/\1/a/
---regex-asciidoc=/^\.([^ \t].+)/\1/t/
---regex-asciidoc=/image::([^\[]+)/\1/i/
---regex-asciidoc=/image:([^:][^\[]+)/\1/I/
---regex-asciidoc=/include::([^\[]+)/\1/n/
+--langdef=Asciidoc
+--langmap=Asciidoc:.ad.adoc.asciidoc
+--regex-Asciidoc=/^=[ \t]+(.*)/# \1/h/
+--regex-Asciidoc=/^==[ \t]+(.*)/. \1/h/
+--regex-Asciidoc=/^===[ \t]+(.*)/. . \1/h/
+--regex-Asciidoc=/^====[ \t]+(.*)/. . . \1/h/
+--regex-Asciidoc=/^=====[ \t]+(.*)/. . . . \1/h/
+--regex-Asciidoc=/^======[ \t]+(.*)/. . . . \1/h/
+--regex-Asciidoc=/^=======[ \t]+(.*)/. . . . \1/h/
+--regex-Asciidoc=/\[\[([^]]+)\]\]/\1/a/
+--regex-Asciidoc=/^\.([^ \t].+)/\1/t/
+--regex-Asciidoc=/image::([^\[]+)/\1/i/
+--regex-Asciidoc=/image:([^:][^\[]+)/\1/I/
+--regex-Asciidoc=/include::([^\[]+)/\1/n/
 
-
---languages=sh,python,rust,css,html,mediawiki,markdown,rst,javascript,vorg,vim,java
+--languages=sh,python,rust,markdown,rst,javascript,vorg,java,c,c++,reStructuredText,vim,php

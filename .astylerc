@@ -1,0 +1,19 @@
+### Artistic Style configuration
+
+--style=java
+--indent=spaces
+-s2
+--convert-tabs
+--add-braces
+# --pad-paren-out
+--pad-comma
+--pad-header
+--align-pointer=name
+--align-reference=name
+--break-blocks
+--pad-oper
+--indent-classes
+--indent-switches
+--indent-preproc-define
+--indent-col1-comments
+--max-code-length=120
