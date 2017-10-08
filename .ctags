@@ -1,0 +1,64 @@
+--recurse=yes
+--tag-relative=yes
+
+--exclude=node_modules/*
+--exclude=*node_modules/*
+--exclude=.vscode/*
+--exclude=.thunderbird/*
+--exclude=.mozilla/*
+--exclude=.cache/*
+--exclude=.nvm/*
+--exclude=.gvm/*
+--exclude=.pyenv/*
+--exclude=.config/*
+--exclude=.*201*/*
+--exclude=.local/*
+
+--langdef=markdown 
+--langmap=markdown:.md
+--langmap=markdown:+.markdown
+--langmap=markdown:+.mdown
+--regex-markdown=/^[ \t]*#+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)/\1 - heading/
+
+--langdef=mediawiki 
+--langmap=mediawiki:.wiki
+--regex-mediawiki=/^[ \t]*=+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)[ \t]*=+/\1 - heading/
+
+--langdef=vorg 
+--langmap=vorg:.vorg
+--regex-vorg=/[^\w]#([A-Z]+)/\1 - hashtag/
+--regex-vorg=/( {4}|\t)*=> (.+)/\2 - defition/
+--regex-vorg=/( {4}|\t)*(>|\(){1,6} (.+)/\3 - heading/
+
+--langdef=rst
+--langmap=rst:.rst
+--regex-rst=/^[ \t]*\.{2} ([-a-z_]+):: (.{2,78}?)$/\2 - \1/
+--regex-rst=/^[ \t]*((\w+ ?)+):$/\1 - list/
+--regex-rst=/^[ \t]*((\w+ ?)+)::$/\1 - paragraph/
+--regex-rst=/^[ \t]*([A-Z]?[a-z]+)$/\1/
+--regex-rst=/^[ \t]*([A-Z]?[a-z]+) : (.*)$/\1: \2 - defintion/
+--regex-rst=/^[ \t]*([A-Z]?[a-z]+) : (.*) : (.*)$/\1: \2: \3 - defintion/
+--regex-rst=/^\.{2} _(.*): .*$/\1 - external hyperlink/
+--regex-rst=/`((.*) )?<?(.*)>?`_{1,2}/\1 - hyperlink/
+--regex-rst=/_`(.*)`/\1 - inline internal reference/
+--regex-rst=/__ (\S+)/\1 - anonymous hyperlink/
+--regex-rst=/<a href=["'](.*)["']>(.*)<\/a>/\2 - html embedded hyperlink/
+--regex-rst=/(\w+)_{1,2}/\1 - anonymous inline reference/
+
+--langdef=asciidoc
+--langmap=asciidoc:.ad.adoc.asciidoc
+--regex-asciidoc=/^=[ \t]+(.*)/# \1/h/
+--regex-asciidoc=/^==[ \t]+(.*)/. \1/h/
+--regex-asciidoc=/^===[ \t]+(.*)/. . \1/h/
+--regex-asciidoc=/^====[ \t]+(.*)/. . . \1/h/
+--regex-asciidoc=/^=====[ \t]+(.*)/. . . . \1/h/
+--regex-asciidoc=/^======[ \t]+(.*)/. . . . \1/h/
+--regex-asciidoc=/^=======[ \t]+(.*)/. . . . \1/h/
+--regex-asciidoc=/\[\[([^]]+)\]\]/\1/a/
+--regex-asciidoc=/^\.([^ \t].+)/\1/t/
+--regex-asciidoc=/image::([^\[]+)/\1/i/
+--regex-asciidoc=/image:([^:][^\[]+)/\1/I/
+--regex-asciidoc=/include::([^\[]+)/\1/n/
+
+
+--languages=sh,python,rust,css,html,mediawiki,markdown,rst,javascript,vorg,vim,java

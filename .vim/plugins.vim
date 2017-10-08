@@ -31,6 +31,8 @@ for i in ['scrooloose/nerdcommenter', 'konfekt/fastfold', 'wellle/targets.vim']
 	Plug i
 endfor
 
+Plug 'majutsushi/tagbar', {'on': 'Tagbar'}
+
 let g:NERDSpaceDelims = 1
 
 if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
