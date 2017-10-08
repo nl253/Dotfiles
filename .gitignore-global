@@ -3,9 +3,11 @@
 *-log
 *.bak
 *.class
+.mypy_cache/
 *.db
 *.lock
 *.log
+*cache*
 *.sqlite
 *.sqlite3
 *.swap
@@ -15,7 +17,13 @@
 .**/*-cache
 .git/
 .idea/ 
+out/
 .vscode/
 node_modules/
 package-lock.json
 tags
+develop-eggs/
+build/
+dist/
+.eggs/
+*.egg
