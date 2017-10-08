@@ -1,5 +1,9 @@
 priority -50
 
+snippet lorem "lorem ipsum [all]"
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+endsnippet
+
 snippet e "Euler's Constant 2.71 [all]"
 `!p 
 import math 
@@ -14,7 +18,7 @@ snip.rv = str(math.pi)
 `
 endsnippet
 
-snippet date "Date [all]" 
+snippet "date|today|now" "Date [all]" r
 `date`
 endsnippet
 
@@ -33,3 +37,12 @@ endsnippet
 snippet "\{" "Braces [all]" r
 {${1:}}
 endsnippet 
+
+snippet "={3,}" "Fat Line [vim]" r
+================
+endsnippet
+
+snippet "-{3,}" "Line [vim]" r
+----------------
+endsnippet
+
