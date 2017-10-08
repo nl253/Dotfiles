@@ -61,7 +61,7 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
 	'php-apache' 'cppcheck' 'php-cgi' 'php-codesniffer' 'php-mongodb' 'php-pgsql' 'php-phpdbg' 'php-sqlite' 'phpmyadmin'
 	'phppgadmin' 'postgresql' 'postgresql-libs' 'powertop' 'ranger' 'redis' 'rsync' 'ruby' 'ruby-docs' 'sed'
 	'shfmt' 'speedtest-cli' 'spotify-stable' 'sqlite' 'subversion' 'tar' 'thunderbird' 'tmux' 'tracker'
-	'transmission-cli' 'tree' 'zsh')
+	'transmission-cli' 'tree')
 
 # declare used python packages
 MANAGE_PYTHON=1
