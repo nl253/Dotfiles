@@ -214,6 +214,7 @@ endfor
 Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES + ['xml', 'html', 'xhtml', 'php']}
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
+let g:user_emmet_install_global = 0
 
 if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 
 	for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
