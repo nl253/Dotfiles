@@ -146,8 +146,7 @@ if index(g:PROGRAMMING_LANGUAGES, 'clojure') >= 0
 	Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 endif
 
-if has('patch-8') || has('nvim')
-
+if has('patch8') || has('nvim')
 	Plug 'neomake/neomake'
 	let g:neomake_yaml_enabled_makers = ['yamllint']
 	let g:neomake_vim_enabled_makers = ['vint']
@@ -276,7 +275,7 @@ let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']}
 
 call plug#end()
 
-if has('patch-8') || has('nvim') 
+if has('patch8') || has('nvim') 
 	call neomake#configure#automake('rw', 1000) 
 endif
 
