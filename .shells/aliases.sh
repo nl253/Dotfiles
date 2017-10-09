@@ -114,6 +114,11 @@ fi
 for i in {h,a,}top 'ps aux'; do
 	_in_path $i && alias p=$i && break
 done
+
+if ! $(hostname) =~ Chummy; then
+  eval "alias ${EDITOR}=${EDITOR} 2>/dev/null"
+fi
+
 # }
 
 # VCS {
