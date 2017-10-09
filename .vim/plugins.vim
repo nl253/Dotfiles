@@ -146,7 +146,7 @@ if index(g:PROGRAMMING_LANGUAGES, 'clojure') >= 0
 	Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 endif
 
-if has('patch8') || has('nvim')
+if has('patch-8') || has('nvim')
 
 	Plug 'neomake/neomake'
 	let g:neomake_yaml_enabled_makers = ['yamllint']
