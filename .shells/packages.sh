@@ -52,16 +52,19 @@ to intialise variables so that a new shell doesnt need to be spawned.
 # 1 or 0
 HAS_ADMIN=1
 PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
-	'automake' 'bash' 'bash-completion' 'bashmount' 'bc' 'binutils' 'bison' 'clang'
-	'composer' 'coreutils' 'cronie' 'universal-ctags-git' 'curl' 'elinks' 'erlang' 'flex' 'fzf' 'gawk'
-	'gcc' 'gcc-libs' 'gimp' 'go' 'gparted' 'grep' 'hexchat' 'highlight' 'htop' 'hub'
-	'hugo' 'jdk9-openjdk' 'jq' 'json-glib' 'jupyter-nbformat' 'jupyter-notebook'
-	'less' 'lsb-release' 'lshw' 'lua' 'make' 'man-db' 'man-pages' 'mariadb' 'mariadb-clients' 'mathjax'
-	'mongodb' 'mongodb-tools' 'mutt' 'ncurses' 'ngrep' 'nodejs' 'npm' 'openssh' 'parted' 'perl' 'php'
-	'php-apache' 'cppcheck' 'php-cgi' 'php-codesniffer' 'php-mongodb' 'php-pgsql' 'php-phpdbg' 'php-sqlite' 'phpmyadmin'
-	'phppgadmin' 'postgresql' 'postgresql-libs' 'powertop' 'ranger' 'redis' 'rsync' 'ruby' 'ruby-docs' 'sed'
-	'shfmt' 'speedtest-cli' 'spotify-stable' 'sqlite' 'subversion' 'tar' 'thunderbird' 'tmux' 'tracker'
-	'transmission-cli' 'tree')
+	'automake' 'bash' 'bash-completion' 'bashmount' 'bc' 'binutils' 
+	'bison' 'clang' 'base-devel' 'composer' 'coreutils' 'cronie' 
+	'universal-ctags-git' 'curl' 'elinks' 'erlang' 'flex' 'fzf' 'gawk'
+	'gcc' 'gcc-libs' 'gimp' 'go' 'gparted' 'grep' 'hexchat' 'highlight' 
+	'htop' 'hub' 'hugo' 'jdk9-openjdk' 'jq' 'json-glib' 'jupyter-nbformat' 
+	'jupyter-notebook' 'less' 'lsb-release' 'lshw' 'lua' 'make' 'man-db' 
+	'man-pages' 'mariadb' 'mariadb-clients' 'mathjax' 'mongodb' 'mongodb-tools' 
+	'mutt' 'ncurses' 'ngrep' 'nodejs' 'npm' 'openssh' 'parted' 'perl' 'php'
+	'php-apache' 'cppcheck' 'php-cgi' 'php-codesniffer' 'php-mongodb' 
+	'php-pgsql' 'php-phpdbg' 'php-sqlite' 'phpmyadmin' 'phppgadmin' 'postgresql' 
+	'postgresql-libs' 'powertop' 'ranger' 'redis' 'rsync' 'ruby' 'ruby-docs' 'sed'
+	'shfmt' 'speedtest-cli' 'spotify-stable' 'sqlite' 'subversion' 'tar' 
+	'thunderbird' 'tmux' 'tracker' 'transmission-cli' 'tree')
 
 # declare used python packages
 MANAGE_PYTHON=1
