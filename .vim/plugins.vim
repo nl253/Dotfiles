@@ -275,6 +275,8 @@ endfor
 let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 
 call plug#end()
-call neomake#configure#automake('rw', 1000) 
+
+if has('patch8') || has('nvim') | call neomake#configure#automake('rw', 1000) | endif
+
 colorscheme fabulous
 " vim: foldmethod=indent
