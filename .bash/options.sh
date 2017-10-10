@@ -33,11 +33,18 @@ shopt -s globstar
 # between A and B, and upper-case and lower-case ASCII characters will collate together 
 shopt -s globasciiranges
 
+# If set, bash allows patterns which match no files (see Pathname Expansion above) to expand to a null string, rather than themselves.
+shopt -s nullglob
+
 # If set, minor errors in the spelling of a directory component in a cd command will be corrected.  
 # The errors checked for are transposed characters, a missing character, and one character too many.  
 # If a correction is found, the corrected filename is printed,  and  the  command  proceeds.   
 # This option is only used by interactive shells.  
 shopt -s cdspell 
+
+# If set, bash attempts spelling correction on directory names during word completion if the directory name initially supplied does not exist.
+# dotglob If set, bash includes filenames beginning with a `.' in the results of pathname expansion.
+shopt -s dirspell
 
 # If set, shell error messages are written in the standard GNU error message format.
 shopt -s gnu_errfmt
@@ -49,12 +56,6 @@ shopt -s no_empty_cmd_completion
 # If set, bash checks that a command found in the hash table exists before trying 
 # to execute it. If a hashed command no longer exists, a normal path search is performed.
 shopt -s  checkhash
-
-## enable inc search <C-s> which is often disabled by terminal emulators
-#stty -ixon
-
-## turn off control character echoing
-#stty -ctlecho
 
 complete -c sudo
 complete -c while

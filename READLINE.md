@@ -30,6 +30,9 @@
 - `\C-x*` glob-expand-word
 - `\C-xg` glob-list-expansions
 
+**NOTE**<br>
+Prefer these over the ones below<br> 
+
 - `\e!` complete-command
 - `\e/` complete-filename
 - `\e@` complete-hostname
