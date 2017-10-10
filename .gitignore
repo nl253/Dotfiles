@@ -274,11 +274,11 @@ undo/*
 
 Raptor
 Pictures
-VMs/
 Downloads
 Projects/
 Notes/
 Libraries/
+Uni/
 
 # Ruby
 
@@ -357,8 +357,6 @@ Empty*
 .CLion*
 .config/JetBrains/ReSharperHost/v08/NuGet.Config
 .WebStorm*
-
-# cache
 
 # archived repo
 
