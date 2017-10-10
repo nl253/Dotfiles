@@ -22,7 +22,7 @@ _add_to_cdpath() {
 
 export CDPATH="${HOME}:"
 
-_add_to_cdpath $HOME/{Projects,Notes,.vim/plugged,.shells}
+_add_to_cdpath $HOME/{Projects,Uni,.vim/plugged,.shells}
 
 unset -f _add_to_cdpath
 

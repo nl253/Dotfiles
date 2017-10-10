@@ -28,6 +28,7 @@ atkmm
 attr
 autoconf
 automake
+autossh
 avahi
 b43-fwcutter
 babl
@@ -40,6 +41,7 @@ binutils
 bison
 bluez
 bluez-libs
+boost
 boost-libs
 btrfs-progs
 bzip2
@@ -79,7 +81,6 @@ cracklib
 crda
 cronie
 cryptsetup
-ctags
 cups
 cups-filters
 cups-pdf
@@ -216,7 +217,6 @@ gnupg
 gnutls
 go
 gobject-introspection-runtime
-gom
 gparted
 gperftools
 gpgme
@@ -227,7 +227,6 @@ graphite
 graphviz
 grep
 grilo
-grilo-plugins
 groff
 grub
 gsettings-desktop-schemas
@@ -272,7 +271,6 @@ haveged
 hdparm
 hexchat
 hicolor-icon-theme
-highlight
 hplip
 hspell
 htop
@@ -428,7 +426,6 @@ libdaemon
 libdatrie
 libdc1394
 libdca
-libdmapsharing
 libdrm
 libdv
 libdvdnav
@@ -482,7 +479,6 @@ liblouis
 liblqr
 libmariadbclient
 libmbim
-libmediaart
 libmediainfo
 libmm-glib
 libmms
@@ -646,7 +642,6 @@ logrotate
 lpsolve
 lsb-release
 lshw
-lua
 lua51
 lua52
 lua52-bitop
@@ -710,6 +705,7 @@ mkinitcpio-openswap
 mlocate
 mobile-broadband-provider-info
 mod_dnssd
+mod_wsgi
 modemmanager
 moka-icon-theme
 mongodb
@@ -740,6 +736,7 @@ networkmanager-vpnc
 nfs-utils
 nfsidmap
 nghttp2
+nginx
 ngrep
 nm-connection-editor
 nmap
@@ -751,7 +748,6 @@ nspr
 nss
 nss-mdns
 ntfs-3g
-ntop
 ntp
 numlockx
 ocl-icd
@@ -764,7 +760,7 @@ openjdk9-doc
 openjpeg2
 openmotif
 openresolv
-openssh
+openssh-hpn-git
 openssl
 openssl-1.0
 openvpn
@@ -917,7 +913,6 @@ rfkill
 rhash
 rlwrap
 rpcbind
-rrdtool
 rsync
 rtkit
 rtmpdump
@@ -942,6 +937,7 @@ slang
 slock
 smbclient
 snappy
+snowman-git
 sound-theme-freedesktop
 soundtouch
 spandsp
@@ -973,13 +969,16 @@ tevent
 texinfo
 texlive-bin
 texlive-core
+thermald
 thin-provisioning-tools
 thunar
 thunar-volman
 thunderbird
+tidy
 tlp
 tmux
 tmux-bash-completion
+tor
 totem
 totem-plparser
 tracker
@@ -998,6 +997,7 @@ tumbler
 tzdata
 udisks2
 ufw
+universal-ctags-git
 unzip
 update-notifier
 upower
@@ -1107,6 +1107,5 @@ zip
 zita-alsa-pcmi
 zita-resampler
 zlib
-zsh
 zvbi
 zziplib

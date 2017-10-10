@@ -360,11 +360,6 @@ Empty*
 
 # cache
 
-**/.cache**
-.standard-cache/
-.**/*-cache
-**/.cache*
-
 # archived repo
 
 *.zip
