@@ -53,7 +53,7 @@ to intialise variables so that a new shell doesnt need to be spawned.
 HAS_ADMIN=1
 PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
 	'automake' 'bash' 'bash-completion' 'bashmount' 'bc' 'binutils' 
-	'bison' 'clang' 'base-devel' 'composer' 'coreutils' 'cronie' 
+	'bison' 'clang' 'base-devel' 'composer' 'coreutils' 'cronie' 'atool'
 	'universal-ctags-git' 'curl' 'elinks' 'erlang' 'flex' 'fzf' 'gawk'
 	'gcc' 'gcc-libs' 'gimp' 'go' 'gparted' 'grep' 'hexchat' 'highlight' 
 	'htop' 'hub' 'hugo' 'jdk9-openjdk' 'jq' 'json-glib' 'jupyter-nbformat' 
