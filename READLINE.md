@@ -55,7 +55,6 @@
 
 - `\C-q` quoted-insert
 - `\C-v` quoted-insert
-
 - `\e[200~` bracketed-paste-begin
 
 <!-- vim foldmethod=marker foldmarker={,} nospell
