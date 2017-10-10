@@ -77,9 +77,10 @@ for i in vim nvim vi; do
 
 done
 
-if ! $(hostname) =~ Chummy; then
-  eval "alias ${EDITOR}=${EDITOR} 2>/dev/null"
-fi
+# FIXME
+# if ! $(hostname) =~ Chummy; then
+  # eval "alias ${EDITOR}=${EDITOR} 2>/dev/null"
+# fi
 
 export HISTFILE=~/.shell_history
 export SAVEHIST=10000

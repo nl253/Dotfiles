@@ -1,4 +1,6 @@
 " vim: foldlevel=0 foldmethod=marker nowrap
+"
+if !exists('g:VIMDIR') | let g:VIMDIR = expand('~/.vim') | endif
 
 " VARIABLES:
 
@@ -88,7 +90,7 @@ if has('python') || has('python3')
 
 	Plug 'SirVer/ultisnips'
 	let g:UltiSnipsEditSplit = 'vertical'
-	let g:UltiSnipsSnippetDirectories = [g:VIMDIR.'snips']
+	let g:UltiSnipsSnippetDirectories = [g:VIMDIR.'/snips']
 	let g:UltiSnipsEnableSnipMate = 0
 	let g:snips_author = "nl253"
 	let g:snips_email = "norbertlogiewa96@gmail.com"
@@ -112,9 +114,9 @@ if has('python') || has('python3')
 	if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 || index(g:PROGRAMMING_LANGUAGES, 'c')  >= 0
 
 		" CPP C:
-		if  executable("g++") || executable("clang")
+		Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
 
-			Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
+		if executable("clang")
 			Plug 'Rip-Rip/clang_complete', {'for': ['c', 'cpp'], 'do': 'make install'}
 			" path to directory where library can be found
 			let g:clang_library_path='/usr/lib/libclang.so.5.0'
