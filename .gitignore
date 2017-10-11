@@ -280,6 +280,8 @@ Notes/
 Libraries/
 Uni/
 
+.local/share/vlc/
+.local/include/
 .m2/
 .mozilla/
 .multirust
