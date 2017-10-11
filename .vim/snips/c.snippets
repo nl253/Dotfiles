@@ -5,32 +5,8 @@ rand() % ${1:100}; // rand int with upper bound
 endsnippet
 
 snippet main "Main method [c]"
-#include <stdio.h>
 int main(int argc, const char *argv[]) {
   ${1:}
-}
-endsnippet
-
-snippet "run|popen|capture|subpr(o?c(ess)?)" "Read stdout from a pipe [c]" r
-optional<string> run(string &command) {
-
-  FILE *fp = popen(command.c_str(), "r");
-
-  if (fp == NULL) return {};
-
-  string result;
-
-  const int max_buffer = 256;
-
-  char buffer[max_buffer];
-
-  while (!feof(fp))
-
-    if (fgets(buffer, max_buffer, fp) != NULL)
-      result.append(buffer);
-
-  pclose(fp);
-  return result;
 }
 endsnippet
 
@@ -40,16 +16,26 @@ string s1 = dirname("/etc/hosts");
 endsnippet
  
 snippet struct "struct [c]"
-struct ${1:`!p snip.rv = (snip.basename or "name") + "_t"`} {
-	${0:/* data */}
-};
+struct myStruct {
+  ${1:int n;
+  double d[];}
+};  
 endsnippet
 
 snippet "printf?" "Print [c]" r
 printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
 endsnippet
 
+snippet "ass(e(rt?)?)?" "Assert statement [c]" r
+assert(${1:true});
+endsnippet 
+
+
 snippet basename "Basename [c]"
 #include <libgen.h>
 string s2 = basename("/etc/hosts");
+endsnippet 
+
+snippet "^#(i(n(c(l(u(de?)?)?)?)?)?)?" "Include [c]" r
+#include <${1:stdio.h}>
 endsnippet 

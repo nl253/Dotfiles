@@ -2,15 +2,6 @@ extends c
 
 # don't extend cfamily (c already does that!)
 
-snippet main "Main method [cpp]"
-#include <stdio.h>
-#include <vector>
-#include <iostream> 
-int main(int argc, const char *argv[]) {
-  
-}
-endsnippet
-
 snippet try "Try catch [c]"
 try {
   risky();
@@ -35,15 +26,16 @@ for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
 endsnippet
 
 snippet "opt(ional)?" "std::optional [cpp]" r
-optional<string> ${1:optionallyReturn}(${2:bool returnOrNot}) {
-  ${3:// optional can be used as the return type of a factory that may fail
-  if (b) return "Godzilla";
-  return {};}
+optional<${1:string}> ${2:optionallyReturn}(${3:bool returnOrNot}) {
 }
 endsnippet
 
 snippet "cout|print" "Print [cpp]" r
-cout << ${1:"message\n"};
+cout << ${1:"message\n"} << endl;
+endsnippet
+
+snippet "typed(ef)?" "Type definiton [cpp]" r
+typedef ${1:point} ${2:*(*point_compare_func_type) (point *a, point *b)};
 endsnippet
 
 snippet enum "Enum [cpp]"
@@ -51,69 +43,69 @@ enum dayOfWeek { x, y, z };
 endsnippet
 
 snippet class "Class [cpp]"
-class ${1:MedalCount} {
-public:
-  ${2:const char *country;
+class MedalCount {
+ public:
+  const char *country;
   int gold;
   int silver;
-  int bronze;}
+  int bronze;
 };
 endsnippet
+
 
 # collections
 
 snippet map "std::map [cpp]"
-map<${1:key}, ${2:value}> myMap$0;
+map<${1:key}, ${2:value}> ${3:myMap}
 endsnippet
 
 snippet "deque|queue" "std::deque [cpp]" r 
-deque<${1:int}> ${2:myDeque}${3: = {7, 5, 16, 8}};
+deque<${1:int}> ${2:myDeque}
 endsnippet
 
 snippet heap "std::priority_queue [cpp]"
-priority_queue<${1:int}> ${2:heap};
+priority_queue<${1:int}> ${2:heap}
 endsnippet 
 
 snippet list "std::list [cpp]"
-list<${1:int}> ${2:myList}${3: = { 7, 5, 16, 8 }};
+list<${1:int}> ${2:myList};
 endsnippet
 
 snippet unomap "std::unordered_map [cpp]"
-unordered_map <${1:key}, ${2:value}> myMap$0;
+unordered_map <${1:key}, ${2:value}> ${3:myMap}
 endsnippet
 
 snippet set "std::set [cpp]"
-set<${1:key}, ${2:value}> mySet$0;
+set<${1:int}> ${2:myOrderedSet}
 endsnippet
 
 snippet unoset "std::unordered_set [cpp]"
-unordered_set<${1:key}, ${2:value}> mySet$0;
+unordered_set<${1:int}> ${2:myUnOrderedSet}
 endsnippet
 
 snippet "vec(t(or)?)?" "std::vector [cpp]" r
-vector<${1:char}> vec$0;
+vector<${1:char}> ${2:vec}
 endsnippet
 
 snippet pair "Pair [cpp]"
-auto myPair = make_pair(${1:_T1 &&__x}, ${2:_T2 &&__y});
+pair<${1:int}, ${2:string}> ${3:myPair}
 endsnippet
 
 snippet tuple "Tuple [cpp]"
-auto t = make_tuple(${1:_Elements &&__args...});
+tuple<${1:int}, ${2:string}, ${3:}> ${3:myTuple}
 endsnippet
 
 snippet array "std::array [cpp]" 
-array<${1:int}, ${2:3}> ${4:arrayOfInts}${5:{1, 2, 3}}; 
+array<${1:int}, ${2:3}> ${4:arrayOfInts}
 endsnippet
 
 snippet "var(iant)" "std::variant [cpp]" r
-std::variant<${1:int}, ${2:float}> ${3:myVariant};
+variant<${1:int}, ${2:float}> ${3:myVariant}
 endsnippet
 
 # utils
 
 snippet read "Read from a file [cpp]"
-// accept c++ strings
 optional<string> readFile(string fileName) {
   ifstream inFile(fileName); // stream to the file
   string buffer; // tmp data holder 
@@ -131,22 +123,33 @@ optional<string> readFile(string fileName) {
   inFile.close(); // close stream
   return result;
 }
-
-// overloaded to accept c-strings
-optional<string> readFile(char* fileName) {
-	return readFile(string(fileName));
-}
 endsnippet
 
 snippet write "Write to a file [cpp]"
-ofstream f("/tmp/test4");
-int i;
-
-for (i = 0; i < 10; ++i) {
-  f << i << endl;
-}
-f.close();
-if (0 != f.fail()) {
-  // handle error
+void writeToFile(string fileName, string content) {
+  ofstream outFile(fileName);
+  outFile << content;
 }
 endsnippet 
+
+snippet "run|popen|capture|subpr(o?c(ess)?)" "Read stdout from a pipe [cpp]" r
+optional<string> run(string &command) {
+
+  FILE *fp = popen(command.c_str(), "r");
+
+  if (fp == NULL) return {};
+
+  string result;
+
+  const int max_buffer = 256;
+
+  char buffer[max_buffer];
+
+  while (!feof(fp))
+    if (fgets(buffer, max_buffer, fp) != NULL)
+      result.append(buffer);
+
+  pclose(fp);
+  return result;
+}
+endsnippet
