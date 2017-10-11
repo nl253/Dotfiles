@@ -2,9 +2,9 @@ extends c
 
 # don't extend cfamily (c already does that!)
 
-snippet try "Try catch [c]"
+snippet try "Try catch [c]" b
 try {
-  risky();
+  riskyAction();
 } catch (const exception &e) {
   const chae *msg = e.what();
 }
@@ -12,37 +12,29 @@ endsnippet
 
 # loops 
 
-snippet fore "Enchanced for loop (fore) [cpp]"
+snippet fore "Enchanced for loop (fore) [cpp]" b
 for (auto i : container) {
   cout << i;
 }
 endsnippet
 
-snippet iter "Iterator [cpp]"
-vector<int> vec;
-for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
-      std::cout << ' ' << *it;
-}
+snippet iter "Vector iterator [cpp]"
+std::vector<int>::iterator it = vec.begin();
 endsnippet
 
 snippet "opt(ional)?" "std::optional [cpp]" r
-optional<${1:string}> ${2:optionallyReturn}(${3:bool returnOrNot}) {
-}
+optional<${1:string}> 
 endsnippet
 
 snippet "cout|print" "Print [cpp]" r
-cout << ${1:"message\n"} << endl;
+cout << "${1:message\n}" << endl;
 endsnippet
 
-snippet "typed(ef)?" "Type definiton [cpp]" r
-typedef ${1:point} ${2:*(*point_compare_func_type) (point *a, point *b)};
+snippet enum "Enum [cpp]" b
+enum BOOL {FALSE, TRUE};
 endsnippet
 
-snippet enum "Enum [cpp]"
-enum dayOfWeek { x, y, z };
-endsnippet
-
-snippet class "Class [cpp]"
+snippet class "Class [cpp]" b
 class MedalCount {
  public:
   const char *country;
@@ -105,7 +97,7 @@ endsnippet
 
 # utils
 
-snippet read "Read from a file [cpp]"
+snippet read "Read from a file [cpp]" b
 optional<string> readFile(string fileName) {
   ifstream inFile(fileName); // stream to the file
   string buffer; // tmp data holder 
@@ -125,7 +117,7 @@ optional<string> readFile(string fileName) {
 }
 endsnippet
 
-snippet write "Write to a file [cpp]"
+snippet write "Write to a file [cpp]" b
 void writeToFile(string fileName, string content) {
   ofstream outFile(fileName);
   outFile << content;

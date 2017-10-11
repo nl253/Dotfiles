@@ -1,26 +1,31 @@
-:type: todo list
 :tags: #TODO 
+
+:type: todo list
 :title: Items to do 
 
->> SHORT TERM
+WIFI PASSWORD
+2EC53A496BBB
 
-- <http://java-design-patterns.com/patterns/>
-- <https://en.wikipedia.org/wiki/Test-driven_development>
-- <https://en.wikipedia.org/wiki/Agile_software_development>
-
-**Term dates**
+>>> Term dates
 
 - Mon 25 Sep - Fri 15 Dec 2017
 - Mon 15 Jan - Fri 29 Mar 2018
 - Mon 30 April - Sat 15 Sep 2018
 
+>> SHORT TERM
 
-WIFI PASSWORD
-2EC53A496BBB
+( Uni
+
+- Test Driven Development <https://en.wikipedia.org/wiki/Test-driven_development>
+- Agile Software Development <https://en.wikipedia.org/wiki/Agile_software_development>
+
+( C{PP}
+
+- GNU make <https://www.gnu.org/software/make/manual/html_node/index.html>
 
 ( Java
 
-> Stuff to go over
+- Design Patterns - Java <http://java-design-patterns.com/patterns/>
 
 >> Interfaces
 
@@ -68,7 +73,6 @@ WIFI PASSWORD
 - Autoboxing <http://docs.oracle.com/javase/8/docs/technotes/guides/language/autoboxing.html>
 - Generics <http://docs.oracle.com/javase/8/docs/technotes/guides/language/generics.html>
 - Fork and Join framework
-- Nashorn ?
 - Invariants <http://docs.oracle.com/javase/8/docs/technotes/guides/language/assert.html>
 - javadoc (`man javadoc`)
 - javac (`man javadoc`)
@@ -84,43 +88,12 @@ WIFI PASSWORD
 
 >> Review
 
-- Enums <http://docs.oracle.com/javase/8/docs/technotes/guides/language/enums.html> 
+- Enums <http://docs.oracle.com/javase/8/docs/technotes/guides/language/enums.html>
 
 >> Resources
 
 - <https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/#refs>
 - <https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html>
-
-( Node.js
-
-@Orm
-MongoDB <http://mongoosejs.com/>
-SQL <http://docs.sequelizejs.com/>
-
-@Express
-Repo <https://github.com/expressjs/express>
-Mozilla's guide <https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs>
-API <https://expressjs.com/en/4x/api.html>
-
-Middleware
-
-- Tutorial <http://expressjs.com/en/guide/writing-middleware.htm0l>
-- Tutorial2 <http://expressjs.com/en/guide/using-middleware.html>
-- <http://expressjs.com/en/resources/middleware/body-parser.html>
-
-@Auth
-<http://passportjs.org/>
-
-@Mail
-<https://github.com/nodemailer/nodemailer>
-
-@Tutorial
-Recipe App Using Node.js & PostgreSQL
-<https://www.youtube.com/watch?v=ijSzX3S5Qco>
-
-@Mongo
-NodeJS MongoDB Tutorial
-<https://www.youtube.com/watch?v=Do_Hsb_Hs3c>
 
 ( Python
 
@@ -143,19 +116,16 @@ Lxml <http://lxml.de/>
 Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
 
 
-		        >> MEDIUM TERM
-
-( General
-
-@Learn
-Static site generator: <https://github.com/gohugoio/hugo>
+		    >> MEDIUM TERM
 
 @Learn
 Learn PostgreSQL with Datagrip
 <https://www.khanacademy.org/computing/hour-of-code/hour-of-sql>
 <https://www.khanacademy.org/computing/computer-programming/sql>
 
+
 		    >> LONG TERM
+
 ( Python
 
 @Learn

@@ -4,6 +4,9 @@
 # point doctuils (rst) to config file
 export DOCUTILSCONFIG=~/.docutils
 
+# use qt5 not qt4
+export QT_SELECT=5
+
 # POSTGRES
 export PGUSER=postgres
 export PGHOST=localhost

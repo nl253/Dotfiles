@@ -1,41 +1,46 @@
 extends cfamily
 
-snippet rand "Random int [c]"
-rand() % ${1:100}; // rand int with upper bound
-endsnippet
-
-snippet main "Main method [c]"
+snippet main "Main method [c]" b
 int main(int argc, const char *argv[]) {
   ${1:}
 }
 endsnippet
 
-snippet dirname "Dirname [c]"
-#include <libgen.h>
-string s1 = dirname("/etc/hosts");
+snippet "^#def(i(ne?)?)?" "#define preprocessor directive" br
+#define TRUE 1
+#define FALSE 0
 endsnippet
- 
-snippet struct "struct [c]"
+
+snippet "stru(ct?)?" "Struct (composite type) [c]" br
 struct myStruct {
   ${1:int n;
   double d[];}
 };  
 endsnippet
 
-snippet "printf?" "Print [c]" r
-printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
+snippet "typed(ef)?" "Type definiton [cpp]" rb
+typedef unsigned char BYTE;
 endsnippet
 
-snippet "ass(e(rt?)?)?" "Assert statement [c]" r
-assert(${1:true});
+snippet union "Union [c]" b
+union car {
+  char name[50];
+  int price;
+} car1, car2, *car3;
 endsnippet 
 
-
-snippet basename "Basename [c]"
-#include <libgen.h>
-string s2 = basename("/etc/hosts");
+snippet size_t "Unsigned integer [c]" b
+unsigned int ${1:myUnsignedInt}
 endsnippet 
 
-snippet "^#(i(n(c(l(u(de?)?)?)?)?)?)?" "Include [c]" r
+snippet "signed int" "Signed integer [c]" b
+ssize_t ${1:mySignedInt}
+endsnippet 
+
+snippet "unsigned int" "Unsigned integer [c]" b
+size_t ${1:myUnsignedInt}
+endsnippet 
+
+snippet "^#inc(l(u(de?)?)?)?" "Include [c]" r
 #include <${1:stdio.h}>
 endsnippet 
