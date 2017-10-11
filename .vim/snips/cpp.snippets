@@ -112,8 +112,33 @@ endsnippet
 
 # utils
 
+snippet read "Read from a file [cpp]"
+// accept c++ strings
+optional<string> readFile(string fileName) {
+  ifstream inFile(fileName); // stream to the file
+  string buffer; // tmp data holder 
+  string result; // will be returned
+
+  if (inFile.bad()) return {}; // IO issues
+
+  cout << "[INFO] " + fileName + " open \n"; 
+
+  while (!inFile.eof()) {
+    inFile >> buffer; // ex from inFile push to the buffer
+    result += buffer; // join with result
+  }
+
+  inFile.close(); // close stream
+  return result;
+}
+
+// overloaded to accept c-strings
+optional<string> readFile(char* fileName) {
+	return readFile(string(fileName));
+}
+endsnippet
+
 snippet write "Write to a file [cpp]"
-#include <fstream>
 ofstream f("/tmp/test4");
 int i;
 

@@ -25,6 +25,7 @@ at-spi2-atk
 at-spi2-core
 atk
 atkmm
+atool
 attr
 autoconf
 automake
@@ -74,6 +75,7 @@ colord-gtk
 composer
 compositeproto
 coreutils
+cpio
 cppcheck
 cpplint
 cpupower
@@ -90,6 +92,7 @@ damageproto
 db
 dbus
 dbus-glib
+dcadec
 dconf
 dconf-editor
 desktop-file-utils
@@ -130,6 +133,7 @@ faad2
 faba-icon-theme
 fakeroot
 ffmpeg
+ffmpeg2.8
 fftw
 file
 file-roller
@@ -428,9 +432,11 @@ libdc1394
 libdca
 libdrm
 libdv
+libdvbpsi
 libdvdnav
 libdvdread
 libe-book
+libebml
 libedit
 libelf
 libepoxy
@@ -472,12 +478,15 @@ libinput
 libiptcdata
 libixion
 libjpeg-turbo
+libkate
 libksba
 liblangtag
 libldap
 liblouis
 liblqr
+libmad
 libmariadbclient
+libmatroska
 libmbim
 libmediainfo
 libmm-glib
@@ -556,11 +565,13 @@ libssh2
 libstemmer
 libsynctex
 libsystemd
+libtar
 libtasn1
 libteam
 libthai
 libtheora
 libtiff
+libtiger
 libtirpc
 libtommath
 libtool
@@ -568,6 +579,7 @@ libtracker-sparql
 libtxc_dxtn
 libunistring
 libunwind
+libupnp
 libusb
 libusbmuxd
 libutempter
@@ -642,6 +654,7 @@ logrotate
 lpsolve
 lsb-release
 lshw
+lua
 lua51
 lua52
 lua52-bitop
@@ -757,6 +770,7 @@ openconnect
 opencore-amr
 openexr
 openjdk9-doc
+openjpeg
 openjpeg2
 openmotif
 openresolv
@@ -893,6 +907,7 @@ python2-gobject
 python2-gobject2
 python2-nautilus
 qpdf
+qt4
 qt5-base
 qt5-styleplugins
 qt5-svg
@@ -925,6 +940,7 @@ schroedinger
 scrnsaverproto
 sdl
 sdl2
+sdl_image
 sed
 semver
 serf
@@ -997,7 +1013,9 @@ tumbler
 tzdata
 udisks2
 ufw
+unace
 universal-ctags-git
+unrar
 unzip
 update-notifier
 upower
@@ -1011,6 +1029,7 @@ videoproto
 vim-runtime
 vim-spell-en
 vino
+vlc
 volume_key
 vpnc
 vte-common
