@@ -52,7 +52,7 @@ to intialise variables so that a new shell doesnt need to be spawned.
 # 1 or 0
 HAS_ADMIN=1
 PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 'autoconf'
-	'automake' 'vlc' 'bash' 'bash-completion' 'bashmount' 'bc' 'binutils' 
+	'automake' 'vlc' 'doxygen' 'bash' 'bash-completion' 'bashmount' 'bc' 'binutils' 
 	'bison' 'clang' 'base-devel' 'composer' 'coreutils' 'cronie' 'atool'
 	'universal-ctags-git' 'curl' 'elinks' 'erlang' 'flex' 'fzf' 'gawk'
 	'gcc' 'gcc-libs' 'gimp' 'go' 'gparted' 'grep' 'hexchat' 'highlight' 
