@@ -4,9 +4,9 @@ extends c
 
 snippet try "Try catch [c]" b
 try {
-  riskyAction();
+    riskyAction();
 } catch (const exception &e) {
-  const chae *msg = e.what();
+    const chae *msg = e.what();
 }
 endsnippet
 
@@ -14,7 +14,7 @@ endsnippet
 
 snippet fore "Enchanced for loop (fore) [cpp]" b
 for (auto i : container) {
-  cout << i;
+    cout << i;
 }
 endsnippet
 
@@ -36,14 +36,13 @@ endsnippet
 
 snippet class "Class [cpp]" b
 class MedalCount {
- public:
-  const char *country;
-  int gold;
-  int silver;
-  int bronze;
+    public:
+        const char *country;
+        int gold;
+        int silver;
+        int bronze;
 };
 endsnippet
-
 
 # collections
 
@@ -99,23 +98,23 @@ endsnippet
 
 snippet read "Read from a file [cpp]" b
 optional<string> readFile(string fileName) {
-  ifstream inFile(fileName); // stream to the file
-  string result; // will be returned 
-  string buffer; // temp holder
+    ifstream inFile(fileName); // stream to the file
+    string result; // will be returned
+    string buffer; // temp holder
 
-	// check for failbit
-  if (inFile.fail()) return {}; // IO issues eg could not access
+    // check for failbit
+    if (inFile.fail()) return {}; // IO issues eg could not access
 
-  clog << printf("\n[INFO] file://%s open\n", fileName.c_str()); 
+    clog << printf("\n[INFO] file://%s open\n", fileName.c_str());
 
-	// loop while EOF bit is not set0
-  while (!inFile.eof()) {
-		getline(inFile, buffer);
-		result += buffer + '\n'; 
-  }
+    // loop while EOF bit is not set0
+    while (!inFile.eof()) {
+        getline(inFile, buffer);
+        result += buffer + '\n';
+    }
 
-  inFile.close(); // close stream
-  return result;
+    inFile.close(); // close stream
+    return result;
 }
 endsnippet
 
@@ -145,5 +144,13 @@ optional<string> run(string &command) {
 
   pclose(fp);
   return result;
+}
+endsnippet
+
+# 4 backslashes ARE necessary
+snippet "match|regex" "Regex string match [cpp]" br
+regex pattern("${1:.*\\\\w+.*}");
+if (regex_match(${2:stringToCheck}, pattern)) {
+    ${1:// it matches, do stuff...}
 }
 endsnippet

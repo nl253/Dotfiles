@@ -2,7 +2,7 @@ extends cfamily
 
 snippet main "Main method [c]" b
 int main(int argc, const char *argv[]) {
-  ${1:}
+    ${1:}
 }
 endsnippet
 
@@ -13,8 +13,8 @@ endsnippet
 
 snippet "stru(ct?)?" "Struct (composite type) [c]" br
 struct myStruct {
-  ${1:int n;
-  double d[];}
+    ${1:int n;
+    double d[];}
 };  
 endsnippet
 
@@ -24,8 +24,8 @@ endsnippet
 
 snippet union "Union [c]" b
 union car {
-  char name[50];
-  int price;
+    char name[50];
+    int price;
 } car1, car2, *car3;
 endsnippet 
 
