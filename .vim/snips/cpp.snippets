@@ -100,16 +100,18 @@ endsnippet
 snippet read "Read from a file [cpp]" b
 optional<string> readFile(string fileName) {
   ifstream inFile(fileName); // stream to the file
-  string buffer; // tmp data holder 
-  string result; // will be returned
+  string result; // will be returned 
+  string buffer; // temp holder
 
-  if (inFile.bad()) return {}; // IO issues
+	// check for failbit
+  if (inFile.fail()) return {}; // IO issues eg could not access
 
-  cout << "[INFO] " + fileName + " open \n"; 
+  clog << printf("\n[INFO] file://%s open\n", fileName.c_str()); 
 
+	// loop while EOF bit is not set0
   while (!inFile.eof()) {
-    inFile >> buffer; // ex from inFile push to the buffer
-    result += buffer; // join with result
+		getline(inFile, buffer);
+		result += buffer + '\n'; 
   }
 
   inFile.close(); // close stream

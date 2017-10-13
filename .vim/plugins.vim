@@ -269,7 +269,7 @@ endif
 
 " MY PLUGINS:
 " ==========
-for plugin in ['fabulous', 'git-ready', 'vorg-mode'] + split(expand('vim-{saner,markup,programming,scratchpads,fzf-extensions,webdev,templates}'))
+for plugin in ['fabulous', 'vorg-mode'] + split(expand('vim-{saner,markup,programming,fzf-extensions,webdev,templates}'))
 	Plug 'nl253/'.plugin
 endfor
 
