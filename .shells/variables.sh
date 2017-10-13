@@ -32,6 +32,10 @@ unset -f _add_to_cdpath
 # Set Xterm/screen/Tmux title with only a short hostname
 export SHORT_HOSTNAME=$(hostname -s)
 
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
+export PATH=$PATH:${JAVA_HOME}/bin:${JRE_HOME}/bin
+
 [[ -f ~/.makepkg.conf ]] && export MAKEPKG_CONF=~/.makepkg.conf
 [[ -f ~/.config/ranger/rc.conf ]] && export RANGER_LOAD_DEFAULT_RC=false
 [[ -f ~/.dir_colors ]] && eval $(dircolors ~/.dir_colors)
