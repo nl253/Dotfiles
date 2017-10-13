@@ -25,19 +25,15 @@ _add_to_cdpath() {
 
 export CDPATH="${HOME}:"
 
-_add_to_cdpath $HOME/{Projects,Uni,.vim/plugged,.shells}
+_add_to_cdpath $HOME/{Projects,Uni,.shells} $HOME/Uni/* $HOME/Uni/*/*
 
 unset -f _add_to_cdpath
-
 
 # Set Xterm/screen/Tmux title with only a short hostname
 export SHORT_HOSTNAME=$(hostname -s)
 
 [[ -f ~/.makepkg.conf ]] && export MAKEPKG_CONF=~/.makepkg.conf
 [[ -f ~/.config/ranger/rc.conf ]] && export RANGER_LOAD_DEFAULT_RC=false
-
-# }}}
-
 [[ -f ~/.dir_colors ]] && eval $(dircolors ~/.dir_colors)
 
 # HISTORY
