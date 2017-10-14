@@ -34,26 +34,26 @@ if (${1:true}) {
 }
 endsnippet
 
-snippet "el(se)?" "Else statement [cfamily]" r
-else {
-  ${2:// do stuff here}
-}
-endsnippet
-
 snippet "fun(c(t(i(on?)?)?)?)?|fn" "Function [cfamily]" br
 ${1:void} ${2:function_name}($3) {
-  ${VISUAL}$0
+    ${VISUAL}$0
 }
 endsnippet
 
-snippet "fori?" "For i loop [cfamily]" 
+snippet "fori?" "For i loop [cfamily]" r
 for (int i = 0; i < ${1:iterable.lenght}; i++) {
-  ${2:printf("something: %s\n", i)};
+    ${2:printf("something: %s\n", i)};
 }
 endsnippet 
 
 snippet "elif?" "else if ... (eli) [cfamily]" r
 else if (${1:true}) {
-  ${VISUAL}$0
+    ${VISUAL}$0
+}
+endsnippet
+
+snippet "else?" "else ... (eli) [cfamily]" r
+else {
+    ${VISUAL}$0
 }
 endsnippet

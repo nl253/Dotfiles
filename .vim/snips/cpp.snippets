@@ -13,8 +13,8 @@ endsnippet
 # loops 
 
 snippet fore "Enchanced for loop (fore) [cpp]" b
-for (auto i : container) {
-    cout << i;
+for (auto i : ${1:container}) {
+    ${2:cout << i << endl};
 }
 endsnippet
 
@@ -153,4 +153,8 @@ regex pattern("${1:.*\\\\w+.*}");
 if (regex_match(${2:stringToCheck}, pattern)) {
     ${1:// it matches, do stuff...}
 }
+endsnippet
+
+snippet del "Delete (deallocate memory from the heap) [cpp]"
+delete ${1:ptrToAnObject};
 endsnippet
