@@ -36,11 +36,12 @@ endsnippet
 
 snippet class "Class [cpp]" b
 class MedalCount {
-    public:
-        const char *country;
-        int gold;
-        int silver;
-        int bronze;
+
+public:
+    const char *country;
+    int gold;
+    int silver;
+    int bronze;
 };
 endsnippet
 
@@ -153,6 +154,10 @@ regex pattern("${1:.*\\\\w+.*}");
 if (regex_match(${2:stringToCheck}, pattern)) {
     ${1:// it matches, do stuff...}
 }
+endsnippet
+
+snippet "s(mart)?p(oin)?te?r" "[cpp]" rb
+unique_ptr<vector<int>> vec(new vector<int>);
 endsnippet
 
 snippet del "Delete (deallocate memory from the heap) [cpp]"
