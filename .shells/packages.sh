@@ -506,6 +506,9 @@ install_package_managers() {
 
     coproc _gists
 
+    # FIXME
+    _add_to_path ~/.cargo/bin
+
     for i in python ruby haskell php go rust node; do
 
 	[[ $(eval 'echo $MANAGE_'${language^^*}) == 0 ]] && continue
