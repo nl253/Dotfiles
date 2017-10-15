@@ -30,7 +30,9 @@ _add_to_cdpath $HOME/{Projects,Uni,.shells} $HOME/Uni/* $HOME/Uni/*/*
 unset -f _add_to_cdpath
 
 # Set Xterm/screen/Tmux title with only a short hostname
-export SHORT_HOSTNAME=$(hostname -s)
+if [[ -x $(command which hostname) ]]; then
+    export SHORT_HOSTNAME=$(hostname -s)
+fi
 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
 export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
