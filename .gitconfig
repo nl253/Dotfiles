@@ -1,131 +1,128 @@
 [init]
-	templatedir = ~/.git-templates
+    templatedir = ~/.git-templates
 
 [user]
-	email = norbertlogiewa96@gmail.com
-	name = nl253
+    email = norbertlogiewa96@gmail.com
+    name = nl253
 
 [diff]
-	renames = copies  # Detect copies as well as renames
-	tool = vimdiff
+    renames = copies  # Detect copies as well as renames
+    tool = vimdiff
 
 [merge]
-	# Include summaries of merged commits in newly created merge commit messages
-	tool = vimdiff
-	conflictstyle = diff3
+	# Include summaries of merged commits in 
+	# newly created merge commit messages
+    tool = vimdiff
+    conflictstyle = diff3
 
 [help]
-	 # Automatically correct and execute mistyped commands
-	autocorrect = 0  
+	# Automatically correct and execute mistyped commands
+    autocorrect = 0  
 
 [apply]
 	# Detect whitespace errors when applying a patch
-	whitespace = fix 
+    whitespace = fix 
 
 [color]
-	ui = true
+    ui = true
 
+# best not to touch these (very legible as is)
 [color "branch"]
-	current = magenta bold
-	local = normal
-	remote = yellow
+    current = magenta bold
+    local = normal
+    remote = yellow
 
+# best not to touch these (very legible as is)
 [color "diff"]
-	meta = "127"
-	frag = magenta bold # line info
-	old = "167" 		# deletions
-	new = "78" 		    # additions
+    meta = "127"
+    frag = magenta bold # line info
+    old = "167" 		# deletions
+    new = "78" 		    # additions
 
+# best not to touch these (very legible as is)
 [color "diff-highlight"]
-	oldNormal = "167 bold"
-	oldHighlight = "167 reverse"
-	newNormal = "78"
-	newHighlight = "78 reverse"
+    oldNormal = "167 bold"
+    oldHighlight = "167 reverse"
+    newNormal = "78"
+    newHighlight = "78 reverse"
 
+# best not to touch these (very legible as is)
 [color "status"]
-	added = green
-	changed = "yellow bold"
-	untracked = "normal bold"
-	header = "white dim"
-	nobranch = "red dim"
+    added = green
+    changed = "yellow bold"
+    untracked = "normal bold"
+    header = "white dim"
+    nobranch = "red dim"
 
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
-	excludesfile = ~/.gitignore-global
-	attributesfile = ~/.gitattributes
-
-	# Treat spaces before tabs and all kinds of trailing whitespace as an error
-	# [default] trailing-space: looks for spaces at the end of a line
-	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
-	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
-	compression = 9
-	pager = less -R
+    excludesfile = ~/.gitignore-global
+    attributesfile = ~/.gitattributes
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+    compression = 9
+    pager = less -RI
 
 [alias]
 
-	aliases = "!git config -l | grep alias | sed 's/^alias\\.//g'"
+    # Be more explicit
+    add = add -v
+    branch = branch -vv
+    cherry = cherry --verbose
 
-	backup-untracked = "!git ls-files --others -i --exclude-standard | xargs zip untracked.zip"
+    aliases = "!git config -l | grep alias | sed 's/^alias\\.//g'"
 
-	unpushed = log --branches --not --remotes
+    backup-untracked = "!git ls-files --others -i --exclude-standard | xargs zip untracked.zip"
+    
+    unpushed = log --branches --not --remotes
 
-	grep = grep --perl-regexp --line-number --color=always --full-name --heading --break 
+    # better format
+    log = log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\"
+    grep = grep --perl-regexp --line-number --color=always --full-name --heading --break 
+    version-tree = log --pretty=oneline --graph --decorate --all
 
-	untracked = ls-files --others
+    # List contributors with number of commits
+    contributors = shortlog --summary --numbered  
 
-	version-tree = log --pretty=oneline --graph --decorate --all
- 
-	add = add -v
+    untracked = ls-files --others
+	
+    forward = "!git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout"
+    back = checkout HEAD^1
 
-	# blame = "!f(){ less -XRI <<< git blame --pretty=full --date=rfc --indent-heuristic --color-words --dense --date-order --extended-regexp --minimal --show-number $@ | pygmentize -l $(pygmentize -N $@) }; f"
+    # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
+    qq = "!git commit -a -m \"Automated commit. Nothing important ...\" ; git push" 
 
-	branch = branch -vv
+    # Find branches containing commit
+    find-branch = "!f() { git branch -a --contains $1; }; f"  
 
-	log = log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\"
+    # Find tags containing commit
+    find-tag = "!f() { git describe --always --contains $1; }; f"  
 
-	cherry = cherry --verbose
+    # Find commits by source code
+    find-commit = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
 
-	back = checkout HEAD^1
+    # Find commits by commit message
+    find-msg = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-	forward = "!git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout"
-
-	# quick add unstaged, commit using "Quick Commit" as a message and push upstream.
-	qq = "!git commit -a -m \"Quick commit. Nothing important ...\" ; git push" 
-
-	 # Find branches containing commit
-	find-branch = "!f() { git branch -a --contains $1; }; f"  
-
-	 # Find tags containing commit
-	find-tag = "!f() { git describe --always --contains $1; }; f"  
-
-	# Find commits by source code
-	find-commit = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
-
-	# Find commits by commit message
-	find-message = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
-
-	 # List contributors with number of commits
-	contributors = shortlog --summary --numbered  
-
-	# form tpope
-	recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
-
-    zipit = "archive --format=zip --output=repo.zip --verbose -9 HEAD"
-    tarit = "archive --format=tar --output=repo.tar --verbose HEAD"
+    # form tpope
+    recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
+    
+    zip-it = "archive --format=zip --output=bundle.zip --verbose -9 HEAD"
+    tar-it = "archive --format=tar --output=bundle.tar --verbose HEAD"
     clean = "clean --interactive"
 
 [web]
-	browser = chromium
+    browser = firefox-developer
 
 [difftool]
-	prompt = false
+    prompt = false
 
 [credential]
-	helper = store
+    helper = store
+
+[sendemail]
+    smtpserver = smtp.gmail.com
+    smtpserverport = 587
+    smtpencryption = tls
+    smtpuser = norbertlogiewa96@gmail.com
 
 # vim: ts=4 sw=4
-[sendemail]
-	smtpserver = smtp.gmail.com
-	smtpserverport = 587
-	smtpencryption = tls
-	smtpuser = norbertlogiewa96@gmail.com
