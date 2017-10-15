@@ -38,13 +38,13 @@ endsnippet
 
 snippet "fun(c(t(i(on?)?)?)?)?" "function [vim]" br
 function! s:${1:function_name}()
-	${2:" DO STH HERE}
+    ${2:" DO STH HERE}
 endfunction
 endsnippet
 
 snippet try "try catch [vim]" b
 try
-	${1:" DO STH HERE}
+    ${1:" DO STH HERE}
 catch /${2:.*}/
 endtry
 endsnippet
@@ -57,7 +57,7 @@ endsnippet
 
 snippet "fori?" "For loop [vim]" br
 for i in ${1:[1, 2, 3]}
-	${2:break}
+    ${2:break}
 endfor
 endsnippet
 
@@ -114,7 +114,7 @@ snippet "g(it)?root" "Find git root [vim]" r
 function! GitRoot()
     let root = systemlist('git rev-parse --show-toplevel')[0]
     if v:shell_error
-        echo 'Not in git repo'                                   
+        echo 'Not in git repo'
     else
         execute 'lcd' root
         echo 'Changed directory to: '.root
