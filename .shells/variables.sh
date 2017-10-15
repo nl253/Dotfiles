@@ -30,7 +30,7 @@ _add_to_cdpath $HOME/{Projects,Uni,.shells} $HOME/Uni/* $HOME/Uni/*/*
 unset -f _add_to_cdpath
 
 # Set Xterm/screen/Tmux title with only a short hostname
-if [[ -x $(command which hostname) ]]; then
+if [[ -x $(command which hostname) ]] && $(hostname -s &>/dev/null); then
     export SHORT_HOSTNAME=$(hostname -s)
 fi
 
@@ -90,7 +90,7 @@ done
 export HISTFILE=~/.shell_history
 export SAVEHIST=10000
 
-if [[ -x $(command which yaourt) ]]; then
+if [[ -x $(command which yaourt 2>/dev/null) ]]; then
   export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
 # vim: foldmethod=marker foldlevel=0 foldmarker={,}
