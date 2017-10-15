@@ -1,0 +1,8 @@
+BoldAsFont=-1
+BackgroundColour=35,35,35
+ClipShortcuts=no
+WindowShortcuts=no
+AltFnShortcuts=no
+MiddleClickAction=void
+RightClickAction=paste
+Term=xterm-256color
