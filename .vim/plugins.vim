@@ -59,7 +59,6 @@ endfor
 if executable('tmux') && exists('$TMUX') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
 " GIT:
-"if has('perl') | Plug 'vim-scripts/dbext.vim', {'for': ['sql', 'plsql', 'mysql']} | endif
 Plug 'junegunn/gv.vim', {'on': 'GV'}
 
 set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
@@ -184,7 +183,7 @@ if has('patch8') || has('nvim')
 		endif
 	endif
 
-	if executable('mdl')
+	if executable('mdl') && exists('g:neomake_markdown_enabled_makers')
 		let g:neomake_markdown_enabled_makers += ['mdl']
 	endif
 else
