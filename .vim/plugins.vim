@@ -41,11 +41,7 @@ if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
-if !executable('fzf')
-	" bin == just the binary, all == bin + shell keybindings
-	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-endif
-
+Plug 'junegunn/fzf', { 'dir': expand('~/.local/share/fzf'), 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = {'up': '~40%'}
