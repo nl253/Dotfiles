@@ -18,7 +18,7 @@
 --align-reference=name
 
 # indentation
--s2
+-s4
 --indent=spaces
 --convert-tabs
 --indent-classes
