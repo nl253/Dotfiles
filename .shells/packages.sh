@@ -49,7 +49,7 @@ to intialise variables so that a new shell doesnt need to be spawned.
 
 }'
 
-[[ -e ~/AppData/ ]] && exit 0
+[[ -e ~/AppData/ ]] && return 0
 
 # 1 or 0
 HAS_ADMIN=1

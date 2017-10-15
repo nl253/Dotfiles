@@ -3,7 +3,7 @@
 
 # chech if on system, set up aliases in case it is and isn't
 
-if [[ -x $(command which fzf) ]]; then # {
+if [[ -x $(command which fzf 2>/dev/null) ]]; then # {
 
   # KEYMAP
   # ------------------------
