@@ -14,7 +14,7 @@ endsnippet
 
 snippet do "Do while loop [cfamily]"
 do { 
-  ${1:// do stuff and then check}
+    ${1:// do stuff and then check}
 } while (${2:true});
 endsnippet 
 
@@ -40,11 +40,17 @@ ${1:void} ${2:function_name}($3) {
 }
 endsnippet
 
-snippet "fori?" "For i loop [cfamily]" r
+snippet "fori?" "For i loop [cfamily]" rb
 for (int i = 0; i < ${1:iterable.lenght}; i++) {
     ${2:printf("something: %s\n", i)};
 }
 endsnippet 
+
+snippet forr "Reverse for loop [cfamily]"
+for (int i = ${1:iterable}.length--; i <= 0; i--) {
+    ${2:// do stuff}
+}
+endsnippet
 
 snippet "elif?" "else if ... (eli) [cfamily]" r
 else if (${1:true}) {

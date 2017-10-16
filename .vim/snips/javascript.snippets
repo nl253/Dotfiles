@@ -1,12 +1,12 @@
 extends cfamily, node, jsdoc
 
-snippet fori "For Loop [javascript]"
+snippet fori "For Loop [javascript]" b
 for (let i of ${1:iterable}) {
   ${2:// do stuff here}
 }
 endsnippet
 
-snippet fun(ct?)? "Function [javascript]" r
+snippet fun(ct?)? "Function [javascript]" rb
 function ${1:do_stuff}(${2:}) {
   ${3:// do stuff here}
 }
@@ -18,7 +18,7 @@ catch(${2:err}) {
 } 
 endsnippet
 
-snippet try "Try Catch Finally [javascript]"
+snippet try "Try Catch Finally [javascript]" b
 try {
     ${1:// Block of code to try}
 }
@@ -44,20 +44,9 @@ for (let i = 0; i < ${1:iterable}.lenght; i++) {
 }
 endsnippet
 
-snippet #! "Shebang node.js [javascript]"
+snippet "#!" "Shebang node.js [javascript]" rb
 #!/usr/bin/env node --expose-http2 --harmony --harmony_typeof
 endsnippet
-
-snippet { "Object [javascript]"
-{
-	${1:key}: ${2:"value"},
-}
-endsnippet
-
-snippet "," "Next item in an object [javascript]" r
-
-${1:next_item}: ${2:"next_value"},
-endsnippet 
 
 snippet proto "Prototype (proto)"
 ${1:class_name}.prototype.${2:method_name} = function`!p snip.rv = space_before_function_paren(snip)`(${3:first_argument}) {

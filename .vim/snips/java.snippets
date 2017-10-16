@@ -9,7 +9,6 @@ public class Main {
 }
 endsnippet
 
-
 snippet "to[sS]tr(ing)?" "toString() [java]" r
 @Override
 public String toString() {
@@ -23,66 +22,31 @@ endsnippet
 
 snippet readFile "Read file [java]"
 private List<String> readFile(String filename) {
-  List<String> records = new ArrayList<String>();
-  try {
-    BufferedReader reader = new BufferedReader(new FileReader(filename));
-    String line;
-    while ((line = reader.readLine()) != null) {
-      records.add(line);
+    List<String> records = new ArrayList<String>();
+    try {
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            records.add(line);
+        }
+        reader.close();
+        return records;
+    } catch (Exception e) {
+        System.err.format("Exception occurred trying to read '%s'.", filename);
+        e.printStackTrace();
+        return null;
     }
-    reader.close();
-    return records;
-  } catch (Exception e) {
-    System.err.format("Exception occurred trying to read '%s'.", filename);
-    e.printStackTrace();
-    return null;
-  }
 } 
 endsnippet
 
-snippet foreach "Foreach loop [java]"
+snippet "fore(ach)?" "Foreach loop [java]" rb
 for (Item i : iter) {
-  // do stuff
-}
-endsnippet
-
-snippet rof "Reverse for loop [java]"
-for (int i = ${1:iterable}.length--; i <= 0; i--) {
-  ${2:// do stuff}
-}
-endsnippet
-
-snippet for "For loop [java]"
-for (int i = 0; i < 10; i++) {
-  ${1:// do stuff}
-}
-endsnippet
-
-snippet while "While loop [java]"
-while (true) {
-  ${1:// do stuff}
+    // do stuff
 }
 endsnippet
 
 snippet "echo|print|sysout" "Sysout [java]" r
 System.out.println("${1:message}");
-endsnippet
-
-snippet if "If statement [java]"
-if (i == 2) {
-  doSomething();
-} 
-endsnippet
-
-snippet "case|switch" "Switch statement [java]" r
-switch (${1:variable}) {
-  case ${2:'A'}:
-	${3:doSomething(); // Triggered if variable == 'A'}
-	break;
-  default:
-	${4:doSomethingDifferent(); // Triggered in any other case}
-	break;
-}
 endsnippet
 
 snippet queue "Queue [java]"
@@ -117,12 +81,6 @@ snippet stack "Stack [java]"
 List<Integer> stack = new Stack<>();
 endsnippet
 
-snippet "\{" "Linked list [java]" r
-{
-  ${1:// do stuff}
-}
-endsnippet
-
 snippet llist "Linked list [java]"
 List<Object> list = new LinkedList<>();
 endsnippet
@@ -140,18 +98,10 @@ snippet array "Array [java]"
 ${1:int}[] ${2:array} = new ${3:int}[${4:10}];
 endsnippet
 
-snippet do "Do while loop [java]"
-do {
-  ${1:// do stuff}
-} while (${2:true});
-endsnippet
-
-
 snippet try "Try, catch [java]"
 try {
-  ${1:// attempt}
-} 
-catch (Exception e) {
-  ${2:// on failure}
+    ${1:// attempt}
+} catch (Exception e) {
+    ${2:// on failure}
 }
 endsnippet
