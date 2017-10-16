@@ -201,8 +201,6 @@ nghttp2
 nginx
 ngrep
 nmap
-nodejs
-npm
 nss-mdns
 ntfs-3g
 ntp
@@ -256,7 +254,6 @@ slock
 snowman-git
 speedtest-cli
 spotify-stable
-staruml
 subversion
 sudo
 sushi
@@ -331,5 +328,4 @@ xorg-twm
 xorg-xinit
 xscreensaver
 yaourt
-yarn
 zd1211-firmware

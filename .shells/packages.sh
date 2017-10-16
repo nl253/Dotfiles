@@ -527,7 +527,7 @@ main
 
 # unset created functions
 for i in main; do
-    eval "unset -f ${i}"
+	eval "unset -f ${i}"
 done
 
-# vim: nowrap foldmarker={,} foldmethod=marker
+# vim: nowrap foldmarker={,} foldmethod=marker sw=2 ts=2
