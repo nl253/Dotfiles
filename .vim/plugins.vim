@@ -31,7 +31,12 @@ for i in ['scrooloose/nerdcommenter', 'konfekt/fastfold', 'wellle/targets.vim']
 	Plug i
 endfor
 
-Plug 'majutsushi/tagbar', {'on': 'Tagbar'}
+Plug 'majutsushi/tagbar', {'on': ['Tagbar', 'TagbarOpen']}
+
+aug TagBarAutoOpen
+	au!
+	au FileType java,python,rust,sh,cpp TagbarOpen
+aug END
 
 let g:NERDSpaceDelims = 1
 
@@ -186,7 +191,7 @@ endif
 
 " MARKUP:
 
-Plug 'dkarter/bullets.vim' 
+Plug 'dkarter/bullets.vim', {'for': g:MARKUP_LANGUAGES + ['gitcommit', 'gitconfig', 'yaml', 'cfg', 'conf', 'config']}
 
 let g:bullets_enabled_file_types = g:MARKUP_LANGUAGES
 
