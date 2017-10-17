@@ -56,7 +56,6 @@ file
 file-roller
 filesystem
 findutils
-firefox-developer
 flex
 garcon
 gawk
@@ -201,6 +200,7 @@ nghttp2
 nginx
 ngrep
 nmap
+nodejs
 nss-mdns
 ntfs-3g
 ntp
@@ -214,7 +214,6 @@ p7zip
 pacman
 pacui
 pamac
-papyrus
 patch
 pciutils
 pcmciautils
