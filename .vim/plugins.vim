@@ -35,7 +35,7 @@ Plug 'majutsushi/tagbar', {'on': ['Tagbar', 'TagbarOpen']}
 
 aug TagBarAutoOpen
 	au!
-	au FileType java,python,rust,sh,cpp TagbarOpen
+	au FileType java,javascript,python,rust,sh,cpp,php,zsh TagbarOpen
 aug END
 
 let g:NERDSpaceDelims = 1
