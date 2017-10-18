@@ -3,6 +3,7 @@
 #
 
 source ~/.mutt/colors/solarized-dark-256
+source ~/.mutt/aliases
 
 auto_view text/html                                      # view html automatically
 alternative_order text/plain text/enriched text/html     # save html for last
@@ -1896,7 +1897,7 @@ set imap_user="norbertlogiewa96@gmail.com"
 # This variable defaults to your user name on the local machine.
 # 
 # 
-# set implicit_autoview=no
+set implicit_autoview=yes
 #
 # Name: implicit_autoview
 # Type: boolean
@@ -2553,7 +2554,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # See also $read_inc, $write_inc and $net_inc.
 # 
 # 
-# set pager="builtin"
+set pager="less"
 #
 # Name: pager
 # Type: path
