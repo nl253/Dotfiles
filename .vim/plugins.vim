@@ -1,6 +1,4 @@
 " vim: foldlevel=0 foldmethod=marker nowrap
-"
-if !exists('g:VIMDIR') | let g:VIMDIR = expand('~/.vim') | endif
 
 " VARIABLES:
 
@@ -21,7 +19,7 @@ endif
 
 " PROGRAMMING LANGUAGES you code in  (python, c, cpp etc.)
 if !exists('g:PROGRAMMING_LANGUAGES')
-	let g:PROGRAMMING_LANGUAGES = ['html', 'sql', 'cpp', 'python', 'sh']
+	let g:PROGRAMMING_LANGUAGES = ['html', 'sql', 'cpp', 'python', 'sh', 'vim']
 endif
 
 " Place Plugins Here:
@@ -33,7 +31,12 @@ for i in ['scrooloose/nerdcommenter', 'konfekt/fastfold', 'wellle/targets.vim']
 	Plug i
 endfor
 
-Plug 'majutsushi/tagbar', {'on': 'Tagbar'}
+Plug 'majutsushi/tagbar', {'on': ['Tagbar', 'TagbarOpen']}
+
+aug TagBarAutoOpen
+	au!
+	au FileType java,javascript,python,rust,sh,cpp,php,zsh TagbarOpen
+aug END
 
 let g:NERDSpaceDelims = 1
 
@@ -41,7 +44,7 @@ if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
-Plug 'junegunn/fzf', { 'dir': expand('~/.local/share/fzf'), 'do': './install --bin' }
+Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = {'up': '~40%'}
@@ -85,7 +88,7 @@ if has('python') || has('python3')
 
 	Plug 'SirVer/ultisnips'
 	let g:UltiSnipsEditSplit = 'vertical'
-	let g:UltiSnipsSnippetDirectories = [g:VIMDIR.'/snips']
+	let g:UltiSnipsSnippetDirectories = [expand('~/.vim/snips')]
 	let g:UltiSnipsEnableSnipMate = 0
 	let g:snips_author = "nl253"
 	let g:snips_email = "norbertlogiewa96@gmail.com"
@@ -188,7 +191,7 @@ endif
 
 " MARKUP:
 
-Plug 'dkarter/bullets.vim' 
+Plug 'dkarter/bullets.vim', {'for': g:MARKUP_LANGUAGES + ['gitcommit', 'gitconfig', 'yaml', 'cfg', 'conf', 'config']}
 
 let g:bullets_enabled_file_types = g:MARKUP_LANGUAGES
 
@@ -206,7 +209,7 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 " WEB DEV:
 
 for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
-	Plug i, {'for': ['xml', 'html', 'xhtml', 'php'] + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES}
+	Plug i, {'for': ['xml', 'html', 'xhtml', 'php', 'markdown'] + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES}
 endfor
 
 Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES + ['xml', 'html', 'xhtml', 'php']}
@@ -264,9 +267,14 @@ endif
 
 " MY PLUGINS:
 " ==========
-for plugin in ['fabulous', 'vorg-mode'] + split(expand('vim-{saner,markup,programming,fzf-extensions,webdev,templates}'))
-	Plug 'nl253/'.plugin
+silent call mkdir(expand("~/Projects/VimScript"), "p")
+for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
+    Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Projects/VimScript/').plugin}
 endfor
+
+Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-markup'), 'for': g:MARKUP_LANGUAGES}
+Plug 'nl253/vim-programming', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-programming'), 'for': g:PROGRAMMING_LANGUAGES}
+Plug 'nl253/vim-webdev', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-webdev'), 'for': g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES + ['xml', 'javascript', 'typescript', 'markdown']}
 
 let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 

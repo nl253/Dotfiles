@@ -1,4 +1,3 @@
-
 # VARIABLES
 
 # point doctuils (rst) to config file
@@ -31,7 +30,7 @@ unset -f _add_to_cdpath
 
 # Set Xterm/screen/Tmux title with only a short hostname
 if [[ -x $(command which hostname) ]] && $(hostname -s &>/dev/null); then
-    export SHORT_HOSTNAME=$(hostname -s)
+	export SHORT_HOSTNAME=$(hostname -s)
 fi
 
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
@@ -82,6 +81,15 @@ for i in nvim vim vi; do
 		break
 	fi
 done
+
+[[ -x $(command which gonvim 2>/dev/null) ]] && alias gvim=gonvim
+
+# link nvim config file (in a subshell) to vim config file if missing
+if [[ -x $(which nvim 2>/dev/null) ]] && [[ ! -e ~/.config/nvim/init.vim ]] && [[ -e ~/.vimrc ]]; then
+	(
+		cd && ln -s ~/.vimrc ~/.config/nvim/init.vim
+	)
+fi
 
 # FIXME
 # if ! $(hostname) =~ Chummy; then

@@ -1,4 +1,4 @@
---maxdepth=3
+--maxdepth=4
 --recurse=yes
 --tag-relative=yes
 --sort=yes
@@ -10,9 +10,8 @@
 --exclude=.thunderbird/*
 --exclude=.mozilla/*
 --exclude=.cache/*
---exclude=.nvm/*
---exclude=.gvm/*
---exclude=.pyenv/*
+--exclude=.?vm/*
+--exclude=.??env/*
 --exclude=.config/*
 --exclude=.*201*/*
 --exclude=*.json

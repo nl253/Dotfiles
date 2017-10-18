@@ -56,7 +56,6 @@ file
 file-roller
 filesystem
 findutils
-firefox-developer
 flex
 garcon
 gawk
@@ -202,7 +201,6 @@ nginx
 ngrep
 nmap
 nodejs
-npm
 nss-mdns
 ntfs-3g
 ntp
@@ -216,7 +214,6 @@ p7zip
 pacman
 pacui
 pamac
-papyrus
 patch
 pciutils
 pcmciautils
@@ -256,7 +253,6 @@ slock
 snowman-git
 speedtest-cli
 spotify-stable
-staruml
 subversion
 sudo
 sushi
@@ -331,5 +327,4 @@ xorg-twm
 xorg-xinit
 xscreensaver
 yaourt
-yarn
 zd1211-firmware
