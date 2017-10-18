@@ -2,7 +2,7 @@
 # System configuration file for Mutt
 #
 
-source ~/.mutt.colors
+source ~/.mutt/colors/solarized-dark-256
 
 auto_view text/html                                      # view html automatically
 alternative_order text/plain text/enriched text/html     # save html for last
@@ -184,7 +184,7 @@ attachments   -I message/external-body
 # Printable or Base64 encoding when sending mail.
 # 
 # 
-# set allow_ansi=no
+set allow_ansi=yes
 #
 # Name: allow_ansi
 # Type: boolean
@@ -413,7 +413,7 @@ attachments   -I message/external-body
 # Also see $fast_reply.
 # 
 # 
-# set beep=yes
+set beep=no
 #
 # Name: beep
 # Type: boolean
@@ -473,7 +473,7 @@ attachments   -I message/external-body
 # visual terminals don't permit making the cursor invisible.
 # 
 # 
-# set certificate_file="~/.mutt_certificates"
+set certificate_file=~/.mutt/certificates
 #
 # Name: certificate_file
 # Type: path
@@ -1548,7 +1548,7 @@ set from="norbertlogiewa96@gmail.com"
 # variable is set.
 # 
 # 
-# set history_file="~/.mutthistory"
+set history_file="~/.mutt/history"
 #
 # Name: history_file
 # Type: path
@@ -1797,7 +1797,7 @@ set imap_keepalive=900
 # This variable defaults to the value of $imap_user.
 # 
 # 
-set imap_pass="Kruszynka96*"
+# set imap_pass=""
 #
 # Name: imap_pass
 # Type: string
