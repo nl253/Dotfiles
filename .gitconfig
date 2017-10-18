@@ -89,7 +89,7 @@
     back = checkout HEAD^1
 
     # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
-    qq = "!git commit -a -m \"Automated commit. Nothing important ...\" ; git push" 
+    qq = "!git pull && git commit -a -m \"Automated commit. Nothing important ...\" && git push" 
 
     # Find branches containing commit
     find-branch = "!f() { git branch -a --contains $1; }; f"  
