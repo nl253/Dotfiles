@@ -49,9 +49,14 @@ export HISTTIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
 
+
 # $PAGER
 if [[ -x $(command which less) ]]; then
-  alias less='less -R' && export PAGER=less
+	export LESS='--RAW-CONTROL-CHARS --IGNORE-CASE --QUIET --HILITE-SEARCH --long-prompt'
+	if [[ -x $(command which pygmentize) ]]; then
+		export LESSOPEN='| pygmentize %s'
+	fi
+	export PAGER=less
 else
   [[ -x $(command which more) ]] && export PAGER=more && alias less=more
 fi
