@@ -205,7 +205,6 @@ nss-mdns
 ntfs-3g
 ntp
 numlockx
-onedrive-git
 openjdk9-doc
 openresolv
 openssh-hpn-git
