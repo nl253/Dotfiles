@@ -99,16 +99,14 @@ handle_extension() {
       elinks -dump "${FILE_PATH}" && exit 5
       ;; # Continue with next handler on failure
 
-		*)
-
-			# fallback
-			if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
-				head -n "${PV_HEIGHT}" "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}"
-				exit 5 
-			else
-				exit 1
-			fi
-			;;
+			# # fallback
+			# if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
+				# head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}"
+				# exit 5 
+			# else
+				# exit 1
+			# fi
+			# ;;
 
   esac
 }
@@ -116,6 +114,7 @@ handle_extension() {
 handle_image() {
   local mimetype="${1}"
   case "${mimetype}" in
+
     # SVG
     # image/svg+xml)
     #     convert "${FILE_PATH}" "${IMAGE_CACHE_PATH}" && exit 6
@@ -151,10 +150,11 @@ handle_mime() {
       # highlight --replace-tabs="${HIGHLIGHT_TABWIDTH}" --out-format="${highlight_format}" --style="${HIGHLIGHT_STYLE}" -- "${FILE_PATH}" && exit 5
 			
 			if [[ -x $(command which pygmentize) ]]; then
-				head -n "${PV_HEIGHT}" | pygmentize -f "${PYGMENTIZE_FORMAT}"
+				head -n "${PV_HEIGHT}" -- ${FILE_PATH} | pygmentize -f "${PYGMENTIZE_FORMAT}"
 				exit 5
+			else
+				exit 2
 			fi
-      exit 2
       ;;
 
     # Image
@@ -176,7 +176,7 @@ handle_mime() {
 }
 
 handle_fallback() {
-  echo '-----     COULD NOT PREVIEW    -----' 
+  echo -e '\n\n\n\n\n\n\t\t\t-----     [COULD NOT PREVIEW]    -----\n' 
   echo '----- File Type Classification -----' && file --dereference --brief -- "${FILE_PATH}" && exit 5
   exit 1
 }
