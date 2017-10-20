@@ -176,8 +176,8 @@ handle_mime() {
 }
 
 handle_fallback() {
-  echo -e '\n\n\n\n\n\n\t\t\t-----     [COULD NOT PREVIEW]    -----\n' 
-  echo '----- File Type Classification -----' && file --dereference --brief -- "${FILE_PATH}" && exit 5
+  echo -e '\n\n\n\n\n\n\t\t\t\t\t-----     [COULD NOT PREVIEW]    -----\n\n\n' 
+  echo -e '\n\n\n\n\n\n\t\t\t\t\t-----  File Type Classification  -----\n' && file --dereference --brief -- "${FILE_PATH}" && exit 5
   exit 1
 }
 
