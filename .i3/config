@@ -4,6 +4,11 @@
 set $WINKEY Mod4
 set $ALTKEY Mod1
 
+set $term gnome-terminal
+set $menu exec --no-startup-id rofi -width 20 -location 0 -matching fuzzy -lines 10 -terminal $term -show run
+
+output * bg /home/norbert/Pictures/desktop.png
+
 # COLORS
 set $deepblue #1874cd
 set $darkmagenta #8b008b
@@ -337,5 +342,7 @@ mode "$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
+include /etc/sway/config.d/*
 
 # vim: ft=sh

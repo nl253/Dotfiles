@@ -36,6 +36,7 @@ dhclient
 dhcpcd
 dialog
 diffutils
+dmenu-manjaro
 dmidecode
 dmraid
 dnsmasq
@@ -73,6 +74,7 @@ gnome-desktop
 gnome-disk-utility
 gnome-font-viewer
 gnome-keyring
+gnome-multi-writer
 gnome-screenshot
 gnome-session
 gnome-settings-daemon
@@ -155,7 +157,6 @@ manjaro-aur-support
 manjaro-browser-settings
 manjaro-firmware
 manjaro-gnome-settings
-manjaro-hello
 manjaro-hotfixes
 manjaro-printer
 manjaro-pulse
@@ -217,6 +218,7 @@ patch
 pciutils
 pcmciautils
 perl
+perl-image-exiftool
 php
 php-apache
 php-cgi
@@ -241,15 +243,18 @@ ranger
 redis
 reiserfsprogs
 rlwrap
+rofi
 rsync
 ruby
 ruby-docs
+rxvt-unicode-256xresources
 s-nail
 sed
 shadow
 shfmt
 slock
 snowman-git
+source-highlight
 speedtest-cli
 spotify-stable
 subversion
@@ -259,6 +264,7 @@ sysfsutils
 systemd-sysvcompat
 tar
 tcl
+terminology
 terminus-font
 texinfo
 texlive-bin
@@ -292,6 +298,8 @@ vim-spell-en
 vino
 vlc
 vulkan-intel
+w3m
+weston
 which
 wiredtiger
 wpa_supplicant
@@ -325,5 +333,6 @@ xorg-server
 xorg-twm
 xorg-xinit
 xscreensaver
+xtail
 yaourt
 zd1211-firmware
