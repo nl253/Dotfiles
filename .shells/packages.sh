@@ -513,7 +513,7 @@ install_package_managers() {
 
   for i in python ruby haskell php go rust node; do
 
-    [[ $(eval 'echo $MANAGE_'${language^^*}) == 0 ]] && continue
+    [[ $(eval 'echo $MANAGE_'${language^^*}) != 1 ]] && continue
 
     # FIXME have the _install_* call init
     # this repetition IS necessary!
@@ -526,7 +526,7 @@ install_package_managers() {
 main
 
 # unset created functions
-for i in main; do
+for i in main _init_{python,go,haskell,php,ruby,rust,node}; do
   eval "unset -f ${i}"
 done
 
