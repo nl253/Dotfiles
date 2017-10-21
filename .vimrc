@@ -1,10 +1,10 @@
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
 
-" Exit if not UNIX
-if !has('unix') 
-     !echo "You need to be running a UNIX-like system for this script to work."
-    finish
-endif 
+" " Exit if not UNIX
+" if !has('unix') 
+     " !echo "You need to be running a UNIX-like system for this script to work."
+    " finish
+" endif 
 
 " VARIABLES:
 let g:VIMDIR = expand('~/.vim')

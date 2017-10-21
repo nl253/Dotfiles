@@ -46,13 +46,15 @@ if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
-Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
+if empty(expand('~/AppData'))
+	Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
+endif
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = {'up': '~40%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
 
-for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}'))
+for i in ['tpope/vim-speeddating' , 'tpope/vim-repeat', 'tpope/vim-fugitive']
 	Plug i
 endfor
 
