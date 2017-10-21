@@ -1,11 +1,10 @@
 [options]
-#allow_bold = true
-#audible_bell = false
-#clickable_url = true
-#dynamic_title = true
-font = Monospace 13
-#fullscreen = true
-#geometry = 640x480
+allow_bold = true
+audible_bell = false
+clickable_url = true
+dynamic_title = true
+font = Monospace 15
+fullscreen = true
 geometry = 1920x1080
 #icon_name = terminal
 mouse_autohide = true
@@ -14,17 +13,17 @@ scroll_on_keystroke = false
 # Length of the scrollback buffer, 0 disabled the scrollback buffer
 # and setting it to a negative value means "infinite scrollback"
 scrollback_lines = 10000
-#search_wrap = true
+search_wrap = true
 #urgent_on_bell = true
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
 #browser = xdg-open
 
 # "system", "on" or "off"
-#cursor_blink = system
+cursor_blink = on
 
 # "block", "underline" or "ibeam"
-#cursor_shape = block
+cursor_shape = block
 
 # Hide links that are no longer valid in url select overlay mode
 #filter_unmatched_urls = true
@@ -33,7 +32,7 @@ scrollback_lines = 10000
 #modify_other_keys = false
 
 # set size hints for the window
-#size_hints = false
+size_hints = true
 
 [colors]
 # If both of these are unset, cursor falls back to the foreground color,

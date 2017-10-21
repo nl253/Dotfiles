@@ -3,6 +3,12 @@
 
 .netrc
 
+
+# Jetbrains
+
+*.iml
+.idea/
+
 # Extensions
 
 *.bak
@@ -232,7 +238,7 @@ undo/*
 .config/psysh/
 .local/share/composer/
 
-# History 
+# History
 
 .netrwhist
 .*_history

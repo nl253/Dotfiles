@@ -14,17 +14,19 @@ export PGDATABASE=testing
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-export TERMINAL=gnome-terminal
+export TERMINAL='termite --exec=tmux'
 
 _add_to_cdpath() {
 	for directory in "$@"; do
-		[[ -d $directory ]] && [[ ! $CDPATH =~ $directory ]] && export CDPATH="$directory:$CDPATH:" 2>/dev/null
+		[[ -d $directory ]] && [[ ! $CDPATH =~ $directory ]] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 	done
 }
 
 export CDPATH="${HOME}:"
 
-_add_to_cdpath $HOME/{Projects,Uni,.shells} $HOME/Uni/* $HOME/Uni/*/*
+export JAVA_HOME=/usr/lib/jvm/java-9-openjdk
+export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
+_add_to_cdpath ${HOME}/{Projects,Uni,.shells} ${HOME}/Uni/* ${HOME}/Uni/*/* ${JAVA_HOME}/bin ${JRE_HOME}/bin 
 
 unset -f _add_to_cdpath
 
@@ -32,10 +34,6 @@ unset -f _add_to_cdpath
 if [[ -x $(command which hostname) ]] && $(hostname -s &>/dev/null); then
 	export SHORT_HOSTNAME=$(hostname -s)
 fi
-
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
-export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
-export PATH=$PATH:${JAVA_HOME}/bin:${JRE_HOME}/bin
 
 [[ -f ~/.makepkg.conf ]] && export MAKEPKG_CONF=~/.makepkg.conf
 [[ -f ~/.config/ranger/rc.conf ]] && export RANGER_LOAD_DEFAULT_RC=false
@@ -70,13 +68,6 @@ done
 
 # $EDITOR
 
-#for i in gvim idea pycharm; do
-  #if [[ -x $(command which $i 2>/dev/null) ]]; then
-    #export VISUAL=$(command which $i)
-    #break
-  #fi
-#done
-
 for i in nvim vim vi; do
 	if [[ -x $(command which $i 2>/dev/null) ]]; then
 		export EDITOR=$(command which $i)
@@ -93,13 +84,8 @@ done
 if [[ -x $(which nvim 2>/dev/null) ]] && [[ ! -e ~/.config/nvim/init.vim ]] && [[ -e ~/.vimrc ]]; then
 	(
 		cd && ln -s ~/.vimrc ~/.config/nvim/init.vim
-	)
+	) &
 fi
-
-# FIXME
-# if ! $(hostname) =~ Chummy; then
-  # eval "alias ${EDITOR}=${EDITOR} 2>/dev/null"
-# fi
 
 export HISTFILE=~/.shell_history
 export SAVEHIST=10000
@@ -108,10 +94,6 @@ if [[ -x $(command which yaourt 2>/dev/null) ]]; then
   export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
 
-# # launch gui
-# if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && [[ -z $XDG_SESSION_TYPE ]]; then
-  # export XDG_SESSION_TYPE=wayland exec dbus-run-session gnome-session
-# fi 
 
 
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2
