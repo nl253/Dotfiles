@@ -9,6 +9,13 @@ public class Main {
 }
 endsnippet
 
+snippet "curl|get|request" "HTTP GET request [java]" r
+private static void get(String url) throws IOException {
+    new BufferedReader(new InputStreamReader(new URL(url).openStream()))
+	    .lines().forEach(System.out::println);
+}
+endsnippet 
+
 snippet "to[sS]tr(ing)?" "toString() [java]" r
 @Override
 public String toString() {

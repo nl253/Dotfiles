@@ -6,7 +6,7 @@ for (let i of ${1:iterable}) {
 }
 endsnippet
 
-snippet fun(ct?)? "Function [javascript]" rb
+snippet "fun(ct?)?" "Function [javascript]" rb
 function ${1:do_stuff}(${2:}) {
   ${3:// do stuff here}
 }
@@ -44,9 +44,6 @@ for (let i = 0; i < ${1:iterable}.lenght; i++) {
 }
 endsnippet
 
-snippet "#!" "Shebang node.js [javascript]" rb
-#!/usr/bin/env node --expose-http2 --harmony --harmony_typeof
-endsnippet
 
 snippet proto "Prototype (proto)"
 ${1:class_name}.prototype.${2:method_name} = function`!p snip.rv = space_before_function_paren(snip)`(${3:first_argument}) {
