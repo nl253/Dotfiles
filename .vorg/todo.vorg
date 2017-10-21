@@ -12,7 +12,7 @@ WIFI PASSWORD
 - Mon 15 Jan - Fri 29 Mar 2018
 - Mon 30 April - Sat 15 Sep 2018
 
->> SHORT TERM
+>> SHORT TERM 
 
 ( Uni
 
@@ -30,7 +30,7 @@ WIFI PASSWORD
 
 >> Interfaces
 
-- Map
+- Map (Dictionary is obsolete)
 - List
 - Set
 - Iterator
@@ -116,7 +116,6 @@ Lxml <http://lxml.de/>
 @Library
 Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
 
-
 		    >> MEDIUM TERM
 
 @Learn
@@ -126,7 +125,6 @@ Learn PostgreSQL with Datagrip
 
 
 		    >> LONG TERM
-
 ( Python
 
 @Learn

@@ -9,14 +9,32 @@ public class Main {
 }
 endsnippet
 
-snippet "curl|get|request" "HTTP GET request [java]" r
-private static void get(String url) throws IOException {
-    new BufferedReader(new InputStreamReader(new URL(url).openStream()))
-	    .lines().forEach(System.out::println);
+snippet "walk|rglob" "Recursively walk a directory [java]" rb
+public final Optional<Set<String>> walk(final String root) {
+    try {
+    return Optional.of(Files.walk(Paths.get(root)).parallel()
+                   .map(Path::toString)
+                   .collect(Collectors.toSet()));
+    } catch (IOException e) {
+    return Optional.empty();
+    }
 }
 endsnippet 
 
-snippet "to[sS]tr(ing)?" "toString() [java]" r
+snippet "curl|get|request" "HTTP GET request [java]" rb
+private static Optional<List<String>> get(String url) {
+    try {
+    return Optional
+        .of(new BufferedReader(new InputStreamReader(new URL(url)
+                                     .openStream()))
+                .lines().collect(Collectors.toList()));
+    } catch (IOException e) {
+    return Optional.empty();
+    }
+}
+endsnippet 
+
+snippet "to[sS]tr(ing)?" "toString() [java]" rb
 @Override
 public String toString() {
   return super.toString();
@@ -47,8 +65,8 @@ private List<String> readFile(String filename) {
 endsnippet
 
 snippet "fore(ach)?" "Foreach loop [java]" rb
-for (Item i : iter) {
-    // do stuff
+for (${1:Object} ${2:i} : ${3:iterable}) {
+    ${4:// do stuff}
 }
 endsnippet
 
