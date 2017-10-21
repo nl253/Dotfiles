@@ -50,23 +50,23 @@ background = #1c1c1c
 # If unset, will reverse foreground and background
 highlight = #2f2f2f
 
-# Colors from color0 to color254 can be set
-color0 = #000000
-color1 = #800000
-color2 = #00af5f	
-color3 = #808000
-color4 = #000087
-color5 = #800080
-color6 = #008080
-color7 = #c0c0c0
-color8 = #808080
-color9 = #ff0000
-color10 = #00ff00
-color11 = #ffff00
-color12 = #005fd7
-color13 = #ff00ff
-color14 = #00ffff
-color15 = #ffffff
+# # Colors from color0 to color254 can be set
+# color0 = #000000
+# color1 = #800000
+# color2 = #00af5f	
+# color3 = #808000
+# color4 = #000087
+# color5 = #800080
+# color6 = #008080
+# color7 = #c0c0c0
+# color8 = #808080
+# color9 = #ff0000
+# color10 = #00ff00
+# color11 = #ffff00
+# color12 = #005fd7
+# color13 = #ff00ff
+# color14 = #00ffff
+# color15 = #ffffff
 
 [hints]
 #font = Monospace 12

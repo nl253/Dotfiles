@@ -3,37 +3,29 @@
 # point doctuils (rst) to config file
 export DOCUTILSCONFIG=~/.docutils
 
-# use qt5 not qt4
-export QT_SELECT=5
+# use qt5 not qt4 (but only if you have qt5)
+if [[ -x $(command which gt5ct 2>/dev/null) ]]; then 
+	export QT_SELECT=5
+fi
 
 # POSTGRES
-export PGUSER=postgres
-export PGHOST=localhost
-export PGDATABASE=testing
+if [[ -x $(command which psql 2>/dev/null) ]]; then
+	export PGUSER=postgres
+	export PGHOST=localhost
+	export PGDATABASE=testing
+fi
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-export TERMINAL='termite --exec=tmux'
-
-_add_to_cdpath() {
-	for directory in "$@"; do
-		[[ -d $directory ]] && [[ ! $CDPATH =~ $directory ]] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
-	done
-}
+export JAVA_HOME=/usr/lib/jvm/java-9-openjdk
+export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
 
 export CDPATH="${HOME}:"
 
-export JAVA_HOME=/usr/lib/jvm/java-9-openjdk
-export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
-_add_to_cdpath ${HOME}/{Projects,Uni,.shells} ${HOME}/Uni/* ${HOME}/Uni/*/* ${JAVA_HOME}/bin ${JRE_HOME}/bin 
-
-unset -f _add_to_cdpath
-
-# Set Xterm/screen/Tmux title with only a short hostname
-if [[ -x $(command which hostname) ]] && $(hostname -s &>/dev/null); then
-	export SHORT_HOSTNAME=$(hostname -s)
-fi
+for directory in ${HOME}/{Projects,Uni,.shells} ${HOME}/Uni/* ${JAVA_HOME}; do
+	[[ -d $directory ]] && [[ ! $CDPATH =~ $directory ]] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
+done
 
 [[ -f ~/.makepkg.conf ]] && export MAKEPKG_CONF=~/.makepkg.conf
 [[ -f ~/.config/ranger/rc.conf ]] && export RANGER_LOAD_DEFAULT_RC=false
@@ -47,22 +39,21 @@ export HISTTIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
 
-
 # $PAGER
-if [[ -x $(command which less) ]]; then
+if [[ -x $(command which less 2>/dev/null) ]]; then
 	export LESS='--RAW-CONTROL-CHARS --IGNORE-CASE --QUIET --HILITE-SEARCH --long-prompt'
-	if [[ -x $(command which pygmentize) ]]; then
+	if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
 		export LESSOPEN='| pygmentize %s'
 	fi
 	export PAGER=less
 else
-  [[ -x $(command which more) ]] && export PAGER=more && alias less=more
+  [[ -x $(command which more 2>/dev/null) ]] && export PAGER=more && alias less=more
 fi
 
 # $BROWSER
 for i in firefox-developer firefox google-chrome-stable chromium elinks lynx w3m; do
   if [[ -x $(command which $i 2>/dev/null) ]]; then
-    export BROWSER=$(command which $i) && break
+    export BROWSER=$(command which $i 2>/dev/null) && break
   fi
 done
 
@@ -70,7 +61,7 @@ done
 
 for i in nvim vim vi; do
 	if [[ -x $(command which $i 2>/dev/null) ]]; then
-		export EDITOR=$(command which $i)
+		export EDITOR=$(command which $i 2>/dev/null)
 		if [[ $i != vim ]]; then
 			eval "alias vim=${i}"
 		fi
@@ -78,7 +69,10 @@ for i in nvim vim vi; do
 	fi
 done
 
-[[ -x $(command which gonvim 2>/dev/null) ]] && alias gvim=gonvim
+
+for i in gonvim; do
+	[[ -x $(command which $i 2>/dev/null) ]] && eval "alias gvim=${i}"
+done
 
 # link nvim config file (in a subshell) to vim config file if missing
 if [[ -x $(which nvim 2>/dev/null) ]] && [[ ! -e ~/.config/nvim/init.vim ]] && [[ -e ~/.vimrc ]]; then
@@ -93,7 +87,5 @@ export SAVEHIST=10000
 if [[ -x $(command which yaourt 2>/dev/null) ]]; then
   export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
-
-
 
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2

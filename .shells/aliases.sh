@@ -1,3 +1,4 @@
+
 # ALIASES (tested on zsh and bash)
 
 # SOURCED BY BOTH `zsh` AND `bash`
@@ -12,26 +13,26 @@ _in_path() {
     return 1
 }
 
-# general {
+# general 
 alias sudo='sudo '
 
-# dirs and files {
+# get MIME type of a file
+[[ -x $(command which file) ]] && alias mime-type='file --dereference --brief --mime-type -- '
+
+# dirs and files 
 alias ls='ls --color=auto --group-directories-first'
 
 alias -- -='cd -' # Go back
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-# }
 
-# pattern matching {
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias diff='diff --color=auto'
-# }
+# pattern matching 
+for i in {f,e,}grep diff; do
+	eval "alias ${i}=${i} --color=auto"
+done
 
-# utils {
+# utils 
 # split path on ":"
 alias show-path='echo -e ${PATH//:/\\n} | sort | grep -P "^.{3,}$"'
 alias df='df --human-readable --si --total'
@@ -47,13 +48,12 @@ fi
 alias mv="mv --verbose"
 alias rm="rm --verbose"
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
-# }
 
 _in_path libreoffice && alias libreoffice="libreoffice --norestore"
 
 _in_path tmux && alias tmux='tmux -2'
 
-# Java {
+# Java 
 # -----------------------------------
 # REQUIRES
 # - mvn
@@ -63,9 +63,8 @@ if _in_path javac; then
 	alias mvn-init='mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false'
     fi
 fi
-# }
 
-# Networking, Servers {
+# Networking, Servers 
 # -----------------------------------
 # REQUIRES
 # - sshfs
@@ -82,9 +81,8 @@ _in_path ruby && alias http-server-ruby="ruby -rwebrick -e'WEBrick::HTTPServer.n
 # mount a remote hard-drive
 _in_path sshfs && alias mount-raptor="mkdir -p \${HOME}/Raptor && sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: \${HOME}/Raptor"
 _in_path curl && alias my-ip='curl ipinfo.io/ip'
-# }
 
-# Package Management - pacman, yaourt, expac {
+# Package Management - pacman, yaourt, expac 
 # -----------------------------
 # REQUIRES
 # - pacman
@@ -104,9 +102,8 @@ if _in_path pacman; then
 	export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
     fi
 fi
-# }
 
-# Proceses {
+# Proceses 
 # ------------------------
 # REQUIRES
 # - top (or htop)
@@ -114,9 +111,8 @@ fi
 for i in {h,a,}top 'ps aux'; do
     _in_path $i && alias p=$i && break
 done
-# }
 
-# VCS {
+# VCS 
 # -------------------------
 # REQUIRES
 # - git
@@ -129,24 +125,17 @@ if _in_path git; then
 	eval "$(hub alias -s)"
     fi
 fi
-# }
 
-# Databases {
+# Databases 
 # -------------------------
 # REQUIRES
 # - postgresql
 # - sqlite3
+#
+_in_path psql && alias psql='psql --single-line'
+_in_path sqlite3 && alias sqlite3="sqlite3 -init \${HOME}/.sqliterc"
 
-if _in_path psql; then
-    alias psql='psql --single-line'
-fi
-
-if _in_path sqlite3; then
-    alias sqlite3="sqlite3 -init \${HOME}/.sqliterc"
-fi
-# }
-
-# Haskell {
+# Haskell 
 # ----------
 # REQUIRES
 # - stack
@@ -157,7 +146,6 @@ fi
 for i in ghc{i,} hoogle haddock; do
     eval "alias "${i}"='stack "${i}"'"
 done
-# }
 
 unset -f _in_path
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} nowrap formatoptions=

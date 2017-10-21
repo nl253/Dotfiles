@@ -238,6 +238,7 @@ pulseaudio-bluetooth
 pulseaudio-ctl
 pulseaudio-zeroconf
 qt4
+qt5-wayland
 qtcreator
 ranger
 redis
@@ -266,6 +267,7 @@ tar
 tcl
 terminology
 terminus-font
+termite
 texinfo
 texlive-bin
 texlive-core
@@ -299,7 +301,6 @@ vino
 vlc
 vulkan-intel
 w3m
-weston
 which
 wiredtiger
 wpa_supplicant

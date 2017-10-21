@@ -20,13 +20,16 @@ if [[ -x $(command which fzf 2>/dev/null) ]]; then # {
   export FZF_CTRL_T_OPTS="--select-1 --exit-0"
   export FZF_CTRL_R_OPTS="--sort --exact --preview 'echo {}' --preview-window down:3:hidden --bind '?:toggle-preview'"
 
-  # preview configured to `cat` for files and use `tree` for dirs
-  # [FZF] with [P]REVIEW
-  #if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
-  alias fzfp='fzf --preview="[[ -f {} ]] && head -n 38 {} | pygmentize -l $(pygmentize -N {}) || [[ -d {} ]] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
-  #else
-    #alias fzfp='fzf --preview="[ -f {} ] && head -n 38 {} || tree -l -a --prune -L 4 -F --sort=mtime {}"'
-  #fi
+	# preview configured to `cat` for files and use `tree` for dirs
+	# [FZF] with [P]REVIEW
+
+	if [[ -e ~/.config/ranger/scope.sh ]]; then
+		alias fzfp='fzf --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'
+	elif [[ -x $(command which pygmentize 2>/dev/null) ]]; then
+		alias fzfp='fzf --preview="[[ -f {} ]] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {}) || [[ -d {} ]] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
+	else
+		alias fzfp='fzf --preview="[[ -f {} ]] && head -n $(tput lines) {} || [[ -d {} ]] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
+	fi
 
   [[ -e ~/.gists ]] && alias gists="find ~/.gists/*/ -type f -and -not -path '**.git**' | fzfp"
 

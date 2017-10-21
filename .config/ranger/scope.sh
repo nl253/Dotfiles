@@ -33,6 +33,12 @@ PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwis
 FILE_EXTENSION="${FILE_PATH##*.}"
 FILE_EXTENSION_LOWER="${FILE_EXTENSION,,}"
 
+if [[ $(command which pygmentize) ]]; then
+    HAS_PYGMENTS=1
+else
+    HAS_PYGMENTS=0
+fi
+
 # Settings
 HIGHLIGHT_SIZE_MAX=262143 # 256KiB
 HIGHLIGHT_TABWIDTH=8
@@ -40,151 +46,118 @@ HIGHLIGHT_STYLE='pablo'
 PYGMENTIZE_STYLE='autumn'
 
 if [[ "$(tput colors)" -ge 256 ]]; then
-  PYGMENTIZE_FORMAT='terminal256'
-  HIGHLIGHT_FORMAT='xterm256'
+    PYGMENTIZE_FORMAT='terminal256'
+    HIGHLIGHT_FORMAT='xterm256'
 else
-  PYGMENTIZE_FORMAT='terminal'
-  HIGHLIGHT_FORMAT='ansi'
+    PYGMENTIZE_FORMAT='terminal'
+    HIGHLIGHT_FORMAT='ansi'
 fi
 
 handle_extension() {
-  case "${FILE_EXTENSION_LOWER}" in
+    case "${FILE_EXTENSION_LOWER}" in
 
-    # Archive
-    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
+	# Archive
+	a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | docx | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
 
-      atool --list -- "${FILE_PATH}" && exit 5
-      bsdtar --list --file "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+	atool --list -- "${FILE_PATH}" && exit 5
+	bsdtar --list --file "${FILE_PATH}" && exit 5
+	exit 1
+	;;
 
     rar)
-      # Avoid password prompt by providing empty password
-      unrar lt -p- -- "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+	# Avoid password prompt by providing empty password
+	unrar lt -p- -- "${FILE_PATH}" && exit 5
+	exit 1
+	;;
 
     7z)
-      # Avoid password prompt by providing empty password
-      7z l -p -- "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+	# Avoid password prompt by providing empty password
+	7z l -p -- "${FILE_PATH}" && exit 5
+	exit 1
+	;;
 
     # PDF
     pdf)
-      # Preview as text conversion
-      pdftotext -l 10 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
-      exiftool "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+	# Preview as text conversion
+	pdftotext -l 10 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
+	exiftool "${FILE_PATH}" && exit 5
+	exit 1
+	;;
 
     # BitTorrent
     torrent)
-      transmission-show -- "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+	transmission-show -- "${FILE_PATH}" && exit 5
+	exit 1
+	;;
 
     # OpenDocument
     odt | ods | odp | sxw)
-      # Preview as text conversion
-      odt2txt "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+	# Preview as text conversion
+	odt2txt "${FILE_PATH}" && exit 5
+	exit 1
+	;;
 
     # HTML
     htm | html | xhtml)
-      # Preview as text conversion
-      w3m -dump "${FILE_PATH}" && exit 5
-      lynx -dump -- "${FILE_PATH}" && exit 5
-      elinks -dump "${FILE_PATH}" && exit 5
-      ;; # Continue with next handler on failure
+	# Preview as text conversion
+	w3m -dump "${FILE_PATH}" && exit 5
+	lynx -dump -- "${FILE_PATH}" && exit 5
+	elinks -dump "${FILE_PATH}" && exit 5
+	;; 
 
-			# # fallback
-			# if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
-				# head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}"
-				# exit 5 
-			# else
-				# exit 1
-			# fi
-			# ;;
+    class)
 
-  esac
-}
+	# automatically decompile Java's *.class files + highlight
+	
+	if [[ -x $(command which javap 2>/dev/null) ]]; then
 
-handle_image() {
-  local mimetype="${1}"
-  case "${mimetype}" in
+	    if (($HAS_PYGMENTS)); then
+		javap "${FILE_PATH}" | pygmentize -l java
 
-    # SVG
-    # image/svg+xml)
-    #     convert "${FILE_PATH}" "${IMAGE_CACHE_PATH}" && exit 6
-    #     exit 1;;
+	    else
+		javap "${FILE_PATH}"
+	    fi
 
-    # Image
-    image/*)
-      # `w3mimgdisplay` will be called for all images (unless overriden as above),
-      # but might fail for unsupported types.
-      exit 7
-      ;;
+	    
+	    exit 5
+	fi
+	;;
 
-    # Video
-    # video/*)
-    #     # Thumbnail
-    #     ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
-    #     exit 1;;
-  esac
+    esac
 }
 
 handle_mime() {
-  local mimetype="${1}"
-  case "${mimetype}" in
+    local mimetype="${1}"
+    case "${mimetype}" in
 
-    # Text
-    text/* | */xml | application/*)
+	# Text
+	text/* | *xml* | *html* | *json* | *script*)
 
-      # Syntax highlight
-      if [[ "$(stat --printf='%s' -- "${FILE_PATH}")" -gt "${HIGHLIGHT_SIZE_MAX}" ]]; then
-        exit 2
-      fi
+	    if (($HAS_PYGMENTS)); then
+		head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}")
+		exit 5 
+	    else
+		exit 2
+	    fi
+	    ;;
 
-      # highlight --replace-tabs="${HIGHLIGHT_TABWIDTH}" --out-format="${highlight_format}" --style="${HIGHLIGHT_STYLE}" -- "${FILE_PATH}" && exit 5
-			
-			if [[ -x $(command which pygmentize) ]]; then
-				head -n "${PV_HEIGHT}" -- ${FILE_PATH} | pygmentize -f "${PYGMENTIZE_FORMAT}"
-				exit 5
-			else
-				exit 2
-			fi
-      ;;
+	inode/directory)
 
-    # Image
-    image/*)
-      # Preview as text conversion
-      # img2txt --gamma=0.6 --width="${PV_WIDTH}" -- "${FILE_PATH}" && exit 4
-      exiftool "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+	    [[ -d "${FILE_PATH}" ]] && tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
+	;;
 
-    # Video and audio
-    video/* | audio/*)
-      mediainfo "${FILE_PATH}" && exit 5
-      exiftool "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
-
-  esac
+    esac
 }
 
 handle_fallback() {
-  echo -e '\n\n\n\n\n\n\t\t\t\t\t-----     [COULD NOT PREVIEW]    -----\n\n\n' 
-  echo -e '\n\n\n\n\n\n\t\t\t\t\t-----  File Type Classification  -----\n' && file --dereference --brief -- "${FILE_PATH}" && exit 5
-  exit 1
+    echo -e "${FILE_PATH}\n"
+    file --dereference --brief -- "${FILE_PATH}" && exit 5
 }
 
 handle_extension
-MIMETYPE="$(file --dereference --brief --mime-type -- "${FILE_PATH}")"
-[[ "${PV_IMAGE_ENABLED}" == 'True' ]] && handle_image "${MIMETYPE}"
-handle_mime "${MIMETYPE}"
+handle_mime $(file --dereference --brief --mime-type -- "${FILE_PATH}")
 handle_fallback
 
 exit 1
+
+# vim: nowrap
