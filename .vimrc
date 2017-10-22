@@ -1,10 +1,10 @@
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o 
 
-" Exit if not UNIX
-if !has('unix') 
-     !echo "You need to be running a UNIX-like system for this script to work."
-    finish
-endif 
+" " Exit if not UNIX
+" if !has('unix') 
+     " !echo "You need to be running a UNIX-like system for this script to work."
+    " finish
+" endif 
 
 " VARIABLES:
 let g:VIMDIR = expand('~/.vim')
@@ -22,10 +22,17 @@ let maplocalleader = ","
 let g:PLUG_FILE = expand('~/.vim/autoload/plug.vim')
 
 " Plug - Download if missing:
-if !filereadable(g:PLUG_FILE) && executable('curl')
+
+if has('unix') && !filereadable(g:PLUG_FILE) && executable('curl')
 	echo system('mkdir -p $(dirname '.g:PLUG_FILE.') && curl -flo '.g:PLUG_FILE.' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
 	execute 'source '.g:PLUG_FILE
 	PlugInstall
+
+elseif !filereadable(g:PLUG_FILE) && has('win32')
+	if !(&shell =~# 'powershell')
+		set shell=powershell.exe
+	endif
+	silent call system('md ~\vimfiles\autoload; $uri = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"; (New-Object Net.WebClient).DownloadFile($uri, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("~\vimfiles\autoload\plug.vim"))')
 elseif !filereadable(g:PLUG_FILE) 
 	finish
 endif

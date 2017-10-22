@@ -46,13 +46,16 @@ if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
-Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
+if has('unix')
+	Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
+endif
+
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = {'up': '~40%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
 
-for i in split(expand('tpope/vim-{speeddating,repeat,fugitive}'))
+for i in ['tpope/vim-speeddating' , 'tpope/vim-repeat', 'tpope/vim-fugitive']
 	Plug i
 endfor
 
@@ -269,7 +272,11 @@ endif
 
 " MY PLUGINS:
 " ==========
-silent call system('mkdir -p '.expand("~/Projects/VimScript"))
+
+if empty(expand('~/Projects/VimScript')) 
+	silent call mkdir('~/Projects/VimScript', 'p')
+endif
+
 for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
     Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Projects/VimScript/').plugin}
 endfor
@@ -286,5 +293,10 @@ if has('patch8') || has('nvim')
 	call neomake#configure#automake('rw', 1000) 
 endif
 
-colorscheme fabulous
+if has("unix") || (has('win32') && has('gui'))
+	colorscheme fabulous
+else
+	colorscheme darkblue
+endif
+
 " vim: foldmethod=indent
