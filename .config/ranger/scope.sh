@@ -33,11 +33,7 @@ PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwis
 FILE_EXTENSION="${FILE_PATH##*.}"
 FILE_EXTENSION_LOWER="${FILE_EXTENSION,,}"
 
-if [[ $(command which pygmentize) ]]; then
-    HAS_PYGMENTS=1
-else
-    HAS_PYGMENTS=0
-fi
+[[ $(command which pygmentize) ]] && HAS_PYGMENTS=1 || HAS_PYGMENTS=0
 
 # Settings
 HIGHLIGHT_SIZE_MAX=262143 # 256KiB
@@ -45,113 +41,131 @@ HIGHLIGHT_TABWIDTH=8
 HIGHLIGHT_STYLE='pablo'
 PYGMENTIZE_STYLE='autumn'
 
-if [[ "$(tput colors)" -ge 256 ]]; then
-    PYGMENTIZE_FORMAT='terminal256'
-    HIGHLIGHT_FORMAT='xterm256'
-else
-    PYGMENTIZE_FORMAT='terminal'
-    HIGHLIGHT_FORMAT='ansi'
-fi
+[[ "$(tput colors)" -ge 256 ]] && PYGMENTIZE_FORMAT='terminal256' || PYGMENTIZE_FORMAT='terminal'
 
 handle_extension() {
-    case "${FILE_EXTENSION_LOWER}" in
+  case "${FILE_EXTENSION_LOWER}" in
 
-	# Archive
-	a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | docx | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
+    # Archive
+    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | docx | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
 
-	atool --list -- "${FILE_PATH}" && exit 5
-	bsdtar --list --file "${FILE_PATH}" && exit 5
-	exit 1
-	;;
+      atool --list -- "${FILE_PATH}" && exit 5
+      bsdtar --list --file "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
+		tar.gz)
+			tar -ztf "${FILE_PATH}"
+		;;
+
+		tar.bz2)
+			tar -jtf "${FILE_PATH}"
+		;;
+
+		gzip | bzip2 | 7z)
+      # Avoid password prompt by providing empty password
+      7z l -p -- "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
 
     rar)
-	# Avoid password prompt by providing empty password
-	unrar lt -p- -- "${FILE_PATH}" && exit 5
-	exit 1
-	;;
-
-    7z)
-	# Avoid password prompt by providing empty password
-	7z l -p -- "${FILE_PATH}" && exit 5
-	exit 1
-	;;
+      # Avoid password prompt by providing empty password
+      unrar lt -p- -- "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
 
     # PDF
     pdf)
-	# Preview as text conversion
-	pdftotext -l 10 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
-	exiftool "${FILE_PATH}" && exit 5
-	exit 1
-	;;
+      # Preview as text conversion
+      pdftotext -l 10 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
+      exiftool "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
 
     # BitTorrent
     torrent)
-	transmission-show -- "${FILE_PATH}" && exit 5
-	exit 1
-	;;
+      transmission-show -- "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
 
     # OpenDocument
     odt | ods | odp | sxw)
-	# Preview as text conversion
-	odt2txt "${FILE_PATH}" && exit 5
-	exit 1
-	;;
+      # Preview as text conversion
+      odt2txt "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
 
     # HTML
     htm | html | xhtml)
-	# Preview as text conversion
-	w3m -dump "${FILE_PATH}" && exit 5
-	lynx -dump -- "${FILE_PATH}" && exit 5
-	elinks -dump "${FILE_PATH}" && exit 5
-	;; 
+      # Preview as text conversion
+      w3m -dump "${FILE_PATH}" && exit 5
+      lynx -dump -- "${FILE_PATH}" && exit 5
+      elinks -dump "${FILE_PATH}" && exit 5
+      ;;
+
+		# PHP
+		php)
+      if (($HAS_PYGMENTS)); then
+        head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l html+php
+        exit 5
+      fi
+      ;;
+
+    # XML formats
+    iml | ucls)
+
+      if (($HAS_PYGMENTS)); then
+        head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
+        exit 5
+      fi
+      ;;
 
     class)
 
-	# automatically decompile Java's *.class files + highlight
-	
-	if [[ -x $(command which javap 2>/dev/null) ]]; then
+      # automatically decompile Java's *.class files + highlight
 
-	    if (($HAS_PYGMENTS)); then
-		javap "${FILE_PATH}" | pygmentize -l java
+      if [[ -x $(command which javap 2>/dev/null) ]]; then
 
-	    else
-		javap "${FILE_PATH}"
-	    fi
+        if (($HAS_PYGMENTS)); then
+          javap "${FILE_PATH}" | pygmentize -l java
 
-	    
-	    exit 5
-	fi
-	;;
+        else
+          javap "${FILE_PATH}"
+        fi
 
-    esac
+        exit 5
+      fi
+      ;;
+
+  esac
 }
 
 handle_mime() {
-    local mimetype="${1}"
-    case "${mimetype}" in
+  local mimetype="${1}"
+  case "${mimetype}" in
 
-	# Text
-	text/* | *xml* | *html* | *json* | *script*)
+    # Text
+    text/* | *xml* | *html* | *json* | *script*)
 
-	    if (($HAS_PYGMENTS)); then
-		head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}")
-		exit 5 
-	    else
-		exit 2
-	    fi
-	    ;;
+      if (($HAS_PYGMENTS)); then
+        head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}")
+        exit 5
+      else
+        exit 2
+      fi
+      ;;
 
-	inode/directory)
+    inode/directory)
 
-	    [[ -d "${FILE_PATH}" ]] && tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
-	;;
+      [[ -d "${FILE_PATH}" ]] && tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
+      ;;
 
-    esac
+  esac
 }
 
 handle_fallback() {
-    echo -e "${FILE_PATH}\n"
-    file --dereference --brief -- "${FILE_PATH}" && exit 5
+  echo -e "${FILE_PATH}\n"
+  file --dereference --brief -- "${FILE_PATH}" && exit 5
 }
 
 handle_extension
