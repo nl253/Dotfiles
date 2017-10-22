@@ -2,8 +2,8 @@
     templatedir = ~/.git-templates
 
 [user]
-    email = norbertlogiewa96@gmail.com
-    name = nl253
+	email = norbertlogiewa96@gmail.com
+	name = nl253
 
 [diff]
     renames = copies  # Detect copies as well as renames
@@ -126,3 +126,8 @@
     smtpuser = norbertlogiewa96@gmail.com
 
 # vim: ts=4 sw=4
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

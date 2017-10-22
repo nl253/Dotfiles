@@ -46,9 +46,10 @@ if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
-if empty(expand('~/AppData'))
+if has('unix')
 	Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
 endif
+
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = {'up': '~40%'}
@@ -288,9 +289,10 @@ if has('patch8') || has('nvim')
 	call neomake#configure#automake('rw', 1000) 
 endif
 
-if has("unix")
+if has("unix") || (has('win32') && has('gui'))
 	colorscheme fabulous
 else
 	colorscheme darkblue
 endif
+
 " vim: foldmethod=indent
