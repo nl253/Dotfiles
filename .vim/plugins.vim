@@ -272,7 +272,11 @@ endif
 
 " MY PLUGINS:
 " ==========
-silent call system('mkdir -p '.expand("~/Projects/VimScript"))
+
+if empty(expand('~/Projects/VimScript')) 
+	silent call mkdir('~/Projects/VimScript', 'p')
+endif
+
 for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
     Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Projects/VimScript/').plugin}
 endfor

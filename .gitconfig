@@ -125,9 +125,10 @@
     smtpencryption = tls
     smtpuser = norbertlogiewa96@gmail.com
 
-# vim: ts=4 sw=4
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+# vim: ts=4 sw=4
