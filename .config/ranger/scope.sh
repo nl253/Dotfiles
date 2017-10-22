@@ -182,6 +182,19 @@ handle_mime() {
   esac
 }
 
+# handle_filename() {
+
+	# case $FILE_PATH in
+	# "$quit")
+			# echo "Exiting."
+			# break
+			# ;;
+	# *)
+			# echo "You picked $filename ($REPLY)"
+			# ;;
+	# esac
+# }
+
 handle_fallback() {
   echo -e "${FILE_PATH}\n"
   file --dereference --brief -- "${FILE_PATH}" | fmt && exit 5
