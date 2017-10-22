@@ -3,6 +3,21 @@
 set -o noclobber -o noglob -o nounset -o pipefail
 IFS=$'\n'
 
+# Dependencies
+# ------------
+# - GNU coreutils
+# - 7z
+# - pygmentize
+# - tar
+# - unrar
+# - atool 
+# - bsdtar
+# - transmission
+# - odt2txt
+# - pdftotext
+# - javap (part of jdk)
+# - tree
+
 # If the option `use_preview_script` is set to `true`,
 # then this script will be called and its output will be displayed in ranger.
 # ANSI color codes are supported.
@@ -111,19 +126,23 @@ handle_extension() {
       fi
       ;;
 
-    # XML formats
-    iml | ucls | plist)
+		toml | conf | MF | cnf | desktop)
+      if (($HAS_PYGMENTS)); then
+        head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
+        exit 5
+      fi
+      ;;
 
+    # XML formats
+    iml | ucls | plist | back | xbel)
       if (($HAS_PYGMENTS)); then
         head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
         exit 5
       fi
       ;;
 
+		# automatically decompile Java's *.class files + highlight
     class)
-
-      # automatically decompile Java's *.class files + highlight
-
       if [[ -x $(command which javap 2>/dev/null) ]]; then
 
         if (($HAS_PYGMENTS)); then
@@ -165,7 +184,7 @@ handle_mime() {
 
 handle_fallback() {
   echo -e "${FILE_PATH}\n"
-  file --dereference --brief -- "${FILE_PATH}" && exit 5
+  file --dereference --brief -- "${FILE_PATH}" | fmt && exit 5
 }
 
 handle_extension
