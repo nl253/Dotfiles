@@ -31,16 +31,14 @@ for i in ['scrooloose/nerdcommenter', 'konfekt/fastfold', 'wellle/targets.vim']
 	Plug i
 endfor
 
+let g:NERDSpaceDelims = 1
+
 Plug 'majutsushi/tagbar', {'on': ['Tagbar', 'TagbarOpen']}
 
 aug TagBarAutoOpen
 	au!
-	if !&diff
-		au FileType java,javascript,python,rust,sh,cpp,php,zsh TagbarOpen
-	endif
+	au FileType java,javascript,python,rust,sh,cpp,php,zsh if !&diff | TagbarOpen | endif
 aug END
-
-let g:NERDSpaceDelims = 1
 
 if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
@@ -59,6 +57,15 @@ for i in ['tpope/vim-speeddating' , 'tpope/vim-repeat', 'tpope/vim-fugitive']
 	Plug i
 endfor
 
+if executable("cargo")
+	function! BuildComposer(info)
+		if a:info.status != 'unchanged' || a:info.force
+			silent call system(has('nvim') ? "cargo build --release" : "cargo build --release --no-default-features --features json-rpc")
+		endif
+	endfunction
+	Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+endif
+
 " A must have if you work with tmux
 if executable('tmux') && exists('$TMUX') | Plug 'tmux-plugins/vim-tmux-focus-events' | endif
 
@@ -70,6 +77,10 @@ set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%
 if has('unix')
 	Plug 'tpope/vim-eunuch', {'on' : ['Move', 'Remove', 'Find', 'Mkdir', 'Wall', 'SudoEdit', 
 									\ 'Chmod', 'SudoWrite', 'Unlink', 'Rename']} 
+endif
+
+if executable('ranger')
+	Plug 'francoiscabrol/ranger.vim'
 endif
 
 " Rust: 
@@ -90,7 +101,6 @@ endif
 
 
 if has('python') || has('python3')
-
 	Plug 'SirVer/ultisnips'
 	let g:UltiSnipsEditSplit = 'vertical'
 	let g:UltiSnipsSnippetDirectories = [expand('~/.vim/snips')]
@@ -289,7 +299,7 @@ let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']}
 
 call plug#end()
 
-if has('patch8') || has('nvim') 
+if has('patch8') || has('nvim')  " this needs to be called after plug#end()
 	call neomake#configure#automake('rw', 1000) 
 endif
 

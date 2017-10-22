@@ -134,7 +134,7 @@ handle_extension() {
       ;;
 
     # XML formats
-    iml | ucls | plist | back | xbel)
+    iml | ucls | plist | back | xbel | fo)
       if (($HAS_PYGMENTS)); then
         head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
         exit 5
