@@ -24,12 +24,14 @@ endsnippet
 snippet "curl|get|request" "HTTP GET request [java]" rb
 private static Optional<List<String>> get(String url) {
     try {
-    return Optional
-        .of(new BufferedReader(new InputStreamReader(new URL(url)
-                                     .openStream()))
-                .lines().collect(Collectors.toList()));
+	return Optional
+	    .of(new BufferedReader(new InputStreamReader(new URL(url)
+					 .openStream()))
+		    .lines().collect(Collectors.toList()));
     } catch (IOException e) {
-    return Optional.empty();
+	return Optional.empty();
+    } catch (final MalformedURLException e) {
+	return Optional.empty();
     }
 }
 endsnippet 

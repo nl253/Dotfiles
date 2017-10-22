@@ -108,7 +108,10 @@
     
     zip-it = "archive --format=zip --output=bundle.zip --verbose -9 HEAD"
     tar-it = "archive --format=tar --output=bundle.tar --verbose HEAD"
-    clean = "clean --interactive"
+	sevenz-it = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
+
+	root = rev-parse --show-toplevel
+	clean = "clean --interactive"
 
 [web]
     browser = firefox-developer
