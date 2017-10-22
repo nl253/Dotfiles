@@ -58,4 +58,6 @@ for i in ['~/node_modules/.bin',
 	endif
 endfor
 
-exec 'source '.s:vimdir.'/plugins.vim' 
+if filereadable(s:vimdir.'/plugins.vim')
+	exec 'source '.s:vimdir.'/plugins.vim' 
+endif

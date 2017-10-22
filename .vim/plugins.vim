@@ -1,26 +1,18 @@
 " vim: foldlevel=0 foldmethod=marker nowrap
 
-" VARIABLES:
+" VARIABLES: (unfortunates these need to be global)
 
 " MARKUP languages you actively use (markdown, rst asciidoc etc.)
-if !exists('g:MARKUP_LANGUAGES') 
-	let g:MARKUP_LANGUAGES = ['markdown', 'rst', 'vorg'] 
-endif
+let g:markup_languages = ['markdown', 'rst', 'vorg'] 
 
 " TEMPLATE languages you actively use (jinja, pug etc.)
-if !exists('g:TEMPLATE_LANGUAGES') 
-	let g:TEMPLATE_LANGUAGES = ['jinja'] 
-endif
+let g:template_languages = ['jinja'] 
 
-" STYLESHEET lanugages (css, pcss, postcss, stylus, sass etc.)
-if !exists('g:STYLESHEET_LANGUAGES') 
-	let g:STYLESHEET_LANGUAGES = ['css'] 
-endif
+" STYLESHEET languages (css, pcss, postcss, stylus, sass etc.)
+let g:stylesheet_languages = ['css'] 
 
 " PROGRAMMING LANGUAGES you code in  (python, c, cpp etc.)
-if !exists('g:PROGRAMMING_LANGUAGES')
-	let g:PROGRAMMING_LANGUAGES = ['html', 'sql', 'cpp', 'python', 'sh', 'vim']
-endif
+let g:programming_languages = ['html', 'sql', 'python', 'sh', 'vim', 'java']
 
 " Place Plugins Here:
 " ===================  
@@ -37,18 +29,18 @@ Plug 'majutsushi/tagbar', {'on': ['Tagbar', 'TagbarOpen']}
 
 aug TagBarAutoOpen
 	au!
-	au FileType java,javascript,python,rust,sh,cpp,php,zsh if !&diff | TagbarOpen | endif
+	au FileType java,javascript,python,rust,sh,cpp,php,zsh if !&diff && (winnr("$") == 1) | TagbarOpen | endif
 aug END
 
-if index(g:PROGRAMMING_LANGUAGES, 'vim') >= 0
+if index(g:programming_languages, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
-if has('unix')
+if has('unix') && empty(expand('~/AppData'))
 	Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
 endif
 
-Plug 'junegunn/fzf.vim'
+if executable('fzf') | Plug 'junegunn/fzf.vim' | endif
 
 let g:fzf_layout = {'up': '~40%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-s': 'split', 'ctrl-v': 'vsplit'}
@@ -57,13 +49,13 @@ for i in ['tpope/vim-speeddating' , 'tpope/vim-repeat', 'tpope/vim-fugitive']
 	Plug i
 endfor
 
-if executable("cargo")
+if executable('cargo') && index(g:markup_languages, 'markdown') >= 0
 	function! BuildComposer(info)
 		if a:info.status != 'unchanged' || a:info.force
 			silent call system(has('nvim') ? "cargo build --release" : "cargo build --release --no-default-features --features json-rpc")
 		endif
 	endfunction
-	Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+	Plug 'euclio/vim-markdown-composer', {'do': function('BuildComposer')}
 endif
 
 " A must have if you work with tmux
@@ -79,13 +71,9 @@ if has('unix')
 									\ 'Chmod', 'SudoWrite', 'Unlink', 'Rename']} 
 endif
 
-if executable('ranger')
-	Plug 'francoiscabrol/ranger.vim'
-endif
-
 " Rust: 
 
-if index(g:PROGRAMMING_LANGUAGES, 'rust') >= 0 && executable("rustc")
+if index(g:programming_languages, 'rust') >= 0 && executable('rustc')
 	for i in ["rust-lang/rust.vim"]
 		Plug i, {'for': 'rust'}
 	endfor
@@ -110,7 +98,7 @@ if has('python') || has('python3')
 	let g:snips_github = "https://github.com/nl253"
 
 	" Python:
-	if index(g:PROGRAMMING_LANGUAGES, 'python') >= 0 && executable("python")
+	if index(g:programming_languages, 'python') >= 0 && executable('python')
 		Plug 'davidhalter/jedi-vim', {'for': 'python'} 
 		let g:jedi#force_py_version = 3
 		let g:jedi#goto_command = "<C-]>"
@@ -119,17 +107,16 @@ if has('python') || has('python3')
 		let g:jedi#documentation_command = "<localleader>d"
 		let g:jedi#usages_command = "<localleader>u"
 		let g:jedi#rename_command = "<localleader>r"
-		let g:jedi#use_splits_not_buffers = "right"
+		let g:jedi#use_splits_not_buffers = 'right'
 		let g:jedi#show_call_signatures_delay = 200
 		Plug 'tmhedberg/SimpylFold', {'for': 'python'}
 	endif
 
-	if index(g:PROGRAMMING_LANGUAGES, 'cpp') >= 0 || index(g:PROGRAMMING_LANGUAGES, 'c')  >= 0
-
-		" CPP C:
+	" CPP C:
+	if index(g:programming_languages, 'cpp') >= 0 || index(g:programming_languages, 'c')  >= 0
 		Plug 'octol/vim-cpp-enhanced-highlight', {'for': ['c', 'cpp']}
 
-		if executable("clang")
+		if executable('clang')
 			Plug 'Rip-Rip/clang_complete', {'for': ['c', 'cpp'], 'do': 'make install'}
 			" path to directory where library can be found
 			let g:clang_library_path='/usr/lib/libclang.so.5.0'
@@ -151,13 +138,13 @@ endif
 
 " Haskell:
 
-if index(g:PROGRAMMING_LANGUAGES, 'haskell') >= 0
+if index(g:programming_languages, 'haskell') >= 0
 	Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 endif
 
 " Clojure:
 
-if index(g:PROGRAMMING_LANGUAGES, 'clojure') >= 0
+if index(g:programming_languages, 'clojure') >= 0
 	Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 endif
 
@@ -173,7 +160,7 @@ if has('patch8') || has('nvim')
 	let g:neomake_json_enabled_makers = ['jsonlint']
 	let g:neomake_python_enabled_makers = [] 
 
-	if index(g:PROGRAMMING_LANGUAGES, 'python') >= 0 
+	if index(g:programming_languages, 'python') >= 0 
 		for i in ['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama']
 			if executable(i)
 				call add(g:neomake_python_enabled_makers, i)
@@ -182,7 +169,7 @@ if has('patch8') || has('nvim')
 	endif
 
 	if executable('yarn')
-		if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 
+		if index(g:programming_languages, 'javascript') >= 0 
 			for i in ['eslint', 'standard']
 				for j in ['javascript', 'json']
 					execute 'let g:neomake_'.j.'_'.i.'_exe = "'.expand('~/.yarn/bin/'.i).'"'
@@ -206,33 +193,33 @@ endif
 
 " MARKUP:
 
-Plug 'dkarter/bullets.vim', {'for': g:MARKUP_LANGUAGES + ['gitcommit', 'gitconfig', 'yaml', 'cfg', 'conf', 'config']}
+Plug 'dkarter/bullets.vim', {'for': g:markup_languages + ['gitcommit', 'gitconfig', 'yaml', 'cfg', 'conf', 'config']}
 
-let g:bullets_enabled_file_types = g:MARKUP_LANGUAGES
+let g:bullets_enabled_file_types = g:markup_languages
 
-Plug 'dbmrq/vim-ditto', {'on': ['ToggleDitto', 'DittoOn'], 'for': g:MARKUP_LANGUAGES}
-let g:ditto_mode = "paragraph"
+Plug 'dbmrq/vim-ditto', {'on': ['ToggleDitto', 'DittoOn'], 'for': g:markup_languages}
+let g:ditto_mode = 'paragraph'
 
-exec "au! FileType ".join(g:MARKUP_LANGUAGES, ',')." DittoOn"
+exec "au! FileType ".join(g:markup_languages, ',')." DittoOn"
 
-Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:MARKUP_LANGUAGES}
+Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:markup_languages}
 
 " MARKDOWN:
-let g:markdown_fenced_languages = g:PROGRAMMING_LANGUAGES
+let g:markdown_fenced_languages = g:programming_languages
 let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
 
 for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
-	Plug i, {'for': ['xml', 'html', 'xhtml', 'php', 'markdown'] + g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES}
+	Plug i, {'for': ['xml', 'html', 'xhtml', 'php', 'markdown'] + g:stylesheet_languages + g:template_languages}
 endfor
 
-Plug 'othree/csscomplete.vim', {'for': g:STYLESHEET_LANGUAGES + ['xml', 'html', 'xhtml', 'php']}
+Plug 'othree/csscomplete.vim', {'for': g:stylesheet_languages + ['xml', 'html', 'xhtml', 'php']}
 let g:user_emmet_complete_tag = 1
 let g:emmet_html5 = 1
 let g:user_emmet_install_global = 0
 
-if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0 
+if index(g:programming_languages, 'javascript') >= 0 
 	for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
 		Plug i, {'for': ['javascript', 'typescript', 'xml' 'html', 'xhtml', 'php']}
 	endfor
@@ -241,7 +228,7 @@ if index(g:PROGRAMMING_LANGUAGES, 'javascript') >= 0
 		Plug i, {'for': ['javascript','xml' 'html', 'xhtml', 'php']}
 	endfor
 
-	if index(g:PROGRAMMING_LANGUAGES, 'typescript') >= 0 && executable("tsc")
+	if index(g:programming_languages, 'typescript') >= 0 && executable('tsc')
 		Plug 'leafgarland/typescript-vim', {'for': ['typescript']}
 	endif
 
@@ -253,21 +240,21 @@ endif
 
 Plug 'elzr/vim-json', {'for': 'json'}
 
-let g:used_javascript_libs = 'jquery,react,'
+let g:used_javascript_libs = 'jquery,'
 
 " Templating Engines:
 " -------------------
 
 " Pug:
-if index(g:TEMPLATE_LANGUAGES, 'pug') >= 0 ||  index(g:TEMPLATE_LANGUAGES, 'jade') >= 0 
+if index(g:template_languages, 'pug') >= 0 ||  index(g:template_languages, 'jade') >= 0 
 	Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
 	Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
 	au! FileType jade setl ft=pug 
 endif
 
 " Jinja Twig Nunjucks:
-for i in ["twig", "jinja"]
-	if index(g:TEMPLATE_LANGUAGES, i) >= 0
+for i in ['twig', 'jinja']
+	if index(g:template_languages, i) >= 0
 		Plug 'Glench/Vim-Jinja2-Syntax'
 		au! BufNewFile,BufRead *.{twig,njk} setl fs=jinja
 		break
@@ -276,34 +263,39 @@ endfor
 
 " PHP:
 
-if index(g:PROGRAMMING_LANGUAGES, 'php') >= 0 && executable("php")
+if index(g:programming_languages, 'php') >= 0 && executable('php')
 	Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
 endif
 
 " MY PLUGINS:
 " ==========
 
-if empty(expand('~/Projects/VimScript')) 
-	silent call mkdir('~/Projects/VimScript', 'p')
-endif
+try
+	if empty(expand('~/Projects/VimScript')) 
+		silent call mkdir('~/Projects/VimScript', 'p')
+	endif
 
-for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
-    Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Projects/VimScript/').plugin}
-endfor
+	for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
+		Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Projects/VimScript/').plugin}
+	endfor
 
-Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-markup'), 'for': g:MARKUP_LANGUAGES}
-Plug 'nl253/vim-programming', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-programming'), 'for': g:PROGRAMMING_LANGUAGES}
-Plug 'nl253/vim-webdev', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-webdev'), 'for': g:STYLESHEET_LANGUAGES + g:TEMPLATE_LANGUAGES + ['xml', 'javascript', 'typescript', 'markdown']}
+	Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-markup'), 'for': g:markup_languages}
+	Plug 'nl253/vim-programming', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-programming'), 'for': g:programming_languages}
+	Plug 'nl253/vim-webdev', {'frozen': 1, 'dir': expand('~/Projects/VimScript/vim-webdev'), 'for': g:stylesheet_languages + g:template_languages + ['xml', 'javascript', 'typescript', 'markdown']}
 
-let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
+	let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
+
+catch /.*/
+endtry
 
 call plug#end()
 
-if has('patch8') || has('nvim')  " this needs to be called after plug#end()
+" these need to be called after plug#end()
+if has('patch8') || has('nvim')  
 	call neomake#configure#automake('rw', 1000) 
 endif
 
-if has("unix") || (has('win32') && has('gui'))
+if $TERM =~ '256' || has('gui') || (has('nvim') && $TERM == '')
 	colorscheme fabulous
 else
 	colorscheme darkblue
