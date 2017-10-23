@@ -141,6 +141,13 @@ handle_extension() {
       fi
       ;;
 
+		puml)
+      if (($HAS_PYGMENTS)); then
+        head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l java
+        exit 5
+      fi
+			;;
+
 		# automatically decompile Java's *.class files + highlight
     class)
       if [[ -x $(command which javap 2>/dev/null) ]]; then
