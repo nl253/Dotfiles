@@ -20,10 +20,10 @@ let g:NERDSpaceDelims = 1
 
 Plug 'majutsushi/tagbar', {'on': ['Tagbar', 'TagbarOpen']}
 
-aug TagBarAutoOpen
-	au!
-	au FileType java,javascript,python,rust,sh,cpp,php,zsh if !&diff && (winnr("$") == 1) | TagbarOpen | endif
-aug END
+" aug TagBarAutoOpen
+	" au!
+	" au FileType java,javascript,python,rust,sh,cpp,php,zsh if !&diff && (winnr("$") == 1) | TagbarOpen | endif
+" aug END
 
 if index(g:programming_languages, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'

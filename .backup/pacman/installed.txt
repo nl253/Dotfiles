@@ -90,6 +90,7 @@ gnome-user-share
 gnome-wallpapers
 go
 gparted
+gradle
 graphviz
 grep
 grub
@@ -214,6 +215,7 @@ p7zip
 pacman
 pacui
 pamac
+papyrus
 patch
 pciutils
 pcmciautils
@@ -336,4 +338,5 @@ xorg-xinit
 xscreensaver
 xtail
 yaourt
+yed
 zd1211-firmware
