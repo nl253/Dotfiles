@@ -2,16 +2,9 @@
 
 " VARIABLES: (unfortunates these need to be global)
 
-" MARKUP languages you actively use (markdown, rst asciidoc etc.)
 let g:markup_languages = ['markdown', 'rst', 'vorg'] 
-
-" TEMPLATE languages you actively use (jinja, pug etc.)
 let g:template_languages = ['jinja'] 
-
-" STYLESHEET languages (css, pcss, postcss, stylus, sass etc.)
 let g:stylesheet_languages = ['css'] 
-
-" PROGRAMMING LANGUAGES you code in  (python, c, cpp etc.)
 let g:programming_languages = ['html', 'sql', 'python', 'sh', 'vim', 'java']
 
 " Place Plugins Here:
@@ -36,9 +29,9 @@ if index(g:programming_languages, 'vim') >= 0
 	Plug 'vim-scripts/SyntaxAttr.vim'
 endif
 
-if has('unix') && empty(expand('~/AppData'))
+" if has('unix') && empty(expand('~/AppData'))
 	Plug 'junegunn/fzf', {'dir': expand('~/.local/share/fzf'), 'do': './install --bin'}
-endif
+" endif
 
 if executable('fzf') | Plug 'junegunn/fzf.vim' | endif
 
@@ -210,14 +203,20 @@ let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 " WEB DEV:
 
-for i in ['othree/html5.vim', 'othree/html5-syntax.vim', 'mattn/emmet-vim']
+for i in ['othree/html5.vim', 'othree/html5-syntax.vim']
 	Plug i, {'for': ['xml', 'html', 'xhtml', 'php', 'markdown'] + g:stylesheet_languages + g:template_languages}
 endfor
 
+" if has('nvim') || (has('python3') || has('python'))
+	" Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'xhtml', 'php', 'markdown'] + g:stylesheet_languages + g:template_languages}
+	" let g:user_emmet_expandabbr_key = '<Tab>'
+	" " let g:user_emmet_complete_tag = 1
+	" " let g:user_emmet_mode = 'i'
+	" let g:emmet_html5 = 1
+	" " let g:user_emmet_install_global = 0 
+" endif
+
 Plug 'othree/csscomplete.vim', {'for': g:stylesheet_languages + ['xml', 'html', 'xhtml', 'php']}
-let g:user_emmet_complete_tag = 1
-let g:emmet_html5 = 1
-let g:user_emmet_install_global = 0
 
 if index(g:programming_languages, 'javascript') >= 0 
 	for i in ['othree/javascript-libraries-syntax.vim', 'moll/vim-node', 'Quramy/vim-js-pretty-template', 'Quramy/tsuquyomi']
