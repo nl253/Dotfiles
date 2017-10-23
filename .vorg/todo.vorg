@@ -239,6 +239,9 @@
 
 	>>>> Algorithms (including Big O score)
 
+	    >>> Resources
+	    <https://github.com/tayllan/awesome-algorithms>
+
 	    >>>>> Sorting 
 
 	    + quicksort
