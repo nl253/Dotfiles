@@ -134,7 +134,8 @@ fi
 #
 _in_path psql && alias psql='psql --single-line'
 _in_path sqlite3 && alias sqlite3="sqlite3 -init \${HOME}/.sqliterc"
-_in_path mysql && [[ $(hostname) =~ raptor ]] && alias mysql-dragon='mysql -u nl253 -p -h dragon.kent.ac.uk nl253'
+_in_path mysql && [[ $(hostname) =~ raptor ]] && alias mysql-dragon='mysql -u nl253 -p -h dragon.kent.ac.uk nl253' 
+_in_path mycli && [[ $(hostname) =~ raptor ]] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253' 
 
 # Haskell 
 # ----------
@@ -147,8 +148,6 @@ _in_path mysql && [[ $(hostname) =~ raptor ]] && alias mysql-dragon='mysql -u nl
 for i in ghc{i,} hoogle haddock; do
     eval "alias "${i}"='stack "${i}"'"
 done
-
-
 
 unset -f _in_path
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} nowrap formatoptions=
