@@ -3,9 +3,14 @@
 
     >>> Stages
 
-	1. Requirements
-	2. Planning
-	3. Testing
+	There are following six phases in *every* software development life cycle model:
+
+	1. Requirement gathering and analysis.
+	2. Design.
+	3. Implementation or coding.
+	4. Testing.
+	5. Deployment.
+	6. Maintenance.
 
     >>> Approaches
 
@@ -62,12 +67,9 @@
 
 	>>> Resources
 
-	default methods in interfaces
-	    - <http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html>
-	java.lang.Enum
-	    - <http://docs.oracle.com/javase/8/docs/technotes/guides/language/enums.html>
-	reflection api
-	    - <https://docs.oracle.com/javase/tutorial/reflect/index.html>
+	default methods in interfaces <http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html>
+	java.lang.Enum <http://docs.oracle.com/javase/8/docs/technotes/guides/language/enums.html>
+	reflection api <https://docs.oracle.com/javase/tutorial/reflect/index.html>
 	<https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/#refs>
 
     >> Collections (Data Structures)
@@ -312,6 +314,27 @@
     - configure cgi scripts (python, php, java ...)
 
     >> SQL
+
+    >> CSS
+
+	>>> Selectors
+
+	- nth child
+
+    >> JQuery
+
+
+	>>> Useful functions
+
+	- `$(#id).hide()`
+
+	>>> AJAX
+
+	>>> Plugins
+
+	- <https://jqueryvalidation.org/>
+	- <http://jqueryui.com/demos/>
+	    + https://jqueryui.com/datepicker/
 
 > OTHER
 

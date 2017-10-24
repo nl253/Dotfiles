@@ -118,6 +118,14 @@ handle_extension() {
       elinks -dump "${FILE_PATH}" && exit 5
       ;;
 
+		# Generic text files
+		txt)
+      if (($HAS_PYGMENTS)); then
+        head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
+        exit 5
+      fi
+      ;;
+
 		# PHP
 		php)
       if (($HAS_PYGMENTS)); then
