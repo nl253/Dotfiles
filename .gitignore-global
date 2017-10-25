@@ -44,9 +44,23 @@ target/
 build/
 dist/
 *.class
+*.jar
+*.o
 
 ## python
 .eggs/
 *.egg
 develop-eggs/
 
+## archives
+*.zip
+*.tar
+*.gzip
+*.7z
+*.bz2
+*.gz
+*.xz
+
+## documents
+*.pdf
+*.docx
