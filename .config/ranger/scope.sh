@@ -170,7 +170,9 @@ handle_extension() {
 					echo -e "\nTable ${table_name}\n"
 					command sqlite3 -column -header -init '' ${FILE_PATH} 'SELECT * FROM '"${table_name} LIMIT ${PV_HEIGHT}"
 				else
-					command sqlite3 ${FILE_PATH} .tables
+					echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
+					echo -e "\nTables\n"
+					command sqlite3 -init '' ${FILE_PATH} .tables
 				fi
 			fi
 			exit 5
