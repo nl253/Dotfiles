@@ -10,7 +10,7 @@ IFS=$'\n'
 # - pygmentize
 # - tar
 # - unrar
-# - atool 
+# - atool
 # - bsdtar
 # - transmission
 # - odt2txt
@@ -35,7 +35,7 @@ IFS=$'\n'
 # 3    | fix width  | Don't reload when width changes
 # 4    | fix height | Don't reload when height changes
 # 5    | fix both   | Don't ever reload
-# 6    | image      | Display the image `$IMAGE_CACHE_PATH` points to as an image preview
+# 6    | image      | Display the image  "${IMAGE_CACHE_PATH}"  points to as an image preview
 # 7    | image      | Display the file directly as an image
 
 # Script arguments
@@ -69,15 +69,15 @@ handle_extension() {
       exit 1
       ;;
 
-		tar.gz)
-			command tar -ztf "${FILE_PATH}"
-		;;
+    tar.gz)
+      command tar -ztf "${FILE_PATH}"
+      ;;
 
-		tar.bz2)
-			command tar -jtf "${FILE_PATH}"
-		;;
+    tar.bz2)
+      command tar -jtf "${FILE_PATH}"
+      ;;
 
-		gzip | bzip2 | 7z)
+    gzip | bzip2 | 7z)
       # Avoid password prompt by providing empty password
       command 7z l -p -- "${FILE_PATH}" && exit 5
       exit 1
@@ -118,79 +118,78 @@ handle_extension() {
       command elinks -dump "${FILE_PATH}" && exit 5
       ;;
 
-		css)
-			if [[ $(command which css-beautify) ]] && (($HAS_PYGMENTS)); then
-				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css
-				exit 5
-			fi
-			;;
-
-		js | ts)
-			if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
-				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l javascript 
-				exit 5
-			fi
-			;;
-
-		json)
-			if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
-				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json 
-				exit 5
-			fi
-			;;
-
-		java | cpp | c | h | hpp | cs | c++ | hh| hxx | cp)
-			if [[ $(command which astyle) ]] && (($HAS_PYGMENTS)); then
-				local filetype=$(pygmentize -N "${FILE_PATH}") 
-				command cat $FILE_PATH | command astyle --mode="${filetype}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" || break
-				exit 5
-			fi
-			;;
-
-		docx)
-			# unzip, strip tags
-			if [[ -x $(command which unzip 2>/dev/null) ]]; then
-				command unzip -p ${FILE_PATH} word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w ${PV_WIDTH} | command head -n ${PV_HEIGHT} 
-				exit 5
-			fi
-			;;
-
-		md | m*down)
-
-			if [[ -x $(command which pandoc 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-				pandoc --self-contained -f markdown_github -t html ${FILE_PATH} | elinks -dump
-				exit 5
-			fi
-		;;
-
-		rst)
-			if [[ -x ~/.local/bin/rst2html5.py ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-				~/.local/bin/rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' ${FILE_PATH} | elinks -dump
-				exit 5
-			fi
-		;;
-
-		# Generic text files
-		txt)
-      if (($HAS_PYGMENTS)); then
-				if [[ $(basename $FILE_PATH) =~ requirements ]] || [[ $(basename $(dirname $FILE_PATH)) =~ requirements ]]; then
-					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
-				else
-					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | fmt -u -w ${PV_WIDTH} | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
-				fi
+    css)
+      if [[ $(command which css-beautify) ]] && (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css
         exit 5
       fi
       ;;
 
-		# PHP
-		php)
+    js | ts)
+      if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l javascript
+        exit 5
+      fi
+      ;;
+
+    json)
+      if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json
+        exit 5
+      fi
+      ;;
+
+    java | cpp | c | h | hpp | cs | c++ | hh | hxx | cp)
+      if [[ $(command which astyle) ]] && (($HAS_PYGMENTS)); then
+        local filetype=$(pygmentize -N "${FILE_PATH}")
+        command cat "${FILE_PATH}" | command astyle --mode="${filetype}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" || break
+        exit 5
+      fi
+      ;;
+
+    docx)
+      # unzip, strip tags
+      if [[ -x $(command which unzip 2>/dev/null) ]]; then
+        command unzip -p "${FILE_PATH}" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w "${PV_WIDTH}" | command head -n ${PV_HEIGHT}
+        exit 5
+      fi
+      ;;
+
+    md | m*down)
+      if [[ -x $(command which pandoc 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
+        pandoc --self-contained -f markdown_github -t html "${FILE_PATH}" | elinks -dump
+        exit 5
+      fi
+      ;;
+
+    rst)
+      if [[ -x ~/.local/bin/rst2html5.py ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
+        ~/.local/bin/rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' "${FILE_PATH}" | elinks -dump
+        exit 5
+      fi
+      ;;
+
+    # Generic text files
+    txt)
+      if (($HAS_PYGMENTS)); then
+        if [[ $(basename "${FILE_PATH}") =~ requirements ]] || [[ $(basename $(dirname "${FILE_PATH}")) =~ requirements ]]; then
+          command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
+        else
+          command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | fmt -u -w "${PV_WIDTH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
+        fi
+        exit 5
+      fi
+      ;;
+
+    # PHP
+    php)
       if (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l html+php
         exit 5
       fi
       ;;
 
-		toml | conf | MF | cnf | desktop)
+    toml | conf | MF | cnf | desktop)
       if (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
         exit 5
@@ -199,38 +198,41 @@ handle_extension() {
 
     # XML formats
     iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro)
-			if (($HAS_PYGMENTS)) && [[ -x $(command which html-beautify 2>/dev/null) ]]; then
-				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
-				exit 5
+      if (($HAS_PYGMENTS)) && [[ -x $(command which html-beautify 2>/dev/null) ]]; then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
+        exit 5
+      elif (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
+        exit 5
       fi
       ;;
 
-		puml)
+    puml)
       if (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l java
         exit 5
       fi
-			;;
+      ;;
 
-		sqlite*)
+    sqlite*)
 
-			if [[ -x $(command which sqlite3 2>/dev/null) ]]; then
-				local no_tables=$(command sqlite3 -noheader -init '' ${FILE_PATH} .tables | grep -Ec '^[-a-zA-Z0-9_]+')
-				if (($no_tables == 1)); then
-					local table_name=$(command sqlite3 -init "" ${FILE_PATH} .tables | head -n 1)
-					echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
-					echo -e "\nTable ${table_name}\n"
-					command sqlite3 -column -header -init '' ${FILE_PATH} 'SELECT * FROM '"${table_name} LIMIT ${PV_HEIGHT}"
-				else
-					echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
-					echo -e "\nTables\n"
-					command sqlite3 -init '' ${FILE_PATH} .tables
-				fi
-			fi
-			exit 5
-			;;
+      if [[ -x $(command which sqlite3 2>/dev/null) ]]; then
+        local no_tables=$(command sqlite3 -noheader -init '' "${FILE_PATH}" .tables | grep -Ec '^[-a-zA-Z0-9_]+')
+        if (($no_tables == 1)); then
+          local table_name=$(command sqlite3 -init "" "${FILE_PATH}" .tables | head -n 1)
+          echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
+          echo -e "\nTable ${table_name}\n"
+          command sqlite3 -column -header -init '' "${FILE_PATH}" 'SELECT * FROM '"${table_name} LIMIT ${PV_HEIGHT}"
+        else
+          echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
+          echo -e "\nTables\n"
+          command sqlite3 -init '' "${FILE_PATH}" .tables
+        fi
+      fi
+      exit 5
+      ;;
 
-		# automatically decompile Java's *.class files + highlight
+    # automatically decompile Java's *.class files + highlight
     class)
       if [[ -x $(command which javap 2>/dev/null) ]]; then
 
@@ -273,7 +275,7 @@ handle_mime() {
 
 handle_fallback() {
   echo -e "${FILE_PATH}\n"
-  command file --dereference --brief -- "${FILE_PATH}" | command fmt -w -U ${PV_WIDTH} && exit 5
+  command file --dereference --brief -- "${FILE_PATH}" | command fmt -w -U "${PV_WIDTH}" && exit 5
 }
 
 handle_extension
