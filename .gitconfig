@@ -106,9 +106,9 @@
     # form tpope
     recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
     
-    zip-it = "archive --format=zip --output=bundle.zip --verbose -9 HEAD"
-    tar-it = "archive --format=tar --output=bundle.tar --verbose HEAD"
-	sevenz-it = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
+    archive-zip = "archive --format=zip --output=bundle.zip --verbose -9 HEAD"
+    archive-tar = "archive --format=tar --output=bundle.tar --verbose HEAD"
+	archive-7z = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
 
 	root = rev-parse --show-toplevel
 	clean = "clean --interactive"

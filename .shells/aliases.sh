@@ -72,7 +72,10 @@ fi
 # - rsync
 # - python3
 # -----------------------------------
-_in_path python3 && alias http-server-python="python3 -m http.server"
+if _in_path python3; then
+	alias http-server-python="python3 -m http.server" 
+	alias pip-update-packages="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+fi
 
 # note the php server requires index.php in the root dir
 _in_path php && alias http-server-php="php -S 0.0.0.0:5000"
@@ -124,6 +127,15 @@ if _in_path git; then
     if _in_path hub; then
 	eval "$(hub alias -s)"
     fi
+fi
+
+# Archiving
+# --------------------------
+# REQUIRES 
+# - 7z 
+
+if [[ -x $(command which 7z) ]]; then
+	alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 fi
 
 # Databases 
