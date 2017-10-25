@@ -121,7 +121,11 @@ handle_extension() {
 		# Generic text files
 		txt)
       if (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
+				if [[ $(basename $FILE_PATH) =~ requirements ]] || [[ $(basename $(dirname $FILE_PATH)) =~ requirements ]]; then
+					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
+				else
+					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
+				fi
         exit 5
       fi
       ;;
@@ -228,11 +232,11 @@ handle_mime() {
 
 handle_fallback() {
   echo -e "${FILE_PATH}\n"
-  command file --dereference --brief -- "${FILE_PATH}" | fmt && exit 5
+  command file --dereference --brief -- "${FILE_PATH}" | command fmt && exit 5
 }
 
 handle_extension
-handle_mime $(file --dereference --brief --mime-type -- "${FILE_PATH}")
+handle_mime $(command file --dereference --brief --mime-type -- "${FILE_PATH}")
 handle_fallback
 
 exit 1
