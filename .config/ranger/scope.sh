@@ -62,7 +62,7 @@ handle_extension() {
   case "${FILE_EXTENSION_LOWER}" in
 
     # Archive
-    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | docx | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
+    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
 
       command atool --list -- "${FILE_PATH}" && exit 5
       command bsdtar --list --file "${FILE_PATH}" && exit 5
@@ -111,12 +111,64 @@ handle_extension() {
       ;;
 
     # HTML
-    htm | html | xhtml)
+    html | xhtml)
       # Preview as text conversion
       command w3m -dump "${FILE_PATH}" && exit 5
       command lynx -dump -- "${FILE_PATH}" && exit 5
       command elinks -dump "${FILE_PATH}" && exit 5
       ;;
+
+		css)
+			if [[ $(command which css-beautify) ]] && (($HAS_PYGMENTS)); then
+				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css
+				exit 5
+			fi
+			;;
+
+		js | ts)
+			if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
+				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l javascript 
+				exit 5
+			fi
+			;;
+
+		json)
+			if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
+				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json 
+				exit 5
+			fi
+			;;
+
+		java | cpp | c | h | hpp | cs | c++ | hh| hxx | cp)
+			if [[ $(command which astyle) ]] && (($HAS_PYGMENTS)); then
+				local filetype=$(pygmentize -N "${FILE_PATH}") 
+				command cat $FILE_PATH | command astyle --mode="${filetype}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" || break
+				exit 5
+			fi
+			;;
+
+		docx)
+			# unzip, strip tags
+			if [[ -x $(command which unzip 2>/dev/null) ]]; then
+				command unzip -p ${FILE_PATH} word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w ${PV_WIDTH} | command head -n ${PV_HEIGHT} 
+				exit 5
+			fi
+			;;
+
+		md | m*down)
+
+			if [[ -x $(command which pandoc 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
+				pandoc --self-contained -f markdown_github -t html ${FILE_PATH} | elinks -dump
+				exit 5
+			fi
+		;;
+
+		rst)
+			if [[ -x ~/.local/bin/rst2html5.py ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
+				~/.local/bin/rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' ${FILE_PATH} | elinks -dump
+				exit 5
+			fi
+		;;
 
 		# Generic text files
 		txt)
@@ -147,9 +199,9 @@ handle_extension() {
 
     # XML formats
     iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro)
-      if (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
-        exit 5
+			if (($HAS_PYGMENTS)) && [[ -x $(command which html-beautify 2>/dev/null) ]]; then
+				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
+				exit 5
       fi
       ;;
 
@@ -218,19 +270,6 @@ handle_mime() {
 
   esac
 }
-
-# handle_filename() {
-
-	# case $FILE_PATH in
-	# "$quit")
-			# echo "Exiting."
-			# break
-			# ;;
-	# *)
-			# echo "You picked $filename ($REPLY)"
-			# ;;
-	# esac
-# }
 
 handle_fallback() {
   echo -e "${FILE_PATH}\n"
