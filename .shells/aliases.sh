@@ -75,6 +75,7 @@ fi
 if _in_path python3; then
 	alias http-server-python="python3 -m http.server" 
 	alias pip-update-packages="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+	[[ -x $(command which ipython3 2>/dev/null) ]] && alias ipython=ipython3
 fi
 
 # note the php server requires index.php in the root dir
@@ -134,7 +135,7 @@ fi
 # REQUIRES 
 # - 7z 
 
-if [[ -x $(command which 7z) ]]; then
+if [[ -x $(command which 7z 2>/dev/null) ]]; then
 	alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 fi
 
