@@ -1,28 +1,52 @@
-**/.cache*
-**/.cache**
-*-log
-*.bak
-*.class
-.mypy_cache/
-*.db
-*.lock
+## rubbish
+
 *.log
+*-log
+
+## database
+
 *.sqlite
+*.db
 *.sqlite3
+
+## tmp files
+
 *.swap
 *.swp
+*.bak
 *.tmp
 *~
 .**/*-cache
+.mypy_cache/
+**/.cache*
+**/.cache**
+
+## VCS
+
 .git/
-.idea/ 
-out/
-.vscode/
+.idea/
+
+## package managers
+
 node_modules/
-package-lock.json
+*-lock.json
+*.lock
+
+## vim
+
 tags
-develop-eggs/
+
+## artifacts
+
+out/
+docs/
+target/
 build/
 dist/
+*.class
+
+## python
 .eggs/
 *.egg
+develop-eggs/
+
