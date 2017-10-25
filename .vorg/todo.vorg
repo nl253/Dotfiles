@@ -29,7 +29,7 @@
 
 	>>>>> Resources 
 
-	<http://www.uml-diagrams.org/use-case-diagrams-how-to.html>
+	- <http://www.uml-diagrams.org>
 
 	>>>> Interaction
 
@@ -43,9 +43,9 @@
 
 	- Activity diagrams
 
-	>>>>> Extra 
+	>>>>> Tools 
 
-	- <http://plantuml.com/use-case-diagram>
+	- <http://plantuml.com>
 
     >>> Design Patterns
 
@@ -70,7 +70,7 @@
 	default methods in interfaces <http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html>
 	java.lang.Enum <http://docs.oracle.com/javase/8/docs/technotes/guides/language/enums.html>
 	reflection api <https://docs.oracle.com/javase/tutorial/reflect/index.html>
-	<https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/#refs>
+	<https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator>
 
     >> Collections (Data Structures)
 
@@ -188,43 +188,55 @@
 	- jaxp <https://docs.oracle.com/javase/tutorial/jaxp/index.html>
 	- For-each Loop <http://docs.oracle.com/javase/8/docs/technotes/guides/language/foreach.html>
 	- type annotations
-	- Advanced Exception Handling <http://docs.oracle.com/javase/8/docs/technotes/guides/language/catch-multiple.html> <http://docs.oracle.com/javase/8/docs/technotes/guides/language/try-with-resources.html>
-
+	- Advanced Exception Handling
+	    + <http://docs.oracle.com/javase/8/docs/technotes/guides/language/catch-multiple.html>
+	    + <http://docs.oracle.com/javase/8/docs/technotes/guides/language/try-with-resources.html>
 
     >> Libraries
 
 	>>> Testing
 
-	JUnit
+	JUnit !!!
 
 	>>> Parsing
 
-	ANTLR4
+	ANTLR4 (?)
 
     >> Java Tools
 
-	- javadoc (`man javadoc`)
-	- javac (`man javadoc`)
-	- maven (`mvn -h`)
+	- javadoc
+	- javac
+	- java
 	- jar
-	- MANIFEST
+	- MANIFEST files
 	- Apache Maven
 
 > PYTHON
 
     >> Orm
 
-    - SQLAlchemy <https://www.sqlalchemy.org/>
+    - SQLAlchemy <https://www.sqlalchemy.org> !
+
+    >> Templating Language
+
+    - Jinja2 <http://jinja.pocoo.org/docs/2.9/>
+
+    >> CLI
+
+    - prompt\_toolkit <https://github.com/jonathanslenders/python-prompt-toolkit>
+    - argparse <https://docs.python.org/3/library/argparse.html>
+    - docopt <http://docopt.org>
 
     >> XML
 
-    - Lxml <http://lxml.de/>
+    - Lxml <http://lxml.de/> (including xpath)
 
     >> Data Analysis
 
-	1. Numpy <http://www.numpy.org/>
-	2. Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html>
-	3. Visualization (Matplotlib, Seaborn)
+    1. Numpy <http://www.numpy.org> !
+    2. Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html> !!!
+    3. Visualization (Matplotlib, Seaborn) !
+    4. IPython Notebook (Jupyter) !
 
 > COMPUTER SCIENCE
 
@@ -240,10 +252,12 @@
 	+ manipulation, algebraic properties
 	    * logarithms
 
-	>>>> Algorithms (including Big O score)
+	>>>> Algorithms (including Big O score) !!!
 
 	    >>> Resources
+	    <https://www.quora.com/What-algorithm-questions-were-you-asked-at-an-Amazon-Microsoft-and-or-Google-interview?srid=Rut6>
 	    <https://github.com/tayllan/awesome-algorithms>
+	    <https://www.youtube.com/playlist?list=PLGLfVvz_LVvReUrWr94U-ZMgjYTQ538nT>
 
 	    >>>>> Sorting 
 
@@ -256,16 +270,35 @@
 
 	    + binary search
 
-    >> Concepts
+	    >>>>> Graphs
+
+	    + depth search first
+	    + breadth search first
+	    + shortest route - Dijkstra
+
+	>>>> Data Structures
+
+	    >>>>> Lists
+
+	    + array lists
+	    + linked lists
+	    + doubly linked lists
+	    + circular linked list
+
+	    >>>>> Trees
+
+	    + binary trees
+
+    >> Concepts !!
 
 	>>> Concurrency
 
+	+ multiprocessing vs multithreading
 	+ parallelism
 	+ coroutines
 	+ threads
-	+ fibers
 	+ subroutines
-	+ multiprocessing vs multithreading
+	+ fibers
 
 	>>> Operating Systems
 
@@ -276,6 +309,7 @@
 	+ processes in sandboxes
 	+ fork() / spawn()
 	+ system calls
+	+ multiprocessing vs multithreading
 	+ caching
 
 	>>> Theory of Computation
