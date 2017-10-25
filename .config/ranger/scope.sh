@@ -124,7 +124,7 @@ handle_extension() {
 				if [[ $(basename $FILE_PATH) =~ requirements ]] || [[ $(basename $(dirname $FILE_PATH)) =~ requirements ]]; then
 					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
 				else
-					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
+					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | fmt -u -w ${PV_WIDTH} | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
 				fi
         exit 5
       fi
@@ -146,7 +146,7 @@ handle_extension() {
       ;;
 
     # XML formats
-    iml | ucls | plist | back | xbel | fo)
+    iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro)
       if (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
         exit 5
@@ -232,7 +232,7 @@ handle_mime() {
 
 handle_fallback() {
   echo -e "${FILE_PATH}\n"
-  command file --dereference --brief -- "${FILE_PATH}" | command fmt && exit 5
+  command file --dereference --brief -- "${FILE_PATH}" | command fmt -w -U ${PV_WIDTH} && exit 5
 }
 
 handle_extension

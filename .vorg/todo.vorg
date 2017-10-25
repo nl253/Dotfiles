@@ -309,7 +309,7 @@
 	+ scheduling
 	+ allocation of resources (cpu time, memory)
 	+ processes in sandboxes
-	+ system calls
+	+ system calls <http://www.linfo.org/system_call.html>
 	+ caching
 
 	>>> Theory of Computation
