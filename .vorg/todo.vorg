@@ -299,17 +299,17 @@
 	+ threads
 	+ subroutines
 	+ fibers
+	+ fork() / spawn()
 
 	>>> Operating Systems
 
+	+ kernels
 	+ memory managment
 	+ virtual memory (mapping)
 	+ scheduling
 	+ allocation of resources (cpu time, memory)
 	+ processes in sandboxes
-	+ fork() / spawn()
 	+ system calls
-	+ multiprocessing vs multithreading
 	+ caching
 
 	>>> Theory of Computation
