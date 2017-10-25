@@ -45,10 +45,7 @@ PV_HEIGHT="${3}"        # Height of the preview pane (number of fitting characte
 IMAGE_CACHE_PATH="${4}" # Full path that should be used to cache image preview
 PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwise.
 
-FILE_EXTENSION="${FILE_PATH##*.}"
-FILE_EXTENSION_LOWER="${FILE_EXTENSION,,}"
-
-[[ $(command which pygmentize) ]] && HAS_PYGMENTS=1 || HAS_PYGMENTS=0
+[[ $(command which pygmentize 2>/dev/null) ]] && HAS_PYGMENTS=1 || HAS_PYGMENTS=0
 
 # Settings
 HIGHLIGHT_SIZE_MAX=262143 # 256KiB
@@ -59,98 +56,20 @@ PYGMENTIZE_STYLE='autumn'
 [[ "$(tput colors)" -ge 256 ]] && PYGMENTIZE_FORMAT='terminal256' || PYGMENTIZE_FORMAT='terminal'
 
 handle_extension() {
-  case "${FILE_EXTENSION_LOWER}" in
 
-    # Archive
-    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
+  case "${FILE_PATH#*.}" in
 
-      command atool --list -- "${FILE_PATH}" && exit 5
-      command bsdtar --list --file "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
-
-    tar.gz)
-      command tar -ztf "${FILE_PATH}"
-      ;;
-
-    tar.bz2)
-      command tar -jtf "${FILE_PATH}"
-      ;;
-
-    gzip | bzip2 | 7z)
-      # Avoid password prompt by providing empty password
-      command 7z l -p -- "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
-
-    rar)
-      # Avoid password prompt by providing empty password
-      command unrar lt -p- -- "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
-
-    # PDF
-    pdf)
-      # Preview as text conversion
-      command pdftotext -l 10 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
-      command exiftool "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
-
-    # BitTorrent
-    torrent)
-      command transmission-show -- "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
-
-    # OpenDocument
-    odt | ods | odp | sxw)
-      # Preview as text conversion
-      command odt2txt "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
-
-    # HTML
-    html | xhtml)
-      # Preview as text conversion
-      command w3m -dump "${FILE_PATH}" && exit 5
-      command lynx -dump -- "${FILE_PATH}" && exit 5
-      command elinks -dump "${FILE_PATH}" && exit 5
-      ;;
-
-    css)
-      if [[ $(command which css-beautify) ]] && (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css
-        exit 5
-      fi
-      ;;
-
-    js | ts)
-      if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l javascript
+    java | cpp | c | h | hpp | cs | c++ | hh | hxx | cp)
+      if [[ -x $(command which astyle 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
+        local filetype=$(pygmentize -N "${FILE_PATH}")
+        command astyle --mode="${filetype}" <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}"
         exit 5
       fi
       ;;
 
     json)
-      if [[ $(command which js-beautify) ]] && (($HAS_PYGMENTS)); then
+      if [[ -x $(command which js-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json
-        exit 5
-      fi
-      ;;
-
-    java | cpp | c | h | hpp | cs | c++ | hh | hxx | cp)
-      if [[ $(command which astyle) ]] && (($HAS_PYGMENTS)); then
-        local filetype=$(pygmentize -N "${FILE_PATH}")
-        command cat "${FILE_PATH}" | command astyle --mode="${filetype}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" || break
-        exit 5
-      fi
-      ;;
-
-    docx)
-      # unzip, strip tags
-      if [[ -x $(command which unzip 2>/dev/null) ]]; then
-        command unzip -p "${FILE_PATH}" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w "${PV_WIDTH}" | command head -n ${PV_HEIGHT}
         exit 5
       fi
       ;;
@@ -162,10 +81,42 @@ handle_extension() {
       fi
       ;;
 
+    tar.gz)
+      command tar -ztf "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
+    tar.bz2)
+      command tar -jtf "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
+    gzip | bzip2 | 7z)
+      # Avoid password prompt by providing empty password
+      if [[ -x $(command which 7z) ]]; then
+        command 7z l -p -- "${FILE_PATH}" && exit 5
+      fi
+      exit 1
+      ;;
+
+    # Archive
+    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
+      command atool --list -- "${FILE_PATH}" && exit 5
+      command bsdtar --list --file "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
+    # HTML
+    *html)
+      # Preview as text conversion
+      command elinks -dump "${FILE_PATH}" && exit 5
+      command w3m -dump "${FILE_PATH}" && exit 5
+      command lynx -dump -- "${FILE_PATH}" && exit 5
+      ;;
+
     rst)
-      if [[ -x ~/.local/bin/rst2html5.py ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-        ~/.local/bin/rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' "${FILE_PATH}" | elinks -dump
-        exit 5
+      if [[ -x $(command which rst2html5.py 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
+        rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' "${FILE_PATH}" | elinks -dump && exit 5
       fi
       ;;
 
@@ -181,6 +132,21 @@ handle_extension() {
       fi
       ;;
 
+    # PDF
+    pdf)
+      # Preview as text conversion
+      command pdftotext -l 10 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
+      command exiftool "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
+    js | ts)
+      if [[ -x $(command which js-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l javascript
+        exit 5
+      fi
+      ;;
+
     # PHP
     php)
       if (($HAS_PYGMENTS)); then
@@ -189,7 +155,30 @@ handle_extension() {
       fi
       ;;
 
+    docx)
+
+      # unzip, strip tags
+      if [[ -x $(command which unzip 2>/dev/null) ]]; then
+        command unzip -p "${FILE_PATH}" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w "${PV_WIDTH}" | command head -n ${PV_HEIGHT}
+        exit 5
+      fi
+      ;;
+
+    # OpenDocument
+    odt | ods | odp | sxw)
+      # Preview as text conversion
+      command odt2txt "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
+    rar)
+      # Avoid password prompt by providing empty password
+      command unrar lt -p- -- "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
     toml | conf | MF | cnf | desktop)
+
       if (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
         exit 5
@@ -204,6 +193,12 @@ handle_extension() {
       elif (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
         exit 5
+      fi
+      ;;
+
+    css)
+      if [[ -x $(command which css-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css && exit 5
       fi
       ;;
 
@@ -235,51 +230,41 @@ handle_extension() {
     # automatically decompile Java's *.class files + highlight
     class)
       if [[ -x $(command which javap 2>/dev/null) ]]; then
-
-        if (($HAS_PYGMENTS)); then
-          command javap "${FILE_PATH}" | pygmentize -l java
-
-        else
-          command javap "${FILE_PATH}"
-        fi
-
-        exit 5
+        (($HAS_PYGMENTS)) && command javap "${FILE_PATH}" | pygmentize -l java || command javap "${FILE_PATH}" && exit 5
       fi
+      ;;
+
+    # BitTorrent
+    torrent)
+      command transmission-show -- "${FILE_PATH}" && exit 5
+      exit 1
       ;;
 
   esac
 }
 
 handle_mime() {
-  local mimetype="${1}"
-  case "${mimetype}" in
+  
+  case $(command file --dereference --brief --mime-type -- "${FILE_PATH}") in
 
     # Text
     text/* | *xml* | *html* | *json* | *script*)
-
-      if (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}")
-        exit 5
-      else
-        exit 2
-      fi
+      (($HAS_PYGMENTS)) && command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}") && exit 5 || exit 1
       ;;
 
     inode/directory)
-
       [[ -d "${FILE_PATH}" ]] && command tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
+      exit 1
       ;;
-
   esac
 }
 
 handle_fallback() {
-  echo -e "${FILE_PATH}\n"
-  command file --dereference --brief -- "${FILE_PATH}" | command fmt -w -U "${PV_WIDTH}" && exit 5
+  echo -e "${FILE_PATH}\n" && command file --dereference --brief -- "${FILE_PATH}" | command fmt -w -U "${PV_WIDTH}" && exit 5
 }
 
 handle_extension
-handle_mime $(command file --dereference --brief --mime-type -- "${FILE_PATH}")
+handle_mime 
 handle_fallback
 
 exit 1
