@@ -9,6 +9,26 @@ public class Main {
 }
 endsnippet
 
+snippet "pub[lic]*" "public [java]" r
+public ${1:}
+endsnippet
+
+snippet "pri[vate]*" "private [java]" r
+private ${1:}
+endsnippet
+
+snippet "pro[tected]*" "protected [java]" r
+protected ${1:}
+endsnippet 
+
+snippet "sta[tic]*" "static [java]" r
+static ${1:}
+endsnippet 
+
+snippet "fin[al]*" "final (constant) [java]" r
+final ${1:}
+endsnippet 
+
 snippet "walk|rglob" "Recursively walk a directory [java]" rb
 public final Optional<Set<String>> walk(final String root) {
     try {

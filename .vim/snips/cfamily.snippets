@@ -4,6 +4,41 @@ snippet ret "Return [cfamily]"
 return ${1:0};
 endsnippet 
 
+snippet "/\*+" "Docstring [cfamily]" rb
+/**
+ * ${VISUAL}$0
+ */
+endsnippet 
+
+snippet "@t[hrows]+" "@throws [cfamily]" r
+@throws ${1:Exception} ${2:when an issue occurs}
+endsnippet 
+
+snippet "@se+" "@param [cfamily]" r
+@see ${1:java.util.List#add}
+endsnippet 
+
+snippet "@a[uthor]+" "@author [cfamily]" r
+@author ${1:`git config user.name` <`git config user.email`>}
+endsnippet 
+
+snippet "@e[xception]+" "@xception [cfamily]" r
+@exception ${1:Exception} ${2:description}
+endsnippet 
+
+
+snippet "\{?@li[nk]+" "@link [cfamily]" r
+{@link ${1:java.util.List#add}}
+endsnippet 
+
+snippet "@r[eturns]+" "@return [cfamily]" r
+@return ${1:description}
+endsnippet 
+
+snippet "@p[aram]+" "@param [cfamily]" r
+@param ${1:arg1}
+endsnippet 
+
 # loops
 
 snippet while "While loop [cfamily]"

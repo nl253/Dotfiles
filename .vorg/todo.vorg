@@ -42,6 +42,7 @@
 	>>>> Behavioural
 
 	- Activity diagrams
+	- Sequence diagrams
 
 	>>>>> Tools 
 
@@ -349,6 +350,13 @@
     - configure cgi scripts (python, php, java ...)
 
     >> SQL
+
+    >> XML
+
+    - <https://en.wikipedia.org/wiki/Document_type_definition>
+    - <https://en.wikipedia.org/wiki/XML>
+    - <https://stackoverflow.com/questions/1544200/what-is-difference-between-xml-schema-and-dtd>
+    - <https://www.w3schools.com/xml/xml_dtd_intro.asp>
 
     >> CSS
 
