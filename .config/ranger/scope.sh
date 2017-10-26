@@ -76,7 +76,7 @@ handle_extension() {
 
     md | m*down)
       if [[ -x $(command which pandoc 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-        pandoc --self-contained -f markdown_github -t html "${FILE_PATH}" | elinks -dump
+        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | elinks -dump
         exit 5
       fi
       ;;
@@ -116,7 +116,7 @@ handle_extension() {
 
     rst)
       if [[ -x $(command which rst2html5.py 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-        rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' "${FILE_PATH}" | elinks -dump && exit 5
+	  command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | elinks -dump && exit 5
       fi
       ;;
 
@@ -126,7 +126,7 @@ handle_extension() {
         if [[ $(basename "${FILE_PATH}") =~ requirements ]] || [[ $(basename $(dirname "${FILE_PATH}")) =~ requirements ]]; then
           command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini
         else
-          command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | fmt -u -w "${PV_WIDTH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
+          command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command fmt -u -w "${PV_WIDTH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst
         fi
         exit 5
       fi
