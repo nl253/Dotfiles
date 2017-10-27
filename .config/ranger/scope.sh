@@ -42,8 +42,8 @@ IFS=$'\n'
 FILE_PATH="${1}"        # Full path of the highlighted file
 PV_WIDTH="${2}"         # Width of the preview pane (number of fitting characters)
 PV_HEIGHT="${3}"        # Height of the preview pane (number of fitting characters)
-IMAGE_CACHE_PATH="${4}" # Full path that should be used to cache image preview
-PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwise.
+# IMAGE_CACHE_PATH="${4}" # Full path that should be used to cache image preview
+# PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwise.
 
 [[ $(command which pygmentize 2>/dev/null) ]] && HAS_PYGMENTS=1 || HAS_PYGMENTS=0
 
@@ -243,6 +243,33 @@ handle_extension() {
   esac
 }
 
+# handle_image() {
+
+    # local mimetype="${1}"
+
+    # case "${mimetype}" in
+
+	# # SVG
+	# # image/svg+xml)
+	# #     convert "${FILE_PATH}" "${IMAGE_CACHE_PATH}" && exit 6
+	# #     exit 1;;
+
+	# # Image
+	# image/*)
+	# # `w3mimgdisplay` will be called for all images (unless overriden as above),
+	# # but might fail for unsupported types.
+	# exit 7
+	# ;;
+
+	# # Video
+	# # video/*)
+	# #     # Thumbnail
+	# #     ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
+	# #     exit 1;;
+    # esac
+# }
+
+
 handle_mime() {
   
   case $(command file --dereference --brief --mime-type -- "${FILE_PATH}") in
@@ -252,10 +279,20 @@ handle_mime() {
       (($HAS_PYGMENTS)) && command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}") && exit 5 || exit 1
       ;;
 
+
     inode/directory)
       [[ -d "${FILE_PATH}" ]] && command tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
       exit 1
       ;;
+
+      # # Image
+      # image/*)
+
+      # # Preview as text conversion
+      # # img2txt --gamma=0.6 --width="${PV_WIDTH}" -- "${FILE_PATH}" && exit 4
+      # exiftool "${FILE_PATH}" && exit 5
+      # exit 1
+      # ;; 
   esac
 }
 
@@ -264,6 +301,7 @@ handle_fallback() {
 }
 
 handle_extension
+# [[ "${PV_IMAGE_ENABLED}" == 'True' ]] && handle_image "${MIMETYPE}"
 handle_mime 
 handle_fallback
 
