@@ -76,7 +76,7 @@ handle_extension() {
 
     md | m*down)
       if [[ -x $(command which pandoc 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | elinks -dump
+        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH}
         exit 5
       fi
       ;;
@@ -109,14 +109,14 @@ handle_extension() {
     # HTML
     *html)
       # Preview as text conversion
-      command elinks -dump "${FILE_PATH}" && exit 5
+      command elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} "${FILE_PATH}" && exit 5
       command w3m -dump "${FILE_PATH}" && exit 5
       command lynx -dump -- "${FILE_PATH}" && exit 5
       ;;
 
     rst)
       if [[ -x $(command which rst2html5.py 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-	  command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | elinks -dump && exit 5
+	  command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} && exit 5
       fi
       ;;
 
