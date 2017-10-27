@@ -91,7 +91,7 @@ handle_extension() {
       exit 1
       ;;
 
-    gzip | bzip2 | 7z)
+    zip | gz | tar | jar | 7z | bz2 | rpm | deb | cpio | deb | arj)
       # Avoid password prompt by providing empty password
       if [[ -x $(command which 7z) ]]; then
         command 7z l -p -- "${FILE_PATH}" && exit 5
@@ -100,7 +100,7 @@ handle_extension() {
       ;;
 
     # Archive
-    a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | gz | jar | lha | lz | lzh | lzma | lzo | rpm | rz | t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z | zip)
+    a | ace | alz | arc | arj | bz |  cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
       command atool --list -- "${FILE_PATH}" && exit 5
       command bsdtar --list --file "${FILE_PATH}" && exit 5
       exit 1
@@ -155,6 +155,19 @@ handle_extension() {
       fi
       ;;
 
+    css)
+      if [[ -x $(command which css-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css && exit 5
+      fi
+      ;;
+
+    puml)
+      if (($HAS_PYGMENTS)); then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l java
+        exit 5
+      fi
+      ;;
+
     docx)
 
       # unzip, strip tags
@@ -192,19 +205,6 @@ handle_extension() {
         exit 5
       elif (($HAS_PYGMENTS)); then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
-        exit 5
-      fi
-      ;;
-
-    css)
-      if [[ -x $(command which css-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css && exit 5
-      fi
-      ;;
-
-    puml)
-      if (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l java
         exit 5
       fi
       ;;
@@ -297,7 +297,7 @@ handle_mime() {
 }
 
 handle_fallback() {
-  echo -e "${FILE_PATH}\n" && command file --dereference --brief -- "${FILE_PATH}" | command fmt -w -U "${PV_WIDTH}" && exit 5
+  echo -e "${FILE_PATH}\n" && command file --dereference --brief -- "${FILE_PATH}" | command fmt -u -w "${PV_WIDTH}" && exit 5
 }
 
 handle_extension
