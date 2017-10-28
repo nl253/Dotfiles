@@ -3,9 +3,6 @@
 " Variables: (unfortunates these need to be global)
 let g:markup_languages = ['markdown', 'rst', 'vorg'] 
 
-let g:template_languages = ['jinja'] 
-
-let g:xml_languages = ['xml', 'html'] 
 
 let g:config_ftypes = [
 	    \ 'yaml', 
@@ -16,7 +13,7 @@ let g:config_ftypes = [
 	    \ 'json',
 	    \ 'config']
 
-let g:programming_languages = ['html', 
+let g:programming_languages = [
 	    \ 'sql', 
 	    \ 'python', 
 	    \ 'sh', 
@@ -113,7 +110,7 @@ if executable('tmux') && exists('$TMUX') | Plug 'tmux-plugins/vim-tmux-focus-eve
 " GIT:
 Plug 'junegunn/gv.vim', {'on': 'GV'}
 
-set statusline=%<\ %f\ %r\ %{fugitive#statusline()}%m\ %=%-14.(\ %{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
+set statusline=\ %f\ %r\ %m%=%-14.(%{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
 
 if has('unix')
     Plug 'tpope/vim-eunuch', {'on' : ['Move', 'Remove', 'Find', 'Mkdir', 'Wall', 'SudoEdit', 
@@ -400,5 +397,7 @@ if $TERM =~ '256' || has('gui') || (has('nvim') && $TERM == '')
 else
     colorscheme darkblue
 endif
+
+exec 'set suffixesadd='.join(g:programming_languages + g:markup_languages, ',')
 
 " vim: foldmethod=indent
