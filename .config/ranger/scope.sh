@@ -82,12 +82,12 @@ handle_extension() {
       ;;
 
     tar.gz)
-      command tar -ztf "${FILE_PATH}" && exit 5
+      command tar ztf "${FILE_PATH}" && exit 5
       exit 1
       ;;
 
     tar.bz2)
-      command tar -jtf "${FILE_PATH}" && exit 5
+      command tar jtf "${FILE_PATH}" && exit 5
       exit 1
       ;;
 
@@ -199,7 +199,7 @@ handle_extension() {
       ;;
 
     # XML formats
-    iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro)
+    iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | xml)
       if (($HAS_PYGMENTS)) && [[ -x $(command which html-beautify 2>/dev/null) ]]; then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
         exit 5
@@ -278,7 +278,6 @@ handle_mime() {
     text/* | *xml* | *html* | *json* | *script*)
       (($HAS_PYGMENTS)) && command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}") && exit 5 || exit 1
       ;;
-
 
     inode/directory)
       [[ -d "${FILE_PATH}" ]] && command tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
