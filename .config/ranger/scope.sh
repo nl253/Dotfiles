@@ -68,10 +68,7 @@ handle_extension() {
       ;;
 
     json)
-      if [[ -x $(command which js-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json
-        exit 5
-      fi
+	[[ -x $(command which js-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)) && command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json && exit 5
       ;;
 
     md | m*down)
@@ -96,13 +93,6 @@ handle_extension() {
       if [[ -x $(command which 7z) ]]; then
         command 7z l -p -- "${FILE_PATH}" && exit 5
       fi
-      exit 1
-      ;;
-
-    # Archive
-    a | ace | alz | arc | arj | bz |  cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
-      command atool --list -- "${FILE_PATH}" && exit 5
-      command bsdtar --list --file "${FILE_PATH}" && exit 5
       exit 1
       ;;
 
@@ -199,7 +189,7 @@ handle_extension() {
       ;;
 
     # XML formats
-    iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | xml)
+    iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | xml | uml | aird | notation | project)
       if (($HAS_PYGMENTS)) && [[ -x $(command which html-beautify 2>/dev/null) ]]; then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
         exit 5
@@ -208,6 +198,7 @@ handle_extension() {
         exit 5
       fi
       ;;
+
 
     sqlite*)
 
@@ -234,6 +225,13 @@ handle_extension() {
       fi
       ;;
 
+    # Archive
+    a | ace | alz | arc | arj | bz |  cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
+      command atool --list -- "${FILE_PATH}" && exit 5
+      command bsdtar --list --file "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
     # BitTorrent
     torrent)
       command transmission-show -- "${FILE_PATH}" && exit 5
@@ -241,6 +239,17 @@ handle_extension() {
       ;;
 
   esac
+}
+
+handle_name() {
+
+    case $(basename "${FILE_PATH}") in
+
+	.gitignore)
+	    (($HAS_PYGMENTS)) && command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini ${FILE_PATH} && exit 5
+	  ;;
+
+    esac
 }
 
 # handle_image() {
@@ -301,8 +310,9 @@ handle_fallback() {
 
 handle_extension
 # [[ "${PV_IMAGE_ENABLED}" == 'True' ]] && handle_image "${MIMETYPE}"
+handle_name
 handle_mime 
-handle_fallback
+handle_fallback 
 
 exit 1
 

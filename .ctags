@@ -9,6 +9,8 @@
 --exclude=.vscode/*
 --exclude=.thunderbird/*
 --exclude=.mozilla/*
+--exclude=.vim/undo/*
+--exclude=.vim/swap/
 --exclude=.cache/*
 --exclude=.?vm/*
 --exclude=.??env/*

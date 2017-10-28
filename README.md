@@ -22,5 +22,4 @@ http://www.thesaurus.com/browse/sunny?s=t
 + [A dictionary generator that I wrote because I needed dictionaries for vim completion](https://github.com/nl253/DictGen)
 + [Grab a dict for a filetype + fantastic general english dict and thesaurus](https://github.com/nl253/Dictionaries)
 + [My uni notes](https://github.com/nl253/Notes) :: for easy access across repos
-
-<!-- vim: nospell
+<!-- :vim: nospell: !-->
