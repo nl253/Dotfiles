@@ -222,21 +222,36 @@ endif
 
 if has('patch8') || has('nvim')
     Plug 'neomake/neomake'
-    let g:neomake_yaml_enabled_makers = ['yamllint']
-    let g:neomake_vim_enabled_makers = ['vint']
-    let g:neomake_sql_enabled_makers = ['sqlint']
-    let g:neomake_bash_enabled_makers = ['sh', 'shellcheck']
-    let g:neomake_scss_enabled_makers = ['scss-lint']
-    let g:neomake_css_enabled_makers = ['stylelint']
-    let g:neomake_javascript_enabled_makers = ['standard']
-    let g:neomake_json_enabled_makers = ['jsonlint']
+	if executable('yamllint')
+		let g:neomake_yaml_enabled_makers = ['yamllint']
+	endif
+	if executable('vint')
+		let g:neomake_vim_enabled_makers = ['vint']
+	endif
+	if executable('sqlint')
+		let g:neomake_sql_enabled_makers = ['sqlint']
+	endif
+	if executable('shellcheck')
+		let g:neomake_bash_enabled_makers = ['sh', 'shellcheck']
+	endif
+	if executable('stylelint')
+		let g:neomake_css_enabled_makers = ['stylelint']
+	endif
+	if executable('standard')
+		let g:neomake_javascript_enabled_makers = ['standard']
+	endif
+	if executable('eslint')
+		call add(g:neomake_javascript_enabled_makers, 'eslint')
+	endif
+	if executable('jsonlint')
+		let g:neomake_json_enabled_makers = ['jsonlint']
+	endif
     let g:neomake_python_enabled_makers = [] 
-
-    if index(g:programming_languages, 'python') >= 0 
-	for i in filter(['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama'], 'executable(v:val)')
-	    call add(g:neomake_python_enabled_makers, i)
-	endfor
-    endif
+	if index(g:programming_languages, 'python') >= 0 
+		for i in filter(['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama'], 'executable(v:val)')
+			call add(g:neomake_python_enabled_makers, i)
+		endfor
+	endif
 
     if executable('yarn')
 	if index(g:programming_languages, 'javascript') >= 0 
