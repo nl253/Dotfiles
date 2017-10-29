@@ -362,21 +362,21 @@ endif
 " ==========
 
 try
-    if empty(expand('~/Projects/vimscript')) 
-	silent call mkdir('~/Projects/vimscript', 'p')
+    if empty(expand('~/Documents/vim')) 
+	silent call mkdir('~/Documents/vim', 'p')
     endif
 
     for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
-	Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Projects/vimscript/').plugin}
+	Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Documents/vim/').plugin}
     endfor
 
     for i in ['programming', 'markup']
-	exec "Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Projects/vimscript/vim-'.i), 'for': g:".i."_languages}"
+	exec "Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Documents/vim/vim-'.i), 'for': g:".i."_languages}"
     endfor
 
     Plug 'nl253/vim-webdev', {
 		\ 'frozen': 1, 
-		\ 'dir': expand('~/Projects/vimscript/vim-webdev'), 
+		\ 'dir': expand('~/Documents/vim/vim-webdev'), 
 		\ 'for': g:template_languages + ['xml', 'css', 'javascript', 'typescript', 'markdown']
 		\ }
 

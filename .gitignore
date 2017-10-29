@@ -23,11 +23,9 @@
 
 # VCS
 .git-credentials
-.config/hub/
 .gitignores/.github/PULL_REQUEST_TEMPLATE.md
 
 
-.config/nautilus/
 .xscreensaver
 
 # Node.js
@@ -76,23 +74,12 @@ undo/*
 
 # Browsers
 
-.config/chromium/
-.config/google-chrome/
 .elinks/
 .tor-browser/
 
 # Gnome
 
 .gnome/
-.config/gconf/
-.config/gthumb/active_filter.xml
-.config/gthumb/filters.xml
-.config/goa-1.0/
-.config/gnome-control-center/backgrounds/last-edited-lock.xml
-.config/gnome-boxes/
-.config/gnome-control-center/backgrounds/last-edited.xml
-
-.config/yad.conf
 */undo/*
 */wn/*
 *breakpoints*
@@ -110,7 +97,6 @@ undo/*
 .cabal/packages/
 .case/
 .conda/environments.txt
-.conf/fontconfig/
 .inspections.xml
 .vorg/tasks.vorg
 
@@ -120,34 +106,15 @@ undo/*
 **/*.log
 **/.log
 
-# file manager
-
-.config/ranger/
-.config/Thunar/uca.xml
-
 # Java
 
 .java/
 .m2/ # maven
 .oracle_jre_usage/
-
-# music
-
-.config/pulse/
-.config/totem/
-.config/spotify/
-
-# networking
-
-.config/transmission/
+ music
 
 # terminal emulator
 
-.config/turtl/
-
-.config/viewnior/
-.config/volumeicon*
-.config/whoozle*
 .cookiecutter*
 .dbshell
 .dicts/
@@ -173,12 +140,10 @@ undo/*
 .jupyter/migrated
 .laptop
 .lesshst
-.local/README.creole
 
 # binaries
 
 .bin/
-.local/bin/
 
 # Rust
 
@@ -188,7 +153,6 @@ undo/*
 
 # libraries
 
-.local/lib/
 
 # Linters
 
@@ -196,47 +160,14 @@ undo/*
 
 # Config
 
-.config/Trolltech.conf
-.config/Mousepad/
-.config/QtProject.conf
-.config/bluedevilglobalrc
-.config/powerdevilrc
-.config/powermanagementprofilesrc
-.config/startupconfig
-.config/startupconfigfiles
-.config/startupconfigkeys
-.config/systemsettingsrc
-.config/configstore/
-.config/copyq/
-.config/dconf/user
-.config/dmenu-recent/
-
-# spell checking
-
-.config/enchant/
-
-.config/epdfview/main.conf
-.config/gtk*
-.config/htop/
-
 # libreoffice
-
-.config/libreoffice/
 
 # manjaro
 
-.config/manjaro/
-.config/manjaro-hello.json
 
-.config/qt5ct/
-.config/qtct/
-.local/share/Trash/
 
 # PHP
 
-.config/composer/
-.config/psysh/
-.local/share/composer/
 
 # History
 
@@ -272,7 +203,6 @@ undo/*
 
 # desktop env
 
-.config/xfce4/desktop/
 .xmonad/
 .xsession-error*
 
@@ -281,41 +211,23 @@ undo/*
 Raptor
 Pictures
 Downloads/
+Downloads
 Projects/
+Documents/
 Notes/
 Libraries/
 Uni/
 
-.local/share/vlc/
-.local/include/
 .m2/
+.yEd/
+.zenmap/
+.3T/
+.p2/
+.xxx/
+.*201*/
 .mozilla/
 .multirust
 .zcompdump
-
-.config/autostart/
-.config/derevenets.com/
-.config/mimeapps.list
-.config/nvim/
-.config/pulseaudio-ctl/
-.config/youtube-dl/
-
-.local/share/applications/
-.local/share/doc/
-.local/share/gegl-0.2/
-.local/share/gnome-*
-.local/share/grilo-plugins/
-.local/share/gsettings-data-convert
-.local/share/heroku/
-.local/share/man/
-.local/share/mime/
-.local/share/nvim/
-.local/share/recently-used.xbel
-.local/share/telepathy/
-.local/share/tracker/
-.local/share/user-places.xbel
-.local/share/user-places.xbel.tbcache
-.local/share/webkitgtk/
 
 # Ruby
 
@@ -333,7 +245,8 @@ Dropbox/
 
 boosterclapps/
 case/
-config/
+.config/
+.local/
 go/
 miniconda3/
 
@@ -360,8 +273,6 @@ package-lock.json
 
 .yarn/
 .yarnrc
-.config/yarn/global/package.json
-.config/yarn/global/yarn.lock
 
 # Other
 
@@ -369,14 +280,8 @@ package-lock.json
 [._]*.sw[a-p]
 [._]s[a-v][a-z]
 [._]sw[a-p]
-.local/share/icons/
-.local/share/keyrings/
-.local/share/xorg/
-.local/share/gvfs-metadata/
 Empty*
 *.swp
-.config/user-dirs*
-.config/discord/
 .wget*
 
 # Jetbrains
@@ -392,7 +297,6 @@ Empty*
 .RubyMine*
 .WebStorm*
 .CLion*
-.config/JetBrains/ReSharperHost/v08/NuGet.Config
 .WebStorm*
 
 # archived repo
@@ -400,8 +304,4 @@ Empty*
 *.zip
 *.tar
 
-.config/hub
 .multirust/
-.local/share/JetBrains/
-.local/share/icc/
-.local/share/xfce4/
