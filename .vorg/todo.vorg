@@ -234,7 +234,7 @@
 
     >> Data Analysis
 
-    1. Numpy <http://www.numpy.org> !
+    1. Numpy <http://www.numpy.org> ! #STARTED
     2. Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html> !!!
     3. Visualization (Matplotlib, Seaborn) !
     4. IPython Notebook (Jupyter) !
