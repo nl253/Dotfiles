@@ -40,6 +40,7 @@ alias du='du --human-readable --si --summarize --total'
 alias info='info --vi-keys'
 alias logout="pkill -KILL -u \$USER"
 _in_path ipython && alias ipython="ipython --profile=me --pylab=qt5 --gui=qt5"
+_in_path ipython3 && alias ipython3="ipython --profile=me --pylab=qt5 --gui=qt5"
 _in_path acpi && alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 if _in_path rsync; then
