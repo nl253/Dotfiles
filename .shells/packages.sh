@@ -224,7 +224,7 @@ _init_python() {
 
   # Don't change the order!
   [[ -z $PYENV_ROOT ]] && export PYENV_ROOT=~/.pyenv
-  [[ -z $PYENV_VERSION ]] && export PYENV_VERSION=3.6.1
+  # [[ -z $PYENV_VERSION ]] && export PYENV_VERSION=3.6.1
   _add_to_path "${PYENV_ROOT}/bin"
   _add_to_path "${PYENV_ROOT}/bin"
 
