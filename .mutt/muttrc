@@ -2,7 +2,7 @@
 # System configuration file for Mutt
 #
 
-source ~/.mutt/colors/solarized-dark-256
+source ~/.mutt/colors/default
 source ~/.mutt/aliases
 
 auto_view text/html                                      # view html automatically
@@ -2554,7 +2554,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # See also $read_inc, $write_inc and $net_inc.
 # 
 # 
-set pager="less"
+# set pager="builtin"
 #
 # Name: pager
 # Type: path
