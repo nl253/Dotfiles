@@ -23,7 +23,7 @@ export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
 
 export CDPATH="${HOME}:"
 
-for directory in ${HOME}/{Projects,Uni,.shells} ${HOME}/Uni/*; do
+for directory in ${HOME}/Documents ${HOME}/Documents/*; do
 	[[ -d $directory ]] && [[ ! $CDPATH =~ $directory ]] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 

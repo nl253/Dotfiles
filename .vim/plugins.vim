@@ -285,7 +285,7 @@ Plug 'alvan/vim-closetag', {'for': ['html', 'xml', 'markdown']}
 let g:closetag_filenames = '*.html,*.md,*.xml'
 
 " if has('nvim') || (has('python3') || has('python'))
-" Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'xhtml', 'php', 'markdown'] + ['css'] + g:template_languages}
+" Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'xhtml', 'php', 'markdown'] + ['css']
 " let g:user_emmet_expandabbr_key = '<Tab>'
 " " let g:user_emmet_complete_tag = 1
 " " let g:user_emmet_mode = 'i'
@@ -330,25 +330,33 @@ endif
 " MY PLUGINS:
 " ==========
 
-try
-    if !empty(expand('~/Documents/vim')) 
-	for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
-	    Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Documents/vim/').plugin}
-	endfor
-
-	for i in ['programming', 'markup']
-	    exec "Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Documents/vim/vim-'.i), 'for': g:".i."_languages}"
-	endfor
-
-	Plug 'nl253/vim-webdev', {
+if !empty(expand('~/Documents/vim')) 
+    for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
+	Plug 'nl253/'.plugin, {
 		    \ 'frozen': 1, 
-		    \ 'dir': expand('~/Documents/vim/vim-webdev'), 
-		    \ 'for': g:template_languages + ['xml', 'css', 'javascript', 'typescript', 'markdown']
+		    \ 'dir': expand('~/Documents/vim/').plugin
 		    \ }
-    endif
-    let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
-catch /.*/
-endtry
+    endfor
+
+    Plug 'nl253/vim-programming', {
+		\ 'frozen': 1, 
+		\ 'dir': expand('~/Documents/vim/vim-programming'), 
+		\ 'for': g:.programming_languages
+		\ }
+
+    Plug 'nl253/vim-markup', {
+		\ 'frozen': 1, 
+		\ 'dir': expand('~/Documents/vim/vim-markup'), 
+		\ 'for': g:markup_languages
+		\ }
+
+    Plug 'nl253/vim-webdev', {
+		\ 'frozen': 1, 
+		\ 'dir': expand('~/Documents/vim/vim-webdev'), 
+		\ 'for': ['xml', 'css', 'javascript', 'typescript', 'markdown']
+		\ }
+endif
+let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 
 call plug#end()
 
