@@ -3,7 +3,6 @@
 " Variables: (unfortunates these need to be global)
 let g:markup_languages = ['markdown', 'rst', 'vorg'] 
 
-
 let g:config_ftypes = [
 	    \ 'yaml', 
 	    \ 'gitconfig', 
@@ -96,8 +95,10 @@ endfor
 if executable('cargo')
     function! BuildMarkdownComposer(info)
 	if a:info.status != 'unchanged' || a:info.force
-	    silent call system("cargo build --release".
-			\ has('nvim') ? "" 
+	    silent call system(
+			\ "cargo build --release".
+			\ has('nvim') 
+			\ ? "" 
 			\ : "--no-default-features --features json-rpc")
 	endif
     endfunction
@@ -208,21 +209,15 @@ endif
 
 " Haskell:
 
-if executable('stack') && exists('g:stack_packages') && type(g:stack_packages) == 3 && len(g:stack_packages) > 0 
+if executable('stack') && exists('g:stack_packages') && type(g:stack_packages) == 3 && len(g:stack_packages) > 0  && executable('bash')
     let j = join(map(split(expand("~/.local/bin/*")), 'fnamemodify(v:val, ":t")'))
     for i in filter(g:stack_packages, '!(j =~ v:val)')
-	silent call system('stack install '.i.' &')
+	silent call system('bash -c "stack install '.i.' &"')
     endfor
 endif
 
 if index(g:programming_languages, 'haskell') >= 0
     Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
-endif
-
-" Clojure:
-
-if index(g:programming_languages, 'clojure') >= 0
-    Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 endif
 
 if has('patch8') || has('nvim')
@@ -238,10 +233,8 @@ if has('patch8') || has('nvim')
     let g:neomake_python_enabled_makers = [] 
 
     if index(g:programming_languages, 'python') >= 0 
-	for i in ['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama']
-	    if executable(i)
-		call add(g:neomake_python_enabled_makers, i)
-	    endif
+	for i in filter(['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama'], 'executable(v:val)')
+	    call add(g:neomake_python_enabled_makers, i)
 	endfor
     endif
 
@@ -261,7 +254,6 @@ if has('patch8') || has('nvim')
 else
     Plug 'vim-syntastic/syntastic'
 endif
-
 
 " MARKUP:
 
@@ -329,29 +321,6 @@ let g:used_javascript_libs = 'jquery,'
 
 " Templating Engines:
 " -------------------
-
-" Pug:
-" if index(g:template_languages, 'pug') >= 0 ||  index(g:template_languages, 'jade') >= 0 
-" Plug 'dNitro/vim-pug-complete', {'for': ['jade', 'pug']}
-" Plug 'digitaltoad/vim-pug', {'for': ['jade', 'pug']}
-" aug PugLikeSyntax
-" au!
-" au FileType jade setl ft=pug 
-" aug END
-" endif
-
-" Jinja Twig Nunjucks:
-" for i in filter(['twig', 'jinja'], 'index(g:template_languages, v:val) >= 0')
-" Plug 'Glench/Vim-Jinja2-Syntax'
-" endfor
-
-" if index(g:template_languages, 'twig') >= 0 || index(g:template_languages, 'njk') >= 0 
-" aug JinjaLikeSyntax
-" au!
-" au BufNewFile,BufRead *.{twig,njk} setl filetype=jinja
-" aug END
-" endif
-
 " PHP:
 
 if index(g:programming_languages, 'php') >= 0 && executable('php')
@@ -362,26 +331,22 @@ endif
 " ==========
 
 try
-    if empty(expand('~/Documents/vim')) 
-	silent call mkdir('~/Documents/vim', 'p')
+    if !empty(expand('~/Documents/vim')) 
+	for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
+	    Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Documents/vim/').plugin}
+	endfor
+
+	for i in ['programming', 'markup']
+	    exec "Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Documents/vim/vim-'.i), 'for': g:".i."_languages}"
+	endfor
+
+	Plug 'nl253/vim-webdev', {
+		    \ 'frozen': 1, 
+		    \ 'dir': expand('~/Documents/vim/vim-webdev'), 
+		    \ 'for': g:template_languages + ['xml', 'css', 'javascript', 'typescript', 'markdown']
+		    \ }
     endif
-
-    for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
-	Plug 'nl253/'.plugin, {'frozen': 1, 'dir': expand('~/Documents/vim/').plugin}
-    endfor
-
-    for i in ['programming', 'markup']
-	exec "Plug 'nl253/vim-markup', {'frozen': 1, 'dir': expand('~/Documents/vim/vim-'.i), 'for': g:".i."_languages}"
-    endfor
-
-    Plug 'nl253/vim-webdev', {
-		\ 'frozen': 1, 
-		\ 'dir': expand('~/Documents/vim/vim-webdev'), 
-		\ 'for': g:template_languages + ['xml', 'css', 'javascript', 'typescript', 'markdown']
-		\ }
-
     let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
-
 catch /.*/
 endtry
 
