@@ -3,7 +3,10 @@ set clipboard=unnamedplus,unnamed
 set diffopt=filler,vertical
 set foldmethod=marker
 set gdefault
-set history=2000
+set scrolloff=11
+set sidescrolloff=30
+set history=100
+set undolevels=1000
 set hidden
 set incsearch
 set hlsearch
