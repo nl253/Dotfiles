@@ -8,6 +8,8 @@
     "gitbook-cli": "^2.3.2",
     "heroku-cli": "^6.14.24",
     "htmlhint": "^0.9.13",
+    "ijavascript": "^5.0.20",
+    "itypescript": "^0.2.2",
     "jest": "^21.1.0",
     "js-beautify": "^1.7.3",
     "jsonlint": "^1.6.2",

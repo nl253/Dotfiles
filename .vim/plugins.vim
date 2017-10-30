@@ -373,6 +373,12 @@ if !empty(expand('~/Documents/vim'))
 endif
 let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 
+if has('nvim')
+	Plug 'kassio/neoterm', {'for': ['sh', 'python', 'javascript', 'haskell']}
+	nnoremap <M-CR> :TREPLSendLine<CR>
+	vnoremap <M-CR> :TREPLSendSelection<CR>
+endif
+
 call plug#end()
 
 " these need to be called after plug#end()

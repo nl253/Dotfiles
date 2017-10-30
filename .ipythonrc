@@ -1,9 +1,0 @@
-import sys, re
-from urllib.request import urlopen as get
-from pandas import Series, DataFrame
-import pandas as pd
-import numpy as np
-from numpy import ndarray, array
-import faker
-gen = faker.Faker()
-# vim: ft=python
