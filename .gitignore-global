@@ -3,6 +3,13 @@
 **/*.log
 **/*-log
 
+# latex
+
+**/*.aux
+**/*.out
+**/*.tox
+**/*.fls
+
 ## database
 
 **/*.sqlite
@@ -24,7 +31,7 @@
 
 ## VCS
 
-.git/
+**/.git/
 **/.idea/
 
 ## package managers
