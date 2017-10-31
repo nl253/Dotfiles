@@ -45,7 +45,8 @@ PV_HEIGHT="${3}"        # Height of the preview pane (number of fitting characte
 # IMAGE_CACHE_PATH="${4}" # Full path that should be used to cache image preview
 # PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwise.
 
-[[ $(command which pygmentize 2>/dev/null) ]] && HAS_PYGMENTS=1 || HAS_PYGMENTS=0
+[[ -x $(command which pygmentize 2>/dev/null) ]] && HAS_PYGMENTS=1 || HAS_PYGMENTS=0
+[[ -x $(command which elinks 2>/dev/null) ]] && HAS_ELINKS=1 || HAS_ELINKS=0
 
 # Settings
 HIGHLIGHT_SIZE_MAX=262143 # 256KiB
@@ -68,12 +69,14 @@ handle_extension() {
       ;;
 
     json)
-	[[ -x $(command which js-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)) && command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json && exit 5
+			if [[ -x $(command which js-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
+				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json && exit 5
+			fi
       ;;
 
     md | m*down)
       if [[ -x $(command which pandoc 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH}
+        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH}
         exit 5
       fi
       ;;
@@ -104,12 +107,20 @@ handle_extension() {
       command lynx -dump -- "${FILE_PATH}" && exit 5
       ;;
 
-    rst | vorg)
-			(($HAS_PYGMENTS)) && [[ ${FILE_PATH} =~ \.vorg$ ]] && command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
-      if [[ -x $(command which rst2html5.py 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} && exit 5
-      fi
-      ;;
+		*ipynb)
+
+			if (($HAS_ELINKS)) && [[ -x $(command which jupyter 2>/dev/null) ]]; then 
+				command jupyter nbconvert --stdout --to html "${FILE_PATH}" | command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+			fi
+			;;
+
+		rst | vorg)
+			if (($HAS_PYGMENTS)) && [[ ${FILE_PATH} =~ \.vorg$ ]];then
+				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
+			elif [[ -x $(command which rst2html5.py 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
+				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | command elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} && exit 5
+			fi
+			;;
 
     # Generic text files
     txt)
@@ -189,17 +200,17 @@ handle_extension() {
       fi
       ;;
 
-    # XML formats
-    iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | xml | uml | aird | notation | project)
-      if (($HAS_PYGMENTS)) && [[ -x $(command which html-beautify 2>/dev/null) ]]; then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
-        exit 5
-      elif (($HAS_PYGMENTS)); then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
-        exit 5
-      fi
-      ;;
-
+			# XML formats
+			iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | xml | uml | aird | notation | project)
+			if (($HAS_PYGMENTS)); then 
+				if [[ -x $(command which html-beautify 2>/dev/null) ]]; then
+					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
+				else
+					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
+				fi
+				exit 5
+			fi
+			;; 
 
     sqlite*)
 
@@ -219,12 +230,17 @@ handle_extension() {
       exit 5
       ;;
 
-    # automatically decompile Java's *.class files + highlight
-    class)
-      if [[ -x $(command which javap 2>/dev/null) ]]; then
-        (($HAS_PYGMENTS)) && command javap "${FILE_PATH}" | pygmentize -l java || command javap "${FILE_PATH}" && exit 5
-      fi
-      ;;
+			# automatically decompile Java's *.class files + highlight
+			class)
+			if [[ -x $(command which javap 2>/dev/null) ]]; then
+				if (($HAS_PYGMENTS)); then
+					command javap "${FILE_PATH}" | pygmentize -l java
+				else
+					command javap "${FILE_PATH}" 
+				fi
+				exit 5
+			fi
+			;;
 
     # Archive
     a | ace | alz | arc | arj | bz |  cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
@@ -247,7 +263,9 @@ handle_name() {
     case $(basename "${FILE_PATH}") in
 
 	.gitignore)
-	    (($HAS_PYGMENTS)) && command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini ${FILE_PATH} && exit 5
+	    if (($HAS_PYGMENTS)); then
+				command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini ${FILE_PATH} && exit 5
+			fi
 	  ;;
 
     esac
