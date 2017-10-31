@@ -75,9 +75,8 @@ handle_extension() {
       ;;
 
     md | m*down)
-      if [[ -x $(command which pandoc 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH}
-        exit 5
+			if [[ -x $(command which pandoc 2>/dev/null) ]] && (($HAS_ELINKS)); then
+        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
       fi
       ;;
 
@@ -107,8 +106,8 @@ handle_extension() {
     # HTML
     *html)
       # Preview as text conversion
-      command elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} "${FILE_PATH}" && exit 5
-      command w3m -dump "${FILE_PATH}" && exit 5
+			(($HAS_ELINKS)) && command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" "${FILE_PATH}" && exit 5
+      command w3m -cols "${PV_WIDTH}" -dump -F -s -graph -M "${FILE_PATH}" && exit 5
       command lynx -dump -- "${FILE_PATH}" && exit 5
       ;;
 
@@ -120,10 +119,10 @@ handle_extension() {
 			;;
 
 		rst | vorg)
-			if (($HAS_PYGMENTS)) && [[ ${FILE_PATH} =~ \.vorg$ ]];then
+			if (($HAS_PYGMENTS)) && [[ "${FILE_PATH}" =~ \.vorg$ ]];then
 				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
-			elif [[ -x $(command which rst2html5.py 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | command elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} && exit 5
+			elif [[ -x $(command which rst2html5.py 2>/dev/null) ]] && (($HAS_ELINKS)); then
+				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
 			fi
 			;;
 
@@ -255,7 +254,7 @@ handle_extension() {
       ;;
 
 		csv)
-			command head -n ${PV_HEIGHT} "${FILE_PATH}" | column --separator ',' --table --output-width ${PV_HEIGHT} --output-separator '  ' 2>/dev/null
+			command head -n "${PV_HEIGHT}" "${FILE_PATH}" | column --separator ',' --table --output-width ${PV_HEIGHT} --output-separator '  ' 2>/dev/null
 			;;
 
     # BitTorrent
@@ -273,7 +272,7 @@ handle_name() {
 
 	.gitignore)
 	    if (($HAS_PYGMENTS)); then
-				command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini ${FILE_PATH} && exit 5
+				command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini "${FILE_PATH}" && exit 5
 			fi
 	  ;;
 
@@ -313,8 +312,15 @@ handle_mime() {
 
     # Text
     text/* | *xml* | *html* | *json* | *script*)
-      (($HAS_PYGMENTS)) && command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}") && exit 5 || exit 1
-      ;;
+
+		if (($HAS_PYGMENTS)); then
+			if [[ "${FILE_PATH,,}" =~ license|readme|change(log|s)|contribut(ors|ing)|building|roadmap ]]; then
+				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
+			fi
+			command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}") && exit 5
+		fi 
+		exit 1
+		;;
 
     inode/directory)
       [[ -d "${FILE_PATH}" ]] && command tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
