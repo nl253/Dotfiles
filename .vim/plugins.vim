@@ -1,7 +1,7 @@
 " vim: foldlevel=0 foldmethod=marker nowrap
 
 " Variables: (unfortunates these need to be global)
-let g:markup_languages = ['markdown', 'rst', 'vorg'] 
+let g:markup_languages = ['markdown', 'rst', 'vorg', 'tex'] 
 
 let g:config_ftypes = [
 	    \ 'yaml', 
