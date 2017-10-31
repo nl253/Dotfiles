@@ -206,6 +206,8 @@ if has('python') || has('python3')
     endif 
 endif
 
+" LateX
+Plug 'lervag/vimtex', {'for': 'tex'}
 
 " Haskell:
 
