@@ -10,7 +10,8 @@
 c.Application.log_datefmt = '%m-%d %H:%M:%S'
 
 ## The Logging format template
-#c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+#  c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
+c.Application.log_format = '%(highlevel)s %(message)s'
 
 ## Set the log level by value or name.
 #c.Application.log_level = 30
@@ -23,6 +24,7 @@ c.Application.log_datefmt = '%m-%d %H:%M:%S'
 
 ## Answer yes to any prompts.
 #c.JupyterApp.answer_yes = False
+c.JupyterApp.answer_yes = True
 
 ## Full path of a config file.
 #c.JupyterApp.config_file = ''
@@ -512,7 +514,46 @@ c.NotebookApp.open_browser = False
 #c.ContentsManager.files_handler_params = {}
 
 ## Glob patterns to hide in file and directory listings.
-#c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~']
+c.ContentsManager.hide_globs = [
+    '*.bak',
+    '*.bk',
+    '*.class',
+    '*.dylib',
+    '*.iml',
+    '*.log',
+    '*.o',
+    '*.obj',
+    '*.pyc',
+    '*.pyo',
+    '*.so',
+    '*.tmp',
+    '.git',
+    'target',
+    '.egg*',
+    '*.7z',
+    '*.xz',
+    'out',
+    'dist',
+    'build',
+    '*.jar',
+    '*.zip',
+    '*.gz',
+    '*.tar',
+    '*.bz2',
+    '*.swp',
+    '*cache*',
+    '*history*',
+    '*~'
+    '*.lock',
+    '*.sqlite*',
+    '.DS_Store',
+    '.idea',
+    'WindowsPowerShell',
+    '_*',
+    'node_modules',
+    'tags',
+    'vimfiles',
+]
 
 ## Python callable or importstring thereof
 #
@@ -535,13 +576,13 @@ c.NotebookApp.open_browser = False
 #c.ContentsManager.root_dir = '/'
 
 ## The base name used when creating untitled directories.
-#c.ContentsManager.untitled_directory = 'Untitled Folder'
+c.ContentsManager.untitled_directory = 'Jupyter-Dir'
 
 ## The base name used when creating untitled files.
-#c.ContentsManager.untitled_file = 'untitled'
+c.ContentsManager.untitled_file = 'Jupyter-File'
 
 ## The base name used when creating untitled notebooks.
-#c.ContentsManager.untitled_notebook = 'Untitled'
+c.ContentsManager.untitled_notebook = 'Jupyter-Notebook'
 
 #------------------------------------------------------------------------------
 # FileManagerMixin(Configurable) configuration

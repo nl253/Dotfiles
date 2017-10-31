@@ -221,7 +221,7 @@ if index(g:programming_languages, 'haskell') >= 0
 endif
 
 if has('patch8') || has('nvim')
-    Plug 'neomake/neomake'
+	Plug 'neomake/neomake'
 	if executable('yamllint')
 		let g:neomake_yaml_enabled_makers = ['yamllint']
 	endif
@@ -246,9 +246,10 @@ if has('patch8') || has('nvim')
 	if executable('jsonlint')
 		let g:neomake_json_enabled_makers = ['jsonlint']
 	endif
-    let g:neomake_python_enabled_makers = [] 
+	let g:neomake_python_enabled_makers = [] 
 	if index(g:programming_languages, 'python') >= 0 
-		for i in filter(['mypy', 'flake8', 'vulture',  'pylint', 'pyflakes', 'pylama'], 'executable(v:val)')
+		for i in filter(['mypy', 'vulture',  
+					\ 'pylint', 'pylama'], 'executable(v:val)')
 			call add(g:neomake_python_enabled_makers, i)
 		endfor
 	endif
@@ -373,11 +374,11 @@ if !empty(expand('~/Documents/vim'))
 endif
 let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 
-if has('nvim')
-	Plug 'kassio/neoterm', {'for': ['sh', 'python', 'javascript', 'haskell']}
-	nnoremap <M-CR> :TREPLSendLine<CR>
-	vnoremap <M-CR> :TREPLSendSelection<CR>
-endif
+" if has('nvim')
+	" Plug 'kassio/neoterm', {'for': ['sh', 'python', 'javascript', 'haskell']}
+	" nnoremap <M-CR> :TREPLSendLine<CR>
+	" vnoremap <M-CR> :TREPLSendSelection<CR>
+" endif
 
 call plug#end()
 

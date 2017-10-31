@@ -3,11 +3,36 @@ def __init__(self, ${1:value}: ${2:Text}):
     self._${3:something} = ${4:value}
 endsnippet
 
+snippet "diff[eretiate]?" "Sympy differentiate [python]" br
+import sympy
+x, y, z = sympy.symbols('x y z')
+expr = (x**2 + y * x + 2 / x + sympy.log(2, x)).simplify()
+print(sympy.diff(expr, x))
+endsnippet
+
+snippet integrate "Sympy integrate [python]" b
+import sympy
+x, y, z = sympy.symbols('x y z')
+expr = (x**2 + y * x + 2 / x + sympy.log(2, x)).simplify()
+print(sympy.integrate(expr, x))
+endsnippet
+
+snippet simplify "Sympy simplify algebraic expression [python]" b
+import sympy
+x, y = sympy.symbols('x y')
+expr = x**2 + y * x + 2 / x + sympy.log(2, x)
+print(expr.simplify())
+endsnippet
+
 snippet #! "Shebang python [python]"
 #!/usr/bin/env python3 
 endsnippet
 
 snippet print "Print [python]" 
+print("${1:HELLO}")
+endsnippet
+
+snippet printf "Printf [python]" 
 print(f"${1:HELLO}")
 endsnippet
 

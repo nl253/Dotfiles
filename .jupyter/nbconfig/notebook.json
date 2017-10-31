@@ -1,7 +1,4 @@
 {
-  "load_extensions": {
-    "jupyter_emacskeys/init": true
-  },
   "Cell": {
     "cm_config": {
       "lineNumbers": false

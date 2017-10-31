@@ -60,7 +60,7 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell'
 	'composer' 'coreutils' 'cronie' 'atool' 'universal-ctags-git' 
 	'curl' 'elinks' 'erlang' 'flex' 'fzf' 'gawk' 'gcc' 'gcc-libs' 
 	'gimp' 'go' 'gparted' 'grep' 'hexchat' 'highlight' 'htop' 
-	'hub' 'hugo' 'jdk9-openjdk' 'jq' 'json-glib' 'less' 
+	'hub' 'hugo' 'jdk9-openjdk' 'jq' 'json-glib' 'less' 'graphviz'
 	'lsb-release' 'lshw' 'lua' 'make' 'man-db' 'man-pages' 'mariadb' 
 	'mariadb-clients' 'mathjax' 'mongodb' 'mongodb-tools' 'mutt' 
 	'ncurses' 'ngrep' 'nodejs' 'npm' 'openssh' 'parted' 'perl' 'php'
@@ -75,7 +75,7 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell'
 MANAGE_PYTHON=1
 PYTHON_PACKAGES=(
   'yapf' 'jedi' 'SQLAlchemy' 'yamllint' 'cpplint' 
-	'neovim' 'pylama' 'flake8' 'vulture' 'pycallgraph' 
+	'neovim' 'pylama' 'flake8' 'vulture' 'pycallgraph' 'radon'
 	'mypy' 'pylint' 'ranger-fm' 'sphinx' 'proselint' 
 	'jupyter' 'profiling' 'pytest' 'psycopg2' 'mycli' 
 	'docutils' 'Jinja2' 'youtube-dl' 'cookiecutter')

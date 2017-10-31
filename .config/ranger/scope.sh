@@ -104,9 +104,10 @@ handle_extension() {
       command lynx -dump -- "${FILE_PATH}" && exit 5
       ;;
 
-    rst)
+    rst | vorg)
+			(($HAS_PYGMENTS)) && [[ ${FILE_PATH} =~ \.vorg$ ]] && command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
       if [[ -x $(command which rst2html5.py 2>/dev/null) ]] && [[ -x $(command which elinks 2>/dev/null) ]]; then
-	  command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} && exit 5
+				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | elinks -dump -dump-color-mode 1 -dump-width ${PV_WIDTH} && exit 5
       fi
       ;;
 
