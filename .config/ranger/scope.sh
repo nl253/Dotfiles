@@ -86,6 +86,11 @@ handle_extension() {
       exit 1
       ;;
 
+    tar.xz)
+      command tar Jtf "${FILE_PATH}" && exit 5
+      exit 1
+      ;;
+
     tar.bz2)
       command tar jtf "${FILE_PATH}" && exit 5
       exit 1
@@ -248,6 +253,10 @@ handle_extension() {
       command bsdtar --list --file "${FILE_PATH}" && exit 5
       exit 1
       ;;
+
+		csv)
+			command head -n ${PV_HEIGHT} "${FILE_PATH}" | column --separator ',' --table --output-width ${PV_HEIGHT} --output-separator '  ' 2>/dev/null
+			;;
 
     # BitTorrent
     torrent)
