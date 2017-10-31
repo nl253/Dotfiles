@@ -219,6 +219,7 @@ Libraries/
 Uni/
 
 .m2/
+.julia/
 .yEd/
 .zenmap/
 .3T/
