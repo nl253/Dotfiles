@@ -1,7 +1,10 @@
 {
   "Cell": {
     "cm_config": {
-      "lineNumbers": false
+      "lineNumbers": true
     }
+  },
+  "load_extensions": {
+    "vim_binding/vim_binding": true
   }
 }

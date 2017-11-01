@@ -61,14 +61,18 @@ handle_extension() {
   case "${FILE_PATH#*.}" in
 
     java | cpp | c | h | hpp | cs | c++ | hh | hxx | cp)
-      if [[ -x $(command which astyle 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
-        local filetype=$(pygmentize -N "${FILE_PATH}")
-        command astyle --mode="${filetype}" <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}"
-        exit 5
-      fi
-      ;;
 
-    json)
+			if  (($HAS_PYGMENTS)); then
+				local filetype=$(pygmentize -N "${FILE_PATH}")
+				if [[ -x $(command which astyle 2>/dev/null) ]]; then
+					command astyle --mode="${filetype}" <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
+				elif [[ -x $(command which clang-format 2>/dev/null) ]]; then
+					command clang-format <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
+				fi
+			fi
+			;;
+
+    json | map)
 			if [[ -x $(command which js-beautify 2>/dev/null) ]] && (($HAS_PYGMENTS)); then
 				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json && exit 5
 			fi
@@ -76,7 +80,7 @@ handle_extension() {
 
     md | m*down)
 			if [[ -x $(command which pandoc 2>/dev/null) ]] && (($HAS_ELINKS)); then
-        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+        command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks  -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
       fi
       ;;
 
@@ -106,7 +110,7 @@ handle_extension() {
     # HTML
     *html)
       # Preview as text conversion
-			(($HAS_ELINKS)) && command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" "${FILE_PATH}" && exit 5
+			(($HAS_ELINKS)) && command elinks -dump -no-references -no-numbering -dump-color-mode 1 -dump-width "${PV_WIDTH}" "${FILE_PATH}" && exit 5
       command w3m -cols "${PV_WIDTH}" -dump -F -s -graph -M "${FILE_PATH}" && exit 5
       command lynx -dump -- "${FILE_PATH}" && exit 5
       ;;
@@ -114,7 +118,7 @@ handle_extension() {
 		*ipynb)
 
 			if (($HAS_ELINKS)) && [[ -x $(command which jupyter 2>/dev/null) ]]; then 
-				command jupyter nbconvert --stdout --to html "${FILE_PATH}" | command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+				command jupyter nbconvert --stdout --to html "${FILE_PATH}" | command elinks  -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
 			fi
 			;;
 
@@ -122,7 +126,7 @@ handle_extension() {
 			if (($HAS_PYGMENTS)) && [[ "${FILE_PATH}" =~ \.vorg$ ]];then
 				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
 			elif [[ -x $(command which rst2html5.py 2>/dev/null) ]] && (($HAS_ELINKS)); then
-				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --smart-quotes=yes --math-output='MathJax' --stylesheet='' | command elinks -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+				command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --math-output=LaTeX --link-stylesheet --quiet --smart-quotes=yes --stylesheet=${HOME}/.docutils/docutils.css | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
 			fi
 			;;
 
@@ -141,7 +145,9 @@ handle_extension() {
     # PDF
     pdf)
       # Preview as text conversion
-      command pdftotext -l 10 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
+			[[ ! $(command du --si -s  "${FILE_PATH}" | grep -Eo '^\S+') =~ 'M' ]] && (($HAS_ELINKS)) && command pdftohtml -c -s -i -stdout "${FILE_PATH}" | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+
+      command pdftotext -l 5 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
       command exiftool "${FILE_PATH}" && exit 5
       exit 1
       ;;
@@ -190,6 +196,11 @@ handle_extension() {
       exit 1
       ;;
 
+		pptx)
+			echo -e $(basename "${FILE_PATH}")"\n----------------------------------------------------\n"
+			command unzip -p ${FILE_PATH} | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' |  perl -pe 's/[^[:ascii:]]//g' | fmt -u -w "${PV_WIDTH}" | column | sed -E -e 's/\. ([A-Z])|(\*)|(\-)/\n\n\1/g' && exit 5
+			;;
+
     rar)
       # Avoid password prompt by providing empty password
       command unrar lt -p- -- "${FILE_PATH}" && exit 5
@@ -205,7 +216,7 @@ handle_extension() {
       ;;
 
 			# XML formats
-			iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | xml | uml | aird | notation | project)
+			iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | xml | uml | aird | notation | project | svg)
 			if (($HAS_PYGMENTS)); then 
 				if [[ -x $(command which html-beautify 2>/dev/null) ]]; then
 					command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command html-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l xml
@@ -270,41 +281,14 @@ handle_name() {
 
     case $(basename "${FILE_PATH}") in
 
-	.gitignore)
-	    if (($HAS_PYGMENTS)); then
-				command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini "${FILE_PATH}" && exit 5
-			fi
-	  ;;
+			.gitignore | humans.txt | robots.txt)
+				if (($HAS_PYGMENTS)); then
+					command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini "${FILE_PATH}" && exit 5
+				fi
+				;;
 
     esac
 }
-
-# handle_image() {
-
-    # local mimetype="${1}"
-
-    # case "${mimetype}" in
-
-	# # SVG
-	# # image/svg+xml)
-	# #     convert "${FILE_PATH}" "${IMAGE_CACHE_PATH}" && exit 6
-	# #     exit 1;;
-
-	# # Image
-	# image/*)
-	# # `w3mimgdisplay` will be called for all images (unless overriden as above),
-	# # but might fail for unsupported types.
-	# exit 7
-	# ;;
-
-	# # Video
-	# # video/*)
-	# #     # Thumbnail
-	# #     ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
-	# #     exit 1;;
-    # esac
-# }
-
 
 handle_mime() {
   
@@ -327,15 +311,11 @@ handle_mime() {
       exit 1
       ;;
 
-      # # Image
-      # image/*)
-
-      # # Preview as text conversion
-      # # img2txt --gamma=0.6 --width="${PV_WIDTH}" -- "${FILE_PATH}" && exit 4
-      # exiftool "${FILE_PATH}" && exit 5
-      # exit 1
-      # ;; 
-  esac
+			# Image
+			image/*)
+			img2txt --gamma=0.6 --width="${PV_WIDTH}" -- "${FILE_PATH}" && exit 5
+			exiftool "${FILE_PATH}" && exit 5
+	esac
 }
 
 handle_fallback() {
