@@ -21,6 +21,7 @@ unset MAILCHECK
 export JAVA_HOME=/usr/lib/jvm/java-9-openjdk
 export JRE_HOME=/usr/lib/jvm/java-8-openjdk/jre
 
+# reset
 export CDPATH="${HOME}:"
 
 for directory in ${HOME}/Documents ${HOME}/Documents/*; do

@@ -166,6 +166,14 @@ preview_dosini() {
   command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l dosini && exit 5
 }
 
+preview_docx() {
+	# unzip, strip tags
+	if [[ -x $(command which unzip 2>/dev/null) ]]; then
+		command unzip -p "${FILE_PATH}" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w "${PV_WIDTH}" | command head -n ${PV_HEIGHT} && exit 5 
+		exit 1
+	fi
+}
+
 preview_cfamily() {
   local filetype=$(pygmentize -N "${FILE_PATH}")
   if [[ -x $(command which astyle 2>/dev/null) ]]; then
@@ -193,6 +201,48 @@ preview_dir() {
 			command ls "${FILE_PATH}" -1log
 		fi 
 	fi
+}
+
+preview_csv(){
+	command head -n "${PV_HEIGHT}" "${FILE_PATH}" | column --separator ',' --table --output-width ${PV_HEIGHT} --output-separator '  ' && exit 5
+	exit 1
+}
+
+preview_sqlite(){
+	if [[ -x $(command which sqlite3 2>/dev/null) ]]; then
+		local no_tables=$(command sqlite3 -noheader -init '' "${FILE_PATH}" .tables | grep -Ec '^[-a-zA-Z0-9_]+')
+		if ((no_tables == 1)); then
+			local table_name=$(command sqlite3 -init "" "${FILE_PATH}" .tables | head -n 1)
+			echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
+			echo -e "\nTable ${table_name}\n"
+			command sqlite3 -column -header -init '' "${FILE_PATH}" 'SELECT * FROM '"${table_name} LIMIT ${PV_HEIGHT}"
+		else
+			echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
+			echo -e "\nTables\n"
+			command sqlite3 -init '' "${FILE_PATH}" .tables
+		fi
+	fi
+	exit 5
+}
+
+preview_pptx(){
+	echo -e $(basename "${FILE_PATH}")"\n----------------------------------------------------\n"
+	command unzip -p "${FILE_PATH}" | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | perl -pe 's/[^[:ascii:]]//g' | fmt -u -w "${PV_WIDTH}" | column | sed -E -e 's/\. ([A-Z])|(\*)|(\-)/\n\n\1/g' && exit 5
+	exit 1
+}
+
+guess_shebang(){
+      # guess from shebang
+      if [[ $(head -n 1 "${FILE_PATH}") =~ '#!/' ]]; then
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(head -n 1 "${FILE_PATH}" | grep -Eo '\w+$') && exit 5
+      fi
+}
+
+preview_pdf(){
+	# Preview as text conversion
+	command pdftotext -l 5 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
+	command exiftool "${FILE_PATH}" && exit 5
+	exit 1
 }
 
 handle_code() {
@@ -252,45 +302,23 @@ handle_extension() {
   case "${EXTENSION}" in
 
     csv)
-      command head -n "${PV_HEIGHT}" "${FILE_PATH}" | column --separator ',' --table --output-width ${PV_HEIGHT} --output-separator '  ' 2>/dev/null
+      preview_csv
       ;;
 
-    # PDF
-    pdf)
-      # Preview as text conversion
-      command pdftotext -l 5 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
-      command exiftool "${FILE_PATH}" && exit 5
-      exit 1
-      ;;
+		pdf)
+			preview_pdf
+			;;
 
     docx)
-      # unzip, strip tags
-      if [[ -x $(command which unzip 2>/dev/null) ]]; then
-        command unzip -p "${FILE_PATH}" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w "${PV_WIDTH}" | command head -n ${PV_HEIGHT} && exit 5 || exit 1
-      fi
+			preview_docx
       ;;
 
     pptx)
-      echo -e $(basename "${FILE_PATH}")"\n----------------------------------------------------\n"
-      command unzip -p "${FILE_PATH}" | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | perl -pe 's/[^[:ascii:]]//g' | fmt -u -w "${PV_WIDTH}" | column | sed -E -e 's/\. ([A-Z])|(\*)|(\-)/\n\n\1/g' && exit 5
-      exit 1
+			preview_pptx
       ;;
 
     sqlite | sqlite*)
-      if [[ -x $(command which sqlite3 2>/dev/null) ]]; then
-        local no_tables=$(command sqlite3 -noheader -init '' "${FILE_PATH}" .tables | grep -Ec '^[-a-zA-Z0-9_]+')
-        if ((no_tables == 1)); then
-          local table_name=$(command sqlite3 -init "" "${FILE_PATH}" .tables | head -n 1)
-          echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
-          echo -e "\nTable ${table_name}\n"
-          command sqlite3 -column -header -init '' "${FILE_PATH}" 'SELECT * FROM '"${table_name} LIMIT ${PV_HEIGHT}"
-        else
-          echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
-          echo -e "\nTables\n"
-          command sqlite3 -init '' "${FILE_PATH}" .tables
-        fi
-      fi
-      exit 5
+			preview_sqlite
       ;;
 
     # automatically decompile Java's *.class files + highlight
@@ -351,10 +379,7 @@ handle_mime() {
         return
       fi
 
-      # guess from shebang
-      if [[ $(head -n 1 "${FILE_PATH}") =~ '#!/' ]]; then
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(head -n 1 "${FILE_PATH}" | grep -Eo '\w+$') && exit 5
-      fi
+			guess_shebang
 
       case "${FILE_NAME,,}" in
 

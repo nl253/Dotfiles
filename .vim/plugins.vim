@@ -348,29 +348,29 @@ endif
 " MY PLUGINS:
 " ==========
 
-if !empty(expand('~/Documents/vim')) 
+if !empty(expand('~/Documents/Vim')) 
     for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
 	Plug 'nl253/'.plugin, {
 		    \ 'frozen': 1, 
-		    \ 'dir': expand('~/Documents/vim/').plugin
+		    \ 'dir': expand('~/Documents/Vim/').plugin
 		    \ }
     endfor
 
     Plug 'nl253/vim-programming', {
 		\ 'frozen': 1, 
-		\ 'dir': expand('~/Documents/vim/vim-programming'), 
+		\ 'dir': expand('~/Documents/Vim/vim-programming'), 
 		\ 'for': g:.programming_languages
 		\ }
 
     Plug 'nl253/vim-markup', {
 		\ 'frozen': 1, 
-		\ 'dir': expand('~/Documents/vim/vim-markup'), 
+		\ 'dir': expand('~/Documents/Vim/vim-markup'), 
 		\ 'for': g:markup_languages
 		\ }
 
     Plug 'nl253/vim-webdev', {
 		\ 'frozen': 1, 
-		\ 'dir': expand('~/Documents/vim/vim-webdev'), 
+		\ 'dir': expand('~/Documents/Vim/vim-webdev'), 
 		\ 'for': ['xml', 'css', 'javascript', 'typescript', 'markdown']
 		\ }
 endif
