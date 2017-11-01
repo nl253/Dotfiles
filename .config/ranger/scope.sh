@@ -80,6 +80,8 @@ preview() {
 preview_go() {
   if [[ -x $(command which go 2>/dev/null) ]]; then
     command gofmt -s <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l golang && exit 5
+	else
+		command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l golang && exit 5
   fi
 }
 
@@ -96,12 +98,19 @@ preview_php() {
 }
 
 preview_css() {
-  ((HAS_JSBEAUTIFY)) && command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css && exit 5
+  if ((HAS_JSBEAUTIFY)); then
+		command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command css-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css && exit 5
+	else
+		command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l css && exit 5
+	fi
 }
 
 preview_sh() {
-  [[ -x $(command which shfmt 2>/dev/null) ]] && local HAS_SHFMT=1 || local HAS_SHFMT=0
-  ((HAS_SHFMT)) && shfmt -s -i2 -ci <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l sh && exit 5
+  if [[ -x $(command which shfmt 2>/dev/null) ]]; then
+    shfmt -s -i2 -ci <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l sh && exit 5
+	else
+		command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l sh && exit 5
+	fi
 }
 
 preview_class() {
@@ -113,6 +122,8 @@ preview_class() {
 preview_rst() {
   if [[ -x $(command which rst2html5.py 2>/dev/null) ]]; then
     command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --math-output=LaTeX --link-stylesheet --quiet --smart-quotes=yes --stylesheet=${HOME}/.docutils/docutils.css | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+	else
+    command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
   fi
 }
 
@@ -120,12 +131,16 @@ preview_md() {
   [[ -x $(command which pandoc 2>/dev/null) ]] && HAS_PANDOC=1 || HAS_PANDOC=0
   if ((HAS_PANDOC)); then
     command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5 || exit 1
+	else
+    command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l markdown && exit 5
   fi
 }
 
 preview_jupyter() {
   if [[ -x $(command which jupyter 2>/dev/null) ]]; then
     command jupyter nbconvert --stdout --to html "${FILE_PATH}" | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+	else 
+		preview_json
   fi
 }
 
@@ -170,8 +185,14 @@ preview_json() {
   fi
 }
 
-preview_dir() {
-  [[ -d ${FILE_PATH} ]] && command tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
+preview_dir() {                     
+	if [[ -d ${FILE_PATH} ]]; then
+		if [[ -x $(command which tree 2>/dev/null) ]]; then
+			command tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
+		else
+			command ls "${FILE_PATH}" -1log
+		fi 
+	fi
 }
 
 handle_code() {
@@ -192,22 +213,9 @@ handle_code() {
       preview_json
       ;;
 
-    md | m*down)
-      preview_md
-      ;;
-
-    # XML formats
-    xml | iml | ucls | plist | back | xbel | fo | urdf | sdf | xacro | uml | aird | notation | project | svg)
+		# XML formats
+    xml | iml | ?cls | plist | back | xbel | fo | urdf | sdf | xacro | uml | aird | notation | project | svg)
       preview_xml
-      ;;
-
-    # Generic text files
-    txt)
-      if [[ "${FILE_NAME}" =~ requirements|humans|robots ]] || [[ $(basename $(dirname "${FILE_PATH}")) =~ requirements ]]; then
-        preview_dosini
-      else
-        preview
-      fi
       ;;
 
     js | ts)
@@ -344,17 +352,26 @@ handle_mime() {
       fi
 
       # guess from shebang
-      if [[ $(head -n "${FILE_PATH}") =~ '#!/' ]]; then
+      if [[ $(head -n 1 "${FILE_PATH}") =~ '#!/' ]]; then
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(head -n 1 "${FILE_PATH}" | grep -Eo '\w+$') && exit 5
       fi
 
       case "${FILE_NAME,,}" in
 
+				requirements.txt | humans.txt | robots.txt)
+					preview_dosini
+				;;
+
+				# Generic text files
+				*.txt)
+					preview
+				;;
+
         .babelrc | .csslintrc | .jsbeautifyrc | .jshintrc | .stylelintrc | .tern-* | .markdownlintrc)
           preview_json
           ;;
 
-        *.cfg | .*conf* | .*ignore* | *.cnf | *.toml | *.MF | *.desktop | .flake8 | *.yapf)
+        *.conf | *config | *.cfg | .*ignore* | *.cnf | *.toml | *.MF | *.desktop | .flake8 | *.yapf)
           preview_dosini
           ;;
 
