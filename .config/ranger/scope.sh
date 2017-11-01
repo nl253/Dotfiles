@@ -4,9 +4,10 @@ set -o noclobber -o noglob -o nounset -o pipefail
 IFS=$'\n'
 
 # Dependencies
-# ------------
+# ---------------------------
 # - GNU coreutils
 # - 7z
+# - perl
 # - pygmentize
 # - tar
 # - elinks
@@ -55,19 +56,20 @@ IMAGE_CACHE_PATH="${4}" # Full path that should be used to cache image preview
 PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwise.
 EXTENSION="${FILE_PATH#*.}"
 FILE_NAME=$(basename "${FILE_PATH}")
-MIME=$(command file --dereference --brief --mime-type -- "${FILE_PATH}")
 
-[[ -x $(command which pygmentize 2>/dev/null) ]] && HAS_PYGMENTS=1 || HAS_PYGMENTS=0
 [[ -x $(command which elinks 2>/dev/null) ]] && HAS_ELINKS=1 || HAS_ELINKS=0
 [[ -x $(command which js-beautify 2>/dev/null) ]] && HAS_JSBEAUTIFY=1 || HAS_JSBEAUTIFY=0
 
 # Settings
-if (($HAS_PYGMENTS)); then
+if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
+	HAS_PYGMENTS=1 
 	HIGHLIGHT_SIZE_MAX=262143 # 256KiB
 	HIGHLIGHT_TABWIDTH=8
 	HIGHLIGHT_STYLE='pablo'
 	PYGMENTIZE_STYLE='autumn'
 	[[ "$(tput colors)" -ge 256 ]] && PYGMENTIZE_FORMAT='terminal256' || PYGMENTIZE_FORMAT='terminal'
+else
+	HAS_PYGMENTS=0
 fi
 
 # most generic, no syntax highlighting
@@ -75,10 +77,8 @@ preview(){
 	command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" && exit 5 || exit 1
 }
 
-
 preview_go(){
-	[[ -x $(command which go 2>/dev/null) ]] && local HAS_GO=1 || local HAS_GO=0
-	if (($HAS_GO)); then
+	if [[ -x $(command which go 2>/dev/null) ]]; then
 		command gofmt -s <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l golang && exit 5
 	fi
 }
@@ -139,6 +139,7 @@ preview_html(){
 preview_img(){
 	img2txt --gamma=0.6 --width="${PV_WIDTH}" -- "${FILE_PATH}" && exit 5
 	exiftool "${FILE_PATH}" && exit 5
+	exit 1
 }
 
 preview_xml(){
@@ -161,12 +162,16 @@ preview_cfamily(){
 		command astyle --mode="${filetype}" <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
 	elif (($HAS_CLANG)); then
 		command clang-format <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
+	else
+		command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
 	fi
 }
 
 preview_json(){
 	if (($HAS_JSBEAUTIFY)); then
 		command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command js-beautify | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json && exit 5
+	else
+		command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l json && exit 5
 	fi
 }
 
@@ -174,7 +179,7 @@ handle_code() {
 
 	! (($HAS_PYGMENTS)) && return
 
-  case $EXTENSION in
+  case "${EXTENSION}" in
 
     java | cpp | c | h | hpp | cs | c++ | hh | hxx | cp)
 			preview_cfamily
@@ -188,13 +193,12 @@ handle_code() {
 			preview_md
       ;; 
 
-
 		# Generic text files
 		txt)
-			if [[ $FILE_NAME =~ requirements|humans|robots ]] || [[ $(basename $(dirname "${FILE_PATH}")) =~ requirements ]]; then
+			if [[ "${FILE_NAME}" =~ requirements|humans|robots ]] || [[ $(basename $(dirname "${FILE_PATH}")) =~ requirements ]]; then
 				preview_dosini
 			else
-				preview_rst
+				preview
 			fi
 			;;
 
@@ -234,8 +238,7 @@ handle_code() {
 
 handle_extension() {
 
-  case $EXTENSION in
-
+  case "${EXTENSION}" in
 
 		csv)
 			command head -n "${PV_HEIGHT}" "${FILE_PATH}" | column --separator ',' --table --output-width ${PV_HEIGHT} --output-separator '  ' 2>/dev/null
@@ -244,11 +247,7 @@ handle_extension() {
     # PDF
     pdf)
       # Preview as text conversion
-			if [[ ! $(command du --si -s  "${FILE_PATH}" | grep -Eo '^\S+') =~ 'M' ]] && (($HAS_ELINKS)); then
-				command pdftohtml -c -s -i -stdout "${FILE_PATH}" | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
-			else
-				command pdftotext -l 5 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
-			fi
+			command pdftotext -l 5 -nopgbrk -q -- "${FILE_PATH}" - && exit 5
       command exiftool "${FILE_PATH}" && exit 5
       exit 1
       ;;
@@ -270,7 +269,6 @@ handle_extension() {
       exit 5
       ;;
 
-
 		# automatically decompile Java's *.class files + highlight
 		class)
 			preview_class
@@ -280,10 +278,8 @@ handle_extension() {
     docx)
       # unzip, strip tags
       if [[ -x $(command which unzip 2>/dev/null) ]]; then
-        command unzip -p "${FILE_PATH}" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w "${PV_WIDTH}" | command head -n ${PV_HEIGHT}
-        exit 5
+        command unzip -p "${FILE_PATH}" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | command fmt -u -w "${PV_WIDTH}" | command head -n ${PV_HEIGHT} && exit 5 || exit 1
       fi
-			exit 1
       ;;
 
 		pptx)
@@ -311,7 +307,7 @@ handle_extension() {
 handle_website(){
 	! (($HAS_ELINKS)) && return
 
-  case $EXTENSION in
+  case "${EXTENSION}" in
 
 		md | markdown | mdown)
 			preview_md
@@ -335,6 +331,8 @@ handle_website(){
 
 handle_mime() {
 
+	local MIME=$(command file --dereference --brief --mime-type -- "${FILE_PATH}")
+
 	case $MIME in
 
 		# Text
@@ -350,9 +348,9 @@ handle_mime() {
 			fi
 
 			# guess from shebang
-			command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(head -n 1 ${FILE_PATH} | grep -Eo '\w+$') && exit 5
+			command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(head -n 1 "${FILE_PATH}" | grep -Eo '\w+$') && exit 5
 
-			case $FILE_NAME in
+			case "${FILE_NAME}" in
 
 				.babelrc | .csslintrc | .jsbeautifyrc | .jshintrc | .stylelintrc | .tern-*)
 					preview_json
@@ -366,14 +364,18 @@ handle_mime() {
 					command pygmentize -f "${PYGMENTIZE_FORMAT}" -l lisp "${FILE_PATH}" && exit 5
 					;;
 
-				*.cnf | *.conf | *.cfg | *.toml | *.MF | *.desktop | .gitignore | .gitconfig | .curlrc | .editorconfig | .flake8 | .flowconfig | .minttyrc | .msmtprc | .my.cnf | .mypyrc | .pylintrc | *.yapf | .tidyrc | .tigrc | .wgetrc | .xbindkeysrc )
+				PKGBUILD)
+					preview_sh
+					;;
+
+				*.cnf | *.conf | *.cfg | *.toml | *.MF | *.desktop | .gitignore | .gitconfig | .curlrc | .editorconfig | .flake8 | .flowconfig | .minttyrc | .msmtprc | .my.cnf | .mypyrc | .pylintrc | *.yapf | .tidyrc | .tigrc | .wgetrc | .xbindkeysrc)
 					preview_dosini
 					;;
 
 				esac
 
 				# let pygments guess
-				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}") && exit 5
+				command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(pygmentize -N "${FILE_PATH}") && exit 5 || preview
 			;;
 
 		inode/directory)
@@ -397,6 +399,11 @@ handle_archive(){
 
   case $EXTENSION in
 
+    zip | gz | tar | jar | 7z | bz2 | rpm | deb | cpio | deb | arj)
+      # Avoid password prompt by providing empty password
+			(($HAS_7Z)) && command 7z l -p -- "${FILE_PATH}" && exit 5
+      ;;
+
     tar.gz)
       command tar ztf "${FILE_PATH}" && exit 5
       ;;
@@ -409,12 +416,6 @@ handle_archive(){
       command tar jtf "${FILE_PATH}" && exit 5
       ;;
 
-    zip | gz | tar | jar | 7z | bz2 | rpm | deb | cpio | deb | arj)
-      # Avoid password prompt by providing empty password
-			(($HAS_7Z)) && command 7z l -p -- "${FILE_PATH}" && exit 5
-      ;;
-
-    # Archive
     a | ace | alz | arc | arj | bz |  cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
       command atool --list -- "${FILE_PATH}" && exit 5
       command bsdtar --list --file "${FILE_PATH}" && exit 5
@@ -437,6 +438,7 @@ handle_code
 handle_website
 handle_archive
 handle_mime 
+handle_extension
 handle_fallback 
 
 exit 1
