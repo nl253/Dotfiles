@@ -205,6 +205,43 @@ class tracked(Command):
         self.fm.ui.redraw_main_column()
 
 
+class yarn(Command):
+    """:yarn <subcommand>
+    """
+
+    def execute(self):
+        run(['yarn'] + self.args[1:], shell=True)
+
+
+    def tab(self, tabnum):
+
+        if len(self.args) > 2 and self.args[1] == 'run':
+
+            from os.path import isfile
+            import json
+
+            if not isfile('package.json'):
+                self.fm.notify('No package.json in this dir.', bad=True)
+                return
+
+            with open('./package.json', mode='r', encoding='utf-8') as f:
+                text = f.read()
+
+            x: dict = json.load(open('./package.json', encoding='utf-8'))
+
+            if x.get('scripts', None) == None: return
+
+            return {f'yarn run {i}' for i in x['scripts']}
+
+        elif len(self.args) == 1 or self.args[1] != 'run':
+            return {f'yarn {i}' for i in ('install', 'update', 'upgrade', 'remove', 'pack', 'run', 'unlink', 'generate-lock-entry', 'import', 'access', 'add', 'autoclean', 'create', 'exec', 'publish')}
+        
+        else:
+            return
+
+
+
+
 class make(Command):
     """:make <subcommand>
 
@@ -231,6 +268,7 @@ class make(Command):
         pat = re.compile(r'^(\w+):', flags=re.M)
 
         return {'make ' + i.group(1) for i in pat.finditer(text)}
+
 
 class mvn(Command):
 
