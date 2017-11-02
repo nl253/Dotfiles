@@ -1419,18 +1419,6 @@ class filter_inode_type(Command):
         self.fm.thisdir.refilter()
 
 
-class grep(Command):
-    """:grep <string>
-
-    Looks for a string in all marked files or directories
-    """
-
-    def execute(self):
-        if self.rest(1):
-            action = ['grep', '--line-number']
-            action.extend(['-e', self.rest(1), '-r'])
-            action.extend(f.path for f in self.fm.thistab.get_selection())
-            self.fm.execute_command(action, flags='p')
 
 
 class flat(Command):

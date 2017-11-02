@@ -12,104 +12,247 @@ from __future__ import (absolute_import, division, print_function)
 # You always need to import ranger.api.commands here to get the Command class:
 from ranger.api.commands import Command
 
-#  # Any class that is a subclass of "Command" will be integrated into ranger as a
-#  # command.  Try typing ":my_edit<ENTER>" in ranger!
-#  class my_edit(Command):
-    #  # The so-called doc-string of the class will be visible in the built-in
-    #  # help that is accessible by typing "?c" inside ranger.
-    #  """:my_edit <filename>
+from os import listdir
+from subprocess import run
 
-    #  A sample command for demonstration purposes that opens a file in an editor.
-    #  """
+# Any class that is a subclass of "Command" will be integrated into ranger as a
+# command.  Try typing ":my_edit<ENTER>" in ranger!
+class git(Command):
+    """git <subcommand> [<option>, ...] [--] [<file>, ...]
+    """
+    def execute(self):
+        command = ['git', '--paginate']
 
-    #  # The execute method is called when you run this command in ranger.
-    #  def execute(self):
-        #  # self.arg(1) is the first (space-separated) argument to the function.
-        #  # This way you can write ":my_edit somefilename<ENTER>".
-        #  if self.arg(1):
-            #  # self.rest(1) contains self.arg(1) and everything that follows
-            #  target_filename = self.rest(1)
-        #  else:
-            #  # self.fm is a ranger.core.filemanager.FileManager object and gives
-            #  # you access to internals of ranger.
-            #  # self.fm.thisfile is a ranger.container.file.File object and is a
-            #  # reference to the currently selected file.
-            #  target_filename = self.fm.thisfile.path
+        command.extend(self.args[1:])
 
-        #  # This is a generic function to print text in ranger.
-        #  self.fm.notify("Let's edit the file " + target_filename + "!")
+        if len(self.fm.thistab.get_selection()) > 1:
+            command.append('--')
+            command.extend((i.path for i in self.fm.thistab.get_selection()))
 
-        #  # Using bad=True in fm.notify allows you to print error messages:
-        #  if not os.path.exists(target_filename):
-            #  self.fm.notify("The given file does not exist!", bad=True)
-            #  return
+        run(command)
 
-        #  # This executes a function from ranger.core.acitons, a module with a
-        #  # variety of subroutines that can help you construct commands.
-        #  # Check out the source, or run "pydoc ranger.core.actions" for a list.
-        #  self.fm.edit_file(target_filename)
-
-    #  # The tab method is called when you press tab, and should return a list of
-    #  # suggestions that the user will tab through.
-    #  # tabnum is 1 for <TAB> and -1 for <S-TAB> by default
-    #  def tab(self, tabnum):
-        #  # This is a generic tab-completion function that iterates through the
-        #  # content of the current directory.
-        #  return self._tab_directory_content()
+        self.fm.ui.need_redraw = True
+        self.fm.ui.redraw_main_column()
 
 
-class ggrep(Command):
-    """:ggrep <string>
+    def tab(self, tabnum):
 
-    Looks for a string in files in the current repo.
+        opts = {'--no-pager', '-C'}
+        commands = {
+            'add',
+            'am',
+            'apply',
+            'archive',
+            'bisect',
+            'blame',
+            'branch',
+            'cat-file',
+            'checkout',
+            'checkout-index',
+            'cherry',
+            'clean',
+            'clone',
+            'commit',
+            'commit-tree',
+            'count-objects',
+            'diff',
+            'diff-files',
+            'diff-index',
+            'diff-tree',
+            'fast-export',
+            'fetch',
+            'filter-branch',
+            'for-each-ref',
+            'for-ls-tree',
+            'grep',
+            'hash-object',
+            'help',
+            'index-pack',
+            'init',
+            'log',
+            'ls-files',
+            'merge',
+            'merge-file',
+            'merge-index',
+            'mktag',
+            'mktree',
+            'mv',
+            'name-rev',
+            'pack-redundant',
+            'prune-packed',
+            'pull',
+            'push'
+            'read-tree',
+            'rebase',
+            'reflog',
+            'remote',
+            'repack',
+            'reset',
+            'rev-list',
+            'rm',
+            'show',
+            'show-branches',
+            'status',
+            'symbolic-ref',
+            'tag',
+            'unpack-file',
+            'update-ref',
+            'var',
+            'verify-pack',
+            'worktree',
+            'write-tree',
+        }
+
+        #  return {f'git {i}' for i in commands if self.arg(1) in i or i in self.arg(1)}  if len(self.args) > 1 else {f'git {i}' for i in commands if self.arg(1) in i or i in self.arg(1)}
+
+        return {(" ".join(self.args[:-1]) + " " + i).strip()
+                for i in commands if self.args[-1] in i or i in self.args[-1]
+                } if len(self.args) > 1 else {f"git {i}" for i in opts} 
+
+
+class vim(Command):
+    """:vim [<option>, ...] [<filename>, ...]
     """
 
     def execute(self):
+        command = ['vim'] + self.args[1:]
+        command.append('--')
+        command.extend(map(lambda x: x.path, self.fm.thistab.get_selection()))
+        run(command)
+        self.fm.ui.need_redraw = True
+        self.fm.ui.redraw_main_column()
+
+    def tab(self, tabnum):
+
+        opts = {'-t', '+', '-S', '--cmd', '-d', '-M', '-m', '-o', '-O', '-p', '-R'}
+
+        return {(" ".join(self.args[:-1]) + " " + i).strip()
+                for i in opts | set(listdir(self.fm.thisdir.path))
+                if self.args[-1] in i or i in self.args[-1]
+                } if len(self.args) > 1 else {f"vim {i}" for i in opts}
+
+
+class todos(Command):
+    """:todos
+
+    Looks for TODOs in the current repo.
+    """
+
+    def execute(self):
+
+        run([
+            'git', '--paginate', 'grep', '--line-number', '--color=always', '-I', '--after-context', '3', '--threads', '16',
+            '--extended-regexp', '--full-name', '--heading', '--break', "'TODO|FIXME'"
+            ])
+
+        self.fm.ui.need_redraw = True
+        self.fm.ui.redraw_main_column()
+
+
+class grep(Command):
+
+    """:grep <string>
+
+    Looks for a string in all marked files or directories
+    """
+
+    def execute(self):
+        from subprocess import PIPE
+        from os.path import exists, expanduser
+
         if self.rest(1):
-            action = ['git', 'grep', '--line-number', '--color=always', '-E', '--full-name', '--heading', '--break']
-            action.extend(['-e', self.rest(1)])
-            self.fm.execute_command(action)
+
+            # try ripgrep
+            if exists(expanduser('~/.cargo/bin/rg')):
+
+                x = run([
+                    'rg', '--pretty', '--smart-case', '--threads', '16',
+                    '--after-context', '1', '--before-context', '1', '--regexp'
+                ] + self.args[1:],
+                        stdout=PIPE)
+
+            # try git grep if in a git repo
+            elif exists(
+                run(['git', 'rev-parse', '--show-toplevel'],
+                    PIPE).stdout.decode('utf-8')
+            ):
+
+                x = run([
+                    'git', 'grep', '--line-number', '--color=always', '-I',
+                    '--after-context=3', '--threads=16', '--extended-regexp',
+                    '--heading', '--break', '-e'
+                ] + self.args[1:],
+                        stdout=PIPE)
+
+            # fallback on grep
+            else:
+                x = run([
+                    'grep', '--line-number', '--extended-regexp',
+                    '--color=always', '--with-filename', '-r', '-e'
+                ] + self.args[1:])
+
+            run(['less', '-R', '-X', '-I'], input=x.stdout)
+
+            self.fm.ui.need_redraw = True
+            self.fm.ui.redraw_main_column()
+
 
 class untracked(Command):
-    """:untracked <string>
+    """:untracked
 
-    List untracked files.
+    List files not tracked by git (ignored).
     """
 
     def execute(self):
-        if self.rest(1):
-            action = ['git', 'ls-files', '--others']
-            self.fm.execute_command(action)
+        run(['git', '--paginate', 'ls-files', '--others'])
 
+        self.fm.ui.need_redraw = True
+        self.fm.ui.redraw_main_column()
 
-#  class glog(Command):
-    #  """:glog
+class tracked(Command):
+    """:tracked
 
-    #  Show git repo log.
-    #  """
+    List files tracked by git.
+    """
 
-    #  def execute(self):
-        #  r = self.rest(1)
-        #  self.fm.execute_command(['git', 'log', '--stat'] + r if r else [])
+    def execute(self):
+        run(['git', '--paginate', 'ls-files'])
 
+        self.fm.ui.need_redraw = True
+        self.fm.ui.redraw_main_column()
 
-#  class gdiff(Command):
-    #  """:gdiff
+class modified(Command):
+    """:modified
 
-    #  Show git diff.
-    #  """
+    List files modified (Git).
+    """
 
-    #  def execute(self):
-        #  r = self.rest(1)
-        #  self.fm.execute_command(['git', 'diff'] + r if r else [])
+    def execute(self):
+        run(['git', '--paginate', 'ls-files', '--modified'])
 
+        self.fm.ui.need_redraw = True
+        self.fm.ui.redraw_main_column() 
 
-#  class gls(Command):
-    #  """:gls
+class vimdiff(Command):
+    """:vimdiff <file1> <file2> | <file1> <file2> <file3>
 
-    #  Git ls-files.
-    #  """
+    Open default diff tool with passed files.
+    """
 
-    #  def execute(self):
-        #  r = self.rest(1)
-        #  self.fm.execute_command(['git', 'ls-files'] + [r] if r else [], flag='p')
+    def execute(self):
+
+        command = ['vim', '-d', '--']
+
+        if len(self.fm.thistab.get_selection()) > 1:
+            command.extend([i.path for i in self.fm.thistab.get_selection()][:3])
+            
+        elif self.args[1:]:
+            command.extend(self.args[1:4])
+
+        else:
+            return
+
+        run(command)
+
+        self.fm.ui.need_redraw = True
+        self.fm.ui.redraw_main_column()

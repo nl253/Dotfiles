@@ -4,13 +4,13 @@
 # SOURCED BY BOTH `zsh` AND `bash`
 
 _in_path() {
-    # checks  an executable is in $PATH
-    for i in $(echo -e ${PATH//:/\\n} | sort | uniq); do
-	if [[ -x "$i/$1" ]]; then
-	    return 0
-	fi
-    done
-    return 1
+	# checks  an executable is in $PATH
+	for i in $(echo -e ${PATH//:/\\n} | sort | uniq); do
+		if [[ -x "$i/$1" ]]; then
+			return 0
+		fi
+	done
+	return 1
 }
 
 # general 
@@ -44,7 +44,7 @@ _in_path ipython3 && alias ipython3="ipython3 --pylab=qt5 --gui=qt5"
 _in_path acpi && alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 if _in_path rsync; then
-    alias copy="rsync --ignore-missing-args --group --xattrs --hard-links --executability --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
+	alias copy="rsync --ignore-missing-args --group --xattrs --hard-links --executability --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
 fi
 alias mv="mv --verbose"
 alias rm="rm --verbose"
@@ -60,9 +60,9 @@ _in_path tmux && alias tmux='tmux -2'
 # - mvn
 # -jdk8
 if _in_path javac; then
-    if _in_path mvn; then
-	alias mvn-init='mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false'
-    fi
+	if _in_path mvn; then
+		alias mvn-init='mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false'
+	fi
 fi
 
 # Networking, Servers 
@@ -95,17 +95,17 @@ _in_path curl && alias my-ip='curl ipinfo.io/ip'
 # - expac
 # -----------------------------
 if _in_path pacman; then
-    alias pacman='pacman --config "${HOME}/.pacman.conf"'
-    alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
-    alias pacman-reinstall-all-foreign-packages="pacman -Qmq | pacman -S -"
-    alias pacman-remove-orphans="sudo pacman -Rns \$(pacman -Qtdq)"
-    if _in_path expac; then
-	alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' %'%l\t%n' %| sort | %tail %-n 20"
-	alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
-    fi
-    if _in_path yaourt; then
-	export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
-    fi
+	alias pacman='pacman --config "${HOME}/.pacman.conf"'
+	alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
+	alias pacman-reinstall-all-foreign-packages="pacman -Qmq | pacman -S -"
+	alias pacman-remove-orphans="sudo pacman -Rns \$(pacman -Qtdq)"
+	if _in_path expac; then
+		alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' %'%l\t%n' %| sort | %tail %-n 20"
+		alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
+	fi
+	if _in_path yaourt; then
+		export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+	fi
 fi
 
 # Proceses 
@@ -114,7 +114,7 @@ fi
 # - top (or htop)
 # ------------------------
 for i in {h,a,}top 'ps aux'; do
-    _in_path $i && alias p=$i && break
+	_in_path $i && alias p=$i && break
 done
 
 # VCS 
@@ -123,12 +123,12 @@ done
 # - git
 # - hub
 if _in_path git; then
-    alias todo="git grep -n --word-regexp --break --heading --after-context 3 TODO"
-    alias fixme="git grep -n --word-regexp --break --heading --after-context 3 FIXME"
-    # look for TODOs in the current repo
-    if _in_path hub; then
-	eval "$(hub alias -s)"
-    fi
+	alias todo="git grep -n --word-regexp --break --heading --after-context 3 TODO"
+	alias fixme="git grep -n --word-regexp --break --heading --after-context 3 FIXME"
+	# look for TODOs in the current repo
+	if _in_path hub; then
+		eval "$(hub alias -s)"
+	fi
 fi
 
 # Archiving
@@ -160,7 +160,7 @@ _in_path mycli && [[ $(hostname) =~ raptor ]] && alias mycli-dragon='mycli mysql
 # - ghc-mod
 # stack (it wraps a number of haskell-related tools, for each access ...)
 for i in ghc{i,} hoogle haddock; do
-    eval "alias "${i}"='stack "${i}"'"
+	eval "alias "${i}"='stack "${i}"'"
 done
 
 unset -f _in_path
