@@ -31,6 +31,13 @@
 --langmap=Mediawiki:.wiki
 --regex-Mediawiki=/^[ \t]*=+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)[ \t]*=+/\1 - heading/
 
+--langdef=BibTex
+--langmap=BibTex:.bib
+--regex-BibTex=/^@[A-Za-z]+\{([^,]*)/\1/b,BibTex/
+--regex-BibTex=/@string\{([^ "#%')(,=}{]+)/\1/s,BibTeX-Strings/i
+--regex-BibTex=/@(article|book|booklet|inbook|incollection|inproceedings|manual|masterthesis|misc|phdthesis|proceedings|techreport|unpublished)\{([^,]+),/\2/e,BibTeX-Entries/i
+--regex-BibTex=/[[:space:]]*author[[:space:]]*=[[:space:]]*("([^"]+)"|\{([^\}]+)\})[[:space:]]*,?[[:space:]]*$/\2\3/a,BibTeX-Authors/i
+
 --langdef=Vorg 
 --langmap=Vorg:.vorg
 --regex-Vorg=/[^\w]#([A-Z]+)/\1 - hashtag/
@@ -67,4 +74,4 @@
 --regex-Asciidoc=/image:([^:][^\[]+)/\1/I/
 --regex-Asciidoc=/include::([^\[]+)/\1/n/
 
---languages=Sh,Python,Rust,Markdown,Rst,Javascript,Vorg,Java,C,C++,reStructuredText,Vim,Php,Maven2,Tex
+--languages=Sh,Python,Rust,Markdown,Rst,Javascript,Vorg,Java,C,C++,reStructuredText,Vim,Php,Maven2,Tex,BibTex

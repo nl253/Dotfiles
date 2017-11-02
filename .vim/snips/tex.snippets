@@ -13,13 +13,17 @@ snippet it "Italics [tex]"
 \textit{
 endsnippet
 
-snippet "\\?b(egin)?" "begin{} / end{}" br
+snippet em "Emphasis [tex]"
+\empf{
+endsnippet
+
+snippet "\\?b(egin)?" "begin{} / end{} block [tex]" br
 \begin{${1:something}}
 	${0:${VISUAL}}
 \end{$1}
 endsnippet
 
-snippet table "Table environment" b
+snippet table "Table [tex]" b
 \begin{table}[${1:htpb}]
 	\centering
 	\caption{${2:caption}}
@@ -77,9 +81,23 @@ snippet bf "Bold [tex]"
 \textbf{
 endsnippet
 
+snippet "verb[atim]*" "Verbatim (literal) [tex]" br
+\begin{verbatim}
+    $0
+\end{verbatim}
+endsnippet
+
+snippet img "Embed image [tex]"
+\includegraphics{${1:image_name_no_extension}}
+endsnippet
+
+snippet ut "Underlined text [tex]"
+\underline{
+endsnippet
+
 snippet theorem "Theorem [tex]"
 \begin{theorem}
-... theorem text
+    ${1:theorem text}
 \end{theorem} 
 endsnippet
 
