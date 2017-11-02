@@ -210,19 +210,14 @@ preview_csv(){
 
 preview_sqlite(){
 	if [[ -x $(command which sqlite3 2>/dev/null) ]]; then
-		local no_tables=$(command sqlite3 -noheader -init '' "${FILE_PATH}" .tables | grep -Ec '^[-a-zA-Z0-9_]+')
-		if ((no_tables == 1)); then
-			local table_name=$(command sqlite3 -init "" "${FILE_PATH}" .tables | head -n 1)
-			echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
-			echo -e "\nTable ${table_name}\n"
-			command sqlite3 -column -header -init '' "${FILE_PATH}" 'SELECT * FROM '"${table_name} LIMIT ${PV_HEIGHT}"
-		else
-			echo -e "\nPreview of SQLite3 database $(basename ${FILE_PATH})"
-			echo -e "\nTables\n"
-			command sqlite3 -init '' "${FILE_PATH}" .tables
-		fi
+		IFS=$' \n'
+		echo -e "\nPreview of SQLite3 database ${FILE_NAME}\n"
+		for table_name in $(command sqlite3 --init '' --noheader "${FILE_PATH}" .tables | xargs); do
+			command sqlite3 -column -header -init '' "${FILE_PATH}" 'SELECT * FROM '"${table_name} LIMIT 3"
+			echo -e "\n"
+		done
+		exit 5
 	fi
-	exit 5
 }
 
 preview_pptx(){
@@ -251,7 +246,7 @@ handle_code() {
   # don't attempt to render non-text files,
   # don't attempt to pygmentize without it installed
   ! ((HAS_PYGMENTS)) && return
-  ! [[ $(command file --dereference --brief -- "${FILE_PATH}") =~ text ]] && return
+	! [[ $(command file --dereference --brief -- "${FILE_PATH}") =~ text|(xml|script)$ ]] && return
 
   case "${EXTENSION}" in
 
@@ -261,11 +256,6 @@ handle_code() {
 
     json | map)
       preview_json
-      ;;
-
-		# XML formats
-    xml | iml | ?cls | plist | back | xbel | fo | urdf | sdf | xacro | uml | aird | notation | project | svg)
-      preview_xml
       ;;
 
     js | ts)
@@ -283,6 +273,11 @@ handle_code() {
 
     css)
       preview_css
+      ;;
+
+		# XML formats
+    xml | iml | ?cls | plist | back | xbel | fo | urdf | sdf | xacro | uml | aird | notation | project | svg)
+      preview_xml
       ;;
 
     puml)
@@ -309,6 +304,7 @@ handle_extension() {
 			preview_pdf
 			;;
 
+
     docx)
 			preview_docx
       ;;
@@ -316,6 +312,7 @@ handle_extension() {
     pptx)
 			preview_pptx
       ;;
+
 
     sqlite | sqlite*)
 			preview_sqlite
@@ -420,6 +417,10 @@ handle_mime() {
 
         pkgbuild | .profile | .zprofile | .zenv | .zsh*)
           preview_sh
+          ;;
+
+        *.cabal)
+          command pygmentize -f "${PYGMENTIZE_FORMAT}" -l haskell "${FILE_PATH}" && exit 5
           ;;
 
       esac
