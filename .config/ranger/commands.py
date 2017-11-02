@@ -1,24 +1,18 @@
-# This is a sample commands.py.  You can add your own commands here.
-#
-# Please refer to commands_full.py for all the default commands and a complete
-# documentation.  Do NOT add them all here, or you may end up with defunct
-# commands when upgrading ranger.
 
-# A simple command for demonstration purposes follows.
-# -----------------------------------------------------------------------------
+from __future__ import absolute_import, division, print_function
 
-from __future__ import (absolute_import, division, print_function)
+# Standard Library
+from subprocess import run
 
+# 3rd Party
 # You always need to import ranger.api.commands here to get the Command class:
 from ranger.api.commands import Command
 
-from os import listdir
-from subprocess import run
 
-# Any class that is a subclass of "Command" will be integrated into ranger as a
-# command.  Try typing ":my_edit<ENTER>" in ranger!
 class git(Command):
     """git <subcommand> [<option>, ...] [--] [<file>, ...]
+
+    Wrapper for git commands. Good completion.
     """
     def execute(self):
         command = ['git', '--paginate']
@@ -103,15 +97,16 @@ class git(Command):
             'write-tree',
         }
 
-        #  return {f'git {i}' for i in commands if self.arg(1) in i or i in self.arg(1)}  if len(self.args) > 1 else {f'git {i}' for i in commands if self.arg(1) in i or i in self.arg(1)}
-
         return {(" ".join(self.args[:-1]) + " " + i).strip()
                 for i in commands if self.args[-1] in i or i in self.args[-1]
-                } if len(self.args) > 1 else {f"git {i}" for i in opts} 
+                } if len(self.args) > 1 else {f"git {i}" for i in opts}
 
 
 class vim(Command):
     """:vim [<option>, ...] [<filename>, ...]
+    Open marked files in vim.
+
+    NOTE marking only works for the current directory.
     """
 
     def execute(self):
@@ -124,6 +119,8 @@ class vim(Command):
 
     def tab(self, tabnum):
 
+        from os import listdir
+
         opts = {'-t', '+', '-S', '--cmd', '-d', '-M', '-m', '-o', '-O', '-p', '-R'}
 
         return {(" ".join(self.args[:-1]) + " " + i).strip()
@@ -132,28 +129,12 @@ class vim(Command):
                 } if len(self.args) > 1 else {f"vim {i}" for i in opts}
 
 
-class todos(Command):
-    """:todos
-
-    Looks for TODOs in the current repo.
-    """
-
-    def execute(self):
-
-        run([
-            'git', '--paginate', 'grep', '--line-number', '--color=always', '-I', '--after-context', '3', '--threads', '16',
-            '--extended-regexp', '--full-name', '--heading', '--break', "'TODO|FIXME'"
-            ])
-
-        self.fm.ui.need_redraw = True
-        self.fm.ui.redraw_main_column()
-
-
 class grep(Command):
-
     """:grep <string>
 
-    Looks for a string in all marked files or directories
+    Looks for a string in all marked files or directories.
+
+    Ripgrep will be attempted before ranger will fallback on git grep and grep.
     """
 
     def execute(self):
@@ -172,10 +153,7 @@ class grep(Command):
                         stdout=PIPE)
 
             # try git grep if in a git repo
-            elif exists(
-                run(['git', 'rev-parse', '--show-toplevel'],
-                    PIPE).stdout.decode('utf-8')
-            ):
+            elif exists(run(['git', 'rev-parse', '--show-toplevel'], PIPE).stdout.decode('utf-8')):
 
                 x = run([
                     'git', 'grep', '--line-number', '--color=always', '-I',
@@ -201,6 +179,8 @@ class untracked(Command):
     """:untracked
 
     List files not tracked by git (ignored).
+
+    Same as git --paginate ls-files --others
     """
 
     def execute(self):
@@ -209,10 +189,13 @@ class untracked(Command):
         self.fm.ui.need_redraw = True
         self.fm.ui.redraw_main_column()
 
+
 class tracked(Command):
     """:tracked
 
     List files tracked by git.
+
+    Same as git --paginate ls-files
     """
 
     def execute(self):
@@ -221,22 +204,84 @@ class tracked(Command):
         self.fm.ui.need_redraw = True
         self.fm.ui.redraw_main_column()
 
+
+class make(Command):
+    """:make <subcommand>
+
+    Run make with specified rule.
+
+    NOTE Must have a Makefile in the same directory.
+    """
+
+    def execute(self):
+        run(['make'] + self.args[1:], shell=True)
+
+
+    def tab(self, tabnum):
+        from os.path import isfile
+        import re
+
+        if not isfile('Makefile'):
+            self.fm.notify('No Makefile in this dir.', bad=True)
+            return
+
+        with open('./Makefile', mode='r', encoding='utf-8') as f:
+            text = f.read()
+
+        pat = re.compile(r'^(\w+):', flags=re.M)
+
+        return {'make ' + i.group(1) for i in pat.finditer(text)}
+
+class mvn(Command):
+
+    """:mvn <subcommand>
+
+    Run make with specified rule.
+
+    NOTE Must have a Makefile in the same directory.
+    """
+
+    def execute(self):
+        run(['mvn'] + self.args[1:], shell=True)
+
+    def tab(self, tabnum):
+        from os.path import isfile
+
+        if not isfile('./pom.xml'):
+            return
+
+        return {
+                'mvn ' + i
+                for i in {
+                    'site', 'compile', 'package', 'validate', 'install', 'deploy',
+                    'test', 'integration-test', 'clean'
+                    }
+                }
+
+
 class modified(Command):
     """:modified
 
     List files modified (Git).
+
+    Same as git --paginate ls-files --modified
     """
 
     def execute(self):
         run(['git', '--paginate', 'ls-files', '--modified'])
 
         self.fm.ui.need_redraw = True
-        self.fm.ui.redraw_main_column() 
+        self.fm.ui.redraw_main_column()
+
 
 class vimdiff(Command):
+
     """:vimdiff <file1> <file2> | <file1> <file2> <file3>
 
-    Open default diff tool with passed files.
+    Open vim in diff mode with passed files.
+
+    NOTE when you mark them, only the ones in the current directory's will be passed to vim.
+         Also, you can diff at most 3 files.
     """
 
     def execute(self):
@@ -244,8 +289,9 @@ class vimdiff(Command):
         command = ['vim', '-d', '--']
 
         if len(self.fm.thistab.get_selection()) > 1:
-            command.extend([i.path for i in self.fm.thistab.get_selection()][:3])
-            
+            command.extend([i.path
+                            for i in self.fm.thistab.get_selection()][:3])
+
         elif self.args[1:]:
             command.extend(self.args[1:4])
 

@@ -138,7 +138,7 @@ preview_md() {
 
 preview_jupyter() {
   if [[ -x $(command which jupyter 2>/dev/null) ]]; then
-    command jupyter nbconvert --stdout --to html "${FILE_PATH}" | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+    command jupyter nbconvert --stdout --to html "${FILE_PATH}" | command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width "${PV_WIDTH}" && exit 5
 	else 
 		preview_json
   fi
@@ -204,7 +204,7 @@ preview_dir() {
 }
 
 preview_csv(){
-	command head -n "${PV_HEIGHT}" "${FILE_PATH}" | column --separator ',' --table --output-width ${PV_HEIGHT} --output-separator '  ' && exit 5
+	command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | column --separator ',' --table && exit 5
 	exit 1
 }
 
@@ -342,13 +342,13 @@ handle_extension() {
 handle_website() {
   ! ((HAS_ELINKS)) && return
 
-  case "${EXTENSION}" in
+  case "${FILE_NAME}" in
 
-    md | m*down)
+    *.md | *.m*down)
       preview_md
       ;;
 
-    rst)
+    *.rst)
       preview_rst
       ;;
 
@@ -428,7 +428,7 @@ handle_mime() {
       # let pygments guess
       local guess=$(pygmentize -N "${FILE_PATH}")
 
-      if [[ $guess == 'text' ]]; then
+      if [[ $guess =~ 'text' ]]; then
         preview
       else
         command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $guess && exit 5
@@ -494,8 +494,8 @@ handle_fallback() {
 handle_code
 handle_website
 handle_archive
-handle_mime
 handle_extension
+handle_mime
 handle_fallback
 
 exit 1
