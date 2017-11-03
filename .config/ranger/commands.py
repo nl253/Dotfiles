@@ -2,7 +2,7 @@
 from __future__ import absolute_import, division, print_function
 
 # Standard Library
-from subprocess import run
+from subprocess import run, DEVNULL
 
 # 3rd Party
 # You always need to import ranger.api.commands here to get the Command class:
@@ -14,92 +14,98 @@ class git(Command):
 
     Wrapper for git commands. Good completion.
     """
-    def execute(self):
-        command = ['git', '--paginate']
 
-        command.extend(self.args[1:])
+    non_interactive_commands = {'clone', 'rm', 'mv', 'init', 'clean', 'archive', 'pull', 'fetch', 'push'}
+
+    opts = {'--no-pager', '-C'}
+
+    commands = {
+        'add',
+        'am',
+        'apply',
+        'bisect',
+        'blame',
+        'branch',
+        'cat-file',
+        'checkout',
+        'checkout-index',
+        'cherry',
+        'commit',
+        'commit-tree',
+        'count-objects',
+        'diff',
+        'diff-files',
+        'diff-index',
+        'diff-tree',
+        'fast-export',
+        'fetch',
+        'filter-branch',
+        'for-each-ref',
+        'for-ls-tree',
+        'grep',
+        'hash-object',
+        'help',
+        'index-pack',
+        'log',
+        'ls-files',
+        'merge',
+        'merge-file',
+        'merge-index',
+        'mktag',
+        'mktree',
+        'name-rev',
+        'pack-redundant',
+        'prune-packed',
+        'read-tree',
+        'rebase',
+        'reflog',
+        'remote',
+        'repack',
+        'reset',
+        'rev-list',
+        'show',
+        'show-branches',
+        'status',
+        'symbolic-ref',
+        'tag',
+        'unpack-file',
+        'update-ref',
+        'var',
+        'verify-pack',
+        'worktree',
+        'write-tree',
+    }
+
+
+    def execute(self):
+        if not self.args[1:] or self.args[1] not in (git.commands | git.non_interactive_commands | git.opts):
+            return
+
+        command = ['git'] + (['--paginate'] if not any(map(lambda x: x in git.non_interactive_commands, self.args)) else []) + self.args[1:]
 
         if len(self.fm.thistab.get_selection()) > 1:
             command.append('--')
             command.extend((i.path for i in self.fm.thistab.get_selection()))
 
-        run(command)
+        try:
+            if any(map(lambda x: x in git.non_interactive_commands, self.args)):
+                import concurrent.futures
+                with concurrent.futures.ThreadPoolExecutor(16) as pool:
+                    pool.submit(run, command, stdout=DEVNULL)
+            else:
+                run(command)
 
-        self.fm.ui.need_redraw = True
-        self.fm.ui.redraw_main_column()
+            self.fm.ui.redraw_main_column()
+            self.fm.ui.need_redraw = True
+
+        except Exception as e:
+            self.fm.notify(f'An error has occurred {e}', bad=True)
 
 
     def tab(self, tabnum):
-
-        opts = {'--no-pager', '-C'}
-        commands = {
-            'add',
-            'am',
-            'apply',
-            'archive',
-            'bisect',
-            'blame',
-            'branch',
-            'cat-file',
-            'checkout',
-            'checkout-index',
-            'cherry',
-            'clean',
-            'clone',
-            'commit',
-            'commit-tree',
-            'count-objects',
-            'diff',
-            'diff-files',
-            'diff-index',
-            'diff-tree',
-            'fast-export',
-            'fetch',
-            'filter-branch',
-            'for-each-ref',
-            'for-ls-tree',
-            'grep',
-            'hash-object',
-            'help',
-            'index-pack',
-            'init',
-            'log',
-            'ls-files',
-            'merge',
-            'merge-file',
-            'merge-index',
-            'mktag',
-            'mktree',
-            'mv',
-            'name-rev',
-            'pack-redundant',
-            'prune-packed',
-            'pull',
-            'push'
-            'read-tree',
-            'rebase',
-            'reflog',
-            'remote',
-            'repack',
-            'reset',
-            'rev-list',
-            'rm',
-            'show',
-            'show-branches',
-            'status',
-            'symbolic-ref',
-            'tag',
-            'unpack-file',
-            'update-ref',
-            'var',
-            'verify-pack',
-            'worktree',
-            'write-tree',
-        }
-
         return {(" ".join(self.args[:-1]) + " " + i).strip()
-                for i in commands if self.args[-1] in i or i in self.args[-1]
-                } if len(self.args) > 1 else {f"git {i}" for i in opts}
+                for i in git.commands | git.non_interactive_commands if self.args[-1] in i or i in self.args[-1]
+                } if len(self.args) > 1 else {f"git {i}" for i in git.opts}
 
 
 class vim(Command):
@@ -113,7 +119,7 @@ class vim(Command):
         command = ['vim'] + self.args[1:]
         command.append('--')
         command.extend(map(lambda x: x.path, self.fm.thistab.get_selection()))
-        run(command)
+        run(command, stdout=DEVNULL)
         self.fm.ui.need_redraw = True
         self.fm.ui.redraw_main_column()
 
@@ -210,7 +216,7 @@ class yarn(Command):
     """
 
     def execute(self):
-        run(['yarn'] + self.args[1:], shell=True)
+        run(['yarn'] + self.args[1:])
 
 
     def tab(self, tabnum):
@@ -314,7 +320,7 @@ class make(Command):
     """
 
     def execute(self):
-        run(['make'] + self.args[1:], shell=True)
+        run(['make'] + self.args[1:], stdout=DEVNULL)
 
 
     def tab(self, tabnum):
@@ -343,7 +349,7 @@ class mvn(Command):
     """
 
     def execute(self):
-        run(['mvn'] + self.args[1:], shell=True)
+        run(['mvn'] + self.args[1:], stdout=DEVNULL)
 
     def tab(self, tabnum):
         from os.path import isfile
@@ -399,7 +405,7 @@ class vimdiff(Command):
         else:
             return
 
-        run(command)
+        run(command, stdout=DEVNULL)
 
         self.fm.ui.need_redraw = True
         self.fm.ui.redraw_main_column()
