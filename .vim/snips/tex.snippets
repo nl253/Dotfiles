@@ -9,9 +9,25 @@ snippet matrix "Matrix (amsmath) [tex]"
 \]
 endsnippet
 
+snippet "col[umns]*" "Column layout (multicol) [tex]" rb
+\begin{multicols}{2}
+    $0
+\end{multicols}
+endsnippet
+
+snippet "verb[atim]*" "Verbatim (literal) [tex]" r
+\begin{verbatim}
+    $0
+\end{verbatim}
+endsnippet
+
 snippet it "Italics [tex]"
 \textit{
 endsnippet
+
+snippet "\\?f(oot)?note" "Footnote [tex]" r
+\footnote{$0}
+endsnippet 
 
 snippet em "Emphasis [tex]"
 \empf{
@@ -79,12 +95,6 @@ endsnippet
 
 snippet bf "Bold [tex]"
 \textbf{
-endsnippet
-
-snippet "verb[atim]*" "Verbatim (literal) [tex]" br
-\begin{verbatim}
-    $0
-\end{verbatim}
 endsnippet
 
 snippet img "Embed image [tex]"
