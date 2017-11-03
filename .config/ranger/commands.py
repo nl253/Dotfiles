@@ -15,12 +15,11 @@ class git(Command):
     Wrapper for git commands. Good completion.
     """
 
-    non_interactive_commands = {'clone', 'rm', 'mv', 'init', 'clean', 'archive', 'pull', 'fetch', 'push'}
+    non_interactive_commands = {'clone', 'rm', 'mv', 'init', 'clean', 'archive', 'pull', 'fetch', 'push', 'add'}
 
     opts = {'--no-pager', '-C'}
 
     commands = {
-        'add',
         'am',
         'apply',
         'bisect',
@@ -38,7 +37,6 @@ class git(Command):
         'diff-index',
         'diff-tree',
         'fast-export',
-        'fetch',
         'filter-branch',
         'for-each-ref',
         'for-ls-tree',
@@ -103,9 +101,23 @@ class git(Command):
 
 
     def tab(self, tabnum):
-        return {(" ".join(self.args[:-1]) + " " + i).strip()
-                for i in git.commands | git.non_interactive_commands if self.args[-1] in i or i in self.args[-1]
-                } if len(self.args) > 1 else {f"git {i}" for i in git.opts}
+
+        if len(self.args) > 2 and self.args[-1].startswith('-'):
+            from subprocess import PIPE, DEVNULL
+            import re
+
+            #  self.args.remove('--paginate')
+            x = run(['git', '--no-pager', self.args[1], '-h'], stdout=PIPE, stderr=DEVNULL).stdout.decode('utf-8')
+
+            pat = re.compile(r'--[a-z][-a-z_]+|-[a-zA-Z]')
+
+            return {(" ".join(self.args[:-1]) + ' ' + i).strip() for i in pat.findall(x)}
+
+
+        else:
+            return {(" ".join(self.args[:-1]) + " " + i).strip()
+                    for i in git.commands | git.non_interactive_commands if self.args[-1] in i or i in self.args[-1]
+                    } if len(self.args) > 1 else {f"git {i}" for i in git.opts}
 
 
 class vim(Command):
