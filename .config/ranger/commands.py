@@ -111,7 +111,9 @@ class git(Command):
 
             pat = re.compile(r'--[a-z][-a-z_]+|-[a-zA-Z]')
 
-            return {(" ".join(self.args[:-1]) + ' ' + i).strip() for i in pat.findall(x)}
+            return {(" ".join(self.args[:-1]) + ' ' + i).strip()
+                    for i in pat.findall(x)
+                    if len(self.args[1]) <= 2 or self.args[-1] in i or i in self.args[-1]}
 
 
         else:
