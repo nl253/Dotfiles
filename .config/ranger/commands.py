@@ -249,6 +249,60 @@ class yarn(Command):
             return
 
 
+class mkdir(Command):
+    """:mkdir [<dirname>, ...]
+
+    Creates a directories with given names.
+    """
+
+    def execute(self):
+        if not self.args[1:]:
+            return
+
+        from os.path import join, expanduser, lexists
+        from os import makedirs
+
+        for i in self.args[1:]:
+
+            dirname = join(self.fm.thisdir.path, expanduser(i))
+
+            if not lexists(dirname):
+                makedirs(dirname, exist_ok=True)
+
+            else:
+                self.fm.notify(f"file/directory {dirname} exists!", bad=True)
+                break
+
+
+    def tab(self, tabnum):
+        return self._tab_directory_content()
+
+
+class touch(Command):
+    """:touch [<fname>, ...]
+
+    Creates files with given names.
+    """
+
+    def execute(self):
+        if not self.args[1:]:
+            return
+
+        from os.path import join, expanduser, lexists
+        from os import mknod
+
+        for i in self.args[1:]:
+            fname = join(self.fm.thisdir.path, expanduser(i))
+
+            if not lexists(fname):
+                mknod(fname)
+
+            else:
+                self.fm.notify(f"file/directory {fname} exists!", bad=True)
+                break
+
+    def tab(self, tabnum):
+        return self._tab_directory_content()
 
 
 class make(Command):

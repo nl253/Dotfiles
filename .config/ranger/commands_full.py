@@ -739,43 +739,6 @@ class unmark_tag(mark_tag):
     do_mark = False
 
 
-class mkdir(Command):
-    """:mkdir <dirname>
-
-    Creates a directory with the name <dirname>.
-    """
-
-    def execute(self):
-        from os.path import join, expanduser, lexists
-        from os import makedirs
-
-        dirname = join(self.fm.thisdir.path, expanduser(self.rest(1)))
-        if not lexists(dirname):
-            makedirs(dirname)
-        else:
-            self.fm.notify("file/directory exists!", bad=True)
-
-    def tab(self, tabnum):
-        return self._tab_directory_content()
-
-
-class touch(Command):
-    """:touch <fname>
-
-    Creates a file with the name <fname>.
-    """
-
-    def execute(self):
-        from os.path import join, expanduser, lexists
-
-        fname = join(self.fm.thisdir.path, expanduser(self.rest(1)))
-        if not lexists(fname):
-            open(fname, 'a').close()
-        else:
-            self.fm.notify("file/directory exists!", bad=True)
-
-    def tab(self, tabnum):
-        return self._tab_directory_content()
 
 
 class edit(Command):
