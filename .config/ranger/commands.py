@@ -231,11 +231,20 @@ class yarn(Command):
 
             if x.get('scripts', None) == None: return
 
-            return {f'yarn run {i}' for i in x['scripts']}
+            return {'yarn run ' + i for i in x['scripts']
+                    if self.args[2] in i
+                    or len(self.args[-1]) == 1 and i.startswith(self.args[-1])}
 
         elif len(self.args) == 1 or self.args[1] != 'run':
-            return {f'yarn {i}' for i in ('install', 'update', 'upgrade', 'remove', 'pack', 'run', 'unlink', 'generate-lock-entry', 'import', 'access', 'add', 'autoclean', 'create', 'exec', 'publish')}
-        
+
+            return {
+                    'yarn ' + i
+                    for i in (
+                        'install', 'update', 'upgrade', 'remove', 'pack', 'run', 'unlink',
+                        'generate-lock-entry', 'import', 'access', 'add', 'autoclean',
+                        'create', 'exec', 'publish'
+                        ) if self.args[-1] in i or len(self.args) == 1
+                    }
         else:
             return
 
@@ -293,7 +302,7 @@ class mvn(Command):
                 for i in {
                     'site', 'compile', 'package', 'validate', 'install', 'deploy',
                     'test', 'integration-test', 'clean'
-                    }
+                    } if self.args[-1] in i or len(self.args) == 1
                 }
 
 
