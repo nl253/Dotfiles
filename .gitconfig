@@ -67,7 +67,11 @@
     # Be more explicit
     add = add -v
     branch = branch -vv
-    cherry = cherry --verbose
+	cherry = cherry --verbose
+
+	clean = "clean --interactive"
+
+	root = rev-parse --show-toplevel
 
     aliases = "!git config -l | grep alias | sed 's/^alias\\.//g'"
 
@@ -76,9 +80,12 @@
     unpushed = log --branches --not --remotes
 
     # better format
-    log = log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\"
-    grep = grep --perl-regexp --line-number --color=always --full-name --heading --break 
-    version-tree = log --pretty=oneline --graph --decorate --all
+	log = log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\"
+
+	# pretter
+	grep = grep --extended-regexp --line-number --color=always --full-name --heading --threads 16 --break
+
+	tree = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
 
     # List contributors with number of commits
     contributors = shortlog --summary --numbered  
@@ -91,6 +98,16 @@
     # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
     qq = "!bash -c 'command git pull && command git commit -a -m \"Automated commit. Nothing important ...\" && command git push'" 
 
+    # form tpope
+    recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
+    recursive-qq = "!find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} qq \\;"
+
+	# bundle repo
+    archive-zip = "archive --format=zip --output=bundle.zip --verbose -9 HEAD"
+    archive-tar = "archive --format=tar --output=bundle.tar --verbose HEAD"
+	archive-7z = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
+
+
     # Find branches containing commit
     find-branch = "!f() { git branch -a --contains $1; }; f"  
 
@@ -98,20 +115,13 @@
     find-tag = "!f() { git describe --always --contains $1; }; f"  
 
     # Find commits by source code
-    find-commit = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+    find-commit = "!f() { git log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\" --date=short -S$1; }; f"
 
     # Find commits by commit message
-    find-msg = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+	find-msg = "!f() { git log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\" --date=short --grep=$1; }; f"
 
-    # form tpope
-    recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
-    
-    archive-zip = "archive --format=zip --output=bundle.zip --verbose -9 HEAD"
-    archive-tar = "archive --format=tar --output=bundle.tar --verbose HEAD"
-	archive-7z = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
-
-	root = rev-parse --show-toplevel
-	clean = "clean --interactive"
+    # Find commits by commit author
+	find-author = "!f() { git log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\" --date=short --author=\"$1\"; }; f"
 
 [web]
     browser = firefox-developer
