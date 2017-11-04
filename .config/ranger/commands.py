@@ -106,7 +106,6 @@ class git(Command):
             from subprocess import PIPE, DEVNULL
             import re
 
-            #  self.args.remove('--paginate')
             x = run(['git', '--no-pager', self.args[1], '-h'], stdout=PIPE, stderr=DEVNULL).stdout.decode('utf-8')
 
             pat = re.compile(r'--[a-z][-a-z_]+|-[a-zA-Z]')

@@ -4,32 +4,33 @@
 --sort=yes
 --guess-language-eagerly
 
---exclude=node_modules/*
---exclude=*node_modules/*
---exclude=.vscode/*
---exclude=.thunderbird/*
---exclude=.mozilla/*
---exclude=.vim/undo/*
---exclude=.vim/swap/
---exclude=.cache/*
---exclude=.?vm/*
---exclude=.??env/*
---exclude=.config/*
---exclude=.*201*/*
---exclude=*.json
---exclude=*.yaml
---exclude=*.yml
---exclude=.local/*
+--exclude=.*
+--exclude=node_modules/
+--exclude=Downloads/
+--exclude=go/
+--exclude=out/
+--exclude=dist/
+--exclude=target/
+--exclude=build/
+--exclude=docs/
+--exclude=nl253/
+--exclude=Dropbox/
+--exclude=OneDrive/
+--exclude=Dump/
+--exclude=*-data/
 
 --langdef=Markdown 
 --langmap=Markdown:.md
 --langmap=Markdown:+.markdown
 --langmap=Markdown:+.mdown
---regex-Markdown=/^[ \t]*#+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)/\1 - heading/
+--regex-Markdown=/^#+ ?([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,})/\1/h,heading/
+--regex-Markdown=/!?\[([-a-zA-Z0-9_]{4,}?)\]\(.{5,}?\)/\1/a,hyperlink/
+--regex-Markdown=/https?:\/{2}\S{10,}?([-a-z0-9A-Z_]{5,})\/?( |$)/\2/a,URL/
+--regex-Markdown=/^[ \t]*\*{2}([-0-9a-zA-Z_:\(\)]{5,}?)\*{2}[\t ]*$/\1/b,statement/
 
---langdef=Mediawiki 
+--langdef=Mediawiki
 --langmap=Mediawiki:.wiki
---regex-Mediawiki=/^[ \t]*=+[ \t]*([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,78}?)[ \t]*=+/\1 - heading/
+--regex-Mediawiki=/^(={1,6})[[:space:]]?([^=]+)[[:space:]]?\1?$/\2/h,header/
 
 --langdef=BibTex
 --langmap=BibTex:.bib
@@ -40,38 +41,43 @@
 
 --langdef=Vorg 
 --langmap=Vorg:.vorg
---regex-Vorg=/[^\w]#([A-Z]+)/\1 - hashtag/
---regex-Vorg=/( {4}|\t)*=> (.+)/\2 - defition/
---regex-Vorg=/( {4}|\t)*(>|\(){1,6} (.+)/\3 - heading/
+--regex-Vorg=/[^\w]#([A-Z]+)/\1/t,hashtag/
+--regex-Vorg=/( {4}|\t)*=> (.+)/\2/d,defition/
+--regex-Vorg=/( {4}|\t)*(>|\(){1,6} (.+)/\3/h,heading/
 
 --langdef=Rst
 --langmap=Rst:.rst
 --regex-Rst=/^[ \t]*\.{2} ([-a-z_]+):: (.{2,78}?)$/\2 - \1/
---regex-Rst=/^[ \t]*((\w+ ?)+):$/\1 - list/
---regex-Rst=/^[ \t]*((\w+ ?)+)::$/\1 - paragraph/
+--regex-Rst=/^[ \t]*((\w+ ?)+):$/\1/l,list/
+--regex-Rst=/^[ \t]*((\w+ ?)+)::$/\1/p,paragraph/
 --regex-Rst=/^[ \t]*([A-Z]?[a-z]+)$/\1/
---regex-Rst=/^[ \t]*([A-Z]?[a-z]+) : (.*)$/\1: \2 - defintion/
+--regex-Rst=/^[ \t]*([A-Z]?[a-z]+) : (.*)$/\1: \2/d,defintion/
 --regex-Rst=/^[ \t]*([A-Z]?[a-z]+) : (.*) : (.*)$/\1: \2: \3 - defintion/
 --regex-Rst=/^\.{2} _(.*): .*$/\1 - external hyperlink/
---regex-Rst=/`((.*) )?<?(.*)>?`_{1,2}/\1 - hyperlink/
---regex-Rst=/_`(.*)`/\1 - inline internal reference/
+--regex-Rst=/`((.*) )?<?(.*)>?`_{1,2}/\1/h,hyperlink/
+--regex-Rst=/_`(.*)`/\1/h,inline internal reference/
 --regex-Rst=/__ (\S+)/\1 - anonymous hyperlink/
---regex-Rst=/<a href=["'](.*)["']>(.*)<\/a>/\2 - html embedded hyperlink/
---regex-Rst=/(\w+)_{1,2}/\1 - anonymous inline reference/
+--regex-Rst=/<a href=["'](.*)["']>(.*)<\/a>/\2/h,html embedded hyperlink/
+--regex-Rst=/(\w+)_{1,2}/\1/h,anonymous inline reference/
+
+--regex-Tex=/\\label\{([^}]*)\}/\1/l,label/
+--regex-Tex=/\\(section|paragraph)\{([^}]*)\}/\2/s,\1/
+--regex-Tex=/\\sub(section|paragraph)\{([^}]*)\}/\2/t,\1/
+--regex-Tex=/\\subsub(section|paragraph)\{([^}]*)\}/\2/u,\1/
+--regex-Tex=/\\includegraphics[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/g,graphic/
+--regex-Tex=/\\lstinputlisting[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/L,listing/
+--regex-Tex=/\\pageref[[:space:]]*\{([^}]+)\}/\1/p,pageref/
+--regex-Tex=/\\ref[[:space:]]*\{([^}]+)\}/\1/r,ref/
+--regex-Tex=/^\\(chapter|part)[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/ \3/s,chapter/
+--regex-Tex=/^\\(chapter|part)[[:space:]]*\*[[:space:]]*\{([^}]+)\}/ \2/s,chapter/ 
 
 --langdef=Asciidoc
 --langmap=Asciidoc:.ad.adoc.asciidoc
---regex-Asciidoc=/^=[ \t]+(.*)/# \1/h/
---regex-Asciidoc=/^==[ \t]+(.*)/. \1/h/
---regex-Asciidoc=/^===[ \t]+(.*)/. . \1/h/
---regex-Asciidoc=/^====[ \t]+(.*)/. . . \1/h/
---regex-Asciidoc=/^=====[ \t]+(.*)/. . . . \1/h/
---regex-Asciidoc=/^======[ \t]+(.*)/. . . . \1/h/
---regex-Asciidoc=/^=======[ \t]+(.*)/. . . . \1/h/
+--regex-Asciidoc=/^=+ +([-[:alnum:][:space:] \(\)]{4,})/\1/h,heading/h/
 --regex-Asciidoc=/\[\[([^]]+)\]\]/\1/a/
 --regex-Asciidoc=/^\.([^ \t].+)/\1/t/
 --regex-Asciidoc=/image::([^\[]+)/\1/i/
 --regex-Asciidoc=/image:([^:][^\[]+)/\1/I/
 --regex-Asciidoc=/include::([^\[]+)/\1/n/
 
---languages=Sh,Python,Rust,Markdown,Rst,Javascript,Vorg,Java,C,C++,reStructuredText,Vim,Php,Maven2,Tex,BibTex
+--languages=Sh,Python,Rust,Markdown,Rst,Javascript,Vorg,Java,C,C++,reStructuredText,Vim,Php,Maven2,Tex,BibTex,SQL
