@@ -75,12 +75,6 @@ for i in gonvim; do
 	[[ -x $(command which $i 2>/dev/null) ]] && eval "alias gvim=${i}"
 done
 
-# link nvim config file (in a subshell) to vim config file if missing
-if [[ -x $(which nvim 2>/dev/null) ]] && [[ ! -e ~/.config/nvim/init.vim ]] && [[ -e ~/.vimrc ]]; then
-	(
-		cd && ln -s ~/.vimrc ~/.config/nvim/init.vim
-	) &
-fi
 
 export HISTFILE=~/.shell_history
 export SAVEHIST=10000

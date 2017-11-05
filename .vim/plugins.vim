@@ -348,8 +348,10 @@ endif
 " MY PLUGINS:
 " ==========
 
-if !empty(expand('~/Documents/Vim')) 
+if isdirectory(expand('~/Documents/Vim')) 
+
     for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
+
 	Plug 'nl253/'.plugin, {
 		    \ 'frozen': 1, 
 		    \ 'dir': expand('~/Documents/Vim/').plugin
@@ -374,6 +376,7 @@ if !empty(expand('~/Documents/Vim'))
 		\ 'for': ['xml', 'css', 'javascript', 'typescript', 'markdown']
 		\ }
 endif
+
 let g:vim_dicts = {'markdown': ['unix-programmers', 'computer-science']} 
 
 " if has('nvim')
