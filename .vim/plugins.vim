@@ -24,56 +24,72 @@ let g:programming_languages = [
 			\ 'vim', 
 			\ 'java']
 
-" Packages: (where key is executable name and value is package name)
+" Packages:
 
-" TODO python setup
-echo g:InstallPackages('yarn', 'global add', 'yarn global list', [
-			\ 'stylelint', 
-			\ 'js-beautify', 
-			\ 'typescript', 
-			\ 'yo', 
-			\ 'jsonlint', 
-			\ 'eslint', 
-			\ 'tslint', 
-			\ 'htmlhint', 
-			\ 'tern', 
-			\ 'uglify-es', 
-			\ 'write-good'])
+" echo g:InstallPackages(
+" \ 'yarn', 
+" \ 'global add', 
+" \ 'yarn global list', [
+" \ 'stylelint', 
+" \ 'js-beautify', 
+" \ 'typescript', 
+" \ 'yo', 
+" \ 'jsonlint', 
+" \ 'eslint', 
+" \ 'tslint', 
+" \ 'htmlhint', 
+" \ 'tern', 
+" \ 'uglify-es', 
+" \ 'write-good'])
 
-echo g:InstallPackages('cargo', 'install', 'ls ~/.cargo/registry/src/github.com-*', ['rustfmt', 'racer', 'tokei'])
+" echo g:InstallPackages(
+" \ 'cargo', 
+" \ 'install', 
+" \ 'ls ~/.cargo/registry/src/github.com-*', 
+" \ ['rustfmt', 'racer', 'tokei'])
 
-" TODO python setup
-echo g:InstallPackages('pip', 'install --user --pre', 'pip list', [
-			\ 'flake8',
-			\ 'Cython',
-			\ 'docopt',
-			\ 'lxml',
-			\ 'jedi',
-			\ 'Jinja2',
-			\ 'matplotlib',
-			\ 'pandas',
-			\ 'mypy',
-			\ 'numpy',
-			\ 'proselint',
-			\ 'pyflakes',
-			\ 'pylama',
-			\ 'Sphinx',
-			\ 'pylint',
-			\ 'nltk',
-			\ 'scipy',
-			\ 'pygments',
-			\ 'seaborn',
-			\ 'sqlalchemy',
-			\ 'bokeh',
-			\ 'vulture',
-			\ 'yamllint',
-            \ 'networkx',
-            \ 'prompt-toolkit',
-            \ 'pydocstyle',
-            \ 'PyYAML',
-            \ 'sympy'])
+" echo g:InstallPackages(
+" \ 'pip', 
+" \ 'install --user --pre', 
+" \ 'pip list', [
+" \ 'flake8',
+" \ 'Cython',
+" \ 'docopt',
+" \ 'lxml',
+" \ 'jedi',
+" \ 'Jinja2',
+" \ 'matplotlib',
+" \ 'pandas',
+" \ 'mypy',
+" \ 'numpy',
+" \ 'proselint',
+" \ 'pyflakes',
+" \ 'pylama',
+" \ 'Sphinx',
+" \ 'pylint',
+" \ 'nltk',
+" \ 'scipy',
+" \ 'pygments',
+" \ 'seaborn',
+" \ 'sqlalchemy',
+" \ 'bokeh',
+" \ 'vulture',
+" \ 'yamllint',
+" \ 'ranger-fm',
+" \ 'networkx',
+" \ 'prompt-toolkit',
+" \ 'pydocstyle',
+" \ 'PyYAML',
+" \ 'sympy'])
 
-echo g:InstallPackages('stack', 'install', 'ls ~/.stack/programs/x86_64-*/ghc*/bin', ['ShellCheck', 'pandoc', 'happy', 'hlint'])
+" echo g:InstallPackages(
+" \ 'stack', 
+" \ 'install', 
+" \ 'ls ~/.stack/programs/x86_64-*/ghc*/bin ~/.local/bin', [
+" \ 'ShellCheck', 
+" \ 'pandoc', 
+" \ 'happy', 
+" \ 'hlint'])
 
 " TODO echo g:InstallPackages('gem', 'install', '~/.gem/bin', ['mdl', 'sqlint'])
 
