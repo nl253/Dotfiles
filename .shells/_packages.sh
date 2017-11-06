@@ -55,8 +55,8 @@ to intialise variables so that a new shell doesnt need to be spawned.
 # 1 or 0
 HAS_ADMIN=1
 PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 
-	'autoconf' 'automake' 'vlc' 'doxygen' 'bash' 'bash-completion' 
-	'bashmount' 'bc' 'binutils' 'bison' 'clang' 'base-devel' 
+	'autoconf' 'automake' 'vlc' 'bash-completion' 'bashmount' 
+	'bc' 'binutils' 'bison' 'clang' 'base-devel' 
 	'composer' 'rubber' 'coreutils' 'cronie' 'atool' 
 	'universal-ctags-git' 'texlive-core' 'texlive-bin'
 	'curl' 'elinks' 'erlang' 'flex' 'fzf' 'gawk' 'gcc' 'gcc-libs' 
@@ -65,12 +65,10 @@ PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell'
 	'lsb-release' 'lshw' 'lua' 'make' 'man-db' 'man-pages' 'mariadb' 
 	'mariadb-clients' 'mathjax' 'mongodb' 'mongodb-tools' 'mutt' 
 	'ncurses' 'ngrep' 'nodejs' 'npm' 'openssh' 'parted' 'perl' 'php'
-  'php-apache' 'cppcheck' 'php-cgi' 'php-codesniffer' 'php-mongodb'
-  'php-pgsql' 'php-phpdbg' 'php-sqlite' 'phpmyadmin' 'phppgadmin' 
-	'postgresql' 'postgresql-libs' 'powertop' 'ranger' 'redis' 
+	'postgresql' 'postgresql-libs' 'powertop' 'redis' 
 	'rsync' 'ruby' 'ruby-docs' 'sed' 'shfmt' 'speedtest-cli' 
-	'spotify-stable' 'sqlite' 'subversion' 'tar' 'thunderbird' 
-	'tmux' 'tracker' 'transmission-cli' 'tree')
+	'spotify' 'sqlite' 'subversion' 'tar' 'thunderbird' 
+	'tmux' 'tracker' 'tree')
 
 # declare used python packages
 MANAGE_PYTHON=1
@@ -83,9 +81,8 @@ PYTHON_PACKAGES=(
 
 # declare used Node.js packages
 MANAGE_NODE=1
-NODE_PACKAGES=('jest' 'typescript' 'write-good' 'htmlhint'
-  'jsonlint' 'heroku-cli' 'yo' 'js-beautify' 'standard' 'uglify-es'
-  'tern' 'gitbook' 'textlint' 'express-generator')
+NODE_PACKAGES=('jest' 'typescript' 'write-good' 'htmlhint' 'jsonlint' 
+	'heroku-cli' 'yo' 'js-beautify' 'uglify-es' 'tern' 'textlint')
 
 # declare used Php packages
 MANAGE_PHP=0

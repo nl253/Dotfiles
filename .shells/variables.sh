@@ -1,5 +1,19 @@
 # VARIABLES
 
+_add_to_path() {
+  for directory in "$@"; do
+    [[ -d $directory ]] && [[ ! $PATH =~ $directory ]] && export PATH="$directory:$PATH:" 2>/dev/null
+  done
+}
+
+_add_to_path ~/.{local,anaconda3}/bin
+_add_to_path ~/.gem/ruby/*/bin
+_add_to_path ~/{.yarn,node_modules}/bin
+_add_to_path ~/.{stack,cabal}/bin
+_add_to_path ~/.cargo/bin
+_add_to_path ~/.config/composer/vendor/bin
+_add_to_path ~/.local/share/fzf/bin
+
 # point doctuils (rst) to config file
 export DOCUTILSCONFIG=~/.docutils
 
@@ -82,5 +96,8 @@ export SAVEHIST=10000
 if [[ -x $(command which yaourt 2>/dev/null) ]]; then
   export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 fi
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2

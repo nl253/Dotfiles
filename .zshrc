@@ -132,40 +132,6 @@ tcsh-backward-word() {
 
 zle -N tcsh-backward-word
 
-# Not using Rust atm
-# zplug "plugins/cargo", from:oh-my-zsh 
-# zplug "plugins/rust", from:oh-my-zsh 
-# zplug "plugins/z", from:oh-my-zsh
-
-# zplug denysdovhan/spaceship-zsh-theme, use:spaceship.zsh, from:github, as:theme
-
-# Not using Python atm
-# zplug "plugins/extract", from:oh-my-zsh
-# zplug "plugins/pip", from:oh-my-zsh
-
-# NVM is not used very often
-# zplug "lukechilds/zsh-nvm"
-
-# Extra overhead?
-# zplug "jreese/zsh-titles"
-# zplug "zsh-users/zsh-history-substring-search"
-
-# zplug "zdharma/fast-syntax-highlighting"
-# zplug "zsh-users/zsh-autosuggestions"
-# zplug "zsh-users/zsh-completions"
-
-# zplug "nl253/Scripts", as:command, rename-to:"csv-preview", use:"csv-preview.sh"
-# zplug "nl253/Scripts", as:command, rename-to:"download-dotfile", use:"download-dotfile.sh"
-# zplug "nl253/Scripts", as:command, rename-to:"grf", use:"grf.sh"
-# zplug "nl253/Scripts", as:command, rename-to:"p", use:"processes.sh"
-
-# zplug "tmux-plugins/tpm", as:command, ignore:'*'
-
-# for i in completion options; do
-	# zplug "nl253/zsh-config-${i}", defer:3
-# done
-# zplug load 
-
 # this is necessary because the string "vim" is present in $EDITOR zsh will attempt to set ZLE to use vi mode
 
 bindkey -e
