@@ -125,16 +125,16 @@ for i in map(['speeddating', 'repeat', 'fugitive'], '"tpope/vim-".v:val')
 endfor
 
 if g:has_cargo
-	function! BuildMarkdownComposer(info)
-		if a:info.status != 'unchanged' || a:info.force
-			silent call system(
-						\ "cargo build --release".
-						\ has('nvim') 
-						\ ? "" 
-						\ : "--no-default-features --features json-rpc")
-		endif
-	endfunction
-	Plug 'euclio/vim-markdown-composer', {'do': function('BuildMarkdownComposer')}
+	" function! BuildMarkdownComposer(info)
+		" if a:info.status != 'unchanged' || a:info.force
+			" silent call system(
+						" \ "cargo build --release".
+						" \ has('nvim') 
+						" \ ? "" 
+						" \ : "--no-default-features --features json-rpc")
+		" endif
+	" endfunction
+	Plug 'euclio/vim-markdown-composer', {'do': 'cargo build --release'}
 endif
 
 " A must have if you work with tmux
@@ -254,7 +254,7 @@ if has('patch8') || has('nvim')
 	call g:MakersForFType('javascript', ['eslint'])
 	call g:MakersForFType('json', ['jsonlint'])
 	call g:MakersForFType('tex', ['proselint', 'rubber', 'lacheck', 'chktex'])
-	call g:MakersForFType('markdown', ['mdl', 'proselint', 'write-good'])
+	call g:MakersForFType('markdown', ['mdl', 'proselint', 'writegood'])
 	call g:MakersForFType('python', ['mypy', 'vulture', 'pylint', 'pylama'])
 
 	if g:has_yarn && index(g:programming_languages, 'javascript') >= 0 
