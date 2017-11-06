@@ -121,7 +121,7 @@ preview_class() {
 
 preview_rst() {
   if [[ -x $(command which rst2html5.py 2>/dev/null) ]]; then
-    command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --math-output=LaTeX --link-stylesheet --quiet --smart-quotes=yes --stylesheet=${HOME}/.docutils/docutils.css | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5
+    command head -n "${PV_HEIGHT}" "${FILE_PATH}" | rst2html5.py --math-output=LaTeX --link-stylesheet --quiet --smart-quotes=yes --stylesheet=${HOME}/.docutils/docutils.css | command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width "${PV_WIDTH}" && exit 5
 	else
     command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l rst && exit 5
   fi
@@ -130,7 +130,7 @@ preview_rst() {
 preview_md() {
   [[ -x $(command which pandoc 2>/dev/null) ]] && HAS_PANDOC=1 || HAS_PANDOC=0
   if ((HAS_PANDOC)); then
-    command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks -no-references -no-numbering -dump -dump-color-mode 1 -dump-width "${PV_WIDTH}" && exit 5 || exit 1
+    command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pandoc --self-contained -f markdown_github -t html | command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width "${PV_WIDTH}" && exit 5 || exit 1
 	else
     command head -n "${PV_HEIGHT}" "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l markdown && exit 5
   fi
