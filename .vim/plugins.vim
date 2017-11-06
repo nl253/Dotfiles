@@ -43,7 +43,7 @@ echo g:InstallPackages('yarn', 'global add', '~/.yarn/bin', [
 
 echo g:InstallPackages('cargo', 'install', '~/.cargo/bin', ['rustfmt', 'racer', 'tokei'])
 
-echo g:InstallPackages('pip', 'install --user --pre', '~/.local/lib/python*/site-packages/*', [
+echo g:InstallPackages('pip', 'install --user --pre', '~/.anaconda3/pkgs', [
 			\ 'flake8',
 			\ 'jedi',
 			\ 'matplotlib',
@@ -60,7 +60,8 @@ echo g:InstallPackages('pip', 'install --user --pre', '~/.local/lib/python*/site
 			\ 'vulture',
 			\ 'yamllint'])
 
-echo g:InstallPackages('stack', 'install', '~/.stack/bin', ['ShellCheck', 'pandoc', 'happy', 'hlint'])
+echo g:InstallPackages('stack', 'install', '~/.stack/programs/x86_64-*/ghc-8*/bin', ['ShellCheck', 'pandoc', 'happy', 'hlint'])
+
 " echo g:InstallPackages('gem', 'install', '~/.gem/bin')
 
 " ----------------------------------------------

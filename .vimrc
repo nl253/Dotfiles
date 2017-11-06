@@ -4,7 +4,7 @@ let s:vimdir = expand('~/.vim')
 
 if !filereadable(s:vimdir.'/plugins.vim') && executable('curl')
 	silent call mkdir(s:vimdir, 'p')
-    echo system('curl -fLo '.s:vimdir.'/plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
+	echo system('curl -fLo '.s:vimdir.'/plugins.vim https://raw.githubusercontent.com/nl253/Dotfiles/master/.vim/plugins.vim')
 elseif !filereadable(s:vimdir.'/plugins.vim')
 	finish
 endif
@@ -24,14 +24,14 @@ if has('unix') && !filereadable(s:plug_file) && executable('curl')
 	execute 'source '.s:plug_file
 	PlugInstall
 
-" Windows
+	" Windows
 elseif !filereadable(s:plug_file) && has('win32')
 	if !(&shell =~# 'powershell')
 		set shell=powershell.exe
 	endif
 	silent call system('md ~\vimfiles\autoload; $uri = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"; (New-Object Net.WebClient).DownloadFile($uri, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("~\vimfiles\autoload\plug.vim"))')
 
-" All other
+	" All other
 elseif !filereadable(s:plug_file) 
 	finish
 endif
@@ -42,22 +42,28 @@ call plug#begin('~/.vim/plugged')
 
 " Add to $PATH bin dirs for package managers in case they aren't in $PATH already
 
-for i in filter(map([
-		\ '~/node_modules/.bin', 
-		\ '~/.gem/ruby/*/bin', 
-		\ '~/.fzf/bin', 
-		\ '~/.cargo/bin', 
-		\ '~/.local/bin', 
-		\ '~/.stack/bin', 
-		\ '~/.cabal/bin', 
-		\ '~/go/bin', 
-		\ '~/.anaconda3/bin', 
-		\ '~/anaconda3/bin', 
-		\ '~/.config/composer/bin', 
-		\ '~/.local/share/fzf/bin', 
-		\ '~/.yarn/bin'], 'expand(v:val)'), '!empty(v:val) && !($PATH =~ v:val)')
-	let $PATH = expand(i).':'.$PATH
-endfor
+function! g:AddToPATH(items)
+	for i in filter(map(a:items, 'expand(v:val)'), '!empty(v:val) && !($PATH =~ v:val)')
+		let $PATH = expand(i).':'.$PATH
+	endfor
+endfunction
+
+silent call g:AddToPATH(
+			\ [
+			\ '~/node_modules/.bin', 
+			\ '~/.gem/ruby/*/bin', 
+			\ '~/.fzf/bin', 
+			\ '~/.cargo/bin', 
+			\ '~/.local/bin', 
+			\ '~/.stack/bin', 
+			\ '~/.cabal/bin', 
+			\ '~/go/bin', 
+			\ '~/.anaconda3/bin', 
+			\ '~/anaconda3/bin', 
+			\ '~/.config/composer/bin', 
+			\ '~/.local/share/fzf/bin', 
+			\ '~/.yarn/bin'
+			\ ])
 
 function! g:InstallPackages(package_mangager, install_command, search_path, packages)
 	let s:search_path = expand(a:search_path)
@@ -66,19 +72,24 @@ function! g:InstallPackages(package_mangager, install_command, search_path, pack
 		echom '[ERROR] Bad type of '.i
 		return
 	endfor
+
 	if !executable(a:package_mangager) 
 		echom '[ERROR] Package manger '.i.' not executable!'
 		return
 	endif
+
 	let s:search_path = split(expand(a:search_path))[0]
+
 	if !type(a:packages) == 3 
 		echom '[ERROR] Bad type of packages expected List<String> got '.a:packages
 		return
 	endif
+
 	if len(a:packages) == 0 
 		echom '[ERROR] no packages passed, got an empty list!'
 		return
 	endif
+	d
 	if !executable('bash')
 		echom '[ERROR] bash not executable!'
 		return
