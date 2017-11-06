@@ -1,7 +1,7 @@
 " vim: foldlevel=0 foldmethod=marker nowrap
 
 for i in ['bash', 'yarn', 'cargo']
-    exec 'let g:has_'.i.' = executable("'.i.'")'
+	exec 'let g:has_'.i.' ='.executable(i)
 endfor
 
 
@@ -123,8 +123,10 @@ Plug 'junegunn/gv.vim', {'on': 'GV'}
 set statusline=\ %f\ %r\ %m%=%-14.(%{&sw}\ %{&ts}%q\ %w\ %y\ %p\ of\ %l%)\ \  
 
 if has('unix')
-	Plug 'tpope/vim-eunuch', {'on' : ['Move', 'Remove', 'Find', 'Mkdir', 'Wall', 'SudoEdit', 
-				\ 'Chmod', 'SudoWrite', 'Unlink', 'Rename']} 
+	Plug 'tpope/vim-eunuch', {'on' : [
+				\ 'Move', 'Remove', 'Find', 'Mkdir',
+				\ 'Wall', 'SudoEdit',  'Unlink',
+				\ 'Chmod', 'SudoWrite', 'Rename']} 
 endif
 
 " Java:
@@ -217,9 +219,9 @@ endif
 if has('patch8') || has('nvim')
 	Plug 'neomake/neomake'
 	function! g:MakersForFType(ftype, makers)
-		execute 'let g:neomake_'.ftype.'_enabled_makers = '.
-					\ string(filter(makers, 'executable(v:val)'))
-	    
+		execute 'let g:neomake_'.a:ftype.'_enabled_makers = '.
+					\ string(filter(a:makers, 'executable(v:val)'))
+
 	endfunction
 	call g:MakersForFType('yaml', ['yamllint'])
 	call g:MakersForFType('vim', ['vint'])
