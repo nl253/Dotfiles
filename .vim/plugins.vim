@@ -4,7 +4,6 @@ for i in ['bash', 'yarn', 'cargo']
 	exec 'let g:has_'.i.' ='.executable(i)
 endfor
 
-
 " Variables: (unfortunates these need to be global)
 let g:markup_languages = ['markdown', 'rst', 'vorg', 'tex'] 
 
@@ -20,18 +19,18 @@ let g:config_ftypes = [
 let g:programming_languages = [
 			\ 'sql', 
 			\ 'python', 
+			\ 'haskell', 
 			\ 'sh', 
 			\ 'vim', 
 			\ 'java']
 
 " Packages: (where key is executable name and value is package name)
 
-" let g:gem_packages = ['mdl', 'sqlint']
-
-echo g:InstallPackages('yarn', 'global add', '~/.yarn/bin', [
+" TODO python setup
+echo g:InstallPackages('yarn', 'global add', 'yarn global list', [
 			\ 'stylelint', 
 			\ 'js-beautify', 
-			\ 'tsc', 
+			\ 'typescript', 
 			\ 'yo', 
 			\ 'jsonlint', 
 			\ 'eslint', 
@@ -41,28 +40,42 @@ echo g:InstallPackages('yarn', 'global add', '~/.yarn/bin', [
 			\ 'uglify-es', 
 			\ 'write-good'])
 
-echo g:InstallPackages('cargo', 'install', '~/.cargo/bin', ['rustfmt', 'racer', 'tokei'])
+echo g:InstallPackages('cargo', 'install', 'ls ~/.cargo/registry/src/github.com-*', ['rustfmt', 'racer', 'tokei'])
 
-echo g:InstallPackages('pip', 'install --user --pre', '~/.anaconda3/pkgs', [
+" TODO python setup
+echo g:InstallPackages('pip', 'install --user --pre', 'pip list', [
 			\ 'flake8',
+			\ 'Cython',
+			\ 'docopt',
+			\ 'lxml',
 			\ 'jedi',
+			\ 'Jinja2',
 			\ 'matplotlib',
+			\ 'pandas',
 			\ 'mypy',
 			\ 'numpy',
 			\ 'proselint',
 			\ 'pyflakes',
 			\ 'pylama',
+			\ 'Sphinx',
 			\ 'pylint',
+			\ 'nltk',
 			\ 'scipy',
 			\ 'pygments',
 			\ 'seaborn',
 			\ 'sqlalchemy',
+			\ 'bokeh',
 			\ 'vulture',
-			\ 'yamllint'])
+			\ 'yamllint',
+            \ 'networkx',
+            \ 'prompt-toolkit',
+            \ 'pydocstyle',
+            \ 'PyYAML',
+            \ 'sympy'])
 
-echo g:InstallPackages('stack', 'install', '~/.stack/programs/x86_64-*/ghc-8*/bin', ['ShellCheck', 'pandoc', 'happy', 'hlint'])
+echo g:InstallPackages('stack', 'install', 'ls ~/.stack/programs/x86_64-*/ghc*/bin', ['ShellCheck', 'pandoc', 'happy', 'hlint'])
 
-" echo g:InstallPackages('gem', 'install', '~/.gem/bin')
+" TODO echo g:InstallPackages('gem', 'install', '~/.gem/bin', ['mdl', 'sqlint'])
 
 " ----------------------------------------------
 

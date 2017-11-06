@@ -5,7 +5,6 @@ _add_to_path() {
     [[ -d $directory ]] && [[ ! $PATH =~ $directory ]] && export PATH="$directory:$PATH:" 2>/dev/null
   done
 }
-
 _add_to_path ~/.{local,anaconda3}/bin
 _add_to_path ~/.gem/ruby/*/bin
 _add_to_path ~/{.yarn,node_modules}/bin
@@ -84,12 +83,6 @@ for i in nvim vim vi; do
 	fi
 done
 
-
-for i in gonvim; do
-	[[ -x $(command which $i 2>/dev/null) ]] && eval "alias gvim=${i}"
-done
-
-
 export HISTFILE=~/.shell_history
 export SAVEHIST=10000
 
@@ -98,6 +91,6 @@ if [[ -x $(command which yaourt 2>/dev/null) ]]; then
 fi
 
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2

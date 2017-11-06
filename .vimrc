@@ -65,10 +65,9 @@ silent call g:AddToPATH(
 			\ '~/.yarn/bin'
 			\ ])
 
-function! g:InstallPackages(package_mangager, install_command, search_path, packages)
-	let s:search_path = expand(a:search_path)
+function! g:InstallPackages(package_mangager, install_command, query_command, packages)
 
-	for i in filter([a:package_mangager, a:search_path, a:install_command], '!type(v:val) == 2')
+	for i in filter([a:package_mangager, a:install_command], '!type(v:val) == 2')
 		echom '[ERROR] Bad type of '.i
 		return
 	endfor
@@ -77,8 +76,6 @@ function! g:InstallPackages(package_mangager, install_command, search_path, pack
 		echom '[ERROR] Package manger '.a:package_mangager.' not executable!'
 		return
 	endif
-
-	let s:search_path = split(expand(a:search_path))[0]
 
 	if !type(a:packages) == 3 
 		echom '[ERROR] Bad type of packages expected List<String> got '.a:packages
@@ -89,13 +86,13 @@ function! g:InstallPackages(package_mangager, install_command, search_path, pack
 		echom '[ERROR] no packages passed, got an empty list!'
 		return
 	endif
-	d
+
 	if !executable('bash')
 		echom '[ERROR] bash not executable!'
 		return
 	endif
 
-	let s:packages = join(map(split(expand(join([s:search_path, '*'], '/'))), 'fnamemodify(v:val, ":t")'))
+	let s:packages = system(a:query_command)
 
 	for i in filter(a:packages, '!(s:packages =~? v:val)')
 		echom '[INFO] installing '.i

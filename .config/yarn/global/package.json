@@ -11,7 +11,7 @@
     "ijavascript": "^5.0.20",
     "itypescript": "^0.2.2",
     "jest": "^21.1.0",
-    "js-beautify": "^1.7.3",
+    "js-beautify": "^1.7.4",
     "jsonlint": "^1.6.2",
     "mancy": "^3.1.0",
     "showdown": "^1.8.0",
