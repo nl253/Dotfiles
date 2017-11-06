@@ -241,8 +241,8 @@ endif
 
 " MARKUP:
 
-Plug 'dkarter/bullets.vim', {'for': g:markup_languages + ['gitcommit', 'gitconfig', 'yaml']}
-let g:bullets_enabled_file_types = g:markup_languages + ['gitcommit', 'gitconfig', 'yaml']
+Plug 'dkarter/bullets.vim', {'for': g:markup_languages + g:config_ftypes}
+let g:bullets_enabled_file_types = g:markup_languages + g:config_ftypes
 
 Plug 'dbmrq/vim-ditto', {'on': ['ToggleDitto', 'DittoOn'], 'for': g:markup_languages}
 let g:ditto_mode = 'paragraph'

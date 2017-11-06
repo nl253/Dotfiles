@@ -109,7 +109,7 @@ MANAGE_RUST=1
 RUST_CRATES=('rustfmt' 'racer' 'mdbook' 'cargo-count' 'cargo-find' 'tokei')
 
 # toolchain to use for Rust
-export DEFAULT_TOOLCHAIN=nightly-x86_64-unknown-linux-gnu
+export DEFAULT_TOOLCHAIN=nightly
 
 # ---------------------------------------------------------------
 

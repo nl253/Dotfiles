@@ -74,7 +74,7 @@ function! g:InstallPackages(package_mangager, install_command, search_path, pack
 	endfor
 
 	if !executable(a:package_mangager) 
-		echom '[ERROR] Package manger '.i.' not executable!'
+		echom '[ERROR] Package manger '.a:package_mangager.' not executable!'
 		return
 	endif
 
@@ -97,7 +97,7 @@ function! g:InstallPackages(package_mangager, install_command, search_path, pack
 
 	let s:packages = join(map(split(expand(join([s:search_path, '*'], '/'))), 'fnamemodify(v:val, ":t")'))
 
-	for i in filter(a:packages, '!(s:packages =~ v:val)')
+	for i in filter(a:packages, '!(s:packages =~? v:val)')
 		echom '[INFO] installing '.i
 		silent call system('bash -c "'.a:package_mangager.' '.a:install_command.' '.i.' &"')
 	endfor
