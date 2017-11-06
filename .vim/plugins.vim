@@ -101,7 +101,7 @@ for i in map(['speeddating', 'repeat', 'fugitive'], '"tpope/vim-".v:val')
 	Plug i
 endfor
 
-if executable('cargo')
+if g:has_cargo
 	function! BuildMarkdownComposer(info)
 		if a:info.status != 'unchanged' || a:info.force
 			silent call system(
@@ -135,7 +135,7 @@ if index(g:programming_languages, 'java') >= 0 && executable('mvn')
 endif
 
 " Rust: 
-if executable('rustc') && executable('cargo')
+if g:has_cargo
 	if index(g:programming_languages, 'rust') >= 0 
 		Plug 'rust-lang/rust.vim', {'for': 'rust'}
 		if executable('racer')
@@ -146,17 +146,17 @@ if executable('rustc') && executable('cargo')
 			let g:rustfmt_autosave = 1
 		endif
 	endif
-endif
 
-if index(g:markup_languages, 'markdown') >= 0 && executable('cargo')
-	function! BuildMarkdownComposer(info)
-		if a:info.status != 'unchanged' || a:info.force
-			silent call system("cargo build --release".
-						\ has('nvim') ? "" 
-						\ : "--no-default-features --features json-rpc")
-		endif
-	endfunction
-	Plug 'euclio/vim-markdown-composer', {'do': function('BuildMarkdownComposer')}
+	if index(g:markup_languages, 'markdown') >= 0
+		function! BuildMarkdownComposer(info)
+			if a:info.status != 'unchanged' || a:info.force
+				silent call system("cargo build --release".
+							\ has('nvim') ? "" 
+							\ : "--no-default-features --features json-rpc")
+			endif
+		endfunction
+		Plug 'euclio/vim-markdown-composer', {'do': function('BuildMarkdownComposer')}
+	endif
 endif
 
 if has('python') || has('python3')
@@ -230,18 +230,16 @@ if has('patch8') || has('nvim')
 	call g:MakersForFType('css', ['stylelint'])
 	call g:MakersForFType('javascript', ['eslint'])
 	call g:MakersForFType('json', ['jsonlint'])
+	call g:MakersForFType('tex', ['proselint', 'rubber', 'lacheck', 'chktex'])
+	call g:MakersForFType('markdown', ['mdl', 'proselint', 'write-good'])
 	call g:MakersForFType('python', ['mypy', 'vulture', 'pylint', 'pylama'])
 
 	if executable('yarn') && index(g:programming_languages, 'javascript') >= 0 
-		for i in ['eslint']
-			for j in ['javascript', 'json']
-				execute 'let g:neomake_'.j.'_'.i.'_exe = "'.expand('~/.yarn/bin/'.i).'"'
+		for package in filter(map(['eslint'], 'expand("~/.yarn/bin/".v:val)'), 'executable(v:val)')
+			for ftype in ['javascript', 'json']
+				execute 'let g:neomake_'.ftype.'_'.fnamemodify(package, ':t').'_exe = '.package
 			endfor
 		endfor
-	endif
-
-	if executable('mdl') && exists('g:neomake_markdown_enabled_makers')
-		let g:neomake_markdown_enabled_makers += ['mdl']
 	endif
 else
 	Plug 'vim-syntastic/syntastic'
