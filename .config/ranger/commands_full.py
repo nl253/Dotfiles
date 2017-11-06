@@ -739,24 +739,6 @@ class unmark_tag(mark_tag):
     do_mark = False
 
 
-
-
-class edit(Command):
-    """:edit <filename>
-
-    Opens the specified file in vim
-    """
-
-    def execute(self):
-        if not self.arg(1):
-            self.fm.edit_file(self.fm.thisfile.path)
-        else:
-            self.fm.edit_file(self.rest(1))
-
-    def tab(self, tabnum):
-        return self._tab_directory_content()
-
-
 class eval_(Command):
     """:eval [-q] <python code>
 

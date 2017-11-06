@@ -59,36 +59,35 @@ for i in filter(map([
 	let $PATH = expand(i).':'.$PATH
 endfor
 
-function! g:InstallPackages(package_mangager, install_command, search_path)
+function! g:InstallPackages(package_mangager, install_command, search_path, packages)
 	let s:search_path = expand(a:search_path)
 
-	if exists(execute('g:'.a:package_mangager.'_packages'))
-		let s:package_mangager_packages = execute('g:'.a:package_mangager.'_packages')
-	else 
+	for i in filter([a:package_mangager, a:search_path, a:install_command], '!type(v:val) == 2')
+		echom '[ERROR] Bad type of '.i
 		return
-	endif
-	for i in [a:package_mangager, a:search_path, a:install_command]
-		if !type(i) == 2
-			return
-		endif
 	endfor
 	if !executable(a:package_mangager) 
+		echom '[ERROR] Package manger '.i.' not executable!'
 		return
 	endif
 	let s:search_path = split(expand(a:search_path))[0]
-	if !type(s:package_mangager_packages) == 3 
+	if !type(a:packages) == 3 
+		echom '[ERROR] Bad type of packages expected List<String> got '.a:packages
 		return
 	endif
-	if !len(s:package_mangager_packages) > 0 
+	if len(a:packages) == 0 
+		echom '[ERROR] no packages passed, got an empty list!'
 		return
 	endif
 	if !executable('bash')
+		echom '[ERROR] bash not executable!'
 		return
 	endif
 
 	let s:packages = join(map(split(expand(join([s:search_path, '*'], '/'))), 'fnamemodify(v:val, ":t")'))
 
-	for i in filter(s:package_mangager_packages, '!(s:packages =~ v:val)')
+	for i in filter(a:packages, '!(s:packages =~ v:val)')
+		echom '[INFO] installing '.i
 		silent call system('bash -c "'.a:package_mangager.' '.a:install_command.' '.i.' &"')
 	endfor
 endfunction

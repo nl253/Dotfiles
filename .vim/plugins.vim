@@ -25,27 +25,10 @@ let g:programming_languages = [
 			\ 'java']
 
 " Packages: (where key is executable name and value is package name)
-let g:cargo_packages = ['rustfmt', 'racer', 'tokei']
 
-let g:gem_packages = ['mdl', 'sqlint']
+" let g:gem_packages = ['mdl', 'sqlint']
 
-let g:pip_packages = [
-			\ 'flake8',
-			\ 'jedi',
-			\ 'matplotlib',
-			\ 'mypy',
-			\ 'numpy',
-			\ 'proselint',
-			\ 'pyflakes',
-			\ 'pylama',
-			\ 'pylint',
-			\ 'scipy',
-			\ 'seaborn',
-			\ 'sqlalchemy',
-			\ 'vulture',
-			\ 'yamllint']
-
-let g:yarn_packages = [
+echo g:InstallPackages('yarn', 'global add', '~/.yarn/bin', [
 			\ 'stylelint', 
 			\ 'js-beautify', 
 			\ 'tsc', 
@@ -56,21 +39,31 @@ let g:yarn_packages = [
 			\ 'htmlhint', 
 			\ 'tern', 
 			\ 'uglify-es', 
-			\ 'write-good']
+			\ 'write-good'])
 
-let g:stack_packages = ['ShellCheck', 'pandoc', 'happy', 'hlint']
+echo g:InstallPackages('cargo', 'install', '~/.cargo/bin', ['rustfmt', 'racer', 'tokei'])
 
-silent call g:InstallPackages('yarn', 'global add', '~/.yarn/bin')
-silent call g:InstallPackages('cargo', 'install', '~/.cargo/bin')
-silent call g:InstallPackages('pip', 'install --user --pre', '~/.local/lib/python*/site-packages/*')
-silent call g:InstallPackages('stack', 'install', '~/.stack/bin')
-" silent call g:InstallPackages('gem', 'install', '~/.gem/bin')
+echo g:InstallPackages('pip', 'install --user --pre', '~/.local/lib/python*/site-packages/*', [
+			\ 'flake8',
+			\ 'jedi',
+			\ 'matplotlib',
+			\ 'mypy',
+			\ 'numpy',
+			\ 'proselint',
+			\ 'pyflakes',
+			\ 'pylama',
+			\ 'pylint',
+			\ 'scipy',
+			\ 'pygments',
+			\ 'seaborn',
+			\ 'sqlalchemy',
+			\ 'vulture',
+			\ 'yamllint'])
+
+echo g:InstallPackages('stack', 'install', '~/.stack/bin', ['ShellCheck', 'pandoc', 'happy', 'hlint'])
+" echo g:InstallPackages('gem', 'install', '~/.gem/bin')
 
 " ----------------------------------------------
-
-" Sanity Tests:
-" =============
-" TODO tests and assertions
 
 " Place Plugins Here:
 " ===================  
@@ -234,7 +227,7 @@ if has('patch8') || has('nvim')
 	call g:MakersForFType('markdown', ['mdl', 'proselint', 'write-good'])
 	call g:MakersForFType('python', ['mypy', 'vulture', 'pylint', 'pylama'])
 
-	if executable('yarn') && index(g:programming_languages, 'javascript') >= 0 
+	if g:has_yarn && index(g:programming_languages, 'javascript') >= 0 
 		for package in filter(map(['eslint'], 'expand("~/.yarn/bin/".v:val)'), 'executable(v:val)')
 			for ftype in ['javascript', 'json']
 				execute 'let g:neomake_'.ftype.'_'.fnamemodify(package, ':t').'_exe = '.package
@@ -292,6 +285,7 @@ if index(g:programming_languages, 'javascript') >= 0
 	for i in ['pangloss/vim-javascript', 'isRuslan/vim-es6', 'Quramy/vim-js-pretty-template']
 		Plug i, {'for': 'javascript'}
 	endfor
+	let g:used_javascript_libs = 'jquery,'
 endif
 
 if index(g:programming_languages, 'typescript') >= 0 
@@ -303,11 +297,7 @@ if index(g:programming_languages, 'typescript') >= 0
 	endfor
 endif
 
-if index(g:config_ftypes, 'json') >= 0
-	Plug 'elzr/vim-json', {'for': 'json'}
-endif
-
-let g:used_javascript_libs = 'jquery,'
+Plug 'elzr/vim-json', {'for': 'json'}
 
 " Templating Engines:
 " -------------------
@@ -319,6 +309,10 @@ endif
 
 " MY PLUGINS:
 " ==========
+
+if !isdirectory(expand('~/Documents/Vim')) 
+	call mkdir(expand('~/Documents/Vim'), 'p')
+endif
 
 if isdirectory(expand('~/Documents/Vim')) 
 
@@ -364,6 +358,6 @@ else
 	colorscheme darkblue
 endif
 
-exec 'set suffixesadd='.join(g:programming_languages + g:markup_languages, ',')
+exec 'set suffixesadd='.join(g:programming_languages + g:markup_languages + g:config_ftypes, ',')
 
 " vim: foldmethod=indent

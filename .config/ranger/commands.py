@@ -422,3 +422,22 @@ class vimdiff(Command):
 
         self.fm.ui.need_redraw = True
         self.fm.ui.redraw_main_column()
+
+
+class edit(Command):
+    """:edit <filename>
+
+    Opens the specified file in vim
+    """
+
+    def execute(self):
+        import os
+        if not self.arg(1):
+            run([os.environ['EDITOR'], self.fm.thisfile.path])
+        else:
+            run([os.environ['EDITOR'], self.args[1:]])
+            #  self.fm.edit_file(self.rest(1))
+
+    def tab(self, tabnum):
+        return self._tab_directory_content()
+
