@@ -11,6 +11,13 @@ _add_to_path ~/.{local,yarn,anaconda3,stack,cabal,config/composer/vendor,cargo,l
 _add_to_path ~/.gem/ruby/*/bin
 _add_to_path ~/{go,node_modules}/bin
 
+# anaconda3 root env
+[[ -f /opt/anaconda/bin/python3 ]] && . /opt/anaconda/bin/activate
+
+for i in pandoc{-citeproc,}; do
+  [[ -x "/usr/local/bin/${i}" ]] && eval "alias ${i}=/usr/local/bin/${i}"
+done
+
 # toolchain to use for Rust
 export DEFAULT_TOOLCHAIN=nightly
 

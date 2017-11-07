@@ -12,12 +12,10 @@ if (($BASH_VERSINFO < 4)); then
   return 0
 fi
 
+
 for i in $(find ~/.shells ~/.bash -name '*.sh' -not -name '_*' -type f); do
 	source "${i}"
 done 
-
-# anaconda3 root env
-[[ -f /opt/anaconda/bin/activate ]] && . /opt/anaconda/bin/activate
 
 if ! shopt -oq posix; then
   if [[ -f /usr/share/bash-completion/bash_completion ]]; then
