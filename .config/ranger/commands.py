@@ -1,13 +1,11 @@
-
 from __future__ import absolute_import, division, print_function
 
 # Standard Library
-from subprocess import run, DEVNULL
+from subprocess import run, DEVNULL, PIPE
 
 # 3rd Party
 # You always need to import ranger.api.commands here to get the Command class:
 from ranger.api.commands import Command
-
 
 class git(Command):
     """git <subcommand> [<option>, ...] [--] [<file>, ...]
@@ -15,7 +13,10 @@ class git(Command):
     Wrapper for git commands. Good completion.
     """
 
-    non_interactive_commands = {'clone', 'rm', 'mv', 'init', 'clean', 'archive', 'pull', 'fetch', 'push', 'add'}
+    non_interactive_commands = {
+        'clone', 'rm', 'mv', 'init', 'clean', 'archive', 'pull', 'fetch',
+        'push', 'add'
+    }
 
     opts = {'--no-pager', '-C'}
 
@@ -74,19 +75,24 @@ class git(Command):
         'write-tree',
     }
 
-
     def execute(self):
-        if not self.args[1:] or self.args[1] not in (git.commands | git.non_interactive_commands | git.opts):
+        if not self.args[1:] or self.args[1] not in (
+            git.commands | git.non_interactive_commands | git.opts
+        ):
             return
 
-        command = ['git'] + (['--paginate'] if not any(map(lambda x: x in git.non_interactive_commands, self.args)) else []) + self.args[1:]
+        command = ['git'] + (['--paginate'] if not any(
+            map(lambda x: x in git.non_interactive_commands, self.args)
+        ) else []) + self.args[1:]
 
         if len(self.fm.thistab.get_selection()) > 1:
             command.append('--')
             command.extend((i.path for i in self.fm.thistab.get_selection()))
 
         try:
-            if any(map(lambda x: x in git.non_interactive_commands, self.args)):
+            if any(
+                map(lambda x: x in git.non_interactive_commands, self.args)
+            ):
                 import concurrent.futures
                 with concurrent.futures.ThreadPoolExecutor(16) as pool:
                     pool.submit(run, command, stdout=DEVNULL)
@@ -99,29 +105,33 @@ class git(Command):
         except Exception as e:
             self.fm.notify(f'An error has occurred {e}', bad=True)
 
-
     def tab(self, tabnum):
 
         if len(self.args) > 2 and self.args[-1].startswith('-'):
-            from subprocess import PIPE, DEVNULL
             import re
 
-            x = run(['git', '--no-pager', self.args[1], '-h'], stdout=PIPE, stderr=DEVNULL).stdout.decode('utf-8')
+            x = run(['git', '--no-pager', self.args[1], '-h'],
+                    stdout=PIPE,
+                    stderr=DEVNULL).stdout.decode('utf-8')
 
             pat = re.compile(r'--[a-z][-a-z_]+|-[a-zA-Z]')
 
             return {(" ".join(self.args[:-1]) + ' ' + i).strip()
                     for i in pat.findall(x)
-                    if len(self.args[1]) <= 2 or self.args[-1] in i or i in self.args[-1]}
-
+                    if len(self.args[1]) <= 2 or self.args[-1] in i
+                    or i in self.args[-1]}
 
         else:
-            return {(" ".join(self.args[:-1]) + " " + i).strip()
-                    for i in git.commands | git.non_interactive_commands if self.args[-1] in i or i in self.args[-1]
-                    } if len(self.args) > 1 else {f"git {i}" for i in git.opts}
+            return {
+                (" ".join(self.args[:-1]) + " " + i).strip()
+                for i in git.commands | git.non_interactive_commands
+                if self.args[-1] in i or i in self.args[-1]
+            } if len(self.args) > 1 else {f"git {i}"
+                                          for i in git.opts}
 
 
 class vim(Command):
+
     """:vim [<option>, ...] [<filename>, ...]
     Open marked files in vim.
 
@@ -140,15 +150,66 @@ class vim(Command):
 
         from os import listdir
 
-        opts = {'-t', '+', '-S', '--cmd', '-d', '-M', '-m', '-o', '-O', '-p', '-R'}
+        opts = {
+            '-t', '+', '-S', '--cmd', '-d', '-M', '-m', '-o', '-O', '-p', '-R'
+        }
 
         return {(" ".join(self.args[:-1]) + " " + i).strip()
                 for i in opts | set(listdir(self.fm.thisdir.path))
                 if self.args[-1] in i or i in self.args[-1]
-                } if len(self.args) > 1 else {f"vim {i}" for i in opts}
+                } if len(self.args) > 1 else {f"vim {i}"
+                                              for i in opts}
+
+
+class lines_of_code(Command):
+
+    """:lines_of_code
+
+    Counts lines of code recursively from the current directory.
+    Optionally accepts an extension.
+    """
+
+    extensions = {
+        'vim', 'sh', 'java', 'c', 'cpp', 'py', 'rs', 'hs', 'pl', 'rb', 'tex',
+        'txt', 'md', 'rst', 'js', 'xml', 'html', 'css', 'php', 'yml', 'ini',
+        'zsh', 'json', 'toml', 'cfg', 'conf'
+    }
+
+    def execute(self):
+        import os
+        import glob
+
+        cmd = ['wc', '-l']
+
+        path = os.path.join(self.fm.thisdir.path, '**')
+
+        files = glob.iglob(path, recursive=True)
+
+        if self.args[1:]:
+            import fnmatch
+            files = fnmatch.filter(files, '*.' + self.args[1])
+
+        files = filter(os.path.isfile, files)
+
+        files = map(lambda i: os.path.relpath(i, self.fm.thisdir.path), files)
+
+        run(['less'], input=run(cmd + list(files), stdout=PIPE, stderr=DEVNULL).stdout)
+
+    def _pred(self, extension):
+        return any({
+            self.args[-1] in extension, extension in self.args[-1],
+            len(self.args) == 1
+        })
+
+    def tab(self, tabnum):
+        return {
+            "lines_of_code " + i
+            for i in filter(self._pred, lines_of_code.extensions)
+        }
 
 
 class grep(Command):
+
     """:grep <string>
 
     Looks for a string in all marked files or directories.
@@ -157,7 +218,6 @@ class grep(Command):
     """
 
     def execute(self):
-        from subprocess import PIPE
         from os.path import exists, expanduser
 
         if self.rest(1):
@@ -172,7 +232,10 @@ class grep(Command):
                         stdout=PIPE)
 
             # try git grep if in a git repo
-            elif exists(run(['git', 'rev-parse', '--show-toplevel'], PIPE).stdout.decode('utf-8')):
+            elif exists(
+                run(['git', 'rev-parse', '--show-toplevel'],
+                    PIPE).stdout.decode('utf-8')
+            ):
 
                 x = run([
                     'git', 'grep', '--line-number', '--color=always', '-I',
@@ -195,6 +258,7 @@ class grep(Command):
 
 
 class untracked(Command):
+
     """:untracked
 
     List files not tracked by git (ignored).
@@ -205,11 +269,9 @@ class untracked(Command):
     def execute(self):
         run(['git', '--paginate', 'ls-files', '--others'])
 
-        self.fm.ui.need_redraw = True
-        self.fm.ui.redraw_main_column()
-
 
 class tracked(Command):
+
     """:tracked
 
     List files tracked by git.
@@ -225,12 +287,12 @@ class tracked(Command):
 
 
 class yarn(Command):
+
     """:yarn <subcommand>
     """
 
     def execute(self):
         run(['yarn'] + self.args[1:])
-
 
     def tab(self, tabnum):
 
@@ -250,25 +312,29 @@ class yarn(Command):
 
             if x.get('scripts', None) == None: return
 
-            return {'yarn run ' + i for i in x['scripts']
-                    if self.args[2] in i
-                    or len(self.args[-1]) == 1 and i.startswith(self.args[-1])}
+            return {
+                'yarn run ' + i
+                for i in x['scripts']
+                if self.args[2] in i
+                or len(self.args[-1]) == 1 and i.startswith(self.args[-1])
+            }
 
         elif len(self.args) == 1 or self.args[1] != 'run':
 
             return {
-                    'yarn ' + i
-                    for i in (
-                        'install', 'update', 'upgrade', 'remove', 'pack', 'run', 'unlink',
-                        'generate-lock-entry', 'import', 'access', 'add', 'autoclean',
-                        'create', 'exec', 'publish'
-                        ) if self.args[-1] in i or len(self.args) == 1
-                    }
+                'yarn ' + i
+                for i in (
+                    'install', 'update', 'upgrade', 'remove', 'pack', 'run',
+                    'unlink', 'generate-lock-entry', 'import', 'access', 'add',
+                    'autoclean', 'create', 'exec', 'publish'
+                ) if self.args[-1] in i or len(self.args) == 1
+            }
         else:
             return
 
 
 class mkdir(Command):
+
     """:mkdir [<dirname>, ...]
 
     Creates a directories with given names.
@@ -292,12 +358,12 @@ class mkdir(Command):
                 self.fm.notify(f"file/directory {dirname} exists!", bad=True)
                 break
 
-
     def tab(self, tabnum):
         return self._tab_directory_content()
 
 
 class touch(Command):
+
     """:touch [<fname>, ...]
 
     Creates files with given names.
@@ -325,6 +391,7 @@ class touch(Command):
 
 
 class make(Command):
+
     """:make <subcommand>
 
     Run make with specified rule.
@@ -334,7 +401,6 @@ class make(Command):
 
     def execute(self):
         run(['make'] + self.args[1:], stdout=DEVNULL)
-
 
     def tab(self, tabnum):
         from os.path import isfile
@@ -371,15 +437,16 @@ class mvn(Command):
             return
 
         return {
-                'mvn ' + i
-                for i in {
-                    'site', 'compile', 'package', 'validate', 'install', 'deploy',
-                    'test', 'integration-test', 'clean'
-                    } if self.args[-1] in i or len(self.args) == 1
-                }
+            'mvn ' + i
+            for i in {
+                'site', 'compile', 'package', 'validate', 'install', 'deploy',
+                'test', 'integration-test', 'clean'
+            } if self.args[-1] in i or len(self.args) == 1
+        }
 
 
 class modified(Command):
+
     """:modified
 
     List files modified (Git).
@@ -425,6 +492,7 @@ class vimdiff(Command):
 
 
 class edit(Command):
+
     """:edit <filename>
 
     Opens the specified file in vim
@@ -440,4 +508,3 @@ class edit(Command):
 
     def tab(self, tabnum):
         return self._tab_directory_content()
-
