@@ -51,6 +51,7 @@ export HISTTIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
 
+
 # $PAGER
 if [[ -x $(command which less 2>/dev/null) ]]; then
 	export LESS='--RAW-CONTROL-CHARS --IGNORE-CASE --QUIET --HILITE-SEARCH --long-prompt'
@@ -68,6 +69,7 @@ for i in firefox-developer firefox google-chrome-stable chromium elinks lynx w3m
     export BROWSER=$(command which $i 2>/dev/null) && break
   fi
 done
+
 
 # $EDITOR
 

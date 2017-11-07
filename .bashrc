@@ -13,7 +13,7 @@ if (($BASH_VERSINFO < 4)); then
 fi
 
 for i in $(find ~/.shells ~/.bash -name '*.sh' -not -name '_*' -type f); do
-  [[ -f $i ]] && echo "souring ${i}" && source "${i}"
+	source "${i}"
 done 
 
 # anaconda3 root env

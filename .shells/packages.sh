@@ -1,5 +1,7 @@
 
-[[ -e ~/AppData/ ]] && return 0
+
+# [[ -e ~/AppData/ ]] && return 0
+return 0
 
 PACMAN_PACKAGES=('ranger' 'htop' 'apache' 'aria2' 'aspell' 
 	'autoconf' 'automake' 'vlc' 'bash-completion' 'bashmount' 
