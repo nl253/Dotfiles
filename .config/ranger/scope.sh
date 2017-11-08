@@ -380,14 +380,14 @@ handle_mime() {
     text/* | application/*xml | application/*script)
 
       if ! ((HAS_PYGMENTS)); then
-        preview
-        return
+        preview && exit 5 || exit 1
       fi
 
       guess_shebang
 
       case "${FILE_NAME,,}" in
 
+				# must be checked for BEFORE *.txt
         # requirements.txt | humans.txt | robots.txt)
         # preview_dosini
         # ;;
@@ -397,18 +397,19 @@ handle_mime() {
           preview
           ;;
 
-        # .babelrc | .csslintrc | .jsbeautifyrc | .jshintrc | .stylelintrc | .tern-* | .markdownlintrc | *.lefty)
-        # preview_json
-        # ;;
-
         # *.conf | *config | *.cfg | .*ignore* | *.cnf | *.toml | *.MF | *.desktop | .flake8 | *.yapf)
         *.conf | *config | *.cfg | .*ignore* | *.cnf | *.toml | *.desktop)
           preview_dosini
           ;;
 
         license | readme | change* | contrib* | building | roadmap)
-
           preview_rst
+          ;;
+
+        .*rc)
+          if [[ $(pygmentize -N "${FILE_PATH}") =~ text ]]; then
+            preview_dosini
+          fi
           ;;
 
         # .ideavimrc)
@@ -417,6 +418,11 @@ handle_mime() {
 
         # .spacemacs | .emacs)
         # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l lisp "${FILE_PATH}" && exit 5
+        # ;;
+				
+
+        # .babelrc | .csslintrc | .jsbeautifyrc | .jshintrc | .stylelintrc | .tern-* | .markdownlintrc | *.lefty)
+        # preview_json
         # ;;
 
         # pkgbuild | .profile | .zprofile | .zenv | .zsh*)
@@ -427,21 +433,15 @@ handle_mime() {
         # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l haskell "${FILE_PATH}" && exit 5
         # ;;
 
-        .*rc)
-          if [[ $(pygmentize -N "${FILE_PATH}") =~ text ]]; then
-            preview_dosini
-          fi
-          ;;
-
       esac
 
       # let pygments guess
       local guess=$(pygmentize -N "${FILE_PATH}")
 
       if [[ $guess =~ 'text' ]]; then
-        preview
+        preview && exit 5
       else
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $guess && exit 5
+        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $guess && exit 5 || exit 1
       fi
 
       ;;
