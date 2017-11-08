@@ -1,6 +1,14 @@
 \documentclass[a4paper, 13pt, draft]{article}
 
 \usepackage{graphicx}
+
+% \usepackage{color}
+\usepackage[dvipsnames]{color}
+\usepackage{enumitem}
+
+\definecolor{col1}{RGB}{204, 0, 0}
+\definecolor{default}{RGB}{20, 20, 31}
+
 \usepackage{multicol}
 \usepackage{geometry}
 \usepackage{hyperref}
@@ -25,7 +33,15 @@
 
 \begin{document}
 
-\begin{center} \Huge{Norbert Logiewa} \\ \small{A Computer Science Student}  \end{center}
+\color{default}
+
+\begin{center}% 
+    \Huge{%
+	\color{col1}
+	Norbert Logiewa
+	\color{default}
+	\\ \small{A Computer Science Student}  
+    \end{center}
 
     \begin{table}[htpb]
 	\centering
@@ -55,39 +71,30 @@
 
 	\timeperiod{Oct 2016}{June 2020}
 
-	\begin{itemize}
+	\begin{itemize}[leftmargin=*]
 	    \setlength\itemsep{0em}
 	\item
-	    \begin{quote}
-		Object Oriented Programming (Java), Testing (JUnit)
-	    \end{quote}
+	    \textbf{Object Oriented Programming} \\
+	    \textit{Java, Testing with JUnit}
 	\item
-	    \begin{quote}
-		Software Engineering (stages, approaches, design patterns, UML)
-	    \end{quote}
+	    \textbf{Software Engineering} \\
+	    \textit{stages, approaches, design patterns, UML}
 	\item
-	    \begin{quote}
-		Computer systems (operating systems, networking, hardware)
-	    \end{quote}
+	    \textbf{Computer systems} \\
+	    \textit{operating systems, networking, hardware}
 	\item
-	    \begin{quote}
-		Algorithms and Data Structures (big O notation, analysis of
-		algorithms)
-	    \end{quote}
+	    \textbf{Algorithms and Data Structures} \\
+	    \textit{big O notation, analysis of algorithms}
 	\item
-	    \begin{quote}
-		Theory of Computation (natural deduction, finite state machines,
-		regular expressions)
-	    \end{quote}
+	    \textbf{Theory of Computation} \\
+	    \textit{natural deduction, finite state machines, regular expressions}
 	\item
-	    \begin{quote}
-		Human Computer Interaction (user experience, usability)
-	    \end{quote}
+	    \textbf{Human Computer Interaction} \\
+	    \textit{user experience, usability}
 	\item
-	    \begin{quote}
-		Web Development (HTML, CSS, SQL, JavaScript, JQuery, PHP, MVC
-		CodeIgniter)
-	    \end{quote}
+	    \textbf{Web Development} \\
+	    \textit{HTML, CSS, SQL, JavaScript, JQuery, PHP, MVC CodeIgniter}
+	    \\
     \end{itemize}
 
     \subsection*{Ysgol Eirias, \small{Colwyn Bay, North Wales} \\ \emph{A-Levels}}
@@ -100,6 +107,7 @@
 	\setlength\itemsep{0em}
     \item Cognitive
     \item Abnormal
+    \item Forensic
     \item Scientific Methodology 
 \end{itemize}		
 
@@ -109,60 +117,62 @@
     \setlength\itemsep{0em}
 \item Family
 \item Criminology
-\item Gender
-\item Equality
+\item Equality - Gender and Health
 \item Scientific Methodology
 \end{itemize}		
 
 \textbf{Health and Social Care} (\textit{double}) & D*D*
 
-\subsection*{Subway, \small{Llandudno, North Wales} \\\emph{Sandwich Artist}}
-
-\timeperiod{Sept 2014}{June 2014}
-
-Working within a team, customer service.
-
 \end{multicols}
 
-\section*{\Large{Programming}}
+\subsection*{Subway, \small{Llandudno, North Wales} \\\emph{Sandwich Artist}} \timeperiod{Sept 2014}{June 2014}
 
-    \proglang{Java}
+\begin{itemize}		
+    \begin{multicols}{3}
+    \item Working within a team
+    \item Customer service
+    \end{multicols}
+\end{itemize}		
 
-    Knowledge of core Java and the standard library
+\section*{\color{col1} \Large{Programming} \color{default}} 
 
-    \begin{itemize}
-	\setlength\itemsep{0em}
-    \item
-	Functional Programming with lambda expressions, Stream API, Optionals
-    \item
-	Understanding Object Oriented design, inheritance, Classes,
-	Interfaces, Generics
-    \item
-	Data structures, understanding how they scale --- knowing when to use which
-    \item
-	Knowledge of the Java ecosystem and tools such as Maven, Javadoc, IDE
-	Intellij Idea etc. 
+\proglang{Java}
+
+Knowledge of core Java and the standard library
+
+\begin{itemize}
+    \setlength\itemsep{0em}
+\item
+    Functional Programming with lambda expressions, Stream API, Optionals
+\item
+    Understanding Object Oriented design, inheritance, Classes,
+    Interfaces, Generics
+\item
+    Data structures, understanding how they scale --- knowing when to use which
+\item
+    Knowledge of the Java ecosystem and tools such as Maven, Javadoc, IDE
+    Intellij Idea etc. 
 \end{itemize}
 
 \pagebreak
 
-\section*{\Large{Scripting}}
+\section*{\color{col1} \Large{Scripting} \color{default}}
 
-    \proglang{Python}
+\proglang{Python}
 
-    \begin{itemize}
-	\setlength\itemsep{0em}
-    \item
-	Tabular data manipulation using Pandas\textbf{,} visualization using
-	Seaborn
-    \item
-	Using SQLAlchemy (ORM) to communicate with databases
-    \item
-	Templating language Jinja
-    \item
-	Writing build and utility scripts
-    \item
-	Command line interfaces using argparse, prompt\_toolkit and docopt \\
+\begin{itemize}
+    \setlength\itemsep{0em}
+\item
+    Tabular data manipulation using Pandas\textbf{,} visualization using
+    Seaborn
+\item
+    Using SQLAlchemy (ORM) to communicate with databases
+\item
+    Templating language Jinja
+\item
+    Writing build and utility scripts
+\item
+    Command line interfaces using argparse, prompt\_toolkit and docopt \\
 \end{itemize}
 
 \begin{multicols}{2}
@@ -171,50 +181,51 @@ Working within a team, customer service.
 
     \begin{itemize}
 	\setlength\itemsep{0em}
-    \item Modern practices \\ (\textit{eg arrow functions, functional programming})
+    \item Modern practices \\ 
+	\textit{eg arrow functions, functional programming}
     \item DOM manipulation 
 \end{itemize}
 
-\proglang{Bash}
+\proglang{Shell Scripting --- Bash}
 
 \begin{itemize}		
-    \item Utility scripts \\ (\textit{automation, project build scripts, cron job scripts})
+    \item Utility scripts \\ 
+    \textit{automation, project build scripts, cron job scripts}
 \end{itemize}		
 
 \end{multicols}
 
-\section*{\Large{Computer Systems}}
+\section*{\color{col1} \Large{Computer Systems} \color{default}}
 
-    Understanding of core concepts such as memory management, CPU time,
-    threading, multiprocessing, scheduling, subprocess etc.
+Understanding of core concepts such as memory management, CPU time,
+threading, multiprocessing, scheduling, subprocess etc.
 
-    \begin{multicols}{2}
-
-	\subsection*{GNU / Linux}
-
-	\begin{itemize}
-	    \setlength\itemsep{0em}
-	\item Solid knowledge of GNU Coreutils
-	\item Bash
-	\item Vim
-	\item Experience using UNIX command line tools \\curl, ssh, rsync etc.
-    \end{itemize}
-
-    \subsection*{Databases}
-
+\begin{multicols}{2}
+    \subsection*{GNU / Linux}
     \begin{itemize}
 	\setlength\itemsep{0em}
-    \item Communicating with databases using Python (SQLAlchemy ORM)
-    \item SQL \\
+    \item Solid knowledge of GNU Coreutils
+    \item Bash
+    \item Vim
+    \item Experience using UNIX command line tools \\
+	curl, ssh, rsync \dots
+\end{itemize}
+
+\subsection*{Databases}
+
+\begin{itemize}
+    \setlength\itemsep{0em}
+\item Communicating with databases using Python \\ (\textit{SQLAlchemy ORM})
+\item SQL \\
 \end{itemize}
 
 \end{multicols}
 
-\section*{Additional Skills}
+\section*{\color{col1} Additional Skills \color{default}}
 
 \begin{itemize}
     \begin{multicols}{2}
-    \item Git (Version Control System)
+    \item Git (\textit{Version Control System})
     \item \LaTeX
     \end{multicols}
 \end{itemize}
@@ -226,7 +237,7 @@ Working within a team, customer service.
     \begin{itemize}
 	\item \href{https://github.com/nl253/FlaskyBlog}{Python Blog \\ https://github.com/nl253/FlaskyBlog}
 	\item \href{https://github.com/nl253/SQLiteREPL}{Python SQLite REPL  \\ https://github.com/nl253/SQLiteREPL}
-	\item \href{https://github.com/nl253/Scraper}{Simple web crawler \\ https://github.com/nl253/Scraper}
+	\item \href{https://github.com/nl253/Scraper}{Simple web crawler \\ https://github.com/nl253/Scraper}\\
     \end{itemize}
 
     \subsection*{Personal Interests}
@@ -235,13 +246,14 @@ Working within a team, customer service.
 	\item
 	    Fitness
 	\item
-	    Computer Science (programming languages and operating systems in
-	    particular)
+	    Computer Science \\
+	    programming languages and operating systems in particular
 	\item
-	    Keeping up to date with open source projects on GitHub \\
-    \end{itemize}
+	    Keeping up to date with open source projects on GitHub \\ \\
+    \end{itemize} 
 
 \end{multicols}
+
 \hline
 
 \section*{References}
