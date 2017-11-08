@@ -227,8 +227,11 @@ preview_pptx() {
 
 guess_shebang() {
   # guess from shebang
-  if [[ $(head -n 1 "${FILE_PATH}") =~ '#!/' ]]; then
-    command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $(head -n 1 "${FILE_PATH}" | grep -Eo '\w+$') && exit 5
+  if [[ $(head -n 1 "${FILE_PATH}") =~ '#!' ]]; then
+    local executable=$(head -n 1 "${FILE_PATH}" | grep -Eo '\w+$')
+		if [[ -x $(command which $executable 2>/dev/null) ]]; then
+      command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $executable && exit 5
+    fi
   fi
 }
 
@@ -277,7 +280,7 @@ handle_code() {
       ;;
 
     # XML formats
-    # xml | iml | ?cls | plist | back | xbel | fo | urdf | sdf | xacro | uml | aird | notation | project | svg | rng | page | docbook | ui | glade)
+    # xml | iml | ?cls | plist | back | xbel | fo | urdf | sdf | xacro | uml | aird | notation | project | svg | rng | page | docbook | ui | glade | gir)
     xml)
       preview_xml
       ;;
@@ -286,8 +289,8 @@ handle_code() {
       command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l java && exit 5
       ;;
 
-
     go)
+
       preview_go
       ;;
 
@@ -337,7 +340,7 @@ handle_extension() {
 
     # BitTorrent
     torrent)
-			[[ -x $(command which transmission) ]] && command transmission-show -- "${FILE_PATH}" && exit 5
+      [[ -x $(command which transmission) ]] && command transmission-show -- "${FILE_PATH}" && exit 5
       exit 1
       ;;
 
@@ -386,8 +389,8 @@ handle_mime() {
       case "${FILE_NAME,,}" in
 
         # requirements.txt | humans.txt | robots.txt)
-          # preview_dosini
-          # ;;
+        # preview_dosini
+        # ;;
 
         # Generic text files
         *.txt)
@@ -395,35 +398,35 @@ handle_mime() {
           ;;
 
         # .babelrc | .csslintrc | .jsbeautifyrc | .jshintrc | .stylelintrc | .tern-* | .markdownlintrc | *.lefty)
-          # preview_json
-          # ;;
+        # preview_json
+        # ;;
 
         # *.conf | *config | *.cfg | .*ignore* | *.cnf | *.toml | *.MF | *.desktop | .flake8 | *.yapf)
         *.conf | *config | *.cfg | .*ignore* | *.cnf | *.toml | *.desktop)
           preview_dosini
           ;;
 
-
         license | readme | change* | contrib* | building | roadmap)
+
           preview_rst
           ;;
 
         # .ideavimrc)
-          # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l vim "${FILE_PATH}" && exit 5
-          # ;;
+        # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l vim "${FILE_PATH}" && exit 5
+        # ;;
 
         # .spacemacs | .emacs)
-          # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l lisp "${FILE_PATH}" && exit 5
-          # ;;
+        # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l lisp "${FILE_PATH}" && exit 5
+        # ;;
 
         # pkgbuild | .profile | .zprofile | .zenv | .zsh*)
-          # preview_sh
-          # ;;
+        # preview_sh
+        # ;;
 
         # *.cabal)
-          # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l haskell "${FILE_PATH}" && exit 5
-          # ;;
-				
+        # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l haskell "${FILE_PATH}" && exit 5
+        # ;;
+
         .*rc)
           if [[ $(pygmentize -N "${FILE_PATH}") =~ text ]]; then
             preview_dosini
@@ -466,7 +469,7 @@ handle_archive() {
       ;;
 
     # a | ace | alz | arc | arj | bz | cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
-     bz | lz | lzma | tbz2 | tgz | tlz | txz | xz)
+    bz | lz | lzma | tbz2 | tgz | tlz | txz | xz)
       [[ -x $(command atool 7z 2>/dev/null) ]] && command atool --list -- "${FILE_PATH}" && exit 5
       [[ -x $(command bsdtar 7z 2>/dev/null) ]] && command bsdtar --list --file "${FILE_PATH}" && exit 5
       ;;

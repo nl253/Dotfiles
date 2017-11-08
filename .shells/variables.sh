@@ -21,8 +21,6 @@ done
 # toolchain to use for Rust
 export DEFAULT_TOOLCHAIN=nightly
 
-[[ -x $(command which stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
-
 # use qt5 not qt4 (but only if you have qt5)
 export QT_SELECT=5
 
