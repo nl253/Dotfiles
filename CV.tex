@@ -10,6 +10,7 @@
 \definecolor{default}{RGB}{20, 20, 31}
 
 \usepackage{multicol}
+\setlength{\columnsep}{40pt}
 \usepackage{geometry}
 \usepackage{hyperref}
 
@@ -17,9 +18,7 @@
     \textit{\small{#1 --- #2}}
 }
 
-\newcommand{\proglang}[1]{%
-    \subsection*{#1}
-}
+\newcommand{\proglang}[1]{\subsection*{#1}}
 
 \geometry{%
     a4paper,
@@ -163,12 +162,16 @@ Knowledge of core Java and the standard library
 
 \begin{multicols}{2}
 
-    \section*{\color{col1} \Large{Scripting} \color{default}}
+    \section*{\color{col1}Scripting\color{default}}
+
+    Experience writing automation and build scripts in different languages.
+    Although I feel most comforable with Python and Bash, I have dealt with
+    Node.js, TypeScript and VimScript.
 
     \proglang{Python}
 
-    \begin{itemize}
-	\setlength\itemsep{0em}
+    \begin{itemize}[leftmargin=*]
+	\setlength\itemsep{12pt}
     \item
 	Tabular data manipulation using Pandas\textbf{,} visualization using
 	Seaborn
@@ -182,26 +185,14 @@ Knowledge of core Java and the standard library
 	Command line interfaces using argparse, prompt\_toolkit and docopt
 \end{itemize}
 
-\proglang{JavaScript} 
-
-\begin{itemize}
-    \setlength\itemsep{0em}
-\item Modern practices \\ 
-    \textit{eg arrow functions, functional programming}
-\item DOM manipulation 
-\end{itemize}
-
-\proglang{Shell Scripting -- Bash}
-
-automation, project build scripts, cron job scripts
-
-\section*{\color{col1} \Large{Computer Systems} \color{default}}
+\section*{\color{col1} Computer Systems \color{default}}
 
 Understanding of core concepts such as memory management, CPU time,
-threading, multiprocessing, scheduling, subprocess etc.
+threading, multiprocessing, scheduling, subprocess etc. \\
 
 \subsection*{GNU / Linux}
-\begin{itemize}
+
+\begin{itemize}[leftmargin=*]
     \setlength\itemsep{0em}
 \item Solid knowledge of GNU Coreutils
 \item Bash
@@ -212,10 +203,10 @@ threading, multiprocessing, scheduling, subprocess etc.
 
 \subsection*{Databases}
 
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
     \setlength\itemsep{0em}
 \item Communicating with databases using Python \\ (\textit{SQLAlchemy ORM})
-\item SQL \\ \\ \\ \\
+\item SQL \\ 
 \end{itemize}
 \end{multicols}
 
