@@ -263,6 +263,11 @@ endif
 
 if index(g:programming_languages, 'haskell') >= 0 && (executable('stack') || executable('ghc-mod'))
     Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
+	let g:haskellmode_completion_ghc = 0
+	aug HaskellStuff
+		au!
+		autocmd FileType haskell setl omnifunc=necoghc#omnifunc
+	aug END
 endif
 
 if has('patch8') || has('nvim')

@@ -225,11 +225,22 @@ preview_pptx() {
   exit 1
 }
 
+guess_pygments() {
+  # let pygments guess
+  local guess=$(pygmentize -N "${FILE_PATH}")
+
+  if [[ $guess =~ 'text' ]]; then
+    preview && exit 5
+  else
+    command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $guess && exit 5 || exit 1
+  fi
+}
+
 guess_shebang() {
   # guess from shebang
   if [[ $(head -n 1 "${FILE_PATH}") =~ '#!' ]]; then
     local executable=$(head -n 1 "${FILE_PATH}" | grep -Eo '\w+$')
-		if [[ -x $(command which $executable 2>/dev/null) ]]; then
+    if [[ -x $(command which $executable 2>/dev/null) ]]; then
       command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $executable && exit 5
     fi
   fi
@@ -290,7 +301,6 @@ handle_code() {
       ;;
 
     go)
-
       preview_go
       ;;
 
@@ -310,7 +320,6 @@ handle_extension() {
       ;;
 
     docx)
-
       preview_docx
       ;;
 
@@ -330,8 +339,7 @@ handle_extension() {
     # OpenDocument
     odt | ods | odp | sxw)
       # Preview as text conversion
-      command odt2txt "${FILE_PATH}" && exit 5
-      exit 1
+      command odt2txt "${FILE_PATH}" && exit 5 || exit 1
       ;;
 
     ?.gz)
@@ -340,8 +348,7 @@ handle_extension() {
 
     # BitTorrent
     torrent)
-      [[ -x $(command which transmission) ]] && command transmission-show -- "${FILE_PATH}" && exit 5
-      exit 1
+      [[ -x $(command which transmission) ]] && command transmission-show -- "${FILE_PATH}" && exit 5 || exit 1
       ;;
 
   esac
@@ -350,22 +357,21 @@ handle_extension() {
 handle_website() {
   ! ((HAS_ELINKS)) && return
 
-  case "${FILE_NAME}" in
+  case "${EXTENSION}" in
 
-    *.md | *.m*down)
+    md | m*down)
       preview_md
       ;;
 
-    *.rst)
+    rst)
       preview_rst
       ;;
 
-    # HTML
     *html)
       preview_html
       ;;
 
-    *ipynb)
+    ipynb)
       preview_jupyter
       ;;
 
@@ -387,7 +393,7 @@ handle_mime() {
 
       case "${FILE_NAME,,}" in
 
-				# must be checked for BEFORE *.txt
+        # must be checked for BEFORE *.txt
         # requirements.txt | humans.txt | robots.txt)
         # preview_dosini
         # ;;
@@ -412,6 +418,10 @@ handle_mime() {
           fi
           ;;
 
+        *)
+          guess_pygments
+          ;;
+
         # .ideavimrc)
         # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l vim "${FILE_PATH}" && exit 5
         # ;;
@@ -419,7 +429,6 @@ handle_mime() {
         # .spacemacs | .emacs)
         # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l lisp "${FILE_PATH}" && exit 5
         # ;;
-				
 
         # .babelrc | .csslintrc | .jsbeautifyrc | .jshintrc | .stylelintrc | .tern-* | .markdownlintrc | *.lefty)
         # preview_json
@@ -432,17 +441,9 @@ handle_mime() {
         # *.cabal)
         # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l haskell "${FILE_PATH}" && exit 5
         # ;;
+				
 
       esac
-
-      # let pygments guess
-      local guess=$(pygmentize -N "${FILE_PATH}")
-
-      if [[ $guess =~ 'text' ]]; then
-        preview && exit 5
-      else
-        command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l $guess && exit 5 || exit 1
-      fi
 
       ;;
 
@@ -465,29 +466,29 @@ handle_archive() {
     zip | gz | tar | jar | 7z | bz2)
 
       # Avoid password prompt by providing empty password
-      [[ -x $(command which 7z 2>/dev/null) ]] && command 7z l -p -- "${FILE_PATH}" && exit 5
+      [[ -x $(command which 7z 2>/dev/null) ]] && command 7z l -p -- "${FILE_PATH}" && exit 5 || exit 1
       ;;
 
     # a | ace | alz | arc | arj | bz | cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
-    bz | lz | lzma | tbz2 | tgz | tlz | txz | xz)
-      [[ -x $(command atool 7z 2>/dev/null) ]] && command atool --list -- "${FILE_PATH}" && exit 5
-      [[ -x $(command bsdtar 7z 2>/dev/null) ]] && command bsdtar --list --file "${FILE_PATH}" && exit 5
+    bz | lz | xz)
+      [[ -x $(command atool 7z 2>/dev/null) ]] && command atool --list -- "${FILE_PATH}" && exit 5 || exit 1
+      [[ -x $(command bsdtar 7z 2>/dev/null) ]] && command bsdtar --list --file "${FILE_PATH}" && exit 5 || exit 1
       ;;
 
     tar.gz)
-      command tar ztf "${FILE_PATH}" && exit 5
+      command tar ztf "${FILE_PATH}" && exit 5 || exit 1
       ;;
 
     tar.xz)
-      command tar Jtf "${FILE_PATH}" && exit 5
+      command tar Jtf "${FILE_PATH}" && exit 5 || exit 1
       ;;
 
     tar.bz2)
-      command tar jtf "${FILE_PATH}" && exit 5
+      command tar jtf "${FILE_PATH}" && exit 5 || exit 1
       ;;
 
     rar)
-      [[ -x $(command unrar 7z 2>/dev/null) ]] && command unrar lt -p- -- "${FILE_PATH}" && exit 5
+      [[ -x $(command unrar 7z 2>/dev/null) ]] && command unrar lt -p- -- "${FILE_PATH}" && exit 5 || exit 1
       exit 1
       ;;
 
