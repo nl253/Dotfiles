@@ -1,10 +1,30 @@
+
 # ~/.profile
 
+# If not running interactively, don't do anything
+case $- in
+  *i*) ;;
+  *) return ;;
+esac
+
 # This file is not read by bash(1) if ~/.bash_profile or ~/.bash_login exists.
+
+# normalise prompt in case somthing goes wrong
+export PS1="$USER@$HOSTNAME $0 $ "
 
 # [[ "$XDG_CURRENT_DESKTOP" == "KDE" ]] || export QT_QPA_PLATFORMTHEME="qt5ct"
 
 export HISTSIZE=20000
+export HISTFILESIZE=20000
+export HISTCONTROL="ignoreboth:erasedups"
+export HISTTIMEFORMAT=""
+export HH_CONFIG=hicolor # get more colors
+export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
+
+export HISTFILE=~/.shell_history
+export SAVEHIST=10000
+
+# vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
@@ -83,7 +103,6 @@ alias sudo='sudo '
 # dirs and files
 alias ls='ls --color=auto --group-directories-first'
 
-alias -- -='cd -' # Go back
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -148,7 +167,6 @@ fi
 # -----------------------------
 # REQUIRES
 # - pacman
-# - yaourt
 # - expac
 if [ -x $(command which pacman 2>/dev/null) ]; then
   alias pacman='pacman --config "${HOME}/.pacman.conf"'
@@ -191,10 +209,6 @@ fi
 # ----------
 # REQUIRES
 # - stack
-# - ghc
-# - ghci
-# - ghc-mod
-# stack (it wraps a number of haskell-related tools, for each access ...)
 for i in ghc{i,} hoogle haddock; do
   eval "alias "${i}"='stack "${i}"'"
 done
@@ -234,7 +248,11 @@ fi # }
 
 # if running bash(1) / zsh
 
-if [ $SHLVL = 1 ] && [ $(basename "${SHELL}") = bash ] || [ $(basename "${SHELL}") = zsh ]; then
-  [ -f /opt/anaconda/bin/python3 ] && . /opt/anaconda/bin/activate
-  eval $(dircolors -b)
-fi
+f() {
+	if [[ $0 =~ (ba|z)sh ]]; then
+    [ -f /opt/anaconda/bin/python3 ] && . /opt/anaconda/bin/activate
+    eval $(dircolors -b)
+  fi
+}
+
+f 2>/dev/null
