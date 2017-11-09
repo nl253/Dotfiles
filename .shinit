@@ -28,10 +28,6 @@ export SAVEHIST=10000
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-for directory in ".local" .yarn .stack .cabal .config/composer/vendor .cargo .local/share/fzf go node_modules; do
-  [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
-done
-
 [ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 
@@ -51,37 +47,6 @@ export CDPATH="${HOME}:"
 
 for directory in ${HOME}/Documents ${HOME}/Documents/*; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
-done
-
-# toolchain to use for Rust
-export DEFAULT_TOOLCHAIN=nightly
-
-# use qt5 not qt4
-export QT_SELECT=5
-
-# POSTGRES
-if [ -x $(command which psql 2>/dev/null) ]; then
-  export PGUSER=postgres
-  export PGHOST=localhost
-  export PGDATABASE=testing
-fi
-
-# $BROWSER
-for i in firefox-developer firefox google-chrome-stable chromium elinks lynx w3m; do
-  if [ -x $(command which $i 2>/dev/null) ]; then
-    export BROWSER=$(command which $i 2>/dev/null) && break
-  fi
-done
-
-# $EDITOR
-for i in nvim vim vi; do
-  if [ -x $(command which $i 2>/dev/null) ]; then
-    export EDITOR=$(command which $i 2>/dev/null)
-    if [ $i != vim ]; then
-      eval "alias vim=${i}"
-    fi
-    break
-  fi
 done
 
 # make less more friendly for non-text input files, see lesspipe(1)

@@ -165,7 +165,7 @@ visual_bell:
 # the `key` value such as `V`. Function keys are probably what you would expect
 # as well (F1, F2, ..). The number keys above the main keyboard are encoded as
 # `Key1`, `Key2`, etc. Keys on the number pad are encoded `Number1`, `Number2`,
-# etc.  These all match the glutin::VirtualKeyCode variants.
+# etc. These all match the glutin::VirtualKeyCode variants.
 #
 # Possible values for `mods`
 # `Command`, `Super` refer to the super/command/windows key
@@ -282,7 +282,7 @@ live_config_reload: true
 #
 # You can set shell.program to the path of your favorite shell, e.g. /bin/fish.
 # Entries in shell.args are passed unmodified as arguments to the shell.
-#shell:
-#  program: /bin/bash
-#  args:
-#    - --login
+shell:
+ program: /bin/bash
+ args:
+   - -i
