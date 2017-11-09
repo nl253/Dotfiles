@@ -1,0 +1,5 @@
+# ~/.shlogout sourced by sh(1) when logging out
+
+# when leaving the console clear the screen to increase privacy
+[[ "$SHLVL" == 1 ]] && clear
+# vim:ft=sh:

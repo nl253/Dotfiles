@@ -1,4 +1,3 @@
-# ~/.bash_logout
+# ~/.bash_logout read by bash(1) when the shell exits
 
-# when leaving the console clear the screen to increase privacy
-[[ "$SHLVL" == 1 ]] && clear
+[[ -f ~/.shlogout ]] && source ~/.shlogout

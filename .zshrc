@@ -1,6 +1,8 @@
 
 # ~/.zshrc
 
+[[ -f ~/.shinit ]] && source ~/.shinit
+
 export PS1="[%*] %d ~> " # normalise prompt in case somthing goes wrong
 export WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
@@ -9,12 +11,7 @@ bindkey -e
 
 fpath+=~/.zfunc
 
-# Load generic shell configuration (aliases, variables)
-for i in ~/.shells/*.sh; do
-	[[ -f $i ]] && [[ ! $i =~ ^_ ]] && source $i 
-done 
-
- # don't nice background tasks
+# don't nice background tasks
 setopt NO_BG_NICE
 setopt NO_HUP
 setopt NO_LIST_BEEP
@@ -132,5 +129,4 @@ tcsh-backward-word() {
 }
 
 zle -N tcsh-backward-word
-
 # vim: foldmethod=marker sw=2 ts=2 nowrap 

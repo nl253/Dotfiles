@@ -1,11 +1,7 @@
 
 # ~/.bashrc: executed by bash(1)
 
-case $0 in
-  bash) ;;
-  -bash) ;;
-  *) return ;;
-esac
+[[ -f ~/.shinit ]] && source ~/.shinit
 
 # Check if bash version is at least 4 to run some of my scripts.
 if ((BASH_VERSINFO < 4)); then
@@ -70,9 +66,6 @@ shopt -s nocaseglob
 # # If set, bash attempts spelling correction on directory names during word completion if the directory name initially supplied does not exist.
 # # dotglob If set, bash includes filenames beginning with a `.' in the results of pathname expansion.
 # shopt -s dirspell
-
-# # If set, shell error messages are written in the standard GNU error message format.
-# shopt -s gnu_errfmt
 
 # # If  set,  and  readline  is  being used, bash will not attempt to 
 # # search the PATH for possible completions when completion is attempted on an empty
