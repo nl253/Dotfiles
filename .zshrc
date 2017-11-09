@@ -2,6 +2,7 @@
 # ~/.zshrc
 
 fpath+=~/.zfunc
+eval $(curl https://raw.githubusercontent.com/seebi/dircolors-solarized/c1779cd7274eb4ad29d94193a4d859a93c5ee2cb/dircolors.256dark)
 
 # Load generic shell configuration (aliases, variables)
 for i in ~/.shells/*.sh; do

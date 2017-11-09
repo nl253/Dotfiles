@@ -9,15 +9,12 @@ export HISTSIZE=20000
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-export PATH="$HOME/.cargo/bin:$PATH"
-
-for directory in _add_to_path .local .yarn .stack .cabal .config/composer/vendor .cargo .local/share/fzf .gem/ruby/* go node_modules; do
-  [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/${directory}/bin:${PATH}:" 2>/dev/null
+for directory in ".local" .yarn .stack .cabal .config/composer/vendor .cargo .local/share/fzf go node_modules; do
+  [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
 
 [ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
-[ -f ~/.dir_colors ] && eval $(dircolors ~/.dir_colors)
 
 # $PAGER
 if [ -x $(command which less 2>/dev/null) ]; then
@@ -185,7 +182,7 @@ fi
 [ -x $(command which psql 2>/dev/null) ] && alias psql='psql --single-line'
 [ -x $(command which sqlite3 2>/dev/null) ] && alias sqlite3="sqlite3 -init \${HOME}/.sqliterc"
 
-if [ $(hostname) == "raptor" ]; then
+if [ $(hostname) = "raptor" ]; then
   [ -x $(command which mysql 2>/dev/null) ] && alias mysql-dragon='mysql -u nl253 -p -h dragon.kent.ac.uk nl253'
   [ -x $(command which mycli 2>/dev/null) ] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253'
 fi
@@ -237,9 +234,11 @@ fi # }
 
 # if running bash(1) / zsh
 
-if [ $(basename "${SHELL}") == bash ]; then
-  [ -f "${HOME}/.bashrc" ] && . "${HOME}/.bashrc" && return 0
-  if [ $(basename "${SHELL}") == zsh ]; then
-    [ -f /opt/anaconda/bin/python3 ] && . /opt/anaconda/bin/activate
-  fi
+if [ $(basename "${SHELL}") = bash ]; then
+  [ -f "${HOME}/.bashrc" ] && . "${HOME}/.bashrc"
+fi
+
+if [ $(basename "${SHELL}") = bash ] || [ $(basename "${SHELL}") = zsh ]; then
+  [ -f /opt/anaconda/bin/python3 ] && . /opt/anaconda/bin/activate
+  eval $(dircolors -b)
 fi
