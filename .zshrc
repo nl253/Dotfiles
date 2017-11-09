@@ -1,16 +1,18 @@
 
 # ~/.zshrc
 
+export PS1="[%*] %d ~> " # normalise prompt in case somthing goes wrong
+export WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+
+# this is necessary because the string "vim" is present in $EDITOR zsh will attempt to set ZLE to use vi mode
+bindkey -e
+
 fpath+=~/.zfunc
-eval $(curl https://raw.githubusercontent.com/seebi/dircolors-solarized/c1779cd7274eb4ad29d94193a4d859a93c5ee2cb/dircolors.256dark)
 
 # Load generic shell configuration (aliases, variables)
 for i in ~/.shells/*.sh; do
-	[[ -f $i ]] && source $i 
+	[[ -f $i ]] && [[ ! $i =~ ^_ ]] && source $i 
 done 
-
-# If ~/.home or ~/.pc detected, don't source this script!
-[[ -e ~/.nozsh ]] && echo -e "~/.nozsh detected - .zshrc not sourced" && return 0
 
  # don't nice background tasks
 setopt NO_BG_NICE
@@ -116,8 +118,6 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey '^x^e' edit-command-line
 
-export WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
-
 backward-kill-dir () {
 	local WORDCHARS=${WORDCHARS/\/}
 	zle backward-kill-word
@@ -133,7 +133,4 @@ tcsh-backward-word() {
 
 zle -N tcsh-backward-word
 
-# this is necessary because the string "vim" is present in $EDITOR zsh will attempt to set ZLE to use vi mode
-
-bindkey -e
 # vim: foldmethod=marker sw=2 ts=2 nowrap 

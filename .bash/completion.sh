@@ -5,5 +5,6 @@
     # . /etc/bash_completion
   # fi
 # fi 
+
 [[ -x $(command which pandoc 2>/dev/null) ]] && eval "$(pandoc --bash-completion)"
 [[ -x $(command which stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"

@@ -1,2 +1,3 @@
-export PS1="[%* - %D] %d %% " # normalise prompt in case somthing goes wrong
-
+if ((SHLVL <= 1)); then
+    [[ -f ~/.profile ]] && source ~/.profile
+fi

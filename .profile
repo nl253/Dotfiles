@@ -234,11 +234,7 @@ fi # }
 
 # if running bash(1) / zsh
 
-if [ $(basename "${SHELL}") = bash ]; then
-  [ -f "${HOME}/.bashrc" ] && . "${HOME}/.bashrc"
-fi
-
-if [ $(basename "${SHELL}") = bash ] || [ $(basename "${SHELL}") = zsh ]; then
+if [ $SHLVL = 1 ] && [ $(basename "${SHELL}") = bash ] || [ $(basename "${SHELL}") = zsh ]; then
   [ -f /opt/anaconda/bin/python3 ] && . /opt/anaconda/bin/activate
   eval $(dircolors -b)
 fi
