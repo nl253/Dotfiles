@@ -1,5 +1,5 @@
 
-#  BASH SHELL OPTIONS
+#  bash(1) options
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -13,10 +13,10 @@ shopt -s checkwinsize
 shopt -s globstar
 
 # # Include dotfiles in pathname expansion
-# shopt -s dotglob
+shopt -s dotglob
 
 # # matches filenames in a case-insensitive fashion when performing pathname expansion.
-# shopt -s nocaseglob
+shopt -s nocaseglob
 
 # # If  set,  bash  replaces  directory names with the results of word expansion when performing filename completion.  
 # # This changes the contents of the readline editing buffer.  
@@ -26,7 +26,6 @@ shopt -s globstar
 # # Bash lists the status of any stopped and running jobs before exiting an interactive shell.
 # # If any jobs are running, this causes the exit to be deferred until a second exit is attempted
 # shopt -s checkjobs
-
 
 # # If set, range expressions used in pattern matching bracket expressions (see Pattern Matching above) 
 # # behave as if in the traditional C  locale  when performing  comparisons.
