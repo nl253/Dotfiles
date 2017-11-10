@@ -11,6 +11,7 @@ endif
 
 let mapleader = " "
 let maplocalleader = ","
+" set scrollback=100000
 
 " PLUG:
 let s:plug_file = expand('~/.vim/autoload/plug.vim')

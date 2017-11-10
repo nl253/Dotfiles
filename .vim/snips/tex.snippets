@@ -1,23 +1,23 @@
-snippet matrix "Matrix (amsmath) [tex]"
+snippet "matr[ix]{,3}" "Matrix (amsmath) [tex]" r
 \[
 \begin{bmatrix}
-    11 & 1  & x_{2}\\
-    22 & 1  & x_{3}\\
-    11 & 1  & x_{1}\\
-    11 & 21 & 33\\
+  11 & 1  & x_{2}\\
+  22 & 1  & x_{3}\\
+  11 & 1  & x_{1}\\
+  11 & 21 & 33\\
 \end{bmatrix}
 \]
 endsnippet
 
-snippet "col[umns]*" "Column layout (multicol) [tex]" rb
+snippet "col[umns]{,8}" "Multi-column layout (multicol) [tex]" rb
 \begin{multicols}{2}
-    $0
+  $0
 \end{multicols}
 endsnippet
 
-snippet "verb[atim]*" "Verbatim (literal) [tex]" r
+snippet "verb[atim]{,8}" "Verbatim - literal [tex]" r
 \begin{verbatim}
-    $0
+  $0
 \end{verbatim}
 endsnippet
 
@@ -39,19 +39,48 @@ snippet "\\?b(egin)?" "begin{} / end{} block [tex]" br
 \end{$1}
 endsnippet
 
-snippet table "Table [tex]" b
-\begin{table}[${1:htpb}]
-	\centering
-	\caption{${2:caption}}
-	\label{tab:${3:label}}
-	\begin{${4:t}${4/(t)$|(a)$|(.*)/(?1:abular)(?2:rray)/}}{${5:c}}
-	$0${5/(?<=.)(c|l|r)|./(?1: & )/g}
-	\end{$4${4/(t)$|(a)$|(.*)/(?1:abular)(?2:rray)/}}
-\end{table}
+snippet center "Quote [tex]" b
+\begin{center}
+  $1
+\end{center}
 endsnippet
 
-snippet code "Code [tex]"
-% required packages
+snippet quote "Quote [tex]" b
+\begin{quote}
+  ${1:Lorem  eiusmod tempor incididunt dolore magna aliqua. }
+\end{quote}
+endsnippet
+
+
+snippet proof "Proof [tex]" b
+\begin{proof}
+  ${1:This follows from}
+  \[${2:e^{x+y}=e^xe^y. \qedhere}\]
+\end{proof}
+endsnippet
+
+snippet toc "Table of Contents [tex]" b
+\tableofcontents
+endsnippet
+
+snippet "tocl(ine)?" "Table of Contents [tex]" br
+\section*{${1:Unnumbered Section Name}}
+endsnippet
+
+snippet table "Table [tex]" b
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ cell1 & cell2 & cell3 \\ 
+ cell4 & cell5 & cell6 \\ 
+ cell7 & cell8 & cell9 \\ 
+ \hline
+\end{tabular}
+\end{center}
+endsnippet
+
+snippet "codes(etup)?" "Code {setup} (listings, color) [tex]" r
+% coding packages (for highlighting)
 \usepackage{listings} 
 \usepackage{color}
 
@@ -60,84 +89,119 @@ snippet code "Code [tex]"
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \lstset{frame=tb,
-    language=Java,
-    aboveskip=3mm,
-    belowskip=3mm,
-    showstringspaces=false,
-    columns=flexible,
-    basicstyle={\small\ttfamily},
-    numbers=none,
-    numberstyle=\tiny\color{gray},
-    keywordstyle=\color{blue},
-    commentstyle=\color{dkgreen},
-    stringstyle=\color{mauve},
-    breaklines=true,
-    breakatwhitespace=true,
-    tabsize=3
+  language=${1:Java},
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
 }
+endsnippet
 
+snippet code "Code (color, lstlisting) [tex]" 
 \begin{lstlisting}
-${1:CODE BLOCK HERE}
+  ${1:% CODE BLOCK HERE}
 \end{lstlisting} 
 endsnippet
 
 snippet ol "Ordered list [tex]"
 \begin{enumerate}		
-    \item ${1:multithreading}
+  \item ${1:multithreading}
 \end{enumerate}		
 endsnippet
 
 snippet "list|ul" "List [tex]" r
 \begin{itemize}		
-    \item ${1:multithreading}
+  \item ${1:multithreading}
 \end{itemize}		
 endsnippet
 
-snippet bf "Bold [tex]"
+snippet "bf|bold" "Bold [tex]" r
 \textbf{
 endsnippet
 
-snippet img "Embed image [tex]"
-\includegraphics{${1:image_name_no_extension}}
+snippet img "Embed image (graphix) [tex]"
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.25\textwidth]{mesh}
+  \caption{a nice plot}
+  \label{fig:mesh1}
+\end{figure}
+endsnippet
+
+snippet "sec[tion]{,7}" "Section [tex]" r
+\section*{$0}
+endsnippet
+
+snippet "par[agrh]{,7}" "Paragraph [tex]" r
+\paragraph{$0}
+endsnippet
+
+snippet "subs[ection]{,7}" "Sub-section [tex]" r
+\subsection*{$0}
+endsnippet
+
+snippet "abs[tract]{,7}" "Abstract [tex]" r
+\begin{abstract}
+  This is a simple paragraph at the beginning of the 
+  document. A brief introduction about the main subject.
+\end{abstract}
+endsnippet
+
+snippet "imgs(etup)?" "Embed image {setup} (graphix) [tex]" r
+\usepackage{graphicx}
+\graphicspath{ {img/} }
 endsnippet
 
 snippet ut "Underlined text [tex]"
 \underline{
 endsnippet
 
+snippet "h[rl]" "Horizontal line / rule [tex]" rb
+\hline
+endsnippet
+
 snippet theorem "Theorem [tex]"
 \begin{theorem}
-    ${1:theorem text}
+  ${1:theorem text}
 \end{theorem} 
 endsnippet
 
 snippet "dl(ist)?" "Description (definition) list [tex]" r
 \begin{description}
-    \item [${1:label}] ${2:First item}
-    \item [${3:label}] ${4:Second item}
+  \item [${1:label}] ${2:First item}
+  \item [${3:label}] ${4:Second item}
 \end{description}
 endsnippet
 
-snippet hypersetup "Hypersetup (hyperref) [tex]"
+snippet "hypers(etup)?" "Hyper {setup} (hyperref) [tex]" r
 \hypersetup{
-    bookmarks=true,         % show bookmarks bar?
-    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
-    pdftoolbar=true,        % show Acrobat’s toolbar?
-    pdfmenubar=true,        % show Acrobat’s menu?
-    pdffitwindow=false,     % window fit to page when opened
-    pdfstartview={FitH},    % fits the width of the page to the window
-    pdftitle={My title},    % title
-    pdfauthor={Author},     % author
-    pdfsubject={Subject},   % subject of the document
-    pdfcreator={Creator},   % creator of the document
-    pdfproducer={Producer}, % producer of the document
-    pdfkeywords={keyword1, key2, key3}, % list of keywords
-    pdfnewwindow=true,      % links in new PDF window
-    colorlinks=false,       % false: boxed links; true: colored links
-    linkcolor=red,          % color of internal links (change box color with linkbordercolor)
-    citecolor=green,        % color of links to bibliography
-    filecolor=magenta,      % color of file links
-    urlcolor=cyan           % color of external links
+  bookmarks=true,     % show bookmarks bar?
+  unicode=false,      % non-Latin characters in Acrobat’s bookmarks
+  pdftoolbar=true,    % show Acrobat’s toolbar?
+  pdfmenubar=true,    % show Acrobat’s menu?
+  pdffitwindow=false,   % window fit to page when opened
+  pdfstartview={FitH},  % fits the width of the page to the window
+  pdftitle={My title},  % title
+  pdfauthor={Author},   % author
+  pdfsubject={Subject},   % subject of the document
+  pdfcreator={Creator},   % creator of the document
+  pdfproducer={Producer}, % producer of the document
+  pdfkeywords={keyword1, key2, key3}, % list of keywords
+  pdfnewwindow=true,    % links in new PDF window
+  colorlinks=false,     % false: boxed links; true: colored links
+  linkcolor=red,      % color of internal links (change box color with linkbordercolor)
+  citecolor=green,    % color of links to bibliography
+  filecolor=magenta,    % color of file links
+  urlcolor=cyan       % color of external links
 }
 endsnippet 
 
@@ -153,10 +217,10 @@ snippet "href|link" "Hyperlink (hyperref) [tex]" r
 \href{${1:https://github.com/nl253}}{${2:GitHub}}
 endsnippet
 
-snippet "frac[tion]*" "Fraction (amsmath) [tex]" r
+snippet "frac[tion]{,8}" "Fraction (amsmath) [tex]" r
 \begin{align*}
-    f(x) &= x^2\\
-    g(x) &= \frac{1}{x}\\
-    F(x) &= \int^a_b \frac{1}{3}x^3
+  f(x) &= x^2\\
+  g(x) &= \frac{1}{x}\\
+  F(x) &= \int^a_b \frac{1}{3}x^3
 \end{align*}
 endsnippet 

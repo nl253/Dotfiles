@@ -13,35 +13,6 @@ export PS1="${USER}@${HOSTNAME}${0} $ "
 
 # [[ "$XDG_CURRENT_DESKTOP" == "KDE" ]] || export QT_QPA_PLATFORMTHEME="qt5ct"
 
-export HISTSIZE=20000
-export HISTFILESIZE=20000
-export HISTCONTROL="ignoreboth:erasedups"
-export HISTTIMEFORMAT=""
-export HH_CONFIG=hicolor # get more colors
-export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
-
-export HISTFILE=~/.shell_history
-export SAVEHIST=10000
-
-# vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2
-
-# Don't check mail when opening terminal.
-unset MAILCHECK
-
-[ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
-[ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
-
-# $PAGER
-if [ -x $(command which less 2>/dev/null) ]; then
-  export LESS='--RAW-CONTROL-CHARS --IGNORE-CASE --QUIET --HILITE-SEARCH --long-prompt'
-  if [ -x $(command which pygmentize 2>/dev/null) ]; then
-    export LESSOPEN='| pygmentize %s'
-  fi
-  export PAGER=less
-else
-  [ -x $(command which more 2>/dev/null) ] && export PAGER=more && alias less=more
-fi
-
 # reset
 export CDPATH="${HOME}:"
 
@@ -91,6 +62,7 @@ alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,times
 if [ -x $(command which rsync 2>/dev/null) ]; then
   alias copy="rsync --ignore-missing-args --group --xattrs --hard-links --executability --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
 fi
+
 alias mv="mv --verbose"
 alias rm="rm --verbose"
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
@@ -148,7 +120,7 @@ fi
 # REQUIRES
 # - git
 # - hub
-[ -x $(command which git 2>/dev/null) ] && [ -x $(command which hub 2>/dev/null) ] && eval "$(hub alias -s)"
+# [ -x $(command which git 2>/dev/null) ] && [ -x $(command which hub 2>/dev/null) ] && eval "$(hub alias -s)"
 
 # Archiving
 # --------------------------
@@ -169,34 +141,11 @@ if [ $(hostname) = "raptor" ]; then
   [ -x $(command which mycli 2>/dev/null) ] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253'
 fi
 
-# Haskell
-# ----------
-# REQUIRES
-# - stack
-for i in ghc{i,} hoogle haddock; do
-  eval "alias "${i}"='stack "${i}"'"
-done
-
 # FZF init (tested on zsh and bash)
 
 # chech if on system, set up aliases in case it is and isn't
 
 if [ -x $(command which fzf 2>/dev/null) ]; then # {
-
-  # KEYMAP
-  # ------------------------
-  # enter : print to STDOUT
-  # ctrl-d : scroll down
-  # ctrl-u : scroll up
-  # alt-e : edit with $EDITOR
-  # alt-d : cd
-  # alt-r : execute `rifle` [detects what to use based on file type]
-  # alt-l : open in `less`
-
-  export FZF_DEFAULT_OPTS=" --bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --bind='alt-e:execute(\$EDITOR {})' --bind='alt-r:execute(rifle {}),alt-l:execute:($PAGER {})' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:107,hl+:1,bg+:234,fg:240,fg+:246'"
-  export FZF_DEFAULT_COMMAND='git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//\ 2> /dev/null'
-  export FZF_CTRL_T_OPTS="--select-1 --exit-0"
-  export FZF_CTRL_R_OPTS="--sort --exact --preview 'echo {}' --preview-window down:3:hidden --bind '?:toggle-preview'"
 
   # preview configured to `cat` for files and use `tree` for dirs
   # [FZF] with [P]REVIEW
@@ -217,4 +166,26 @@ if [ $0 = bash ] || [ $0 = zsh ] | [ $0 = -bash ]; then
 	eval $(dircolors -b)
 fi
 
-# vim:ft=sh:
+# $EDITOR
+for i in nvim vim vi; do
+	if [ -x $(command which $i 2>/dev/null) ]; then
+		export EDITOR=$(command which $i 2>/dev/null)
+		if [ ! $i = vim ]; then
+			eval "alias vim=${i}"
+		fi       
+		break
+	fi
+done
+
+# $PAGER
+if [ -x $(command which less 2>/dev/null) ]; then
+  export LESS='--RAW-CONTROL-CHARS --IGNORE-CASE --QUIET --HILITE-SEARCH --long-prompt'
+  if [ -x $(command which pygmentize 2>/dev/null) ]; then
+    export LESSOPEN='| pygmentize %s'
+  fi
+  export PAGER=less
+else
+  [ -x $(command which more 2>/dev/null) ] && export PAGER=more && alias less=more
+fi
+
+# vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2 ft=sh

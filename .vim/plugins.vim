@@ -260,14 +260,15 @@ if index(g:markup_languages, 'tex') >= 0
 endif
 
 " Haskell:
-
-if index(g:programming_languages, 'haskell') >= 0 && (executable('stack') || executable('ghc-mod'))
-	Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
-	let g:haskellmode_completion_ghc = 0
-	aug HaskellStuff
-		au!
-		autocmd FileType haskell setl omnifunc=necoghc#omnifunc
-	aug END
+if index(g:programming_languages, 'haskell') >= 0
+	Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+	let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+	let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+	let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+	let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+	let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+	let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
+	let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
 endif
 
 if has('patch8') || has('nvim')

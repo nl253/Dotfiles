@@ -180,7 +180,8 @@ preview_cfamily() {
   elif [[ -x $(command which clang 2>/dev/null) ]]; then
     command clang-format <"${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
   else
-    command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
+    # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
+    command head -n "${PV_HEIGHT}" -- "${FILE_PATH}" | command pygmentize -f "${PYGMENTIZE_FORMAT}" -l "${filetype}" && exit 5
   fi
 }
 
@@ -441,13 +442,13 @@ handle_mime() {
         # *.cabal)
         # command pygmentize -f "${PYGMENTIZE_FORMAT}" -l haskell "${FILE_PATH}" && exit 5
         # ;;
-				
 
       esac
 
       ;;
 
     inode/directory)
+
       preview_dir
       ;;
 
