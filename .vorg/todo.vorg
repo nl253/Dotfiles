@@ -1,394 +1,75 @@
-
-> SOFTWARE ENGINEERING
-
-    >>> Stages
-
-	There are following six phases in *every* software development life cycle model:
-
-	1. Requirement gathering and analysis.
-	2. Design.
-	3. Implementation or coding.
-	4. Testing.
-	5. Deployment.
-	6. Maintenance.
-
-    >>> Approaches
-
-	>>>> Waterfall
-
-	>>>> Incremental
-
-	>>>> Agile
-
-	+ <https://en.wikipedia.org/wiki/Agile_software_development>
-	+ pair programming
-	+ scrum
-	+ XP (Extreme Programming)
-
-    >>> UML (System Modelling)
-
-	>>>>> Resources 
-
-	- <http://www.uml-diagrams.org>
-
-	>>>> Interaction
-
-	- Use Case diagrams
-
-	>>>> Strucutral
-
-	- Class diagrams
-
-	>>>> Behavioural
-
-	- Activity diagrams
-	- Sequence diagrams
-
-	>>>>> Tools 
-
-	- <http://plantuml.com>
-
-    >>> Design Patterns
-
-	>>>>> Resources
-
-	<https://www.youtube.com/playlist?list=PLF206E906175C7E07>
-
-	>>>>> Java
-
-	<http://java-design-patterns.com/patterns/>
-
-	>>>>> Python
-
-	<http://www.blackwasp.co.uk/gofpatterns.aspx>
-
-> JAVA
-
-    >> Java Language
-
-	>>> Resources
-
-	default methods in interfaces <http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html>
-	java.lang.Enum <http://docs.oracle.com/javase/8/docs/technotes/guides/language/enums.html>
-	reflection api <https://docs.oracle.com/javase/tutorial/reflect/index.html>
-	<https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator>
-
-    >> Collections (Data Structures)
-
-	- java.util.Collections
-	    + java.util.PriorityQueue
-	    + java.util.Set
-		- java.util.HashSet
-	    + java.util.Map (Dictionary is obsolete)
-		+ java.util.TreeMap
-		+ java.util.HashMap
-	    - java.util.List
-	    - java.util.Iterator
-	    - java.util.Splitterator
-	    - java.util.Optional
-	    - java.util.Serializable
-	    - java.util.Tree
-
-    >> Databases (SQL)
-
-	>>> Tutorials
-
-	jdbc <https://docs.oracle.com/javase/tutorial/jdbc/index.html>
-
-	- java.sql
-	    + java.sql.Connection
-	    + java.sql.Statement
-		# java.sql.PreparedStatement
-	    + java.sql.ResultSet
-
-    >> Concurrency
-
-	>>> Resources
-	<https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html>
-
-	- java.concurrent
-	    + java.concurrent.CompletableFuture
-	    + java.concurrent.Executors
-	    + java.concurrent.ThreadPoolExecutor
-	    + java.concurrent.FutureTask
-	    + java.concurrent.ForkJoinPool
-
-    >> Utils
-
-	- java.util.Random
-	- java.util.Objects
-
-    >> IO
-
-	>>> Resources
-	<https://docs.oracle.com/javase/tutorial/essential/io/index.html>
-	<http://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html>
-
-	- java.util.Scanner
-	- java.io
-	    + java.io.File
-	- java.net
-	- java.nio
-	    + java.nio.URL
-
-    >> String Processing
-
-	- java.util.StringTokenizer
-	- java.util.StringJoiner
-
-    >> Stream API
-
-	- java.util.stream
-	    + java.util.stream.Stream
-	    + java.util.stream.Collectors
-
-    >> Archiving
-
-    >>> JAR
-
-    - java.util.jar
-	+ java.util.zip.JarFile
-	+ java.util.zip.JarEntry
-	+ java.util.zip.JarOutputStream
-	+ java.util.zip.JarInputStream
-
-    >>> ZIP
-
-    - java.util.zip
-	+ java.util.zip.ZipFile
-	+ java.util.zip.ZipEntry
-	+ java.util.zip.ZipInputStream
-	+ java.util.zip.ZipOutputStream
-	+ java.util.zip.Inflater
-	    # java.util.zip.InflaterInputStream
-	    # java.util.zip.InflaterOutputStream
-	+ java.util.zip.Deflater
-	    # java.util.zip.DeflaterInputStream
-	    # java.util.zip.DeflaterOutputStream
-	+ java.util.zip.GZIPInputStream
-	+ java.util.zip.GZIPOutputStream
-
-    >> XML
-
-	- xpath
-	- java.xml
-
-    >> Regular Expressions
-
-	- java.util.regex <https://docs.oracle.com/javase/tutorial/essential/regex/index.html>
-	    + java.util.regex.Pattern
-	    + java.util.regex.Matcher
-
-    >> Other
-
-	- Annotations <http://docs.oracle.com/javase/8/docs/technotes/guides/language/annotations.html>
-	- Static Imports <http://docs.oracle.com/javase/8/docs/technotes/guides/language/static-import.html>
-	- Autoboxing <http://docs.oracle.com/javase/8/docs/technotes/guides/language/autoboxing.html>
-	- Generics <http://docs.oracle.com/javase/8/docs/technotes/guides/language/generics.html>
-	- Invariants <http://docs.oracle.com/javase/8/docs/technotes/guides/language/assert.html>
-	- jaxp <https://docs.oracle.com/javase/tutorial/jaxp/index.html>
-	- For-each Loop <http://docs.oracle.com/javase/8/docs/technotes/guides/language/foreach.html>
-	- type annotations
-	- Advanced Exception Handling
-	    + <http://docs.oracle.com/javase/8/docs/technotes/guides/language/catch-multiple.html>
-	    + <http://docs.oracle.com/javase/8/docs/technotes/guides/language/try-with-resources.html>
-
-    >> Libraries
-
-	>>> Testing
-
-	JUnit !!!
-
-	>>> Parsing
-
-	ANTLR4 (?)
-
-    >> Java Tools
-
-	- javadoc
-	- javac
-	- java
-	- jar
-	- MANIFEST files
-	- Apache Maven
-
-> PYTHON
-
-    >> Orm
-
-    - SQLAlchemy <https://www.sqlalchemy.org> !
-
-    >> Templating Language
-
-    - Jinja2 <http://jinja.pocoo.org/docs/2.9/>
-
-    >> CLI
-
-    - prompt\_toolkit <https://github.com/jonathanslenders/python-prompt-toolkit>
-    - argparse <https://docs.python.org/3/library/argparse.html>
-    - docopt <http://docopt.org>
-
-    >> XML
-
-    - Lxml <http://lxml.de/> (including xpath)
-
-    >> Data Analysis
-
-    1. Numpy <http://www.numpy.org> ! #STARTED
-    2. Pandas <https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html> !!!
-    3. Visualization (Matplotlib, Seaborn) !
-    4. IPython Notebook (Jupyter) !
-    5. Graph Theory library <https://networkx.github.io/documentation/stable/tutorial.html#multigraphs>
-
-> COMPUTER SCIENCE
-
-    >>> Resources
-
-    <https://www.youtube.com/user/hhp3/videos>
-
-    >> Complexity Theory
-
-	>>>> Big O Notation
-
-	+ time complexity
-	+ manipulation, algebraic properties
-	    * logarithms
-
-	>>>> Algorithms (including Big O score) !!!
-
-	    >>> Resources
-	    <https://www.quora.com/What-algorithm-questions-were-you-asked-at-an-Amazon-Microsoft-and-or-Google-interview?srid=Rut6>
-	    <https://github.com/tayllan/awesome-algorithms>
-	    <https://www.youtube.com/playlist?list=PLGLfVvz_LVvReUrWr94U-ZMgjYTQ538nT>
-
-	    >>>>> Sorting 
-
-	    + quicksort
-	    + insertion sort
-	    + bubble sort
-	    + merge sort
-
-	    >>>>> Searching
-
-	    + binary search
-
-	    >>>>> Graphs
-
-	    + depth search first
-	    + breadth search first
-	    + shortest route - Dijkstra
-
-	>>>> Data Structures
-
-	    >>>>> Lists
-
-	    + array lists
-	    + linked lists
-	    + doubly linked lists
-	    + circular linked list
-
-	    >>>>> Trees
-
-	    + binary trees
-
-    >> Concepts !!
-
-	>>> Concurrency
-
-	+ multiprocessing vs multithreading
-	+ parallelism
-	+ coroutines
-	+ threads
-	+ subroutines
-	+ fibers
-	+ fork() / spawn()
-
-	>>> Operating Systems
-
-	+ kernels
-	+ memory managment
-	+ virtual memory (mapping)
-	+ scheduling
-	+ allocation of resources (cpu time, memory)
-	+ processes in sandboxes
-	+ system calls <http://www.linfo.org/system_call.html>
-	+ caching
-
-	>>> Theory of Computation
-
-	+ DFA
-	+ FDA
-	+ NP Complete
-	+ Regular Languages
-	    - regular expressions
-		# PCRE <https://swtch.com/~rsc/regexp/regexp1.html>
-		# POSIX extended vs basic
-		# backtracking
-	+ Turing Machines
-	+ Graph Theory
-	    - graph algorithms
-
-	>>> Compression
-
-	+ lossless
-	    - techinques (tar vs zip vz jar ...)
-
-	>>> Security
-
-	+ Hashing Algorithms
-	    - SHA (1, 2, 3, 256, 128, 512 ...)
-	    - MD5SUM
-
-	>>> Data Representation
-
-	+ floating point numbers
-	+ unicode (utf-8)
-
-> DATABASES AND THE WEB
-
-    >> Apache
-
-    - configure cgi scripts (python, php, java ...)
-
-    >> SQL
-
-    >> XML
-
-    - <https://en.wikipedia.org/wiki/Document_type_definition>
-    - <https://en.wikipedia.org/wiki/XML>
-    - <https://stackoverflow.com/questions/1544200/what-is-difference-between-xml-schema-and-dtd>
-    - <https://www.w3schools.com/xml/xml_dtd_intro.asp>
-
-    >> CSS
-
-	>>> Selectors
-
-	- nth child
-
-    >> JQuery
-
-
-	>>> Useful functions
-
-	- `$(#id).hide()`
-
-	>>> AJAX
-
-	>>> Plugins
-
-	- <https://jqueryvalidation.org/>
-	- <http://jqueryui.com/demos/>
-	    + https://jqueryui.com/datepicker/
-
-> OTHER
-
-    >> GNU make
-
-    <https://www.gnu.org/software/make/manual/html_node/index.html>
-
-    >> Apache Maven
-
-    <https://maven.apache.org/>
-
-
---- vim: conceallevel=3  nowrap
+Date: 16 Nov 01:27:49 GMT 2017
+Author: nl253
+-----------------------------------------------------------
+
+> TODO
+
+@Java
+# Standard Library
+# Streams
+# Optionals
+
+@Python
+Have a look at the libraries you mentioned in your CV:
+
+>> Databases
+# SQLAlchemy
+
+>> Data Analysis
+# Pandas
+
+>> Visualization
+# Seaborn
+
+>> Templating
+# Jinja2
+
+>> CLI
+# docopt
+# argparse
+# prompt\_toolkit
+
+@Shells
+getopts
+
+@Extra
+Git
+LaTeX
+
+@Concepts
+1. Operating Systems
+    - virtualisation
+    - multithreading
+    - multiprocessing
+
+@Linux
+Look again at tools such as:
+- ssh
+- curl
+- rsync
+
+@Preparation
+- What exactly do Citrix do?
+- Virtualisation, see the Wikipedia article
+- Look at CV
+
+@Uni
+
+1. Theory of Computing
+    - Graphs
+
+2. Algorithms, Correctness and Efficiency
+    - predicate logic proofs
+    - finish off regular langagues (last part)
+
+3. Sofware Engineering
+
+    >> UML
+    + fix use case diagram
+	# extra actors
+	    * Facebook
+	    * Google
+	    * repositiory
+	    * database
+	# more descriptions
+    + start working on the class diagram !!

@@ -67,7 +67,6 @@ anaconda3/
 tags
 .viminfo
 .vimtags
-.vim/
 undo/*
 
 # VSC
@@ -162,6 +161,36 @@ undo/*
 
 # Config
 
+.local/share/applications/
+.local/lib/
+.local/include/
+*vorg*
+*JetBrains*
+*gnome*
+*hexchat*
+*libre*
+.config/goa*
+.config/manja*
+.config/htop/
+*gtk-3*
+.local/bin/
+.local/share/doc/
+.local/share/recently-used.xbel
+.stack-work/
+.cache/
+.astropy/
+.config/Trolltech.conf
+.config/Kvantum/
+.config/qt5ct/
+.config/spotify/
+.local/share/icc/
+.local/share/ranger/
+.local/share/tracker/
+.local/share/keyrings/
+.local/share/man/
+.local/share/heroku/
+.local/share/fzf/
+
 # libreoffice
 
 # manjaro
@@ -247,8 +276,6 @@ Dropbox/
 
 boosterclapps/
 case/
-.config/
-.local/
 go/
 miniconda3/
 
@@ -307,3 +334,10 @@ Empty*
 *.tar
 
 .multirust/
+.config/hub
+.nv/
+.config/dconf
+.texlive
+.steam
+.config/kdeglobals
+.config/kmixrc

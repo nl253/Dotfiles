@@ -1,0 +1,29 @@
+[Added Associations]
+application/pdf=evince.desktop;okularApplication_pdf.desktop;libreoffice-draw.desktop;inkscape.desktop;krita_pdf.desktop;
+application/x-extension-htm=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+application/x-extension-html=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+application/x-extension-shtml=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+application/x-extension-xht=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+application/x-extension-xhtml=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+application/xhtml+xml=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+inode/directory=ranger.desktop;
+text/html=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+x-scheme-handler/chrome=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+x-scheme-handler/ftp=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+x-scheme-handler/http=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+x-scheme-handler/https=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+
+[Default Applications]
+application/pdf=evince.desktop;
+application/x-extension-htm=userapp-Firefox Developer Edition-YJIO9Y.desktop
+application/x-extension-html=userapp-Firefox Developer Edition-YJIO9Y.desktop
+application/x-extension-shtml=userapp-Firefox Developer Edition-YJIO9Y.desktop
+application/x-extension-xht=userapp-Firefox Developer Edition-YJIO9Y.desktop
+application/x-extension-xhtml=userapp-Firefox Developer Edition-YJIO9Y.desktop
+application/xhtml+xml=userapp-Firefox Developer Edition-YJIO9Y.desktop
+inode/directory=ranger.desktop;
+text/html=userapp-Firefox Developer Edition-YJIO9Y.desktop
+x-scheme-handler/chrome=userapp-Firefox Developer Edition-YJIO9Y.desktop
+x-scheme-handler/ftp=userapp-Firefox Developer Edition-YJIO9Y.desktop
+x-scheme-handler/http=userapp-Firefox Developer Edition-YJIO9Y.desktop
+x-scheme-handler/https=userapp-Firefox Developer Edition-YJIO9Y.desktop

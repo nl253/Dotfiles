@@ -1,0 +1,1 @@
+/home/norbert/.vim/autoload/plug.vim
