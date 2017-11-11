@@ -80,7 +80,7 @@
     unpushed = log --branches --not --remotes
 
     # better format
-	log = log --stat --format=\"________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b\"
+	log = log --stat --format="________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b"
 
 	# pretter
 	grep = grep --extended-regexp --line-number --color=always --full-name --heading --threads 16 --break

@@ -4,6 +4,7 @@ export DEFAULT_TOOLCHAIN=nightly
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
+
 export HISTFILE=~/.shell_history
 export SAVEHIST=10000
 export HISTSIZE=20000

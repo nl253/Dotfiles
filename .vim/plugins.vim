@@ -183,11 +183,11 @@ endif
 
 if has('nvim') || (has('python3') && has('patch8'))
 	if has('nvim')
-		Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+		" Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 	elseif has('python3') && has('patch8')
-		Plug 'Shougo/deoplete.nvim'
-		Plug 'roxma/nvim-yarp'
-		Plug 'roxma/vim-hug-neovim-rpc'
+		" Plug 'Shougo/deoplete.nvim'
+		" Plug 'roxma/nvim-yarp'
+		" Plug 'roxma/vim-hug-neovim-rpc'
 	endif
 	Plug 'Shougo/neco-vim', {'for': 'vim'}
 	if index(g:programming_languages, 'rust') >= 0 
@@ -314,6 +314,7 @@ aug MarkupAutoTools
 	au!
 	exec "au FileType ".string(g:markup_languages)." DittoOn"
 	exec "au FileType ".string(g:markup_languages)." WordyWordy"
+    au BufReadPre *.tex let b:vimtex_main = 'main.tex'
 aug END
 
 " MARKDOWN:
