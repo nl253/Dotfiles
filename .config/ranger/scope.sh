@@ -54,196 +54,239 @@ PV_WIDTH="${2}"         # Width of the preview pane (number of fitting character
 PV_HEIGHT="${3}"        # Height of the preview pane (number of fitting characters)
 IMAGE_CACHE_PATH="${4}" # Full path that should be used to cache image preview
 PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwise.
-EXTENSION="${FILE_PATH#*.}"
-FILE_NAME=$(basename "${FILE_PATH}")
-head="command head -n ${PV_HEIGHT} --"
+FILE_NAME=$(basename "$FILE_PATH")
+EXTENSION="${FILE_NAME#*.}"
+head="command head -n $PV_HEIGHT --"
+fmt="command fmt -u -w $PV_WIDTH"
 
 # Essential
-[[ -x $(command which elinks 2>/dev/null) ]] && HAS_ELINKS=1 && export browser="command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width ${PV_WIDTH}" || HAS_ELINKS=0
+[[ -x $(command which elinks 2>/dev/null) ]] && HAS_ELINKS=1 && export browser="command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width $PV_WIDTH" || HAS_ELINKS=0
 [[ -x $(command which js-beautify 2>/dev/null) ]] && HAS_JSBEAUTIFY=1 || HAS_JSBEAUTIFY=0
 [[ -x $(command which pandoc 2>/dev/null) ]] && HAS_PANDOC=1 && export pandoc="command pandoc --self-contained -t html5" || HAS_PANDOC=0
 [[ -x $(command which highlight 2>/dev/null) ]] && HAS_HIGHLIGHT=1 || HAS_PYGMENTS=0
 
+HAS_SYNTAX_HL=0
+HAS_PYGMENTS=0
+HAS_PYGMENTS=0
+
 # Settings
 if [[ -x $(command which highlight) ]]; then
   HAS_HIGHLIGHT=1
-  export highlight="command highlight --stdout --reformat=google --out-format=xterm256"
-else
-  HAS_HIGHLIGHT=0
+  export highlight="command highlight --line-numbers --stdout --out-format=xterm256"
 fi
 
 if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
   HAS_PYGMENTS=1
+	HAS_SYNTAX_HL=1
   HIGHLIGHT_SIZE_MAX=262143 # 256KiB
   HIGHLIGHT_TABWIDTH=8
   HIGHLIGHT_STYLE=pablo
   PYGMENTIZE_STYLE=autumn
   [[ "$(tput colors)" -ge 256 ]] && PYGMENTIZE_FORMAT=terminal256 || PYGMENTIZE_FORMAT=terminal
   export pygmentize="command pygmentize -O style=default,bg=dark,lineos=1 -F gobble,highlight,codetagify -f ${PYGMENTIZE_FORMAT}"
-else
-  HAS_PYGMENTS=0
 fi
+
+report(){
+	cat <<EOF
+REPORT 
+------
+
+FILE_PATH: $FILE_PATH
+FILE_NAME: $FILE_NAME
+EXTENSION: $EXTENSION
+MIME:     $(command file --dereference --brief --mime-type -- "$FILE_PATH")
+-------------------------------
+pygmentize:  $pygmentize
+highlight:   $highlight
+browser:     $browser
+fmt:         $fmt
+head:        $head
+pandoc:      $pandoc
+--------------------------------
+HAS_SYNTAX_HL:   $HAS_SYNTAX_HL
+HAS_PYGMENTS:    $HAS_PYGMENTS
+HAS_PANDOC:      $HAS_PANDOC
+HAS_JSBEAUTIFY:  $HAS_JSBEAUTIFY
+HAS_ELINKS:      $HAS_ELINKS
+--------------------------------
+PV_WIDTH:   $PV_WIDTH
+PV_HEIGHT:  $PV_HEIGHT
+
+EOF
+	exit 5
+}
 
 colorize_stdout() {
 
-	# if language not set, guess using pygments or use extension
+	! ((HAS_SYNTAX_HL)) && cat < /dev/stdin && exit 5
+	
 	if [[ -v 1 ]]; then
 	  local language=$1
 	else
+
 		if ((HAS_PYGMENTS)); then
-			local language=$(pygmentize -N "${FILE_PATH}")
+			local language=$(pygmentize -N "$FILE_PATH")
 		else
 			local language=$EXTENSION
 		fi
-	fi
 
-  if ((HAS_HIGHLIGHT)); then
-    $highlight -S $language < /dev/stdin
-  elif ((HAS_PYGMENTS)); then
-    $pygmentize -l $language < /dev/stdin
-  else
-    cat < /dev/stdin
+		if ((HAS_HIGHLIGHT)) || [[ $2 =~ highl ]]; then
+			$highlight -S $language < /dev/stdin && exit 5
+		elif ((HAS_PYGMENTS)) || [[ $2 =~ pygme ]]; then
+			$pygmentize -l $language < /dev/stdin && exit 5
+		fi
   fi
+	preview && exit 5
+	echo "[ERROR] Could not highlight file $FILE_PATH with langugage ${language}."
 	exit 5
 }
 
 colorize_head() {
-	if [[ -v 1 ]]; then
-		$head "${FILE_PATH}" | colorize_stdout $1
-	else
-		$head "${FILE_PATH}" | colorize_stdout
-	fi
+	$head "$FILE_PATH" | colorize_stdout $1 $2 
+	exit 5
 }
 
 # most generic, no syntax highlighting
 preview() {
-  $head "${FILE_PATH}" && exit 5 || exit 1
+  $head "$FILE_PATH"  
+	exit 5
 }
 
 preview_go() {
-  ([[ -x $(command which gofmt 2>/dev/null) ]] && command gofmt -s || cat) < "$FILE_PATH" | colorize_stdout go && exit 5
+  ([[ -x $(command which gofmt 2>/dev/null) ]] && command gofmt -s || cat) < "$FILE_PATH" | colorize_stdout go 
+	exit 5
 }
 
 preview_js() {
-  $head "$FILE_PATH" | ($HAS_JSBEAUTIFY && command js-beautify || cat) | colorize_stdout javascript && exit 5
+  $head "$FILE_PATH" | ($HAS_JSBEAUTIFY && command js-beautify || cat) | colorize_stdout javascript 
+	exit 5
 }
 
 preview_css() {
-  $head "$FILE_PATH" | ($HAS_JSBEAUTIFY && command css-beautify || cat) | colorize_stdout css && exit 5
+  $head "$FILE_PATH" | ($HAS_JSBEAUTIFY && command css-beautify || cat) | colorize_stdout css 
+	exit 5
 }
 
 preview_sh() {
-  ([[ -x $(command which shfmt 2>/dev/null) ]] && shfmt -s -i 2 -ci || cat) <"$FILE_PATH" | colorize_stdout sh && exit 5
+  ([[ -x $(command which shfmt 2>/dev/null) ]] && shfmt -s -i 2 -ci || cat) <"$FILE_PATH" | colorize_stdout sh 
+	exit 5
 }
 
 preview_class() {
-  [[ -x $(command which javac 2>/dev/null) ]] && command javap "$FILE_PATH" | colorize_stdout java && exit 5
+  [[ -x $(command which javac 2>/dev/null) ]] && command javap "$FILE_PATH" | colorize_stdout java 
+	exit 5
 }
 
 preview_rst() {
   if [[ -x $(command which rst2html5.py 2>/dev/null) ]]; then
     $head "$FILE_PATH" |
       rst2html5.py --math-output=LaTeX --link-stylesheet --quiet --smart-quotes=yes --stylesheet=${HOME}/.docutils/docutils.css |
-      $browser && exit 5
+      $browser
   elif ((HAS_PANDOC)); then
-    $head "$FILE_PATH" | $pandoc -f rst | $browser && exit 5
+    $head "$FILE_PATH" | $pandoc -f rst | $browser
   else
-    $head "$FILE_PATH" | colorize_stdout rst && exit 5
+		colorize_head rst 
   fi
+	exit 5
 }
 
 preview_md() {
-  $head "${FILE_PATH}" | ($HAS_PANDOC && $pandoc -f gfm | $browser && exit 5 || colorize_head markdown)
+	# report
+	$head "$FILE_PATH" | ( ((HAS_PANDOC)) && $pandoc -f gfm | $browser || colorize_head markdown) 
+	exit 5
 }
 
 preview_jupyter() {
   if [[ -x $(command which jupyter 2>/dev/null) ]]; then
-    command jupyter nbconvert --stdout --to html "${FILE_PATH}" | $browser && exit 5
+    command jupyter nbconvert --stdout --to html "${FILE_PATH}" | $browser 
   else
     preview_js
   fi
+	exit 5
 }
 
 preview_html() {
-  $browser "${FILE_PATH}" && exit 5
+  $browser "$FILE_PATH" 
+	exit 5
 }
 
 preview_img() {
-  img2txt --gamma=0.6 --width="${PV_WIDTH}" -- "$FILE_PATH" && exit 5
-  exiftool "$FILE_PATH" && exit 5
-  exit 1
+  img2txt --gamma=0.6 --width="$PV_WIDTH" -- "$FILE_PATH" && exit 5
+  exiftool "$FILE_PATH"
+	exit 5
 }
 
 preview_xml() {
-  $head "${FILE_PATH}" |
-    ($HAS_JSBEAUTIFY && command html-beautify || cat) |
-    colorize_stdout xml && exit 5
-}
-
-preview_ini() {
-  $head "${FILE_PATH}" | colorize_stdout ini && exit 5
+  $head "$FILE_PATH" |
+	( ((HAS_JSBEAUTIFY)) && command html-beautify || cat) |
+    colorize_stdout xml  
+	exit 5
 }
 
 preview_docx() {
   # unzip, strip tags
   if ((HAS_PANDOC)); then
-    $pandoc "$FILE_PATH" | $browser && exit 5
+    $pandoc -f docx "$FILE_PATH" | $browser 
   elif [[ -x $(command which unzip 2>/dev/null) ]]; then
-    command unzip -p "$FILE_PATH" word/document.xml |
-      command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' |
-      command fmt -u -w "$PV_WIDTH" |
-      $head -n $PV_HEIGHT && exit 5
+    command unzip -p "$FILE_PATH" word/document.xml | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | $fmt | $head
   fi
-  exit 1
+	exit 5
 }
 
 preview_cfamily() {
-  local filetype=$(command pygmentize -N "$FILE_PATH")
+  # local filetype=$(command pygmentize -N "$FILE_PATH")
+	if [[ $EXTENSION =~ java|c|cpp ]]; then
+		local filetype=$EXTENSION
+	else
+		local filetype=$(command pygmentize -N "$FILE_PATH")
+	fi
   if [[ -x $(command which astyle 2>/dev/null) ]]; then
-    command astyle --mode="$filetype" <"$FILE_PATH" | colorize_stdout "$filetype" && exit 5
+    command astyle --mode="$filetype" <"$FILE_PATH" | colorize_stdout "$filetype" $1
   elif [[ -x $(command which clang 2>/dev/null) ]]; then
-    command clang-format <"$FILE_PATH" | colorize_stdout "$filetype" && exit 5
+    command clang-format <"$FILE_PATH" | colorize_stdout "$filetype" $1
   else
-    # command pygmentize -f "${PYGMENTIZE_FORMAT}" -S "${filetype}" && exit 5
-    $head "$FILE_PATH" | colorize_stdout "${filetype}" && exit 5
+		colorize_head "$filetype" $1
   fi
+	exit 5
 }
 
 preview_js() {
-  if ((HAS_JSBEAUTIFY)); then
-    $head "${FILE_PATH}" | command js-beautify | colorize_stdout json && exit 5
-  else
-    $head "${FILE_PATH}" | colorize_stdout json && exit 5
-  fi
+	$head "$FILE_PATH" | ( ((HAS_JSBEAUTIFY)) && command js-beautify || cat) | colorize_stdout javascript 
+	exit 5
 }
 
 preview_dir() {
-  if [[ -d ${FILE_PATH} ]]; then
+  if [[ -d "$FILE_PATH" ]]; then
     if [[ -x $(command which tree 2>/dev/null) ]]; then
-      command tree -l -a --prune -L 4 -F --sort=mtime "${FILE_PATH}" && exit 5
+      command tree -l -a --prune -L 4 -F --sort=mtime "$FILE_PATH"
     else
-      command ls "${FILE_PATH}" -1log
+      command ls "$FILE_PATH" -1log
     fi
+		exit 5
   fi
 }
 
 preview_org() {
-  if ((HAS_PANDOC)); then
-    $head "${FILE_PATH}" | $pandoc -f org | $browser && exit 5
-  fi
+		$head "$FILE_PATH" | 
+			( ((HAS_PANDOC)) && $pandoc -f org | $browser || ((HAS_PYGMENTS)) && colorize_head org) 
+		exit 5
 }
 
 preview_csv() {
-  $head "${FILE_PATH}" | column --separator ',' --table && exit 5
-  exit 1
+  $head "$FILE_PATH" | column --separator ',' --table || preview 
+	exit 5
 }
 
 preview_sqlite() {
   if [[ -x $(command which sqlite3 2>/dev/null) ]]; then
-    IFS=$' \n'
-    echo -e "\nPreview of SQLite3 database ${FILE_NAME}\n"
-    for table_name in $(command sqlite3 --init '' --no$header "${FILE_PATH}" .tables | xargs); do
-      command sqlite3 -column -$header -init '' "${FILE_PATH}" 'SELECT * FROM '"${table_name} LIMIT 3"
+		cat <<EOF
+
+SQLite3 database $FILE_NAME $(basename $(dirname $FILE_PATH))
+-----------------------------------------------
+
+EOF
+    for table_name in $(command sqlite3 --init '' --no-header "$FILE_PATH" .tables | xargs); do
+      command sqlite3 -column -$header -init '' "$FILE_PATH" 'SELECT * FROM '"$table_name LIMIT 3"
       echo -e "\n"
     done
     exit 5
@@ -251,263 +294,239 @@ preview_sqlite() {
 }
 
 preview_pptx() {
-  echo -e $(basename "${FILE_PATH}")"\n----------------------------------------------------\n"
-  command unzip -p "${FILE_PATH}" | command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | perl -pe 's/[^[:ascii:]]//g' | fmt -u -w $PV_WIDTH | column | sed -E -e 's/\. ([A-Z])|(\*)|(\-)/\n\n\1/g' && exit 5
-  exit 1
+	cat <<EOF
+
+PowerPoint ($EXTENSION) - $FILE_NAME $(basename $(dirname $FILE_PATH))
+----------------------------------------------------
+
+EOF
+  command unzip -p "${FILE_PATH}" | 
+		command sed -e 's/<\/w:p>/\n\n/g; s/<[^>]\{1,\}>//g; s/[^[:print:]\n]\{1,\}//g' | 
+		perl -pe 's/[^[:ascii:]]//g' | 
+		$fmt | 
+		column | 
+		sed -E -e 's/\. ([A-Z])|(\*)|(\-)/\n\n\1/g' | 
+		grep -E '[[:print:][:alpha:]]{5,}' 
+	exit 5
 }
 
 guess_pygments() {
   # let pygments guess
   local guess=$(pygmentize -N "${FILE_PATH}")
 
-  if [[ $guess =~ 'text' ]]; then
-    preview
+  if [[ $guess = text ]]; then
+    preview 
   else
-    $head "${FILE_PATH}" | colorize_stdout $guess && exit 5 || exit 1
+    $head "$FILE_PATH" | colorize_stdout $guess 
   fi
+	exit 5 
 }
 
 guess_shebang() {
   # guess from shebang
-  if [[ $(eval "$head ${FILE_PATH}") =~ '#!' ]]; then
-    local executable=$($head -n 1 "${FILE_PATH}" | grep -Eo '\w+$')
+  if [[ $(eval "$head $FILE_PATH") =~ '#!' ]]; then
+    local executable=$($head -n 1 "$FILE_PATH" | grep -Eo '\w+$')
     if [[ -x $(command which $executable 2>/dev/null) ]]; then
-      colorize_head $executable
+      colorize_head $executable && exit 5
     fi
   fi
+	preview 
+	exit 5
 }
 
 preview_pdf() {
   # Preview as text conversion
-  command pdftotext -l 5 -nopgbrk -q -- "${FILE_PATH}" - | grep -Eo '[[:print:][:alpha:]]{5,}' && exit 5
-  command exiftool "${FILE_PATH}" && exit 5
-  exit 1
-}
-
-handle_code() {
-
-  # save time,
-  # don't attempt to render non-text files,
-  # don't attempt to pygmentize without it installed
-  ! ((HAS_PYGMENTS)) && return
-  ! [[ $(command file --dereference --brief -- "${FILE_PATH}") =~ text|(xml|script)$ ]] && return
-
-  case "${EXTENSION}" in
-
-    # java | cpp | c | h | hpp | cs | c++ | hh | hxx | cp)
-    java | cpp | c | h)
-      preview_cfamily
-      ;;
-
-    js | ts | json)
-      preview_js
-      ;;
-
-    sh)
-      preview_sh
-      ;;
-
-    # PHP
-    php)
-      preview_php
-      ;;
-
-    css)
-      preview_css
-      ;;
-
-    # XML formats
-    # xml | iml | ?cls | plist | back | xbel | fo | urdf | sdf | xacro | uml | aird | notation | project | svg | rng | page | docbook | ui | glade | gir)
-    xml)
-      preview_xml
-      ;;
-
-    puml)
-      $head "${FILE_PATH}" | colorize_stdout java && exit 5
-      ;;
-
-    go)
-      preview_go
-      ;;
-
-  esac
+  command pdftotext -l 5 -nopgbrk -q -- "$FILE_PATH" -
+	exit 5
 }
 
 handle_extension() {
 
-  case "${EXTENSION}" in
+	echo -e "[INFO] extension handle"
 
-    csv)
-      preview_csv
+  case "$EXTENSION" in
+
+    # java | cpp | c | h | hpp | cs | c++ | hh | hxx | cp)
+    java | cpp | c | h)
+      preview_cfamily pygments && exit 5
       ;;
 
-    pdf)
-      preview_pdf
+    js | json | ts)
+      preview_js && exit 5
       ;;
 
-    docx)
-      preview_docx
+    sh)
+      preview_sh && exit 5
+      ;;
+
+    md | m*down)
+      preview_md && exit 5
+      ;;
+
+    css)
+      preview_css && exit 5
       ;;
 
     pptx)
-      preview_pptx
+      preview_pptx && exit 5
       ;;
 
-    sqlite*)
-      preview_sqlite
+    pdf)
+      preview_pdf && exit 5
       ;;
 
-    # automatically decompile Java's *.class files + highlight
-    class)
-      preview_class
+    xml)
+      preview_xml && exit 5
       ;;
 
-    # OpenDocument
-    odt | ods | odp | sxw)
-      # Preview as text conversion
-      command odt2txt "${FILE_PATH}" && exit 5 || exit 1
+    docx)
+      preview_docx && exit 5
       ;;
 
-    ?.gz)
-      MANWIDTH=${PV_WIDTH} man -- "$FILE_PATH"
-      ;;
-
-    # BitTorrent
-    torrent)
-      [[ -x $(command which transmission) ]] && command transmission-show -- "${FILE_PATH}" && exit 5 || exit 1
-      ;;
-
-  esac
-}
-
-handle_website() {
-  ! ((HAS_ELINKS)) && return
-
-  case "${EXTENSION}" in
-
-    md | m*down)
-      preview_md
+    puml)
+      colorize_head java pygments && exit 5
       ;;
 
     *html)
-      preview_html
+      preview_html && exit 5
       ;;
 
     rst)
-      preview_rst
+      preview_rst && exit 5
       ;;
 
     org)
-      preview_org
+      preview_org && exit 5
       ;;
 
     ipynb)
-      preview_jupyter
+      preview_jupyter && exit 5
       ;;
+
+    go)
+      preview_go && exit 5
+      ;;
+
+    csv)
+      preview_csv && exit 5
+      ;;
+
+		conf | cnf | cfg | toml | desktop)
+			preview_ini && exit 5
+      ;;
+
+    ?.gz)
+      MANWIDTH=$PV_WIDTH man -- "$FILE_PATH" && exit 5
+      ;;
+
+    sqlite*)
+      preview_sqlite && exit 5
+      ;;
+
+    # # automatically decompile Java's *.class files + highlight
+    # class)
+      # preview_class
+      # ;;
+
+    # # OpenDocument
+    # odt | ods | odp | sxw)
+      # # Preview as text conversion
+      # command odt2txt "${FILE_PATH}" && exit 5 || exit 1
+      # ;;
+
+    # # BitTorrent
+    # torrent)
+      # [[ -x $(command which transmission) ]] && command transmission-show -- "${FILE_PATH}" && exit 5 || exit 1
+      # ;;
 
   esac
 }
 
 handle_mime() {
 
-  case $(command file --dereference --brief --mime-type -- "${FILE_PATH}") in
+	echo -e "[INFO] MIME handle"
 
-    # Text files
+  case $(command file --dereference --brief --mime-type -- "$FILE_PATH") in
+
+		# Text files
     text/* | application/*xml | application/*script)
-
-      if ! ((HAS_PYGMENTS)); then
-        preview && exit 5 || exit 1
-      fi
-
-      guess_shebang
-
-      case "${FILE_NAME,,}" in
-
-        # must be checked for BEFORE *.txt
-        # requirements.txt | humans.txt | robots.txt)
-        # preview_ini
-        # ;;
-
-        # Generic text files
-        *.txt)
-          preview
-          ;;
-
-        # *.conf | *config | *.cfg | .*ignore* | *.cnf | *.toml | *.MF | *.desktop | .flake8 | *.yapf)
-        *.conf | *config | *.cfg | .*ignore* | *.cnf | *.toml | *.desktop)
-          preview_ini
-          ;;
-
-        license | readme | change* | contrib* | building | roadmap)
-          preview_rst
-          ;;
-
-        *)
-          guess_pygments
-          ;;
-
-      esac
-      ;;
+			[[ $EXTENSION = $FILE_NAME ]] && guess_shebang && exit 5
+			( ((HAS_SYNTAX_HL)) && colorize_head || preview) && exit 5
+			;;
 
     inode/directory)
-      preview_dir
+      preview_dir && exit 5
       ;;
 
     # Image
     image/*)
-      preview_img
+      preview_img && exit 5
       ;;
   esac
 }
 
 handle_archive() {
 
-  case "${EXTENSION}" in
+	echo -e "[INFO] archive HANDLE"
 
-    # zip | gz | tar | jar | 7z | bz2 | rpm | deb | cpio | deb | arj)
+	case "$EXTENSION" in
+
     zip | gz | tar | jar | 7z | bz2)
-
       # Avoid password prompt by providing empty password
-      [[ -x $(command which 7z 2>/dev/null) ]] && command 7z l -p -- "${FILE_PATH}" && exit 5 || exit 1
+      [[ -x $(command which 7z 2>/dev/null) ]] && command 7z l -p -- "$FILE_PATH" && exit 5 
+			exit 1
       ;;
 
-    # a | ace | alz | arc | arj | bz | cab | lha | lz | lzh | lzma | lzo | rz | t7z | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | war | xpi | xz | Z)
     bz | lz | xz)
-      [[ -x $(command atool 7z 2>/dev/null) ]] && command atool --list -- "${FILE_PATH}" && exit 5 || exit 1
-      [[ -x $(command bsdtar 7z 2>/dev/null) ]] && command bsdtar --list --file "${FILE_PATH}" && exit 5 || exit 1
+      [[ -x $(command atool 7z 2>/dev/null) ]] && command atool --list -- "$FILE_PATH" && exit 5
+      [[ -x $(command bsdtar 7z 2>/dev/null) ]] && command bsdtar --list --file "$FILE_PATH" && exit 5
+  		exit 1
       ;;
 
     tar.gz)
-      command tar ztf "${FILE_PATH}" && exit 5 || exit 1
+      command tar ztf "$FILE_PATH" && exit 5 
+			exit 1
       ;;
 
     tar.xz)
-      command tar Jtf "${FILE_PATH}" && exit 5 || exit 1
+      command tar Jtf "$FILE_PATH" && exit 5 
+			exit 1
       ;;
 
     tar.bz2)
-      command tar jtf "${FILE_PATH}" && exit 5 || exit 1
+      command tar jtf "$FILE_PATH" && exit 5 
+			exit 1
       ;;
 
     rar)
-      [[ -x $(command unrar 7z 2>/dev/null) ]] && command unrar lt -p- -- "${FILE_PATH}" && exit 5 || exit 1
-      exit 1
+      [[ -x $(command unrar 7z 2>/dev/null) ]] && command unrar lt -p- -- "${FILE_PATH}" && exit 5 
+			exit 1
       ;;
 
   esac
 }
 
 handle_fallback() {
-  echo ""
-  exiftool "${FILE_PATH}"
-  echo -e "\n${FILE_PATH}\n" && command file --dereference --brief -- "${FILE_PATH}" | command fmt -u -w $PV_WIDTH && exit 5
+
+  cat <<EOF 
+
+$(report)
+
+----------------------------------------------------------------------
+
+$(exiftool "$FILE_PATH")
+
+----------------------------------------------------------------------
+
+$(command file --dereference --brief -- "$FILE_PATH" | $fmt)
+
+EOF
+	exit 5
 }
 
-handle_code
-handle_website
-handle_archive
 handle_extension
 handle_mime
+handle_archive
 handle_fallback
 
 exit 1
