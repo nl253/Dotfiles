@@ -1,0 +1,75 @@
+## rubbish
+
+**/*.log
+**/*-log
+
+# latex
+
+**/*.aux
+**/*.out
+**/*.tox
+**/*.fls
+
+## database
+
+**/*.sqlite
+**/*.db
+**/*.sqlite3
+
+## tmp files
+
+**/*.swap
+**/*.swp
+**/*.bak
+**/*.bk
+**/*.tmp
+**/*~
+.**/*-cache
+**/.mypy_cache/
+**/.cache*
+**/.cache**
+
+## VCS
+
+**/.git/
+**/.idea/
+
+## package managers
+
+**/node_modules/
+node_modules/
+**/*-lock.json
+**/*.lock
+
+## vim
+
+**/tags
+
+## artifacts
+
+**/out/
+**/docs/
+**/target/
+**/build/
+**/dist/
+**/*.class
+**/*.jar
+**/*.o
+
+## python
+**/.eggs/
+**/*.egg
+**/develop-eggs/
+
+## archives
+**/*.zip
+**/*.tar
+**/*.gzip
+**/*.7z
+**/*.bz2
+**/*.gz
+**/*.xz
+
+## documents
+**/*.pdf
+**/*.docx

@@ -1,0 +1,35 @@
+{
+  "name": "Frontend",
+  "version": "0.0.1-alpha",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "read": "cd docs && python3 -m http.server",
+    "docs": "node_modules/.bin/jsdoc --verbose --destination docs/ --recurse $(git ls-files | grep -E '\.js$')",
+    "test": "node_modules/.bin/jest"
+  },
+  "dependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "react-scripts": "*",
+    "bootstrap@4.0.0-beta": "*"
+  },
+  "devDependencies": {
+    "stylelint": "*",
+    "stylelint-config-standard": "*",
+    "faker": "^4.1.0",
+    "eslint-config-frontend-react": "https://github.com/nl253/eslint-config-frontend-react",
+    "jest": "^21.0.2",
+    "js-beautify": "*",
+    "jsdoc": "*"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-frontend-react"
+  }
+}

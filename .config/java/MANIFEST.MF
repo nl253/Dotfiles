@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven 3
+Built-By: nl253
+Build-Jdk: 1.8
+Main-Class: Main
+Class-Path: src/main/java
+

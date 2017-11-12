@@ -1,0 +1,81 @@
+/* RestructuredText Docutils Custom Stylesheet */
+
+@import url('./general.css');
+@import url('./pygments.css');
+
+/* docutils */
+
+.system-messages.section {
+  background-color: #ffbfc8;
+  padding: 1rem;
+  border-radius: 3px;
+}
+
+/* docutils sections */
+
+.rubric {
+  margin: 0em;
+  width: 100%;
+  text-indent: 2em;
+  font-weight: 700;
+  font-size: 1.5em;
+  font-family: Raleway, sans-serif;
+}
+
+.topic-title {
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.topic {
+  background-color: white;
+  border-radius: 3px;
+  padding: 1rem;
+}
+
+
+.field-list p {
+  text-indent: 0;
+  margin: 0;
+
+}
+
+/* admonitions */
+
+.admonition {
+  background: #ebebeb;
+  padding: 0.5rem 1rem;
+  margin: 0.5em;
+  border-radius: 3px;
+}
+
+.admonition.note {
+  background-color: #c3f4f5;
+}
+
+.admonition.warning {
+  background-color: #ffe8c6;
+}
+
+.admonition.danger {
+  background-color: #ff9191;
+}
+
+.admonition.attention,
+.admonition.caution {
+  background-color: #ffd6c6;
+}
+
+/* admonition title */
+
+.admonition-title,
+.topic-title {
+  color: black;
+  font-weight: bold;
+  font-family: Raleway, sans-serif;
+
+}
+
+.admonition-title {
+  font-size: 1rem;
+}
