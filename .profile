@@ -67,10 +67,10 @@ done
 # alt-e : edit with $EDITOR
 # alt-d : cd
 # alt-l : open in `less`
-export FZF_DEFAULT_OPTS=" --no-mouse --multi --ansi --black --margin 3% --filepath-word --prompt=' >> ' --reverse --tiebreak=end,length"
+export FZF_DEFAULT_OPTS=" --tiebreak=end --no-mouse --multi --ansi --margin 3% --filepath-word --prompt=' >> ' --reverse --tiebreak=end,length"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute($EDITOR {})' --bind='alt-l:execute:($PAGER {})'"
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:173,hl+:126,bg+:247,fg+:20,border:0"
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:160,fg+:11,border:0,spinner:0,header:0,bg+:0,info:0"
 export FZF_DEFAULT_COMMAND='git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//\ 2> /dev/null'
 if [ -e ~/.config/ranger/scope.sh ]; then
   export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'
