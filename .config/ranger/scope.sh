@@ -93,8 +93,7 @@ fi
 
 report(){
 	cat <<EOF
-REPORT 
-------
+$(ls -l $FILE_PATH)
 
 FILE_PATH:       $FILE_PATH                                                      
 FILE_NAME:       $FILE_NAME                                                      
@@ -138,9 +137,9 @@ colorize_stdout() {
 		fi
 	fi
 
-	if ((HAS_PYGMENTS)); then
+	if ((HAS_HIGHLIGHT)); then
 		$highlight -S $language < /dev/stdin
-	elif ((HAS_HIGHLIGHT)); then
+	elif ((HAS_PYGMENTS)); then
 		$pygmentize -l $language < /dev/stdin
 	fi
 }
@@ -292,6 +291,8 @@ guess_shebang() {
     if [[ -x $(command which $executable 2>/dev/null) ]]; then
       colorize_head $executable
     fi
+	else
+		preview
   fi
 }
 
@@ -303,7 +304,7 @@ preview_pdf() {
 
 handle_extension() {
 
-	echo -e "[INFO] extension handle"
+	# echo -e "preview from extension\n______________________\n"
 
   case "$EXTENSION" in
 
@@ -430,7 +431,7 @@ handle_extension() {
 
 handle_mime() {
 
-	echo -e "[INFO] MIME handle"
+	# echo -e "preview from MIME\n________________\n"
 
   case $(command file --dereference --brief --mime-type -- "$FILE_PATH") in
 
@@ -440,7 +441,7 @@ handle_mime() {
 			if [[ $EXTENSION = $FILE_NAME ]]; then 
 				guess_shebang && exit 5
 			else
-				colorize_head 
+				colorize_head  && exit 5
 			fi
 			preview
 			exit 5
@@ -461,7 +462,7 @@ handle_mime() {
 
 handle_archive() {
 
-	echo -e "[INFO] archive HANDLE"
+	# echo -e "archive preview\n________________\n"
 
 	case "$EXTENSION" in
 
