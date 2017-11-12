@@ -4,6 +4,25 @@ export DEFAULT_TOOLCHAIN=nightly
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
+# $EDITOR
+for i in nvim vim vi; do
+  if [ -x $(command which $i 2>/dev/null) ]; then
+    export EDITOR=$(command which $i 2>/dev/null) && break
+  fi
+done
+
+if [ $0 = bash ] || [ $0 = zsh ] || [ $0 = -bash ]; then
+  eval $(dircolors -b)
+fi
+
+# $PAGER
+if [ -x $(command which less 2>/dev/null) ]; then
+  export LESS='--RAW-CONTROL-CHARS --IGNORE-CASE --QUIET --HILITE-SEARCH --long-prompt'
+  if [ -x $(command which pygmentize 2>/dev/null) ]; then
+    export LESSOPEN='| pygmentize %s'
+  fi
+  export PAGER=less
+fi
 
 export HISTFILE=~/.shell_history
 export SAVEHIST=10000
@@ -38,21 +57,26 @@ for i in firefox-developer firefox google-chrome-stable chromium elinks lynx w3m
   fi
 done
 
-if [ -x $(command which fzf 2>/dev/null) ]; then
-
-  # KEYMAP
-  # ------------------------
-  # enter : print to STDOUT
-  # ctrl-d : scroll down
-  # ctrl-u : scroll up
-  # alt-e : edit with $EDITOR
-  # alt-d : cd
-  # alt-r : execute `rifle` [detects what to use based on file type]
-  # alt-l : open in `less`
-
-  export FZF_DEFAULT_OPTS=" --bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview' --bind='alt-e:execute(\$EDITOR {})' --bind='alt-r:execute(rifle {}),alt-l:execute:($PAGER {})' --no-mouse --multi --black --margin 3% --prompt=' >> ' --reverse --tiebreak=end,length --color 'hl:107,hl+:1,bg+:234,fg:240,fg+:246'"
-  export FZF_DEFAULT_COMMAND='git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//\ 2> /dev/null'
-  export FZF_CTRL_T_OPTS="--select-1 --exit-0"
-  export FZF_CTRL_R_OPTS="--sort --exact --preview 'echo {}' --preview-window down:3:hidden --bind '?:toggle-preview'"
-
+# FZF
+#
+# KEYMAP
+# ------------------------
+# enter : print to STDOUT
+# ctrl-d : scroll down
+# ctrl-u : scroll up
+# alt-e : edit with $EDITOR
+# alt-d : cd
+# alt-l : open in `less`
+export FZF_DEFAULT_OPTS=" --no-mouse --multi --ansi --black --margin 3% --filepath-word --prompt=' >> ' --reverse --tiebreak=end,length"
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview'"
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute($EDITOR {})' --bind='alt-l:execute:($PAGER {})'"
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:173,hl+:126,bg+:247,fg+:20,border:0"
+export FZF_DEFAULT_COMMAND='git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//\ 2> /dev/null'
+if [ -e ~/.config/ranger/scope.sh ]; then
+  export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'
+elif [ -x $(command which pygmentize 2>/dev/null) ]; then
+	export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {})"'
+  # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && ls -Al {})"'
+else
+  export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="[ -f {} ] && head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
 fi
