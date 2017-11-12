@@ -10,9 +10,9 @@ if [[ ! $(head -n 1 $1) =~ [A-Z][[:print:][:space:]]+\.$ ]]; then
 	cat <<EOF
 The commit message does not adhere to standard format.
 
-THE MESSAGE
+THE MESSAGE 
 -----------
-$0
+$(cat $0)
 
 RULES
 -----
@@ -24,7 +24,7 @@ Please fix it before re-comitting.
 EOF
 	exit 1
 else
-	fmt --uniform-spacing $1 > /tmp/formatted_commit_msg.txt 
+	cat $1 | grep -E -v  '^#' | fmt --uniform-spacing > /tmp/formatted_commit_msg.txt 
 	cat /tmp/formatted_commit_msg.txt > $1
 	cat <<EOF
 The following commit message has been subitted

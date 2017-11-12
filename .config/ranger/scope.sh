@@ -88,7 +88,7 @@ if [[ -x $(command which pygmentize 2>/dev/null) ]]; then
   PYGMENTIZE_STYLE=autumn
   [[ "$(tput colors)" -ge 256 ]] && PYGMENTIZE_FORMAT=terminal256 || PYGMENTIZE_FORMAT=terminal
   # pygmentize="command pygmentize -O style=${HIGHLIGHT_STYLE},bg=dark,lineos=1 -F gobble,highlight,codetagify -f ${PYGMENTIZE_FORMAT}"
-  pygmentize="command pygmentize -O bg=dark -F gobble,highlight,codetagify -f ${PYGMENTIZE_FORMAT}"
+  pygmentize="command pygmentize -O bg=dark -f ${PYGMENTIZE_FORMAT}"
 fi
 
 report(){
@@ -169,7 +169,7 @@ preview_jsbeautify(){
 
 preview_sh() {
 	if [[ -x $(command which shfmt 2>/dev/null) ]]; then
-		shfmt -s -i 2 -c <"$FILE_PATH" | colorize_stdout sh 
+		shfmt -s -i 2 -ci <"$FILE_PATH" | colorize_stdout sh 
 	fi
 }
 
@@ -287,7 +287,7 @@ EOF
 guess_shebang() {
   # guess from shebang
   if [[ $(eval "$head $FILE_PATH") =~ '#!' ]]; then
-    local executable=$($head -n 1 "$FILE_PATH" | grep -Eo '\w+$')
+    local executable=$(head -n 1 "$FILE_PATH" | grep -Eo '\w+$')
     if [[ -x $(command which $executable 2>/dev/null) ]]; then
       colorize_head $executable
     fi

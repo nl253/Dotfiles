@@ -137,6 +137,7 @@ if [ $(hostname) = "raptor" ]; then
   [ -x $(command which mycli 2>/dev/null) ] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253'
 fi
 
+alias pip=pip3
 
 # if running bash(1) / zsh
 

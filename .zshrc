@@ -3,7 +3,7 @@
 
 [[ -f ~/.shinit ]] && source ~/.shinit
 
-export PS1="[%*] %d ~> " # normalise prompt in case somthing goes wrong
+export PS1=" %d ~> " # normalise prompt in case somthing goes wrong
 export WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
 # this is necessary because the string "vim" is present in $EDITOR zsh will attempt to set ZLE to use vi mode
@@ -93,7 +93,7 @@ zmodload zsh/complist
 autoload -Uz compinit && compinit
 
 zstyle ':completion:::::' completer _complete _approximate
-zstyle ':completion:*:descriptions' format "- %d -"
+zstyle ':completion:*:descriptions' format " >> %d"
 # zstyle ':completion:*:corrections' format "- %d - (errors %e})"
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
 zstyle ':completion:*' group-name ''
