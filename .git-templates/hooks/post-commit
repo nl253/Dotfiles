@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-git log -1 --stat 

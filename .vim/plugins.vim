@@ -236,7 +236,25 @@ endif
 
 if index(g:markup_languages, 'tex') >= 0
 	Plug 'lervag/vimtex', {'for': 'tex'}
+	let g:vimtex_compiler_latexmk = {
+				\ 'backend' : has('nvim') ? 'nvim' : 'jobs',
+				\ 'background' : 1,
+				\ 'build_dir' : '../build',
+				\ 'callback' : 1,
+				\ 'continuous' : 1,
+				\ 'executable' : 'latexmk',
+				\ 'options' : [
+				\   '-pdf',
+				\   '-view=pdf',
+				\   '-verbose',
+				\   '-file-line-error',
+				\   '-synctex=1',
+				\   '-aux-directory=.aux',
+				\   '-interaction=nonstopmode',
+				\ ],
+				\}
 endif
+
 
 " Haskell:
 if index(g:programming_languages, 'haskell') >= 0
@@ -293,7 +311,7 @@ aug MarkupAutoTools
 	au!
 	exec "au FileType ".string(g:markup_languages)." DittoOn"
 	exec "au FileType ".string(g:markup_languages)." WordyWordy"
-    au BufReadPre *.tex let b:vimtex_main = 'main.tex'
+	au BufReadPre *.tex let b:vimtex_main = 'main.tex'
 aug END
 
 " MARKDOWN:

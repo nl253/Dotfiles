@@ -1,5 +1,5 @@
 [init]
-    templatedir = ~/.git-templates
+    templatedir = ~/.config/git/templates
 
 [user]
 	email = norbertlogiewa96@gmail.com
@@ -144,4 +144,4 @@
     process = git-lfs filter-process
     required = true
 
-# vim: ts=4 sw=4
+# vim: ts=4 sw=4 ft=gitconfig: 

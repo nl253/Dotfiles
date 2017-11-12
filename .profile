@@ -24,7 +24,8 @@ if [ -x $(command which less 2>/dev/null) ]; then
   export PAGER=less
 fi
 
-export HISTFILE=~/.shell_history
+export HISTFILE="$HOME/.config/sh/.shell_history"
+export EXECIGNORE='{/usr,}/bin/grub*:'
 export SAVEHIST=10000
 export HISTSIZE=20000
 export HISTFILESIZE=20000
@@ -32,6 +33,7 @@ export HISTCONTROL="ignoreboth:erasedups"
 export HISTTIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
+export FIGNORE='~:.o:.swp:__:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:tags'
 
 [ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false

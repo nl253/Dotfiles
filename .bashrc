@@ -1,7 +1,7 @@
 
 # ~/.bashrc: executed by bash(1)
 
-[[ -f ~/.shinit ]] && source ~/.shinit
+[[ -f ~/.config/sh/init.sh ]] && source ~/.config/sh/init.sh
 
 # Check if bash version is at least 4 to run some of my scripts.
 if ((BASH_VERSINFO < 4)); then
