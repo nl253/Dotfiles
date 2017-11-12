@@ -1,5 +1,6 @@
 
-# ~/.zshrc
+# ~/.zshrc 
+# refer to zshoptions(1)
 
 [[ -f ~/.shinit ]] && source ~/.shinit
 
@@ -7,90 +8,74 @@ export PS1=" %d ~> " # normalise prompt in case somthing goes wrong
 export WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
 # this is necessary because the string "vim" is present in $EDITOR zsh will attempt to set ZLE to use vi mode
-bindkey -e
+setopt EMACS
 
 fpath+=~/.zfunc
 
-# don't nice background tasks
+# setopt LIST_PACKED
+# setopt LIST_ROWS_FIRST
+setopt ALWAYS_TO_END
+setopt AUTO_CONTINUE
+setopt AUTO_PARAM_KEYS
+setopt AUTO_PUSHD
+setopt BAD_PATTERN
+setopt BANG_HIST
+setopt BRACE_CCL
+setopt CDABLE_VARS
+setopt CHASE_DOTS
+setopt CHASE_LINKS
+setopt COMBINING_CHARS
+setopt COMPLETE_ALIASES
+setopt COMPLETE_IN_WORD
+setopt C_BASES
+setopt EXTENDED_HISTORY
+setopt GLOB_ASSIGN
+setopt GLOB_COMPLETE
+setopt GLOB_DOTS
+setopt GLOB_STAR_SHORT
+setopt GLOB_SUBST
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_FCNTL_LOCK
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_NO_FUNCTIONS
+setopt HIST_NO_STORE
+setopt HIST_REDUCE_BLANKS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_SUBST_PATTERN
+setopt HIST_VERIFY
+setopt INC_APPEND_HISTORY
+setopt INTERACTIVE_COMMENTS
+setopt KSH_GLOB
+setopt LOCAL_OPTIONS
+setopt LOCAL_TRAPS
+setopt LONG_LIST_JOBS
+setopt MARK_DIRS
+setopt MENU_COMPLETE
+setopt NO_BEEP
 setopt NO_BG_NICE
+setopt NO_HIST_BEEP
 setopt NO_HUP
 setopt NO_LIST_BEEP
-
-# allow functions to have local options
-setopt LOCAL_OPTIONS
-
- # allow functions to have local traps
-setopt LOCAL_TRAPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt COMPLETE_IN_WORD
-setopt NO_BEEP
-
-# {a-c} -> a b c
-setopt BRACE_CCL
-setopt LIST_TYPES
-
-# Compact completion
-setopt AUTO_LIST
-setopt AUTO_MENU
-setopt AUTO_PARAM_SLASH
-setopt AUTO_PARAM_KEYS
-setopt LIST_PACKED
-setopt LIST_ROWS_FIRST
-setopt AUTO_PUSHD
-setopt PUSHD_MINUS
+setopt NO_LIST_BEEP
+setopt POSIX_BUILTINS
+setopt POSIX_IDENTIFIERS
+setopt PRINT_EXIT_VALUE
 setopt PUSHD_IGNORE_DUPS
-
-setopt GLOB_DOTS
-
-# Write the history file in the ':start:elapsed;command' format.
-setopt EXTENDED_HISTORY
-
- # Write to the history file immediately, not when the shell exits.
-setopt INC_APPEND_HISTORY
-
- # Share history between all sessions.
+setopt PUSHD_MINUS
+setopt PUSHD_TO_HOME
+setopt RC_EXPAND_PARAM
 setopt SHARE_HISTORY
-
- # Expire a duplicate event first when trimming history.
-setopt HIST_EXPIRE_DUPS_FIRST
-
- # Do not record an event that was just recorded again.
-setopt HIST_IGNORE_DUPS
-
- # Delete an old recorded event if a new event is a duplicate.
-setopt HIST_IGNORE_ALL_DUPS
-
- # Do not display a previously found event.
-setopt HIST_FIND_NO_DUPS
-
- # Do not record an event starting with a space.
-setopt HIST_IGNORE_SPACE
-
- # Do not write a duplicate event to the history file.
-setopt HIST_SAVE_NO_DUPS
-
- # Do not execute immediately upon history expansion.
-setopt HIST_VERIFY
-
-# Check original command in alias completion
-setopt COMPLETE_ALIASES
-
-# Expand globs when completion
-# setopt GLOB_COMPLETE
-# Add "/" if completes directory
-setopt MARK_DIRS
-
-unsetopt CORRECT_ALL
-
-setopt COMPLETE_ALIASES
-
-# unfortunately this is necessary
-setopt MENU_COMPLETE
-
-# enable completion
-zmodload zsh/complist
+setopt WARN_CREATE_GLOBAL
 autoload -Uz compinit && compinit
+zmodload zsh/computil
+zmodload zsh/complete
+zmodload zsh/complist
+zmodload zsh/zle
+zmodload zsh/zutil
+zmodload zsh/regex
 
 zstyle ':completion:::::' completer _complete _approximate
 zstyle ':completion:*:descriptions' format " >> %d"
