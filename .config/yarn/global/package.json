@@ -6,7 +6,7 @@
     "express-generator": "^4.15.0",
     "gitbook": "^3.2.3",
     "gitbook-cli": "^2.3.2",
-    "heroku-cli": "^6.14.24",
+    "heroku-cli": "^6.14.36",
     "htmlhint": "^0.9.13",
     "ijavascript": "^5.0.20",
     "itypescript": "^0.2.2",
