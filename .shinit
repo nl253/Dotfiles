@@ -1,4 +1,7 @@
-# ~/.profile
+
+# ~/.shinit 
+
+# meant to be run by all interactive shells
 
 # If not running interactively, don't do anything
 case $- in
