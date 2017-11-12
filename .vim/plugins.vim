@@ -181,27 +181,6 @@ if g:has_cargo
 	endif
 endif
 
-if has('nvim') || (has('python3') && has('patch8'))
-	if has('nvim')
-		" Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
-	elseif has('python3') && has('patch8')
-		" Plug 'Shougo/deoplete.nvim'
-		" Plug 'roxma/nvim-yarp'
-		" Plug 'roxma/vim-hug-neovim-rpc'
-	endif
-	Plug 'Shougo/neco-vim', {'for': 'vim'}
-	if index(g:programming_languages, 'rust') >= 0 
-		Plug 'sebastianmarkow/deoplete-rust'
-	endif
-	if index(g:programming_languages, 'python') >= 0 
-		Plug 'zchee/deoplete-jedi', {'for': 'python'}
-	endif
-	Plug 'Shougo/neco-syntax'
-	if executable('tmux') && exists('$TMUX') | Plug 'wellle/tmux-complete.vim' | endif
-	let g:deoplete#enable_at_startup = 1
-	let g:deoplete#max_list = 15
-endif
-
 if has('python') || has('python3')
 	Plug 'SirVer/ultisnips'
 	let g:UltiSnipsEditSplit = 'vertical'
@@ -214,7 +193,7 @@ if has('python') || has('python3')
 	" Python:
 
 	if index(g:programming_languages, 'python') >= 0
-		" Plug 'davidhalter/jedi-vim', {'for': 'python'} 
+		Plug 'davidhalter/jedi-vim', {'for': 'python'} 
 		let g:jedi#force_py_version = 3
 		let g:jedi#goto_command = "<C-]>"
 		let g:jedi#goto_assignments_command = "<localleader>a"

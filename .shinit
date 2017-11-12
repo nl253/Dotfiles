@@ -148,7 +148,4 @@ for i in nvim vim vi; do
 		fi       
 	fi
 done 
-
-
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2 ft=sh
-

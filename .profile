@@ -72,11 +72,11 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-d:execute(cd {})' --bind=
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute($EDITOR {})' --bind='alt-l:execute:($PAGER {})'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:160,fg+:11,border:0,spinner:0,header:0,bg+:0,info:0"
 export FZF_DEFAULT_COMMAND='git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//\ 2> /dev/null'
-if [ -e ~/.config/ranger/scope.sh ]; then
-  export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'
-elif [ -x $(command which pygmentize 2>/dev/null) ]; then
-	export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {})"'
-  # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && ls -Al {})"'
-else
-  export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="[ -f {} ] && head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
-fi
+# if [ -e ~/.config/ranger/scope.sh ]; then
+  # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'
+# elif [ -x $(command which pygmentize 2>/dev/null) ]; then
+	# export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {})"'
+  # # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && ls -Al {})"'
+# else
+  # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="[ -f {} ] && head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
+# fi
