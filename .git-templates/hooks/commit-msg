@@ -4,7 +4,9 @@
 validator_regexp='[A-Z][-A-Za-z,.:;_]+'
 
 # If it doesn't match, don't allow to commit!
-if [[ ! $1 =~ $validator_regexp ]]; then
+# Allow only prinatble characters and spaces
+# Begin with capitalized word, a end with a dot.
+if [[ ! $(head -n 1 $1) =~ [A-Z][[:print:][:space:]]+\.$ ]]; then
 	cat <<EOF
 The commit message does not adhere to standard format.
 
@@ -12,7 +14,22 @@ THE MESSAGE
 -----------
 $0
 
-Please fix it before comitting.
+RULES
+-----
+- capitalize entries 
+- end with a dot
+- use printable characters
+
+Please fix it before re-comitting.
 EOF
 	exit 1
+else
+	fmt --uniform-spacing $1 > /tmp/formatted_commit_msg.txt 
+	cat /tmp/formatted_commit_msg.txt > $1
+	cat <<EOF
+The following commit message has been subitted
+
+$(cat $1)
+EOF
 fi
+
