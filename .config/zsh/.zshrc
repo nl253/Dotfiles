@@ -3,7 +3,7 @@
 
 [[ -f ~/.config/sh/init.sh ]] && source ~/.config/sh/init.sh
 FPATH+=~/.config/zsh/zfunc
-PS1='$(dirs) >> ' 
+PS1='$(dirs || echo "") >> ' 
 
 autoload -z edit-command-line
 zle -N edit-command-line

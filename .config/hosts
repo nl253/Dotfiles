@@ -1,0 +1,4 @@
+# this file is equivalent to /etc/hosts
+# <ip-address>	<hostname.domain.org>	<hostname>
+127.0.0.1	localhost.localdomain	localhost	Chummy-Laptop
+::1	localhost.localdomain	localhost	Chukkkjmmy-Laptop
