@@ -141,6 +141,8 @@ colorize_stdout() {
 		$highlight -S $language < /dev/stdin
 	elif ((HAS_PYGMENTS)); then
 		$pygmentize -l $language < /dev/stdin
+	else
+		cat < /dev/stdin
 	fi
 }
 
