@@ -69,6 +69,8 @@
     branch = branch -vv
 	cherry = cherry --verbose
 
+	status = status column=auto
+
 	clean = "clean --interactive"
 
 	root = rev-parse --show-toplevel
