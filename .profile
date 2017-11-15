@@ -1,7 +1,6 @@
 # ~/.profile sourced by all login shells
 
 export ENV=$HOME/.config/sh/init.sh
-export BASH_ENV=/home/norbert/.config/bash/bashrc.sh
 
 # toolchain to use for Rust
 export DEFAULT_TOOLCHAIN=nightly
