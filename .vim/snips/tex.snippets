@@ -1,42 +1,23 @@
-snippet "matr[ix]{,3}" "Matrix (amsmath) [tex]" r
-\[
-\begin{bmatrix}
-  11 & 1  & x_{2}\\
-  22 & 1  & x_{3}\\
-  11 & 1  & x_{1}\\
-  11 & 21 & 33\\
-\end{bmatrix}
-\]
+
+# utils
+snippet "\\?b(egin)?" "begin{} / end{} block [tex]" br
+\begin{${1:something}}
+	${0:${VISUAL}}
+\end{$1}
 endsnippet
 
-snippet "col[umns]{,8}" "Multi-column layout (multicol) [tex]" rb
-\begin{multicols}{2}
-  $0
-\end{multicols}
-endsnippet
-
-snippet "verb[atim]{,8}" "Verbatim - literal [tex]" r
-\begin{verbatim}
-  $0
-\end{verbatim}
-endsnippet
-
-snippet it "Italics [tex]"
-\textit{
-endsnippet
-
-snippet "\\?f(oot)?note" "Footnote [tex]" r
-\footnote{$0}
-endsnippet 
+# general formatting
 
 snippet em "Emphasis [tex]"
 \empf{
 endsnippet
 
-snippet "\\?b(egin)?" "begin{} / end{} block [tex]" br
-\begin{${1:something}}
-	${0:${VISUAL}}
-\end{$1}
+snippet "bf|bold" "Bold [tex]" r
+\textbf{
+endsnippet
+
+snippet it "Italics [tex]"
+\textit{
 endsnippet
 
 snippet center "Quote [tex]" b
@@ -45,71 +26,12 @@ snippet center "Quote [tex]" b
 \end{center}
 endsnippet
 
-snippet quote "Quote [tex]" b
-\begin{quote}
-  ${1:Lorem  eiusmod tempor incididunt dolore magna aliqua. }
-\end{quote}
-endsnippet
+# lists
 
-
-snippet proof "Proof [tex]" b
-\begin{proof}
-  ${1:This follows from}
-  \[${2:e^{x+y}=e^xe^y. \qedhere}\]
-\end{proof}
-endsnippet
-
-snippet toc "Table of Contents [tex]" b
-\tableofcontents
-endsnippet
-
-snippet "tocl(ine)?" "Table of Contents [tex]" br
-\section*{${1:Unnumbered Section Name}}
-endsnippet
-
-snippet table "Table [tex]" b
-\begin{center}
-\begin{tabular}{ |c|c|c| } 
- \hline
- cell1 & cell2 & cell3 \\ 
- cell4 & cell5 & cell6 \\ 
- cell7 & cell8 & cell9 \\ 
- \hline
-\end{tabular}
-\end{center}
-endsnippet
-
-snippet "codes(etup)?" "Code {setup} (listings, color) [tex]" r
-% coding packages (for highlighting)
-\usepackage{listings} 
-\usepackage{color}
-
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
-
-\lstset{frame=tb,
-  language=${1:Java},
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=4
-}
-endsnippet
-
-snippet code "Code (color, lstlisting) [tex]" 
-\begin{lstlisting}
-  ${1:% CODE BLOCK HERE}
-\end{lstlisting} 
+snippet "dl(ist)?" "Description (definition) list [tex]" r
+\begin{description}
+  \item [${1:label}] ${2:Description of the first item.}
+\end{description}
 endsnippet
 
 snippet ol "Ordered list [tex]"
@@ -124,18 +46,46 @@ snippet "list|ul" "List [tex]" r
 \end{itemize}		
 endsnippet
 
-snippet "bf|bold" "Bold [tex]" r
-\textbf{
+# page layout
+
+snippet "col[umns]{,8}" "Multi-column layout (multicol) [tex]" rb
+\begin{multicols}{2}
+  $0
+\end{multicols}
 endsnippet
 
-snippet img "Embed image (graphix) [tex]"
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.25\textwidth]{mesh}
-  \caption{a nice plot}
-  \label{fig:mesh1}
-\end{figure}
+snippet table "Table [tex]" b
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+  \hline
+  cell1 & cell2 & cell3 \\ 
+  cell4 & cell5 & cell6 \\ 
+  cell7 & cell8 & cell9 \\ 
+  \hline
+\end{tabular}
+\end{center}
 endsnippet
+
+# code (minted) / verbatim
+
+snippet "verb[atim]{,8}" "Verbatim - literal [tex]" r
+\begin{verbatim}
+  $0
+\end{verbatim}
+endsnippet
+
+snippet "codes(etup)?" "Code {setup} (minted) [tex]" r
+% coding highlighting
+\usepackage{minted}
+endsnippet
+
+snippet code "Code (minted) [tex]" 
+\begin{minted}{${1:python}}
+  %% code block here
+\end{minted}
+endsnippet
+
+# sections, paragraphs, footnotes
 
 snippet "sec[tion]{,7}" "Section [tex]" r
 \section*{$0}
@@ -149,6 +99,27 @@ snippet "subs[ection]{,7}" "Sub-section [tex]" r
 \subsection*{$0}
 endsnippet
 
+snippet "\\?f(oot)?note" "Footnote [tex]" r
+\footnote{$0}
+endsnippet 
+
+snippet toc "Table of Contents [tex]" b
+\tableofcontents
+endsnippet
+
+snippet "tocl(ine)?" "Table of Contents [tex]" br
+\section*{${1:Unnumbered Section Name}}
+endsnippet
+
+# elements
+
+snippet quote "Quote [tex]" b
+\begin{quote}
+  ${1:Lorem  eiusmod tempor 
+  incididunt dolore magna aliqua. }
+\end{quote}
+endsnippet
+
 snippet "abs[tract]{,7}" "Abstract [tex]" r
 \begin{abstract}
   This is a simple paragraph at the beginning of the 
@@ -156,17 +127,42 @@ snippet "abs[tract]{,7}" "Abstract [tex]" r
 \end{abstract}
 endsnippet
 
+# logic and proof
+
+snippet proof "Proof [tex]" b
+\begin{proof}
+  ${1:This follows from}
+  \[${2:e^{x+y}=e^xe^y. \qedhere}\]
+\end{proof}
+endsnippet
+
+# images (graphix)
+
 snippet "imgs(etup)?" "Embed image {setup} (graphix) [tex]" r
 \usepackage{graphicx}
 \graphicspath{ {img/} }
 endsnippet
 
-snippet ut "Underlined text [tex]"
-\underline{
+snippet img "Embed image (graphix) [tex]"
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.25\textwidth]{mesh}
+  \caption{a nice plot}
+  \label{fig:mesh1}
+\end{figure}
 endsnippet
 
-snippet "h[rl]" "Horizontal line / rule [tex]" rb
-\hline
+snippet remark "Remark [tex]" 
+\begin{remark}
+  ${1:This statement is true, I guess.}
+\end{remark}
+endsnippet
+
+snippet proof "Proof [tex]" 
+\begin{proof}
+  This is a simple paragraph at the beginning of the 
+  document. A brief introduction about the main subject.
+\end{proof}
 endsnippet
 
 snippet theorem "Theorem [tex]"
@@ -175,46 +171,42 @@ snippet theorem "Theorem [tex]"
 \end{theorem} 
 endsnippet
 
-snippet "dl(ist)?" "Description (definition) list [tex]" r
-\begin{description}
-  \item [${1:label}] ${2:First item}
-  \item [${3:label}] ${4:Second item}
-\end{description}
+snippet lemma "Lemma [tex]" 
+\begin{lemma}
+  This is a simple paragraph at the beginning of the 
+  document. A brief introduction about the main subject.
+\end{lemma}
 endsnippet
 
-snippet "hypers(etup)?" "Hyper {setup} (hyperref) [tex]" r
-\hypersetup{
-  bookmarks=true,     % show bookmarks bar?
-  unicode=false,      % non-Latin characters in Acrobat’s bookmarks
-  pdftoolbar=true,    % show Acrobat’s toolbar?
-  pdfmenubar=true,    % show Acrobat’s menu?
-  pdffitwindow=false,   % window fit to page when opened
-  pdfstartview={FitH},  % fits the width of the page to the window
-  pdftitle={My title},  % title
-  pdfauthor={Author},   % author
-  pdfsubject={Subject},   % subject of the document
-  pdfcreator={Creator},   % creator of the document
-  pdfproducer={Producer}, % producer of the document
-  pdfkeywords={keyword1, key2, key3}, % list of keywords
-  pdfnewwindow=true,    % links in new PDF window
-  colorlinks=false,     % false: boxed links; true: colored links
-  linkcolor=red,      % color of internal links (change box color with linkbordercolor)
-  citecolor=green,    % color of links to bibliography
-  filecolor=magenta,    % color of file links
-  urlcolor=cyan       % color of external links
-}
-endsnippet 
+# urls, links (hyperref)
+
+snippet "h[rl]" "Horizontal line / rule [tex]" rb
+\hline
+endsnippet
 
 snippet "e?mail" "Email (hyperref) [tex]" r
 \href{mailto:${1:my_address@wikibooks.org}}{${2:my\_address@wikibooks.org}}
 endsnippet
 
 snippet "url|link" "URL (hyperref) [tex]" r
-\url{${1:https://github.com/nl253}}
+\url{
 endsnippet
 
 snippet "href|link" "Hyperlink (hyperref) [tex]" r
 \href{${1:https://github.com/nl253}}{${2:GitHub}}
+endsnippet
+
+# math (amsmath)
+
+snippet "matr[ix]{,3}" "Matrix (amsmath) [tex]" r
+\[
+  \begin{bmatrix}
+    11 & 1  & x_{2}\\
+    22 & 1  & x_{3}\\
+    11 & 1  & x_{1}\\
+    11 & 21 & 33\\
+  \end{bmatrix}
+\]
 endsnippet
 
 snippet "frac[tion]{,8}" "Fraction (amsmath) [tex]" r

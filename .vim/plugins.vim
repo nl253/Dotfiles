@@ -182,6 +182,7 @@ if g:has_cargo
 endif
 
 if has('python') || has('python3')
+
 	Plug 'SirVer/ultisnips'
 	let g:UltiSnipsEditSplit = 'vertical'
 	let g:UltiSnipsSnippetDirectories = [expand('~/.vim/snips')]
