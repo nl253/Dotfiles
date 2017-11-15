@@ -235,21 +235,27 @@ endif
 " LaTeX:
 
 if index(g:markup_languages, 'tex') >= 0
+
 	Plug 'lervag/vimtex', {'for': 'tex'}
+
+	let g:vimtex_syntax_minted = map(g:programming_languages + ['xml'], '{"lang": v:val}')
+
 	let g:vimtex_compiler_latexmk = {
 				\ 'backend' : has('nvim') ? 'nvim' : 'jobs',
 				\ 'background' : 1,
 				\ 'build_dir' : '../build',
-				\ 'callback' : 1,
+				\ 'callback' : has('clientserver') || has('nvim') ? 1 : 0,
 				\ 'continuous' : 1,
 				\ 'executable' : 'latexmk',
 				\ 'options' : [
 				\   '-pdf',
 				\   '-view=pdf',
 				\   '-verbose',
+				\   '-output-directory=../build',
 				\   '-file-line-error',
 				\   '-synctex=1',
-				\   '-aux-directory=.aux',
+				\   '-print=pdf',
+				\   '-aux-directory=../.aux',
 				\   '-interaction=nonstopmode',
 				\ ],
 				\}
@@ -270,20 +276,18 @@ endif
 
 if has('patch8') || has('nvim')
 	Plug 'neomake/neomake'
+
 	function! g:MakersForFType(ftype, makers)
 		execute 'let g:neomake_'.a:ftype.'_enabled_makers = '.
 					\ string(filter(a:makers, 'executable(v:val)'))
-
 	endfunction
-	call g:MakersForFType('yaml', ['yamllint'])
+
 	call g:MakersForFType('vim', ['vint'])
-	call g:MakersForFType('sql', ['sqlint'])
-	call g:MakersForFType('sh', ['shcheck', 'sh'])
-	call g:MakersForFType('css', ['stylelint'])
+	call g:MakersForFType('sh', ['shcheck', 'sh', 'dash'])
 	call g:MakersForFType('javascript', ['eslint'])
-	call g:MakersForFType('json', ['jsonlint'])
-	call g:MakersForFType('tex', ['proselint', 'rubber', 'lacheck', 'chktex'])
-	call g:MakersForFType('markdown', ['mdl', 'proselint', 'writegood'])
+	call g:MakersForFType('help', [])
+	call g:MakersForFType('bib', ['bibtex'])
+	" call g:MakersForFType('markdown', ['mdl', 'proselint', 'writegood'])
 	call g:MakersForFType('python', ['mypy', 'vulture', 'pylint', 'pylama'])
 
 	if g:has_yarn && index(g:programming_languages, 'javascript') >= 0 
@@ -293,6 +297,7 @@ if has('patch8') || has('nvim')
 			endfor
 		endfor
 	endif
+
 else
 	Plug 'vim-syntastic/syntastic'
 endif

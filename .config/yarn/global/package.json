@@ -2,6 +2,7 @@
   "dependencies": {
     "@angular/cli": "^1.4.2",
     "create-react-app": "^1.4.0",
+    "csslint": "^1.0.5",
     "eslint": "^4.7.1",
     "express-generator": "^4.15.0",
     "gitbook": "^3.2.3",
