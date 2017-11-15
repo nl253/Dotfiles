@@ -236,9 +236,7 @@ endif
 " LaTeX:
 
 if index(g:markup_languages, 'tex') >= 0
-
 	Plug 'lervag/vimtex', {'for': 'tex'}
-
 	let g:vimtex_syntax_minted = map(g:programming_languages + ['xml'], '{"lang": v:val}')
 
 	let g:vimtex_compiler_latexmk = {
@@ -261,7 +259,6 @@ if index(g:markup_languages, 'tex') >= 0
 				\ ],
 				\}
 endif
-
 
 " Haskell:
 if index(g:programming_languages, 'haskell') >= 0
@@ -380,7 +377,6 @@ endif
 if isdirectory(expand('~/Documents/Vim')) 
 
 	for plugin in ['fabulous', 'vorg-mode', 'vim-saner', 'vim-fzf-extensions', 'vim-templates']
-
 		Plug 'nl253/'.plugin, {
 					\ 'frozen': 1, 
 					\ 'dir': expand('~/Documents/Vim/').plugin

@@ -119,7 +119,13 @@ fi
 # REQUIRES
 # - git
 # - hub
-# [ -x $(command which git 2>/dev/null) ] && [ -x $(command which hub 2>/dev/null) ] && eval "$(hub alias -s)"
+if [ -x $(command which git 2>/dev/null) ]; then
+	alias g=git
+	if [ -x $(command which hub 2>/dev/null) ]; then
+		eval "$(hub alias -s)"
+		alias g=hub
+	fi
+fi
 
 # Archiving
 # --------------------------
