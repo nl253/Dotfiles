@@ -1,3 +1,7 @@
 [submodule ".config/ranger"]
 	path = .config/ranger
 	url = https://github.com/nl253/RangerConfig
+
+[submodule ".vim"]
+	path = .vim
+	url = https://github.com/nl253/Vim
