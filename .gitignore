@@ -67,7 +67,6 @@ anaconda3/
 tags
 .viminfo
 .vimtags
-.vim/
 undo/*
 
 # VSC
