@@ -1,0 +1,3 @@
+[submodule ".config/ranger"]
+	path = .config/ranger
+	url = https://github.com/nl253/RangerConfig
