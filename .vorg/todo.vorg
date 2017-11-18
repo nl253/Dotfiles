@@ -4,10 +4,6 @@ Author: nl253
 
 > TODO
 
-@Catchup
-Software Engineering - Design Principles
-Theory of Computing - Everything
-
 @Java
 # Standard Library
 # Streams
@@ -16,22 +12,25 @@ Theory of Computing - Everything
 @Python
 Have a look at the libraries you mentioned in your CV:
 
-    >> Databases
-    # SQLAlchemy
+>> Databases
+# SQLAlchemy
 
-    >> Data Analysis
-    # Pandas
+>> Data Analysis
+# Pandas
 
-    >> Visualization
-    # Seaborn
+>> Visualization
+# Seaborn
 
-    >> Templating
-    # Jinja2
+>> Templating
+# Jinja2
 
-    >> CLI
-    # docopt
-    # argparse
-    # prompt\_toolkit
+>> CLI
+# docopt
+# argparse
+# prompt\_toolkit
+
+@Shells
+getopts
 
 @Extra
 Git
@@ -48,8 +47,6 @@ Look again at tools such as:
 - ssh
 - curl
 - rsync
-
-Go over coreutils (<https://github.com/coreutils/coreutils>):
 
 @Preparation
 - What exactly do Citrix do?
@@ -74,7 +71,5 @@ Go over coreutils (<https://github.com/coreutils/coreutils>):
 	    * Google
 	    * repositiory
 	    * database
+	# more descriptions
     + start working on the class diagram !!
-
-    >> Project
-    + find the last person

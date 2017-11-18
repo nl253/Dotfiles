@@ -3,14 +3,14 @@
 
 [[ -f ~/.config/sh/init.sh ]] && source ~/.config/sh/init.sh
 FPATH+=~/.config/zsh/zfunc
-PS1='$(echo "\n$(dirs)\n$(pwd)") >> ' 
+PS1='%~ >> ' 
 
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey '^x^e' edit-command-line
 
 autoload -Uz compinit && compinit
-autoload -Uz bashcompinit && bashcompinit &&
+autoload -Uz bashcompinit && bashcompinit
 [[ -f $ZDOTDIR/../bash/completions.sh ]] && source $ZDOTDIR/../bash/completions.sh
 zmodload zsh/complete
 zmodload zsh/complist
