@@ -5,6 +5,7 @@
 [submodule ".vim"]
     path = .vim
     url = https://github.com/nl253/Vim
+
 [submodule ".config/makefiles"]
     path = .config/makefiles
     url = https://github.com/nl253/Makefiles

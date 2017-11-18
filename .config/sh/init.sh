@@ -43,9 +43,11 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 # pattern matching
-for i in {f,e,}grep diff; do
+for i in {f,e,}grep; do
   eval "alias ${i}='${i} --color=auto'"
 done
+
+alias diff='diff --color=auto --suppress-common-lines --side-by-side --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
 
 # split path on ":"
 alias show-path='echo -e ${PATH//:/\\n} | sort | grep -P "^.{3,}$"'
