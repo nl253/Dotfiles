@@ -40,6 +40,7 @@
 	tree = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
 	unpushed = log --branches --not --remotes
 	untracked = ls-files --others
+	modified = ls-files --modified
 
 	backup-untracked = "!git ls-files --others -i --exclude-standard | xargs zip untracked.zip"
 
