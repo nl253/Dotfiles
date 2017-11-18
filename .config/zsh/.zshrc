@@ -1,38 +1,26 @@
 
 # $ZDOTDIR/.zshrc refer to zshoptions(1)
 
-[[ -f ~/.config/sh/init.sh ]] && source ~/.config/sh/init.sh
+[[ -d ../sh ]] && SHDOTDIR=$SHDOTDIR/../sh
+[[ -d ../bash ]] && BASHDOTDIR=$BASHDOTDIR/../bash
+[[ -f $SHDOTDIR/init.sh ]] && source $SHDOTDIR/init.sh
+
 FPATH+=~/.config/zsh/zfunc
 PS1='%~ >> ' 
+WORDCHARS='"*?_|-.[]~=/&;!#$%^(){}<>'
 
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey '^x^e' edit-command-line
 
-autoload -Uz compinit && compinit
-autoload -Uz bashcompinit && bashcompinit
-[[ -f $ZDOTDIR/../bash/completions.sh ]] && source $ZDOTDIR/../bash/completions.sh
-zmodload zsh/complete
-zmodload zsh/complist
+autoload -Uz compinit && compinit && \
+	zmodload zsh/complete && zmodload zsh/complist && \
+	autoload -Uz bashcompinit && bashcompinit && \
+	[[ -f $BASHDOTDIR/completions.sh ]] && source $BASHDOTDIR/completions.sh
 
-WORDCHARS='"*?_|-.[]~=/&;!#$%^(){}<>'
+autoload -U select-word-style
+zle -N select-word-style
 
-backward-kill-dir() {
-	local WORDCHARS=${WORDCHARS/\/}
-	zle backward-kill-word
-}
-
-tcsh-backward-word() {
-	local WORDCHARS="${WORDCHARS:s@/@}"
-	zle backward-word
-}
-
-zle -N backward-kill-dir
-bindkey '^[^?' backward-kill-dir
-zle -N tcsh-backward-word
-
-# zstyle ':completion:*' group-name ''
-# zstyle ':completion:::::' completer _complete _approximate
 zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
 zstyle ':completion:*:*:kill:*:processes' list-colors "=(#b) #([0-9]#)*=$color[cyan]=$color[red]"
 zstyle ':completion::*:(-command-|export):*' fake-parameters ${${${_comps[(I)-value-*]#*,}%%,*}:#-*-}
@@ -57,6 +45,13 @@ else
 fi
 
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,comm -w -w"
+
+# ignore uninteresting files
+for i in files paths all-files; do 
+	zstyle ":completion:*:$i" ignored-patterns 'tags' '*.swp' '*.bak' '*history*' '*cache*' '*.pyc' '*.class' '*.o' '*.so' '*.fls' '*.lock' '*.iml' '*.aux'
+done
+
+# ignore functions that start with an underscore (typically private to a script)
 zstyle ':completion:*:functions' ignored-patterns '_*'
  
 # Don't complete uninteresting users

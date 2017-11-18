@@ -79,7 +79,7 @@
 	aliases = "!git config -l | grep alias | sed 's/^alias\\.//g'"
 
 [web]
-	browser = firefox-developer
+	browser = elinks
 
 [difftool]
 	prompt = false

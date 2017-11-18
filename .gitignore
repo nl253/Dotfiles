@@ -334,3 +334,10 @@ Empty*
 *.tar
 
 .multirust/
+.config/hub
+.nv/
+.config/dconf
+.texlive
+.steam
+.config/kdeglobals
+.config/kmixrc
