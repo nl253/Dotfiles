@@ -13,10 +13,10 @@ Author: nl253
 Have a look at the libraries you mentioned in your CV:
 
 >> Databases
-# SQLAlchemy
+# SQLAlchemy !!
 
 >> Data Analysis
-# Pandas
+# Pandas !!
 
 >> Visualization
 # Seaborn
@@ -44,8 +44,8 @@ LaTeX
 
 @Linux
 Look again at tools such as:
-- ssh
-- curl
+- curl (practice on GitHub or PayPal API)
+    + GET, POST etc requests
 - rsync
 
 @Preparation
@@ -54,22 +54,14 @@ Look again at tools such as:
 - Look at CV
 
 @Uni
-
 1. Theory of Computing
-    - Graphs
+    - Graphs (try with adjecency matricies especially the 3 dimensional case with more than one connection to a node)
 
-2. Algorithms, Correctness and Efficiency
-    - predicate logic proofs
-    - finish off regular langagues (last part)
+2. Sofware Engineering
 
-3. Sofware Engineering
-
-    >> UML
-    + fix use case diagram
-	# extra actors
-	    * Facebook
-	    * Google
-	    * repositiory
-	    * database
-	# more descriptions
-    + start working on the class diagram !!
+>> UML
++ fix use case diagram
+    # extra actors
+    # more descriptions
++ the class diagram !!!
++ start working on the sequence diagram !!

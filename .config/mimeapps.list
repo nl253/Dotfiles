@@ -12,6 +12,8 @@ x-scheme-handler/chrome=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp
 x-scheme-handler/ftp=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
 x-scheme-handler/http=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
 x-scheme-handler/https=userapp-Firefox Developer Edition-UVKB9Y.desktop;userapp-Firefox Developer Edition-YJIO9Y.desktop;
+x-scheme-handler/mailto=thunderbird.desktop;
+message/rfc822=thunderbird.desktop;
 
 [Default Applications]
 application/pdf=evince.desktop;
@@ -25,5 +27,5 @@ inode/directory=ranger.desktop;
 text/html=userapp-Firefox Developer Edition-YJIO9Y.desktop
 x-scheme-handler/chrome=userapp-Firefox Developer Edition-YJIO9Y.desktop
 x-scheme-handler/ftp=userapp-Firefox Developer Edition-YJIO9Y.desktop
-x-scheme-handler/http=userapp-Firefox Developer Edition-YJIO9Y.desktop
-x-scheme-handler/https=userapp-Firefox Developer Edition-YJIO9Y.desktop
+x-scheme-handler/mailto=thunderbird.desktop
+message/rfc822=thunderbird.desktop
