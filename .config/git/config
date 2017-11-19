@@ -27,11 +27,7 @@
     whitespace = fix 
 
 [alias]
-    a = add -v
-    b = branch -vv
-    s = status --column=auto
     g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 16 --break
-    d = diff --find-copies-harder --pickaxe-regex --ignore-space-change --ignore-blank-lines --word-diff=color
 
     root = rev-parse --show-toplevel
 
