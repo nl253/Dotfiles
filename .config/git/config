@@ -1,13 +1,12 @@
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
-    excludesfile = ~/.gitignore-global
+    excludesfile   = ~/.gitignore-global
     attributesfile = ~/.gitattributes
-    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
-    compression = 9
-	; pager = less
+    whitespace     = space-before-tab,-indent-with-non-tab,trailing-space
+	compression    = 9
 
 [credential]
-    helper = store
+    helper   = store
     username = nl253
 
 [init]
@@ -15,12 +14,12 @@
 
 [user]
     email = nl253@kent.ac.uk
-    name = nl253
+    name  = nl253
 
 [help]
 	# Automatically correct and execute mistyped commands
     autocorrect = 0  
-    browser = google-chrome-unstable
+    browser     = google-chrome-unstable
 
 [apply]
 	# Detect whitespace errors when applying a patch
@@ -29,42 +28,45 @@
 [alias]
     g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 16 --break
 
-    root = rev-parse --show-toplevel
 
     # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
     qq = "!bash -c 'command git pull && command git commit -a -m \"Automated commit. Nothing important ...\" && command git push'" 
 
-    tree = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
-    unpushed = log --branches --not --remotes
+    root      = rev-parse --show-toplevel
+    tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
+    unpushed  = log --branches --not --remotes
     untracked = ls-files --others
-    modified = ls-files --modified
+    modified  = ls-files --modified
 
-    backup-untracked = "!git ls-files --others -i --exclude-standard | xargs zip untracked.zip"
+    untracked-zip    = "!zip untracked.zip $(git ls-files --others --exclude-standard | xargs)"
+    untracked-7z     = "!7z a -mx=9 untracked.7z $(git ls-files --others --exclude-standard | xargs)"
+    untracked-tar-gz = "!tar cfvz untracked.tar.gz $(git ls-files --others --exclude-standard | xargs)"
+    untracked-tar-xz = "!tar cfvJ untracked.tar.xz $(git ls-files --others --exclude-standard | xargs)"
+    untracked-tar-bz = "!tar cfvj untracked.tar.bz2 $(git ls-files --others --exclude-standard | xargs)"
 
     # go forward (and backward) by 1 commit
-    forward = "!git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout"
-    back = checkout HEAD^1
+	forward = "!git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout"
 
     # form tpope
     recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
-    recursive-qq = "!find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} qq \\;"
+	recursive-qq     = "!find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} qq \\;"
 
     # bundle repo
     archive-zip = "archive --format=zip --output=bundle.zip --verbose HEAD"
     archive-tar = "archive --format=tar --output=bundle.tar --verbose HEAD"
-    archive-7z = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
+    archive-7z  = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
 
     # Find branches containing commit
     find-branch = "!f() { git branch -a --contains $1; }; f"  
 
     # Find tags containing commit
-    find-tag = "!f() { git describe --always --contains $1; }; f"  
+    find-tag    = "!f() { git describe --always --contains $1; }; f"  
 
     # Find commits by source code
     find-commit = "!f() { git log --stat --date=short -S$1; }; f"
 
     # Find commits by commit message
-    find-msg = "!f() { git log --stat --date=short --grep=$1; }; f"
+    find-msg    = "!f() { git log --stat --date=short --grep=$1; }; f"
 
     # Find commits by commit author
     find-author = "!f() { git log --stat --date=short --author=\"$1\"; }; f"
@@ -73,65 +75,65 @@
     contributors = shortlog --summary --numbered  
 
     # list aliases from this file
-    aliases = "!git config -l | grep alias | sed 's/^alias\\.//g'"
+    aliases      = "!git config -l | grep alias | sed 's/^alias\\.//g'"
 
 [web]
     browser = google-chrome-unstable
 
 [difftool]
-    prompt = false
+    prompt  = false
 
 [diff]
     renames = copies  # Detect copies as well as renames
-    tool = vimdiff
+    tool    = vimdiff
 
 [merge]
     # Include summaries of merged commits in 
     # newly created merge commit messages
-    tool = vimdiff
     conflictstyle = diff3
+    tool          = vimdiff
 
 [sendemail]
-    smtpserver = smtp.gmail.com
+    smtpserver     = smtp.gmail.com
     smtpserverport = 587
     smtpencryption = tls
-    smtpuser = norbertlogiewa96@gmail.com
+    smtpuser       = norbertlogiewa96@gmail.com
 
 [color]
-    ui = auto
+    ui     = auto
     branch = auto
-    diff = auto
-    grep = auto
-    showbranch = auto
+    diff   = auto
+    grep   = auto
     status = auto
+    showbranch = auto
 
 # best not to touch these (very legible as is)
 [color "branch"]
     current = magenta bold
-    local = normal
-    remote = yellow
+    local   = normal
+    remote  = yellow
 
 # best not to touch these (very legible as is)
 [color "diff"]
     meta = "127"
     frag = magenta bold # line info
-    old = "167" 		# deletions
-    new = "78" 		    # additions
+    old  = "167" 		# deletions
+    new  = "78" 		# additions
 
 # best not to touch these (very legible as is)
 [color "diff-highlight"]
-    oldNormal = "167 bold"
+    oldNormal    = "167 bold"
     oldHighlight = "167 reverse"
-    newNormal = "78"
+    newNormal    = "78"
     newHighlight = "78 reverse"
 
 # best not to touch these (very legible as is)
 [color "status"]
-    added = green
-    changed = "yellow bold"
+    added     = green
+    changed   = "yellow bold"
     untracked = "normal bold"
-    header = "white dim"
-    nobranch = "red dim"
+    header    = "white dim"
+    nobranch  = "red dim"
 
 # best not to touch these (very legible as is)
 [format]
@@ -139,7 +141,7 @@
 
 [gui]
     commitmsgwidth = 79
-    fastcopyblame = true
+    fastcopyblame  = true
 
 [instaweb]
     browser = google-chrome-unstable
