@@ -1,8 +1,8 @@
 
 # $ZDOTDIR/.zshrc refer to zshoptions(1)
 
-[[ -d ../sh ]] && SHDOTDIR=$SHDOTDIR/../sh
-[[ -d ../bash ]] && BASHDOTDIR=$BASHDOTDIR/../bash
+[[ -d ~/.config/sh ]] && SHDOTDIR=~/.config/sh
+[[ -d ~/.config/bash ]] && BASHDOTDIR=~/.config/bash
 [[ -f $SHDOTDIR/init.sh ]] && source $SHDOTDIR/init.sh
 
 FPATH+=~/.config/zsh/zfunc
