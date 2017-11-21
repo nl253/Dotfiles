@@ -61,7 +61,7 @@ alias logout="pkill -KILL -u \$USER"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 
 if [ -x $(command which rsync 2>/dev/null) ]; then
-  alias copy="rsync --ignore-missing-args --group --xattrs --hard-links --executability --itemize-changes --stats --partial --rsh=bash --progress --recursive --times --whole-file --perms --executability --verbose --human-readable  --copy-links"
+  alias copy="rsync --ignore-missing-args --copy-links --executability --group --hard-links --human-readable  --itemize-changes --partial --perms --progress --recursive --rsh=bash --stats --times --verbose --whole-file --xattrs"
 fi
 
 alias mv="mv --verbose"
