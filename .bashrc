@@ -65,3 +65,4 @@ shopt -s checkhash
 
 # # If set, bash allows patterns which match no files (see Pathname Expansion above) to expand to a null string, rather than themselves.
 # shopt -s nullglob
+[[ $(hostname) =~ raptor ]] && source /etc/bash_completion

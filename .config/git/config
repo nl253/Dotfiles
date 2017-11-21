@@ -4,6 +4,7 @@
     attributesfile = ~/.gitattributes
     whitespace     = space-before-tab,-indent-with-non-tab,trailing-space
 	compression    = 9
+	autocrlf = input
 
 [credential]
     helper   = store
