@@ -1,75 +1,86 @@
-## rubbish
-
-**/*.log
-**/*-log
-
-# latex
-
-**/*.aux
-**/*.out
-**/*.tox
-**/*.fls
-
-## database
-
-**/*.sqlite
-**/*.db
-**/*.sqlite3
 
 ## tmp files
 
-**/*.swap
-**/*.swp
-**/*.bak
-**/*.bk
-**/*.tmp
-**/*~
+*.swap
+*.swp
+*.log
+*-log
+*.bak
+*.bk
+*.tmp
+*~
 .**/*-cache
-**/.mypy_cache/
-**/.cache*
-**/.cache**
+.mypy_cache/
+.cache*
+.cache**
 
 ## VCS
 
-**/.git/
-**/.idea/
+.git/
+.idea/
+.svn/
+
+## archives
+
+*.zip
+*.tar
+*.gzip
+*.7z
+*.bz2
+*.gz
+*.xz
+
+## documents
+
+*.pdf
+*.docx
+*.pptx
+*.doc
+*.ppt
 
 ## package managers
 
-**/node_modules/
 node_modules/
-**/*-lock.json
-**/*.lock
+node_modules/
+*-lock.json
+*.lock
 
-## vim
+## Vim
 
-**/tags
+tags
 
-## artifacts
+## database
 
-**/out/
-**/docs/
-**/target/
-**/build/
-**/dist/
-**/*.class
-**/*.jar
-**/*.o
+*.sqlite
+*.db
+*.sqlite3
 
-## python
-**/.eggs/
-**/*.egg
-**/develop-eggs/
+## Java
 
-## archives
-**/*.zip
-**/*.tar
-**/*.gzip
-**/*.7z
-**/*.bz2
-**/*.gz
-**/*.xz
+*.jar
+*.class
+target/
+out/
+docs/
+build/
+dist/
 
-## documents
-**/*.pdf
-**/*.docx
+## C and C++ 
+
+*.o
+doc/
+
+
+## Python
+
+.eggs/
+*.egg
+develop-eggs/
+*.pyc
+
+# LaTeX
+
+*.aux
+*.out
+*.tox
+*.fls
