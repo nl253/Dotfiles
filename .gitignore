@@ -357,3 +357,5 @@ Empty*
 Downloads
 .config/user-dirs.locale
 .local/share/composer
+.dmrc
+.dmenurc
