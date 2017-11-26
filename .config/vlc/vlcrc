@@ -3478,6 +3478,11 @@ skins2-last=/usr/share/vlc/skins2/default.vlt
 # UDP timeout (in ms) (integer)
 #netsync-timeout=500
 
+[lirc] # Infrared remote control interface
+
+# Change the lirc configuration file (string)
+#lirc-file=
+
 [gestures] # Mouse gestures control interface
 
 # Motion threshold (10-100) (integer)
