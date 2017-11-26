@@ -93,6 +93,7 @@ if (($(cat $commit_msg | grep --count .) > 1)); then
 		sed -n "2,$(grep --count $commit_msg)" $commit_msg
 	}
 
+	# FIXME
 	# if [[ ! $(message) =~ ^[[:print:][:space:]]+$ ]]; then
 		# error_msg "Use of unprintable characters in the message body"
 		# exit 1
