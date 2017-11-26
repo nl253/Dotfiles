@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+TryExec=alacritty -e stack ghci 
+Exec=alacritty -e ghci 
+Icon=utilities-terminal
+Terminal=false
+Categories=REPL;Interpreter;
+Name=Tmux
+GenericName=Interpreter
+Comment=The Glasgow Haskell Compiler Interactive REPL
+Actions=New; 

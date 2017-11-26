@@ -1,39 +1,116 @@
 #!/usr/bin/env bash
 
+for i in sed grep cat; do
+	if [[ ! -x $(command which $i) ]]; then
+		echo -e "[ERROR] $i is not installed, cannot validate the commit message."
+		exit 0
+	fi
+done
+
+if [[ ! $BASH_VERSION =~ ^4 ]]; then
+	echo -e "[ERROR] your bash(1) is outdated, cannot validate the commit message."
+	exit 0
+fi
+
 # Regular expression to match against the commit message.
 validator_regexp='[A-Z][-A-Za-z,.:;_]+'
 
 # If it doesn't match, don't allow to commit!
 # Allow only prinatble characters and spaces
 # Begin with capitalized word, a end with a dot.
-if [[ ! $(head -n 1 $1) =~ [A-Z][[:print:][:space:]]+\.$ ]]; then
+
+# FILE WITH THE MESSAGE NOT THE TEXT ITSELF
+commit_msg=$0
+# TEXT
+subject_line=$(head -n 1 $commit_msg)
+
+error_msg(){
 	cat <<EOF
 
-[ERROR] The commit message does not adhere to standard format.
+[ERROR] The commit message does not adhere to git style guide.
 
 THE MESSAGE 
 -----------
-$(cat $0)
+$(cat $commit_msg)
 
 RULES
 -----
-- capitalize entries 
-- end with a dot
+- the summary line should be descriptive yet succinct (max 50 characters)
+- capitalize the subject 
+- use imperative, present tense
 - use printable characters
+- don't use fullstops (periods) at the end (it's a title)
+
+See <https://github.com/agis/git-style-guide#messages> for details.
+
+The issue with your commit message
+----------------------------------
+${1}.
 
 Please fix it before re-comitting.
 
 EOF
 	exit 1
-else
-	cat $1 | grep -E -v  '^#' | fmt --uniform-spacing > /tmp/formatted_commit_msg.txt 
-	cat /tmp/formatted_commit_msg.txt > $1
-	cat <<EOF
+}
 
-The following commit message has been subitted
-
-$(cat $1)
-
-EOF
+# THE SUBJECT LINE
+if [[ $subject_line =~ ^[[:space:]]+ ]]; then
+	error_msg "Leading spaces in the subject"
+fi
+if [[ ! $subject_line =~ ^[A-Z] ]]; then
+	error_msg "Uncapitalised subject"
+fi
+if [[ ! $subject_line =~ ^[A-Z][[:print:][:space:]]+$ ]]; then
+	error_msg "Use of unprintable characters"
+fi
+if [[ $subject_line =~ \.$ ]]; then
+	error_msg "The subject ends with a fullstop (period)"
+fi
+if [[ $subject_line =~ .{51,} ]]; then
+	error_msg "The subject is too long - max is 50 chars, found ${#subject_line} chars"
 fi
 
+# THE MESSAGE LINE
+if (($(cat $commit_msg | grep --count .) > 1)); then
+
+	# more than just the subject, check for blank line
+	$second_line=$(head -n 2 $commit_msg)
+
+
+	if [[ ! $second_line =~ [[:space:]]* ]]; then
+		error_msg "The second line needs to be blank"
+	fi
+
+	# the main message
+	message(){
+		sed -n "2,$(grep --count $commit_msg)" $commit_msg
+	}
+
+	if [[ ! $(message) =~ ^[A-Z][[:print:][:space:]]+$ ]]; then
+		error_msg "Use of unprintable characters in the message body"
+	fi
+
+	if [[ $(message) =~ ^[[:space:]]+ ]]; then
+		error_msg "Leading spaces in the message body"
+	fi
+
+	for i in $(message); do
+	  if [[ $i =~ .{81} ]]; then
+			error_msg "Over 80 characters on line\n$i"
+	  fi
+	done
+
+fi
+
+# ------------------------------------------------------------------------
+
+cat $commit_msg | grep -E -v  '^#' | fmt --uniform-spacing > /tmp/formatted_commit_msg.txt 
+cat /tmp/formatted_commit_msg.txt > $commit_msg
+cat <<EOF
+
+The following commit message has been submitted
+-----------------------------------------------
+
+$(cat $commit_msg)
+
+EOF
