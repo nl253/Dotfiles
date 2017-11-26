@@ -20,10 +20,10 @@ validator_regexp='[A-Z][-A-Za-z,.:;_]+'
 # Begin with capitalized word, a end with a dot.
 
 # FILE WITH THE MESSAGE NOT THE TEXT ITSELF
-commit_msg=$1
+commit_msg_file=$1
 
 subject_line(){
-	head -n 1 $commit_msg
+	head -n 1 $commit_msg_file
 }
 
 error_msg(){
@@ -43,7 +43,7 @@ See <https://github.com/agis/git-style-guide#messages> for details.
 
 THE MESSAGE 
 -----------
-$(cat $commit_msg)
+$(cat $commit_msg_file)
 
 The issue with your commit message
 ----------------------------------
@@ -77,20 +77,21 @@ if [[ $(subject_line) =~ .{51,} ]]; then
 fi
 
 # THE MESSAGE LINE
-if (($(cat $commit_msg | grep --count .) > 1)); then
+if (($(cat $commit_msg_file | grep --count .) > 1)); then
 
 	# more than just the subject, check for blank line
-	$second_line=$(head -n 2 $commit_msg)
+	second_line(){
+		head -n 2 $commit_msg_file
+	}
 
-
-	if [[ ! $second_line =~ [[:space:]]* ]]; then
+	if [[ ! $(second_line) =~ [[:space:]]* ]]; then
 		error_msg "The second line needs to be blank"
 		exit 1
 	fi
 
 	# the main message
 	message(){
-		sed -n "2,$(grep --count $commit_msg)" $commit_msg
+		sed -n "2,$(grep --count $commit_msg_file)" $commit_msg_file
 	}
 
 	# FIXME
@@ -115,13 +116,13 @@ fi
 
 # ------------------------------------------------------------------------
 
-cat $commit_msg | grep -E -v  '^#' | fmt --uniform-spacing > /tmp/formatted_commit_msg.txt 
-cat /tmp/formatted_commit_msg.txt > $commit_msg
+cat $commit_msg_file | grep -E -v  '^#' | fmt --uniform-spacing > /tmp/formatted_commit_msg_file.txt 
+cat /tmp/formatted_commit_msg_file.txt > $commit_msg_file
 cat <<EOF
 
 The following commit message has been submitted
 -----------------------------------------------
 
-$(cat $commit_msg)
+$(cat $commit_msg_file)
 
 EOF
