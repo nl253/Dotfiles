@@ -80,6 +80,10 @@ if [[ ! $(subject_line) =~ ^[A-Z][[:print:][:space:]]+$ ]]; then
 	error_msg "Use of unprintable characters"
 	exit 1
 fi
+if [[ $(subject_line) =~ \w{3,}ed[[:space:]] ]]; then
+	error_msg "Possible use of past tense"
+	exit 1
+fi
 if [[ $(subject_line) =~ \.$ ]]; then
 	error_msg "The subject ends with a fullstop (period)"
 	exit 1
@@ -106,6 +110,11 @@ if (($(line_count) > 1)); then
 
 	if [[ $(message) =~ ^[[:space:]]+ ]]; then
 		error_msg "Leading spaces in the message body"
+		exit 1
+	fi
+
+	if [[ $(message) =~ \w{3,}ed[[:space:]] ]]; then
+		error_msg "Possible use of past tense"
 		exit 1
 	fi
 
