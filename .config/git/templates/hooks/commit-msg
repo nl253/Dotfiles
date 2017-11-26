@@ -44,15 +44,15 @@ error_msg(){
 
 [ERROR] The commit message does not adhere to git style guide.
 
-RULES
------
+THE RULES
+---------
 - the summary line should be descriptive yet succinct (max 50 characters)
 - capitalize the subject 
 - use imperative, present tense
 - use printable characters
 - don't use fullstops (periods) at the end (it's a title)
 
-See <https://github.com/agis/git-style-guide#messages> for details.
+For details see <https://github.com/agis/git-style-guide#messages>
 
 THE MESSAGE 
 -----------
@@ -80,7 +80,7 @@ if [[ ! $(subject_line) =~ ^[A-Z][[:print:][:space:]]+$ ]]; then
 	error_msg "Use of unprintable characters"
 	exit 1
 fi
-if [[ $(subject_line) =~ \w{3,}ed[[:space:]] ]]; then
+if [[ $(subject_line) =~ [[:alpha:]]{3,}ed[[:space:]] ]]; then
 	error_msg "Possible use of past tense"
 	exit 1
 fi
@@ -113,7 +113,7 @@ if (($(line_count) > 1)); then
 		exit 1
 	fi
 
-	if [[ $(message) =~ \w{3,}ed[[:space:]] ]]; then
+	if [[ $(message) =~ [[:alpha:]]{3,}ed[[:space:]] ]]; then
 		error_msg "Possible use of past tense"
 		exit 1
 	fi
