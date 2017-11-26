@@ -20,18 +20,16 @@ validator_regexp='[A-Z][-A-Za-z,.:;_]+'
 # Begin with capitalized word, a end with a dot.
 
 # FILE WITH THE MESSAGE NOT THE TEXT ITSELF
-commit_msg=$0
-# TEXT
-subject_line=$(head -n 1 $commit_msg)
+commit_msg=$1
+
+subject_line(){
+	head -n 1 $commit_msg
+}
 
 error_msg(){
 	cat <<EOF
 
 [ERROR] The commit message does not adhere to git style guide.
-
-THE MESSAGE 
------------
-$(cat $commit_msg)
 
 RULES
 -----
@@ -43,31 +41,39 @@ RULES
 
 See <https://github.com/agis/git-style-guide#messages> for details.
 
+THE MESSAGE 
+-----------
+$(cat $commit_msg)
+
 The issue with your commit message
 ----------------------------------
-${1}.
+>> ${1}.
 
 Please fix it before re-comitting.
 
 EOF
-	exit 1
 }
 
 # THE SUBJECT LINE
-if [[ $subject_line =~ ^[[:space:]]+ ]]; then
+if [[ $(subject_line) =~ ^[[:space:]]+ ]]; then
 	error_msg "Leading spaces in the subject"
+	exit 1
 fi
-if [[ ! $subject_line =~ ^[A-Z] ]]; then
+if [[ ! $(subject_line) =~ ^[A-Z] ]]; then
 	error_msg "Uncapitalised subject"
+	exit 1
 fi
-if [[ ! $subject_line =~ ^[A-Z][[:print:][:space:]]+$ ]]; then
+if [[ ! $(subject_line) =~ ^[A-Z][[:print:][:space:]]+$ ]]; then
 	error_msg "Use of unprintable characters"
+	exit 1
 fi
-if [[ $subject_line =~ \.$ ]]; then
+if [[ $(subject_line) =~ \.$ ]]; then
 	error_msg "The subject ends with a fullstop (period)"
+	exit 1
 fi
-if [[ $subject_line =~ .{51,} ]]; then
-	error_msg "The subject is too long - max is 50 chars, found ${#subject_line} chars"
+if [[ $(subject_line) =~ .{51,} ]]; then
+	error_msg "The subject is too long - max is 50 chars"
+	exit 1
 fi
 
 # THE MESSAGE LINE
@@ -79,6 +85,7 @@ if (($(cat $commit_msg | grep --count .) > 1)); then
 
 	if [[ ! $second_line =~ [[:space:]]* ]]; then
 		error_msg "The second line needs to be blank"
+		exit 1
 	fi
 
 	# the main message
@@ -86,17 +93,20 @@ if (($(cat $commit_msg | grep --count .) > 1)); then
 		sed -n "2,$(grep --count $commit_msg)" $commit_msg
 	}
 
-	if [[ ! $(message) =~ ^[A-Z][[:print:][:space:]]+$ ]]; then
-		error_msg "Use of unprintable characters in the message body"
-	fi
+	# if [[ ! $(message) =~ ^[[:print:][:space:]]+$ ]]; then
+		# error_msg "Use of unprintable characters in the message body"
+		# exit 1
+	# fi
 
 	if [[ $(message) =~ ^[[:space:]]+ ]]; then
 		error_msg "Leading spaces in the message body"
+		exit 1
 	fi
 
 	for i in $(message); do
 	  if [[ $i =~ .{81} ]]; then
 			error_msg "Over 80 characters on line\n$i"
+			exit 1
 	  fi
 	done
 
