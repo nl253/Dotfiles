@@ -26,6 +26,19 @@ subject_line(){
 	head -n 1 $commit_msg_file
 }
 
+line_count(){
+	cat $commit_msg_file | command grep --count .
+}
+
+second_line(){
+	head -n 2 $commit_msg_file
+}
+
+# the main message
+message(){
+	command sed -n "2,$(command grep --count $commit_msg_file)p" $commit_msg_file
+}
+
 error_msg(){
 	cat <<EOF
 
@@ -77,28 +90,19 @@ if [[ $(subject_line) =~ .{51,} ]]; then
 fi
 
 # THE MESSAGE LINE
-if (($(cat $commit_msg_file | grep --count .) > 1)); then
+if (($(line_count) > 1)); then
 
 	# more than just the subject, check for blank line
-	second_line(){
-		head -n 2 $commit_msg_file
-	}
-
 	if [[ ! $(second_line) =~ [[:space:]]* ]]; then
 		error_msg "The second line needs to be blank"
 		exit 1
 	fi
 
-	# the main message
-	message(){
-		sed -n "2,$(grep --count $commit_msg_file)" $commit_msg_file
-	}
 
 	# FIXME
 	# if [[ ! $(message) =~ ^[[:print:][:space:]]+$ ]]; then
 		# error_msg "Use of unprintable characters in the message body"
 		# exit 1
-	# fi
 
 	if [[ $(message) =~ ^[[:space:]]+ ]]; then
 		error_msg "Leading spaces in the message body"
@@ -116,13 +120,13 @@ fi
 
 # ------------------------------------------------------------------------
 
-cat $commit_msg_file | grep -E -v  '^#' | fmt --uniform-spacing > /tmp/formatted_commit_msg_file.txt 
-cat /tmp/formatted_commit_msg_file.txt > $commit_msg_file
-cat <<EOF
+command cat $commit_msg_file | command grep -E -v  '^#' | fmt --uniform-spacing > /tmp/formatted_commit_msg_file.txt 
+command cat /tmp/formatted_commit_msg_file.txt > $commit_msg_file
+command cat <<EOF
 
 The following commit message has been submitted
 -----------------------------------------------
 
-$(cat $commit_msg_file)
+$(command cat $commit_msg_file)
 
 EOF
