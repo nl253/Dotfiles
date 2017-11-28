@@ -30,7 +30,7 @@
 
 
     # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
-    qq = "!bash -c 'command git pull && command git commit -a -m \"Automated commit\" && command git push'" 
+    qq = "!command bash -c 'command git pull && command git commit -a && command git push'" 
 
     root      = rev-parse --show-toplevel
     tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
