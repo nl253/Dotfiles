@@ -10,7 +10,7 @@
 
 ### Desktop (Xmonad)
 
-![Alt text](Pictures/desktop.png?raw=true "desktop")
+![Alt text](Pictures/desktop.png?raw=true "desktop") 
 
 (sadly I don't remember who I stole this wallpaper from)
 

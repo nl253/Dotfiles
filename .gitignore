@@ -2,14 +2,11 @@
 # password storage
 
 .netrc
+out/
+.idea/
+*.iml
 
 *anaconda*
-
-
-# Jetbrains
-
-*.iml
-.idea/
 
 # Extensions
 
