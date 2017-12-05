@@ -1,6 +1,8 @@
 # ~/.profile sourced by all login shells
 
 export ENV=$HOME/.config/sh/init.sh
+export LC_ALL=en_GB.UTF-8
+export LANG=en_GB.UTF-8
 
 # toolchain to use for Rust
 export DEFAULT_TOOLCHAIN=nightly
