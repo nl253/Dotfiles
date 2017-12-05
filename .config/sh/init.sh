@@ -1,7 +1,6 @@
+# ~/.shinit to be run by all interactive shells
 
-# ~/.shinit 
-
-# meant to be run by all interactive shells
+# This file is not read by bash(1) if ~/.bash_profile or ~/.bash_login exists.
 
 # If not running interactively, don't do anything
 case $- in
@@ -9,12 +8,8 @@ case $- in
   *) return ;;
 esac
 
-# This file is not read by bash(1) if ~/.bash_profile or ~/.bash_login exists.
-
 # normalise prompt in case somthing goes wrong
 export PS1="${USER}@${HOSTNAME}${0} $ "
-
-# [[ "$XDG_CURRENT_DESKTOP" == "KDE" ]] || export QT_QPA_PLATFORMTHEME="qt5ct"
 
 # reset
 export CDPATH="${HOME}:"
@@ -71,22 +66,7 @@ alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*
 [ -x $(command which libreoffice 2>/dev/null) ] && alias libreoffice="libreoffice --norestore"
 [ -x $(command which tmux 2>/dev/null) ] && alias tmux='tmux -2'
 
-# Java
-# -----------------------------------
-# REQUIRES
-# - mvn
-# -jdk8
-if [ -x $(command which javac 2>/dev/null) ] && [ -x $(command which mvn 2>/dev/null) ]; then
-  alias mvn-init='mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false'
-fi
-
 # Networking, Servers
-# -----------------------------------
-# REQUIRES
-# - sshfs
-# - aria2c
-# - rsync
-# - python3
 if [ -x $(command which python3 2>/dev/null) ]; then
   alias http-server-python="python3 -m http.server"
   alias pip-update-packages="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
@@ -101,10 +81,6 @@ fi
 [ -x $(command which curl 2>/dev/null) ] && alias my-ip='curl ipinfo.io/ip'
 
 # Package Management - pacman, yaourt, expac
-# -----------------------------
-# REQUIRES
-# - pacman
-# - expac
 if [ -x $(command which pacman 2>/dev/null) ]; then
   alias pacman='pacman --config "${HOME}/.pacman.conf"'
   alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
@@ -117,32 +93,20 @@ if [ -x $(command which pacman 2>/dev/null) ]; then
 fi
 
 # VCS
-# -------------------------
-# REQUIRES
-# - git
-# - hub
 if [ -x $(command which git 2>/dev/null) ]; then
-	alias g=git
-	if [ -x $(command which hub 2>/dev/null) ]; then
-		eval "$(hub alias -s)"
-		alias g=hub
-	fi
+  alias g=git
+  git_recursive_update() { for i in $(find -name .git -type d -exec dirname {} \;); do (cd $i && git pull); done; }
+  git_foreach() { for i in $(find -name .git -type d -exec dirname {} \;); do (cd $i && $@); done; }
+  if [ -x $(command which hub 2>/dev/null) ]; then
+    eval "$(hub alias -s)"
+    alias g=hub
+  fi
 fi
 
 # Archiving
-# --------------------------
-# REQUIRES
-# - 7z
 [ -x $(command which 7z 2>/dev/null) ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 
 # Databases
-# -------------------------
-# REQUIRES
-# - postgresql
-# - sqlite3
-[ -x $(command which psql 2>/dev/null) ] && alias psql='psql --single-line'
-[ -x $(command which sqlite3 2>/dev/null) ] && alias sqlite3="sqlite3 -init \${HOME}/.sqliterc"
-
 if [ $(hostname) = "raptor" ]; then
   [ -x $(command which mysql 2>/dev/null) ] && alias mysql-dragon='mysql -u nl253 -p -h dragon.kent.ac.uk nl253'
   [ -x $(command which mycli 2>/dev/null) ] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253'
@@ -150,14 +114,6 @@ fi
 
 alias pip=pip3
 
-# if running bash(1) / zsh
-
 # $EDITOR
-for i in nvim vim vi; do
-	if [ -x $(command which $i 2>/dev/null) ]; then
-		if [ $i = nvim ]; then
-			eval "alias vim=${i}" 
-		fi       
-	fi
-done 
+for i in nvim vim vi; do [ -x $(command which $i 2>/dev/null) ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
 # vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2 ft=sh
