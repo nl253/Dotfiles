@@ -1,227 +1,238 @@
 <-global?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.example</groupId>
-  <artifactId>Java-API-XML-learning</artifactId>
+    <groupId>com.example</groupId>
+    <artifactId>Java-API-XML-learning</artifactId>
 
-  <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
 
-  <dependencies>
+    <dependencies>
 
-    <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>15.0</version>
-    </dependency>
+	<!-- Apache standard library -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-lang3</artifactId>
+	    <version>3.7</version>
+	</dependency>
 
-    <!-- Google core libraries - graphs, collections, functional patterns -->
-    <dependency>
-	<groupId>com.google.guava</groupId>
-	<artifactId>guava</artifactId>
-	<version>23.5-jre</version>
-	<!-- or, for Android: -->
-	<version>23.5-android</version>
-    </dependency>
+	<dependency>
+	    <groupId>org.jetbrains</groupId>
+	    <artifactId>annotations</artifactId>
+	    <version>15.0</version>
+	</dependency>
 
-    <!-- Apache IO utils -->
-    <dependency>
-	<groupId>commons-io</groupId>
-	<artifactId>commons-io</artifactId>
-	<version>2.6</version>
-    </dependency>
+	<!-- Google core libraries - graphs, collections, functional patterns -->
+	<dependency>
+	    <groupId>com.google.guava</groupId>
+	    <artifactId>guava</artifactId>
+	    <version>23.5-jre</version>
+	    <!-- or, for Android: -->
+	    <version>23.5-android</version>
+	</dependency>
 
-    <!-- Apache standard library -->
-    <dependency>
-	<groupId>org.apache.commons</groupId>
-	<artifactId>commons-lang3</artifactId>
-	<version>3.7</version>
-    </dependency>
+	<!-- [> Spring ORM <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>org.springframework</groupId> -->
+	    <!-- <artifactId>spring-orm</artifactId> -->
+	    <!-- <version>5.0.2.RELEASE</version> -->
+	<!-- </dependency> -->
 
-    <!-- maths -->
-    <dependency>
-	<groupId>org.apache.commons</groupId>
-	<artifactId>commons-math3</artifactId>
-	<version>3.6.1</version>
-    </dependency>
+	<!-- [> Apache IO utils <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>commons-io</groupId> -->
+	    <!-- <artifactId>commons-io</artifactId> -->
+	    <!-- <version>2.6</version> -->
+	    <!-- </dependency> -->
 
-    <!-- local SQLite-like database  -->
-    <!-- <dependency> -->
-	<!-- <groupId>com.h2database</groupId> -->
-	<!-- <artifactId>h2</artifactId> -->
-	<!-- <version>1.4.196</version> -->
-	<!-- <scope>test</scope> -->
-    <!-- </dependency> -->
+	<!-- [> maths <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>org.apache.commons</groupId> -->
+	    <!-- <artifactId>commons-math3</artifactId> -->
+	    <!-- <version>3.6.1</version> -->
+	    <!-- </dependency> -->
 
-    <!-- JSON -->
-    <!-- <dependency> -->
-	<!-- <groupId>com.google.code.gson</groupId> -->
-	<!-- <artifactId>gson</artifactId> -->
-	<!-- <version>2.8.2</version> -->
-    <!-- </dependency> -->
+	<!-- local SQLite-like database  -->
+	<!-- <dependency> -->
+	    <!-- <groupId>com.h2database</groupId> -->
+	    <!-- <artifactId>h2</artifactId> -->
+	    <!-- <version>1.4.196</version> -->
+	    <!-- <scope>test</scope> -->
+	    <!-- </dependency> -->
 
-
-
-    <!-- [> PostgreSQL JDBC driver <] -->
-    <!-- <dependency> -->
-	<!-- <groupId>org.postgresql</groupId> -->
-	<!-- <artifactId>postgresql</artifactId> -->
-	<!-- <version>42.1.4</version> -->
-    <!-- </dependency> -->
-
-
-    <!-- [> data compression <] -->
-    <!-- <dependency> -->
-	<!-- <groupId>org.apache.commons</groupId> -->
-	<!-- <artifactId>commons-compress</artifactId> -->
-	<!-- <version>1.15</version> -->
-    <!-- </dependency> -->
-
-
-    <!-- MySQL JDBC driver -->
-
-    <!-- <dependency> -->
-	<!-- <groupId>mysql</groupId> -->
-	<!-- <artifactId>mysql-connector-java</artifactId> -->
-	<!-- <version>8.0.8-dmr</version> -->
-    <!-- </dependency> -->
-
-
-    <!-- CLI  -->
-    <!-- <dependency> -->
-	<!-- <groupId>commons-cli</groupId> -->
-	<!-- <artifactId>commons-cli</artifactId> -->
-	<!-- <version>2.0-gt2-pre1</version> -->
-    <!-- </dependency> -->
+	<!-- JSON -->
+	<!-- <dependency> -->
+	    <!-- <groupId>com.google.code.gson</groupId> -->
+	    <!-- <artifactId>gson</artifactId> -->
+	    <!-- <version>2.8.2</version> -->
+	    <!-- </dependency> -->
 
 
 
-    <!-- [> ANTLR4 <] -->
-    <!-- <dependency> -->
-	<!-- <groupId>org.antlr</groupId> -->
-	<!-- <artifactId>antlr4-runtime</artifactId> -->
-	<!-- <version>4.7</version> -->
-    <!-- </dependency> -->
-
-    <!-- [> Java Native Access <] -->
-    <!-- <dependency> -->
-	<!-- <groupId>net.java.dev.jna</groupId> -->
-	<!-- <artifactId>jna</artifactId> -->
-	<!-- <version>4.5.0</version> -->
-    <!-- </dependency> -->
-
-    <!-- <dependency> -->
-	<!-- <groupId>org.antlr</groupId> -->
-	<!-- <artifactId>antlr4</artifactId> -->
-	<!-- <version>4.7</version> -->
-    <!-- </dependency> -->
+	<!-- [> PostgreSQL JDBC driver <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>org.postgresql</groupId> -->
+	    <!-- <artifactId>postgresql</artifactId> -->
+	    <!-- <version>42.1.4</version> -->
+	    <!-- </dependency> -->
 
 
-    <!-- [> CSV <] -->
-    <!-- <dependency> -->
-	<!-- <groupId>com.opencsv</groupId> -->
-	<!-- <artifactId>opencsv</artifactId> -->
-	<!-- <version>4.1</version> -->
-    <!-- </dependency> -->
+	<!-- [> data compression <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>org.apache.commons</groupId> -->
+	    <!-- <artifactId>commons-compress</artifactId> -->
+	    <!-- <version>1.15</version> -->
+	    <!-- </dependency> -->
 
 
+	<!-- MySQL JDBC driver -->
 
-    <!-- [> YAML <] -->
-    <!-- <dependency> -->
-	<!-- <groupId>org.yaml</groupId> -->
-	<!-- <artifactId>snakeyaml</artifactId> -->
-	<!-- <version>1.19</version> -->
-    <!-- </dependency> -->
+	<!-- <dependency> -->
+	    <!-- <groupId>mysql</groupId> -->
+	    <!-- <artifactId>mysql-connector-java</artifactId> -->
+	    <!-- <version>8.0.8-dmr</version> -->
+	    <!-- </dependency> -->
+
+
+	<!-- CLI  -->
+	<!-- <dependency> -->
+	    <!-- <groupId>commons-cli</groupId> -->
+	    <!-- <artifactId>commons-cli</artifactId> -->
+	    <!-- <version>2.0-gt2-pre1</version> -->
+	    <!-- </dependency> -->
 
 
 
-    <!-- jquery-like DOM manipulation  -->
-    <!-- <dependency> -->
-	<!-- <groupId>org.jsoup</groupId> -->
-	<!-- <artifactId>jsoup</artifactId> -->
-	<!-- <version>1.11.2</version> -->
-    <!-- </dependency> -->
+	<!-- [> ANTLR4 <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>org.antlr</groupId> -->
+	    <!-- <artifactId>antlr4-runtime</artifactId> -->
+	    <!-- <version>4.7</version> -->
+	    <!-- </dependency> -->
 
-  </dependencies>
+	<!-- [> Java Native Access <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>net.java.dev.jna</groupId> -->
+	    <!-- <artifactId>jna</artifactId> -->
+	    <!-- <version>4.5.0</version> -->
+	    <!-- </dependency> -->
 
-  <inceptionYear>2017</inceptionYear>
+	<!-- <dependency> -->
+	    <!-- <groupId>org.antlr</groupId> -->
+	    <!-- <artifactId>antlr4</artifactId> -->
+	    <!-- <version>4.7</version> -->
+	    <!-- </dependency> -->
 
-  <name>A project set up to learn the Java XML API</name>
 
-  <prerequisites>
-    <maven>[3.0.0,)</maven>
-  </prerequisites>
+	<!-- [> CSV <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>com.opencsv</groupId> -->
+	    <!-- <artifactId>opencsv</artifactId> -->
+	    <!-- <version>4.1</version> -->
+	    <!-- </dependency> -->
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.9</java.version>
-    <author>nl253</author>
-  </properties>
 
-  <licenses>
-    <license>
-      <name>MIT</name>
-    </license>
-  </licenses>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.0.1</version>
-      </plugin>
+	<!-- [> YAML <] -->
+	<!-- <dependency> -->
+	    <!-- <groupId>org.yaml</groupId> -->
+	    <!-- <artifactId>snakeyaml</artifactId> -->
+	    <!-- <version>1.19</version> -->
+	    <!-- </dependency> -->
 
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
-        <configuration>
-          <fork>true</fork>
-          <meminitial>128m</meminitial>
-          <maxmem>512m</maxmem>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-          <compilerArgs>
-            <arg>-Xlint:all</arg>
-            <arg>-Xdoclint:all</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.0-M1</version>
-        <configuration>
-          <author>true</author>
-          <validateLinks>true</validateLinks>
-          <doctitle>${project.basedir}</doctitle>
-          <footer>
-            Copyright ${project.artifactId} ${inceptionYear}
-          </footer>
-          <header>API documentation for ${project.artifactId}</header>
-          <locale>en_GB</locale>
-          <nodeprecated>true</nodeprecated>
-          <doclint>all</doclint>
-          <overview>${project.basedir}/README.md</overview>
-          <show>private</show>
-        </configuration>
-      </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-          <archive>
-            <manifestFile>
-              ${project.basedir}/META-INF/MANIFEST.MF
-            </manifestFile>
-          </archive>
-        </configuration>
-      </plugin>
+	<!-- jquery-like DOM manipulation  -->
+	<!-- <dependency> -->
+	    <!-- <groupId>org.jsoup</groupId> -->
+	    <!-- <artifactId>jsoup</artifactId> -->
+	    <!-- <version>1.11.2</version> -->
+	    <!-- </dependency> -->
 
-    </plugins>
-  </build>
+    </dependencies>
+
+    <inceptionYear>2017</inceptionYear>
+
+    <name>A project set up to learn the Java XML API</name>
+
+    <prerequisites>
+	<maven>[3.0.0,)</maven>
+    </prerequisites>
+
+    <properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<java.version>1.9</java.version>
+	<author>nl253</author>
+    </properties>
+
+    <licenses>
+	<license>
+	    <name>MIT</name>
+	</license>
+    </licenses>
+
+    <build>
+
+	<plugins>
+
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-source-plugin</artifactId>
+		<version>3.0.1</version>
+	    </plugin>
+
+	    <plugin>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.7.0</version>
+		<configuration>
+		    <fork>true</fork>
+		    <meminitial>128m</meminitial>
+		    <maxmem>512m</maxmem>
+		    <source>${java.version}</source>
+		    <target>${java.version}</target>
+		    <compilerArgs>
+			<arg>-Xlint:all</arg>
+			<arg>-Xdoclint:all</arg>
+		    </compilerArgs>
+		</configuration>
+	    </plugin>
+
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-javadoc-plugin</artifactId>
+		<version>3.0.0-M1</version>
+		<configuration>
+		    <author>true</author>
+		    <validateLinks>true</validateLinks>
+		    <doctitle>${project.basedir}</doctitle>
+		    <footer>
+			Copyright ${project.artifactId} ${inceptionYear}
+		    </footer>
+		    <header>API documentation for ${project.artifactId}</header>
+		    <locale>en_GB</locale>
+		    <nodeprecated>true</nodeprecated>
+		    <doclint>all</doclint>
+		    <overview>${project.basedir}/README.md</overview>
+		    <show>private</show>
+		</configuration>
+	    </plugin>
+
+	    <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-jar-plugin</artifactId>
+		<version>3.0.2</version>
+		<configuration>
+		    <archive>
+			<manifestFile>
+			    ${project.basedir}/META-INF/MANIFEST.MF
+			</manifestFile>
+		    </archive>
+		</configuration>
+	    </plugin>
+
+	</plugins>
+
+    </build>
+
 </project>
