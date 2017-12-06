@@ -1,29 +1,39 @@
-
-# password storage
+# Password storage
 
 .netrc
-out/
-.idea/
-*.iml
 
-*anaconda*
+# Build
+
+out/
+target/
+build/
+dist/
 
 # Extensions
 
 *.bak
-*.bluej
-*.class
 *.ctxt
 *.pdf
+
+# Images
+
 *.png
+*.jpg
+*.svg
+*.xfc
+*.xcf
+
+# Microsoft Office
+
 *.ppt
 *.pptx
-*.backup
 
 # VCS
+
 .git-credentials
 .gitignores/.github/PULL_REQUEST_TEMPLATE.md
 
+# X11
 
 .xscreensaver
 
@@ -39,6 +49,7 @@ node_modules/
 
 # Go
 
+go/
 .gvm/
 
 # Haskell
@@ -50,25 +61,24 @@ node_modules/
 
 # Python
 
+*.ropeprojec*
+*anaconda*
+.cookiecutter*
+.ipython/
+.jupyter/
 .pyenv/
-PyComLine
 .pylint.d/
 .python-version
+PyComLine
 anaconda3/
-.ipython/
-*.ropeprojec*
+miniconda3/
 
-# Vim
-
-*~
-tags
-.viminfo
-.vimtags
-undo/*
-
-# VSC
+# Version Control Systems
 
 .subversion/
+.git/
+.svn/
+.hg/
 
 # Browsers
 
@@ -98,48 +108,26 @@ undo/*
 .inspections.xml
 .vorg/tasks.vorg
 
-# log
+# Log
 
 **/log
 **/*.log
-**/.log
+**/*-log
 
 # Java
 
 .java/
-.m2/ # maven
+*.bluej
+*.class
 .oracle_jre_usage/
- music
 
-# terminal emulator
+# Maven
 
-.cookiecutter*
-.dbshell
-.dicts/
-.directory
-.dlv/
-.esd_auth
-.fonts/
-.fuse_hidden*
-.fzf/
-.gcalcli*
-.gimp*
-.gists/
-.git-stats
-.gitbook/
-.gksu*
-.gnupg/
-.grip/
-.gtkrc*
-.home
-.icons/
-.idlerc/
+.m2/ 
 
-.jupyter/migrated
-.laptop
-.lesshst
 
-# binaries
+
+# Binaries
 
 .bin/
 
@@ -149,7 +137,7 @@ undo/*
 .rustup/
 .cargo/
 
-# libraries
+# Libraries
 
 
 # Linters
@@ -188,9 +176,9 @@ undo/*
 .local/share/heroku/
 .local/share/fzf/
 
-# libreoffice
+# Libreoffice
 
-# manjaro
+# Manjaro
 
 
 
@@ -222,39 +210,62 @@ undo/*
 .travis/
 .v8flags.5.8.283.41.norbert.json
 
-# text editors
+# Text editors
 
+# Eclipse
 .eclim/
 .eclipse/
+
+# Vim
+*~
+tags
+.viminfo
+.vimtags
+undo/*
+
+# Nvim
+.local/share/nvim/shada
+.local/share/nvim/rplugin.vim
+
+# Jetbrains 
+.idea/
+*.iml
+
+# Emacs
 .emacs.d/
 .emacs.desktop
 
-# desktop env
+# Desktop env
 
 .xmonad/
 .xsession-error*
 
 # Dirs
 
-Raptor
-Pictures
 Downloads/
+Dump/
+nltk_data/
+seaborn-data/
 Projects/
+Raptor/
+Pictures/
+Downloads/
 Documents/
 Notes/
 Libraries/
 Uni/
 
-.m2/
 .julia/
+
+# UML editors
 .yEd/
 .zenmap/
+
 .3T/
 .p2/
 .xxx/
 .*201*/
 .mozilla/
-.multirust
 .zcompdump
 
 # Ruby
@@ -271,37 +282,19 @@ Dropbox/
 .dropbox
 .dropbox*
 
-boosterclapps/
-case/
-go/
-miniconda3/
-
-# raptor
-
-nl253
-
-# database
+# PostgreSQL
 
 .pgpass
 
-# data
-
-Dump/
-nltk_data/
-seaborn-data/
-
-
-package-lock.json
-.thunderbird/
-
-
-# Package Managers
+# Node.js
 
 .yarn/
 .yarnrc
 
-# Other
+# Rubbish
 
+*.backup
+*-lock.*
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
 [._]s[a-v][a-z]
@@ -316,7 +309,6 @@ Empty*
 .DataGrip*
 .Gogland*
 .IdeaIC*
-*Projects/
 .IntelliJIdea2017.2/
 .PyCharm2017*
 .Rider*
@@ -325,34 +317,68 @@ Empty*
 .CLion*
 .WebStorm*
 
-# archived repo
+# Archives
 
 *.zip
 *.tar
+*.[xg7]z
+*.bz2
 
-.multirust/
-.config/hub
-.nv/
+# LaTeX
+
+.texlive/
+
+# PHP
+
+.local/share/composer
+
+# Configuration
+
+.config/composer/.htaccess
+.config/configstore/update-notifier-npm.json
 .config/dconf
-.texlive
-.steam
+.config/gconf
+.config/hub
 .config/kdeglobals
 .config/kmixrc
-.config/composer/.htaccess
-.config/pulse/
-.config/configstore/update-notifier-npm.json
-.config/gconf
-.local/share/webkitgtk
 .config/menus/
-.local/share/gegl-0.2
-.local/share/vlc
-.local/share/xorg
-.local/share/gvfs-metadata/
-.local/share/nvim/shada
-.local/share/nvim/rplugin.vim
-.local/share/gsettings-data-convert
-Downloads
+.config/pulse/
 .config/user-dirs.locale
-.local/share/composer
-.dmrc
+.dbshell
+.dicts/
+.directory
+.dlv/
 .dmenurc
+.dmrc
+.esd_auth
+.fonts/
+.fuse_hidden*
+.fzf/
+.gcalcli*
+.gimp*
+.gists/
+.git-stats
+.gitbook/
+.gksu*
+.gnupg/
+.grip/
+.gtkrc*
+.home
+.icons/
+.idlerc/
+.laptop
+.lesshst
+.local/share/gegl-0.2
+.local/share/gsettings-data-convert
+.local/share/gvfs-metadata/
+.local/share/vlc
+.local/share/webkitgtk
+.local/share/xorg
+.nv/
+.steam/
+.thunderbird/
+boosterclapps/
+
+.config/css/
+.config/ranger/
+.config/makefiles/

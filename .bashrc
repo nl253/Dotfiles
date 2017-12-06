@@ -1,5 +1,5 @@
 # ~/.bashrc  executed by bash(1)
-# NOTE here it is moved to ~/.config/bash/bashrc.sh
+# NOTe here it is moved to ~/.config/bash/bashrc.sh
 # setting $BASH_ENV to this file makes it act as ~/.bashrc normally would
 
 [[ -d ~/.config/sh ]] && export SHDOTDIR=$HOME/.config/sh
