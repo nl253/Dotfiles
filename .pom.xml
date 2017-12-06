@@ -5,14 +5,144 @@
 
   <groupId>com.example</groupId>
   <artifactId>Java-API-XML-learning</artifactId>
+
   <version>0.1.0-SNAPSHOT</version>
 
   <dependencies>
+
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
       <version>15.0</version>
     </dependency>
+
+    <!-- Google core libraries - graphs, collections, functional patterns -->
+    <dependency>
+	<groupId>com.google.guava</groupId>
+	<artifactId>guava</artifactId>
+	<version>23.5-jre</version>
+	<!-- or, for Android: -->
+	<version>23.5-android</version>
+    </dependency>
+
+    <!-- Apache IO utils -->
+    <dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>2.6</version>
+    </dependency>
+
+    <!-- Apache standard library -->
+    <dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-lang3</artifactId>
+	<version>3.7</version>
+    </dependency>
+
+    <!-- maths -->
+    <dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-math3</artifactId>
+	<version>3.6.1</version>
+    </dependency>
+
+    <!-- local SQLite-like database  -->
+    <!-- <dependency> -->
+	<!-- <groupId>com.h2database</groupId> -->
+	<!-- <artifactId>h2</artifactId> -->
+	<!-- <version>1.4.196</version> -->
+	<!-- <scope>test</scope> -->
+    <!-- </dependency> -->
+
+    <!-- JSON -->
+    <!-- <dependency> -->
+	<!-- <groupId>com.google.code.gson</groupId> -->
+	<!-- <artifactId>gson</artifactId> -->
+	<!-- <version>2.8.2</version> -->
+    <!-- </dependency> -->
+
+
+
+    <!-- [> PostgreSQL JDBC driver <] -->
+    <!-- <dependency> -->
+	<!-- <groupId>org.postgresql</groupId> -->
+	<!-- <artifactId>postgresql</artifactId> -->
+	<!-- <version>42.1.4</version> -->
+    <!-- </dependency> -->
+
+
+    <!-- [> data compression <] -->
+    <!-- <dependency> -->
+	<!-- <groupId>org.apache.commons</groupId> -->
+	<!-- <artifactId>commons-compress</artifactId> -->
+	<!-- <version>1.15</version> -->
+    <!-- </dependency> -->
+
+
+    <!-- MySQL JDBC driver -->
+
+    <!-- <dependency> -->
+	<!-- <groupId>mysql</groupId> -->
+	<!-- <artifactId>mysql-connector-java</artifactId> -->
+	<!-- <version>8.0.8-dmr</version> -->
+    <!-- </dependency> -->
+
+
+    <!-- CLI  -->
+    <!-- <dependency> -->
+	<!-- <groupId>commons-cli</groupId> -->
+	<!-- <artifactId>commons-cli</artifactId> -->
+	<!-- <version>2.0-gt2-pre1</version> -->
+    <!-- </dependency> -->
+
+
+
+    <!-- [> ANTLR4 <] -->
+    <!-- <dependency> -->
+	<!-- <groupId>org.antlr</groupId> -->
+	<!-- <artifactId>antlr4-runtime</artifactId> -->
+	<!-- <version>4.7</version> -->
+    <!-- </dependency> -->
+
+    <!-- [> Java Native Access <] -->
+    <!-- <dependency> -->
+	<!-- <groupId>net.java.dev.jna</groupId> -->
+	<!-- <artifactId>jna</artifactId> -->
+	<!-- <version>4.5.0</version> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+	<!-- <groupId>org.antlr</groupId> -->
+	<!-- <artifactId>antlr4</artifactId> -->
+	<!-- <version>4.7</version> -->
+    <!-- </dependency> -->
+
+
+    <!-- [> CSV <] -->
+    <!-- <dependency> -->
+	<!-- <groupId>com.opencsv</groupId> -->
+	<!-- <artifactId>opencsv</artifactId> -->
+	<!-- <version>4.1</version> -->
+    <!-- </dependency> -->
+
+
+
+    <!-- [> YAML <] -->
+    <!-- <dependency> -->
+	<!-- <groupId>org.yaml</groupId> -->
+	<!-- <artifactId>snakeyaml</artifactId> -->
+	<!-- <version>1.19</version> -->
+    <!-- </dependency> -->
+
+
+
+    <!-- jquery-like DOM manipulation  -->
+    <!-- <dependency> -->
+	<!-- <groupId>org.jsoup</groupId> -->
+	<!-- <artifactId>jsoup</artifactId> -->
+	<!-- <version>1.11.2</version> -->
+    <!-- </dependency> -->
+
   </dependencies>
 
   <inceptionYear>2017</inceptionYear>
@@ -90,25 +220,6 @@
             </manifestFile>
           </archive>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-linkcheck-plugin</artifactId>
-        <version>1.2</version>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-docck-plugin</artifactId>
-        <version>1.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
     </plugins>
