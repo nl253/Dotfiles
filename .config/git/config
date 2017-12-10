@@ -158,6 +158,6 @@
 
 [pack]
     compression = 9
-    threads = 16
+    threads = 4
 
 # vim: ts=4 sw=4 ft=gitconfig: 
