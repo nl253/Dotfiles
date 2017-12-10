@@ -11,8 +11,8 @@
     url = https://github.com/nl253/Makefiles
 
 [submodule ".config/css"]
-    path = .config/css
-    url = https://github.com/nl253/Stylesheets
+	path = .config/css
+	url = https://github.com/nl253/Stylesheets
 
 [submodule ".config/cron"]
     path = .config/css
