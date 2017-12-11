@@ -6,6 +6,7 @@
 [[ -f $SHDOTDIR/init.sh ]] && source $SHDOTDIR/init.sh
 
 FPATH+=~/.config/zsh/zfunc
+for i in $(echo $FPATH | sed -E 's/:/\n/g'); do [[ -f $i ]] && source $i; done
 PS1='%~ >> ' 
 WORDCHARS='"*?_|-.[]~=/&;!#$%^(){}<>'
 
