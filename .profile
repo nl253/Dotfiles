@@ -65,7 +65,7 @@ if [ -x $(command which psql 2>/dev/null) ]; then
 fi
 
 # $BROWSER
-for i in firefox-developer firefox google-chrome-stable chromium elinks lynx w3m; do
+for i in google-chrome-{unstable,beta,stable} firefox{-developer,}; do
   if [ -x $(command which $i 2>/dev/null) ]; then
     export BROWSER=$(command which $i 2>/dev/null) && break
   fi
