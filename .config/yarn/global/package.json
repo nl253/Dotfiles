@@ -15,6 +15,7 @@
     "js-beautify": "^1.7.4",
     "jsonlint": "^1.6.2",
     "mancy": "^3.1.0",
+    "parcel-bundler": "^1.2.0",
     "showdown": "^1.8.0",
     "standard": "^10.0.3",
     "stylelint": "^8.2.0",
