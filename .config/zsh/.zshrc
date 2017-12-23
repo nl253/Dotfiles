@@ -1,5 +1,5 @@
 
-# $ZDOTDIR/.zshrc refer to zshoptions(1)
+# $ZDOTDIR/.zshrc read by zsh(1) when invoked as an interactive shell
 
 [[ -d ~/.config/sh ]] && SHDOTDIR=~/.config/sh
 [[ -d ~/.config/bash ]] && BASHDOTDIR=~/.config/bash
