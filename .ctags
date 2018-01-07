@@ -4,20 +4,19 @@
 --sort=yes
 --guess-language-eagerly
 
---exclude=.*
---exclude=node_modules/
---exclude=Downloads/
---exclude=go/
---exclude=out/
---exclude=dist/
---exclude=target/
---exclude=build/
---exclude=docs/
---exclude=nl253/
---exclude=Dropbox/
---exclude=OneDrive/
---exclude=Dump/
---exclude=*-data/
+--exclude=node_modules/.*
+--exclude=Downloads/.*
+--exclude=go/.*
+--exclude=out/.*
+--exclude=dist/.*
+--exclude=target/.*
+--exclude=build/.*
+--exclude=docs/.*
+--exclude=nl253/.*
+--exclude=Dropbox/.*
+--exclude=OneDrive/.*
+--exclude=Dump/.*
+--exclude=*-data/.*
 
 --langdef=Markdown 
 --langmap=Markdown:.md

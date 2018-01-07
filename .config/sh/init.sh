@@ -30,7 +30,7 @@ alias sudo='sudo '
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
 
 # dirs and files
-alias ls='ls --color=auto --group-directories-first'
+alias ls='ls --color=auto --group-directories-first --hide tags --hide "*cache*" --hide "*history*" --hide "~*" --hide "_*" --hide "*~" --hide "*-log" --hide "*-lock" --hide "*.log" --hide "*.class" --hide "*.so" --hide "*.beam" --hide "*.o" --hide "*.pyc" --hide "*.pyg" --hide "*.aux" --hide "*.toc" --hide "*.swp" --hide "*.tmp" --hide "*.fls" --hide "*.fdb_latexmk" --hide "*.lock"'
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -107,7 +107,7 @@ fi
 [ -x $(command which 7z 2>/dev/null) ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 
 # Databases
-if [ $(hostname) = "raptor" ]; then
+if [ $(hostname) = raptor ]; then
   [ -x $(command which mysql 2>/dev/null) ] && alias mysql-dragon='mysql -u nl253 -p -h dragon.kent.ac.uk nl253'
   [ -x $(command which mycli 2>/dev/null) ] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253'
 fi

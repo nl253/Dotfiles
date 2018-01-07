@@ -1,6 +1,6 @@
 # variables
 SHELL=/bin/bash
-PATH=/home/norbert/.config/composer/bin:/home/norbert/anaconda3/bin:/home/norbert/.anaconda3/bin:/home/norbert/go/bin:/home/norbert/.cabal/bin:/home/norbert/.stack/bin:/home/norbert/.cargo/bin:/home/norbert/.fzf/bin:/home/norbert/.gem/ruby/*/bin:/home/norbert/node_modules/.bin:/home/norbert/.local/share/fzf/bin:/home/norbert/.yarn/bin:/home/norbert/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:
+PATH=/home/norbert/.config/composer/bin:/home/norbert/anaconda3/bin:/home/norbert/.anaconda3/bin:/home/norbert/go/bin:/home/norbert/.cabal/bin:/home/norbert/.stack/bin:/home/norbert/.fzf/bin:/home/norbert/.gem/ruby/*/bin:/home/norbert/node_modules/.bin:/home/norbert/.local/share/fzf/bin:/home/norbert/.cargo/bin:/home/norbert/.yarn/bin:/home/norbert/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:
 
 # day of week (0 - 6) (Sunday=0)
 # month (1 - 12)
@@ -15,7 +15,7 @@ PATH=/home/norbert/.config/composer/bin:/home/norbert/anaconda3/bin:/home/norber
 # - be executable
 
 # TEST
-# * * * * * echo "[TEST] $(date)" >> /home/norbert/crontest.txt
+# * * * * * echo "[TEST] $(date)" >> /tmp/crontest.txt
 
 # ---------------------------------------------------------------------------------------------------------------------------------------
 # Min     Hour    Day     Month   Weekday    Command
@@ -23,32 +23,32 @@ PATH=/home/norbert/.config/composer/bin:/home/norbert/anaconda3/bin:/home/norber
 
 # Every hour
 
-1         *       *      *       *    find ~/.config/cron/hourly -regextype posix-extended -type f -executable -readable -exec {} + &>/tmp.config/cron.hourly.log
+1         *       *      *       *    find ~/.config/cron/hourly -type f -executable -readable -exec {} + &>/tmp/cron_hourly.log
 
 # Every day at 15:45
 
-46       15       *      *       *    find ~/.config/cron/daily -regextype posix-extended -type f -executable -readable -exec {} + &>/tmp.config/cron.daily.log
+46       15       *      *       *    find ~/.config/cron/daily -type f -executable -readable -exec {} + &>/tmp/cron_daily.log
 
 # 15:05 Monday - Friday 
-5        15       *      *      1-5   find ~/.config/cron/weekdaily -regextype posix-extended -type f -executable -readable -exec {} + &>/tmp.config/cron.weekdaily.log
+5        15       *      *      1-5   find ~/.config/cron/weekdaily -type f -executable -readable -exec {} + &>/tmp/cron_weekdaily.log
 
 
 # 15:10, Monday once a week
 
-11       15       *      *       1    find ~/.config/cron/weekly -regextype posix-extended -type f -executable -readable -exec {} + &>/tmp.config/cron.weekly.log
+11       15       *      *       1    find ~/.config/cron/weekly -type f -executable -readable -exec {} + &>/tmp/cron_weekly.log
 
 # 15:15, once a month on the very first day
 
-16       15       1      *       *    find ~/.config/cron/monthly -type f -executable -readable -regex -exec {} + &>/tmp.config/cron.monthly.log
+16       15       1      *       *    find ~/.config/cron/monthly -type f -executable -readable -exec {} + &>/tmp/cron_monthly.log
 
 # 15:25 Monday every other week 
-25       15       7      *       *    find ~/.config/cron/fortnightly -regextype posix-extended -type f -executable -readable -exec bash {} + &>/tmp.config/cron.fortnightly.log
-25       15      21      *       *    find ~/.config/cron/fortnightly -regextype posix-extended -type f -executable -readable -exec bash {} + &>/tmp.config/cron.fortnightly.log
+25       15       7      *       *    find ~/.config/cron/fortnightly -type f -executable -readable -exec bash {} + &>/tmp/cron_fortnightly.log
+25       15      21      *       *    find ~/.config/cron/fortnightly -type f -executable -readable -exec bash {} + &>/tmp/cron_fortnightly.log
 
 
 # 15:30 on the Christmas Day
 
-31       15      24     12       *    find ~/.config/cron/yearly -regextype posix-extended -type f -executable -readable -exec {} + &>/tmp.config/cron.yearly.log 
+31       15      24     12       *    find ~/.config/cron/yearly -type f -executable -readable -exec {} + &>/tmp/cron_yearly.log 
 
 # reboot
-@reboot 			      find ~/.config/cron/reboot -regextype posix-extended -type f -executable -readable -exec {} + &>/tmp.config/cron.reboot.log
+@reboot 			      find ~/.config/cron/reboot -type f -executable -readable -exec {} + &>/tmp/cron_reboot.log
