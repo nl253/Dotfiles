@@ -107,7 +107,7 @@ fi
 [ -x $(command which 7z 2>/dev/null) ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 
 # Databases
-if [ $(hostname) = "raptor" ]; then
+if [ $(hostname) = raptor ]; then
   [ -x $(command which mysql 2>/dev/null) ] && alias mysql-dragon='mysql -u nl253 -p -h dragon.kent.ac.uk nl253'
   [ -x $(command which mycli 2>/dev/null) ] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253'
 fi
