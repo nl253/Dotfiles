@@ -4,6 +4,8 @@ export ENV=$HOME/.config/sh/init.sh
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 
+export JAVA_HOME=/usr/lib/jvm/default/
+
 # toolchain to use for Rust
 export DEFAULT_TOOLCHAIN=nightly
 
@@ -53,7 +55,7 @@ export FIGNORE='~:.o:.swp:__:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp
 export QT_SELECT=5
 
 # $PATH
-for directory in '.local' '.yarn' '.stack' '.cabal' '.config/composer/vendor' '.cargo' '.local/share/fzf' 'go' 'node_modules'; do
+for directory in .{local,yarn,stack,cabal,cargo} '.config/composer/vendor' '.local/share/fzf' 'go' 'node_modules'; do
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
 
@@ -61,7 +63,15 @@ done
 if [ -x $(command which psql 2>/dev/null) ]; then
   export PGUSER=postgres
   export PGHOST=localhost
-  export PGDATABASE=testing
+  # export PGDATABASE=testing
+fi
+
+# MySQL
+if [ -x $(command which mysql 2>/dev/null) ]; then
+	export MYSQL_PS1=' MySQL ~> '
+	if [ $(hostname) = raptor ]; then
+		export MYSQL_HOST='dragon.kent.ac.uk'
+	fi
 fi
 
 # $BROWSER
