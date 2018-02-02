@@ -1,5 +1,5 @@
 ﻿###
-###  vlc 2.2.6
+###  vlc 2.2.8
 ###
 
 ###
@@ -3213,7 +3213,7 @@ skins2-last=/usr/share/vlc/skins2/default.vlt
 #sout-avi-subject=
 
 # Encoder (string)
-#sout-avi-encoder=VLC Media Player - 2.2.6 Umbrella
+#sout-avi-encoder=VLC Media Player - 2.2.8 Weatherwax
 
 # Keywords (string)
 #sout-avi-keywords=
