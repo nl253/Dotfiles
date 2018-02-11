@@ -30,7 +30,7 @@ alias sudo='sudo '
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
 
 # dirs and files
-alias ls='ls --color=auto --group-directories-first'
+alias ls='ls --color=auto --group-directories-first --hide tags --hide "*{cache,history}*" --hide "{~,_}*" --hide "*~" --hide "*-{log,lock}" --hide "*.{log,class,so,beam,o,pyc,pyg,aux,toc,swp,tmp,fls,fdb_latexmk,lock}"'
 
 alias ..="cd .."
 alias ...="cd ../.."

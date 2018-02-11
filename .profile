@@ -4,6 +4,9 @@ export ENV=$HOME/.config/sh/init.sh
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 
+# erlang
+export ERL_LIBS=/home/norbert/Documents/Erlang/lib
+
 export JAVA_HOME=/usr/lib/jvm/default/
 
 # toolchain to use for Rust
