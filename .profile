@@ -62,6 +62,10 @@ for directory in .{local,yarn,stack,cabal,cargo} '.config/composer/vendor' '.loc
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
 
+# for directory in '/usr/lib/jvm/java-9-openjdk'; do
+  # [ -d "${directory}/bin" ] && export PATH="${directory}/bin:${PATH}:" 2>/dev/null
+# done
+
 # PostgreSQL
 if [ -x $(command which psql 2>/dev/null) ]; then
   export PGUSER=postgres
