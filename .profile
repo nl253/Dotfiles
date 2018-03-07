@@ -1,5 +1,6 @@
 # ~/.profile sourced by all login shells
 
+export ERL_AFLAGS="-kernel shell_history enabled"
 export ENV=$HOME/.config/sh/init.sh
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
