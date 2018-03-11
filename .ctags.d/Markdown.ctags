@@ -1,0 +1,7 @@
+--langdef=Markdown 
+--langmap=Markdown:.md
+--langmap=Markdown:+.markdown
+--langmap=Markdown:+.mdown
+--langmap=Markdown:+.Rmd
+--regex-Markdown=/^#+ ?([-() \/'\ta-zA-Z0-9,;_?!\.`:;]{2,})/\1/h,heading/
+--regex-Markdown=/!?\[([-a-zA-Z0-9_]{4,}?)\]\(.{5,}?\)/\1/a,hyperlink/

@@ -1,0 +1,12 @@
+--maxdepth=4
+--recurse=yes
+--tag-relative=yes
+--sort=yes
+--guess-language-eagerly
+
+--exclude=.*/(go|cache|Downloads|out|dist|target|build|node_modules)/.*
+--exclude=.*/\..*/.*
+--exclude=\..*
+--exclude=.*%.*
+
+--languages=Haskell,Erlang,Sh,Rust,Markdown,Java,reStructuredText,Vim,OrgMode

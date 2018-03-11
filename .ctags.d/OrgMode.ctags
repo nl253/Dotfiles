@@ -1,0 +1,5 @@
+--langdef=OrgMode
+--langmap=OrgMode:.org 
+--regex-OrgMode=/^\#+TITLE: (.+).*/\1/t,title/
+--regex-OrgMode=/^\*+ ?(.+)/\1/h,heading/
+--regex-OrgMode=/^\[\[.*\]\[(.*)\]\]/\1/a,hyperlink/

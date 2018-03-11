@@ -1,0 +1,10 @@
+--regex-Tex=/\\label\{([^}]*)\}/\1/l,label/
+--regex-Tex=/\\(section|paragraph)\{([^}]*)\}/\2/t,\1/
+--regex-Tex=/\\sub(section|paragraph)\{([^}]*)\}/\2/T,\1/
+--regex-Tex=/\\subsub(section|paragraph)\{([^}]*)\}/\2/u,\1/
+--regex-Tex=/\\includegraphics[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/g,graphic/
+--regex-Tex=/\\lstinputlisting[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/L,listing/
+--regex-Tex=/\\pageref[[:space:]]*\{([^}]+)\}/\1/p,pageref/
+--regex-Tex=/\\ref[[:space:]]*\{([^}]+)\}/\1/r,ref/
+--regex-Tex=/^\\(chapter|part)[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/ \3/s,chapter/
+--regex-Tex=/^\\(chapter|part)[[:space:]]*\*[[:space:]]*\{([^}]+)\}/ \2/S,chapter/ 

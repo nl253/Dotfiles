@@ -1,0 +1,7 @@
+--regex-reStructuredText=/^:: _([^:]+): (.*)/\1/U,URI/
+--regex-reStructuredText=/^\s*(\S+) : (.*)$/\1: \2/d,defintion/
+--regex-reStructuredText=/^\s*(\S+) : (.*) : (.*)$/k,\1/D,defintion/
+--regex-reStructuredText=/^\.{2} _(.*): .*$/\1/E,external hyperlink/
+--regex-reStructuredText=/`([^` \t]+) ([^`]+)`__?/\1/a,hyperlink/
+--regex-reStructuredText=/_`([^`]+)`: /\1/i,inline internal reference/
+--regex-reStructuredText=/`([^`]+)`_/\1/A,hyperlink/

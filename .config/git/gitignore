@@ -41,7 +41,6 @@
 ## package managers
 
 node_modules/
-node_modules/
 *-lock.json
 *.lock
 
@@ -64,7 +63,7 @@ docs/
 build/
 dist/
 
-## C and C++ 
+## C and C++
 
 *.o
 doc/
