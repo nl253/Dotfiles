@@ -79,4 +79,4 @@
 --regex-Asciidoc=/image:([^:][^\[]+)/\1/I/
 --regex-Asciidoc=/include::([^\[]+)/\1/n/
 
---languages=Sh,Python,Rust,Markdown,Rst,Javascript,Vorg,Java,C,C++,reStructuredText,Vim,Php,Maven2,Tex,BibTex,SQL
+--languages=Erlang,Sh,Python,Rust,Markdown,Rst,Javascript,Vorg,Java,C,C++,reStructuredText,Vim,Php,Maven2,Tex,BibTex,SQL
