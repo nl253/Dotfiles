@@ -1,20 +1,12 @@
 # ~/.profile sourced by all login shells
 
-export ERL_AFLAGS="-kernel shell_history enabled"
 export ENV=$HOME/.config/sh/init.sh
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 
-# erlang
-export ERL_LIBS=/home/norbert/Documents/Erlang/lib
-
-export JAVA_HOME=/usr/lib/jvm/default/
-
-# toolchain to use for Rust
-export DEFAULT_TOOLCHAIN=nightly
-
 # Don't check mail when opening terminal.
 unset MAILCHECK
+
 
 # $EDITOR
 for i in nvim vim vi; do
@@ -88,6 +80,19 @@ for i in google-chrome-{unstable,beta,stable} firefox{-developer,}; do
     export BROWSER=$(command which $i 2>/dev/null) && break
   fi
 done
+
+# Erlang
+# ------
+export ERL_AFLAGS="-kernel shell_history enabled"
+export ERL_LIBS=/home/norbert/.local/lib/erlang
+
+# Java
+# ----
+export JAVA_HOME=/usr/lib/jvm/default/
+
+# Rust
+# ----
+export DEFAULT_TOOLCHAIN=nightly
 
 # FZF (keymap)
 # ------------------------

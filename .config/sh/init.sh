@@ -14,7 +14,7 @@ export PS1="${USER}@${HOSTNAME}${0} $ "
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ${HOME}/Documents ${HOME}/Documents/*; do
+for directory in ${HOME}/Documents ${HOME}/Documents/* ${HOME}/Documents/Programming/{Java,Python,Rust} ~/Documents/Programming/Functional\ Programming ~/Documents/Uni/{Assignments,}; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -31,11 +31,6 @@ alias sudo='sudo '
 
 # dirs and files
 alias ls='ls --color=auto --group-directories-first --hide tags --hide "*cache*" --hide "*history*" --hide "~*" --hide "_*" --hide "*~" --hide "*-log" --hide "*-lock" --hide "*.log" --hide "*.class" --hide "*.so" --hide "*.beam" --hide "*.o" --hide "*.pyc" --hide "*.pyg" --hide "*.aux" --hide "*.toc" --hide "*.swp" --hide "*.tmp" --hide "*.fls" --hide "*.fdb_latexmk" --hide "*.lock"'
-
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
 
 # pattern matching
 for i in {f,e,}grep; do
