@@ -1,0 +1,9 @@
+jobs: 4
+templates:
+  params:
+    author-email: norbertlogiewa96@gmail.com
+    copyright: mit
+    github-username: nl253
+    author-name: Norbert Logiewa
+system-ghc: false
+install-ghc: true

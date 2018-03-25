@@ -49,7 +49,7 @@ zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,comm -w -w"
 
 # ignore uninteresting files
 for i in files paths all-files; do 
-	zstyle ":completion:*:$i" ignored-patterns 'tags' '*.swp' '*.bak' '*history*' '*cache*' '*.pyc' '*.class' '*.o' '*.so' '*.fls' '*.lock' '*.iml' '*.aux'
+	zstyle ":completion:*:$i" ignored-patterns 'tags' '*.swp' '*.bak' '*history*' '*cache*' '*.pyc' '*.class' '*.o' '*.so' '*.fls' '*.lock' '*.iml' '*.aux' '*.hi' '*.beam'
 done
 
 # ignore functions that start with an underscore (typically private to a script)

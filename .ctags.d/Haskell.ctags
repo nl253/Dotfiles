@@ -1,0 +1,7 @@
+--langdef=Haskell
+--langmap=Haskell:.hs 
+--regex-Haskell=/^([^-]+) :: .*/\1/f,function/
+--regex-Haskell=/^module ([A-Z]\w+) .*/\2/m,module/
+--regex-Haskell=/^class ([A-Z]\w+) .*/\2/c,class/
+--regex-Haskell=/^data ([A-Z]\w+) .*/\2/d,data/
+--regex-Haskell=/^(new)?type ([A-Z]\w+) .*/\2/t,type alias/

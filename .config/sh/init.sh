@@ -30,7 +30,7 @@ alias sudo='sudo '
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
 
 # dirs and files
-alias ls='ls --color=auto --group-directories-first --hide tags --hide "*cache*" --hide "*history*" --hide "~*" --hide "_*" --hide "*~" --hide "*-log" --hide "*-lock" --hide "*.log" --hide "*.class" --hide "*.so" --hide "*.beam" --hide "*.o" --hide "*.pyc" --hide "*.pyg" --hide "*.aux" --hide "*.toc" --hide "*.swp" --hide "*.tmp" --hide "*.fls" --hide "*.fdb_latexmk" --hide "*.lock"'
+alias ls='ls --color=auto --group-directories-first -I tags -I "*cache*" -I "*history*" -I "~*" -I "_*" -I "*~" -I "*-log" -I "*-lock" -I "*.log" -I "*.class" -I "*.so" -I "*.beam" -I "*.o" -I "*.pyc" -I "*.pyg" -I "*.aux" -I "*.toc" -I "*.swp" -I "*.tmp" -I "*.fls" -I "*.fdb_latexmk" -I "*.lock" -I "*.hi"'
 
 # pattern matching
 for i in {f,e,}grep; do
@@ -40,9 +40,10 @@ done
 alias diff='diff --color=auto --suppress-common-lines --side-by-side --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
 
 # split path on ":"
-alias show-path='echo -e ${PATH//:/\\n} | sort | grep -P "^.{3,}$"'
-alias df='df --human-readable --si --total'
-alias du='du --human-readable --si --summarize --total'
+alias show-path='echo -e ${PATH//:/\\n} | grep -E "^.{3,}$"'
+for i in df du; do
+  alias $i="$i --human-readable --si --total"
+done
 alias info='info --vi-keys'
 alias logout="pkill -KILL -u \$USER"
 [ -x $(command which ipython 2>/dev/null) ] && alias ipython="ipython3 --pylab=qt5 --gui=qt5"
@@ -54,8 +55,10 @@ if [ -x $(command which rsync 2>/dev/null) ]; then
   alias copy="rsync --ignore-missing-args --copy-links --executability --group --hard-links --human-readable  --itemize-changes --partial --perms --progress --recursive --rsh=bash --stats --times --verbose --whole-file --xattrs"
 fi
 
-alias mv="mv --verbose"
-alias rm="rm --verbose"
+for i in mv rm; do
+  alias $i="$i --verbose"
+done
+
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
 [ -x $(command which libreoffice 2>/dev/null) ] && alias libreoffice="libreoffice --norestore"
@@ -73,6 +76,7 @@ fi
 
 # mount a remote hard-drive
 [ -x $(command which sshfs 2>/dev/null) ] && alias mount-raptor="mkdir -p \${HOME}/Raptor && sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: \${HOME}/Raptor"
+# get ip address
 [ -x $(command which curl 2>/dev/null) ] && alias my-ip='curl ipinfo.io/ip'
 
 # Package Management - pacman, yaourt, expac

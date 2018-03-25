@@ -1,0 +1,3 @@
+--langdef=Mediawiki
+--langmap=Mediawiki:.wiki
+--regex-Mediawiki=/^(={1,6})[[:space:]]?([^=]+)[[:space:]]?\1?$/\2/h,header/
