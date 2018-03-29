@@ -7,7 +7,6 @@ export LANG=en_GB.UTF-8
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-
 # $EDITOR
 for i in nvim vim vi; do
   if [ -x $(command which $i 2>/dev/null) ]; then
@@ -56,7 +55,7 @@ for directory in .{local,yarn,stack,cabal,cargo} '.config/composer/vendor' '.loc
 done
 
 # for directory in '/usr/lib/jvm/java-9-openjdk'; do
-  # [ -d "${directory}/bin" ] && export PATH="${directory}/bin:${PATH}:" 2>/dev/null
+# [ -d "${directory}/bin" ] && export PATH="${directory}/bin:${PATH}:" 2>/dev/null
 # done
 
 # PostgreSQL
@@ -68,10 +67,10 @@ fi
 
 # MySQL
 if [ -x $(command which mysql 2>/dev/null) ]; then
-	export MYSQL_PS1=' MySQL ~> '
-	if [ $(hostname) = raptor ]; then
-		export MYSQL_HOST='dragon.kent.ac.uk'
-	fi
+  export MYSQL_PS1=' MySQL ~> '
+  if [ $(hostname) = raptor ]; then
+    export MYSQL_HOST='dragon.kent.ac.uk'
+  fi
 fi
 
 # $BROWSER

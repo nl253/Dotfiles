@@ -18,6 +18,7 @@
     "mancy": "^3.1.0",
     "markdownlint": "^0.8.1",
     "parcel-bundler": "^1.2.0",
+    "prettier": "^1.11.1",
     "remark-lint": "^6.0.1",
     "showdown": "^1.8.0",
     "standard": "^10.0.3",

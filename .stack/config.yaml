@@ -2,8 +2,12 @@ jobs: 4
 templates:
   params:
     author-email: norbertlogiewa96@gmail.com
-    copyright: mit
+    copyright: MIT
     github-username: nl253
     author-name: Norbert Logiewa
 system-ghc: false
 install-ghc: true
+ghc-options:
+  "$locals": -Wall
+  "$targets": -Werror
+  "$everything": -O2 -XOverloadedStrings -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators -XGADTs -XOverloadedLists
