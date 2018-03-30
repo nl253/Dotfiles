@@ -37,7 +37,8 @@
     root      = rev-parse --show-toplevel
     tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
     unpushed  = log --branches --not --remotes
-    untracked = ls-files --others
+ 	ignored = ls-files . --ignored --exclude-standard --others
+    untracked = ls-files . --ignored --exclude-standard --others
     modified  = ls-files --modified
 
     untracked-zip    = "!zip untracked.zip $(git ls-files --others --exclude-standard | xargs)"
