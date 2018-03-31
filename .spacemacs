@@ -32,12 +32,8 @@ values."
    dotspacemacs-configuration-layers
    '(
      ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
+     ;; Press <SPC f e R> (Vim style) or <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     typescript
-     javascript
      helm
      auto-completion
      emacs-lisp
@@ -47,17 +43,15 @@ values."
      markdown
      shell-scripts
      yaml
-     ;; org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     haskell
+     org
      html
-     ;; spell-checking
-     ;; php
      git
-     ;; python
      markdown
-     ;; better-defaults
+     spell-checking
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -228,7 +222,7 @@ values."
    dotspacemacs-loading-progress-bar t
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
    dotspacemacs-fullscreen-use-non-native nil
@@ -281,7 +275,7 @@ values."
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
-   dotspacemacs-highlight-delimiters 'current
+   dotspacemacs-highlight-delimiters 'all
    ;; If non nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
    dotspacemacs-persistent-server nil
@@ -328,7 +322,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (web-mode tagedit smeargle slim-mode scss-mode sass-mode pug-mode org-plus-contrib magit-gitflow less-css-mode helm-gitignore request helm-css-scss haml-mode gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit emmet-mode company-web web-completion-data tide typescript-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode yaml-mode which-key use-package toml-mode racer pcre2el mmm-mode markdown-toc magit-gh-pulls macrostep insert-shebang hydra help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag github-search github-clone github-browse-file git-gutter-fringe git-gutter-fringe+ gist gh-md fuzzy flycheck-rust flycheck-pos-tip fish-mode exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav diff-hl company-statistics company-shell cargo bind-map auto-yasnippet auto-compile ace-window ace-jump-helm-line ac-ispell))))
+    (xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode orgit markdown-mode projectile flx magit magit-popup ghub fringe-helper git-gutter+ git-gutter git-commit gh marshal logito pcache ht pos-tip flycheck pkg-info epl let-alist with-editor evil goto-chg undo-tree diminish s dash company bind-key yasnippet packed helm avy helm-core async auto-complete popup web-mode tagedit smeargle slim-mode scss-mode sass-mode pug-mode org-plus-contrib magit-gitflow less-css-mode helm-gitignore request helm-css-scss haml-mode gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit emmet-mode company-web web-completion-data tide typescript-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode yaml-mode which-key use-package toml-mode racer pcre2el mmm-mode markdown-toc magit-gh-pulls macrostep insert-shebang hydra help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag github-search github-clone github-browse-file git-gutter-fringe git-gutter-fringe+ gist gh-md fuzzy flycheck-rust flycheck-pos-tip fish-mode exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav diff-hl company-statistics company-shell cargo bind-map auto-yasnippet auto-compile ace-window ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
