@@ -14,7 +14,7 @@ export PS1="${USER}@${HOSTNAME}${0} $ "
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ${HOME}/Documents ${HOME}/Documents/* ${HOME}/Documents/Programming/{Java,Python,Rust} ~/Documents/Programming/Functional\ Programming ~/Documents/Uni/{Assignments,}; do
+for directory in ${HOME}/Documents/Vim/vim-programming/after/ftplugin/haskell/base ${HOME}/Documents ${HOME}/Documents/* ${HOME}/Documents/Programming/{Java,Python,Rust} ~/Documents/Programming/Functional\ Programming ~/Documents/Uni/{Assignments,}; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -52,7 +52,7 @@ alias logout="pkill -KILL -u \$USER"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 
 if [ -x $(command which rsync 2>/dev/null) ]; then
-  alias copy="rsync --ignore-missing-args --copy-links --executability --group --hard-links --human-readable  --itemize-changes --partial --perms --progress --recursive --rsh=bash --stats --times --verbose --whole-file --xattrs"
+  alias copy="rsync --progress --log-file=/tmp/rsync.log --recursive --backup --backup-dir=/tmp --human-readable --times --preallocate --partial --partial-dir=/tmp/rsync-partially-copied --suffix=rsync-backup --hard-links --group --perms -xattrs --executability --copy-links --copy-dirlinks --compress --compress-level 9 --verbose"
 fi
 
 for i in mv rm; do
