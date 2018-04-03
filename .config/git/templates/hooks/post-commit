@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-git log -1 --stat 
+git --no-pager log -1 --stat --color=always

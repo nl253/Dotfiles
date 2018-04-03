@@ -14,7 +14,7 @@ export PS1="${USER}@${HOSTNAME}${0} $ "
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ${HOME}/Documents ${HOME}/Documents/* ${HOME}/Documents/Programming/{Java,Python,Rust} ~/Documents/Programming/Functional\ Programming ~/Documents/Uni/{Assignments,}; do
+for directory in ${HOME}/Documents/Vim/vim-programming/after/ftplugin/haskell/base ${HOME}/Documents ${HOME}/Documents/* ${HOME}/Documents/Programming/{Java,Python,Rust} ~/Documents/Programming/Functional-Programming ~/Documents/Uni/{Assignments,}; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -28,6 +28,11 @@ alias sudo='sudo '
 
 # get MIME type of a file
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
+
+if [ -x $(which ghci) ]; then
+	alias ghci='ghc --interactive -threaded -j4 -fprint-unicode-syntax -fprint-expanded-synonyms -fdiagnostics-color=always -Wcompat -Wredundant-constraints -Wdeprecations -Wunused-foralls -Wunused-local-binds -Wunused-binds -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wname-shadowing -Wnoncanonical-monad-instances -Wsemigroup -Wincomplete-uni-patterns'
+	alias ghc='ghc -threaded -j4 -fprint-expanded-synonyms -fprint-potential-instances -fdiagnostics-color=always -Wcompat -Wredundant-constraints -Wdeprecations -Wunused-foralls -Wunused-local-binds -Wunused-binds -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wname-shadowing -Wnoncanonical-monad-instances -Wsemigroup -Wincomplete-uni-patterns'
+fi
 
 # dirs and files
 alias ls='ls --color=auto --group-directories-first -I tags -I "*cache*" -I "*history*" -I "~*" -I "_*" -I "*~" -I "*-log" -I "*-lock" -I "*.log" -I "*.class" -I "*.so" -I "*.beam" -I "*.o" -I "*.pyc" -I "*.pyg" -I "*.aux" -I "*.toc" -I "*.swp" -I "*.tmp" -I "*.fls" -I "*.fdb_latexmk" -I "*.lock" -I "*.hi"'
@@ -52,7 +57,7 @@ alias logout="pkill -KILL -u \$USER"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 
 if [ -x $(command which rsync 2>/dev/null) ]; then
-  alias copy="rsync --ignore-missing-args --copy-links --executability --group --hard-links --human-readable  --itemize-changes --partial --perms --progress --recursive --rsh=bash --stats --times --verbose --whole-file --xattrs"
+  alias copy="rsync --progress --log-file=/tmp/rsync.log --recursive --backup --backup-dir=/tmp --human-readable --times --preallocate --partial --partial-dir=/tmp/rsync-partially-copied --suffix=rsync-backup --hard-links --group --perms -xattrs --executability --copy-links --copy-dirlinks --compress --compress-level 9 --verbose"
 fi
 
 for i in mv rm; do

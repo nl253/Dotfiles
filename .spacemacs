@@ -10,7 +10,7 @@ values."
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
    ;; or `spacemacs'. (default 'spacemacs)
-   dotspacemacs-distribution 'spacemacs-base
+   dotspacemacs-distribution 'spacemacs
    ;; Lazy installation of layers (i.e. layers are installed only when a file
    ;; with a supported type is opened). Possible values are `all', `unused'
    ;; and `nil'. `unused' will lazy install only unused layers (i.e. layers
@@ -31,23 +31,25 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     erlang
      ;; ----------------------------------------------------------------
      ;; Press <SPC f e R> (Vim style) or <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
      auto-completion
      emacs-lisp
-     github
+     ;; erlang
+     ;; github
      syntax-checking
-     version-control
-     markdown
+     ;; version-control
+     ;; markdown
      shell-scripts
-     yaml
+     ;; yaml
      haskell
      org
-     html
-     git
-     markdown
+     ;; html
+     ;; git
+     ;; markdown
      spell-checking
      (shell :variables
             shell-default-height 30
@@ -104,7 +106,7 @@ values."
    ;; with `:variables' keyword (similar to layers). Check the editing styles
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
-   dotspacemacs-editing-style 'vim
+   dotspacemacs-editing-style 'hybrid
    ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
@@ -311,21 +313,5 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  (setq scroll-margin 11)
   )
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot intero hlint-refactor hindent helm-hoogle haskell-snippets flycheck-haskell company-ghci company-ghc ghc haskell-mode company-cabal cmm-mode orgit markdown-mode projectile flx magit magit-popup ghub fringe-helper git-gutter+ git-gutter git-commit gh marshal logito pcache ht pos-tip flycheck pkg-info epl let-alist with-editor evil goto-chg undo-tree diminish s dash company bind-key yasnippet packed helm avy helm-core async auto-complete popup web-mode tagedit smeargle slim-mode scss-mode sass-mode pug-mode org-plus-contrib magit-gitflow less-css-mode helm-gitignore request helm-css-scss haml-mode gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit emmet-mode company-web web-completion-data tide typescript-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode yaml-mode which-key use-package toml-mode racer pcre2el mmm-mode markdown-toc magit-gh-pulls macrostep insert-shebang hydra help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag github-search github-clone github-browse-file git-gutter-fringe git-gutter-fringe+ gist gh-md fuzzy flycheck-rust flycheck-pos-tip fish-mode exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav diff-hl company-statistics company-shell cargo bind-map auto-yasnippet auto-compile ace-window ace-jump-helm-line ac-ispell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

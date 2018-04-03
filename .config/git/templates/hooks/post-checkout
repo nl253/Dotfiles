@@ -1,1 +1,20 @@
 #!/usr/bin/env bash
+
+OLD_REF=$1
+NEW_REF=$2
+
+if [[ $OLD_REF == $NEW_REF ]]; then
+  exit 0
+fi
+
+fmt_heading() {
+  command cat <<EOF
+$(tput bold)$(tput setaf 3)$*$(tput sgr0)
+EOF
+}
+
+fmt_heading "CHECKOUT"
+echo -e "\n$(tput bold)Branches$(tput sgr0)\n$(git --no-pager branch -v --color=always)\n"
+echo -e "$(tput setaf 4)${OLD_REF} $(tput setaf 6)=> $(tput setaf 4)${NEW_REF}$(tput sgr0)"
+
+git --no-pager diff --stat --color=always ${OLD_REF} || exit 0

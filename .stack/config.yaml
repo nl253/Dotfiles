@@ -1,3 +1,4 @@
+# vim:ft=yaml:
 jobs: 4
 templates:
   params:
@@ -8,4 +9,6 @@ templates:
 system-ghc: false
 install-ghc: true
 ghc-options:
-  "$everything": -O2 -XOverloadedStrings -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators -XGADTs -XOverloadedLists
+  "$everything": -O2 -XDeriveFunctor -XDeriveFoldable -XDeriveTraversable -XPartialTypeSignatures -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators
+  # "$everything": -O2 -XFlexibleContexts -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators -XGADTs
+  # "$everything": -O2 -XFlexibleContexts -XOverloadedStrings -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators -XGADTs -XOverloadedLists

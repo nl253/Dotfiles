@@ -19,7 +19,8 @@ set nospell
 set nostartofline
 set number
 set spelllang=en_gb
-set surround mps+=<:>
+set surround 
+set mps+=<:>
 set virtualedit=all
 set visualbell
 set wildmode=full

@@ -1,2 +1,0 @@
-code:load_abs("/full/path/to/proper").
-%% vim:ft=erlang:
