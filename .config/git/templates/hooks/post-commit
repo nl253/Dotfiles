@@ -1,6 +1,2 @@
 #!/usr/bin/env bash
-cat <<EOF
-Successfully committed
----------------------------------------------------
-$(git --no-pager log -1 --stat)
-EOF
+git --no-pager log -1 --stat --color=always

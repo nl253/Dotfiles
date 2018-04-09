@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 _fmt_heading() {
-  cat <<EOF
+  command cat <<EOF
 $(tput bold)$(tput setaf 3)$*$(tput sgr0)
 EOF
 }
 
 _fmt_error() {
-  cat <<EOF
+  command cat <<EOF
 $(tput setaf 1)[ERROR] $*$(tput sgr0).
 EOF
 }
@@ -27,15 +27,15 @@ fi
 commit_msg_file=$1
 
 subject_line() {
-  head -n 1 $commit_msg_file
+  command head -n 1 $commit_msg_file
 }
 
 line_count() {
-  cat $commit_msg_file | command grep --count .
+  command cat $commit_msg_file | command grep --count .
 }
 
 second_line() {
-  head -n 2 $commit_msg_file
+  command head -n 2 $commit_msg_file
 }
 
 # the main message
@@ -59,7 +59,7 @@ For details see <https://github.com/agis/git-style-guide#messages>
 
 $(_fmt_heading "THE MESSAGE ")
 
-"$(cat "$commit_msg_file" | grep -Ev '^#')"
+"$(cat "$commit_msg_file" | command grep -Ev '^#')"
 
 $(_fmt_heading "ISSUE")
 >> ${1}.
@@ -72,33 +72,25 @@ EOF
 if [[ $(subject_line) =~ ^[[:space:]]+ ]]; then
   error_msg "Leading spaces in the subject"
   exit 1
-fi
-if [[ $(subject_line) =~ ^[a-z] ]]; then
+elif [[ $(subject_line) =~ ^[a-z] ]]; then
   error_msg "Uncapitalised subject"
   exit 1
-fi
-if [[ ! $(subject_line) =~ ^[[:print:][:space:]]+$ ]]; then
+elif [[ ! $(subject_line) =~ ^[[:print:][:space:]]+$ ]]; then
   error_msg "Use of unprintable characters"
   exit 1
-fi
-if [[ $(subject_line) =~ [[:alpha:]]{3,}ed[[:space:]] ]]; then
+elif [[ $(subject_line) =~ [[:alpha:]]{3,}ed[[:space:]] ]]; then
   error_msg "Possible use of past tense"
   exit 1
-fi
-if [[ $(subject_line) =~ \.$ ]]; then
+elif [[ $(subject_line) =~ \.$ ]]; then
   error_msg "The subject ends with a fullstop (period)"
   exit 1
-fi
-if [[ $(subject_line) =~ .{51,} ]]; then
+elif [[ $(subject_line) =~ .{51,} ]]; then
   error_msg "The subject is too long - max is 50 chars"
   exit 1
-fi
-if [[ $(subject_line) =~ \\t ]]; then
+elif [[ $(subject_line) =~ \\t ]]; then
   error_msg "Use of tab"
   exit 1
-fi
-
-if [[ $(subject_line) =~ \ +$ ]]; then
+elif [[ $(subject_line) =~ \ +$ ]]; then
   error_msg "Trailing spaces"
   exit 1
 fi
@@ -139,5 +131,5 @@ command cat <<EOF
 
 $(tput bold)The following commit message has been submitted$(tput sgr0)
 
-$(command cat $commit_msg_file)
+"$(command cat $commit_msg_file)"
 EOF
