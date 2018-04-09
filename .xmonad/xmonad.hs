@@ -28,22 +28,18 @@ myTerminal :: String
 myTerminal = "alacritty -e tmux"
 
 -- Whether focus follows the mouse pointer.
-myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = False
 
 -- Whether clicking on a window to focus also passes the click to the window
-myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
 -- Width of the window border in pixels.
---
-myBorderWidth = 3
+myBorderWidth = 1
 
 -- modMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
 -- ("right alt"), which does not conflict with emacs keybindings. The
 -- "windows key" is usually mod4Mask.
---
 myModMask = mod4Mask
 
 -- The default number of workspaces (virtual screens) and their names.
@@ -55,13 +51,13 @@ myModMask = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces = ["1:term", "2:chrome", "3:ide", "4:spotify"] ++ fmap show [5..9]
+myWorkspaces =
+  ["1:term", "2:chrome", "3:ide", "4:spotify"] ++ fmap show [5 .. 9]
 
 -- Border colors for unfocused and focused windows, respectively.
---
-myNormalBorderColor = "#dddddd"
+myNormalBorderColor = "#000000"
 
-myFocusedBorderColor = "#ff0000"
+myFocusedBorderColor = "#ffc251"
 
 ------------------------------------------------------------------------
 -- Key bindings.
@@ -80,19 +76,22 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
   , ((modm .|. shiftMask, xK_space), setLayout $ XMonad.layoutHook conf)
   -- Brightness and  volume.  (notify-send, xbacklight, amixer, scrot)
   , ( (0, 0x1008ff02)
-    , spawn $ "backlight +5; notify-send " ++ show "Brightness up +5")
+    , spawn $ "backlight +2; notify-send " ++ show "Brightness up +5")
   , ( (0, 0x1008ff03)
-    , spawn $ "backlight -5; notify-send " ++ show "Brightness Down -5")
+    , spawn $ "backlight -2; notify-send " ++ show "Brightness down -5")
   , ( (0, 0x1008ff12)
     , spawn $
       "amixer -q set Master toggle; notify-send " ++ show "Toggle volume")
   , ( (0, 0x1008ff13)
-    , spawn $ "amixer -D pulse sset Master 5%+; notify-send " ++ show "Volume up +5")
+    , spawn $
+      "amixer -D pulse sset Master 5%+; notify-send " ++ show "Volume up +5")
   , ( (0, 0x1008ff11)
-    , spawn $ "amixer -D pulse sset Master 5%-; notify-send " ++ show "Volume down -5")
+    , spawn $
+      "amixer -D pulse sset Master 5%-; notify-send " ++ show "Volume down -5")
   , ( (0, xK_Print)
-    , spawn
-        "sleep 0.2; scrot '%Y-%m-%d_%H-%M_$wx$h.png' -e 'mv $f ~/Pictures/' ; notify-send \"Print Screen Saved to ~/Pictures\"")
+    , spawn $
+      "sleep 0.2; scrot '%Y-%m-%d_%H-%M_$wx$h.png' -e 'mv $f ~/Pictures/' ; notify-send " ++
+      show "Print Screen Saved to ~/Pictures")
     -- Resize viewed windows to the correct size
   , ((modm, xK_n), refresh)
     -- Move focus to the next window
@@ -122,7 +121,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
     -- Toggle the status bar gap
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
-    --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
     -- Quit xmonad
   , ((modm .|. shiftMask, xK_q), io (exitWith ExitSuccess))
@@ -137,14 +135,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
   [ ((m .|. modm, k), windows $ f i)
   | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
   , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
-  ] ++
-    --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
-  [ ((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-  | (key, sc) <- zip [xK_w, xK_e, xK_r] [0 ..]
-  , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
   ]
 
 ------------------------------------------------------------------------
@@ -157,11 +147,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout =
-  Full |||
-  spiral (5 / 7) |||
-  TwoPane (3 / 100) (1 / 2) |||
-  GridRatio (4 / 3) False ||| FixedColumn 1 20 80 10
+myLayout = one ||| two ||| three ||| four
+  where
+    one = Full
+    two = spiral (4 / 8)
+    three = TwoPane (7 / 100) (3 / 7)
+    four = FixedColumn 3 20 80 10
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -182,7 +173,10 @@ myManageHook =
     [ className =? "MPlayer" --> doFloat
     , className =? "Gimp" --> doFloat
     , className =? "Alacritty" --> doShift "1:term"
+    , className =? "spotify" --> doShift "4:spotify"
     , className =? "Google-chrome" --> doShift "2:chrome"
+    , className =? "Google-chrome-beta" --> doShift "2:chrome"
+    , className =? "Google-chrome-nightly" --> doShift "2:chrome"
     , resource =? "desktop_window" --> doIgnore
     , resource =? "kdesktop" --> doIgnore
     ]
@@ -220,7 +214,7 @@ myStartupHook
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 -- Run xmonad with the settings you specify. No need to modify this.
---
+main :: IO ()
 main = xmonad defaults
 
 -- A structure containing your configuration settings, overriding
@@ -228,7 +222,6 @@ main = xmonad defaults
 -- use the defaults defined in xmonad/XMonad/Config.hs
 --
 -- No need to modify this.
---
 defaults =
   def
   { terminal = myTerminal
@@ -239,9 +232,7 @@ defaults =
   , workspaces = myWorkspaces
   , normalBorderColor = myNormalBorderColor
   , focusedBorderColor = myFocusedBorderColor
-      -- key bindings
   , keys = myKeys
-      -- hooks, layouts
   , layoutHook = myLayout
   , manageHook = myManageHook
   , handleEventHook = myEventHook
