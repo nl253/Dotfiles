@@ -147,12 +147,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = one ||| two ||| three ||| four
+myLayout = one ||| two ||| three
   where
     one = Full
     two = spiral (4 / 8)
     three = TwoPane (7 / 100) (3 / 7)
-    four = FixedColumn 3 20 80 10
 
 ------------------------------------------------------------------------
 -- Window rules:

@@ -145,6 +145,8 @@
 [gui]
     commitmsgwidth = 79
     fastcopyblame  = true
+	fontui = -family Cantarell -size 12 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family \"Bitstream Vera Sans Mono\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
 
 [instaweb]
     browser = google-chrome-unstable
