@@ -1,0 +1,32 @@
+# vim:ft=muttrc:
+
+set folder = "imaps://nl253@kent.ac.uk@outlook.office365.com:993"
+set imap_user = "nl253@kent.ac.uk"
+set imap_pass = "Kruszynka96***"
+
+set smtp_pass = "Kruszynka96***"
+
+set imap_check_subscribed = "yes"
+set imap_list_subscribed = "yes"
+
+set spoolfile = '+INBOX'
+
+set ssl_force_tls = yes
+set ssl_use_sslv3 = yes
+set smtp_authenticators = "login"
+
+set hostname = "outlook.office365.com"
+
+set mbox = "imaps://outlook.office365.com/[Uni]/Inbox"
+set realname = "Norbert Logiewa"
+set postponed = "+[Uni]/Drafts"
+# set trash = "+[Uni]/Deleted Items"
+set record = "+[Uni]/Sent Items"
+
+set smtp_url = 'smtps://nl253@kent.ac.uk@smtp.office365.com:587/'
+
+set from = "nl253@kent.ac.uk"
+
+set signature = "Norbert"
+
+account-hook $folder "set imap_user = 'nl253@kent.ac.uk' imap_pass='Kruszynka96***'"

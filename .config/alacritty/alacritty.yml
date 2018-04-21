@@ -107,9 +107,11 @@ custom_cursor_colors: true
 
 # Colors (Tomorrow Night Bright)
 colors:
+ 
   # Default colors
   primary:
-    background: '0x000000'
+    #background: '0x000000'
+    background: '0x1c1c1c'
     foreground: '0xeaeaea'
 
   # Colors the cursor will use if `custom_cursor_colors` is true

@@ -10,7 +10,7 @@ values."
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
    ;; or `spacemacs'. (default 'spacemacs)
-   dotspacemacs-distribution 'spacemacs
+   dotspacemacs-distribution 'spacemacs-base
    ;; Lazy installation of layers (i.e. layers are installed only when a file
    ;; with a supported type is opened). Possible values are `all', `unused'
    ;; and `nil'. `unused' will lazy install only unused layers (i.e. layers
@@ -31,26 +31,26 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     erlang
-     ;; ----------------------------------------------------------------
+     vimscript
+     ;; ---------------------------------------------------------------------------
      ;; Press <SPC f e R> (Vim style) or <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
-     helm
-     auto-completion
-     emacs-lisp
+     ;; ---------------------------------------------------------------------------
      ;; erlang
      ;; github
-     syntax-checking
-     ;; version-control
-     ;; markdown
-     shell-scripts
-     ;; yaml
-     haskell
-     org
      ;; html
-     ;; git
-     ;; markdown
-     spell-checking
+     ;; org
+     ;; haskell
+     ;; version-control
+     ;; spell-checking
+     git
+     vimscript
+     auto-completion
+     emacs-lisp
+     ivy
+     markdown
+     shell-scripts
+     syntax-checking
+     yaml
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
@@ -136,15 +136,15 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+   dotspacemacs-default-font '("Hack"
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
-   ;; (default "SPC")
+   ; fEdefault "SPC")
    dotspacemacs-emacs-command-key "SPC"
    ;; The key used for Vim Ex commands (default ":")
    dotspacemacs-ex-command-key ":"
@@ -168,13 +168,13 @@ values."
    dotspacemacs-remap-Y-to-y$ nil
    ;; If non-nil, the shift mappings `<' and `>' retain visual state if used
    ;; there. (default t)
-   dotspacemacs-retain-visual-state-on-shift t
+   dotspacemacs-retain-visual-state-on-shift nil
    ;; If non-nil, J and K move lines up and down when in visual mode.
    ;; (default nil)
    dotspacemacs-visual-line-move-text nil
    ;; If non nil, inverse the meaning of `g' in `:substitute' Evil ex-command.
    ;; (default nil)
-   dotspacemacs-ex-substitute-global nil
+   dotspacemacs-ex-substitute-global t
    ;; Name of the default layout (default "Default")
    dotspacemacs-default-layout-name "Default"
    ;; If non nil the default layout name is displayed in the mode-line.
@@ -221,7 +221,7 @@ values."
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
    dotspacemacs-fullscreen-at-startup t
@@ -249,7 +249,7 @@ values."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
    ;; Control line numbers activation.
    ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
    ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
@@ -304,6 +304,10 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+
+  (add-hook 'markdown-mode-hook 'auto-fill-mode)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -313,5 +317,52 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq scroll-margin 11)
+  (setq scroll-margin 12)
+  (setq hscroll-margin 12)
+
+  (add-hook 'emacs-lisp-mode-hook 'electric-pair-mode)
+  (add-hook 'markdown-mode-hook 'abbrev-mode)
+  (add-hook 'markdown-mode-hook 'flyspell-mode)
+
+  ;; (setq-default abbrev-mode t)
+  ;; (setq save-abbrevs t)
+  ;; (setq abbrev-file-name "~/.config/emacs/abbrevs.el")
+  ;; (quietly-read-abbrev-file)
+
+  ;; (spacemacs/toggle-spelling-checking-off)
+  (spacemacs/toggle-visual-line-navigation-off)
+  (spacemacs/toggle-display-time-off)
+  (spacemacs/toggle-highlight-current-line-globally-off)
+  (spacemacs/toggle-line-numbers-off)
+  (spacemacs/toggle-mode-line-off)
+  (spacemacs/toggle-which-key-off)
   )
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (org-plus-contrib let-alist wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper ivy s hydra projectile flx flyspell-correct pos-tip pkg-info epl goto-chg undo-tree ghc haskell-mode bind-map bind-key packed auto-complete popup avy evil flycheck yasnippet company helm helm-core async dash vimrc-mode dactyl-mode yaml-mode smeargle orgit mmm-mode markdown-toc markdown-mode magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md evil-magit magit magit-popup git-commit ghub with-editor diff-hl xterm-color ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline shell-pop restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-projectile org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree multi-term move-text macrostep lorem-ipsum linum-relative link-hint intero insert-shebang indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot fuzzy flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help erlang elisp-slime-nav dumb-jump diminish define-word company-statistics company-shell company-ghci company-ghc company-cabal column-enforce-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "Grey10" :foreground "#b2b2b2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 136 :width normal :foundry "SRC" :family "Hack"))))
+ '(dired-directory ((t (:inherit bold :background "Grey10" :foreground "#4f97d7"))))
+ '(dired-symlink ((t (:inherit bold :background "Grey10" :foreground "#28def0"))))
+ '(font-lock-comment-face ((t (:background "Grey10" :foreground "#2aa1ae"))))
+ '(font-lock-function-name-face ((t (:inherit bold :foreground "DarkOrange"))))
+ '(font-lock-keyword-face ((t (:inherit bold :foreground "DeepPink"))))
+ '(font-lock-preprocessor-face ((t (:foreground "magenta1"))))
+ '(font-lock-string-face ((t (:foreground "SpringGreen3"))))
+ '(font-lock-type-face ((t (:inherit bold :foreground "DodgerBlue1"))))
+ '(fringe ((t (:foreground "#b2b2b2"))))
+ '(link ((t (:foreground "light sky blue" :underline t))))
+ '(markdown-header-face-2 ((t (:inherit (bold font-lock-keyword-face) :foreground "DeepPink" :height 1.2))))
+ '(markdown-header-face-3 ((t (:foreground "DarkOrange" :weight semi-bold :height 1.1))))
+ '(markdown-header-face-4 ((t (:foreground "SpringGreen3" :weight semi-bold))))
+ '(term ((t (:background "grey10" :foreground "#b2b2b2")))))

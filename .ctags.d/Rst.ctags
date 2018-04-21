@@ -4,4 +4,4 @@
 --regex-reStructuredText=/^\.{2} _(.*): .*$/\1/E,external hyperlink/
 --regex-reStructuredText=/`([^` \t]+) ([^`]+)`__?/\1/a,hyperlink/
 --regex-reStructuredText=/_`([^`]+)`: /\1/i,inline internal reference/
---regex-reStructuredText=/`([^`]+)`_/\1/A,hyperlink/
+# --regex-reStructuredText=/`([^`]+)`_/\1/A,hyperlink/

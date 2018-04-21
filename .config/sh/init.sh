@@ -9,12 +9,17 @@ case $- in
 esac
 
 # normalise prompt in case somthing goes wrong
-export PS1="${USER}@${HOSTNAME}${0} $ "
+export PS1="${USER}@"$(hostname)" ${0} >> "
+
+# set ls colors
+if [ $0 = bash ] || [ $0 = zsh ] || [ $0 = -bash ]; then
+  eval $(dircolors -b)
+fi
 
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ${HOME}/Documents/Vim/vim-programming/after/ftplugin/haskell/base ${HOME}/Documents ${HOME}/Documents/* ${HOME}/Documents/Programming/{Java,Python,Rust} ~/Documents/Programming/Functional-Programming ~/Documents/Uni/{Assignments,}; do
+for directory in ~/Documents/{,Revision,Vim,} ~/Documents/Programming/{,Functional-Programming}; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -46,13 +51,14 @@ for i in {f,e,}grep; do
   eval "alias ${i}='${i} --color=auto'"
 done
 
+GLOBIGNORE=*.{fls,out,aux,toc,beam,pyo,lock,tmp,bak,log,o,hi,class,so}:tags:node_modules:iml:*cache*:*history*
+FIGNORE=$GLOBIGNORE
+
 alias diff='diff --color=auto --suppress-common-lines --side-by-side --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
 
 # split path on ":"
 alias show-path='echo -e ${PATH//:/\\n} | grep -E "^.{3,}$"'
-for i in df du; do
-  alias $i="$i --human-readable --si --total"
-done
+for i in df du; do alias $i="$i --human-readable --si --total"; done
 alias info='info --vi-keys'
 alias logout="pkill -KILL -u \$USER"
 [ -x $(command which ipython 2>/dev/null) ] && alias ipython="ipython3 --pylab=qt5 --gui=qt5"
@@ -83,8 +89,6 @@ fi
 [ -x $(command which php 2>/dev/null) ] && alias http-server-php="php -S 0.0.0.0:5000"
 [ -x $(command which ruby 2>/dev/null) ] && alias http-server-ruby="ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd.start'"
 
-# mount a remote hard-drive
-[ -x $(command which sshfs 2>/dev/null) ] && alias mount-raptor="mkdir -p \${HOME}/Raptor && sshfs -o transform_symlinks -o follow_symlinks nl253@raptor.kent.ac.uk: \${HOME}/Raptor"
 # get ip address
 [ -x $(command which curl 2>/dev/null) ] && alias my-ip='curl ipinfo.io/ip'
 
@@ -100,28 +104,14 @@ if [ -x $(command which pacman 2>/dev/null) ]; then
   fi
 fi
 
-# VCS
-if [ -x $(command which git 2>/dev/null) ]; then
-  alias g=git
-  git_recursive_update() { for i in $(find -name .git -type d -exec dirname {} \;); do (cd $i && git pull); done; }
-  git_foreach() { for i in $(find -name .git -type d -exec dirname {} \;); do (cd $i && $@); done; }
-  if [ -x $(command which hub 2>/dev/null) ]; then
-    eval "$(hub alias -s)"
-    alias g=hub
-  fi
-fi
-
 # Archiving
 [ -x $(command which 7z 2>/dev/null) ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
-
-# Databases
-if [ $(hostname) = raptor ]; then
-  [ -x $(command which mysql 2>/dev/null) ] && alias mysql-dragon='mysql -u nl253 -p -h dragon.kent.ac.uk nl253'
-  [ -x $(command which mycli 2>/dev/null) ] && alias mycli-dragon='mycli mysql://nl253@dragon.kent.ac.uk/nl253'
-fi
 
 alias pip=pip3
 
 # $EDITOR
 for i in nvim vim vi; do [ -x $(command which $i 2>/dev/null) ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
-# vim: foldmethod=marker foldlevel=0 foldmarker={,} shiftwidth=2 tabstop=2 ft=sh
+
+export PS1=' $(command git --no-pager branch --color=always -vv 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(pwd)$(tput setaf 1)\n >>$(tput sgr0) '
+
+# vim:foldmethod=marker:foldlevel=0:foldmarker={,}:shiftwidth=2:tabstop=2:
