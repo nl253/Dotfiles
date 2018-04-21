@@ -9,6 +9,5 @@ templates:
 system-ghc: false
 install-ghc: true
 ghc-options:
-  "$everything": -O2 -XDeriveFunctor -XDeriveFoldable -XDeriveTraversable -XPartialTypeSignatures -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators
-  # "$everything": -O2 -XFlexibleContexts -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators -XGADTs
-  # "$everything": -O2 -XFlexibleContexts -XOverloadedStrings -XTupleSections -XDeriveAnyClass -XEmptyDataDecls -XPostfixOperators -XGADTs -XOverloadedLists
+  "$everything": -O2 -XBangPatterns -XPatternGuards -XApplicativeDo -XBinaryLiterals -XDeriveAnyClass -XScopedTypeVariables -XDeriveGeneric -XDeriveFoldable -XDeriveFunctor -XDeriveTraversable -XEmptyDataDecls -XFunctionalDependencies -XGADTs -XKindSignatures -XLambdaCase -XMonadComprehensions -XMultiParamTypeClasses -XMultiWayIf -XNamedWildCards -XNumDecimals -XParallelListComp -XPartialTypeSignatures -XPostfixOperators -XTupleSections -XTypeOperators -XViewPatterns -XFlexibleContexts  -XFlexibleInstances
+  # "$everything": -O2 --XOverloadedStrings -XOverloadedLists

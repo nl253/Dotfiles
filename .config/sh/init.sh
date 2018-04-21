@@ -30,8 +30,12 @@ alias sudo='sudo '
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
 
 if [ -x $(which ghci) ]; then
-	alias ghci='ghc --interactive -threaded -j4 -fprint-unicode-syntax -fprint-expanded-synonyms -fdiagnostics-color=always -Wcompat -Wredundant-constraints -Wdeprecations -Wunused-foralls -Wunused-local-binds -Wunused-binds -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wname-shadowing -Wnoncanonical-monad-instances -Wsemigroup -Wincomplete-uni-patterns'
-	alias ghc='ghc -threaded -j4 -fprint-expanded-synonyms -fprint-potential-instances -fdiagnostics-color=always -Wcompat -Wredundant-constraints -Wdeprecations -Wunused-foralls -Wunused-local-binds -Wunused-binds -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wname-shadowing -Wnoncanonical-monad-instances -Wsemigroup -Wincomplete-uni-patterns'
+  ghc_exts='-XApplicativeDo -XBangPatterns -XBinaryLiterals -XDeriveAnyClass -XDeriveFoldable -XDeriveFunctor -XDeriveGeneric -XDeriveTraversable -XEmptyDataDecls -XFlexibleContexts -XFlexibleInstances -XFunctionalDependencies -XGADTs -XKindSignatures -XLambdaCase -XMonadComprehensions -XMultiParamTypeClasses -XMultiWayIf -XNamedWildCards -XNumDecimals -XParallelListComp -XPartialTypeSignatures -XPatternGuards -XPostfixOperators -XScopedTypeVariables -XTupleSections -XTypeOperators -XViewPatterns'
+  ghc_f='-fprint-potential-instances -fprint-expanded-synonyms -fdiagnostics-color=always'
+  ghc_warn='-Wunused-local-binds -Wunused-foralls -Wunused-binds -Wsemigroup -Wredundant-constraints -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances -Wname-shadowing -Wincomplete-uni-patterns -Wdeprecations -Wcompat'
+  ghc_opts='-threaded -j4'
+  alias ghci="ghc --interactive ${ghc_opts} ${ghc_f} -fprint-unicode-syntax ${ghc_warn} ${ghc_exts}"
+  alias ghc="ghc ${ghc_opts} ${ghc_f} ${ghc_warn} ${ghc_exts}"
 fi
 
 # dirs and files

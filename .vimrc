@@ -5,7 +5,7 @@ if !has('unix') | finish | endif
 " Variables: (these need to be global)
 let mapleader = " "
 let maplocalleader = ","
-let g:markup_langs = ['markdown', 'rst', 'tex']
+let g:markup_langs = ['markdown', 'rst', 'tex', 'scratch']
 let g:config_ftypes = [
             \ 'yaml',
             \ 'gitconfig',

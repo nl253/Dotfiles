@@ -1,19 +1,18 @@
 # ### Artistic Style configuration
 # --suffix=.astyle.orig
-# --indent=spaces
-# -s4
-# # --max-code-length=120
+--indent=spaces=4
+--max-code-length=80
 
 # # brackes
-# --style=java
-# --remove-braces
+--style=java
+--remove-braces
 
 # # space around (padding)
 # # --pad-paren-out
 # --break-blocks
-# --pad-comma
-# --pad-oper
-# --pad-header
+--pad-comma
+--pad-oper
+--pad-header
 
 # # align
 # --align-pointer=name
@@ -21,14 +20,14 @@
 
 # # indentation
 # --convert-tabs
-# --indent-cases
-# --indent-classes
+--indent-cases
+--indent-classes
 # --indent-col1-comments
 # --indent-labels
 # --indent-modifiers
 # --indent-namespaces
-# # --indent-preproc-block
-# # --indent-preproc-cond
-# # --indent-preproc-define
-# # --indent-preproc-define
-# # --indent-switches
+# --indent-preproc-block
+# --indent-preproc-cond
+# --indent-preproc-define
+# --indent-preproc-define
+# --indent-switches
