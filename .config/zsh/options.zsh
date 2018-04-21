@@ -53,3 +53,5 @@ setopt SHARE_HISTORY
 # setopt PRINT_EXIT_VALUE
 # setopt RC_EXPAND_PARAM
 # setopt WARN_CREATE_GLOBAL
+setopt EXTENDED_GLOB
+setopt EQUALS
