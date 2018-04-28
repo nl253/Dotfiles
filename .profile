@@ -1,8 +1,14 @@
 # ~/.profile sourced by all login shells
 
 export ENV=$HOME/.config/sh/init.sh
+export BASH_ENV=$HOME/.config/bash/.bashrc
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
+export EMAIL=norbertlogiewa96@gmail.com
+
+if [[ -x $(which go) ]]; then
+  export PATH=$PATH:$(go env GOPATH)/bin
+fi
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
@@ -14,10 +20,6 @@ for i in nvim vim vi; do
   fi
 done
 
-if [ $0 = bash ] || [ $0 = zsh ] || [ $0 = -bash ]; then
-  eval $(dircolors -b)
-fi
-
 # $PAGER
 if [ -x $(command which less 2>/dev/null) ]; then
   export LESS='--RAW-CONTROL-CHARS --IGNORE-CASE --QUIET --HILITE-SEARCH --long-prompt'
@@ -27,23 +29,18 @@ if [ -x $(command which less 2>/dev/null) ]; then
   export PAGER=less
 fi
 
-export HISTFILE="$HOME/.config/sh/.shell_history"
-export EXECIGNORE='{/usr,}/bin/grub*:'
+export HISTFILE="$HOME/.config/sh/.history"
 export SAVEHIST=10000
 export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTCONTROL="ignoreboth:erasedups"
-# export HISTTIMEFORMAT=""
-# export TIMEFORMAT=""
 export HH_CONFIG=hicolor # get more colors
 export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
-# colon separated list of extensions to ignore when completing
-export FIGNORE='~:.o:.swp:__:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:tags'
+export FIGNORE='~:.o:.swp:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:tags:.log:.hi:.so:.beam:tags:.iml:.lock:.bak'
 
-# arch linux / manjaro
 [ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
 
-# needs to be set for ranger to load custom files
+# Needs to be set for ranger to load configuration
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 
 # GUI use qt5 not qt4
@@ -106,13 +103,23 @@ export FZF_DEFAULT_OPTS=" --preview-window=right:hidden --tiebreak=end --no-mous
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview,ctrl-n:down,ctrl-p:up'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute(\$EDITOR {})' --bind='alt-l:execute:(\$PAGER {})'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:160,fg+:11,border:0,spinner:0,header:0,bg+:0,info:0"
+
 # use git listing if in a git repo, otherwise use find to list current dir recursively
 export FZF_DEFAULT_COMMAND='git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//\ 2> /dev/null'
+
 if [ -e ~/.config/ranger/scope.sh ]; then
   export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'
+
 elif [ -x $(command which pygmentize 2>/dev/null) ]; then
   export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {})"'
-  # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && ls -Al {})"'
+
 else
   export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="[ -f {} ] && head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
+fi
+
+if [ $0 = zsh ] || [ $0 = $(which zsh) ]; then
+  # not run with -i (interactive) but with TMUX so make interactive anyway
+  [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f $ZDOTDIR/.zshrc ]] && [[ -n $ZDOTDIR ]] && source $ZDOTDIR/.zshrc
+elif [ $0 = bash ] || [ $0 = $(which bash) ]; then
+  [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f ~/.bashrc ]] && source ~/.bashrc
 fi

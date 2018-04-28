@@ -9,12 +9,17 @@ case $- in
 esac
 
 # normalise prompt in case somthing goes wrong
-export PS1="${USER}@${HOSTNAME}${0} $ "
+export PS1="${USER}@"$(hostname)" ${0} >> "
+
+# set ls colors
+if [ $0 = bash ] || [ $0 = zsh ] || [ $0 = -bash ]; then
+  eval $(dircolors -b)
+fi
 
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ${HOME}/Documents/Vim/vim-programming/after/ftplugin/haskell/base ${HOME}/Documents ${HOME}/Documents/* ${HOME}/Documents/Programming/{Java,Python,Rust} ~/Documents/Programming/Functional-Programming ~/Documents/Uni/{Assignments,}; do
+for directory in ~/Documents/{,Revision,Vim,} ~/Documents/Programming/{,Functional-Programming}; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -45,6 +50,9 @@ alias ls='ls --color=auto --group-directories-first -I tags -I "*cache*" -I "*hi
 for i in {f,e,}grep; do
   eval "alias ${i}='${i} --color=auto'"
 done
+
+GLOBIGNORE=*.{fls,out,aux,toc,beam,pyo,lock,tmp,bak,log,o,hi,class,so}:tags:node_modules:iml:*cache*:*history*
+FIGNORE=$GLOBIGNORE
 
 alias diff='diff --color=auto --suppress-common-lines --side-by-side --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
 

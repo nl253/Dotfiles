@@ -81,4 +81,4 @@ highlight = #2f2f2f
 #border_width = 0.5
 #roundness = 2.0
 
-# vim: ft=dosini cms=#%s
+# vim:ft=cfg:cms=#%s

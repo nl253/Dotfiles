@@ -8,11 +8,9 @@
 --regex-Markdown=/!?\[\*{,2}([^\]]{4,})\*{,2}\]\[[^\)]{5,}\]/\1/A,local reference link/
 --regex-Markdown=/^[ \t]*\*{2}([^\*:,.;`]{3,})\*{2}/\1/b,bold/
 --regex-Markdown=/^\**([A-Z][a-z]{3,})\**$/\1/d,definition/
---regex-Markdown=/.*:::+ ([A-Z][a-z]{3,}) :::+.*/\1/f,fenced div/
---regex-Markdown=/^([tT]itle|[aA]uthor): (.+)/\2/m,\1 mmd meta tag/
+# --regex-Markdown=/.*:::+ ([A-Z][a-z]{3,}) :::+.*/\1/f,fenced div/
+# --regex-Markdown=/^([tT]itle|[aA]uthor): (.+)/\2/m,\1 mmd meta tag/
 --regex-Markdown=/^[ \t]*\[(.*)\]: (.+).*/\1/r,reference/
---regex-Markdown=/.*\{#([-a-zA-Z]{4,})\}.*/\1/l,local reference/
-# --regex-Markdown=/^ *\[([^]]{3,})\] ?:/\1/l,link/
---regex-Markdown=/\w[^a-zA-Z]\[(.{5,})\][^a-zA-Z][a-z\.]/\1/i,inline reference/
-# --regex-Markdown=/\[([-a-zA-Z0-9_]{3,}?)\]\[[^\]]{3,}\]/\1/t,tag/
---regex-Markdown=/<([a-z]+)[^>]*>(.{3,})<\/\1>/\2/t,\1/
+# --regex-Markdown=/.*\{#([-a-zA-Z]{4,})\}.*/\1/l,local reference/
+# --regex-Markdown=/\w[^a-zA-Z]\[(.{5,})\][^a-zA-Z][a-z\.]/\1/i,inline reference/
+--regex-Markdown=/<([a-z]+)[^>]*>(.{3,})<\/\1>/\2/t,HTML \1 tag/

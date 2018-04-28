@@ -2,8 +2,8 @@
 # System configuration file for Mutt
 #
 
-source ~/.mutt/colors/default
-source ~/.mutt/aliases
+#source ~/.config/mutt/colors/default
+source ~/.config/mutt/colors/solarized-dark-256
 
 auto_view text/html                                      # view html automatically
 alternative_order text/plain text/enriched text/html     # save html for last
@@ -23,9 +23,9 @@ macro index \eb "<search>~b " "search in message bodies"
 
 # simulate the old url menu
 macro index,pager,attach,compose \cb "\
-<enter-command> set my_pipe_decode=\$pipe_decode pipe_decode<Enter>\
+<enter-command> set my_pipe_decode = \$pipe_decode pipe_decode<Enter>\
 <pipe-message> urlview<Enter>\
-<enter-command> set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<Enter>" \
+<enter-command> set pipe_decode = \$my_pipe_decode; unset my_pipe_decode<Enter>" \
 "call urlview to extract URLs out of a message"
 
 # Show documentation when pressing F1
@@ -43,7 +43,7 @@ bind browser y exit
 # If Mutt is unable to determine your site's domain name correctly, you can
 # set the default here.
 #
-# set hostname=cs.hmc.edu
+# set hostname = cs.hmc.edu
 
 # If your sendmail supports the -B8BITMIME flag, enable the following
 #
@@ -112,7 +112,7 @@ attachments   -I message/external-body
 ##
 
 
-# set abort_nosubject=ask-yes
+# set abort_nosubject = ask-yes
 #
 # Name: abort_nosubject
 # Type: quadoption
@@ -125,7 +125,7 @@ attachments   -I message/external-body
 # prompt will never be aborted.
 # 
 # 
-# set abort_unmodified=yes
+# set abort_unmodified = yes
 #
 # Name: abort_unmodified
 # Type: quadoption
@@ -138,7 +138,7 @@ attachments   -I message/external-body
 # to no, composition will never be aborted.
 # 
 # 
-# set alias_file="~/.muttrc"
+set alias_file = "~/.config/mutt/aliases"
 #
 # Name: alias_file
 # Type: path
@@ -158,7 +158,7 @@ attachments   -I message/external-body
 # ``~/.muttrc'' if no user muttrc was found.
 # 
 # 
-# set alias_format="%4n %2f %t %-10a   %r"
+# set alias_format = "%4n %2f %t %-10a   %r"
 #
 # Name: alias_format
 # Type: string
@@ -174,7 +174,7 @@ attachments   -I message/external-body
 # %t      character which indicates if the alias is tagged for inclusion
 # 
 # 
-# set allow_8bit=yes
+# set allow_8bit = yes
 #
 # Name: allow_8bit
 # Type: boolean
@@ -185,7 +185,7 @@ attachments   -I message/external-body
 # Printable or Base64 encoding when sending mail.
 # 
 # 
-set allow_ansi=yes
+set allow_ansi = yes
 #
 # Name: allow_ansi
 # Type: boolean
@@ -204,7 +204,7 @@ set allow_ansi=yes
 # $crypt_timestamp).
 # 
 # 
-# set arrow_cursor=no
+# set arrow_cursor = no
 #
 # Name: arrow_cursor
 # Type: boolean
@@ -218,7 +218,7 @@ set allow_ansi=yes
 # in the menu.
 # 
 # 
-# set ascii_chars=no
+# set ascii_chars = no
 #
 # Name: ascii_chars
 # Type: boolean
@@ -229,7 +229,7 @@ set allow_ansi=yes
 # and attachment trees, instead of the default ACS characters.
 # 
 # 
-# set askbcc=no
+# set askbcc = no
 #
 # Name: askbcc
 # Type: boolean
@@ -240,7 +240,7 @@ set allow_ansi=yes
 # before editing an outgoing message.
 # 
 # 
-# set askcc=no
+# set askcc = no
 #
 # Name: askcc
 # Type: boolean
@@ -251,7 +251,7 @@ set allow_ansi=yes
 # editing the body of an outgoing message.
 # 
 # 
-# set assumed_charset=""
+# set assumed_charset = ""
 #
 # Name: assumed_charset
 # Type: string
@@ -266,12 +266,12 @@ set allow_ansi=yes
 # indication are assumed to be in ``us-ascii''.
 # 
 # For example, Japanese users might prefer this:
-# set assumed_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"
+# set assumed_charset = "iso-2022-jp:euc-jp:shift_jis:utf-8"
 # 
 # However, only the first content is valid for the message body.
 # 
 # 
-# set attach_charset=""
+# set attach_charset = ""
 #
 # Name: attach_charset
 # Type: string
@@ -286,13 +286,13 @@ set allow_ansi=yes
 # If unset, the value of $charset will be used instead.
 # For example, the following configuration would work for Japanese
 # text handling:
-# set attach_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"
+# set attach_charset = "iso-2022-jp:euc-jp:shift_jis:utf-8"
 # 
 # Note: for Japanese users, ``iso-2022-*'' must be put at the head
 # of the value as shown above if included.
 # 
 # 
-# set attach_format="%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s] "
+# set attach_format = "%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s] "
 #
 # Name: attach_format
 # Type: string
@@ -316,7 +316,7 @@ set allow_ansi=yes
 # %s      size
 # %t      tagged flag
 # %T      graphic tree characters
-# %u      unlink (=to delete) flag
+# %u      unlink ( = to delete) flag
 # %X      number of qualifying MIME parts in this part and its children
 #         (please see the ``attachments'' section for possible speed effects)
 # %>X     right justify the rest of the string and pad with character ``X''
@@ -327,7 +327,7 @@ set allow_ansi=yes
 # For an explanation of ``soft-fill'', see the $index_format documentation.
 # 
 # 
-# set attach_sep="\n"
+# set attach_sep = "\n"
 #
 # Name: attach_sep
 # Type: string
@@ -338,7 +338,7 @@ set allow_ansi=yes
 # printing, piping, etc) on a list of tagged attachments.
 # 
 # 
-# set attach_split=yes
+# set attach_split = yes
 #
 # Name: attach_split
 # Type: boolean
@@ -352,7 +352,7 @@ set allow_ansi=yes
 # Mutt will operate on the attachments one by one.
 # 
 # 
-# set attribution="On %d, %n wrote:"
+# set attribution = "On %d, %n wrote:"
 #
 # Name: attribution
 # Type: string
@@ -364,7 +364,7 @@ set allow_ansi=yes
 # the section on $index_format.
 # 
 # 
-# set attribution_locale=""
+# set attribution_locale = ""
 #
 # Name: attribution_locale
 # Type: string
@@ -381,7 +381,7 @@ set allow_ansi=yes
 # this except to override that default.
 # 
 # 
-# set auto_tag=no
+# set auto_tag = no
 #
 # Name: auto_tag
 # Type: boolean
@@ -394,7 +394,7 @@ set allow_ansi=yes
 # by default) to make the next function apply to all tagged messages.
 # 
 # 
-# set autoedit=no
+# set autoedit = no
 #
 # Name: autoedit
 # Type: boolean
@@ -414,7 +414,7 @@ set allow_ansi=yes
 # Also see $fast_reply.
 # 
 # 
-set beep=no
+set beep = no
 #
 # Name: beep
 # Type: boolean
@@ -424,7 +424,7 @@ set beep=no
 # When this variable is set, mutt will beep when an error occurs.
 # 
 # 
-# set beep_new=no
+# set beep_new = no
 #
 # Name: beep_new
 # Type: boolean
@@ -436,7 +436,7 @@ set beep=no
 # $beep variable.
 # 
 # 
-# set bounce=ask-yes
+# set bounce = ask-yes
 #
 # Name: bounce
 # Type: quadoption
@@ -449,7 +449,7 @@ set beep=no
 # and thus not recommended, because you are unable to bounce messages.
 # 
 # 
-# set bounce_delivered=yes
+# set bounce_delivered = yes
 #
 # Name: bounce_delivered
 # Type: boolean
@@ -460,7 +460,7 @@ set beep=no
 # bouncing messages.  Postfix users may wish to unset this variable.
 # 
 # 
-# set braille_friendly=no
+# set braille_friendly = no
 #
 # Name: braille_friendly
 # Type: boolean
@@ -474,7 +474,7 @@ set beep=no
 # visual terminals don't permit making the cursor invisible.
 # 
 # 
-set certificate_file=~/.mutt/certificates
+set certificate_file = ~/.mutt/certificates
 #
 # Name: certificate_file
 # Type: path
@@ -492,10 +492,10 @@ set certificate_file=~/.mutt/certificates
 # also automatically accepted.
 # 
 # Example:
-# set certificate_file=~/.mutt/certificates
+# set certificate_file = ~/.mutt/certificates
 # 
 # 
-# set charset=""
+# set charset = ""
 #
 # Name: charset
 # Type: string
@@ -512,7 +512,7 @@ set certificate_file=~/.mutt/certificates
 # character set used correctly.
 # 
 # 
-# set check_mbox_size=no
+# set check_mbox_size = no
 #
 # Name: check_mbox_size
 # Type: boolean
@@ -532,7 +532,7 @@ set certificate_file=~/.mutt/certificates
 # Afterwards the new mail status is tracked by file size changes.
 # 
 # 
-# set check_new=yes
+# set check_new = yes
 #
 # Name: check_new
 # Type: boolean
@@ -550,7 +550,7 @@ set certificate_file=~/.mutt/certificates
 # while the mailbox is open.
 # 
 # 
-# set collapse_unread=yes
+# set collapse_unread = yes
 #
 # Name: collapse_unread
 # Type: boolean
@@ -561,7 +561,7 @@ set certificate_file=~/.mutt/certificates
 # unread messages.
 # 
 # 
-# set compose_format="-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
+# set compose_format = "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
 #
 # Name: compose_format
 # Type: string
@@ -581,7 +581,7 @@ set certificate_file=~/.mutt/certificates
 # information on how to set $compose_format.
 # 
 # 
-# set config_charset=""
+# set config_charset = ""
 #
 # Name: config_charset
 # Type: string
@@ -600,7 +600,7 @@ set certificate_file=~/.mutt/certificates
 # side effects (for example in regular expressions).
 # 
 # 
-# set confirmappend=yes
+# set confirmappend = yes
 #
 # Name: confirmappend
 # Type: boolean
@@ -611,7 +611,7 @@ set certificate_file=~/.mutt/certificates
 # an existing mailbox.
 # 
 # 
-# set confirmcreate=yes
+# set confirmcreate = yes
 #
 # Name: confirmcreate
 # Type: boolean
@@ -622,7 +622,7 @@ set certificate_file=~/.mutt/certificates
 # mailbox which does not yet exist before creating it.
 # 
 # 
-# set connect_timeout=30
+# set connect_timeout = 30
 #
 # Name: connect_timeout
 # Type: number
@@ -634,7 +634,7 @@ set certificate_file=~/.mutt/certificates
 # value causes Mutt to wait indefinitely for the connection attempt to succeed.
 # 
 # 
-# set content_type="text/plain"
+# set content_type = "text/plain"
 #
 # Name: content_type
 # Type: string
@@ -644,7 +644,7 @@ set certificate_file=~/.mutt/certificates
 # Sets the default Content-Type for the body of newly composed messages.
 # 
 # 
-# set copy=yes
+# set copy = yes
 #
 # Name: copy
 # Type: quadoption
@@ -656,7 +656,7 @@ set certificate_file=~/.mutt/certificates
 # $save_name, $force_name and ``fcc-hook''.
 # 
 # 
-# set crypt_autoencrypt=no
+# set crypt_autoencrypt = no
 #
 # Name: crypt_autoencrypt
 # Type: boolean
@@ -673,7 +673,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set crypt_autopgp=yes
+# set crypt_autopgp = yes
 #
 # Name: crypt_autopgp
 # Type: boolean
@@ -686,7 +686,7 @@ set certificate_file=~/.mutt/certificates
 # $crypt_autosign, $crypt_replysign and $smime_is_default.
 # 
 # 
-# set crypt_autosign=no
+# set crypt_autosign = no
 #
 # Name: crypt_autosign
 # Type: boolean
@@ -702,7 +702,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set crypt_autosmime=yes
+# set crypt_autosmime = yes
 #
 # Name: crypt_autosmime
 # Type: boolean
@@ -715,7 +715,7 @@ set certificate_file=~/.mutt/certificates
 # $crypt_autosign, $crypt_replysign and $smime_is_default.
 # 
 # 
-# set crypt_confirmhook=yes
+# set crypt_confirmhook = yes
 #
 # Name: crypt_confirmhook
 # Type: boolean
@@ -728,7 +728,7 @@ set certificate_file=~/.mutt/certificates
 # typos are concerned.
 # 
 # 
-# set crypt_opportunistic_encrypt=no
+# set crypt_opportunistic_encrypt = no
 #
 # Name: crypt_opportunistic_encrypt
 # Type: boolean
@@ -754,7 +754,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set crypt_replyencrypt=yes
+# set crypt_replyencrypt = yes
 #
 # Name: crypt_replyencrypt
 # Type: boolean
@@ -766,7 +766,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set crypt_replysign=no
+# set crypt_replysign = no
 #
 # Name: crypt_replysign
 # Type: boolean
@@ -781,7 +781,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set crypt_replysignencrypted=no
+# set crypt_replysignencrypted = no
 #
 # Name: crypt_replysignencrypted
 # Type: boolean
@@ -797,7 +797,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set crypt_timestamp=yes
+# set crypt_timestamp = yes
 #
 # Name: crypt_timestamp
 # Type: boolean
@@ -811,7 +811,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set crypt_use_gpgme=no
+# set crypt_use_gpgme = no
 #
 # Name: crypt_use_gpgme
 # Type: boolean
@@ -828,7 +828,7 @@ set certificate_file=~/.mutt/certificates
 # (traditional) PGP encrypted or signed messages (see $pgp_autoinline).
 # 
 # 
-# set crypt_use_pka=no
+# set crypt_use_pka = no
 #
 # Name: crypt_use_pka
 # Type: boolean
@@ -840,7 +840,7 @@ set certificate_file=~/.mutt/certificates
 # verification (only supported by the GPGME backend).
 # 
 # 
-# set crypt_verify_sig=yes
+# set crypt_verify_sig = yes
 #
 # Name: crypt_verify_sig
 # Type: quadoption
@@ -853,7 +853,7 @@ set certificate_file=~/.mutt/certificates
 # (Crypto only)
 # 
 # 
-# set date_format="!%a, %b %d, %Y at %I:%M:%S%p %Z"
+set date_format = "%c"
 #
 # Name: date_format
 # Type: string
@@ -872,7 +872,7 @@ set certificate_file=~/.mutt/certificates
 # English).
 # 
 # 
-# set default_hook="~f %s !~P | (~P ~C %s)"
+# set default_hook = "~f %s !~P | (~P ~C %s)"
 #
 # Name: default_hook
 # Type: string
@@ -893,7 +893,7 @@ set certificate_file=~/.mutt/certificates
 # regular expression.
 # 
 # 
-# set delete=ask-yes
+# set delete = ask-yes
 #
 # Name: delete
 # Type: quadoption
@@ -906,7 +906,7 @@ set certificate_file=~/.mutt/certificates
 # no, messages marked for deletion will be kept in the mailbox.
 # 
 # 
-# set delete_untag=yes
+# set delete_untag = yes
 #
 # Name: delete_untag
 # Type: boolean
@@ -918,7 +918,7 @@ set certificate_file=~/.mutt/certificates
 # or when you save it to another folder.
 # 
 # 
-# set digest_collapse=yes
+# set digest_collapse = yes
 #
 # Name: digest_collapse
 # Type: boolean
@@ -929,7 +929,7 @@ set certificate_file=~/.mutt/certificates
 # individual messages in a multipart/digest.  To see these subparts, press ``v'' on that menu.
 # 
 # 
-# set display_filter=""
+# set display_filter = ""
 #
 # Name: display_filter
 # Type: path
@@ -941,7 +941,7 @@ set certificate_file=~/.mutt/certificates
 # filtered message is read from the standard output.
 # 
 # 
-# set dotlock_program="/usr/bin/mutt_dotlock"
+# set dotlock_program = "/usr/bin/mutt_dotlock"
 #
 # Name: dotlock_program
 # Type: path
@@ -952,7 +952,7 @@ set certificate_file=~/.mutt/certificates
 # mutt.
 # 
 # 
-# set dsn_notify=""
+# set dsn_notify = ""
 #
 # Name: dsn_notify
 # Type: string
@@ -967,7 +967,7 @@ set certificate_file=~/.mutt/certificates
 # notified of successful transmission.
 # 
 # Example:
-# set dsn_notify="failure,delay"
+# set dsn_notify = "failure,delay"
 # 
 # Note: when using $sendmail for delivery, you should not enable
 # this unless you are either using Sendmail 8.8.x or greater or a MTA
@@ -976,7 +976,7 @@ set certificate_file=~/.mutt/certificates
 # depends on the server whether DSN will be used or not.
 # 
 # 
-# set dsn_return=""
+# set dsn_return = ""
 #
 # Name: dsn_return
 # Type: string
@@ -988,7 +988,7 @@ set certificate_file=~/.mutt/certificates
 # message header, or full to return the full message.
 # 
 # Example:
-# set dsn_return=hdrs
+# set dsn_return = hdrs
 # 
 # Note: when using $sendmail for delivery, you should not enable
 # this unless you are either using Sendmail 8.8.x or greater or a MTA
@@ -997,7 +997,7 @@ set certificate_file=~/.mutt/certificates
 # depends on the server whether DSN will be used or not.
 # 
 # 
-# set duplicate_threads=yes
+# set duplicate_threads = yes
 #
 # Name: duplicate_threads
 # Type: boolean
@@ -1010,7 +1010,7 @@ set certificate_file=~/.mutt/certificates
 # in the thread tree.
 # 
 # 
-# set edit_headers=no
+# set edit_headers = no
 #
 # Name: edit_headers
 # Type: boolean
@@ -1031,7 +1031,7 @@ set certificate_file=~/.mutt/certificates
 # ignored for interoperability reasons.
 # 
 # 
-# set editor=""
+# set editor = ""
 #
 # Name: editor
 # Type: path
@@ -1052,7 +1052,7 @@ set certificate_file=~/.mutt/certificates
 # where string is the expansion of $editor described above.
 # 
 # 
-# set encode_from=no
+# set encode_from = no
 #
 # Name: encode_from
 # Type: boolean
@@ -1066,7 +1066,7 @@ set certificate_file=~/.mutt/certificates
 # misinterpreting the line as a mbox message separator).
 # 
 # 
-# set entropy_file=""
+# set entropy_file = ""
 #
 # Name: entropy_file
 # Type: path
@@ -1077,7 +1077,7 @@ set certificate_file=~/.mutt/certificates
 # library functions.
 # 
 # 
-# set envelope_from_address=""
+# set envelope_from_address = ""
 #
 # Name: envelope_from_address
 # Type: e-mail address
@@ -1088,7 +1088,7 @@ set certificate_file=~/.mutt/certificates
 # This value is ignored if $use_envelope_from is unset.
 # 
 # 
-# set escape="~"
+# set escape = "~"
 #
 # Name: escape
 # Type: string
@@ -1098,7 +1098,7 @@ set certificate_file=~/.mutt/certificates
 # Escape character to use for functions in the built-in editor.
 # 
 # 
-# set fast_reply=no
+# set fast_reply = no
 #
 # Name: fast_reply
 # Type: boolean
@@ -1113,7 +1113,7 @@ set certificate_file=~/.mutt/certificates
 # variable is set.
 # 
 # 
-# set fcc_attach=yes
+# set fcc_attach = yes
 #
 # Name: fcc_attach
 # Type: quadoption
@@ -1124,7 +1124,7 @@ set certificate_file=~/.mutt/certificates
 # are saved along with the main body of your message.
 # 
 # 
-# set fcc_clear=no
+# set fcc_clear = no
 #
 # Name: fcc_clear
 # Type: boolean
@@ -1137,7 +1137,7 @@ set certificate_file=~/.mutt/certificates
 # (PGP only)
 # 
 # 
-# set flag_safe=no
+# set flag_safe = no
 #
 # Name: flag_safe
 # Type: boolean
@@ -1147,22 +1147,24 @@ set certificate_file=~/.mutt/certificates
 # If set, flagged messages cannot be deleted.
 # 
 # 
-set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
+# set folder = "imaps://norbertlogiewa96@imap.gmail.com:993"
+set folder=~/mail
+#
 #
 # Name: folder
 # Type: path
 # Default: "~/Mail"
 # 
 # 
-# Specifies the default location of your mailboxes.  A ``+'' or ``='' at the
+# Specifies the default location of your mailboxes.  A ``+'' or `` = '' at the
 # beginning of a pathname will be expanded to the value of this
 # variable.  Note that if you change this variable (from the default)
 # value you need to make sure that the assignment occurs before
-# you use ``+'' or ``='' for any other variables since expansion takes place
+# you use ``+'' or `` = '' for any other variables since expansion takes place
 # when handling the ``mailboxes'' command.
 # 
 # 
-# set folder_format="%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f"
+# set folder_format = "%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f"
 #
 # Name: folder_format
 # Type: string
@@ -1201,7 +1203,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # %n requires $mail_check_stats to be set (except for IMAP mailboxes).
 # 
 # 
-# set followup_to=yes
+# set followup_to = yes
 #
 # Name: followup_to
 # Type: boolean
@@ -1227,7 +1229,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # of the same email for you.
 # 
 # 
-# set force_name=no
+# set force_name = no
 #
 # Name: force_name
 # Type: boolean
@@ -1241,7 +1243,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # Also see the $record variable.
 # 
 # 
-# set forward_attribution_intro="----- Forwarded message from %f -----"
+# set forward_attribution_intro = "----- Forwarded message from %f -----"
 #
 # Name: forward_attribution_intro
 # Type: string
@@ -1254,7 +1256,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # the section on $index_format.  See also $attribution_locale.
 # 
 # 
-# set forward_attribution_trailer="----- End forwarded message -----"
+# set forward_attribution_trailer = "----- End forwarded message -----"
 #
 # Name: forward_attribution_trailer
 # Type: string
@@ -1267,7 +1269,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # the section on $index_format.  See also $attribution_locale.
 # 
 # 
-# set forward_decode=yes
+# set forward_decode = yes
 #
 # Name: forward_decode
 # Type: boolean
@@ -1280,7 +1282,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # otherwise $mime_forward_decode is used instead.
 # 
 # 
-# set forward_decrypt=yes
+# set forward_decrypt = yes
 #
 # Name: forward_decrypt
 # Type: boolean
@@ -1294,7 +1296,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # (PGP only)
 # 
 # 
-# set forward_edit=yes
+# set forward_edit = yes
 #
 # Name: forward_edit
 # Type: quadoption
@@ -1306,7 +1308,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # to forward with no modification, use a setting of ``no''.
 # 
 # 
-# set forward_format="[%a: %s]"
+# set forward_format = "[%a: %s]"
 #
 # Name: forward_format
 # Type: string
@@ -1317,7 +1319,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # It uses the same format sequences as the $index_format variable.
 # 
 # 
-# set forward_quote=no
+# set forward_quote = no
 #
 # Name: forward_quote
 # Type: boolean
@@ -1329,7 +1331,7 @@ set folder="imaps://norbertlogiewa96@imap.gmail.com:993"
 # $indent_string.
 # 
 # 
-set from="norbertlogiewa96@gmail.com"
+# set from = "norbertlogiewa96@gmail.com"
 #
 # Name: from
 # Type: e-mail address
@@ -1343,7 +1345,7 @@ set from="norbertlogiewa96@gmail.com"
 # This setting defaults to the contents of the environment variable $EMAIL.
 # 
 # 
-# set gecos_mask="^[^,]*"
+# set gecos_mask = "^[^,]*"
 #
 # Name: gecos_mask
 # Type: regular expression
@@ -1363,7 +1365,7 @@ set from="norbertlogiewa96@gmail.com"
 # ``Franklin'' to ``Franklin, Steve''.
 # 
 # 
-# set hdrs=yes
+# set hdrs = yes
 #
 # Name: hdrs
 # Type: boolean
@@ -1376,7 +1378,7 @@ set from="norbertlogiewa96@gmail.com"
 # the user defined header fields are added to every new message.
 # 
 # 
-# set header=no
+# set header = no
 #
 # Name: header
 # Type: boolean
@@ -1388,7 +1390,7 @@ set from="norbertlogiewa96@gmail.com"
 # The $weed setting applies.
 # 
 # 
-# set header_cache=""
+set header_cache = "~/.cache/mutt"
 #
 # Name: header_cache
 # Type: path
@@ -1405,7 +1407,7 @@ set from="norbertlogiewa96@gmail.com"
 # MH or Maildir folders, see ``caching'' for details.
 # 
 # 
-# set header_cache_compress=yes
+# set header_cache_compress = yes
 #
 # Name: header_cache_compress
 # Type: boolean
@@ -1420,7 +1422,7 @@ set from="norbertlogiewa96@gmail.com"
 # much faster than opening non header cached folders.
 # 
 # 
-# set header_cache_pagesize="16384"
+# set header_cache_pagesize = "16384"
 #
 # Name: header_cache_pagesize
 # Type: string
@@ -1433,7 +1435,7 @@ set from="norbertlogiewa96@gmail.com"
 # or less optimal for most use cases.
 # 
 # 
-# set header_color_partial=no
+# set header_color_partial = no
 #
 # Name: header_color_partial
 # Type: boolean
@@ -1449,7 +1451,7 @@ set from="norbertlogiewa96@gmail.com"
 # See ``color'' for more details.
 # 
 # 
-# set help=yes
+# set help = yes
 #
 # Name: help
 # Type: boolean
@@ -1466,7 +1468,7 @@ set from="norbertlogiewa96@gmail.com"
 # of these should present a major problem.
 # 
 # 
-# set hidden_host=no
+# set hidden_host = no
 #
 # Name: hidden_host
 # Type: boolean
@@ -1479,7 +1481,7 @@ set from="norbertlogiewa96@gmail.com"
 # cut-off of first-level domains.
 # 
 # 
-# set hide_limited=no
+# set hide_limited = no
 #
 # Name: hide_limited
 # Type: boolean
@@ -1490,7 +1492,7 @@ set from="norbertlogiewa96@gmail.com"
 # by limiting, in the thread tree.
 # 
 # 
-# set hide_missing=yes
+# set hide_missing = yes
 #
 # Name: hide_missing
 # Type: boolean
@@ -1501,7 +1503,7 @@ set from="norbertlogiewa96@gmail.com"
 # thread tree.
 # 
 # 
-# set hide_thread_subject=yes
+# set hide_thread_subject = yes
 #
 # Name: hide_thread_subject
 # Type: boolean
@@ -1513,7 +1515,7 @@ set from="norbertlogiewa96@gmail.com"
 # displayed sibling.
 # 
 # 
-# set hide_top_limited=no
+# set hide_top_limited = no
 #
 # Name: hide_top_limited
 # Type: boolean
@@ -1525,7 +1527,7 @@ set from="norbertlogiewa96@gmail.com"
 # $hide_limited is set, this option will have no effect.
 # 
 # 
-# set hide_top_missing=yes
+# set hide_top_missing = yes
 #
 # Name: hide_top_missing
 # Type: boolean
@@ -1537,7 +1539,7 @@ set from="norbertlogiewa96@gmail.com"
 # set, this option will have no effect.
 # 
 # 
-# set history=10
+# set history = 10
 #
 # Name: history
 # Type: number
@@ -1549,7 +1551,7 @@ set from="norbertlogiewa96@gmail.com"
 # variable is set.
 # 
 # 
-set history_file="~/.mutt/history"
+set history_file = "~/.config/mutt/.history"
 #
 # Name: history_file
 # Type: path
@@ -1561,7 +1563,7 @@ set history_file="~/.mutt/history"
 # Also see $save_history.
 # 
 # 
-# set history_remove_dups=no
+# set history_remove_dups = no
 #
 # Name: history_remove_dups
 # Type: boolean
@@ -1573,7 +1575,7 @@ set history_file="~/.mutt/history"
 # also be removed when it is periodically compacted.
 # 
 # 
-# set honor_disposition=no
+# set honor_disposition = no
 #
 # Name: honor_disposition
 # Type: boolean
@@ -1589,7 +1591,7 @@ set history_file="~/.mutt/history"
 # properly transform to plain text.
 # 
 # 
-# set honor_followup_to=yes
+# set honor_followup_to = yes
 #
 # Name: honor_followup_to
 # Type: quadoption
@@ -1600,7 +1602,7 @@ set history_file="~/.mutt/history"
 # honored when group-replying to a message.
 # 
 # 
-# set hostname=""
+# set hostname = ""
 #
 # Name: hostname
 # Type: string
@@ -1623,7 +1625,7 @@ set history_file="~/.mutt/history"
 # Also see $use_domain and $hidden_host.
 # 
 # 
-# set idn_decode=yes
+# set idn_decode = yes
 #
 # Name: idn_decode
 # Type: boolean
@@ -1635,7 +1637,7 @@ set history_file="~/.mutt/history"
 # This variable only affects decoding. (IDN only)
 # 
 # 
-# set idn_encode=yes
+# set idn_encode = yes
 #
 # Name: idn_encode
 # Type: boolean
@@ -1647,7 +1649,7 @@ set history_file="~/.mutt/history"
 # UTF-8 encoded domains. (IDN only)
 # 
 # 
-# set ignore_linear_white_space=no
+# set ignore_linear_white_space = no
 #
 # Name: ignore_linear_white_space
 # Type: boolean
@@ -1659,7 +1661,7 @@ set history_file="~/.mutt/history"
 # ``Subject:'' field from being divided into multiple lines.
 # 
 # 
-# set ignore_list_reply_to=no
+# set ignore_list_reply_to = no
 #
 # Name: ignore_list_reply_to
 # Type: boolean
@@ -1677,7 +1679,7 @@ set history_file="~/.mutt/history"
 # list.
 # 
 # 
-# set imap_authenticators=""
+# set imap_authenticators = ""
 #
 # Name: imap_authenticators
 # Type: string
@@ -1687,20 +1689,20 @@ set history_file="~/.mutt/history"
 # This is a colon-delimited list of authentication methods mutt may
 # attempt to use to log in to an IMAP server, in the order mutt should
 # try them.  Authentication methods are either ``login'' or the right
-# side of an IMAP ``AUTH=xxx'' capability string, e.g. ``digest-md5'', ``gssapi''
+# side of an IMAP ``AUTH = xxx'' capability string, e.g. ``digest-md5'', ``gssapi''
 # or ``cram-md5''. This option is case-insensitive. If it's
 # unset (the default) mutt will try all available methods,
 # in order from most-secure to least-secure.
 # 
 # Example:
-# set imap_authenticators="gssapi:cram-md5:login"
+# set imap_authenticators = "gssapi:cram-md5:login"
 # 
 # Note: Mutt will only fall back to other authentication methods if
 # the previous methods are unavailable. If a method is available but
 # authentication fails, mutt will not connect to the IMAP server.
 # 
 # 
-set imap_check_subscribed=yes
+set imap_check_subscribed = yes
 #
 # Name: imap_check_subscribed
 # Type: boolean
@@ -1713,7 +1715,7 @@ set imap_check_subscribed=yes
 # commands.
 # 
 # 
-# set imap_delim_chars="/."
+# set imap_delim_chars = "/."
 #
 # Name: imap_delim_chars
 # Type: string
@@ -1722,10 +1724,10 @@ set imap_check_subscribed=yes
 # 
 # This contains the list of characters which you would like to treat
 # as folder separators for displaying IMAP paths. In particular it
-# helps in using the ``='' shortcut for your folder variable.
+# helps in using the `` = '' shortcut for your folder variable.
 # 
 # 
-# set imap_headers=""
+# set imap_headers = ""
 #
 # Name: imap_headers
 # Type: string
@@ -1744,7 +1746,7 @@ set imap_check_subscribed=yes
 # ``X-Bogosity:'' and ``X-Spam-Status:'' header fields.
 # 
 # 
-# set imap_idle=no
+set imap_idle = no
 #
 # Name: imap_idle
 # Type: boolean
@@ -1758,7 +1760,7 @@ set imap_check_subscribed=yes
 # up periodically, try unsetting this.
 # 
 # 
-set imap_keepalive=900
+set imap_keepalive = 900
 #
 # Name: imap_keepalive
 # Type: number
@@ -1774,7 +1776,7 @@ set imap_keepalive=900
 # getting disconnected from your IMAP server due to inactivity.
 # 
 # 
-# set imap_list_subscribed=no
+# set imap_list_subscribed = no
 #
 # Name: imap_list_subscribed
 # Type: boolean
@@ -1786,7 +1788,7 @@ set imap_keepalive=900
 # IMAP browser with the <toggle-subscribed> function.
 # 
 # 
-# set imap_login=""
+# set imap_login = ""
 #
 # Name: imap_login
 # Type: string
@@ -1798,7 +1800,7 @@ set imap_keepalive=900
 # This variable defaults to the value of $imap_user.
 # 
 # 
-# set imap_pass=""
+# set imap_pass = ""
 #
 # Name: imap_pass
 # Type: string
@@ -1828,7 +1830,7 @@ unset imap_passive
 # is slow.
 # 
 # 
-# set imap_peek=yes
+# set imap_peek = yes
 #
 # Name: imap_peek
 # Type: boolean
@@ -1841,7 +1843,7 @@ unset imap_passive
 # exists to appease speed freaks.
 # 
 # 
-# set imap_pipeline_depth=15
+# set imap_pipeline_depth = 15
 #
 # Name: imap_pipeline_depth
 # Type: number
@@ -1857,7 +1859,7 @@ unset imap_passive
 # Note: Changes to this variable have no effect on open connections.
 # 
 # 
-# set imap_poll_timeout=15
+# set imap_poll_timeout = 15
 #
 # Name: imap_poll_timeout
 # Type: number
@@ -1870,7 +1872,7 @@ unset imap_passive
 # to 0 to disable timing out.
 # 
 # 
-# set imap_servernoise=yes
+# set imap_servernoise = yes
 #
 # Name: imap_servernoise
 # Type: boolean
@@ -1884,7 +1886,7 @@ unset imap_passive
 # them at some point.
 # 
 # 
-set imap_user="norbertlogiewa96@gmail.com"
+# set imap_user = "norbertlogiewa96@gmail.com"
 #
 # Name: imap_user
 # Type: string
@@ -1897,7 +1899,7 @@ set imap_user="norbertlogiewa96@gmail.com"
 # This variable defaults to your user name on the local machine.
 # 
 # 
-set implicit_autoview=yes
+set implicit_autoview = yes
 #
 # Name: implicit_autoview
 # Type: boolean
@@ -1911,7 +1913,7 @@ set implicit_autoview=yes
 # form.
 # 
 # 
-# set include=ask-yes
+# set include = ask-yes
 #
 # Name: include
 # Type: quadoption
@@ -1922,7 +1924,7 @@ set implicit_autoview=yes
 # is included in your reply.
 # 
 # 
-# set include_onlyfirst=no
+# set include_onlyfirst = no
 #
 # Name: include_onlyfirst
 # Type: boolean
@@ -1933,7 +1935,7 @@ set implicit_autoview=yes
 # of the message you are replying.
 # 
 # 
-# set indent_string="> "
+# set indent_string = "> "
 #
 # Name: indent_string
 # Type: string
@@ -1945,13 +1947,14 @@ set implicit_autoview=yes
 # change this value, as it tends to agitate the more fanatical netizens.
 # 
 # The value of this option is ignored if $text_flowed is set, because
-# the quoting mechanism is strictly defined for format=flowed.
+# the quoting mechanism is strictly defined for format = flowed.
 # 
 # This option is a format string, please see the description of
 # $index_format for supported printf(3)-style sequences.
 # 
 # 
-# set index_format="%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
+set index_format = "%4C %Z %{%b %d} %-15.15L  %s"
+# set index_format = "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
 #
 # Name: index_format
 # Type: string
@@ -2041,7 +2044,7 @@ set implicit_autoview=yes
 # ``save-hook'', ``fcc-hook'' and ``fcc-save-hook'', too.
 # 
 # 
-# set ispell="ispell"
+# set ispell = "ispell"
 #
 # Name: ispell
 # Type: path
@@ -2051,7 +2054,7 @@ set implicit_autoview=yes
 # How to invoke ispell (GNU's spell-checking software).
 # 
 # 
-# set keep_flagged=no
+# set keep_flagged = no
 #
 # Name: keep_flagged
 # Type: boolean
@@ -2063,7 +2066,7 @@ set implicit_autoview=yes
 # a ``mbox-hook'' command.
 # 
 # 
-# set mail_check=5
+set mail_check = 60
 #
 # Name: mail_check
 # Type: number
@@ -2074,7 +2077,7 @@ set implicit_autoview=yes
 # new mail. Also see the $timeout variable.
 # 
 # 
-# set mail_check_recent=yes
+# set mail_check_recent = yes
 #
 # Name: mail_check_recent
 # Type: boolean
@@ -2090,7 +2093,7 @@ set implicit_autoview=yes
 # mail if only old messages exist.
 # 
 # 
-# set mail_check_stats=no
+# set mail_check_stats = no
 #
 # Name: mail_check_stats
 # Type: boolean
@@ -2105,7 +2108,7 @@ set implicit_autoview=yes
 # control how often to update these counts.
 # 
 # 
-# set mail_check_stats_interval=60
+# set mail_check_stats_interval = 60
 #
 # Name: mail_check_stats_interval
 # Type: number
@@ -2116,7 +2119,7 @@ set implicit_autoview=yes
 # how often (in seconds) mutt will update message counts.
 # 
 # 
-# set mailcap_path=""
+set mailcap_path 	= ~/.config/mutt/mailcap
 #
 # Name: mailcap_path
 # Type: string
@@ -2127,7 +2130,7 @@ set implicit_autoview=yes
 # display MIME bodies not directly supported by Mutt.
 # 
 # 
-# set mailcap_sanitize=yes
+# set mailcap_sanitize = yes
 #
 # Name: mailcap_sanitize
 # Type: boolean
@@ -2142,7 +2145,7 @@ set implicit_autoview=yes
 # DOING!
 # 
 # 
-# set maildir_header_cache_verify=yes
+# set maildir_header_cache_verify = yes
 #
 # Name: maildir_header_cache_verify
 # Type: boolean
@@ -2155,7 +2158,7 @@ set implicit_autoview=yes
 # folders).
 # 
 # 
-# set maildir_trash=no
+# set maildir_trash = no
 #
 # Name: maildir_trash
 # Type: boolean
@@ -2168,7 +2171,7 @@ set implicit_autoview=yes
 # mailbox types.
 # 
 # 
-# set maildir_check_cur=no
+# set maildir_check_cur = no
 #
 # Name: maildir_check_cur
 # Type: boolean
@@ -2183,7 +2186,7 @@ set implicit_autoview=yes
 # to scan all cur messages.
 # 
 # 
-# set mark_macro_prefix="'"
+# set mark_macro_prefix = "'"
 #
 # Name: mark_macro_prefix
 # Type: string
@@ -2195,7 +2198,7 @@ set implicit_autoview=yes
 # from this prefix and the letter a.
 # 
 # 
-# set mark_old=yes
+# set mark_old = yes
 #
 # Name: mark_old
 # Type: boolean
@@ -2209,7 +2212,7 @@ set implicit_autoview=yes
 # indicating that they are old.
 # 
 # 
-# set markers=yes
+# set markers = yes
 #
 # Name: markers
 # Type: boolean
@@ -2222,7 +2225,7 @@ set implicit_autoview=yes
 # Also see the $smart_wrap variable.
 # 
 # 
-# set mask="!^\\.[^.]"
+# set mask = "!^\\.[^.]"
 #
 # Name: mask
 # Type: regular expression
@@ -2234,7 +2237,7 @@ set implicit_autoview=yes
 # will be shown. The match is always case-sensitive.
 # 
 # 
-set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
+# set mbox = "imaps://imap.gmail.com/[Gmail]/Inbox"
 #
 # Name: mbox
 # Type: path
@@ -2247,7 +2250,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # Also see the $move variable.
 # 
 # 
-# set mbox_type=mbox
+set mbox_type = Maildir
 #
 # Name: mbox_type
 # Type: folder magic
@@ -2259,7 +2262,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # -m command-line option.
 # 
 # 
-# set menu_context=0
+# set menu_context = 0
 #
 # Name: menu_context
 # Type: number
@@ -2270,7 +2273,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # when scrolling through menus. (Similar to $pager_context.)
 # 
 # 
-# set menu_move_off=yes
+# set menu_move_off = yes
 #
 # Name: menu_move_off
 # Type: boolean
@@ -2282,7 +2285,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # When set, the bottom entry may move off the bottom.
 # 
 # 
-# set menu_scroll=no
+# set menu_scroll = no
 #
 # Name: menu_scroll
 # Type: boolean
@@ -2295,7 +2298,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (useful for slow links to avoid many redraws).
 # 
 # 
-# set message_cache_clean=no
+# set message_cache_clean = no
 #
 # Name: message_cache_clean
 # Type: boolean
@@ -2308,7 +2311,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (especially for large folders).
 # 
 # 
-# set message_cachedir=""
+# set message_cachedir = ""
 #
 # Name: message_cachedir
 # Type: path
@@ -2326,7 +2329,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # Also see the $message_cache_clean variable.
 # 
 # 
-# set message_format="%s"
+# set message_format = "%s"
 #
 # Name: message_format
 # Type: string
@@ -2338,7 +2341,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # printf(3)-like sequences see the section on $index_format.
 # 
 # 
-# set meta_key=no
+# set meta_key = no
 #
 # Name: meta_key
 # Type: boolean
@@ -2354,7 +2357,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # ``x''.
 # 
 # 
-# set metoo=no
+# set metoo = no
 #
 # Name: metoo
 # Type: boolean
@@ -2365,7 +2368,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # command) from the list of recipients when replying to a message.
 # 
 # 
-# set mh_purge=no
+# set mh_purge = no
 #
 # Name: mh_purge
 # Type: boolean
@@ -2381,7 +2384,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # This option is similar to $maildir_trash for Maildir folders.
 # 
 # 
-# set mh_seq_flagged="flagged"
+# set mh_seq_flagged = "flagged"
 #
 # Name: mh_seq_flagged
 # Type: string
@@ -2391,7 +2394,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # The name of the MH sequence used for flagged messages.
 # 
 # 
-# set mh_seq_replied="replied"
+# set mh_seq_replied = "replied"
 #
 # Name: mh_seq_replied
 # Type: string
@@ -2401,7 +2404,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # The name of the MH sequence used to tag replied messages.
 # 
 # 
-# set mh_seq_unseen="unseen"
+# set mh_seq_unseen = "unseen"
 #
 # Name: mh_seq_unseen
 # Type: string
@@ -2411,7 +2414,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # The name of the MH sequence used for unseen messages.
 # 
 # 
-# set mime_forward=no
+# set mime_forward = no
 #
 # Name: mime_forward
 # Type: quadoption
@@ -2428,7 +2431,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # Also see $forward_decode and $mime_forward_decode.
 # 
 # 
-# set mime_forward_decode=no
+# set mime_forward_decode = no
 #
 # Name: mime_forward_decode
 # Type: boolean
@@ -2440,7 +2443,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # $forward_decode is used instead.
 # 
 # 
-# set mime_forward_rest=yes
+# set mime_forward_rest = yes
 #
 # Name: mime_forward_rest
 # Type: quadoption
@@ -2452,7 +2455,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # be attached to the newly composed message if this option is set.
 # 
 # 
-# set mime_type_query_command=""
+# set mime_type_query_command = ""
 #
 # Name: mime_type_query_command
 # Type: string
@@ -2477,7 +2480,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # ``file -bi''.
 # 
 # 
-# set mime_type_query_first=no
+# set mime_type_query_first = no
 #
 # Name: mime_type_query_first
 # Type: boolean
@@ -2488,7 +2491,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # mime.types lookup.
 # 
 # 
-# set mix_entry_format="%4n %c %-16s %a"
+# set mix_entry_format = "%4n %c %-16s %a"
 #
 # Name: mix_entry_format
 # Type: string
@@ -2504,7 +2507,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # %a      The remailer's e-mail address.
 # 
 # 
-# set mixmaster="mixmaster"
+# set mixmaster = "mixmaster"
 #
 # Name: mixmaster
 # Type: path
@@ -2517,7 +2520,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # mixmaster chain.
 # 
 # 
-# set move=no
+# set move = no
 #
 # Name: move
 # Type: quadoption
@@ -2529,7 +2532,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # a ``mbox-hook'' command.
 # 
 # 
-# set narrow_tree=no
+# set narrow_tree = no
 #
 # Name: narrow_tree
 # Type: boolean
@@ -2540,7 +2543,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # deeper threads to fit on the screen.
 # 
 # 
-# set net_inc=10
+# set net_inc = 10
 #
 # Name: net_inc
 # Type: number
@@ -2554,7 +2557,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # See also $read_inc, $write_inc and $net_inc.
 # 
 # 
-# set pager="builtin"
+# set pager = "builtin"
 #
 # Name: pager
 # Type: path
@@ -2572,7 +2575,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # the screen width to be badly formatted in the help menu.
 # 
 # 
-# set pager_context=0
+# set pager_context = 0
 #
 # Name: pager_context
 # Type: number
@@ -2589,7 +2592,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # if 0, the match will be top-aligned.
 # 
 # 
-# set pager_format="-%Z- %C/%m: %-20.20n   %s%*  -- (%P)"
+# set pager_format = "-%Z- %C/%m: %-20.20n   %s%*  -- (%P)"
 #
 # Name: pager_format
 # Type: string
@@ -2602,7 +2605,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # section.
 # 
 # 
-# set pager_index_lines=0
+# set pager_index_lines = 0
 #
 # Name: pager_index_lines
 # Type: number
@@ -2622,7 +2625,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # many lines as it needs.
 # 
 # 
-# set pager_stop=no
+# set pager_stop = no
 #
 # Name: pager_stop
 # Type: boolean
@@ -2634,7 +2637,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # function.
 # 
 # 
-# set pgp_auto_decode=no
+# set pgp_auto_decode = no
 #
 # Name: pgp_auto_decode
 # Type: boolean
@@ -2649,7 +2652,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # check the message for traditional pgp.
 # 
 # 
-# set pgp_autoinline=no
+# set pgp_autoinline = no
 #
 # Name: pgp_autoinline
 # Type: boolean
@@ -2674,7 +2677,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_check_exit=yes
+# set pgp_check_exit = yes
 #
 # Name: pgp_check_exit
 # Type: boolean
@@ -2687,7 +2690,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_clearsign_command=""
+# set pgp_clearsign_command = ""
 #
 # Name: pgp_clearsign_command
 # Type: string
@@ -2703,7 +2706,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_decode_command=""
+# set pgp_decode_command = ""
 #
 # Name: pgp_decode_command
 # Type: string
@@ -2714,7 +2717,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # application/pgp attachments.
 # 
 # The PGP command formats have their own set of printf(3)-like sequences:
-# %p      Expands to PGPPASSFD=0 when a pass phrase is needed, to an empty
+# %p      Expands to PGPPASSFD = 0 when a pass phrase is needed, to an empty
 #         string otherwise. Note: This may be used with a %? construct.
 # %f      Expands to the name of a file containing a message.
 # %s      Expands to the name of a file containing the signature part
@@ -2730,7 +2733,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_decrypt_command=""
+# set pgp_decrypt_command = ""
 #
 # Name: pgp_decrypt_command
 # Type: string
@@ -2744,7 +2747,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_decryption_okay=""
+# set pgp_decryption_okay = ""
 #
 # Name: pgp_decryption_okay
 # Type: regular expression
@@ -2760,7 +2763,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_encrypt_only_command=""
+# set pgp_encrypt_only_command = ""
 #
 # Name: pgp_encrypt_only_command
 # Type: string
@@ -2774,7 +2777,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_encrypt_sign_command=""
+# set pgp_encrypt_sign_command = ""
 #
 # Name: pgp_encrypt_sign_command
 # Type: string
@@ -2788,7 +2791,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_entry_format="%4n %t%f %4l/0x%k %-4a %2c %u"
+# set pgp_entry_format = "%4n %t%f %4l/0x%k %-4a %2c %u"
 #
 # Name: pgp_entry_format
 # Type: string
@@ -2812,7 +2815,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_export_command=""
+# set pgp_export_command = ""
 #
 # Name: pgp_export_command
 # Type: string
@@ -2827,7 +2830,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_getkeys_command=""
+# set pgp_getkeys_command = ""
 #
 # Name: pgp_getkeys_command
 # Type: string
@@ -2842,7 +2845,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_good_sign=""
+# set pgp_good_sign = ""
 #
 # Name: pgp_good_sign
 # Type: regular expression
@@ -2856,7 +2859,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_ignore_subkeys=yes
+# set pgp_ignore_subkeys = yes
 #
 # Name: pgp_ignore_subkeys
 # Type: boolean
@@ -2869,7 +2872,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_import_command=""
+# set pgp_import_command = ""
 #
 # Name: pgp_import_command
 # Type: string
@@ -2884,7 +2887,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_list_pubring_command=""
+# set pgp_list_pubring_command = ""
 #
 # Name: pgp_list_pubring_command
 # Type: string
@@ -2907,7 +2910,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_list_secring_command=""
+# set pgp_list_secring_command = ""
 #
 # Name: pgp_list_secring_command
 # Type: string
@@ -2930,7 +2933,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_long_ids=yes
+# set pgp_long_ids = yes
 #
 # Name: pgp_long_ids
 # Type: boolean
@@ -2944,7 +2947,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_mime_auto=ask-yes
+# set pgp_mime_auto = ask-yes
 #
 # Name: pgp_mime_auto
 # Type: quadoption
@@ -2960,7 +2963,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_replyinline=no
+# set pgp_replyinline = no
 #
 # Name: pgp_replyinline
 # Type: boolean
@@ -2987,7 +2990,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_retainable_sigs=no
+# set pgp_retainable_sigs = no
 #
 # Name: pgp_retainable_sigs
 # Type: boolean
@@ -3003,7 +3006,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_self_encrypt=no
+# set pgp_self_encrypt = no
 #
 # Name: pgp_self_encrypt
 # Type: boolean
@@ -3015,7 +3018,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_self_encrypt_as=""
+# set pgp_self_encrypt_as = ""
 #
 # Name: pgp_self_encrypt_as
 # Type: string
@@ -3028,7 +3031,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_show_unusable=yes
+# set pgp_show_unusable = yes
 #
 # Name: pgp_show_unusable
 # Type: boolean
@@ -3041,7 +3044,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_sign_as=""
+# set pgp_sign_as = ""
 #
 # Name: pgp_sign_as
 # Type: string
@@ -3054,7 +3057,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_sign_command=""
+# set pgp_sign_command = ""
 #
 # Name: pgp_sign_command
 # Type: string
@@ -3069,7 +3072,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_sort_keys=address
+# set pgp_sort_keys = address
 #
 # Name: pgp_sort_keys
 # Type: sort order
@@ -3089,7 +3092,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_strict_enc=yes
+# set pgp_strict_enc = yes
 #
 # Name: pgp_strict_enc
 # Type: boolean
@@ -3103,7 +3106,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_timeout=300
+# set pgp_timeout = 300
 #
 # Name: pgp_timeout
 # Type: number
@@ -3115,7 +3118,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_use_gpg_agent=no
+# set pgp_use_gpg_agent = no
 #
 # Name: pgp_use_gpg_agent
 # Type: boolean
@@ -3128,7 +3131,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_verify_command=""
+# set pgp_verify_command = ""
 #
 # Name: pgp_verify_command
 # Type: string
@@ -3142,7 +3145,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pgp_verify_key_command=""
+# set pgp_verify_key_command = ""
 #
 # Name: pgp_verify_key_command
 # Type: string
@@ -3157,7 +3160,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # (PGP only)
 # 
 # 
-# set pipe_decode=no
+# set pipe_decode = no
 #
 # Name: pipe_decode
 # Type: boolean
@@ -3170,7 +3173,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # first.
 # 
 # 
-# set pipe_sep="\n"
+# set pipe_sep = "\n"
 #
 # Name: pipe_sep
 # Type: string
@@ -3181,7 +3184,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # messages to an external Unix command.
 # 
 # 
-# set pipe_split=no
+# set pipe_split = no
 #
 # Name: pipe_split
 # Type: boolean
@@ -3196,7 +3199,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # and the $pipe_sep separator is added after each message.
 # 
 # 
-# set pop_auth_try_all=yes
+# set pop_auth_try_all = yes
 #
 # Name: pop_auth_try_all
 # Type: boolean
@@ -3209,7 +3212,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # available but authentication fails, Mutt will not connect to the POP server.
 # 
 # 
-# set pop_authenticators=""
+# set pop_authenticators = ""
 #
 # Name: pop_authenticators
 # Type: string
@@ -3225,10 +3228,10 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # most-secure to least-secure.
 # 
 # Example:
-# set pop_authenticators="digest-md5:apop:user"
+# set pop_authenticators = "digest-md5:apop:user"
 # 
 # 
-# set pop_checkinterval=60
+# set pop_checkinterval = 60
 #
 # Name: pop_checkinterval
 # Type: number
@@ -3239,7 +3242,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # new mail in the currently selected mailbox if it is a POP mailbox.
 # 
 # 
-# set pop_delete=ask-no
+# set pop_delete = ask-no
 #
 # Name: pop_delete
 # Type: quadoption
@@ -3251,7 +3254,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # download messages but also leave them on the POP server.
 # 
 # 
-# set pop_host=""
+# set pop_host = ""
 #
 # Name: pop_host
 # Type: string
@@ -3265,7 +3268,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # where ``[...]'' denotes an optional part.
 # 
 # 
-# set pop_last=no
+# set pop_last = no
 #
 # Name: pop_last
 # Type: boolean
@@ -3277,7 +3280,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # the <fetch-mail> function.
 # 
 # 
-# set pop_pass=""
+# set pop_pass = ""
 #
 # Name: pop_pass
 # Type: string
@@ -3292,7 +3295,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # even if you are the only one who can read the file.
 # 
 # 
-# set pop_reconnect=ask-yes
+# set pop_reconnect = ask-yes
 #
 # Name: pop_reconnect
 # Type: quadoption
@@ -3303,7 +3306,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # the connection is lost.
 # 
 # 
-# set pop_user=""
+# set pop_user = ""
 #
 # Name: pop_user
 # Type: string
@@ -3315,7 +3318,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # This variable defaults to your user name on the local machine.
 # 
 # 
-# set post_indent_string=""
+# set post_indent_string = ""
 #
 # Name: post_indent_string
 # Type: string
@@ -3326,7 +3329,7 @@ set mbox="imaps://imap.gmail.com/[Gmail]/Inbox"
 # string after the inclusion of a message which is being replied to.
 # 
 # 
-# set postpone=ask-yes
+# set postpone = ask-yes
 #
 # Name: postpone
 # Type: quadoption
@@ -3353,7 +3356,7 @@ set postponed = "+[Gmail]/Drafts"
 # Also see the $postpone variable.
 # 
 # 
-# set postpone_encrypt=no
+# set postpone_encrypt = no
 #
 # Name: postpone_encrypt
 # Type: boolean
@@ -3367,7 +3370,7 @@ set postponed = "+[Gmail]/Drafts"
 # (Crypto only)
 # 
 # 
-# set postpone_encrypt_as=""
+# set postpone_encrypt_as = ""
 #
 # Name: postpone_encrypt_as
 # Type: string
@@ -3379,7 +3382,7 @@ set postponed = "+[Gmail]/Drafts"
 # (Crypto only)
 # 
 # 
-# set preconnect=""
+# set preconnect = ""
 #
 # Name: preconnect
 # Type: string
@@ -3390,7 +3393,7 @@ set postponed = "+[Gmail]/Drafts"
 # a connection to the server. This is useful for setting up secure
 # connections, e.g. with ssh(1). If the command returns a  nonzero
 # status, mutt gives up opening the server. Example:
-# set preconnect="ssh -f -q -L 1234:mailhost.net:143 mailhost.net \
+# set preconnect = "ssh -f -q -L 1234:mailhost.net:143 mailhost.net \
 # sleep 20 < /dev/null > /dev/null"
 # 
 # Mailbox ``foo'' on ``mailhost.net'' can now be reached
@@ -3400,7 +3403,7 @@ set postponed = "+[Gmail]/Drafts"
 # remote machine without having to enter a password.
 # 
 # 
-# set print=ask-no
+# set print = ask-no
 #
 # Name: print
 # Type: quadoption
@@ -3412,7 +3415,7 @@ set postponed = "+[Gmail]/Drafts"
 # accidentally hit ``p'' often.
 # 
 # 
-# set print_command="lpr"
+# set print_command = "lpr"
 #
 # Name: print_command
 # Type: path
@@ -3422,7 +3425,7 @@ set postponed = "+[Gmail]/Drafts"
 # This specifies the command pipe that should be used to print messages.
 # 
 # 
-# set print_decode=yes
+# set print_decode = yes
 #
 # Name: print_decode
 # Type: boolean
@@ -3438,7 +3441,7 @@ set postponed = "+[Gmail]/Drafts"
 # e-mail messages for printing.
 # 
 # 
-# set print_split=no
+# set print_split = no
 #
 # Name: print_split
 # Type: boolean
@@ -3456,7 +3459,7 @@ set postponed = "+[Gmail]/Drafts"
 # most likely want to set this option.
 # 
 # 
-# set prompt_after=yes
+# set prompt_after = yes
 #
 # Name: prompt_after
 # Type: boolean
@@ -3469,7 +3472,7 @@ set postponed = "+[Gmail]/Drafts"
 # index menu when the external pager exits.
 # 
 # 
-# set query_command=""
+# set query_command = ""
 #
 # Name: query_command
 # Type: path
@@ -3485,7 +3488,7 @@ set postponed = "+[Gmail]/Drafts"
 # See ``query'' for more information.
 # 
 # 
-# set query_format="%4c %t %-25.25a %-25.25n %?e?(%e)?"
+# set query_format = "%4c %t %-25.25a %-25.25n %?e?(%e)?"
 #
 # Name: query_format
 # Type: string
@@ -3509,7 +3512,7 @@ set postponed = "+[Gmail]/Drafts"
 # * = can be optionally printed if nonzero, see the $status_format documentation.
 # 
 # 
-# set quit=yes
+# set quit = yes
 #
 # Name: quit
 # Type: quadoption
@@ -3522,7 +3525,7 @@ set postponed = "+[Gmail]/Drafts"
 # prompted for confirmation when you try to quit.
 # 
 # 
-# set quote_regexp="^([ \t]*[|>:}#])+"
+# set quote_regexp = "^([ \t]*[|>:}#])+"
 #
 # Name: quote_regexp
 # Type: regular expression
@@ -3542,7 +3545,7 @@ set postponed = "+[Gmail]/Drafts"
 # Match detection may be overridden by the $smileys regular expression.
 # 
 # 
-# set read_inc=10
+# set read_inc = 10
 #
 # Name: read_inc
 # Type: number
@@ -3563,7 +3566,7 @@ set postponed = "+[Gmail]/Drafts"
 # ``tuning'' section of the manual for performance considerations.
 # 
 # 
-# set read_only=no
+# set read_only = no
 #
 # Name: read_only
 # Type: boolean
@@ -3573,7 +3576,7 @@ set postponed = "+[Gmail]/Drafts"
 # If set, all folders are opened in read-only mode.
 # 
 # 
-set realname="Norbert Logiewa"
+set realname = "Norbert Logiewa"
 #
 # Name: realname
 # Type: string
@@ -3588,7 +3591,7 @@ set realname="Norbert Logiewa"
 # in the $from variable.
 # 
 # 
-# set recall=ask-yes
+# set recall = ask-yes
 #
 # Name: recall
 # Type: quadoption
@@ -3605,7 +3608,7 @@ set realname="Norbert Logiewa"
 # Also see $postponed variable.
 # 
 # 
-set record = "+[Gmail]/Sent Mail"
+# set record = "+[Gmail]/Sent Mail"
 #
 # Name: record
 # Type: path
@@ -3621,14 +3624,14 @@ set record = "+[Gmail]/Sent Mail"
 # $save_name variables, and the ``fcc-hook'' command.
 # 
 # 
-# set reflow_space_quotes=yes
+# set reflow_space_quotes = yes
 #
 # Name: reflow_space_quotes
 # Type: boolean
 # Default: yes
 # 
 # 
-# This option controls how quotes from format=flowed messages are displayed
+# This option controls how quotes from format = flowed messages are displayed
 # in the pager and when replying (with $text_flowed unset).
 # When set, this option adds spaces after each level of quote marks, turning
 # ">>>foo" into "> > > foo".
@@ -3637,7 +3640,7 @@ set record = "+[Gmail]/Sent Mail"
 # Also, this option does not affect replies when $text_flowed is set.
 # 
 # 
-# set reflow_text=yes
+# set reflow_text = yes
 #
 # Name: reflow_text
 # Type: boolean
@@ -3645,14 +3648,14 @@ set record = "+[Gmail]/Sent Mail"
 # 
 # 
 # When set, Mutt will reformat paragraphs in text/plain
-# parts marked format=flowed.  If unset, Mutt will display paragraphs
+# parts marked format = flowed.  If unset, Mutt will display paragraphs
 # unaltered from how they appear in the message body.  See RFC3676 for
-# details on the format=flowed format.
+# details on the format = flowed format.
 # 
 # Also see $reflow_wrap, and $wrap.
 # 
 # 
-# set reflow_wrap=78
+# set reflow_wrap = 78
 #
 # Name: reflow_wrap
 # Type: number
@@ -3668,7 +3671,7 @@ set record = "+[Gmail]/Sent Mail"
 # Also see $wrap.
 # 
 # 
-# set reply_regexp="^(re([\\[0-9\\]+])*|aw):[ \t]*"
+# set reply_regexp = "^(re([\\[0-9\\]+])*|aw):[ \t]*"
 #
 # Name: reply_regexp
 # Type: regular expression
@@ -3680,7 +3683,7 @@ set record = "+[Gmail]/Sent Mail"
 # the German "Aw:".
 # 
 # 
-# set reply_self=no
+# set reply_self = no
 #
 # Name: reply_self
 # Type: boolean
@@ -3694,7 +3697,7 @@ set record = "+[Gmail]/Sent Mail"
 # Also see the ``alternates'' command.
 # 
 # 
-# set reply_to=ask-yes
+# set reply_to = ask-yes
 #
 # Name: reply_to
 # Type: quadoption
@@ -3709,7 +3712,7 @@ set record = "+[Gmail]/Sent Mail"
 # message to the author of a message.
 # 
 # 
-# set resolve=yes
+# set resolve = yes
 #
 # Name: resolve
 # Type: boolean
@@ -3721,7 +3724,7 @@ set record = "+[Gmail]/Sent Mail"
 # current message is executed.
 # 
 # 
-# set resume_draft_files=no
+# set resume_draft_files = no
 #
 # Name: resume_draft_files
 # Type: boolean
@@ -3735,7 +3738,7 @@ set record = "+[Gmail]/Sent Mail"
 # and signatures are not added to the message.
 # 
 # 
-# set resume_edited_draft_files=yes
+# set resume_edited_draft_files = yes
 #
 # Name: resume_edited_draft_files
 # Type: boolean
@@ -3756,7 +3759,7 @@ set record = "+[Gmail]/Sent Mail"
 # made multiple times to the draft file.
 # 
 # 
-# set reverse_alias=no
+# set reverse_alias = no
 #
 # Name: reverse_alias
 # Type: boolean
@@ -3777,7 +3780,7 @@ set record = "+[Gmail]/Sent Mail"
 # address is not human friendly.
 # 
 # 
-# set reverse_name=no
+# set reverse_name = no
 #
 # Name: reverse_name
 # Type: boolean
@@ -3796,7 +3799,7 @@ set record = "+[Gmail]/Sent Mail"
 # Also see the ``alternates'' command.
 # 
 # 
-# set reverse_realname=yes
+# set reverse_realname = yes
 #
 # Name: reverse_realname
 # Type: boolean
@@ -3809,7 +3812,7 @@ set record = "+[Gmail]/Sent Mail"
 # override any such real names with the setting of the $realname variable.
 # 
 # 
-# set rfc2047_parameters=no
+# set rfc2047_parameters = no
 #
 # Name: rfc2047_parameters
 # Type: boolean
@@ -3819,7 +3822,7 @@ set record = "+[Gmail]/Sent Mail"
 # When this variable is set, Mutt will decode RFC2047-encoded MIME
 # parameters. You want to set this variable when mutt suggests you
 # to save attachments to files named like:
-# =?iso-8859-1?Q?file=5F=E4=5F991116=2Ezip?=
+# =?iso-8859-1?Q?file = 5F = E4 = 5F991116 = 2Ezip?=
 # 
 # When this variable is set interactively, the change won't be
 # active until you change folders.
@@ -3833,7 +3836,7 @@ set record = "+[Gmail]/Sent Mail"
 # unconditionally use the encoding specified in RFC2231.
 # 
 # 
-# set save_address=no
+# set save_address = no
 #
 # Name: save_address
 # Type: boolean
@@ -3845,7 +3848,7 @@ set record = "+[Gmail]/Sent Mail"
 # is set too, the selection of the Fcc folder will be changed as well.
 # 
 # 
-# set save_empty=yes
+# set save_empty = yes
 #
 # Name: save_empty
 # Type: boolean
@@ -3860,7 +3863,7 @@ set record = "+[Gmail]/Sent Mail"
 # delete MH and Maildir directories.
 # 
 # 
-# set save_history=0
+# set save_history = 0
 #
 # Name: save_history
 # Type: number
@@ -3871,7 +3874,7 @@ set record = "+[Gmail]/Sent Mail"
 # $history_file file.
 # 
 # 
-# set save_name=no
+# set save_name = no
 #
 # Name: save_name
 # Type: boolean
@@ -3889,7 +3892,7 @@ set record = "+[Gmail]/Sent Mail"
 # Also see the $force_name variable.
 # 
 # 
-# set score=yes
+# set score = yes
 #
 # Name: score
 # Type: boolean
@@ -3901,7 +3904,7 @@ set record = "+[Gmail]/Sent Mail"
 # $score_threshold_delete variable and related are used.
 # 
 # 
-# set score_threshold_delete=-1
+# set score_threshold_delete = -1
 #
 # Name: score_threshold_delete
 # Type: number
@@ -3914,7 +3917,7 @@ set record = "+[Gmail]/Sent Mail"
 # of this variable will never mark a message for deletion.
 # 
 # 
-# set score_threshold_flag=9999
+# set score_threshold_flag = 9999
 #
 # Name: score_threshold_flag
 # Type: number
@@ -3925,7 +3928,7 @@ set record = "+[Gmail]/Sent Mail"
 # variable's value are automatically marked "flagged".
 # 
 # 
-# set score_threshold_read=-1
+# set score_threshold_read = -1
 #
 # Name: score_threshold_read
 # Type: number
@@ -3938,7 +3941,7 @@ set record = "+[Gmail]/Sent Mail"
 # of this variable will never mark a message read.
 # 
 # 
-# set search_context=0
+# set search_context = 0
 #
 # Name: search_context
 # Type: number
@@ -3949,7 +3952,7 @@ set record = "+[Gmail]/Sent Mail"
 # before search results. By default, search results will be top-aligned.
 # 
 # 
-# set send_charset="us-ascii:iso-8859-1:utf-8"
+# set send_charset = "us-ascii:iso-8859-1:utf-8"
 #
 # Name: send_charset
 # Type: string
@@ -3968,7 +3971,7 @@ set record = "+[Gmail]/Sent Mail"
 # mutt uses $charset as a fallback.
 # 
 # 
-# set sendmail="/usr/sbin/sendmail -oem -oi"
+# set sendmail = "/usr/sbin/sendmail -oem -oi"
 #
 # Name: sendmail
 # Type: path
@@ -3983,7 +3986,7 @@ set record = "+[Gmail]/Sent Mail"
 # $dsn_notify, or $dsn_return will be added before the delimiter.
 # 
 # 
-# set sendmail_wait=0
+# set sendmail_wait = 0
 #
 # Name: sendmail_wait
 # Type: number
@@ -4004,7 +4007,7 @@ set record = "+[Gmail]/Sent Mail"
 # will be informed as to where to find the output.
 # 
 # 
-# set shell=""
+# set shell = ""
 #
 # Name: shell
 # Type: path
@@ -4015,7 +4018,7 @@ set record = "+[Gmail]/Sent Mail"
 # shell from /etc/passwd is used.
 # 
 # 
-# set sidebar_delim_chars="/."
+# set sidebar_delim_chars = "/."
 #
 # Name: sidebar_delim_chars
 # Type: string
@@ -4026,15 +4029,15 @@ set record = "+[Gmail]/Sent Mail"
 # as folder separators for displaying paths in the sidebar.
 # 
 # Local mail is often arranged in directories: `dir1/dir2/mailbox'.
-# set sidebar_delim_chars='/'
+# set sidebar_delim_chars = '/'
 # 
 # IMAP mailboxes are often named: `folder1.folder2.mailbox'.
-# set sidebar_delim_chars='.'
+# set sidebar_delim_chars = '.'
 # 
 # See also: $sidebar_short_path, $sidebar_folder_indent, $sidebar_indent_string.
 # 
 # 
-# set sidebar_divider_char="|"
+# set sidebar_divider_char = "|"
 #
 # Name: sidebar_divider_char
 # Type: string
@@ -4046,7 +4049,7 @@ set record = "+[Gmail]/Sent Mail"
 # characters are supported.
 # 
 # 
-# set sidebar_folder_indent=no
+# set sidebar_folder_indent = no
 #
 # Name: sidebar_folder_indent
 # Type: boolean
@@ -4058,7 +4061,7 @@ set record = "+[Gmail]/Sent Mail"
 # See also: $sidebar_short_path, $sidebar_indent_string, $sidebar_delim_chars.
 # 
 # 
-# set sidebar_format="%B%*  %n"
+# set sidebar_format = "%B%*  %n"
 #
 # Name: sidebar_format
 # Type: string
@@ -4093,7 +4096,7 @@ set record = "+[Gmail]/Sent Mail"
 # "%B%?F? [%F]?%* %?N?%N/?%S".
 # 
 # 
-# set sidebar_indent_string="  "
+# set sidebar_indent_string = "  "
 #
 # Name: sidebar_indent_string
 # Type: string
@@ -4106,7 +4109,7 @@ set record = "+[Gmail]/Sent Mail"
 # See also: $sidebar_short_path, $sidebar_folder_indent, $sidebar_delim_chars.
 # 
 # 
-# set sidebar_new_mail_only=no
+# set sidebar_new_mail_only = no
 #
 # Name: sidebar_new_mail_only
 # Type: boolean
@@ -4119,7 +4122,7 @@ set record = "+[Gmail]/Sent Mail"
 # See also: sidebar_whitelist.
 # 
 # 
-# set sidebar_next_new_wrap=no
+# set sidebar_next_new_wrap = no
 #
 # Name: sidebar_next_new_wrap
 # Type: boolean
@@ -4132,7 +4135,7 @@ set record = "+[Gmail]/Sent Mail"
 # the end of the list.
 # 
 # 
-# set sidebar_short_path=no
+# set sidebar_short_path = no
 #
 # Name: sidebar_short_path
 # Type: boolean
@@ -4140,9 +4143,9 @@ set record = "+[Gmail]/Sent Mail"
 # 
 # 
 # By default the sidebar will show the mailbox's path, relative to the
-# $folder variable. Setting sidebar_shortpath=yes will shorten the
+# $folder variable. Setting sidebar_shortpath = yes will shorten the
 # names relative to the previous name. Here's an example:
-# shortpath=no shortpath=yes shortpath=yes, folderindent=yes, indentstr=".."
+# shortpath = no shortpath = yes shortpath = yes, folderindent = yes, indentstr = ".."
 # fruit           fruit         fruit
 # fruit.apple  apple         ..apple
 # fruit.banana banana        ..banana
@@ -4152,7 +4155,7 @@ set record = "+[Gmail]/Sent Mail"
 # See also: $sidebar_delim_chars, $sidebar_folder_indent, $sidebar_indent_string.
 # 
 # 
-# set sidebar_sort_method=order
+# set sidebar_sort_method = order
 #
 # Name: sidebar_sort_method
 # Type: sort order
@@ -4172,10 +4175,10 @@ set record = "+[Gmail]/Sent Mail"
 # 
 # 
 # You may optionally use the ``reverse-'' prefix to specify reverse sorting
-# order (example: ``set sort_browser=reverse-date'').
+# order (example: ``set sort_browser = reverse-date'').
 # 
 # 
-# set sidebar_visible=no
+# set sidebar_visible = no
 #
 # Name: sidebar_visible
 # Type: boolean
@@ -4188,7 +4191,7 @@ set record = "+[Gmail]/Sent Mail"
 # See also: $sidebar_format, $sidebar_width
 # 
 # 
-# set sidebar_width=30
+# set sidebar_width = 30
 #
 # Name: sidebar_width
 # Type: number
@@ -4196,11 +4199,11 @@ set record = "+[Gmail]/Sent Mail"
 # 
 # 
 # This controls the width of the sidebar.  It is measured in screen columns.
-# For example: sidebar_width=20 could display 20 ASCII characters, or 10
+# For example: sidebar_width = 20 could display 20 ASCII characters, or 10
 # Chinese characters.
 # 
 # 
-# set sig_dashes=yes
+# set sig_dashes = yes
 #
 # Name: sig_dashes
 # Type: boolean
@@ -4215,7 +4218,7 @@ set record = "+[Gmail]/Sent Mail"
 # the signature in a different color in the built-in pager.
 # 
 # 
-# set sig_on_top=no
+# set sig_on_top = no
 #
 # Name: sig_on_top
 # Type: boolean
@@ -4228,7 +4231,7 @@ set record = "+[Gmail]/Sent Mail"
 # some heat from netiquette guardians.
 # 
 # 
-# set signature="~/.signature"
+# set signature = "~/.signature"
 #
 # Name: signature
 # Type: path
@@ -4241,7 +4244,7 @@ set record = "+[Gmail]/Sent Mail"
 # its standard output.
 # 
 # 
-# set simple_search="~f %s | ~s %s"
+# set simple_search = "~f %s | ~s %s"
 #
 # Name: simple_search
 # Type: string
@@ -4258,7 +4261,7 @@ set record = "+[Gmail]/Sent Mail"
 # For the default value, ``joe'' would be expanded to: ``~f joe | ~s joe''.
 # 
 # 
-# set sleep_time=1
+# set sleep_time = 1
 #
 # Name: sleep_time
 # Type: number
@@ -4271,7 +4274,7 @@ set record = "+[Gmail]/Sent Mail"
 # a value of zero for this option suppresses the pause.
 # 
 # 
-# set smart_wrap=yes
+# set smart_wrap = yes
 #
 # Name: smart_wrap
 # Type: boolean
@@ -4284,7 +4287,7 @@ set record = "+[Gmail]/Sent Mail"
 # $markers variable.
 # 
 # 
-# set smileys="(>From )|(:[-^]?[][)(><}{|/DP])"
+# set smileys = "(>From )|(:[-^]?[][)(><}{|/DP])"
 #
 # Name: smileys
 # Type: regular expression
@@ -4297,7 +4300,7 @@ set record = "+[Gmail]/Sent Mail"
 # happens at the beginning of a line.
 # 
 # 
-# set smime_ask_cert_label=yes
+# set smime_ask_cert_label = yes
 #
 # Name: smime_ask_cert_label
 # Type: boolean
@@ -4310,7 +4313,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_ca_location=""
+# set smime_ca_location = ""
 #
 # Name: smime_ca_location
 # Type: path
@@ -4322,7 +4325,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_certificates=""
+# set smime_certificates = ""
 #
 # Name: smime_certificates
 # Type: path
@@ -4339,7 +4342,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_decrypt_command=""
+# set smime_decrypt_command = ""
 #
 # Name: smime_decrypt_command
 # Type: string
@@ -4369,7 +4372,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_decrypt_use_default_key=yes
+# set smime_decrypt_use_default_key = yes
 #
 # Name: smime_decrypt_use_default_key
 # Type: boolean
@@ -4382,7 +4385,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_default_key=""
+# set smime_default_key = ""
 #
 # Name: smime_default_key
 # Type: string
@@ -4394,7 +4397,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_encrypt_command=""
+# set smime_encrypt_command = ""
 #
 # Name: smime_encrypt_command
 # Type: string
@@ -4408,7 +4411,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_encrypt_with="aes256"
+# set smime_encrypt_with = "aes256"
 #
 # Name: smime_encrypt_with
 # Type: string
@@ -4420,7 +4423,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_get_cert_command=""
+# set smime_get_cert_command = ""
 #
 # Name: smime_get_cert_command
 # Type: string
@@ -4434,7 +4437,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_get_cert_email_command=""
+# set smime_get_cert_email_command = ""
 #
 # Name: smime_get_cert_email_command
 # Type: string
@@ -4450,7 +4453,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_get_signer_cert_command=""
+# set smime_get_signer_cert_command = ""
 #
 # Name: smime_get_signer_cert_command
 # Type: string
@@ -4466,7 +4469,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_import_cert_command=""
+# set smime_import_cert_command = ""
 #
 # Name: smime_import_cert_command
 # Type: string
@@ -4480,7 +4483,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_is_default=no
+# set smime_is_default = no
 #
 # Name: smime_is_default
 # Type: boolean
@@ -4495,7 +4498,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_keys=""
+# set smime_keys = ""
 #
 # Name: smime_keys
 # Type: path
@@ -4511,7 +4514,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_pk7out_command=""
+# set smime_pk7out_command = ""
 #
 # Name: smime_pk7out_command
 # Type: string
@@ -4526,7 +4529,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_self_encrypt=no
+# set smime_self_encrypt = no
 #
 # Name: smime_self_encrypt
 # Type: boolean
@@ -4538,7 +4541,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_self_encrypt_as=""
+# set smime_self_encrypt_as = ""
 #
 # Name: smime_self_encrypt_as
 # Type: string
@@ -4552,7 +4555,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_sign_command=""
+# set smime_sign_command = ""
 #
 # Name: smime_sign_command
 # Type: string
@@ -4567,7 +4570,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_sign_digest_alg="sha256"
+# set smime_sign_digest_alg = "sha256"
 #
 # Name: smime_sign_digest_alg
 # Type: string
@@ -4579,7 +4582,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_sign_opaque_command=""
+# set smime_sign_opaque_command = ""
 #
 # Name: smime_sign_opaque_command
 # Type: string
@@ -4595,7 +4598,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_timeout=300
+# set smime_timeout = 300
 #
 # Name: smime_timeout
 # Type: number
@@ -4607,7 +4610,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_verify_command=""
+# set smime_verify_command = ""
 #
 # Name: smime_verify_command
 # Type: string
@@ -4621,7 +4624,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smime_verify_opaque_command=""
+# set smime_verify_opaque_command = ""
 #
 # Name: smime_verify_opaque_command
 # Type: string
@@ -4636,7 +4639,7 @@ set record = "+[Gmail]/Sent Mail"
 # (S/MIME only)
 # 
 # 
-# set smtp_authenticators=""
+# set smtp_authenticators = ""
 #
 # Name: smtp_authenticators
 # Type: string
@@ -4652,10 +4655,10 @@ set record = "+[Gmail]/Sent Mail"
 # most-secure to least-secure.
 # 
 # Example:
-# set smtp_authenticators="digest-md5:cram-md5"
+# set smtp_authenticators = "digest-md5:cram-md5"
 # 
 # 
-set smtp_pass="Kruszynka96*"
+# set smtp_pass = "Kruszynka96*"
 #
 # Name: smtp_pass
 # Type: string
@@ -4671,7 +4674,7 @@ set smtp_pass="Kruszynka96*"
 # if you are the only one who can read the file.
 # 
 # 
-set smtp_url = 'smtps://norbertlogiewa96:Kruszynka96*@smtp.gmail.com'
+# set smtp_url = 'smtps://norbertlogiewa96:Kruszynka96*@smtp.gmail.com'
 #
 # Name: smtp_url
 # Type: string
@@ -4687,7 +4690,7 @@ set smtp_url = 'smtps://norbertlogiewa96:Kruszynka96*@smtp.gmail.com'
 # variable.
 # 
 # 
-set sort=reverse-date-received
+set sort = reverse-date-received
 #
 # Name: sort
 # Type: sort order
@@ -4709,10 +4712,10 @@ set sort=reverse-date-received
 # 
 # 
 # You may optionally use the ``reverse-'' prefix to specify reverse sorting
-# order (example: ``set sort=reverse-date-sent'').
+# order (example: ``set sort = reverse-date-sent'').
 # 
 #
-# set sort_alias=alias
+# set sort_alias = alias
 #
 # Name: sort_alias
 # Type: sort order
@@ -4726,7 +4729,7 @@ set sort=reverse-date-received
 # - unsorted (leave in order specified in .muttrc)
 # 
 #
-set sort_aux=last-date-received       
+set sort_aux = last-date-received       
 #
 # Name: sort_aux
 # Type: sort order
@@ -4741,18 +4744,18 @@ set sort_aux=last-date-received
 # must come after ``reverse-''.  The ``last-'' prefix causes messages to be
 # sorted against its siblings by which has the last descendant, using
 # the rest of $sort_aux as an ordering.  For instance,
-# set sort_aux=last-date-received
+# set sort_aux = last-date-received
 # 
 # would mean that if a new message is received in a
 # thread, that thread becomes the last one displayed (or the first, if
-# you have ``set sort=reverse-threads''.)
+# you have ``set sort = reverse-threads''.)
 # 
 # Note: For reversed $sort
 # order $sort_aux is reversed again (which is not the right thing to do,
 # but kept to not break any existing configuration setting).
 # 
 # 
-# set sort_browser=alpha
+# set sort_browser = alpha
 #
 # Name: sort_browser
 # Type: sort order
@@ -4768,10 +4771,10 @@ set sort_aux=last-date-received
 # 
 # 
 # You may optionally use the ``reverse-'' prefix to specify reverse sorting
-# order (example: ``set sort_browser=reverse-date'').
+# order (example: ``set sort_browser = reverse-date'').
 # 
 # 
-# set sort_re=yes
+# set sort_re = yes
 #
 # Name: sort_re
 # Type: boolean
@@ -4788,7 +4791,7 @@ set sort_aux=last-date-received
 # non-$reply_regexp parts of both messages are identical.
 # 
 # 
-# set spam_separator=","
+# set spam_separator = ","
 #
 # Name: spam_separator
 # Type: string
@@ -4803,6 +4806,7 @@ set sort_aux=last-date-received
 # 
 # 
 set spoolfile = '+INBOX'
+set spoolfile=+/
 #
 # Name: spoolfile
 # Type: path
@@ -4815,7 +4819,7 @@ set spoolfile = '+INBOX'
 # variable $MAIL or $MAILDIR if either is defined.
 # 
 # 
-# set ssl_ca_certificates_file=""
+# set ssl_ca_certificates_file = ""
 #
 # Name: ssl_ca_certificates_file
 # Type: path
@@ -4827,10 +4831,10 @@ set spoolfile = '+INBOX'
 # certificates is also automatically accepted.
 # 
 # Example:
-# set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
+# set ssl_ca_certificates_file = /etc/ssl/certs/ca-certificates.crt
 # 
 # 
-# set ssl_client_cert=""
+# set ssl_client_cert = ""
 #
 # Name: ssl_client_cert
 # Type: path
@@ -4841,7 +4845,7 @@ set spoolfile = '+INBOX'
 # key.
 # 
 # 
-# set ssl_force_tls=no
+# set ssl_force_tls = no
 #
 # Name: ssl_force_tls
 # Type: boolean
@@ -4855,7 +4859,7 @@ set spoolfile = '+INBOX'
 # option supersedes $ssl_starttls.
 # 
 # 
-# set ssl_min_dh_prime_bits=0
+# set ssl_min_dh_prime_bits = 0
 #
 # Name: ssl_min_dh_prime_bits
 # Type: number
@@ -4867,7 +4871,7 @@ set spoolfile = '+INBOX'
 # the default from the GNUTLS library.
 # 
 # 
-# set ssl_starttls=yes
+# set ssl_starttls = yes
 #
 # Name: ssl_starttls
 # Type: quadoption
@@ -4879,7 +4883,7 @@ set spoolfile = '+INBOX'
 # use STARTTLS regardless of the server's capabilities.
 # 
 # 
-# set ssl_use_sslv2=no
+# set ssl_use_sslv2 = no
 #
 # Name: ssl_use_sslv2
 # Type: boolean
@@ -4891,7 +4895,7 @@ set spoolfile = '+INBOX'
 # considered fundamentally insecure and are no longer recommended.
 # 
 # 
-# set ssl_use_sslv3=no
+# set ssl_use_sslv3 = no
 #
 # Name: ssl_use_sslv3
 # Type: boolean
@@ -4903,7 +4907,7 @@ set spoolfile = '+INBOX'
 # considered fundamentally insecure and are no longer recommended.
 # 
 # 
-# set ssl_use_tlsv1=yes
+# set ssl_use_tlsv1 = yes
 #
 # Name: ssl_use_tlsv1
 # Type: boolean
@@ -4914,7 +4918,7 @@ set spoolfile = '+INBOX'
 # SSL authentication process.
 # 
 # 
-# set ssl_use_tlsv1_1=yes
+# set ssl_use_tlsv1_1 = yes
 #
 # Name: ssl_use_tlsv1_1
 # Type: boolean
@@ -4925,7 +4929,7 @@ set spoolfile = '+INBOX'
 # SSL authentication process.
 # 
 # 
-# set ssl_use_tlsv1_2=yes
+# set ssl_use_tlsv1_2 = yes
 #
 # Name: ssl_use_tlsv1_2
 # Type: boolean
@@ -4936,7 +4940,7 @@ set spoolfile = '+INBOX'
 # SSL authentication process.
 # 
 # 
-# set ssl_usesystemcerts=yes
+# set ssl_usesystemcerts = yes
 #
 # Name: ssl_usesystemcerts
 # Type: boolean
@@ -4948,7 +4952,7 @@ set spoolfile = '+INBOX'
 # is signed by a trusted CA.
 # 
 # 
-# set ssl_verify_dates=yes
+# set ssl_verify_dates = yes
 #
 # Name: ssl_verify_dates
 # Type: boolean
@@ -4961,7 +4965,7 @@ set spoolfile = '+INBOX'
 # <account-hook> function.
 # 
 # 
-# set ssl_verify_host=yes
+# set ssl_verify_host = yes
 #
 # Name: ssl_verify_host
 # Type: boolean
@@ -4974,7 +4978,7 @@ set spoolfile = '+INBOX'
 # the <account-hook> function.
 # 
 # 
-# set ssl_verify_partial_chains=no
+# set ssl_verify_partial_chains = no
 #
 # Name: ssl_verify_partial_chains
 # Type: boolean
@@ -4993,7 +4997,7 @@ set spoolfile = '+INBOX'
 # (OpenSSL 1.0.2b and newer only).
 # 
 # 
-# set ssl_ciphers=""
+# set ssl_ciphers = ""
 #
 # Name: ssl_ciphers
 # Type: string
@@ -5009,7 +5013,7 @@ set spoolfile = '+INBOX'
 # required.)
 # 
 # 
-# set status_chars="-*%A"
+# set status_chars = "-*%A"
 #
 # Name: status_chars
 # Type: string
@@ -5028,7 +5032,7 @@ set spoolfile = '+INBOX'
 # forwarding, etc. are not permitted in this mode).
 # 
 # 
-# set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s/%S)-%>-(%P)---"
+# set status_format = "-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s/%S)-%>-(%P)---"
 #
 # Name: status_format
 # Type: string
@@ -5105,7 +5109,7 @@ set spoolfile = '+INBOX'
 # with IMAP folders that don't like dots in folder names.
 # 
 # 
-# set status_on_top=no
+# set status_on_top = no
 #
 # Name: status_on_top
 # Type: boolean
@@ -5117,7 +5121,7 @@ set spoolfile = '+INBOX'
 # is set, too it'll be placed at the bottom.
 # 
 # 
-# set strict_threads=no
+# set strict_threads = no
 #
 # Name: strict_threads
 # Type: boolean
@@ -5134,7 +5138,7 @@ set spoolfile = '+INBOX'
 # behavior.
 # 
 # 
-# set suspend=yes
+# set suspend = yes
 #
 # Name: suspend
 # Type: boolean
@@ -5146,15 +5150,15 @@ set spoolfile = '+INBOX'
 # inside an xterm using a command like ``xterm -e mutt''.
 # 
 # 
-# set text_flowed=no
+# set text_flowed = no
 #
 # Name: text_flowed
 # Type: boolean
 # Default: no
 # 
 # 
-# When set, mutt will generate ``format=flowed'' bodies with a content type
-# of ``text/plain; format=flowed''.
+# When set, mutt will generate ``format = flowed'' bodies with a content type
+# of ``text/plain; format = flowed''.
 # This format is easier to handle for some mailing software, and generally
 # just looks like ordinary text.  To actually make use of this format's
 # features, you'll need support in your editor.
@@ -5162,7 +5166,7 @@ set spoolfile = '+INBOX'
 # Note that $indent_string is ignored when this option is set.
 # 
 # 
-# set thorough_search=yes
+# set thorough_search = yes
 #
 # Name: thorough_search
 # Type: boolean
@@ -5181,7 +5185,7 @@ set spoolfile = '+INBOX'
 # headers) which may lead to incorrect search results.
 # 
 # 
-# set thread_received=no
+# set thread_received = no
 #
 # Name: thread_received
 # Type: boolean
@@ -5192,7 +5196,7 @@ set spoolfile = '+INBOX'
 # to thread messages by subject.
 # 
 # 
-# set tilde=no
+# set tilde = no
 #
 # Name: tilde
 # Type: boolean
@@ -5203,7 +5207,7 @@ set spoolfile = '+INBOX'
 # screen with a tilde (``~'').
 # 
 # 
-# set time_inc=0
+# set time_inc = 0
 #
 # Name: time_inc
 # Type: number
@@ -5219,7 +5223,7 @@ set spoolfile = '+INBOX'
 # Also see the ``tuning'' section of the manual for performance considerations.
 # 
 # 
-# set timeout=600
+# set timeout = 600
 #
 # Name: timeout
 # Type: number
@@ -5239,7 +5243,7 @@ set spoolfile = '+INBOX'
 # A value of zero or less will cause Mutt to never time out.
 # 
 # 
-# set tmpdir=""
+# set tmpdir = ""
 #
 # Name: tmpdir
 # Type: path
@@ -5252,7 +5256,7 @@ set spoolfile = '+INBOX'
 # used.  If $TMPDIR is not set then ``/tmp'' is used.
 # 
 # 
-# set to_chars=" +TCFL"
+# set to_chars = " +TCFL"
 #
 # Name: to_chars
 # Type: string
@@ -5271,7 +5275,7 @@ set spoolfile = '+INBOX'
 # was sent to a mailing-list you subscribe to.
 # 
 # 
-# set trash="imaps://imap.gmail.com/[Gmail]/Trash"
+# set trash = "imaps://imap.gmail.com/[Gmail]/Trash"
 #
 # Name: trash
 # Type: path
@@ -5286,7 +5290,7 @@ set spoolfile = '+INBOX'
 # deleted, so that you have a way to clean the trash.
 # 
 # 
-# set ts_icon_format="M%?n?AIL&ail?"
+# set ts_icon_format = "M%?n?AIL&ail?"
 #
 # Name: ts_icon_format
 # Type: string
@@ -5298,7 +5302,7 @@ set spoolfile = '+INBOX'
 # ``$status_format''.
 # 
 # 
-# set ts_enabled=no
+# set ts_enabled = no
 #
 # Name: ts_enabled
 # Type: boolean
@@ -5309,7 +5313,7 @@ set spoolfile = '+INBOX'
 # Most terminal emulators emulate the status line in the window title.
 # 
 # 
-# set ts_status_format="Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
+# set ts_status_format = "Mutt with %?m?%m messages&no messages?%?n? [%n NEW]?"
 #
 # Name: ts_status_format
 # Type: string
@@ -5321,7 +5325,7 @@ set spoolfile = '+INBOX'
 # formatting to the one used by ``$status_format''.
 # 
 # 
-# set tunnel=""
+# set tunnel = ""
 #
 # Name: tunnel
 # Type: string
@@ -5331,7 +5335,7 @@ set spoolfile = '+INBOX'
 # Setting this variable will cause mutt to open a pipe to a command
 # instead of a raw socket. You may be able to use this to set up
 # preauthenticated connections to your IMAP/POP3/SMTP server. Example:
-# set tunnel="ssh -q mailhost.net /usr/local/libexec/imapd"
+# set tunnel = "ssh -q mailhost.net /usr/local/libexec/imapd"
 # 
 # Note: For this example to work you must be able to log in to the remote
 # machine without having to enter a password.
@@ -5341,7 +5345,7 @@ set spoolfile = '+INBOX'
 # tunnel commands per connection.
 # 
 # 
-# set uncollapse_jump=no
+# set uncollapse_jump = no
 #
 # Name: uncollapse_jump
 # Type: boolean
@@ -5352,7 +5356,7 @@ set spoolfile = '+INBOX'
 # when the current thread is uncollapsed.
 # 
 # 
-# set uncollapse_new=yes
+# set uncollapse_new = yes
 #
 # Name: uncollapse_new
 # Type: boolean
@@ -5365,7 +5369,7 @@ set spoolfile = '+INBOX'
 # index sorting, though.
 # 
 # 
-# set use_8bitmime=no
+# set use_8bitmime = no
 #
 # Name: use_8bitmime
 # Type: boolean
@@ -5380,7 +5384,7 @@ set spoolfile = '+INBOX'
 # flag when sending 8-bit messages to enable ESMTP negotiation.
 # 
 # 
-# set use_domain=yes
+# set use_domain = yes
 #
 # Name: use_domain
 # Type: boolean
@@ -5392,7 +5396,7 @@ set spoolfile = '+INBOX'
 # addresses will be qualified.
 # 
 # 
-# set use_envelope_from=no
+# set use_envelope_from = no
 #
 # Name: use_envelope_from
 # Type: boolean
@@ -5410,7 +5414,7 @@ set spoolfile = '+INBOX'
 # executable pointed to by $sendmail doesn't support the -f switch.
 # 
 # 
-# set use_from=yes
+# set use_from = yes
 #
 # Name: use_from
 # Type: boolean
@@ -5423,7 +5427,7 @@ set spoolfile = '+INBOX'
 # command.
 # 
 # 
-# set use_ipv6=yes
+# set use_ipv6 = yes
 #
 # Name: use_ipv6
 # Type: boolean
@@ -5435,7 +5439,7 @@ set spoolfile = '+INBOX'
 # Normally, the default should work.
 # 
 # 
-# set user_agent=yes
+# set user_agent = yes
 #
 # Name: user_agent
 # Type: boolean
@@ -5447,7 +5451,7 @@ set spoolfile = '+INBOX'
 # them.
 # 
 # 
-# set visual=""
+# set visual = ""
 #
 # Name: visual
 # Type: path
@@ -5458,7 +5462,7 @@ set spoolfile = '+INBOX'
 # given in the built-in editor.
 # 
 # 
-# set wait_key=yes
+# set wait_key = yes
 #
 # Name: wait_key
 # Type: boolean
@@ -5478,7 +5482,7 @@ set spoolfile = '+INBOX'
 # for a key only if the external command returned a non-zero status.
 # 
 # 
-# set weed=yes
+# set weed = yes
 #
 # Name: weed
 # Type: boolean
@@ -5489,7 +5493,7 @@ set spoolfile = '+INBOX'
 # printing, or replying to messages.
 # 
 # 
-# set wrap=0
+# set wrap = 0
 #
 # Name: wrap
 # Type: number
@@ -5504,7 +5508,7 @@ set spoolfile = '+INBOX'
 # Also see $reflow_wrap.
 # 
 # 
-# set wrap_headers=78
+# set wrap_headers = 78
 #
 # Name: wrap_headers
 # Type: number
@@ -5520,7 +5524,7 @@ set spoolfile = '+INBOX'
 # this setting when you know what you're doing.
 # 
 # 
-# set wrap_search=yes
+# set wrap_search = yes
 #
 # Name: wrap_search
 # Type: boolean
@@ -5533,7 +5537,7 @@ set spoolfile = '+INBOX'
 # unset, incremental searches will not wrap.
 # 
 # 
-# set wrapmargin=0
+# set wrapmargin = 0
 #
 # Name: wrapmargin
 # Type: number
@@ -5543,7 +5547,7 @@ set spoolfile = '+INBOX'
 # (DEPRECATED) Equivalent to setting $wrap with a negative value.
 # 
 # 
-# set write_bcc=yes
+# set write_bcc = yes
 #
 # Name: write_bcc
 # Type: boolean
@@ -5557,7 +5561,7 @@ set spoolfile = '+INBOX'
 # in this case.
 # 
 # 
-# set write_inc=10
+# set write_inc = 10
 #
 # Name: write_inc
 # Type: number
@@ -5571,4 +5575,16 @@ set spoolfile = '+INBOX'
 # Also see the $read_inc, $net_inc and $time_inc variables and the
 # ``tuning'' section of the manual for performance considerations.
 # 
-# 
+
+set pager_stop = yes
+
+source "~/.config/mutt/norbertlogiewa96@gmail.com"
+folder-hook $folder 'source ~/.config/mutt/norbertlogiewa96@gmail.com'
+
+source "~/.config/mutt/nl253@kent.ac.uk"
+folder-hook $folder 'source ~/.config/mutt/nl253@kent.ac.uk'
+
+macro index,pager \cg '<sync-mailbox><enter-command>source ~/.config/mutt/norbertlogiewa96@gmail.com<enter><change-folder>!<enter>'
+macro index,pager \ck '<sync-mailbox><enter-command>source ~/.config/mutt/nl253@kent.ac.uk<enter><change-folder>!<enter>'
+
+# source "~/.config/mutt/sidebar"

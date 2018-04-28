@@ -1,11 +1,12 @@
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o
-
 if !has('unix') | finish | endif
+
+setl termguicolors
 
 " Variables: (these need to be global)
 let mapleader = " "
 let maplocalleader = ","
-let g:markup_langs = ['markdown', 'rst', 'tex', 'scratch']
+let g:markup_langs = ['markdown', 'tex', 'scratch']
 let g:config_ftypes = [
             \ 'yaml',
             \ 'gitconfig',
@@ -16,11 +17,10 @@ let g:config_ftypes = [
             \ 'config']
 let g:prog_langs = [
             \ 'sql',
-            \ 'python',
             \ 'sh',
-            \ 'erlang',
             \ 'haskell',
-            \ 'vim']
+            \ 'vim'
+            \ ]
 
 " Init Vim-Plug
 call plug#begin('~/.vim/plugged')
@@ -35,6 +35,7 @@ endfu
 silent call s:append_to_path([
             \ '~/.gem/ruby/*/bin',
             \ '~/.fzf/bin',
+            \ '~/go/bin',
             \ '~/.cargo/bin',
             \ '~/.local/bin',
             \ '~/.stack/bin',
