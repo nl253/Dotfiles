@@ -1,4 +1,4 @@
-# ### Artistic Style configuration
+# Artistic Style configuration
 --style=google
 --align-pointer=name
 --align-reference=name

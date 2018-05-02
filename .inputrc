@@ -1,183 +1,130 @@
-# DEFAULTS {
-set meta-flag on
-set input-meta on
+# DEFAULTS 
+set meta-flag    on
+set input-meta   on
 set convert-meta off
-set output-meta on
-# }
-
+set output-meta  on
 set editing-mode emacs
-set keymap emacs
+set keymap       emacs
 
- # EMACS {
+#set  show-mode-in-prompt on
+
+#set emacs-mode-string  "[emacs] "
+#set vi-cmd-mode-string "[vi cmd] "
+#set vi-ins-mode-string "[vi insert] "
+
 $if mode=emacs 
 
-# KEYBINDINGS {
-"\e[5~": beginning-of-history
-"\e[6~": end-of-history
+        # KEYBINDINGS 
+        "\e[5~": beginning-of-history
+        "\e[6~": end-of-history
 
-"\e[3~": delete-char
-"\e[2~": quoted-insert
+        "\e[3~": delete-char
+        "\e[2~": quoted-insert
 
-"\e[5D": backward-word
-"\e\e[D": backward-word
-"\e[1;5D": backward-word
+        "\e[5D": backward-word
+        "\e\e[D": backward-word
+        "\e[1;5D": backward-word
 
-"\e\e[C": forward-word
-"\e[5C": forward-word
-"\e[1;5C": forward-word
+        "\e\e[C": forward-word
+        "\e[5C": forward-word
+        "\e[1;5C": forward-word
 
-"\e[1~": beginning-of-line
-"\e[7~": beginning-of-line
-"\eOH": beginning-of-line
-"\e[H": beginning-of-line
+        "\e[1~": beginning-of-line
+        "\e[7~": beginning-of-line
+        "\eOH": beginning-of-line
+        "\e[H": beginning-of-line
 
-"\eOF": end-of-line
-"\e[4~": end-of-line
-"\e[8~": end-of-line
-"\e[F": end-of-line
-# }
+        "\eOF": end-of-line
+        "\e[4~": end-of-line
+        "\e[8~": end-of-line
+        "\e[F": end-of-line
 
-# smarter completion, list all options once and then cycle through them {
-# TAB cycle forward
-Tab: menu-complete 
+        # smarter completion, list all options once and then cycle through them {
+        # TAB cycle forward
+        Tab: menu-complete 
 
-# Shift-Tab 
-"\e[Z": "\e-1\C-i" 
+        $if Bash
 
-# # cycle back in menu-complete }
+                #"\C-x\C-m": print-last-kbd-macro
 
-# MACROS {
+                # find files
+                "\C-x\C-f": "command find -maxdepth 8 -type f -regextype posix-extended -regex '.*\\.$'\C-b\C-b"
 
-# sudo Esc Esc
-"\e\e": "\C-asudo \C-e"
+                # find recent files
+                "\C-x\C-r": "command find -maxdepth 8 -atime -1 -type f -regextype posix-extended -regex '.*\\.$'\C-b\C-b"
 
-# less Ctrl-x Ctrl-l[ess]
-"\C-x\C-l":"\C-e | less " 
+                # Shift-Tab 
+                "\e[Z": "\e-1\C-i" 
 
-# grep Ctrl-x Ctrl-g[rep]
-"\C-x\C-g":"\C-e | grep " 
+                # sudo Esc Esc
+                "\e\e": "\C-asudo \C-e"
 
-# nullify stderr Ctrl-x Ctrl-n[ullify]
-"\C-x\C-n":"\C-e 2>/dev/null " 
-# }
-#
-#
+                # less Ctrl-x Ctrl-l[ess]
+                "\C-x\C-p":"\C-e | $PAGER" 
 
-$if term=msys # RXVT
-	"\e[7~": beginning-of-line      # Home Key
-	"\e[8~": end-of-line            # End Key
-	"\e[11~": display-shell-version # F1
-	"\e[15~": re-read-init-file     # F5
-	"\e[12~": "Function Key 2"
-	"\e[13~": "Function Key 3"
-	"\e[14~": "Function Key 4"
-	"\e[17~": "Function Key 6"
-	"\e[18~": "Function Key 7"
-	"\e[19~": "Function Key 8"
-	"\e[20~": "Function Key 9"
-	"\e[21~": "Function Key 10"
-$else
-	# Eh, normal Console is not really cygwin anymore, is it? Using 'else' instead. -mstormo
-	# $if term=cygwin # Console
-	"\e[1~": beginning-of-line      # Home Key
-	"\e[4~": end-of-line            # End Key
-	"\e[3~": delete-char      # Delete Key
-	"\e\e[C": forward-word      # Alt-Right
-	"\e\e[D": backward-word      # Alt-Left
-	"\e[1;5C": forward-word   # ctrl + right
-	"\e[1;5D": backward-word  # ctrl + left 
-	"\e[17~": "Function Key 6"
-	"\e[18~": "Function Key 7"
-	"\e[19~": "Function Key 8"
-	"\e[20~": "Function Key 9"
-	"\e[21~": "Function Key 10"
-	"\e[23~": "Function Key 11"
+                # grep Ctrl-x Ctrl-g[rep]
+                "\C-x\C-g":"\C-e | grep -E --color=always " 
+
+                # nullify stderr Ctrl-x Ctrl-n[ullify]
+                "\C-x\C-n":"\C-e 2>/dev/null " 
+
+                "\C-x\C-l": "\C-a\vls -a \r\C-y"
+        $endif
+
+        $if term=msys # RXVT
+                "\e[7~": beginning-of-line      # Home Key
+                "\e[8~": end-of-line            # End Key
+                "\e[11~": display-shell-version # F1
+                "\e[15~": re-read-init-file     # F5
+                "\e[12~": "Function Key 2"
+                "\e[13~": "Function Key 3"
+                "\e[14~": "Function Key 4"
+                "\e[17~": "Function Key 6"
+                "\e[18~": "Function Key 7"
+                "\e[19~": "Function Key 8"
+                "\e[20~": "Function Key 9"
+                "\e[21~": "Function Key 10"
+        $else
+                # Eh, normal Console is not really cygwin anymore, is it? Using 'else' instead. -mstormo
+                # $if term=cygwin # Console
+                "\e[1~": beginning-of-line      # Home Key
+                "\e[4~": end-of-line            # End Key
+                "\e[3~": delete-char      # Delete Key
+                "\e\e[C": forward-word      # Alt-Right
+                "\e\e[D": backward-word      # Alt-Left
+                "\e[1;5C": forward-word   # ctrl + right
+                "\e[1;5D": backward-word  # ctrl + left 
+                "\e[17~": "Function Key 6"
+                "\e[18~": "Function Key 7"
+                "\e[19~": "Function Key 8"
+                "\e[20~": "Function Key 9"
+                "\e[21~": "Function Key 10"
+                "\e[23~": "Function Key 11"
+        $endif
 $endif
 
-
-$endif
-# }
-
-# OPTIONS {
-
-# If set to ‘on’, Readline attempts to briefly move the cursor to an {
-# opening parenthesis when a closing parenthesis is inserted. The default
-# is ‘off’. }
-# set blink-matching-paren on
-
-
-# If set to ‘on’, tilde expansion is performed when Readline attempts {
-# word completion. The default is ‘off’. }
-set expand-tilde on
-
-# If set to ‘on’, menu completion displays the common prefix of the {
-# list of possible completions (which may be empty) before cycling through
-# the list. The default is ‘off’. }
-set menu-complete-display-prefix on
-
-# If set to ‘on’, add a character to the beginning of the prompt {
-# indicating the editing mode: emacs, vi command, or vi insertion. The mode
-# strings are user-settable. The default value is ‘off’. }
 #set show-mode-in-prompt on
+set bell-style                     none
+set blink-matching-paren           on
+set colored-completion-prefix      on
+set colored-stats                  on
+set completion-ignore-case         on
+set completion-query-items         250
+set echo-control-characters        off
+set enable-bracketed-paste         on
+set expand-tilde                   on
+set history-preserve-point         on
+set mark-symlinked-directories     on
+set match-hidden-files             off
+set menu-complete-display-prefix   on
+set page-completions               off
+set print-completions-horizontally on
+set show-all-if-ambiguous          on
+set show-all-if-unmodified         on
+set skip-completed-text            on
+set visible-stats                  on
 
-# If set to ‘on’, this alters the default completion behavior when {
-# inserting a single match into the line. It’s only active when performing
-# completion in the middle of a word. If enabled, readline does not insert
-# characters from the completion that match characters after point in the
-# word being completed, so portions of the word following the cursor are
-# not duplicated. For instance, if this is enabled, attempting completion
-# when the cursor is after the ‘e’ in ‘Makefile’ will result in
-# ‘Makefile’ rather than ‘Makefilefile’, assuming there is a single
-# possible completion. The default value is ‘off’. }
-set skip-completed-text on
+# 1 completion / line
+#set completion-display-width 1
 
-# If set to ‘on’, the history code attempts to place the point (the {
-# current cursor position) at the same location on each history line retrieved
-# with previous-history or next-history. The default is ‘off’. }
-set history-preserve-point on
-
-# If there are more than 250 possible completions for a word, ask to show them all
-set completion-query-items 250
-
-# Show all autocomplete results at once
-set page-completions off
-
-# If set to ‘on’, completed names which are symbolic links to directories {
-# have a slash appended (subject to the value of mark-directories). The
-# default is ‘off’. }
-set mark-symlinked-directories on
-
-# If set to ‘on’, and completion-ignore-case is enabled, Readline treats {
-# hyphens (‘-’) and underscores (‘_’) as equivalent when performing
-# case-insensitive filename matching and completion. }
-set completion-ignore-case on 
-
-# Show extra file information when completing, like `ls -F` does
-set visible-stats on
-
-# List all matches in case multiple possible completions are possible
-set show-all-if-ambiguous on
-
-set show-all-if-unmodified on
-
-# If set to ‘on’, when listing completions, Readline displays the common {
-# prefix of the set of possible completions using a different color. The
-# color definitions are taken from the value of the LS_COLORS environment
-# variable. The default is ‘off’. }
-set colored-completion-prefix on 
-
-set echo-control-characters off
-
-# If set to ‘on’, Readline displays possible completions using different {
-# colors to indicate their file type. The color definitions are taken from
-# the value of the LS_COLORS environment variable. The default is ‘off’. }
-set colored-stats on
-
-# Controls what happens when Readline wants to ring the terminal bell. If {
-# set to ‘none’, Readline never rings the bell. If set to ‘visible’,
-# Readline uses a visible bell if one is available. If set to ‘audible’
-# (the default), Readline attempts to ring the terminal’s bell. }
-set bell-style none 
-
-# }
-# vim: foldmethod=marker foldmarker={,}
+# vim:foldmethod=marker:foldmethod=indent:

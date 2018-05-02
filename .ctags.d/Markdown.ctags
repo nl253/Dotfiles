@@ -6,7 +6,6 @@
 --regex-Markdown=/^#+ ([A-Z][-() \/'a-zA-Z0-9,_?!"\.`]{2,})/\1/h,heading/
 --regex-Markdown=/!?\[\*{,2}([^\]]{4,})\*{,2}\]\([^\)]{5,}\)/\1/a,hyperlink/
 --regex-Markdown=/!?\[\*{,2}([^\]]{4,})\*{,2}\]\[[^\)]{5,}\]/\1/A,local reference link/
---regex-Markdown=/^[ \t]*\*{2}([^\*:,.;`]{3,})\*{2}/\1/b,bold/
 --regex-Markdown=/^\**([A-Z][a-z]{3,})\**$/\1/d,definition/
 # --regex-Markdown=/.*:::+ ([A-Z][a-z]{3,}) :::+.*/\1/f,fenced div/
 # --regex-Markdown=/^([tT]itle|[aA]uthor): (.+)/\2/m,\1 mmd meta tag/

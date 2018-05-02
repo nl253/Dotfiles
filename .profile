@@ -35,7 +35,8 @@ export HISTSIZE=20000
 export HISTFILESIZE=20000
 export HISTCONTROL="ignoreboth:erasedups"
 export HH_CONFIG=hicolor # get more colors
-export HISTIGNORE="&:[ ]*:exit:cd:ls:bg:fg:history:clear:jobs"
+export HISTIGNORE="&:[ ]*:pwd:exit:cd:ls:bg:fg:history:clear:jobs:git*:ls*:dirs *:vim*:nvim*:ghci*:date:ranger:alias:dirs:popd:mutt:bash*:shopt:set:env:enable:"
+export HISTTIMEFORMAT='%c'
 export FIGNORE='~:.o:.swp:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:tags:.log:.hi:.so:.beam:tags:.iml:.lock:.bak'
 
 [ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf

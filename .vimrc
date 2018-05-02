@@ -6,7 +6,8 @@ setl termguicolors
 " Variables: (these need to be global)
 let mapleader = " "
 let maplocalleader = ","
-let g:markup_langs = ['markdown', 'tex', 'scratch']
+let g:markup_langs = ['markdown', 'tex']
+
 let g:config_ftypes = [
             \ 'yaml',
             \ 'gitconfig',
@@ -14,25 +15,21 @@ let g:config_ftypes = [
             \ 'dosini',
             \ 'conf',
             \ 'json',
-            \ 'config']
+            \ 'config',
+            \ ]
+
 let g:prog_langs = [
             \ 'sql',
             \ 'sh',
             \ 'haskell',
-            \ 'vim'
+            \ 'vim',
             \ ]
 
-" Init Vim-Plug
-call plug#begin('~/.vim/plugged')
+if has('nvim') | exe 'setl rtp=~/.vim,'.&rtp | endif
 
-" Add to $PATH bin dirs for package managers in case they aren't in $PATH already
-fu! s:append_to_path(items)
-    for i in filter(map(a:items, 'split(expand(v:val))[0]'), 'isdirectory(v:val) && !($PATH =~? v:val)')
-        let $PATH = i.':'.$PATH
-    endfor
-endfu
+so ~/.vim/plugin/plugins.vim
 
-silent call s:append_to_path([
+silent call funct#append_to_path([
             \ '~/.gem/ruby/*/bin',
             \ '~/.fzf/bin',
             \ '~/go/bin',
@@ -45,4 +42,11 @@ silent call s:append_to_path([
             \ '~/.yarn/bin'
             \ ])
 
-exec 'source '.expand('~/.vim').'/plugins.vim'
+silent call funct#set_repl({
+            \ "haskell"   : "ghci", 
+            \ "python"    : "ipython", 
+            \ "erlang"    : "erl", 
+            \ "java"      : "jshell", 
+            \ "javascript": "node", 
+            \ "html"      : "node",
+            \ })

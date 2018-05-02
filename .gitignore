@@ -433,3 +433,5 @@ octave-workspace
 .oni/config.js
 .config/evince/accels
 .config/evince/
+.local/share/okular/
+.electron/
