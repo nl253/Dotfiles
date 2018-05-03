@@ -72,7 +72,7 @@ if [ -x $(command which mysql 2>/dev/null) ]; then
 fi
 
 # $BROWSER
-for i in google-chrome-{unstable,beta,stable} firefox{-developer,}; do
+for i in google-chrome-stable google-chrom-beta google-chrome-unstable firefox-developer; do
   if [ -x $(command which $i 2>/dev/null) ]; then
     export BROWSER=$(command which $i 2>/dev/null) && break
   fi
