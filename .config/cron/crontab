@@ -1,6 +1,6 @@
 # variables
 SHELL=/bin/bash
-PATH=/home/norbert/.config/composer/bin:/home/norbert/anaconda3/bin:/home/norbert/.anaconda3/bin:/home/norbert/go/bin:/home/norbert/.cabal/bin:/home/norbert/.stack/bin:/home/norbert/.fzf/bin:/home/norbert/.gem/ruby/*/bin:/home/norbert/node_modules/.bin:/home/norbert/.local/share/fzf/bin:/home/norbert/.cargo/bin:/home/norbert/.yarn/bin:/home/norbert/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:
+PATH=/home/norbert/.cabal/bin:/home/norbert/.cargo/bin:/home/norbert/.config/composer/bin:/home/norbert/.config/yarn/global/node_modules/.bin:/home/norbert/.gem/ruby/*/bin:/home/norbert/.local/bin:/home/norbert/.local/share/fzf/bin:/home/norbert/.stack/bin:/home/norbert/go/bin:/usr/bin:/usr/bin/core_perl:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/lib/jvm/default/bin:/usr/local/bin:/usr/local/sbin:
 
 # day of week (0 - 6) (Sunday=0)
 # month (1 - 12)

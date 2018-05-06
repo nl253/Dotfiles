@@ -1,84 +1,85 @@
 
 ## tmp files
 
-*.swap
-*.swp
-*.log
-*-log
-*.bak
-*.bk
-*.tmp
-*~
+**/*.swap
+**/*.swp
+**/*.log
+**/*-log
+**/*.bak
+**/*.bk
+**/*.tmp
+**/*~
 .**/*-cache
-.mypy_cache/
-.cache*
-.cache**
+**/.mypy_cache/
+**/.cache*
+**/.cache**
 
 ## VCS
 
-.git/
-.idea/
-.svn/
+**/.git/
+**/.idea/
+**/.svn/
 
 ## archives
 
-*.zip
-*.tar
-*.gzip
-*.7z
-*.bz2
-*.gz
-*.xz
+**/*.zip
+**/*.tar
+**/*.gzip
+**/*.7z
+**/*.bz2
+**/*.gz
+**/*.xz
 
 ## documents
 
-*.pdf
-*.docx
-*.pptx
-*.doc
-*.ppt
+**/*.pdf
+**/*.docx
+**/*.pptx
+**/*.doc
+**/*.ppt
 
 ## package managers
 
-node_modules/
-*-lock.json
-*.lock
+**/node_modules/
+**/*-lock.json
+**/*.lock
 
 ## Vim
 
-tags
+**/NetrwTreeListing*
+**/tags
 
 ## database
 
-*.sqlite
-*.db
-*.sqlite3
+**/*.sqlite
+**/*.db
+**/*.sqlite3
 
 ## Java
 
-*.class
-target/
-out/
-docs/
-build/
-dist/
+**/*.class
+**/target/
+**/out/
+**/docs/
+**/build/
+**/dist/
 
 ## C and C++
 
-*.o
-doc/
+**/*.o
+**/doc/
 
 
 ## Python
 
-.eggs/
-*.egg
-develop-eggs/
-*.pyc
+**/.eggs/
+**/*.egg
+**/develop-eggs/
+**/*.pyc
 
 # LaTeX
 
-*.aux
-*.out
-*.tox
-*.fls
+**/*.aux
+**/*.out
+**/*.tox
+**/*.fls

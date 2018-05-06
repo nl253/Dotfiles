@@ -1,4 +1,5 @@
 # editorconfig.org
+# vim:ft=cfg:
 
 # top-most editorconfig file
 root = true
@@ -8,14 +9,9 @@ charset = utf-8
 end_of_line = lf
 indent_style = space
 insert_final_newline = true
-tab_width = 4
+tab_width = 2
 
-[*.vorg]
-indent_size = 4
-tab_width = 8
-trim_trailing_whitespace = false
-
-[*.{js,ts,jsx,json,css,md,yml}]
+[*.{js,ts,jsx,json,css,md,yml,html}]
 indent_size = 2
 indent_style = space
 tab_width = 4
@@ -45,15 +41,3 @@ trim_trailing_whitespace = false
 [{makefile,makefile}]
 indent_size = 2
 indent_style = space
-
-# vim plugin supports the following editorconfig properties:
-#	- indent_style
-#	- indent_size
-#	- tab_width
-#	- end_of_line
-#	- charset
-#	- insert_final_newline (feature +fixendofline (available on vim 7.4.785+) 
-#	  or preservenoeol is required for this property)
-#	- trim_trailing_whitespace
-#	- max_line_length
-#	- root (only used by editorconfig core)

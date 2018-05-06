@@ -4,8 +4,8 @@ if !has('unix') | finish | endif
 setl termguicolors
 
 " Variables: (these need to be global)
-let mapleader = " "
-let maplocalleader = ","
+let g:mapleader = ' '
+let g:maplocalleader = ','
 let g:markup_langs = ['markdown', 'tex']
 
 let g:config_ftypes = [
@@ -15,21 +15,23 @@ let g:config_ftypes = [
             \ 'dosini',
             \ 'conf',
             \ 'json',
-            \ 'config',
+            \ 'config'
             \ ]
 
 let g:prog_langs = [
             \ 'sql',
             \ 'sh',
+            \ 'c',
+            \ 'go',
             \ 'haskell',
             \ 'vim',
             \ ]
 
-if has('nvim') | exe 'setl rtp=~/.vim,'.&rtp | endif
+if has('nvim') | exe 'setl rtp=~/.vim,'.&runtimepath | endif
 
 so ~/.vim/plugin/plugins.vim
 
-silent call funct#append_to_path([
+silent call opts#append_to_path([
             \ '~/.gem/ruby/*/bin',
             \ '~/.fzf/bin',
             \ '~/go/bin',
@@ -42,11 +44,11 @@ silent call funct#append_to_path([
             \ '~/.yarn/bin'
             \ ])
 
-silent call funct#set_repl({
-            \ "haskell"   : "ghci", 
-            \ "python"    : "ipython", 
-            \ "erlang"    : "erl", 
-            \ "java"      : "jshell", 
-            \ "javascript": "node", 
-            \ "html"      : "node",
+silent call repl#set_repl({
+            \ 'haskell'   : 'ghci', 
+            \ 'python'    : 'ipython', 
+            \ 'erlang'    : 'erl', 
+            \ 'java'      : 'jshell', 
+            \ 'javascript': 'node', 
+            \ 'html'      : 'node',
             \ })

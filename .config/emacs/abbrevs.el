@@ -1,23 +1,128 @@
 (global-abbrev-table)
 
-"ie" 0 "i.e."
-"eg" 0 "e.g."
-"Ie" 0 "I.e."
-"Eg" 0 "E.g."
 
-(bookmark-bmenu-mode-abbrev-table)
+
+(debugger-mode-abbrev-table)
 
 
 
-(bookmark-edit-annotation-mode-abbrev-table)
+(Man-mode-abbrev-table)
+
+
+
+(conf-xdefaults-mode-abbrev-table)
+
+
+
+(conf-ppd-mode-abbrev-table)
+
+
+
+(conf-colon-mode-abbrev-table)
+
+
+
+(conf-space-mode-abbrev-table)
+
+
+
+(conf-javaprop-mode-abbrev-table)
+
+
+
+(conf-windows-mode-abbrev-table)
+
+
+
+(conf-unix-mode-abbrev-table)
+
+
+
+(gnus-group-mode-abbrev-table)
+
+
+
+(git-rebase-mode-abbrev-table)
+
+
+
+(magit-stash-mode-abbrev-table)
+
+
+
+(magit-stashes-mode-abbrev-table)
+
+
+
+(magit-merge-preview-mode-abbrev-table)
+
+
+
+(url-cookie-mode-abbrev-table)
+
+
+
+(magit-refs-mode-abbrev-table)
+
+
+
+(magit-status-mode-abbrev-table)
+
+
+
+(magit-repolist-mode-abbrev-table)
+
+
+
+(magit-reflog-mode-abbrev-table)
+
+
+
+(magit-cherry-mode-abbrev-table)
+
+
+
+(magit-log-select-mode-abbrev-table)
+
+
+
+(magit-log-mode-abbrev-table)
+
+
+
+(magit-revision-mode-abbrev-table)
+
+
+
+(magit-diff-mode-abbrev-table)
+
+
+
+(magit-process-mode-abbrev-table)
+
+
+
+(magit-mode-abbrev-table)
+
+
+
+(magit-popup-mode-abbrev-table)
+
+
+
+(log-edit-mode-abbrev-table)
+
+
+
+(message-mode-abbrev-table)
+
+
+
+(change-log-mode-abbrev-table)
 
 
 
 (vc-git-region-history-mode-abbrev-table)
-
-
-
-(diff-mode-abbrev-table)
 
 
 
@@ -33,31 +138,23 @@
 
 
 
-(bibtex-mode-abbrev-table)
-
-
-
 (org-mode-abbrev-table)
-
-
-
-(calendar-mode-abbrev-table)
-
-
-
-(gfm-view-mode-abbrev-table)
 
 
 
 (markdown-view-mode-abbrev-table)
 
 
-
-(gfm-mode-abbrev-table)
-
-
-
 (markdown-mode-abbrev-table)
+
+"CI"           2    "CodeIgniter"
+"ie"           0    "i.e."
+"I.e."         0    "I.e."
+"eg"           0    "e.g."
+"E.g."         0    "E.g."
+
+
+(ibuffer-mode-abbrev-table)
 
 
 
@@ -65,7 +162,31 @@
 
 
 
-(ibuffer-mode-abbrev-table)
+(gfm-view-mode-abbrev-table)
+
+
+
+(gfm-mode-abbrev-table)
+
+
+
+(diff-mode-abbrev-table)
+
+
+
+(calendar-mode-abbrev-table)
+
+
+
+(bookmark-edit-annotation-mode-abbrev-table)
+
+
+
+(bookmark-bmenu-mode-abbrev-table)
+
+
+
+(bibtex-mode-abbrev-table)
 
 
 
@@ -194,3 +315,6 @@
 
 
 (fundamental-mode-abbrev-table)
+
+
+

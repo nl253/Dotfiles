@@ -6,6 +6,7 @@
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
 values."
+
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
@@ -31,25 +32,28 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     vimscript
+     rust
      ;; ---------------------------------------------------------------------------
      ;; Press <SPC f e R> (Vim style) or <M-m f e R> (Emacs style) to install them.
      ;; ---------------------------------------------------------------------------
      ;; erlang
      ;; github
-     ;; html
-     ;; org
      ;; haskell
      ;; version-control
      ;; spell-checking
-     git
-     vimscript
      auto-completion
+     python
      emacs-lisp
+     git
+     html
+     javascript
+     python
      ivy
      markdown
+     ;; org
      shell-scripts
      syntax-checking
+     vimscript
      yaml
      (shell :variables
             shell-default-height 30
@@ -294,7 +298,7 @@ values."
    ;; `trailing' to delete only the whitespace at end of lines, `changed'to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-whitespace-cleanup 'trailing
    ))
 
 (defun dotspacemacs/user-init ()
@@ -307,8 +311,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
   (add-hook 'markdown-mode-hook 'auto-fill-mode)
   (add-hook 'org-mode-hook 'auto-fill-mode)
-
-  )
+)
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -317,6 +320,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
   (setq scroll-margin 12)
   (setq hscroll-margin 12)
 
@@ -345,7 +349,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (org-plus-contrib let-alist wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper ivy s hydra projectile flx flyspell-correct pos-tip pkg-info epl goto-chg undo-tree ghc haskell-mode bind-map bind-key packed auto-complete popup avy evil flycheck yasnippet company helm helm-core async dash vimrc-mode dactyl-mode yaml-mode smeargle orgit mmm-mode markdown-toc markdown-mode magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md evil-magit magit magit-popup git-commit ghub with-editor diff-hl xterm-color ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline shell-pop restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-projectile org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree multi-term move-text macrostep lorem-ipsum linum-relative link-hint intero insert-shebang indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot fuzzy flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help erlang elisp-slime-nav dumb-jump diminish define-word company-statistics company-shell company-ghci company-ghc company-cabal column-enforce-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (toml-mode racer flycheck-rust cargo rust-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode cython-mode company-anaconda anaconda-mode pythonic f web-mode tagedit slim-mode scss-mode sass-mode pug-mode org-category-capture alert log4e gntp less-css-mode haml-mode emmet-mode company-web web-completion-data web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode org-plus-contrib let-alist wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper ivy s hydra projectile flx flyspell-correct pos-tip pkg-info epl goto-chg undo-tree ghc haskell-mode bind-map bind-key packed auto-complete popup avy evil flycheck yasnippet company helm helm-core async dash vimrc-mode dactyl-mode yaml-mode smeargle orgit mmm-mode markdown-toc markdown-mode magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md evil-magit magit magit-popup git-commit ghub with-editor diff-hl xterm-color ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline shell-pop restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-projectile org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree multi-term move-text macrostep lorem-ipsum linum-relative link-hint intero insert-shebang indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot fuzzy flyspell-correct-helm flycheck-pos-tip flycheck-haskell flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help erlang elisp-slime-nav dumb-jump diminish define-word company-statistics company-shell company-ghci company-ghc company-cabal column-enforce-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -354,15 +358,28 @@ you should place your code here."
  '(default ((t (:inherit nil :stipple nil :background "Grey10" :foreground "#b2b2b2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 136 :width normal :foundry "SRC" :family "Hack"))))
  '(dired-directory ((t (:inherit bold :background "Grey10" :foreground "#4f97d7"))))
  '(dired-symlink ((t (:inherit bold :background "Grey10" :foreground "#28def0"))))
+ '(flycheck-warning ((t (:underline "DarkOrange"))))
+ '(font-lock-builtin-face ((t (:foreground "indian red"))))
  '(font-lock-comment-face ((t (:background "Grey10" :foreground "#2aa1ae"))))
- '(font-lock-function-name-face ((t (:inherit bold :foreground "DarkOrange"))))
+ '(font-lock-constant-face ((t (:foreground "Purple2"))))
+ '(font-lock-function-name-face ((t (:inherit bold :foreground "DarkOrange2"))))
  '(font-lock-keyword-face ((t (:inherit bold :foreground "DeepPink"))))
- '(font-lock-preprocessor-face ((t (:foreground "magenta1"))))
+ '(font-lock-preprocessor-face ((t (:background "Grey18" :foreground "magenta1"))))
  '(font-lock-string-face ((t (:foreground "SpringGreen3"))))
  '(font-lock-type-face ((t (:inherit bold :foreground "DodgerBlue1"))))
  '(fringe ((t (:foreground "#b2b2b2"))))
  '(link ((t (:foreground "light sky blue" :underline t))))
- '(markdown-header-face-2 ((t (:inherit (bold font-lock-keyword-face) :foreground "DeepPink" :height 1.2))))
- '(markdown-header-face-3 ((t (:foreground "DarkOrange" :weight semi-bold :height 1.1))))
- '(markdown-header-face-4 ((t (:foreground "SpringGreen3" :weight semi-bold))))
- '(term ((t (:background "grey10" :foreground "#b2b2b2")))))
+ '(markdown-header-face-2 ((t (:inherit (bold font-lock-keyword-face) :foreground "DeepPink2" :height 1.2))))
+ '(markdown-header-face-3 ((t (:foreground "DarkOrange2" :weight semi-bold :height 1.1))))
+ '(markdown-header-face-4 ((t (:foreground "medium sea green" :weight semi-bold))))
+ '(nxml-element-local-name ((t (:inherit font-lock-keyword-face))))
+ '(org-code ((t (:foreground "Purple"))))
+ '(org-level-2 ((t (:inherit bold :foreground "DeepPink" :height 1.2))))
+ '(org-level-3 ((t (:foreground "tomato" :weight bold :height 1.1))))
+ '(org-level-4 ((t (:foreground "DarkOrange" :weight bold))))
+ '(org-link ((t (:foreground "light sky blue" :underline t))))
+ '(org-verbatim ((t (:foreground "dark turquoise"))))
+ '(sh-heredoc ((t (:foreground "HotPink1"))))
+ '(term ((t (:background "grey10" :foreground "#b2b2b2"))))
+ '(web-mode-css-selector-face ((t (:inherit font-lock-function-name-face))))
+ '(web-mode-html-tag-face ((t (:foreground "DeepPink2")))))

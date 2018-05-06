@@ -6,7 +6,7 @@
 	autocrlf = input
 
 [credential]
-    helper   = store
+	helper = store
     username = nl253
 
 [init]
@@ -163,7 +163,7 @@
     compression = 9
     threads = 4
 
-# vim: ts=4 sw=4 ft=gitconfig: 
 [github]
 	user = nl253
 	oauth-token = 6fb424e6ce59e5b6d689d35928f9d76a159d5404
+# vim: ts=4 sw=4 ft=gitconfig: 
