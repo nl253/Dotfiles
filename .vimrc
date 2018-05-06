@@ -15,7 +15,7 @@ let g:config_ftypes = [
             \ 'dosini',
             \ 'conf',
             \ 'json',
-            \ 'config',
+            \ 'config'
             \ ]
 
 let g:prog_langs = [
@@ -29,7 +29,7 @@ if has('nvim') | exe 'setl rtp=~/.vim,'.&rtp | endif
 
 so ~/.vim/plugin/plugins.vim
 
-silent call funct#append_to_path([
+silent call opts#append_to_path([
             \ '~/.gem/ruby/*/bin',
             \ '~/.fzf/bin',
             \ '~/go/bin',
@@ -42,7 +42,7 @@ silent call funct#append_to_path([
             \ '~/.yarn/bin'
             \ ])
 
-silent call funct#set_repl({
+silent call repl#set_repl({
             \ "haskell"   : "ghci", 
             \ "python"    : "ipython", 
             \ "erlang"    : "erl", 

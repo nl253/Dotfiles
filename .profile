@@ -29,14 +29,14 @@ if [ -x $(command which less 2>/dev/null) ]; then
   export PAGER=less
 fi
 
-export HISTFILE="$HOME/.config/sh/.history"
-export SAVEHIST=10000
-export HISTSIZE=20000
-export HISTFILESIZE=20000
-export HISTCONTROL="ignoreboth:erasedups"
+#export HISTIGNORE="&:[ ]*:pwd:exit:cd:ls:bg:fg:history:clear:jobs:git*:ls*:dirs *:vim*:nvim*:ghci*:date:ranger:alias:dirs:popd:mutt:bash*:shopt:set:env:enable:"
+#export HISTFILE="$HOME/.config/sh/.history"
+#export SAVEHIST=10000
+#export HISTSIZE=20000
+#export HISTFILESIZE=20000
+#export HISTCONTROL="ignoreboth:erasedups"
+#export HISTTIMEFORMAT='%c'
 export HH_CONFIG=hicolor # get more colors
-export HISTIGNORE="&:[ ]*:pwd:exit:cd:ls:bg:fg:history:clear:jobs:git*:ls*:dirs *:vim*:nvim*:ghci*:date:ranger:alias:dirs:popd:mutt:bash*:shopt:set:env:enable:"
-export HISTTIMEFORMAT='%c'
 export FIGNORE='~:.o:.swp:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:tags:.log:.hi:.so:.beam:tags:.iml:.lock:.bak'
 
 [ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf

@@ -1,7 +1,8 @@
+
 # Can also be sourced by zsh if you autoload bashcompinit, see zshcompsys(1)
 
 [[ -x $(type -P pandoc 2>/dev/null) ]] && eval "$(pandoc --bash-completion)"
-[[ -x $(type -P stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
+#[[ -x $(type -P stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
 
 _go() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
@@ -45,4 +46,3 @@ _read() {
 complete -F _read read
 
 [[ $(hostname) =~ raptor ]] && source /etc/bash_completion
-

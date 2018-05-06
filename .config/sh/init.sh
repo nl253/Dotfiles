@@ -112,6 +112,6 @@ alias pip=pip3
 # $EDITOR
 for i in nvim vim vi; do [ -x $(command which $i 2>/dev/null) ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
 
-export PS1=' $(command git --no-pager branch --color=always -vv 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(pwd)$(tput setaf 1)\n >>$(tput sgr0) '
+export PS1=' $(git --no-pager log --color=always -1 --pretty=format:"%C(blue)%h %C(yellow)%cr%Creset \"%s\"" 2>/dev/null) $(git --no-pager branch --color=always --format "%(color:magenta)[%(color:cyan)%(refname:lstrip=-1) %(color:magenta)=> %(color:cyan)%(upstream:lstrip=2)%(color:magenta)]" 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(pwd)$(tput setaf 1)\n >>$(tput sgr0) '
 
 # vim:foldmethod=marker:foldlevel=0:foldmarker={,}:shiftwidth=2:tabstop=2:
