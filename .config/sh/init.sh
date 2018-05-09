@@ -19,7 +19,7 @@ fi
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ~/Documents/{,Revision,Vim,} ~/Documents/Programming/{,Functional-Programming}; do
+for directory in ~/Documents/Revision ~/Documents/Vim ~/Documents/Programming; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -41,6 +41,7 @@ if [ -x $(which ghci) ]; then
   ghc_opts='-threaded -j4'
   alias ghci="ghc --interactive ${ghc_opts} ${ghc_f} -fprint-unicode-syntax ${ghc_warn} ${ghc_exts}"
   alias ghc="ghc ${ghc_opts} ${ghc_f} ${ghc_warn} ${ghc_exts}"
+  for var in ghc_exts ghc_f ghc_warn ghc_opts; do eval "unset -v $var"; done
 fi
 
 # dirs and files
@@ -51,7 +52,7 @@ for i in {f,e,}grep; do
   eval "alias ${i}='${i} --color=auto'"
 done
 
-GLOBIGNORE=*.{fls,out,aux,toc,beam,pyo,lock,tmp,bak,log,o,hi,class,so}:tags:node_modules:iml:*cache*:*history*
+GLOBIGNORE='*.{fls,out,aux,toc,beam,pyo,lock,tmp,bak,log,o,hi,class,so}:tags:node_modules:iml:*cache*:*history*'
 FIGNORE=$GLOBIGNORE
 
 alias diff='diff --color=auto --suppress-common-lines --side-by-side --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
@@ -94,7 +95,7 @@ fi
 
 # Package Management - pacman, yaourt, expac
 if [ -x $(command which pacman 2>/dev/null) ]; then
-  alias pacman='pacman --config "${HOME}/.pacman.conf"'
+  alias pacman="pacman --color always --config ${HOME}/.pacman.conf"
   alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
   alias pacman-reinstall-all-foreign-packages="pacman -Qmq | pacman -S -"
   alias pacman-remove-orphans="sudo pacman -Rns \$(pacman -Qtdq)"
@@ -112,6 +113,12 @@ alias pip=pip3
 # $EDITOR
 for i in nvim vim vi; do [ -x $(command which $i 2>/dev/null) ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
 
-export PS1=' $(git --no-pager log --color=always -1 --pretty=format:"%C(blue)%h %C(yellow)%cr%Creset \"%s\"" 2>/dev/null) $(git --no-pager branch --color=always --format "%(color:magenta)[%(color:cyan)%(refname:lstrip=-1) %(color:magenta)=> %(color:cyan)%(upstream:lstrip=2)%(color:magenta)]" 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(pwd)$(tput setaf 1)\n >>$(tput sgr0) '
+#export PS1=' $(git --no-pager log --color=always -1 --pretty=format:"%C(blue)%h %C(yellow)%cr%Creset %s" 2>/dev/null) $(git --no-pager branch --color=always --format "%(color:magenta)[%(color:cyan)%(refname:lstrip=-1) %(color:magenta)-> %(color:cyan)%(upstream:lstrip=2)%(color:magenta)]" 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(echo $0):/$(pwd)$(tput setaf 1) >>$(tput sgr0) '
+if $(builtin 2>/dev/null); then
+  # bash and zsh
+  export PS1=' $(git --no-pager log --color=never -1 --pretty=format:"%h %cr \"%s\"" 2>/dev/null) $(git --no-pager branch --color=never --format "[%(refname:lstrip=-1) -> %(upstream:lstrip=2)]" 2>/dev/null)\n $(builtin echo $0):/$(builtin pwd) :: $(builtin dirs 2>/dev/null)\n >> '
+else # dash
+  export PS1=' $(echo -n "\n " && git --no-pager log --color=never -1 --pretty=format:"%h %cr \"%s\"" 2>/dev/null) $(git --no-pager branch --color=never --format "[%(refname:lstrip=-1) -> %(upstream:lstrip=2)]" 2>/dev/null)$(echo "") $(echo $0):/$(pwd) $(dirs 2>/dev/null)$(echo "") >> '
+fi
 
-# vim:foldmethod=marker:foldlevel=0:foldmarker={,}:shiftwidth=2:tabstop=2:
+# vim:foldmethod=indent:foldlevel=0:foldmarker={,}:shiftwidth=2:tabstop=2:

@@ -4,7 +4,7 @@
 [[ -d ~/.config/bash    ]] && BASHDOTDIR=~/.config/bash
 [[ -f $SHDOTDIR/init.sh ]] && source $SHDOTDIR/init.sh
 
-PS1='%~ %F{magenta}λ%F{white} '
+#PS1='%~ %F{magenta}λ%F{white} '
 WORDCHARS=''
 FPATH=~/.config/zsh/zfunc:$FPATH
 DIRSTACKSIZE=10
@@ -50,7 +50,7 @@ if [[ "${terminfo[kcbt]}" != "" ]]; then
 else
   bindkey '^[[Z' reverse-menu-complete
 fi
-
+  
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,comm -w -w"
 
 # ignore uninteresting files
