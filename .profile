@@ -6,7 +6,11 @@ export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export EMAIL=norbertlogiewa96@gmail.com
 
-if [[ -x $(which go) ]]; then
+plantuml(){
+  dash -c "java -jar ~/.local/share/plant-uml/plantum*.jar $@"
+}
+
+if [ -x $(which go) ]; then
   export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
@@ -48,8 +52,14 @@ export FIGNORE='~:.o:.swp:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:ta
 export QT_SELECT=5
 
 # $PATH
-for directory in .{local,yarn,stack,cabal,cargo} '.config/composer/vendor' '.local/share/fzf' 'go' 'node_modules'; do
+
+
+for directory in .local .yarn .stack .cabal .cargo .config/composer/vendor .local/share/fzf go node_modules; do
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
+done
+
+for directory in .config/yarn/global/node_modules/.bin; do
+  [ -d "${HOME}/${directory}" ] && export PATH="${HOME}/${directory}:${PATH}:" 2>/dev/null
 done
 
 # for directory in '/usr/lib/jvm/java-9-openjdk'; do

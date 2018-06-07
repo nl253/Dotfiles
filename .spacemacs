@@ -47,6 +47,7 @@ values."
      git
      html
      javascript
+     python
      ivy
      markdown
      ;; org

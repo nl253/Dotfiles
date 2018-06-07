@@ -436,3 +436,5 @@ octave-workspace
 .local/share/okular/
 .electron/
 .electron/
+.config/cmus/
+.config/deluge/

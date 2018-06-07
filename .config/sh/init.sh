@@ -19,7 +19,7 @@ fi
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ~/Documents/Revision ~/Documents/Vim ~/Documents/Programming; do
+for directory in ~/Documents/Notes ~/Documents/Vim ~/Documents/Programming; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -34,7 +34,7 @@ alias sudo='sudo '
 # get MIME type of a file
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
 
-if [ -x $(which ghci) ]; then
+if [ -x $(command which ghci) ]; then
   ghc_exts='-XApplicativeDo -XBangPatterns -XBinaryLiterals -XDeriveAnyClass -XDeriveFoldable -XDeriveFunctor -XDeriveGeneric -XDeriveTraversable -XEmptyDataDecls -XFlexibleContexts -XFlexibleInstances -XFunctionalDependencies -XGADTs -XKindSignatures -XLambdaCase -XMonadComprehensions -XMultiParamTypeClasses -XMultiWayIf -XNamedWildCards -XNumDecimals -XParallelListComp -XPartialTypeSignatures -XPatternGuards -XPostfixOperators -XScopedTypeVariables -XTupleSections -XTypeOperators -XViewPatterns'
   ghc_f='-fprint-potential-instances -fprint-expanded-synonyms -fdiagnostics-color=always'
   ghc_warn='-Wunused-local-binds -Wunused-foralls -Wunused-binds -Wsemigroup -Wredundant-constraints -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances -Wname-shadowing -Wincomplete-uni-patterns -Wdeprecations -Wcompat'
@@ -47,15 +47,19 @@ fi
 # dirs and files
 alias ls='ls --color=auto --group-directories-first -I tags -I "*cache*" -I "*history*" -I "~*" -I "_*" -I "*~" -I "*-log" -I "*-lock" -I "*.log" -I "*.class" -I "*.so" -I "*.beam" -I "*.o" -I "*.pyc" -I "*.pyg" -I "*.aux" -I "*.toc" -I "*.swp" -I "*.tmp" -I "*.fls" -I "*.fdb_latexmk" -I "*.lock" -I "*.hi"'
 
+if [ -x $(command which rlwrap) ]; then
+  alias dash='rlwrap dash -i'
+fi
+
 # pattern matching
-for i in {f,e,}grep; do
+for i in fgrep egrep grep; do
   eval "alias ${i}='${i} --color=auto'"
 done
 
-GLOBIGNORE='*.{fls,out,aux,toc,beam,pyo,lock,tmp,bak,log,o,hi,class,so}:tags:node_modules:iml:*cache*:*history*'
+GLOBIGNORE='*.fls:*.out:*.aux:*.toc:*.beam:*.pyo:*.lock:*.tmp:*.bak:*.log:*.o:*.hi:*.class:*.so:tags:node_modules:iml:*cache*:*history*'
 FIGNORE=$GLOBIGNORE
 
-alias diff='diff --color=auto --suppress-common-lines --side-by-side --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
+alias diff='diff --color=auto --suppress-common-lines --ignore-trailing-space --minimal --text --side-by-side --width=$(tput cols) --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
 
 # split path on ":"
 alias show-path='echo -e ${PATH//:/\\n} | grep -E "^.{3,}$"'
@@ -113,12 +117,19 @@ alias pip=pip3
 # $EDITOR
 for i in nvim vim vi; do [ -x $(command which $i 2>/dev/null) ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
 
+git_basic_info='$(git --no-pager log --color=never -1 --pretty=format:"%h %cr \"%s\"" 2>/dev/null)'
+git_branch_info='$(git --no-pager branch --color=never --format "%(refname:lstrip=-1)" 2>/dev/null) -> $(git --no-pager config --get remote.origin.url 2>/dev/null)@$(git --no-pager branch --color=never --format="%(upstream:lstrip=3)" 2>/dev/null) ($(git remote 2>/dev/null))'
+git_branch_info="[${git_branch_info}]"
+non_git_prompt='$(echo $0):/$(pwd) :: '
+
 #export PS1=' $(git --no-pager log --color=always -1 --pretty=format:"%C(blue)%h %C(yellow)%cr%Creset %s" 2>/dev/null) $(git --no-pager branch --color=always --format "%(color:magenta)[%(color:cyan)%(refname:lstrip=-1) %(color:magenta)-> %(color:cyan)%(upstream:lstrip=2)%(color:magenta)]" 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(echo $0):/$(pwd)$(tput setaf 1) >>$(tput sgr0) '
-if $(builtin 2>/dev/null); then
+if $(builtin dirs 2>/dev/null 1>/dev/null); then
   # bash and zsh
-  export PS1=' $(git --no-pager log --color=never -1 --pretty=format:"%h %cr \"%s\"" 2>/dev/null) $(git --no-pager branch --color=never --format "[%(refname:lstrip=-1) -> %(upstream:lstrip=2)]" 2>/dev/null)\n $(builtin echo $0):/$(builtin pwd) :: $(builtin dirs 2>/dev/null)\n >> '
+ export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
 else # dash
-  export PS1=' $(echo -n "\n " && git --no-pager log --color=never -1 --pretty=format:"%h %cr \"%s\"" 2>/dev/null) $(git --no-pager branch --color=never --format "[%(refname:lstrip=-1) -> %(upstream:lstrip=2)]" 2>/dev/null)$(echo "") $(echo $0):/$(pwd) $(dirs 2>/dev/null)$(echo "") >> '
+  export PS1="${git_basic_info} ${git_branch_info} ${non_git_prompt}"
 fi
+
+for var in git_basic_info git_branch_info non_git_prompt; do unset -v $var; done
 
 # vim:foldmethod=indent:foldlevel=0:foldmarker={,}:shiftwidth=2:tabstop=2:

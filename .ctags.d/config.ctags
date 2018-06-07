@@ -9,4 +9,4 @@
 --exclude=**%**
 --exclude=vimfiles
 
---languages=Haskell,Erlang,Sh,Rust,Markdown,Java,reStructuredText,Vim,OrgMode
+--languages=Python,Haskell,Erlang,Sh,Rust,Markdown,Java,reStructuredText,Vim,OrgMode
