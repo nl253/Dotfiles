@@ -1,0 +1,83 @@
+snippet main "main :: IO () [haskell]" b
+main :: IO ()
+main = do
+  ${1:putStrLn "test suite not yet implemented"}
+endsnippet
+
+snippet if "if ... then ... else ... [haskell]" 
+if ${1:x == 4}
+  then ${2:putStrLn "you're right!"}
+  else ${3:putStrLn "you're wrong!"}
+endsnippet
+
+snippet "do\s*" "do ... [haskell]" r
+do 
+  ${1:}
+endsnippet
+
+snippet "of\s*" "of ... [haskell]" r
+of 
+  ${1:} -> ${2:}
+endsnippet
+
+snippet let "let ... in ... [haskell]"
+let ${1:sec} = ${2:60}
+in ${3:sec / 1000}
+endsnippet
+
+snippet case "case ... of ... [haskell]"
+case ${1:char} of
+  ${2:' '} -> ${3:parseWord}
+  ${4:_} -> ${5:parseOther}
+endsnippet
+
+snippet "mod[ule]{,4}" "module ... where [haskell]" rb
+module `!v expand("%:r")` where
+endsnippet
+
+snippet "qual[ifed]" "import qualified ... as ... [haskell]" rb
+import qualified ${1:Data.List} as ${2:L}
+endsnippet
+
+snippet "^\s*imp[ort]{,4}" "import ... [haskell]" rb
+import ${1:Data.List} ($2)
+endsnippet
+
+snippet where "where ... [haskell]"
+where
+  ${1:ffn} = ${2:[(head firstName)]}
+endsnippet
+
+snippet "inst[ance]*" "instance ... where ... [haskell]" rb
+instance ${1:Functor} ${2:Box} where
+  ${3:fmap f EmptyBox = EmptyBox}
+  ${4:fmap f (FullBox a) = (FullBox (f a))}
+endsnippet
+
+snippet "rec[ord]{,4}" "record [haskell]" rb
+data ${1:Person} = ${2:Person}
+  { ${3:firstName   :: String
+  , lastName    :: String
+  , age         :: Int
+  , height      :: Float
+  , phoneNumber :: String
+  , flavor      :: String}
+  } deriving (Show)
+endsnippet
+
+snippet "der[ivng]{,5}" "deriving (...) [haskell]" r
+deriving (${0:Show})
+endsnippet
+
+snippet data "data ... = ... [haskell]" b
+data ${1:Box boxedValue} = ${2:EmptyBox | FullBox { boxedValue :: String } }
+endsnippet
+
+snippet  "^#!.*" "shebang [haskell]" rb
+#!/usr/bin/env stack
+-- stack --install-ghc runghc
+endsnippet
+
+snippet  "no[Iimplct]{,8}(p|P)[relud]{,7}" "{-# NoImplicitPrelude #-} [haskell]" rb
+{-# LANGUAGE NoImplicitPrelude #-}
+endsnippet

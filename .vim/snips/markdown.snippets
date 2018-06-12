@@ -1,0 +1,18 @@
+extends markup
+extends tex
+
+snippet img "image [markdown]" b
+![${1:image alt text}](${2:#path-to-img}${3/.+/ "/}${3:opt title}${3/.+/"/})$0
+endsnippet
+
+snippet "h1|title" "current file without ext [markdown]" rb
+# `!p 
+import re
+snip.rv = re.sub("\.\w+$", "", snip.fn).replace("-", " ").replace("_", " ").title()`
+endsnippet 
+
+snippet "^([A-Z][a-z A-Z])*[\t ]*:[ \t]*" "titled list [markup]" r
+`!p snip.rv = match.group(1)` 
+
+- $1
+endsnippet 

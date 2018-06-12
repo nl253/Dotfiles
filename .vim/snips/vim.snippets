@@ -1,0 +1,62 @@
+snippet "com[mand]{,5}" "com! ... ... [vim]" r
+com! ${1:CommandName} ${2:call s:script_function()}
+endsnippet
+
+snippet let "let ... = ... [vim]" b
+let ${1:g}:${2:var_name} = ${3:1}
+endsnippet
+
+snippet "[Pp]lug" "Plug ... / ... [vim]" br
+Plug '${1:author}/${2:repo}'
+endsnippet
+
+snippet if "if ... ... endif [vim]" b
+if ${1:!has}('${2:nvim}')
+    let g:${3:VIMDIR} = ${4:expand('')}
+endif
+endsnippet
+
+snippet has "has (...) [vim]" 
+has('${1:nvim}')
+endsnippet
+
+snippet isdir "isdirectory (...) [vim]" 
+isdirectory('${1:DIRNAME}')
+endsnippet
+
+snippet sfile "let ....  = <sfile> [vim]" 
+let s:${1:DIR} = expand('<sfile>:p:h:h').'/${2:dicts}/'
+endsnippet 
+
+snippet exists "exists (...) [vim]" 
+exists("${1:g:variable}")
+endsnippet 
+
+snippet exe "executable (...) [vim]" 
+executable("${1:executable}")
+endsnippet 
+
+snippet "fu[nction]{,6}" "fu! ... (...) ... endf [vim]" br
+fu! s:${1:function_name}()
+    ${2:" do sth here}
+endf
+endsnippet
+
+snippet try "try ... catch / ... / ... endtry [vim]" b
+try
+    ${1:" do sth here}
+catch /${2:.*}/
+endtry
+endsnippet
+
+snippet while "while ... ... endwhile [vim]" b
+while ${1:condition}
+	${2:break}
+endwhile
+endsnippet
+
+snippet "fori?" "for i in ... ... endfor [vim]" br
+for i in ${1:[1, 2, 3]}
+    ${2:break}
+endfor
+endsnippet

@@ -1,0 +1,396 @@
+/* Custom Stylesheet */
+
+/* fonts */
+
+/* serif - Amiri */
+
+/* sans-serif - Raleway */
+
+/* monospaced - Oxygen Mono */
+
+@import url('https://fonts.googleapis.com/css?family=Raleway|Amiri|Oxygen+Mono');
+
+/* global scope */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Amiri, 'Times New Roman', serif !important;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+body {
+  color: #eaeaea;
+  background-color: #191816;
+  margin: 2em;
+}
+
+/* 3 breakpoints */
+
+/* large */
+
+@media screen and (min-width: 1440px) {
+  body {
+    margin: 4em 20em;
+  }
+}
+
+/* medium */
+
+@media screen and (min-width: 1280px) and (max-width: 1440px) {
+  body {
+    margin: 4em 8em;
+  }
+}
+
+/* small */
+
+@media screen and (min-width: 1000px) and (max-width: 1280px) {
+  body {
+    margin: 4em 8em;
+  }
+}
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Raleway, 'Helvetica Neue', Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+  color: #5a6875;
+}
+
+h1 {
+  font-size: 1.8em;
+  margin: 0.4em 0;
+  color: #f4b042;
+  font-weight: bold;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0.5em;
+  line-height: 1.25;
+}
+
+h2 {
+  margin-top: 1.5rem;
+  font-size: 1.5em;
+}
+
+h3 {
+  margin-top: 1.2rem;
+  font-size: 1.25em;
+}
+
+h4,
+h5,
+h6 {
+  margin-top: 1rem;
+  font-size: 0.8em;
+}
+
+/* links */
+
+a {
+  color: #268bd2;
+  text-decoration: none;
+}
+
+a strong {
+  color: inherit;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+/* basic editing  */
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+/* lists */
+
+ul,
+ol,
+dl {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+dt {
+  font-weight: bold;
+}
+
+/* media - images etc */
+
+img {
+  width: 100%;
+  vertical-align: middle;
+  margin: 2rem 0;
+}
+
+figure {
+  margin: 0 0 1rem;
+}
+
+/* quotes and citing */
+
+blockquote {
+  padding: 0.5rem 1rem;
+  margin: 0.8rem 0;
+  color: #7a7a7a;
+  border-left: 0.25rem solid #e5e5e5;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* inline editing */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+small {
+  font-size: 80%;
+}
+
+mark {
+  background-color: #ff0;
+  color: #000;
+}
+
+dfn {
+  font-style: italic;
+}
+
+abbr {
+  font-size: 85%;
+  font-weight: bold;
+  color: #555;
+  text-transform: uppercase;
+}
+
+/* preformatted */
+
+pre code {
+  padding: 0;
+  font-size: 90%;
+  color: #191816;
+  background-color: #ebebeb;
+}
+
+pre {
+  font-family: 'Oxygen Mono', Menlo, Monaco, 'Courier New', monospace !important;
+  color: #191816;
+  background-color: #ebebeb;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+}
+
+
+kbd {
+  padding: 0.2rem 0.4rem;
+  font-family: 'Oxygen Mono', Menlo, Monaco, 'Courier New', monospace !important;
+  font-size: 90%;
+  color: #191816;
+  background-color: #292b2c;
+  border-radius: 0.2rem;
+}
+
+kbd kbd {
+  padding: 0;
+  font-size: 100%;
+  font-weight: bold;
+}
+
+/* table */
+
+table {
+  padding: 1em;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  background-color: transparent;
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}
+
+table td * {
+  margin: 4px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+
+thead th * {
+  padding: 6px;
+  margin: 0;
+}
+
+thead {
+  padding: 3em;
+  background-color: antiquewhite;
+  text-align: center;
+}
+
+td>p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* other */
+
+output {
+  display: inline-block;
+}
+
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: .5rem;
+  line-height: inherit;
+}
+
+address {
+  margin-bottom: 1rem;
+  font-style: normal;
+  line-height: inherit;
+}
+
+p {
+  padding: 0;
+  margin-top: 2px;
+}
+
+hr {
+  position: relative;
+  margin: 1.5rem 0;
+  border: 0;
+  color: #eaeaea;
+  /* border-top: 1px solid #eee; */
+  /* border-bottom: 1px solid #fff; */
+}
+
+/* forms */
+
+fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+caption {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  text-align: center;
+  caption-side: bottom;
+}
+
+/* sections */
+
+footer {
+  width: 100%;
+  background-color: #c9a1b6;
+  padding: 0.5em 2em;
+  margin-top: 1em;
+}
+
+footer ul {
+  list-style-type: none;
+}
+
+/* pygments */
+
+.literal {
+  font-size: 85%;
+  color: #bf616a;
+  border-radius: 3px;
+  padding: 0 5px;
+  font-family: 'Oxygen Mono', Menlo, Monaco, 'Courier New', monospace !important;
+}
+
+.comment {
+  color: #858a85;
+}
+
+.keyword {
+  color: #8352a5;
+  font-weight: bold;
+}
+
+.name {
+  color: #985759;
+}
+
+.name.builtin {
+  color: #947748;
+  font-weight: bold;
+}
+
+.name.function {
+  color: #ba7c4c;
+  font-weight: bold;
+}
+
+.number {
+  color: #c0bc21;
+}
+
+.operator {
+  color: #1f9192;
+}
+
+.pseudo {
+  color: #4c82b7;
+  font-weight: bold;
+}
+
+.punctuation {
+  color: #727572;
+}
+
+.string {
+  color: #39a15f;
+}

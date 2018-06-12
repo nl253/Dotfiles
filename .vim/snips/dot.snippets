@@ -1,0 +1,27 @@
+snippet "fsm|automata|graph" "finite state machine [dot]" r
+digraph G {
+
+    node [shape=circle]
+
+	s0 [style=filled fillcolor=black label="start" fixedsize=true width=0.5]
+	s0 -> {S1, S3} -> S2 
+}
+endsnippet 
+
+snippet "cluster|sub(graph)?" "subgraph [dot]" rb
+subgraph cluster_2 {
+        w1_
+        w2_
+        b_
+        sum_
+        Id
+}
+endsnippet 
+
+snippet "plain|te?xt" "plain text node [dot]" rb
+{
+        node [shape="plaintext"]
+        Input
+        Output
+}
+endsnippet 

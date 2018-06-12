@@ -1,0 +1,17 @@
+{
+  "exclude": ["node_modules"],
+  "compileOnSave": true,
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "importHelpers": true,
+    "jsx": "React",
+    "lib": ["ES2015", "ES2016", "ES2017", "ESNext"],
+    "noImplicitAny": false,
+    "outDir": "dist",
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "types": ["node", "passport", "express-session", "express", "jest", "validator", "body-parser", "mongoose", "faker"]
+  },
+  "include": ["src/**/*.ts", "src/*.ts"]
+}

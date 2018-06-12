@@ -1,0 +1,380 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <groupId>com.example</groupId>
+    <artifactId>Java-API-XML-learning</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+
+    <name>Java-API-XML-learning</name>
+
+    <url>https://github.com/nl253/${project.name}</url>
+
+    <issueManagement>
+        <system>github</system>
+        <url>${project.url}/issues</url>
+    </issueManagement>
+
+    <inceptionYear>2017</inceptionYear>
+
+    <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>4.12</junit.version>
+        <java.version>1.8</java.version>
+        <junit.jupiter.version>5.0.2</junit.jupiter.version>
+        <junit.vintage.version>${junit.version}.2</junit.vintage.version>
+        <junit.platform.version>1.0.2</junit.platform.version>
+    </properties>
+
+    <contributors>
+        <contributor>
+            <email>nl253@kent.ac.uk</email>
+            <name>Norbert Logiewa</name>
+            <organization>Kent Univerity</organization>
+            <roles>
+                <role>coding</role>
+            </roles>
+        </contributor>
+    </contributors>
+
+    <prerequisites>
+        <maven>[3.0.0,)</maven>
+    </prerequisites>
+
+    <dependencies>
+
+        <!--Fake data-->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>0.14</version>
+        </dependency>
+
+	<!-- Testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+	<!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+	<!-- Testing -->
+        <!-- Only required to run tests in an IDE that bundles an older version -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+	<!-- Testing -->
+        <!-- Only required to run tests in an IDE that bundles an older version -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+	<!-- Testing -->
+        <!-- Only required to run tests in an IDE that bundles an older version -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.vintage.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+	<!-- Testing -->
+        <!-- To avoid compiler warnings about @API annotations in JUnit code -->
+        <dependency>
+            <groupId>org.apiguardian</groupId>
+            <artifactId>apiguardian-api</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Apache standard library -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+
+        <!-- Google core libraries - graphs, collections, functional patterns -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.5-jre</version>
+            <!-- or, for Android: -->
+            <!-- <version>23.5-android</version> -->
+        </dependency>
+
+        <!-- ORM -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.12.Final</version>
+        </dependency>
+
+        <!-- [> Apache IO utils <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>commons-io</groupId> -->
+        <!-- <artifactId>commons-io</artifactId> -->
+        <!-- <version>2.6</version> -->
+        <!-- </dependency> -->
+
+        <!-- [> maths <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>org.apache.commons</groupId> -->
+        <!-- <artifactId>commons-math3</artifactId> -->
+        <!-- <version>3.6.1</version> -->
+        <!-- </dependency> -->
+
+        <!--local SQLite-like database  -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JSON -->
+        <!-- <dependency> -->
+        <!-- <groupId>com.google.code.gson</groupId> -->
+        <!-- <artifactId>gson</artifactId> -->
+        <!-- <version>2.8.2</version> -->
+        <!-- </dependency> -->
+
+        <!-- [>  Gson: Java to Json conversion <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>com.google.code.gson</groupId> -->
+        <!-- <artifactId>gson</artifactId> -->
+        <!-- <version>2.8.2</version> -->
+        <!-- <scope>compile</scope> -->
+        <!-- </dependency> -->
+
+        <!-- [> PostgreSQL JDBC driver <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>org.postgresql</groupId> -->
+        <!-- <artifactId>postgresql</artifactId> -->
+        <!-- <version>42.1.4</version> -->
+        <!-- </dependency> -->
+
+        <!-- [> data compression <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>org.apache.commons</groupId> -->
+        <!-- <artifactId>commons-compress</artifactId> -->
+        <!-- <version>1.15</version> -->
+        <!-- </dependency> -->
+
+        <!-- MySQL JDBC driver -->
+        <!-- <dependency> -->
+        <!-- <groupId>mysql</groupId> -->
+        <!-- <artifactId>mysql-connector-java</artifactId> -->
+        <!-- <version>8.0.8-dmr</version> -->
+        <!-- </dependency> -->
+
+        <!-- CLI  -->
+        <!-- <dependency> -->
+        <!-- <groupId>commons-cli</groupId> -->
+        <!-- <artifactId>commons-cli</artifactId> -->
+        <!-- <version>2.0-gt2-pre1</version> -->
+        <!-- </dependency> -->
+
+
+        <!-- [> ANTLR4 <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>org.antlr</groupId> -->
+        <!-- <artifactId>antlr4-runtime</artifactId> -->
+        <!-- <version>4.7</version> -->
+        <!-- </dependency> -->
+
+        <!-- [> Java Native Access <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>net.java.dev.jna</groupId> -->
+        <!-- <artifactId>jna</artifactId> -->
+        <!-- <version>4.5.0</version> -->
+        <!-- </dependency> -->
+
+        <!-- <dependency> -->
+        <!-- <groupId>org.antlr</groupId> -->
+        <!-- <artifactId>antlr4</artifactId> -->
+        <!-- <version>4.7</version> -->
+        <!-- </dependency> -->
+
+        <!-- [> CSV <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>com.opencsv</groupId> -->
+        <!-- <artifactId>opencsv</artifactId> -->
+        <!-- <version>4.1</version> -->
+        <!-- </dependency> -->
+
+        <!-- [> YAML <] -->
+        <!-- <dependency> -->
+        <!-- <groupId>org.yaml</groupId> -->
+        <!-- <artifactId>snakeyaml</artifactId> -->
+        <!-- <version>1.19</version> -->
+        <!-- </dependency> -->
+
+        <!--jquery-like DOM manipulation  -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.2</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <comments>this project</comments>
+        </license>
+    </licenses>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <fork>true</fork>
+                    <meminitial>128m</meminitial>
+                    <maxmem>512m</maxmem>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                        <arg>-Xdoclint:all</arg>
+                    </compilerArgs>
+                    <optimize>false</optimize>
+                    <showWarnings>false</showWarnings>
+                    <compilerVersion>${java.version}</compilerVersion>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <includes>
+                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
+                        <include>**/*TestCase.java</include>
+                    </includes>
+                    <properties>
+                        <!-- <includeTags>fast</includeTags> -->
+                        <excludeTags>slow</excludeTags>
+                        <!--
+                        <configurationParameters>
+                            junit.jupiter.conditions.deactivate = *
+                        </configurationParameters>
+                        -->
+                    </properties>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider
+                        </artifactId>
+                        <version>${junit.platform.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <validateLinks>true</validateLinks>
+                    <doctitle>${project.basedir}</doctitle>
+                    <footer>Copyright ${project.name} ${project.inceptionYear}
+                    </footer>
+                    <header>API documentation for ${project.name}</header>
+                    <locale>en_GB</locale>
+                    <nodeprecated>true</nodeprecated>
+                    <overview>${project.basedir}/README.md</overview>
+                    <show>private</show>
+                    <detectLinks>true</detectLinks>
+                    <defaultSince>1.0.0</defaultSince>
+                    <defaultVersion>1.0.0</defaultVersion>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>false</minimizeJar>
+                            <createDependencyReducedPom>false
+                            </createDependencyReducedPom>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>uk.ac.kent.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.basedir}/META-INF/MANIFEST.MF
+                        </manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- The JavaFX Maven Plugin provides a way to assemble distribution -->
+            <!-- bundles for JavaFX applications (8+) from within Maven.-->
+            <!-- <plugin> -->
+            <!-- <groupId>com.zenjava</groupId> -->
+            <!-- <artifactId>javafx-maven-plugin</artifactId> -->
+            <!-- <version>8.8.3</version> -->
+            <!-- <configuration> -->
+            <!-- <mainClass>uk.ac.kent.Main</mainClass> -->
+            <!-- <vendor>uk.ac.kent</vendor> -->
+            <!-- </configuration> -->
+            <!-- </plugin> -->
+
+        </plugins>
+
+    </build>
+
+</project>

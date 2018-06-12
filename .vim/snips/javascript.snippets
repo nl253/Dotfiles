@@ -1,0 +1,120 @@
+extends node, jsdoc
+
+snippet " */\*+" "docstring [cfamily]" rb
+/\*\*
+ \* ${VISUAL}$0
+ \*\/
+endsnippet 
+
+snippet "con[struco]{,8}" "constructor [javascript]" r
+constructor() {
+  $1;
+}
+endsnippet 
+
+snippet class "class ... { ... } [javascript]" 
+class $1 { 
+  $2
+}
+endsnippet 
+
+snippet foro "for (const i of obj) { ... } [javascript]" b
+for (let i of $1) {
+  $2;
+}
+endsnippet
+
+snippet "t(ime)?out" "setTimeout(funct, int) [javascript]" r
+setTimeout(function() {
+  $1;
+}, ${2:2000});
+endsnippet
+
+snippet forin "for (const key in object) { ... } [javascript]" b
+for (const key in $1) {
+  $2;
+}
+endsnippet
+
+snippet "fu[nctio]{,6}" "function ... (...) { ... } [javascript]" r
+function ${1:doStuff}($2) {
+  $3;
+}
+endsnippet
+
+snippet "lam[bda]{,3}" "x => { ... } [javascript]" r
+${1:x} => ${1:x} {
+  return $2;
+}
+endsnippet
+
+snippet catch "catch { ... } [javascript]"
+catch (err) {
+  $2;
+} 
+endsnippet
+
+snippet try "try { ... } catch (...) { ... } finally { ... } [javascript]" b
+try {
+  $1;
+}
+catch(err) {
+  $2;
+} 
+endsnippet
+
+snippet "ret[urn]{,3}" "return [javascript]" rb
+return $1;
+endsnippet 
+
+snippet fori "for (let i = 0; i < xs.lenght; i++) { ... } [javascript]"
+for (let i = 0; i < $1.length; i++) {
+  $2;
+}
+endsnippet
+
+snippet forr "reverse for loop [javascript]"
+for (let i = $1.length - 1; i <= 0; i--) {
+  $2;
+}
+endsnippet
+
+snippet while "while (...) { ... } [cfamily]"
+while (${1:true}) {
+  $2;
+}
+endsnippet 
+
+snippet do "do { ... } while (...) [javascript]"
+do { 
+  $1;
+} while (${2:true});
+endsnippet 
+
+snippet "switch|case" "switch statement [javascript]" r
+switch ($1) {
+  case $2:
+    $3;
+    break;
+  default:
+    $4;
+}
+endsnippet
+
+snippet if "if (...) { ... } [javascript]"
+if (${1:true}) {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet "el[se]{,2}if?" "else if (...) { ... } [javascript]" r
+else if ($1) {
+  $2;
+}
+endsnippet
+
+snippet "el[se]{,2}" "else { ... } [javascript]" r
+else {
+  $1;
+}
+endsnippet

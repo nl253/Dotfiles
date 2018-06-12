@@ -1,0 +1,99 @@
+priority -50
+
+snippet ret "return [cfamily]"
+return ${1:0};
+endsnippet 
+
+snippet " */\*+" "docstring [cfamily]" rb
+/\*\*
+ \* ${VISUAL}$0
+ \*\/
+endsnippet 
+
+snippet "@t[hrows]+" "@throws [cfamily]" r
+@throws ${1:Exception} ${2:when an issue occurs}
+endsnippet 
+
+snippet "@se+" "@param [cfamily]" r
+@see ${1:java.util.List#add}
+endsnippet 
+
+snippet "@a[uthor]+" "@author [cfamily]" r
+@author ${1:`git config user.name` <`git config user.email`>}
+endsnippet 
+
+snippet "@e[xception]+" "@xception [cfamily]" r
+@exception ${1:Exception} ${2:description}
+endsnippet 
+
+snippet "\{?@li[nk]+" "@link [cfamily]" r
+{@link ${1:java.util.List#add}}
+endsnippet 
+
+snippet "@r[eturns]+" "@return [cfamily]" r
+@return ${1:description}
+endsnippet 
+
+snippet "@p[arm]+" "@param [cfamily]" r
+@param ${1:arg1}
+endsnippet 
+
+# loops
+
+snippet while "while (...) { ... } [cfamily]"
+while (${1:true}) {
+    ${2:// code block to be executed}
+}
+endsnippet 
+
+snippet do "do { ... } while (...) [cfamily]"
+do { 
+    ${1:// do stuff and then check}
+} while (${2:true});
+endsnippet 
+
+snippet "switch|case" "switch statement [cfamily]" r
+switch(${1:expression}) {
+    case ${2:n}:
+        ${3:// code block
+        break;}
+    default:
+        ${4:// code block}
+}
+endsnippet
+
+snippet if "if (...) { ... } [cfamily]"
+if (${1:true}) {
+  ${2:// do stuff here}
+}
+endsnippet
+
+snippet "fun[ction]{,6}|fn" "... (...) { ... } [cfamily]" br
+${1:void} ${2:function_name}($3) {
+    ${VISUAL}$0
+}
+endsnippet
+
+snippet "fori?" "for (int i = 0 ; i < ... ; i++) { ... } [cfamily]" rb
+for (int i = 0; i < ${1:iterable.lenght}; i++) {
+    ${2:printf("something: %s\n", i)};
+}
+endsnippet 
+
+snippet forr "reverse for loop [cfamily]"
+for (int i = ${1:iterable}.length--; i <= 0; i--) {
+    ${2:// do stuff}
+}
+endsnippet
+
+snippet "elif?" "else if (...) { ... } [cfamily]" r
+else if (${1:true}) {
+    ${VISUAL}$0
+}
+endsnippet
+
+snippet "else?" "else { ... } [cfamily]" r
+else {
+    ${VISUAL}$0
+}
+endsnippet
