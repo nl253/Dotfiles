@@ -34,14 +34,16 @@ if [ -x $(command which less 2>/dev/null) ]; then
 fi
 
 #export HISTIGNORE="&:[ ]*:pwd:exit:cd:ls:bg:fg:history:clear:jobs:git*:ls*:dirs *:vim*:nvim*:ghci*:date:ranger:alias:dirs:popd:mutt:bash*:shopt:set:env:enable:"
-#export HISTFILE="$HOME/.config/sh/.history"
-#export SAVEHIST=10000
-#export HISTSIZE=20000
-#export HISTFILESIZE=20000
-#export HISTCONTROL="ignoreboth:erasedups"
 #export HISTTIMEFORMAT='%c'
+export FIGNORE='~:.o:.swp:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:tags:.log:.hi:.so:.beam:tags:.iml:.lock:.bak:.idx:.pack'
 export HH_CONFIG=hicolor # get more colors
-export FIGNORE='~:.o:.swp:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:tags:.log:.hi:.so:.beam:tags:.iml:.lock:.bak'
+export HISTCONTROL=ignoreboth:erasedups
+export HISTFILE="$HOME/.config/sh/.history"
+export HISTSIZE=20000
+export HISTFILESIZE=$HISTSIZE
+export SAVEHIST=$HISTSIZE
+# After each command, append to the history file and reread it
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
 [ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
 
@@ -52,8 +54,6 @@ export FIGNORE='~:.o:.swp:history:.class:cache:.pyc:.aux:.toc:.fls:.lock:.tmp:ta
 export QT_SELECT=5
 
 # $PATH
-
-
 for directory in .local .yarn .stack .cabal .cargo .config/composer/vendor .local/share/fzf go node_modules; do
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
@@ -129,6 +129,7 @@ else
 fi
 
 if [ $0 = zsh ] || [ $0 = $(which zsh) ]; then
+  # sh won't ever get here so [[ is fine 
   # not run with -i (interactive) but with TMUX so make interactive anyway
   [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f $ZDOTDIR/.zshrc ]] && [[ -n $ZDOTDIR ]] && source $ZDOTDIR/.zshrc
 elif [ $0 = bash ] || [ $0 = $(which bash) ]; then

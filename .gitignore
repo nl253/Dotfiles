@@ -31,47 +31,22 @@ dist/
 # VCS
 
 .git-credentials
-.gitignores/.github/PULL_REQUEST_TEMPLATE.md
-
-# X11
-
-.xscreensaver
 
 # Node.js
 
-.nvm/
-.v8flags*
-.node_repl*
+.node_repl_history
 .node-gyp/
-.npmrc
-node_modules/
 .npm/
-
-# Go
-
-go/
-.gvm/
 
 # Haskell
 
-.ghc-mod/
 .stack/
 .ghc/
-.cabal/
 
 # Python
 
-*.ropeprojec*
-*anaconda*
-.cookiecutter*
-.ipython/
 .jupyter/
-.pyenv/
-.pylint.d/
 .python-version
-PyComLine
-anaconda3/
-miniconda3/
 
 # Version Control Systems
 
@@ -88,25 +63,7 @@ miniconda3/
 # Gnome
 
 .gnome/
-*/undo/*
-*/wn/*
-*breakpoints*
-*session*
-.*.tmp
 .ICEauthority
-.Notes_html/
-.Trash-*
-.Xauthority
-.applications/
-.aspell.*
-.athome
-.autojump/
-.bundle/
-.cabal/packages/
-.case/
-.conda/environments.txt
-.inspections.xml
-.vorg/tasks.vorg
 
 # Log
 
@@ -133,9 +90,7 @@ miniconda3/
 
 # Rust
 
-.multirust/
 .rustup/
-.cargo/
 
 # Libraries
 
@@ -149,23 +104,14 @@ miniconda3/
 .local/share/applications/
 .local/lib/
 .local/include/
-*vorg*
-*JetBrains*
-*gnome*
-*hexchat*
-*libre*
-.config/goa*
-.config/manja*
-.config/htop/
-*gtk-3*
+.config/goa-1.0
+.config/manjaro
+.config/manjaro-hello.json
 .local/bin/
 .local/share/doc/
 .local/share/recently-used.xbel
-.stack-work/
 .cache/
-.astropy/
 .config/Trolltech.conf
-.config/Kvantum/
 .config/qt5ct/
 .config/spotify/
 .local/share/icc/
@@ -173,8 +119,6 @@ miniconda3/
 .local/share/tracker/
 .local/share/keyrings/
 .local/share/man/
-.local/share/heroku/
-.local/share/fzf/
 
 # Libreoffice
 
@@ -187,28 +131,11 @@ miniconda3/
 
 # History
 
-.netrwhist
-.*_history
-*history*
-.*-history
+.bash_history
+.node_repl_history
 
-.nfs*
-.pc
-.pdepend/
 .pki/
-.rnd
-.scripts/
-.split
-.sqlite
 .ssh/
-.swt/
-.task/
-.templateengine/
-.thumbnails/
-.tmux/
-.tooling/
-.travis/
-.v8flags.5.8.283.41.norbert.json
 
 # Text editors
 
@@ -243,44 +170,12 @@ undo/*
 # Dirs
 
 Downloads/
-Dump/
-nltk_data/
-seaborn-data/
-Projects/
-Raptor/
 Pictures/
 Downloads/
 Documents/
-Notes/
-Libraries/
-Uni/
 
-.julia/
-
-# UML editors
-.yEd/
-.zenmap/
-
-.3T/
-.p2/
-.xxx/
-.*201*/
 .mozilla/
-.zcompdump
-
-# Ruby
-
-.rbenv/
 .gem/
-
-# Cloud storage
-
-.gdrive/
-OneDrive/
-Dropbox/
-.dropbox/
-.dropbox
-.dropbox*
 
 # PostgreSQL
 
@@ -305,16 +200,15 @@ Empty*
 
 # Jetbrains
 
-.PhpStorm*
+.CLion*
 .DataGrip*
 .Gogland*
 .IdeaIC*
-.IntelliJIdea2017.2/
-.PyCharm2017*
+.IntelliJ*
+.PhpStorm*
+.PyCharm*
 .Rider*
 .RubyMine*
-.WebStorm*
-.CLion*
 .WebStorm*
 
 # Archives
@@ -334,107 +228,51 @@ Empty*
 
 # Configuration
 
-.config/composer/.htaccess
 .config/configstore/update-notifier-npm.json
 .config/dconf
 .config/gconf
-.config/hub
-.config/kdeglobals
-.config/kmixrc
 .config/menus/
 .config/pulse/
 .config/user-dirs.locale
-.dbshell
-.dicts/
-.directory
-.dlv/
-.dmenurc
-.dmrc
 .esd_auth
-.fonts/
-.fuse_hidden*
-.fzf/
-.gcalcli*
-.gimp*
-.gists/
-.git-stats
-.gitbook/
-.gksu*
 .gnupg/
-.grip/
-.gtkrc*
-.home
-.icons/
-.idlerc/
-.laptop
 .lesshst
-.local/share/gegl-0.2
 .local/share/gsettings-data-convert
 .local/share/gvfs-metadata/
-.local/share/vlc
 .local/share/webkitgtk
 .local/share/xorg
-.nv/
-.steam/
-.thunderbird/
-boosterclapps/
 
 .config/css/
 .config/ranger/
 .config/makefiles/
 .config/nvim/
-.config/google-chrome*
-.config/ipynb_checkpoints/
-.dialyzer_plt 
-octave-workspace
-.local/share/RecentDocuments
-.local/share/Trash
-.local/share/grilo-plugins
-.local/man/
-.gradle/
-.hoogle/
-.ipynb_checkpoints
-.keras/datasets
-.gd/credentials.json
-.config/oni/
-.elvish/db
-.netbeans
-.config/xbuild/pkgconfig-cache-2.xml
-.android/
-.config/NuGet/
-.config/QtProject.conf
+.config/google-chrome-beta
 .config/autostart/
 .config/configstore/
-.config/efince/
 .config/gthumb/
-.config/gtk-2.0/
-.config/kdenliverc
-.config/knfsshare
-.config/octave/
-.config/onedrive/
-.config/python/venvs/
-.config/totem/
-.config/vlc/vlc-qt-interface.conf
-.erlang.cookie
-.h2.server.properties
-.intellij-haskell/
 .local/etc/
-.local/share/Oni/
-.local/share/h2/
 .local/share/jupyter/
-.local/share/mime/packages/video-mpeg.xml
-.local/share/mime/video/
-.local/share/plant-uml/
-.local/share/tor-browser/
-.local/share/user-places.xbel
-.local/share/user-places.xbel.tbcache
-.nuget/
-.octave_hist
-.oni/config.js
-.config/evince/accels
-.config/evince/
-.local/share/okular/
-.electron/
-.electron/
-.config/cmus/
 .config/deluge/
+.config/sh/.history
+.config/zsh/.zcompdump
+.config/qupzilla/
+.config/libreoffice/
+.config/hexchat/
+.config/brasero/
+.config/evolution/
+.local/share/gnome-shell/application_state
+.local/share/telepathy/
+.local/share/gnome-settings-daemon/input-sources-converted
+.face
+*.js
+*.html
+*.ts
+*.vim
+*.py
+*.sh
+.local/share/evolution/
+.config/gtk-3.0/bookmarks
+.local/share/gnome-background-properties
+.config/gnome-control-center/backgrounds/last-edited-lock.xml
+.config/gnome-control-center
+.config/libaccounts-glib/

@@ -34,7 +34,7 @@ alias sudo='sudo '
 # get MIME type of a file
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
 
-if [ -x $(command which ghci) ]; then
+if [ -x $(command which ghci 2>/dev/null) ]; then
   ghc_exts='-XApplicativeDo -XBangPatterns -XBinaryLiterals -XDeriveAnyClass -XDeriveFoldable -XDeriveFunctor -XDeriveGeneric -XDeriveTraversable -XEmptyDataDecls -XFlexibleContexts -XFlexibleInstances -XFunctionalDependencies -XGADTs -XKindSignatures -XLambdaCase -XMonadComprehensions -XMultiParamTypeClasses -XMultiWayIf -XNamedWildCards -XNumDecimals -XParallelListComp -XPartialTypeSignatures -XPatternGuards -XPostfixOperators -XScopedTypeVariables -XTupleSections -XTypeOperators -XViewPatterns'
   ghc_f='-fprint-potential-instances -fprint-expanded-synonyms -fdiagnostics-color=always'
   ghc_warn='-Wunused-local-binds -Wunused-foralls -Wunused-binds -Wsemigroup -Wredundant-constraints -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances -Wname-shadowing -Wincomplete-uni-patterns -Wdeprecations -Wcompat'
@@ -47,7 +47,7 @@ fi
 # dirs and files
 alias ls='ls --color=auto --group-directories-first -I tags -I "*cache*" -I "*history*" -I "~*" -I "_*" -I "*~" -I "*-log" -I "*-lock" -I "*.log" -I "*.class" -I "*.so" -I "*.beam" -I "*.o" -I "*.pyc" -I "*.pyg" -I "*.aux" -I "*.toc" -I "*.swp" -I "*.tmp" -I "*.fls" -I "*.fdb_latexmk" -I "*.lock" -I "*.hi"'
 
-if [ -x $(command which rlwrap) ]; then
+if [ -x $(command which rlwrap 2>/dev/null) ]; then
   alias dash='rlwrap dash -i'
 fi
 
@@ -123,9 +123,12 @@ git_branch_info="[${git_branch_info}]"
 non_git_prompt='$(echo $0):/$(pwd) :: '
 
 #export PS1=' $(git --no-pager log --color=always -1 --pretty=format:"%C(blue)%h %C(yellow)%cr%Creset %s" 2>/dev/null) $(git --no-pager branch --color=always --format "%(color:magenta)[%(color:cyan)%(refname:lstrip=-1) %(color:magenta)-> %(color:cyan)%(upstream:lstrip=2)%(color:magenta)]" 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(echo $0):/$(pwd)$(tput setaf 1) >>$(tput sgr0) '
-if $(builtin dirs 2>/dev/null 1>/dev/null); then
-  # bash and zsh
- export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
+if $(builtin dirs 2>/dev/null 1>/dev/null); then # bash and zsh
+  if [[ -n "$ZSH_VERSION" ]]; then # zsh
+    export PS1="${git_basic_info} ${non_git_prompt}"
+  else # bash
+    export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
+  fi
 else # dash
   export PS1="${git_basic_info} ${git_branch_info} ${non_git_prompt}"
 fi

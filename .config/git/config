@@ -6,7 +6,7 @@
 	autocrlf = input
 
 [credential]
-    helper   = store
+	helper = store
     username = nl253
 
 [init]
