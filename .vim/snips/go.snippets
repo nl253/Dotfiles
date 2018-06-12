@@ -1,0 +1,130 @@
+snippet "case|switch" "switch ... { case ... : ... default: ... } [go]" rb
+switch $1 {
+case ${2:true}:
+	$3
+default:
+	$4
+}
+endsnippet 
+
+snippet import "import (...)"
+import (
+	"${1:package}"
+)
+endsnippet
+
+snippet ife "if err := ... ; err != nil [go]"
+if err := ${1:condition}; err != nil {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet "else?" "else { ... }" rb
+else {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet if "if ... { ... } [go]"
+if ${1:condition} {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet cons "const (...) [go]"
+const (
+	${1:NAME} ${2:Type} = ${3:value}
+	${0}
+)
+endsnippet
+
+snippet "fu[nct]{,3}" "func ... { ... } [go]" rb
+func ${1:greet}(${2:name string}) {
+	$3
+}
+endsnippet 
+
+snippet for "for i , ... := range ... { ... } [go]" b
+for i, ${1:currentEntry} := range ${2:greeting} {
+	$3
+}
+endsnippet 
+
+snippet fori "for i := 0; i < N; i++ { ... }"
+for ${1:i} := 0; $1 < ${2:N}; $1++ {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet log "log [go]"
+log.Printf("$1\n")
+endsnippet 
+
+snippet print "print [go]"
+fmt.Printf("$1\n")
+endsnippet 
+
+snippet "struct|type" "struct [go]" br
+type ${1:Vertex} struct {
+	${2:X, Y int}
+}
+endsnippet 
+
+snippet "interface|typei" "interface [go]" br
+type ${1:ReadWriter} interface {
+	${2:Reader
+	Writer}
+}
+endsnippet 
+
+snippet "res|err" "res, err := { ... } [go]" rb
+res, err := $1
+if err != nil {
+	$2
+}
+endsnippet
+
+snippet main "func main() { ... } [go]"
+func main() {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet "sel[ect]{,3}" "select { case a := <-chan : ... }" rb
+select {
+case ${1:v1} := <-${2:chan1}
+	${0}
+}
+endsnippet
+
+snippet "ft|fall" "fallthrough" rb
+fallthrough
+endsnippet
+
+snippet vars "var (...)"
+var (
+	${1:x} ${2:Type}${3: = ${0:value}}
+)
+endsnippet
+
+snippet map "map [ ... ] ... { ... }"
+map[${1:string}]${2:string}{${3:
+        "Tim":   "Good morning!",
+        "Jenny": "Bonjour!",
+}}
+endsnippet
+
+snippet scanner "bufio.NewScanner [go]" b
+scanner := bufio.NewScanner(strings.NewReader(input))
+scanner.Split(bufio.ScanWords)
+for scanner.Scan() {
+        fmt.Println(scanner.Text())
+}
+endsnippet
+
+snippet get "http.Get (...) [go]" 
+res, err := http.Get("http://www.gutenberg.org/files/2701/old/moby10b.txt")
+if err != nil {
+        log.Fatal(err)
+}
+endsnippet

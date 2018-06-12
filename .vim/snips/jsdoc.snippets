@@ -1,0 +1,65 @@
+# snippet @type "@type {Type} [jsdoc]" 
+# @type ${1:string}
+# endsnippet
+
+# snippet "@inter(f(a(ce?)?)?)?" "@interface [jsdoc]" r
+# @interface
+# endsnippet
+
+# snippet "@gen(e(r(a(t(or?)?)?)?)?)?" "@generator [jsdoc]" r
+# @generator
+# endsnippet
+
+# snippet "@(emit|fire)s?" "@fires {Event} [jsdoc]" r
+# @emits {Event}
+# endsnippet
+
+# snippet "@glo(b(al?)?)?" "@global [jsdoc]" r
+# @global
+# endsnippet
+
+# snippet "@acc(e(ss?)?)?" "@access { private | protected | public } [jsdoc]" r
+# @access ${1:private}
+# endsnippet
+
+# snippet "@pa(r(am?)?)?" "@param {Type} {Varname} {Description} [jsdoc]" r
+# @param {${1:Type}} ${2:varname} ${3:Description}
+# endsnippet
+
+# snippet "@r(e(t(u(r(ns?)?)?)?)?)?" "@return {Type} Description [jsdoc]" r
+# @return {${1:Type}} ${2:Description}
+# endsnippet
+
+# snippet "@priv?" "@private [jsdoc]" r
+# @private
+# endsnippet
+
+# snippet "@o(v(er?)?)?" "@override [jsdoc]" r
+# @override
+# endsnippet
+
+# snippet "@prot?" "@protected [jsdoc]" r
+# @protected
+# endsnippet
+
+# snippet "@f(ile)?o(ver)?" "@fileoverview Description [jsdoc]" r
+# /**
+ # * @fileoverview ${1:${VISUAL:A description of the file}}$0
+ # */
+# endsnippet
+
+# snippet "@con(s(t(r?)?)?)?" "@constructor [jsdoc]" r
+# @constructor
+# endsnippet
+
+# snippet "@li(c(e(n(se?)?)?)?)?" "@license Description [jsdoc]" r 
+# @license ${1:MIT}$0
+# endsnippet
+
+# snippet "@ver(s(i(on?)?)?)?" "@version Semantic version [jsdoc]" r
+# @version ${1:0.1.0}$0
+# endsnippet
+ 
+# snippet "@a(u(t(h(or?)?)?)?)?" "@author email (First Last) [jsdoc]" r
+# @author ${1:`!v g:snips_author`} [${2:`!v g:snips_author_email`}]
+# endsnippet

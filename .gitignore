@@ -245,7 +245,6 @@ Empty*
 .config/css/
 .config/ranger/
 .config/makefiles/
-.config/nvim/
 .config/google-chrome-beta
 .config/autostart/
 .config/configstore/
@@ -267,7 +266,6 @@ Empty*
 *.js
 *.html
 *.ts
-*.vim
 *.py
 *.sh
 .local/share/evolution/

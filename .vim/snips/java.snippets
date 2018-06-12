@@ -1,0 +1,167 @@
+extends cfamily
+
+snippet main "public static void main ( final String args ) { ... } [java]"
+public class `!v expand("%:r")` {
+
+    /**
+     * @param args command line arguments
+     */
+    public static void main(final String... args) {
+        $1
+    }
+}
+endsnippet
+
+snippet class "class ... { ... } [java]"
+/*
+ * @author nl253
+ */
+
+class ${1:Matrix} {
+    $2
+}
+endsnippet
+
+snippet "pub[lic]{,3}" "public [java]" r
+public ${1:}
+endsnippet
+
+snippet "pri[vate]{,4}" "private [java]" r
+private ${1:}
+endsnippet
+
+snippet "pro[tected]*" "protected [java]" r
+protected ${1:}
+endsnippet 
+
+snippet "sta[tic]{,3}" "static [java]" r
+static ${1:}
+endsnippet 
+
+snippet "fin[al]{,2}" "final (constant) [java]" r
+final ${1:}
+endsnippet 
+
+snippet "walk|rglob" "recursively walk a directory [java]" rb
+public final Optional<Set<String>> walk(final String root) {
+    try {
+    return Optional.of(Files.walk(Paths.get(root)).parallel()
+                   .map(Path::toString)
+                   .collect(Collectors.toSet()));
+    } catch (IOException e) {
+    return Optional.empty();
+    }
+}
+endsnippet 
+
+snippet "curl|get|request" "HTTP GET request [java]" rb
+private static Optional<List<String>> get(String url) {
+    try {
+	return Optional
+	    .of(new BufferedReader(new InputStreamReader(new URL(url)
+					 .openStream()))
+		    .lines().collect(Collectors.toList()));
+    } catch (IOException e) {
+	return Optional.empty();
+    } catch (final MalformedURLException e) {
+	return Optional.empty();
+    }
+}
+endsnippet 
+
+snippet "to[sS]tr(ing)?" "public String toString() { ... } [java]" rb
+@Override
+public String toString() {
+  return super.toString();
+}
+endsnippet
+
+snippet collect "Collectors [java]"
+List<String> list = Arrays.stream(strArray).collect(Collectors.toList());
+endsnippet 
+
+snippet readFile "read file [java]"
+private List<String> readFile(String filename) {
+    List<String> records = new ArrayList<String>();
+    try {
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            records.add(line);
+        }
+        reader.close();
+        return records;
+    } catch (Exception e) {
+        System.err.format("exception occurred trying to read '%s'.", filename);
+        e.printStackTrace();
+        return null;
+    }
+} 
+endsnippet
+
+snippet "fore(ach)?" "foreach loop [java]" rb
+for (${1:Object} ${2:i} : ${3:iterable}) {
+    ${4:// do stuff}
+}
+endsnippet
+
+snippet "echo|print|sysout" "System.out.println (...) [java]" r
+System.out.println("${1:message}");
+endsnippet
+
+snippet queue "Queue < ... > [java]"
+Queue<Integer> deque = new SynchronousQueue<Integer>();
+endsnippet
+
+snippet hmap "HashMap < ... , ... > [java]"
+Map<Integer> map = new HashMap<>();
+endsnippet
+
+snippet hset "HashSet < ... > [java]"
+Set<Integer> set = new HashSet<>();
+endsnippet
+
+snippet tset "TreeSet < ... > [java]"
+Set<Integer> set = new TreeSet<>();
+endsnippet
+
+snippet heap "PriorityQueue < ... > [java]"
+Queue<Integer> heap = new PriorityQueue<>();
+endsnippet
+
+snippet deque "Deque < ... > [java]"
+Deque<Integer> deque = new ArrayDeque<>();
+endsnippet
+
+snippet "vec[tor]{,3}" "Vector < ... > [java]" r
+Collection<Integer> vector = new Vector<>();
+endsnippet
+
+snippet stack "Stack < ... > [java]"
+List<Integer> stack = new Stack<>();
+endsnippet
+
+snippet llist "LinkedList < ... > [java]"
+List<Object> list = new LinkedList<>();
+endsnippet
+
+snippet alist "ArrayList < ... > [java]"
+List<Object> list = new ArrayList<>();
+endsnippet
+
+snippet "log(ger)?" "logging [java]" r
+final static Logger log = Logger.getLogger("${1:Main logger}");
+log.setLevel(Level.${2:INFO});
+endsnippet
+
+snippet array "array [java]"
+${1:int}[] ${2:array} = new ${3:int}[${4:10}];
+endsnippet
+
+snippet try "try { ... } catch ( Exception e ) { ... } [java]"
+try {
+    ${1:// attempt}
+} catch (Exception e) {
+    ${2:// on failure}
+}
+endsnippet

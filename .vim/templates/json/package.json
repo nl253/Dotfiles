@@ -1,0 +1,66 @@
+{
+  "name": "{{ title }}",
+  "description": "{{ description }}",
+  "version": "{{ version }}",
+  "main": "src/index.js",
+  "license": "{{ license }}",
+  "scripts": {
+    "test": "node_modules/.bin/jest",
+    "doc": "node_modules/.bin/jsdoc -c conf.json $(yarn run files)",
+    "webpack": "node_modules/.bin/webpack",
+    "files": "find -regextype posix-extended -not -path '**node_modules**' -regex '.*\.([tj]sx?|css|html|md)$'",
+    "prettify": "node_modules/.bin/prettier --write $(yarn run files)",
+    "lint": "node_modules/.bin/eslint $(yarn run files)",
+  },
+  "repository": {
+    "type": "git",
+    "url": "{{ repo }}"
+  },
+  "keywords": [{
+    {
+      keywords
+    }
+  }],
+  "author": "{{ author }}",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "{{ issues }}"
+  },
+  "homepage": "{{ website }}",
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "*",
+    "eslint": "*",
+    "eslint": "*",
+    "eslint-config-airbnb": "*",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-compat": "*",
+    "eslint-plugin-filenames": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-jsx-a11y": "*",
+    "eslint-plugin-node": "*",
+    "eslint-plugin-optimize-regex": "*",
+    "eslint-plugin-prettier": "*",
+    "eslint-plugin-promise": "*",
+    "eslint-plugin-react": "*",
+    "eslint-plugin-security": "*",
+    "file-loader": "*",
+    "html-loader": "*",
+    "html-webpack-plugin": "*",
+    "jest": "*",
+    "jsdoc": "*",
+    "markdown-loader": "*",
+    "markdownlint": "*",
+    "node-sass": "*",
+    "prettier": "*",
+    "raw-loader": "*",
+    "sass-loader": "*",
+    "semver": "*",
+    "style-loader": "*",
+    "ts-loader": "*",
+    "typescript": "*",
+    "typescript-eslint-parser": "*",
+    "uglify-js": "*",
+    "webpack": "*"
+  }
+}

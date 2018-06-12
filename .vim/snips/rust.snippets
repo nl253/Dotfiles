@@ -1,0 +1,146 @@
+
+# loops
+
+snippet while "while (...) { ... } [rust]" b
+while ${1:condition} {
+
+}
+endsnippet 
+
+snippet for "for ... in ... { ... } [rust]" b
+for item in ${1:iterable} {
+
+}
+endsnippet 
+
+# boilerplate
+
+snippet fn "fn (...) -> ... { ... } [rust]" b
+fn ${1:area}(${2:rectangle}: ${3:&Rectangle}) -> ${4:u32} {
+    ${5:return rectangle.length * rectangle.width}
+}
+endsnippet 
+
+snippet main "fn main() { ... } [rust]" 
+fn main() {
+	${1:// DO STUFF HERE.}
+}
+endsnippet 
+
+# statements
+
+snippet if "if (...) { ... } [rust]" 
+if ${1:condition} { ${2:do stuff} } else { ${3:do stuff} }
+endsnippet 
+
+snippet if "if statement [rust]" b
+if ${1:condition} {
+
+}
+endsnippet 
+
+snippet "elif?" "else if (...) { ... } [rust]" r
+else if ${1:condition} {
+	${VISUAL}${2:${VISUAL/(.*)//}}
+} ${0}
+endsnippet
+
+snippet "match|switch" "match ... { ... } [rust]" rb
+match ${1:expression} {
+	${2:pattern} => ${3:expression},
+	${4:pattern} => ${5:expression},
+	${VISUAL}${6:${VISUAL/(.*)/_/}} => ${0:expression},
+}
+endsnippet
+
+snippet use "use std :: ... :: ... [rust]" b
+use ${1:std}::${2:collections}::${3:HashMap};
+endsnippet 
+
+snippet extern "external crate ... [rust]" b
+extern crate ${1:glob};
+endsnippet 
+
+# loops
+
+snippet "(derive)?debug" "debugging printing [rust]"
+#[derive(Debug)]
+endsnippet
+
+snippet let "let ... ... : ... = ... [rust]" b
+let ${2:} ${1:VARIABLE_NAME}: ${3:i32} = ${4:23};
+endsnippet 
+
+# constructs
+
+snippet "stru(ct?)?" "struct ... { ... } [rust]" rb
+struct ${1:Point} {
+    ${2:x}: ${3:i32},
+    ${4:y}: ${5:i32},
+}
+endsnippet 
+
+snippet enum "enum ... { ... } [rust]" b
+enum ${1:Message} {
+    ${2:Quit},
+    ${3:ChangeColor}: i32,
+}
+
+endsnippet 
+
+snippet impl "impl ... { ... } [rust]" b
+impl ${1:Circle} {
+
+}
+endsnippet
+
+snippet trait "trait (...) { ... } [rust]" b
+trait ${1:HasArea} {
+    fn ${2:area}(&self) -> ${3:f64};
+}
+endsnippet 
+
+# data structures
+
+snippet "clojure|lambda" "| ... | ... [rust]" r
+|x: ${1:i32}| ${2:x + 1}
+endsnippet
+
+snippet "(h(ash)?)?map|dict" "let mut dictionary: HashMap < ... > = HashMap::new() [rust]" r
+let ${3:mut} ${2:dictionary}: HashMap<${1:i32}> = HashMap::new();
+endsnippet 
+
+snippet bmap "let mut dictionary: BTreeMap < ... > = BTreeMap::new() [rust]" 
+let ${3:mut} ${2:dictionary}: BTreeMap<${1:i32}> = BTreeMap::new();
+endsnippet 
+
+snippet "deq(ue)?" "let mut deque: VecDeque < ... > = VecDeque::new() [rust]" r
+let ${3:mut} ${2:deque}: VecDeque<${1:i32}> = VecDeque::new();
+endsnippet 
+
+snippet "(h(ash)?)?set" "let mut set: HashSet < ... > = HashSet::new() [rust]" r
+let mut ${1:set}: HashSet<${2:i32}> = HashSet::new();
+endsnippet 
+
+snippet vec "let mut vector = vec! [ ... ] [rust]" 
+let ${3:mut} ${1:vector} = vec![${2:}];
+endsnippet 
+
+snippet heap "let mut queue: BinaryHeap < ... > = BinaryHeap::new() [rust]" 
+let ${3:mut} ${2:queue}: BinaryHeap<${1:i32}> = BinaryHeap::new();
+endsnippet 
+
+snippet llist "let mut list: LinkedList < ... > = LinkedList::new() [rust]" 
+let ${3:mut} ${2:list}: LinkedList<${1:i32}> = LinkedList::new();
+endsnippet 
+
+# utils
+
+snippet print "print [rust]" 
+println!("${2:The value is: \{:?\}}", ${1:item});
+endsnippet 
+
+snippet "strf[time]{,4}" "strftime (...) [rust]" r
+println!("the value is: {:?}", time::strftime("%c", &time::now()).unwrap());
+endsnippet 
+

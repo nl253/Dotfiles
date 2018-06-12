@@ -1,0 +1,320 @@
+extends markup
+
+snippet "h(1|ead((er)|(ing))?)|title?" "title / Heading Level 1 [rst]" r
+`!p 
+import re
+snip.rv = "############\n" + re.sub("\.\w+$", "", snip.fn).capitalize() + "\n############\n"`
+endsnippet
+
+snippet "h?2" "heading Level 2 [rst]" r
+${1:Heading Level 2}
+------------
+endsnippet
+
+snippet "capt[ure]{,3}" "capture program output [rst]" r
+.. program-output:: python -V
+endsnippet
+
+snippet "h?3" "heading Level 3 [rst]" r
+${1:Heading Level 3 [rst]}
+==============
+endsnippet
+
+snippet "h?4" "heading Level 4 [rst]" r
+${1:Heading Level 4 [rst]}
+~~~~~~~~~~~~~~
+endsnippet
+
+snippet "h?5" "heading Level 5 [rst]" r
+${1:Heading Level 5 [rst]}
+...............
+endsnippet
+
+snippet "list|ls" "list auto-enumerated # [rst]" r
+
+${1:List Heading}
+
+#. ${2:Item A}
+#. ${2:Item B}
+#. ${2:Item C}
+
+endsnippet
+
+snippet "l[is]{,3}t(able)?" "list table [rst]" r
+
+.. list-table:: ${1:Frozen Delights!}
+   :widths: 10 8 32
+   :header-rows: 1
+   :align: left
+
+    * - Treat
+      - Quantity
+      - Description
+    * - Albatross
+      - 2.99
+      - On a stick!
+    * - Crunchy Frog
+      - 1.49
+      - If we took the bones out, it wouldn't be
+       crunchy, now would it?
+    * - Gannet Ripple
+      - 1.99
+      - On a stick!
+
+endsnippet
+
+snippet "cont[ainer]{,5}" "container [rst]" r
+
+.. container:: 
+
+    ${1:The "container" directive surrounds its contents (arbitrary body elements)
+    with a generic block-level "container" element. Combined with the optional
+    "classes" attribute argument(s), this is an extension mechanism for users &
+    applications.}
+
+endsnippet
+
+snippet "comp[ound]{,4}" "compounded paragraph [rst]" r
+
+.. compound:: 
+
+    ${1:The "compound" directive is used to create a compound paragraph, which
+    is a single logical paragraph containing multiple physical body elements
+    such as simple paragraphs, literal blocks, tables, lists, etc., instead
+    of directly containing text and inline elements.}
+
+endsnippet
+
+snippet note "note [rst]"
+
+.. note::
+
+   ${1:Admonitions are specially marked "topics" that can appear
+   anywhere an ordinary body element can. They contain arbitrary body
+   elements. Typically, an admonition is rendered as an offset block in
+   a document, sometimes outlined or shaded, with a title matching the
+   admonition type.}
+
+endsnippet
+
+snippet "todol[ist]{,3}" "todo list [rst]" r
+
+ .. todolist::
+
+endsnippet
+
+snippet todo "todo [rst]"
+
+.. todo::
+
+    ${1:Use this directive like, for example, note.  It will only show up
+    in the output if todo_include_todos is True.}
+
+endsnippet
+
+snippet topic "topic [rst]"
+ .. topic:: ${1:Topic Title}
+
+   ${1:A topic is like a block quote with a title, or a self-contained section
+   with no subsections. Use the "topic" directive to indicate a self-contained
+   idea that is separate from the flow of the document.}
+
+endsnippet
+
+
+snippet hint "hint [rst]"
+
+.. hint::
+
+   ${1:Admonitions are specially marked "topics" that can appear
+   anywhere an ordinary body element can.}
+
+endsnippet
+
+snippet "tldr|high[lights]{,6}" "highlight - tldr; [rst]" r
+
+.. highlights::
+
+    ${1:Highlights summarize the 
+    main points of a document or section,
+    often consisting of a list.}
+
+endsnippet
+
+snippet "atten[tion]{,4}" "attention [rst]" r 
+
+.. attention::
+
+    ${1:Admonitions are specially marked "topics" 
+    that can appear anywhere an ordinary 
+    body element can.}
+
+endsnippet
+
+snippet "warn[ing]{,3}" "warning [rst]" r 
+
+.. warning::
+
+   ${1:Admonitions are specially marked "topics" that can appear
+   anywhere an ordinary body element can.}
+
+endsnippet
+
+
+snippet "(py)?code" "code block [rst]" r
+
+.. code-block:: python
+    :number-lines: 
+
+    ${1:def my_function():
+	"just a test"
+	 print 8/2}
+
+endsnippet
+
+snippet "maths?" "math block [rst]" r
+
+.. math::
+
+    ${1:α_t(i) = P(O_1, O_2, … O_t, q_t = S_i λ)}
+
+endsnippet
+
+snippet "pelican|meta" "meta tags for a Pelican Blog" r
+:date: `date`
+:modified: `date`
+:tags: ${1:thats}, ${2:awesome}
+
+.. status: published
+
+endsnippet
+
+snippet "rub[rick]{,4}" "rubric [rst]" r
+
+.. rubric:: 
+
+   ${1:The "rubric" directive inserts a "rubric" element into the document tree. A
+   rubric is like an informal heading that doesn't correspond to the document's
+   structure.}
+
+endsnippet
+
+snippet "img(age)?" "image [rst]" r
+
+.. image:: img/${1:gnu}.*
+   :name: my picture
+   :height: 100px
+   :width: 200 px
+   :scale: 50 %
+   :alt: alternate text
+   :align: left
+
+endsnippet
+
+snippet "d(ef)?(list|ls?)" "definiton list [rst]" r
+
+${1:Term to define}
+    ${2:Definition Several noteworthy blogs are in 
+    that list which you should definitely check out!}
+
+endsnippet
+
+snippet "pq(u(o(te?)?)?)?" "pull-quote [rst]" r
+
+.. pull-quote::
+
+   ${1:A pull-quote is a small selection of text "pulled out and quoted",
+   typically in a larger typeface. 
+   Pull-quotes are used to attract attention, especially in long articles.}
+
+endsnippet
+
+snippet "adm[onit]{,7}" "admoniton [rst]" r
+
+.. admonition:: And, by the way...
+
+    ${1:You can make up your own admonition too.}
+
+endsnippet
+
+snippet "epi[graph]{,5}" "epigraph [rst]" r
+
+.. epigraph:: 
+
+    ${1:An epigraph is an apposite (suitable, apt, or pertinent) short inscription, often a quotation or poem, at the beginning of a document or section.}
+
+endsnippet
+
+
+snippet "csv[table]{,5}" "csv table" r
+
+.. csv-table:: Frozen Delights!
+
+    :header: "treat", "Quantity", "Description"
+    :widths: "auto"
+    :align: left
+    :file: path-to-local-csvfile.csv
+
+    .. optionally :url:
+		  :delim: "space"
+
+    ${1:"albatross", 2.99, "On a stick!"
+    "crunchy Frog", 1.49, "If we took it?"
+    "gannet Ripple", 1.99, "On a stick!"}
+
+endsnippet
+
+snippet toc "table of contents [rst]"
+
+.. toctree::
+	:maxdepth: 3
+
+	`ls | sed -E 's/\.w+$//' | sed -E 's/^/    /'`
+
+endsnippet
+
+snippet "((t(opic)?)?contents)" "contents [rst]" r
+
+.. contents:: Table of Contents
+    :depth: 2
+
+endsnippet
+
+snippet "s[ide]{,3}bar" "side bar [rst]" r
+
+.. sidebar:: ${1:Sidebar Title}
+    :subtitle: Optional Sidebar Subtitle
+
+    Subsequent indented lines comprise
+    the body of the sidebar, and are
+    interpreted as body elements.
+
+endsnippet
+
+snippet "cent[erdhding]{,47}" "centered heading [rst]" r
+.. centered:: ${1:LICENSE AGREEMENT}
+endsnippet
+
+snippet "glos[sary]{,5}" "glossary of terms [rst]" r
+
+.. glossary::
+
+    Term
+	${1:A structure where information about all documents under the root is
+	saved, and used for cross-referencing.  The environment is pickled
+	after the parsing stage, so that successive runs only need to read
+	and parse new and changed documents.}
+
+endsnippet
+
+snippet "see[also]{,5}" "see also [rst]" r
+
+.. seealso::
+
+    ${1:Module :py:mod:`zipfile`
+    Documentation of the :py:mod:`zipfile` standard module.
+
+    Documentation for tar archive files, including GNU tar extensions.}
+
+endsnippet
+# vim: sw=4 ts=8

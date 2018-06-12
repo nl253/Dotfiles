@@ -1,0 +1,25 @@
+## core
+
+## dev
+# code style + linters
+pylama
+pydocstyle
+profiling
+pylint
+vulture
+pyflakes
+flake8
+mypy
+isort
+
+# tools
+jedi
+ipython
+
+# documentation
+sphinx
+
+# cli
+docopt
+
+# vim: ft=cfg

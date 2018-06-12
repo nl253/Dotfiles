@@ -1,0 +1,142 @@
+# Comment
+snippet comment "create a comment block" b
+---${1/./-/g}---
+-- ${1} --
+---${1/./-/g}---
+endsnippet
+
+# Comment on
+snippet sqlcomment "create a comment on a SQL element" b
+COMMENT ON ${1:TABLE} ${2:tb_table} IS
+'${3:TODO PLACE COMMENT}';
+endsnippet
+
+# TODO
+snippet TODO "create a TODO comment" b
+-- TODO ${1:description} (`git config user.name`: `date +"%Y-%m-%d"`)
+endsnippet
+
+# with query
+snippet with "create a CTE" b
+WITH tt_${1:table_name} AS
+(
+	${2:body ...}
+)
+endsnippet
+
+# recursive with query
+snippet rwith "create a recursive CTE" b
+WITH RECURSIVE tt_${1:table_name} AS
+(
+	${2:body ...}
+)
+endsnippet
+
+# create table
+snippet createtb "creates a table with standard format" b
+CREATE SEQUENCE sq_pk_$1;
+CREATE TABLE tb_${1:name}
+(
+	$1 INTEGER PRIMARY KEY DEFAULT NEXTVAL( 'sq_pk_$1' ),
+	${2:argument}
+);
+COMMENT ON TABLE tb_$1 IS
+'${3:TODO PLACE COMMENT}';
+endsnippet
+
+# create temp table
+snippet creatett "creates a temporary table" b
+CREATE TEMPORARY TABLE tt_${1:name}
+(
+	${2:argument}
+);
+endsnippet
+
+# create or replace function
+snippet createfn "creates a stored procedure" b
+CREATE OR REPLACE FUNCTION ${1:name}
+(
+	${2:arg}
+)
+ RETURNS ${3:return}
+AS $_$
+DECLARE
+BEGIN
+	${4:body}
+END
+ $_$
+ 	LANGUAGE 'plpgsql';
+COMMENT ON FUNCTION $1(`!p import re
+pattern = r'[\s\t]*(.*)'
+replacement = r' \1'
+t2_no_newlines = re.sub( pattern, replacement, t[2] )
+
+res_pattern = r'in_\w*\s+(\w*)'
+res_replace = r'\1'
+result = re.sub( res_pattern, res_replace, t2_no_newlines )
+snip.rv = snip.mkline( result )` ) IS
+'${5:TODO PLACE COMMENT}';
+endsnippet
+
+# create or replace trigger
+snippet createtr "creates a trigger" b
+CREATE TRIGGER ${1:name}
+	${2:BEFORE} INSERT OR DELETE OR UPDATE OF
+	${3:column} ON ${4:table_name}
+	FOR EACH ROW EXECUTE PROCEDURE ${5:function_name}();
+COMMENT ON TRIGGER $1 ON $4 IS
+'${6:TODO PLACE COMMENT}';
+endsnippet
+
+# plsql block
+snippet begin "begins a do block" b
+BEGIN
+	${0}
+END;
+endsnippet
+
+# plsql block with declare part
+snippet declare "begins a declare block" b
+DECLARE
+	${1}
+BEGIN
+	${0}
+END;
+endsnippet
+
+# local variable
+snippet my "creates a new local variable" b
+my_${1:var}		${0:type};
+endsnippet
+
+# for loop with select
+snippet for "starts a new for loop" b
+FOR( ${1:rec} ) IN
+	(
+		${2: select}
+	) LOOP
+	${0}
+	END LOOP;
+endsnippet
+
+# if
+snippet if "starts a new if loop" b
+IF( ${1} ) THEN
+	${0}
+END IF;
+endsnippet
+
+# if else
+snippet ife "starts a new if then loop" b
+IF( ${1} ) THEN
+	${2}
+ELSE
+	${0}
+END IF;
+endsnippet
+
+# elsif
+snippet eif "starts a new elsif block" b
+ELSIF( ${0:condition} ) THEN
+	${1}
+endsnippet

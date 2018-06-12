@@ -1,0 +1,181 @@
+extends c  
+
+# don't extend cfamily (c already does that!)
+
+snippet try "try { ... } catch (...) { ... } [c]" b
+try {
+    riskyAction();
+} catch (const exception &e) {
+    const chae *msg = e.what();
+}
+endsnippet
+
+# loops 
+
+snippet "fore(ach)?" "for ( auto i : ... ) { ... } [cpp]" br
+for (auto i : ${1:container}) {
+    ${2:cout << i << endl};
+}
+endsnippet
+
+snippet "for_e[a-z]*" "for_each [cpp]" br
+for_each(vec.begin(), vec.end(), [](auto i) {
+    cout << i << endl;
+});
+endsnippet
+
+snippet iter "std::vector < ... > iterator ... [cpp]"
+std::vector<int>::iterator it = vec.begin();
+endsnippet
+
+snippet "opt(ional)?" "std::optional < ... > (C++17) [cpp]" r
+optional<${1:string}> 
+endsnippet
+
+snippet "cout|print" "cout << ... [cpp]" r
+cout << "${1:message\n}" << endl;
+endsnippet
+
+snippet enum "enum ... { ... } [cpp]" b
+enum BOOL {FALSE, TRUE};
+endsnippet
+
+snippet class "class ... { ... } [cpp]" b
+class MedalCount {
+
+public:
+    const char *country;
+    int gold;
+    int silver;
+    int bronze;
+};
+endsnippet
+
+# collections
+
+snippet "map|dict" "std::map <map> [cpp]" r
+map<${1:key}, ${2:value}> ${3:myMap}
+endsnippet
+
+snippet "map\(|transf[a-z]*" "transform <algorithm> [cpp]" rb
+transform(${1:vec.begin()}, ${2:vec.end()}, ${3:vec.begin()}, [](auto i) {
+    ${4:return 1};
+});
+endsnippet
+
+snippet "deque|queue" "std::deque < ... > ... [cpp]" r 
+deque<${1:int}> ${2:myDeque}
+endsnippet
+
+snippet "heap|pqueue" "std::priority_queue < ... > ... [cpp]" r
+priority_queue<${1:int}> ${2:heap}
+endsnippet 
+
+snippet "(dl)?list" "std::list < ... > ... [cpp]" r
+list<${1:int}> ${2:myList};
+endsnippet
+
+snippet "(f|sl)list" "std::forward_list (singly linked) <forward_list> [cpp]" r
+forward_list<${1:int}> ${2:myList};
+endsnippet
+
+snippet "un?omap" "std::unordered_map < ... > ... (C++11) [cpp]" r
+unordered_map <${1:key}, ${2:value}> ${3:myMap}
+endsnippet
+
+snippet "o?set" "std::set < ... > ... [cpp]" r
+set<${1:int}> ${2:myOrderedSet}
+endsnippet
+
+snippet "un?oset" "std::unordered_set < ... > ... (C++11) [cpp]" r
+unordered_set<${1:int}> ${2:myUnOrderedSet}
+endsnippet
+
+snippet "vec[tor]{,3}" "std::vector < ... > ... [cpp]" r
+vector<${1:char}> ${2:vec}
+endsnippet
+
+snippet pair "std::pair < ... , ... > ... [cpp]"
+pair<${1:int}, ${2:string}> ${3:myPair}
+endsnippet
+
+snippet tuple "tuple < ... , ... , ... > ... (C++11) [cpp]"
+tuple<${1:int}, ${2:string}, ${3:double}> ${3:my3Tuple}
+endsnippet
+
+snippet array "std::array < ... , ... > ... (C++11) [cpp]" 
+array<${1:int}, ${2:100}> ${4:arrayOf100Ints}
+endsnippet
+
+snippet "var(iant)?" "std::variant < ... , ... > ... (C++17) [cpp]" r
+variant<${1:int}, ${2:float}> ${3:myVariant}
+endsnippet
+
+# utils
+
+snippet read "readFile ( string fname ) { ... } [cpp]" b
+optional<string> readFile(string fileName) {
+    ifstream inFile(fileName); // stream to the file
+    string result; // will be returned
+    string buffer; // temp holder
+
+    // check for failbit
+    if (inFile.fail()) return {}; // IO issues eg could not access
+
+    clog << printf("\n[INFO] file://%s open\n", fileName.c_str());
+
+    // loop while EOF bit is not set0
+    while (!inFile.eof()) {
+        getline(inFile, buffer);
+        result += buffer + '\n';
+    }
+
+    inFile.close(); // close stream
+    return result;
+}
+endsnippet
+
+snippet write "void write ( string fname , string content ) { ... } [cpp]" b
+void writeToFile(string fileName, string content) {
+    ofstream outFile(fileName);
+    outFile << content;
+}
+endsnippet 
+
+snippet "run|popen|capture|subpr(o?c(ess)?)" "read stdout from a pipe [cpp]" r
+optional<string> run(string &command) {
+
+    FILE *fp = popen(command.c_str(), "r");
+
+    if (fp == NULL) return {};
+
+    string result;
+
+    const int max_buffer = 256;
+
+    char buffer[max_buffer];
+
+    while (!feof(fp))
+      if (fgets(buffer, max_buffer, fp) != NULL)
+        result.append(buffer);
+
+    pclose(fp);
+    return result;
+}
+endsnippet
+
+# 4 backslashes ARE necessary
+snippet "match|regex" "regex string match <regex> (C++11) [cpp]" br
+regex pattern("${1:.*\\\\w+.*}");
+if (regex_match(${2:stringToCheck}, pattern)) {
+    ${1:// it matches, do stuff...}
+}
+endsnippet
+
+snippet "s(mart)?p(oin)?te?r" "smart pointer <memory> (C++) [cpp]" rb
+unique_ptr<vector<int>> vec(new vector<int>);
+endsnippet
+
+snippet del "delete ... [cpp]"
+delete ${1:ptrToAnObject};
+endsnippet

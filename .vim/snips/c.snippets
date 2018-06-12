@@ -1,0 +1,35 @@
+extends cfamily
+
+snippet main "int main (int argc, const char *argv[]) { ... } [c]" b
+int main(int argc, const char *argv[]) {
+  $1
+  return 0;
+}
+endsnippet
+
+snippet "^#def[ine]{,3}" "#define ... ... [c]" br
+#define TRUE 1
+#define FALSE 0
+endsnippet
+
+snippet "stru(ct?)?" "struct ... { ... } ... ; [c]" br
+$4struct ${1:myStruct} {
+  ${2:int n;
+  double d[];}
+}$3;  
+endsnippet
+
+snippet "typed(ef)?" "typedef ... ... ; [cpp]" rb
+typedef ${1:unsigned char} ${2:BYTE};
+endsnippet
+
+snippet union "union ... { ... } ... ; [c]" b
+$4union ${1:car} {
+  ${2:char name[50];}
+  ${3:int price;}
+} ${4:car1, car2, *car3} $3;
+endsnippet 
+
+snippet "^\s*#inc[lude]{,4}" "include [c]" r
+#include <${1:stdio.h}>
+endsnippet 
