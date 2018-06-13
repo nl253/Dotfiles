@@ -2,8 +2,5 @@ backup/
 plugged/
 sessions/
 swap/
-my_plugins
 undo/
 views/
-tags
-autoload/plug.vim.old

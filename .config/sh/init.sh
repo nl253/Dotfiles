@@ -44,6 +44,16 @@ if [ -x $(command which ghci 2>/dev/null) ]; then
   for var in ghc_exts ghc_f ghc_warn ghc_opts; do eval "unset -v $var"; done
 fi
 
+if [ -x $(command which node 2>/dev/null) ]; then
+  node_libs='path fs os'
+  node_experimental='modules repl-await vm-modules'
+  node_cmd='node -i --no-warnings'
+  for lib in $(eval "echo $node_libs"); do node_cmd="${node_cmd} --require ${lib}"; done
+  for feature in $(eval "echo $node_experimental"); do node_cmd="${node_cmd} --experimental-${feature}"; done
+  alias node="${node_cmd}"
+  for var in node_libs node_experimental node_cmd; do eval "unset -v $var"; done
+fi
+
 # dirs and files
 alias ls='ls --color=auto --group-directories-first -I tags -I "*cache*" -I "*history*" -I "~*" -I "_*" -I "*~" -I "*-log" -I "*-lock" -I "*.log" -I "*.class" -I "*.so" -I "*.beam" -I "*.o" -I "*.pyc" -I "*.pyg" -I "*.aux" -I "*.toc" -I "*.swp" -I "*.tmp" -I "*.fls" -I "*.fdb_latexmk" -I "*.lock" -I "*.hi"'
 
