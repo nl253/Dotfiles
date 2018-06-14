@@ -132,17 +132,21 @@ git_branch_info='$(git --no-pager branch --color=never --format "%(refname:lstri
 git_branch_info="[${git_branch_info}]"
 non_git_prompt='$(echo $0):/$(pwd) :: '
 
-#export PS1=' $(git --no-pager log --color=always -1 --pretty=format:"%C(blue)%h %C(yellow)%cr%Creset %s" 2>/dev/null) $(git --no-pager branch --color=always --format "%(color:magenta)[%(color:cyan)%(refname:lstrip=-1) %(color:magenta)-> %(color:cyan)%(upstream:lstrip=2)%(color:magenta)]" 2>/dev/null) $(tput setaf 5)::$(tput sgr0) $(echo $0):/$(pwd)$(tput setaf 1) >>$(tput sgr0) '
 if $(builtin dirs 2>/dev/null 1>/dev/null); then # bash and zsh
+
+  f() (find -readable -regextype posix-extended -name "*${1}*" "${@:2}" -not -regex '.*(node_m|\.cache|\.cargo/registry/|rustup/toolchains/|libreoffice|site-packages|google-chrome|\.vim/(undo|plugged|backup|views|s(essions|wap))).*' -not -regex '.*(b(eam|ack)|log|tmp|/tags|fls|class|(py|s)?o|iml|hi|aux|pdf)$' 2>/dev/null)
+  alias rg='rg --pretty --threads 4 --context 1 --max-count 3 --no-search-zip'
+
   if [[ -n "$ZSH_VERSION" ]]; then # zsh
     export PS1="${git_basic_info} ${non_git_prompt}"
   else # bash
     export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
   fi
+
 else # dash
   export PS1="${git_basic_info} ${git_branch_info} ${non_git_prompt}"
 fi
 
 for var in git_basic_info git_branch_info non_git_prompt; do unset -v $var; done
 
-# vim:foldmethod=indent:foldlevel=0:foldmarker={,}:shiftwidth=2:tabstop=2:
+# vim:foldmethod=indent:foldlevel=1:foldmarker={,}:shiftwidth=2:tabstop=2:

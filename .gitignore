@@ -82,8 +82,6 @@ dist/
 
 .m2/ 
 
-
-
 # Binaries
 
 .bin/
@@ -91,9 +89,7 @@ dist/
 # Rust
 
 .rustup/
-
-# Libraries
-
+.cargo/
 
 # Linters
 
@@ -119,15 +115,6 @@ dist/
 .local/share/tracker/
 .local/share/keyrings/
 .local/share/man/
-
-# Libreoffice
-
-# Manjaro
-
-
-
-# PHP
-
 
 # History
 
@@ -229,11 +216,9 @@ Empty*
 # Configuration
 
 .config/configstore/update-notifier-npm.json
-.config/dconf
-.config/gconf
+.config/[dg]conf
 .config/menus/
 .config/pulse/
-.config/user-dirs.locale
 .esd_auth
 .gnupg/
 .lesshst
@@ -242,35 +227,40 @@ Empty*
 .local/share/webkitgtk
 .local/share/xorg
 
-.config/css/
-.config/ranger/
-.config/makefiles/
-.config/google-chrome-beta
-.config/autostart/
-.config/configstore/
-.config/gthumb/
-.local/etc/
-.local/share/jupyter/
-.config/deluge/
-.config/sh/.history
-.config/zsh/.zcompdump
-.config/qupzilla/
-.config/libreoffice/
-.config/hexchat/
+.Xauthority
 .config/brasero/
+.config/configstore/
+.config/deluge/
 .config/evolution/
-.local/share/gnome-shell/application_state
-.local/share/telepathy/
-.local/share/gnome-settings-daemon/input-sources-converted
+.config/gnome-control-center
+.config/gnome-control-center/backgrounds/last-edited-lock.xml
+.config/google-chrome-beta
+.config/gthumb/
+.config/gtk-3.0/bookmarks
+.config/hexchat/
+.config/libaccounts-glib/
+.config/qupzilla/
+.dbus/
 .face
+.local/share/evolution/
+.local/share/gnome-background-properties
+.local/share/gnome-settings-daemon/input-sources-converted
+.local/share/gnome-shell/application_state
+.local/share/jupyter/kernels/
+.local/share/telepathy/
+.local/share/jupyter/
+.config/libreoffice/
+
+# Stray scripts
+
 *.js
 *.html
 *.ts
 *.py
 *.sh
-.local/share/evolution/
-.config/gtk-3.0/bookmarks
-.local/share/gnome-background-properties
-.config/gnome-control-center/backgrounds/last-edited-lock.xml
-.config/gnome-control-center
-.config/libaccounts-glib/
+.config/autostart/create-template.desktop
+.config/autostart/gnome-screensaver.desktop
+.config/sh/.history
+.config/zsh/.zcompdump
+grammar
+syntax

@@ -1,0 +1,22 @@
+if !exists(":Man") && filereadable($VIMRUNTIME.'/ftplugin/man.vim') 
+    execute 'source '.$VIMRUNTIME.'/ftplugin/man.vim'
+endif
+
+if executable('shfmt')
+    setl formatprg=shfmt\ -ci\ -i\ 2
+endif
+
+if executable("bash")
+    setl makeprg=bash\ %
+endif
+
+setl shiftwidth=2 tabstop=2 foldmethod=marker foldlevel=0 foldmarker={,} omnifunc=BashOmniFunc
+
+" SHELL - built-in
+let readline_has_bash = 1 
+let g:is_bash = 1
+let g:sh_fold_enabled = 4
+
+let b:match_words = '\<if\>:\<elif\>:\<else\>'
+let b:loaded_vim_programming_sh = 1
+

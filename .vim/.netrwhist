@@ -1,4 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_cnt =4
 let g:netrw_dirhist_1='/home/norbert/.vim/plugin'
 let g:netrw_dirhist_2='/home/norbert'
+let g:netrw_dirhist_3='/home/norbert/Documents/Programming/Web-Dev'
+let g:netrw_dirhist_4='/home/norbert/Documents/Vim/fabulous/syntax'

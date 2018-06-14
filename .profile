@@ -5,12 +5,11 @@ export BASH_ENV=$HOME/.config/bash/.bashrc
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export EMAIL=norbertlogiewa96@gmail.com
+# export RIPGREP_CONFIG_PATH=~/.config/rg/config
 
-plantuml(){
-  dash -c "java -jar ~/.local/share/plant-uml/plantum*.jar $@"
-}
+plantuml() (dash -c "java -jar ~/.local/share/plant-uml/plantum*.jar $@")
 
-if [ -x $(which go) ]; then
+if [ -x $(which go 2>/dev/null) ]; then
   export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
@@ -111,7 +110,7 @@ export DEFAULT_TOOLCHAIN=nightly
 #  alt-p   preview toggle
 #  alt-l   open in  less`
 export FZF_DEFAULT_OPTS=" --preview-window=right:hidden --tiebreak=end --no-mouse --multi --ansi --margin 3% --filepath-word --prompt=' >> ' --reverse --tiebreak=end,length"
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-d:execute(cd {})' --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview,ctrl-n:down,ctrl-p:up'"
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-c:execute(cd {})' --bind='alt-v:half-page-up,ctrl-v:half-page-down,ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview,ctrl-n:down,ctrl-p:up'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute(\$EDITOR {})' --bind='alt-l:execute:(\$PAGER {})'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:160,fg+:11,border:0,spinner:0,header:0,bg+:0,info:0"
 
@@ -128,10 +127,10 @@ else
   export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="[ -f {} ] && head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
 fi
 
-if [ $0 = zsh ] || [ $0 = $(which zsh) ]; then
+if [ $0 = zsh ] || [ $0 = $(which zsh 2>/dev/null) ]; then
   # sh won't ever get here so [[ is fine 
   # not run with -i (interactive) but with TMUX so make interactive anyway
   [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f $ZDOTDIR/.zshrc ]] && [[ -n $ZDOTDIR ]] && source $ZDOTDIR/.zshrc
-elif [ $0 = bash ] || [ $0 = $(which bash) ]; then
+elif [ $0 = bash ] || [ $0 = $(which bash 2>/dev/null) ]; then
   [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f ~/.bashrc ]] && source ~/.bashrc
 fi

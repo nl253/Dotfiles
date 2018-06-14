@@ -1,0 +1,83 @@
+/* pygments */
+
+pre, code, kbd {
+  --code-kw: #8352a5;
+  --code-comment: grey !important;
+  --code-name: #985759;
+  --code-builtin: #947748;
+  --code-num: #e17b31 !important;
+  --code-op: #1f9192;
+  --code-pseudo: #4c82b7;
+  --code-str: #39a15f;
+  --code-data-type: brown;
+  --code-import: #af4e65;
+  --code-punct: #727572;
+  --code-funct: #ba7c4c;
+}
+
+.night-mode-code {
+  --code-kw: #ef6f6f !important;
+  --code-comment: #5cad80 !important;
+  --code-name: grey !important;
+  --code-builtin: darkorange !important;
+  --code-num: #edd345 !important;
+  --code-op: #0ff !important;
+  --code-pseudo: #4c82b7 !important;
+  --code-data-type: #88f !important;
+  --code-import: #af4e65;
+  --code-str: green !important;
+  --code-punct: #727572 !important;
+  --code-funct: #d696dd !important;
+  }
+
+code .comment, code span.ot, code span.co {
+  color: var(--code-comment);
+}
+
+code span.keyword, code span.kw {
+  color: var(--code-kw);
+  font-weight: bold;
+}
+
+code span.name, code span.bu {
+  color: var(--code-name);
+}
+
+code span.im, code span.at {
+  color: var(--code-import);
+}
+
+code span.name.builtin {
+  color: var(--code-builtin);
+  font-weight: bold;
+}
+
+code .name.function, code span.fu, code span.va {
+  color: var(--code-funct);
+  font-weight: bold;
+}
+
+code span.number, code span.dv, code span.cf, code span.fl {
+  color: var(--code-num);
+}
+
+code span.operator, code span.op {
+  color: var(--code-op);
+}
+
+code span.pseudo, code span.bu {
+  color: var(--code-pseudo);
+  font-weight: bold;
+}
+
+code span.punctuation {
+  color: var(--code-punct);
+}
+
+code span.string {
+  color: var(--code-str);
+}
+
+code span.dt {
+  color: var(--code-data-type);
+}

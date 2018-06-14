@@ -1,0 +1,1 @@
+setl ft=jinja.html

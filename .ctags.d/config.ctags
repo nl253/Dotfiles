@@ -4,9 +4,9 @@
 --sort=yes
 --guess-language-eagerly
 
---exclude=*/(go|cache|Downloads|out|dist|target|build|node_modules)/*
+--exclude=.**(/(go|out|dist)/|cache|Downloads|target|build|node_modules).**
 --exclude=[._]*
 --exclude=**%**
 --exclude=vimfiles
 
---languages=Python,Haskell,Erlang,Sh,Rust,Markdown,Java,reStructuredText,Vim,OrgMode
+--languages=Python,Haskell,Erlang,Sh,Rust,Markdown,JavaScript,Java,reStructuredText,Vim,OrgMode

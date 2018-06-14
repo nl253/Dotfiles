@@ -50,10 +50,10 @@ Plug 'flazz/vim-colorschemes/'
 
 if isdirectory(g:my_plug_dir)
     Plug 'nl252/fabulous', {'frozen': 1, 'dir': g:my_plug_dir.'/fabulous'}
-    Plug 'nl253/vim-saner', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-saner'}
-    Plug 'nl253/vim-markup', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-markup'}
-    Plug 'nl253/vim-programming', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-programming'}
-    Plug 'nl253/vim-webdev', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-webdev'}
+    " Plug 'nl253/vim-saner', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-saner'}
+    " Plug 'nl253/vim-markup', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-markup'}
+    " Plug 'nl253/vim-programming', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-programming'}
+    " Plug 'nl253/vim-webdev', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-webdev'}
 en
 call plug#end()
 

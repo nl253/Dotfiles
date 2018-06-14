@@ -43,18 +43,26 @@ $if mode=emacs
         # TAB cycle forward
         Tab: menu-complete 
 
+
         $if Bash
+
+                # from emacs
+                "\C-@": set-mark
+                "\C-w": kill-region
+                "\M-w": copy-region-as-kill
+                "\M-/" dabbrev-expand
 
                 #"\C-x\C-m": print-last-kbd-macro
 
                 # find files
-                "\C-x\C-f": "command find -maxdepth 8 -type f -regextype posix-extended -regex '.*\\.$'\C-b\C-b"
+                "\C-x\C-f": "command find -maxdepth 8 -type f -not -path '**/.node-gyp/**' -not -path '**/.config/google-chrome-beta/**' -not -path '**/.rustup/toolchains/**' -not -path '**/site-packages/**' -not -path '**/.cargo/registry/**' -not -ipath '**cache/**' -not -path '**/.vim/plugged/**' -not -path '**%**' -not -path '**/.git/**' -not -name '*~' -not -name '*#*' -not -path '**/node_modules/**' -regextype posix-extended -regex '.*\\.$'\C-b\C-b"
 
                 # find recent files
-                "\C-x\C-r": "command find -maxdepth 8 -atime -1 -type f -regextype posix-extended -regex '.*\\.$'\C-b\C-b"
+                "\C-x\C-r": "command find -maxdepth 8 -atime -1 -type f -not -path '**/.node-gyp/**' -not -path '**/.config/google-chrome-beta/**' -not -path '**/.rustup/toolchains/**' -not -path '**/site-packages/**' -not -path '**/.cargo/registry/**' -not -ipath '**cache/**' -not -path '**/.vim/plugged/**' -not -path '**%**' -not -path '**/.git/**' -not -name '*~' -not -name '*#*' -not -path '**/node_modules/**' -regextype posix-extended -regex '.*\\.$'\C-b\C-b"
 
                 # Shift-Tab 
                 "\e[Z": "\e-1\C-i" 
+
 
                 # sudo Esc Esc
                 "\e\e": "\C-asudo \C-e"

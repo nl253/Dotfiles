@@ -1,5 +1,7 @@
---regex-JavaScript=/([A-Za-z0-9._$'"()]+)[ \t]*[:][ \t]*function[ \t]*\([^)]*\)/\1/f,function/
---regex-JavaScript=/([A-Za-z0-9._$]+)[ \t]*[:=][ \t]*\[/\1/a,array/
---regex-JavaScript=/([A-Za-z0-9._$]+)[ \t]*[:=][ \t]*\{/\1/o,object/
---regex-JavaScript=/([^= ]+)[ \t]*=[ \t]*"[^"]*"/\1/s,string/
---regex-JavaScript=/([^= ]+)[ \t]*=[ \t]*'[^']*'/\1/s,string/
+--regex-JavaScript=/function[ \t]*\*?[\t ]*\([^)]*\)/\1/f,function/
+--regex-JavaScript=/^const (\S+)/\1/c,constant/
+--regex-JavaScript=/const (\S+) = \/.*\//\1/r,regex/
+--regex-JavaScript=/^var (\S+)/\1/v,variable/
+--regex-JavaScript=/class (\S+)/\1/C,class/
+--regex-JavaScript=/^\s*([a-z][A-Za-z]+)([^)]*) \{/\1/m,method/
+--regex-JavaScript=/^(import|require) ([a-zA-Z0-9]+) from/\2/i,import/

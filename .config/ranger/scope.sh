@@ -67,7 +67,7 @@ HAS_PYGMENTS=0
 HIGHLIGHT_STYLE=pablo
 
 # Settings
-if [[ -x $(command which highlight) ]]; then
+if [[ -x $(command which highlight 2>/dev/null) ]]; then
   HAS_HIGHLIGHT=1
   highlight="command highlight --style=${HIGHLIGHT_STYLE} --line-numbers --stdout --out-format=xterm256"
 fi
@@ -189,7 +189,7 @@ preview_jsbeautify() {
 }
 
 preview_json() {
-	if [[ -x $(command which jq) ]]; then
+	if [[ -x $(command which jq 2>/dev/null) ]]; then
 		jq --color-output --sort-keys --unbuffered <"$FILE_PATH"
 	else
 		preview_jsbeautify js javascript
@@ -240,7 +240,7 @@ preview_html() {
 }
 
 preview_img() {
-  if [[ -x $(command which img2txt) ]]; then
+  if [[ -x $(command which img2txt 2>/dev/null) ]]; then
     img2txt --gamma=0.6 --width="$PV_WIDTH" -- "$FILE_PATH"
   fi
 }
@@ -279,7 +279,7 @@ preview_dir() {
     if [[ -x $(command which tree 2>/dev/null) ]]; then
       command tree -l -a --prune -L 4 -F --sort=mtime "$FILE_PATH"
     else
-      command ls "$FILE_PATH" -1log
+      command ls --color=always "$FILE_PATH" -pNsh1goG
     fi
   fi
 }
