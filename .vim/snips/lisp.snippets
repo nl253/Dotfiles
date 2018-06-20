@@ -1,0 +1,11 @@
+snippet "(def[un]{,2}|fu[nction]{,6})\s*" "defun [lisp]" br
+(defun $1 ($2) 
+  $3
+  )
+endsnippet
+
+snippet "(defv[ar]{,2}|var)\s*" "defun [lisp]" br
+(defvar $1 ($2) 
+  $3
+  )
+endsnippet

@@ -1,4 +1,8 @@
 " vim:ft=vim:
+
+" VimRacer:
+let g:racer_experimental_completer = 1
+
 " VimProgramming:
 let g:haskell_indent_if    = 2
 let g:haskell_indent_where = 2
@@ -48,6 +52,7 @@ let g:ale_sign_error                         = 'E'
 let g:ale_sign_warning                       = 'W'
 let g:ale_textlint_use_global                = 1
 let g:ale_yaml_swaglint_use_global           = 1
+let g:ale_linters = {'rust': ['rls', 'cargo', 'rustfmt']}
 
 " Emmet:
 let g:user_emmet_install_global = 0

@@ -54,5 +54,70 @@ fu! repl#open_repl(repl)
 endf
 
 " Commands ---------------------------------
+"
+"
+fu! repl#list_repls(A, L, P)
 
-com! ShellREPL silent call repl#open_shell()  
+    let l:ok = []
+    
+    let l:args = {
+                \ 'ash': ['-i'], 
+                \ 'bash': ['-i'], 
+                \ 'clisp': ['-repl'],
+                \ 'csh': ['-i'], 
+                \ 'dash': ['-i'], 
+                \ 'erl': [], 
+                \ 'fish': [], 
+                \ 'ghci': [], 
+                \ 'git add': ['--patch'], 
+                \ 'git commit': ['--patch'], 
+                \ 'git diff': ['--patch'], 
+                \ 'git diff --staged': ['--patch'], 
+                \ 'git reset': ['--patch'], 
+                \ 'guile': ['--no-debug', '--'], 
+                \ 'ipython': [' --pprint', '--autoindent', '--pylab'], 
+                \ 'ipython3': ['--pprint', '--autoindent', '--pylab'], 
+                \ 'iruby': [], 
+                \ 'jshell': [], 
+                \ 'ksh': ['-i'], 
+                \ 'lua': ['-i'], 
+                \ 'mongo': ['--shell'], 
+                \ 'mysql': [], 
+                \ 'node': ['-i'], 
+                \ 'pdksh': ['-i'], 
+                \ 'rebar3': ['shell'], 
+                \ 'rebar': ['shell'], 
+                \ 'psql': [], 
+                \ 'psysh': [], 
+                \ 'ptpython': [], 
+                \ 'python': ['-i'], 
+                \ 'python3': ['-i'], 
+                \ 'ranger': [], 
+                \ 'redis': [], 
+                \ 'redis-cli': [], 
+                \ 'ruby': [], 
+                \ 'sbcl': [], 
+                \ 'sh': [], 
+                \ 'sqlite': [], 
+                \ 'sqlite3': ['-interactive'], 
+                \ 'ssh': ['nl253@raptor.kent.ac.uk'], 
+                \ 'zsh': ['-i'],        
+                \ }
+
+    for l:bin in keys(l:args)
+        if executable(substitute(l:bin, '\v^(\S+) .*', '\1', '')) && l:bin =~? a:A 
+            call add(l:ok, l:bin . ' ' . join(l:args[l:bin]))
+        endif
+    endfor
+    return l:ok
+endf
+
+fu! repl#shell_repl_cmd(args)
+    if len(a:args) > 0 
+        call repl#open_repl(a:args) 
+    else 
+        call repl#open_shell() 
+    endif 
+endf
+
+com! -nargs=* -complete=customlist,repl#list_repls ShellREPL call repl#shell_repl_cmd(<q-args>)

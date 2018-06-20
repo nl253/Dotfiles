@@ -4,7 +4,6 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-rsi'
-Plug 'nikvdp/ejs-syntax'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'vim-scripts/SyntaxAttr.vim'
 Plug 'konfekt/fastfold'
@@ -20,7 +19,8 @@ Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:markup_langs +
 
 Plug 'othree/html5.vim', {'for': ['markdown', 'html']}
 Plug 'othree/csscomplete.vim', {'for': ['css', 'html']}
-" Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+
+Plug 'wlangstroth/vim-racket'
 
 Plug 'lervag/vimtex', {'for': 'tex'}
 
@@ -28,12 +28,15 @@ Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
 
 Plug 'justmao945/vim-clang', {'for': 'c'}
 
+Plug 'rust-lang/rust.vim', {'for': 'rust'}
+Plug 'racer-rust/vim-racer', {'for': 'rust'}
+
 Plug 'fatih/vim-go', {'for': 'go'}
 
 Plug 'racer-rust/vim-racer', {'for': 'rust'}
 
 if has('python3') || has('python')
-    Plug 'davidhalter/jedi-vim', {'for': 'python'}
+    " Plug 'davidhalter/jedi-vim', {'for': 'python'}
     Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'php', 'ejs']}
     Plug 'SirVer/ultisnips'
 en
@@ -46,7 +49,6 @@ if !isdirectory(g:my_plug_dir) && hostname() =~? "Chummy-Laptop"
     call mkdir(g:my_plug_dir, 'p')
 en
 
-Plug 'flazz/vim-colorschemes/'
 
 if isdirectory(g:my_plug_dir)
     Plug 'nl252/fabulous', {'frozen': 1, 'dir': g:my_plug_dir.'/fabulous'}

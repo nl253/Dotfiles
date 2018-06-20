@@ -1,4 +1,4 @@
-snippet "^\s*#!.*" "Shebang [erlang]" r
+snippet "^\s*#!.*" "Shebang #! [erlang]" rb
 #!/usr/bin/env escript
 endsnippet 
 
@@ -6,11 +6,15 @@ snippet XS "[X|XS] [erlang]"
 [X|XS]$1
 endsnippet 
 
+snippet "-?(mac[ro]{,2}|def[ine]{,3})" "-define [erlang]" rb
+-define(${1:TIMEOUT}, ${2:200}).
+endsnippet 
+
 snippet YS "[Y|YS] [erlang]"
 [Y|YS]$1
 endsnippet 
 
-snippet main "main ( Args ) -> ... [erlang]" b
+snippet main "main(Args) -> ... [erlang]" b
 %% @doc Entry point into the program.
 %% Args command line args
 
@@ -18,29 +22,28 @@ main(Args) ->
     $0.
 endsnippet
 
-snippet "^\s*%%+" "%% @doc ... %% @param ... [erlang]" br
+snippet "^\s*%%+" "%% @doc ... [erlang]" br
 %% @doc ${1:Description of the function}.
 %%
 %% @param ${2:N} ${3:number of repetitions}
 endsnippet
 
-snippet "print|sout|log" "io:fwrite ( INFO ... , ... ) [erlang]" r
-io:fwrite("~s ~6p ~25s~n", ["[INFO]", self(), "${1:hello world!}"]).
+snippet "log(macros?)?" "logging macros [erlang]" r
+-define(LOG(Msg, Lvl), io:fwrite("[~s] ~p :: ~6p ~25p~n", [Lvl, ?FUNCTION_NAME, self(), Msg])).
+-define(INFO(Msg), ?LOG(Msg, "INFO")).
+-define(WARN(Msg), ?LOG(Msg, "WARN")).
+-define(ERR(Msg), ?LOG(Msg, "ERROR")).
 endsnippet
 
-snippet "err[or]{,2}" "io:fwrite ( ERROR ... , ... ) [erlang]" r
-io:fwrite("~s ~6p ~25s~n", ["[ERROR]", self(), "${1:hello world!}"]).
+snippet "inc[lude]{,4}" "-include [erlang]" br
+-include("${1:my_records}.hrl").
 endsnippet
 
-snippet "warn[ing]{,3}" "io:fwrite ( WARN ... , ... ) [erlang]" r
-io:fwrite("~s ~6p ~25s~n", ["[WARN]", self(), "${1:hello world!}"]).
-endsnippet
-
-snippet spawn "spawn ( ?MODULE , ... , ... ) [erlang]"
+snippet spawn "spawn(?MODULE, ..., ...) [erlang]"
 spawn(?MODULE, ${1:chunker}, [$2])$3
 endsnippet
 
-snippet "-?mod[ule]{,4}" "-module (...) [erlang]" rb
+snippet "-?mod[ule]{,4}" "-module(...) [erlang]" rb
 -module(`!v expand("%:r")`).
 endsnippet
 
@@ -58,7 +61,7 @@ case ${1:Expr} of
 end.
 endsnippet
 
-snippet begin "begin ... end [erlang]"
+snippet "bl[ock]{,3}|beg[in]{,2}" "begin ... end [erlang]" r
 begin ${0:true} end.
 endsnippet
 
@@ -73,11 +76,11 @@ receive
 end.
 endsnippet
 
-snippet "fun|lambda" "fun (...) -> ... end [erlang]" r
-fun (X) -> ${1:X + 1} end.
+snippet "fun|lambda" "fun(...) -> ... end [erlang]" r
+fun(${1:X}) -> ${2:X + 1} end.
 endsnippet
 
-snippet "^\s*-?def" "define ( ..., ... ) [erlang]" br
+snippet "^\s*-?def" "define(..., ... ) [erlang]" br
 -define(${1:TIMEOUT}, ${2:200}).
 endsnippet
 
@@ -143,7 +146,7 @@ refSafeLocked(Client, State) ->
     end.
 endsnippet
 
-snippet sleep "timer:sleep (...) [erlang]" b
-% sleep for 100 - 1000 miliseconds
-timer:sleep(round(rand:uniform() * 1000)),
+snippet sleep "timer:sleep(...) [erlang]" b
+% sleep for 100 - ${1:1000} miliseconds
+timer:sleep(round(rand:uniform() * ${1:1000})),
 endsnippet

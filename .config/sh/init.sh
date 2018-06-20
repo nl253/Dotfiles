@@ -54,11 +54,21 @@ if [ -x $(command which node 2>/dev/null) ]; then
   for var in node_libs node_experimental node_cmd; do eval "unset -v $var"; done
 fi
 
+# this here is very format dependent - do not change
 # dirs and files
-alias ls='ls --color=auto --group-directories-first -I tags -I "*cache*" -I "*history*" -I "~*" -I "_*" -I "*~" -I "*-log" -I "*-lock" -I "*.log" -I "*.class" -I "*.so" -I "*.beam" -I "*.o" -I "*.pyc" -I "*.pyg" -I "*.aux" -I "*.toc" -I "*.swp" -I "*.tmp" -I "*.fls" -I "*.fdb_latexmk" -I "*.lock" -I "*.hi"'
+ls_opts='-I=tags -I *cache* -I *history* -I ~* -I _* -I *~ -I *-log -I *-lock -I *.log -I *.class -I *.so -I *.beam -I *.o -I *.pyc -I *.pyg -I *.aux -I *.toc -I *.swp -I *.tmp -I *.fls -I *.fdb_latexmk -I *.lock -I *.hi --color=auto --group-directories-first'
+if [ -x ~/.cargo/bin/exa ]; then
+  # replace all occurances of ' -I ' with '|' required by exa
+  alias ls="exa \"${ls_opts// -I /|}\" --git --git-ignore" 
+else
+  alias ls="ls $ls_opts"
+fi
+unset -v ls_opts
 
 if [ -x $(command which rlwrap 2>/dev/null) ]; then
-  alias dash='rlwrap dash -i'
+  for i in 'dash -i'; do
+    eval "alias $(echo $i | sed -E 's/^(\S+).*/\1/')='rlwrap $i'"
+  done
 fi
 
 # pattern matching

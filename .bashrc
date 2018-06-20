@@ -14,4 +14,6 @@ shopt -s xpg_echo globasciiranges histappend checkjobs checkwinsize \
 
 PROMPT_COMMAND="history -a"
 
+[[ -f ~/.opam/opam-init/init.sh ]] && . ~/.opam/opam-init/init.sh
+
 #EXECIGNORE=:/{usr/,}bin/{grub*,pamac,x86,xdg,xfs,yuv,tiff,sndfile,quad,ntfs,nl-,mtp-,mkfs,jfs_,jack_,ip6table,iptable,idevice,gvfs,fsck,encryptfs,dvi,djv}*:
