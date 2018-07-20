@@ -1,4 +1,6 @@
 " vim:ft=vim:
+let g:rust_fold = 2
+let g:rust_bang_comment_leader = 1
 
 " VimRacer:
 let g:racer_experimental_completer = 1

@@ -2,7 +2,7 @@
 # Can also be sourced by zsh if you autoload bashcompinit, see zshcompsys(1)
 
 [[ -x $(type -P pandoc 2>/dev/null) ]] && eval "$(pandoc --bash-completion)"
-#[[ -x $(type -P stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
+[[ -x $(type -P stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
 
 _cargo() {
   local cur prev words cword

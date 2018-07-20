@@ -24,12 +24,14 @@ syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" conta
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
-syn region markdownBlockquote start="^> " end="$" contained oneline
+syn region markdownBlockquote start="^ {,3}\> ?" end="$" contained oneline contains=@Spell
 
-syn match markdownHeadingRule "^[=-]\+$" contained
+" FIXME
+" syn match markdownSetextRule1 "\v^ {,3}=[= ]*$"
+" syn match markdownSetextRule2 "\v^ {,3}-[- ]*$"
 
-syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
-syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
+" syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
+" syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
 
 syn region markdownBlock start="    \|\t" end="$" contained oneline
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
@@ -84,20 +86,23 @@ sy match pandocDefMarker "\v^ {,2}[\~:] "
 
 " Links:
 sy region markdownLinkChev start="\v\<([a-z]+:|\.{,2}\/)" end=">" skip="\\>" oneline 
-sy region markdownInLineReference start="\[" end=")" skip="\v\\\]|\\\)" keepend contains=markdownInLineReferenceLabel,markdownInLineReferenceURI 
-sy region markdownInLineReferenceLabel start="\[" end="\]" skip="\\\]" contained matchgroup=Delimiter
-sy region markdownInLineReferenceURI start="(" end=")" skip="\\)" contained matchgroup=Delimiter
+" sy region markdownInLineReference start="\[" end="\]" skip="\v\\\]" oneline keepend contains=markdownInLineReferenceLabel,markdownInLineReferenceURI 
+" sy region markdownInLineReferenceLabel start="\[" end="\]" skip="\\\]" keepend contained matchgroup=Delimiter
+" sy region markdownInLineReferenceURI start="(" end=")" skip="\\)" contained keepend matchgroup=Delimiter
 
 " Math:
 sy region pandocInlineMath start="\\\\(" end="\\\\)" oneline contained 
 sy region pandocMultiLineMath start="\$\$" end="\$\$" skip="\\\$" 
 
-syn region markdownH1 matchgroup=markdownHeadingDelimiter start="^##\@!"      end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink 
-syn region markdownH2 matchgroup=markdownHeadingDelimiter start="^###\@!"     end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink 
-syn region markdownH3 matchgroup=markdownHeadingDelimiter start="^####\@!"    end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink 
-syn region markdownH4 matchgroup=markdownHeadingDelimiter start="^#####\@!"   end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink 
-syn region markdownH5 matchgroup=markdownHeadingDelimiter start="^######\@!"  end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink 
-syn region markdownH6 matchgroup=markdownHeadingDelimiter start="^#######\@!" end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink 
+syn region markdownH1 matchgroup=markdownHeadingDelimiter start="^##\@!"      end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink contains=@Spell
+syn region markdownH2 matchgroup=markdownHeadingDelimiter start="^###\@!"     end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink contains=@Spell
+syn region markdownH3 matchgroup=markdownHeadingDelimiter start="^####\@!"    end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink contains=@Spell
+syn region markdownH4 matchgroup=markdownHeadingDelimiter start="^#####\@!"   end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink contains=@Spell
+syn region markdownH5 matchgroup=markdownHeadingDelimiter start="^######\@!"  end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink contains=@Spell
+syn region markdownH6 matchgroup=markdownHeadingDelimiter start="^#######\@!" end="$" keepend oneline contains=@markdownInline,markdownAutomaticLink contains=@Spell
+
+hi link markdownSetextRule1 markdownH1
+hi link markdownSetextRule2 markdownH2
 
 hi link markdownBlock SpecialComment
 hi link markdownBlockquote SpecialComment
@@ -106,8 +111,8 @@ hi link markdownBoldDelimiter Delimiter
 hi link markdownCode PreProc
 hi link markdownCodeDelimiter Comment
 hi link markdownHeadingDelimiter Comment
-hi link markdownInLineReferenceLabel URI
-hi link markdownInLineReferenceURI Comment
+" hi link markdownInLineReferenceLabel URI
+" hi link markdownInLineReferenceURI Comment
 hi link markdownItalic htmlItalic
 hi link markdownItalicDelimiter Delimiter
 hi link markdownLinkChev URI 

@@ -1,5 +1,7 @@
 hi link erlangVariable Constant
 hi link erlangStringModifier SpecialChar
+hi link erlangAtom Symbol
+hi link erlangBracket NONE
 
 " EDoc
 sy region erlangEDocMetaTag  start="@\v[a-z]{2,}" end="$" contained containedin=erlangComment keepend

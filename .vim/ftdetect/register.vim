@@ -5,6 +5,7 @@ endf
 
 sil call s:register(['requrements.txt', '.flake8', '.gitstats', '.mypyrc', '.myclirc'], 'cfg')
 sil call s:register(['.ideavimrc'], 'vim')
+sil call s:register(['*.grammar', 'grammar', '*.peg', '*.bnf', '*.ebnf'], 'grammar')
 sil call s:register(['.emacs', '.spacemacs'], 'lisp')
 sil call s:register(['*.gv'], 'dot')
 sil call s:register(['*.toml'], 'cfg')

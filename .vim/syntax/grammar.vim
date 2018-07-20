@@ -1,26 +1,88 @@
+" Syntax for PEG and context-free (BNF / EBNF) grammars
+" -----------------------------------------------------
 runtime! syntax/regex.vim
 
-sy match grammarNonTerm "\v<[a-z][a-z_]+>" containedin=grammarOpt
-sy match grammarTerm "\v<[A-Z][A-Za-z]+>" 
-sy match grammarBNFSymbol " ::= " 
-sy match grammarBNFSymbol "\v \|( |$)" 
-sy match grammarChar "\v'(.|\\.)'" 
+" terminals have lower snake case: lowercase_terminal 
+sy match grammarTerm "\v<[a-z][a-z_]+[0-9]*>"                contains=@Spell
+
+" non-terminals have pascal case: UpperCaseTerm
+sy match grammarNonTerm "\v<[A-Z](([A-Za-z]+|[0-9])[0-9]*)>" contains=@Spell
+
+" Rule ::= term1 | term2 # BNF style
+" Rule <- term1 | term2  # PEG style 
+sy match grammarRuleSymbol "\V::=" 
+sy match grammarRuleSymbol "\V<-" 
+
+" some | none
+" Rule ::= Some
+"        | None
+sy match grammarOrSymbol "\v( |^|>)(\||/)( |$|<)" 
+
+" single char must be single quoted: 'a'
+sy match grammarChar "\v'\\?.'" 
+
+" string must be double quoted: "something"
 sy region grammarStr start='"' end='"'   oneline keepend
-sy region grammarRegex start='/' end='/' oneline contains=regexGroup,regexSet,regexQuant,regexAtom,regexEscape,regexOr keepend
-sy region grammarOpt start='\[' end='\]' oneline keepend contains=grammarNonTerm,grammarTerm,grammarStr,grammarRegex,grammarChar,grammarOpt,grammarBNFSymbol,grammarStar,grammarPlus,grammarGroup
-sy region grammarGroup start='(' end=')' oneline keepend contains=grammarNonTerm,grammarTerm,grammarStr,grammarRegex,grammarChar,grammarOpt,grammarBNFSymbol,grammarStar,grammarPlus,grammarGroup
-sy match grammarStar '*' 
-sy match grammarPlus '+' 
-sy match grammarOpt  '?' 
-sy region grammarComment start="\v(#|//) " end='$' oneline
-hi link grammarChar Character
-hi link grammarRegex PreProc
-hi link grammarStr String
-hi link grammarTerm Define
-hi link grammarNonTerm Statement
-hi link grammarBNFSymbol Delimiter
-hi link grammarPlus Operator
-hi link grammarOpt Operator
-hi link grammarGroup Function
-hi link grammarStar Operator
-hi link grammarComment Comment
+
+" regex between '/' and '/': /\w+/
+sy region grammarRegex start='/' end='/' oneline contains=regexGroup,regexSpecial,regexComment,regexSet,regexQuant,regexAtom,regexEscape,regexOr keepend
+
+" regex set between '[' and ']': [abc]
+sy region grammarSet start='\['ms=s+1 end='\]'me=e-1 oneline keepend contains=grammarSetRange,grammarSetChar
+
+" ( ... )
+sy region grammarGroup start='\V(' end='\V)' skip="\v['\"]." oneline keepend contains=grammarOrSymbol,grammarNonTerm,grammarRange,grammarTerm,grammarStr,grammarRegex,grammarChar,grammarOpt,grammarStar,grammarPlus,grammarGroup
+
+" 'a'..'z' means ( 'a' | 'b' | 'c' ... 'z' )
+" essentially the same as [a-z]
+sy match grammarRange '\.\.' 
+
+" 'a'{2,3}
+" 'a'{,3}
+" 'a'{2,}
+" 'a'{2}
+sy match grammarQuant '\v\{\d{,2}(,\d{,2})?\}'
+" 'a'*
+sy match grammarStar '\V*' 
+" 'a'+
+sy match grammarPlus '\V+' 
+" 'a'?
+sy match grammarOpt  '\V?' 
+
+" // comment
+" # comment
+" -- comment
+sy region grammarComment start="\v(#|//|--) " end='$' oneline
+" /* multi-line comment */
+sy region grammarComment start="\V/*" end='\V*/' keepend 
+
+" ^ Operator 
+" Operator $ 
+sy match grammarSpecialSym "\v(^| |>)(\$|\^)($| |<)"
+
+" !terminal
+sy match grammarNegPred "\V!"
+" &'('
+sy match grammarPosPred "\V&"
+
+hi link grammarOpt        Operator
+hi link grammarPlus       Operator
+hi link grammarQuant      Operator
+hi link grammarStar       Operator
+hi link grammarRange      Operator
+hi link grammarPosPred    Operator
+hi link grammarNegPred    Operator
+
+hi link grammarRuleSymbol Delimiter
+hi link grammarOrSymbol   Delimiter
+
+hi link grammarChar       Character
+hi link grammarSet        Character
+
+hi link grammarComment    Comment
+hi link grammarGroup      Function
+hi link grammarNonTerm    Define
+hi link grammarRegex      PreProc
+hi link grammarSpecialSym Special
+hi link grammarStr        String
+hi link grammarTerm       Normal

@@ -1,8 +1,9 @@
-# ~/.shinit to be run by all interactive shells
+# ~/.shinit to be sourced by all interactive shells
 
 # This file is not read by bash(1) if ~/.bash_profile or ~/.bash_login exists.
 
 # If not running interactively, don't do anything
+
 case $- in
   *i*) ;;
   *) return ;;
@@ -34,7 +35,7 @@ alias sudo='sudo '
 # get MIME type of a file
 [ -x $(command which file) ] && alias mime-type='file --dereference --brief --mime-type -- '
 
-if [ -x $(command which ghci 2>/dev/null) ]; then
+if [ -x /usr/bin/ghci ]; then
   ghc_exts='-XApplicativeDo -XBangPatterns -XBinaryLiterals -XDeriveAnyClass -XDeriveFoldable -XDeriveFunctor -XDeriveGeneric -XDeriveTraversable -XEmptyDataDecls -XFlexibleContexts -XFlexibleInstances -XFunctionalDependencies -XGADTs -XKindSignatures -XLambdaCase -XMonadComprehensions -XMultiParamTypeClasses -XMultiWayIf -XNamedWildCards -XNumDecimals -XParallelListComp -XPartialTypeSignatures -XPatternGuards -XPostfixOperators -XScopedTypeVariables -XTupleSections -XTypeOperators -XViewPatterns'
   ghc_f='-fprint-potential-instances -fprint-expanded-synonyms -fdiagnostics-color=always'
   ghc_warn='-Wunused-local-binds -Wunused-foralls -Wunused-binds -Wsemigroup -Wredundant-constraints -Woverlapping-patterns -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances -Wname-shadowing -Wincomplete-uni-patterns -Wdeprecations -Wcompat'
@@ -44,7 +45,7 @@ if [ -x $(command which ghci 2>/dev/null) ]; then
   for var in ghc_exts ghc_f ghc_warn ghc_opts; do eval "unset -v $var"; done
 fi
 
-if [ -x $(command which node 2>/dev/null) ]; then
+if [ -x /usr/bin/node ]; then
   node_libs='path fs os'
   node_experimental='modules repl-await vm-modules'
   node_cmd='node -i --no-warnings'
@@ -65,7 +66,7 @@ else
 fi
 unset -v ls_opts
 
-if [ -x $(command which rlwrap 2>/dev/null) ]; then
+if [ -x /usr/bin/rlwrap ]; then
   for i in 'dash -i'; do
     eval "alias $(echo $i | sed -E 's/^(\S+).*/\1/')='rlwrap $i'"
   done
@@ -88,10 +89,10 @@ alias info='info --vi-keys'
 alias logout="pkill -KILL -u \$USER"
 [ -x $(command which ipython 2>/dev/null) ] && alias ipython="ipython3 --pylab=qt5 --gui=qt5"
 [ -x $(command which ipython3 2>/dev/null) ] && alias ipython3="ipython3 --pylab=qt5 --gui=qt5"
-[ -x $(command which acpi 2>/dev/null) ] && alias battery="acpi -V"
+[ -x /usr/bin/acpi ] && alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 
-if [ -x $(command which rsync 2>/dev/null) ]; then
+if [ -x /usr/bin/rsync ]; then
   alias copy="rsync --progress --log-file=/tmp/rsync.log --recursive --backup --backup-dir=/tmp --human-readable --times --preallocate --partial --partial-dir=/tmp/rsync-partially-copied --suffix=rsync-backup --hard-links --group --perms -xattrs --executability --copy-links --copy-dirlinks --compress --compress-level 9 --verbose"
 fi
 
@@ -101,8 +102,8 @@ done
 
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 
-[ -x $(command which libreoffice 2>/dev/null) ] && alias libreoffice="libreoffice --norestore"
-[ -x $(command which tmux 2>/dev/null) ] && alias tmux='tmux -2'
+[ -x /usr/bin/libreoffice ] && alias libreoffice="libreoffice --norestore"
+[ -x /usr/bin/tmux ] && alias tmux='tmux -2'
 
 # Networking, Servers
 if [ -x $(command which python3 2>/dev/null) ]; then
@@ -115,32 +116,34 @@ fi
 [ -x $(command which ruby 2>/dev/null) ] && alias http-server-ruby="ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd.start'"
 
 # get ip address
-[ -x $(command which curl 2>/dev/null) ] && alias my-ip='curl ipinfo.io/ip'
+[ -x /usr/bin/curl ] && alias my-ip='curl ipinfo.io/ip'
 
 # Package Management - pacman, yaourt, expac
-if [ -x $(command which pacman 2>/dev/null) ]; then
+if [ -x /usr/bin/pacman ]; then
   alias pacman="pacman --color always --config ${HOME}/.pacman.conf"
   alias pacman-reinstall-all-native-packages="pacman -Qnq | pacman -S -"
   alias pacman-reinstall-all-foreign-packages="pacman -Qmq | pacman -S -"
   alias pacman-remove-orphans="sudo pacman -Rns \$(pacman -Qtdq)"
-  if [ -x $(command which expac 2>/dev/null) ]; then
+  if [ -x /usr/bin/expac ]; then
     alias pacman-recent-installations="expac --timefmt='%Y-%m-%d %T' %'%l\t%n' %| sort | %tail %-n 20"
     alias pacman-packages-by-size="expac -S -H M '%k\t%n'"
   fi
 fi
 
 # Archiving
-[ -x $(command which 7z 2>/dev/null) ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
+[ -x /usr/bin/7z ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 
 alias pip=pip3
 
+alias rusti="rustup run nightly-2016-08-01 $HOME/.cargo/bin/rusti"
+
 # $EDITOR
-for i in nvim vim vi; do [ -x $(command which $i 2>/dev/null) ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
+for i in nvim vim vi; do [ -x /usr/bin/$i ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
 
 git_basic_info='$(git --no-pager log --color=never -1 --pretty=format:"%h %cr \"%s\"" 2>/dev/null)'
 git_branch_info='$(git --no-pager branch --color=never --format "%(refname:lstrip=-1)" 2>/dev/null) -> $(git --no-pager config --get remote.origin.url 2>/dev/null)@$(git --no-pager branch --color=never --format="%(upstream:lstrip=3)" 2>/dev/null) ($(git remote 2>/dev/null))'
 git_branch_info="[${git_branch_info}]"
-non_git_prompt='$(echo $0):/$(pwd) :: '
+non_git_prompt='$(basename $0):/$(pwd) :: '
 
 if $(builtin dirs 2>/dev/null 1>/dev/null); then # bash and zsh
 

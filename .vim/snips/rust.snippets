@@ -1,13 +1,139 @@
+snippet stack "stack (Vec<_>) [rust]" b
+let mut ${1:stack} = Vec::with_capacity(${2:3});
+endsnippet
 
-# loops
+snippet skip "#[rustfmt::skip] [rust]" b
+#[rustfmt::skip]
+endsnippet
 
-snippet "f(or)?ma?t" "format!(msg, ...) [rust]" b
+snippet bitor "derive bitor `|` op [rust]" b
+impl BitOr for Outcome {
+    type Output = Self;
+
+    // rhs is the "right-hand side" of the expression `a | b`
+    fn bitor<F: Fn() -> Self>(self, rhs: F) -> Self {
+        if self.is_succ() {
+            self
+        } else {
+            rhs()
+        }
+    }
+}
+endsnippet 
+
+snippet "der[ive]{,3}" "#[derive] [rust]" rb
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+endsnippet
+
+snippet matches! "matches! [rust]" b
+macro_rules! matches {
+    ($e:expr, $p:pat) => {
+        if let $p = $e {
+            true
+        } else {
+            false
+        }
+    };
+}
+endsnippet
+
+snippet ntimes! "ntimes! [rust]" b
+macro_rules! ntimes {
+    ($n:expr, $e:expr) => {
+        for i in 0..$n {
+            $e;
+        }
+    };
+}
+endsnippet
+
+snippet assert_all! "assert_all! [rust]" b
+macro_rules! all {
+    ( $pred:expr, $msg:expr, $( $rest:expr ),* ) => ( 
+        let mut passes = 0;
+        $( 
+            assert!($pred($rest), "{} failed to pass the test - {}", $rest, $msg)
+        );*
+    );
+}
+endsnippet
+
+snippet skip_all! "skip_all! [rust]"
+macro_rules! skip_all {
+    ( $( $token:expr ),+ ) => ({
+        loop {
+            $( if self.input[self.pos] == $token {
+                self.pos += 1;
+                continue;
+               } 
+            ),+
+                else {
+                    break;
+                }
+            }
+    })
+}
+endsnippet
+
+snippet test! "test! [rust]" b
+macro_rules! test {
+    ($pred:expr, $gen:expr, $n:expr) => {{
+        for i in (0..$n) {
+            let value = $gen();
+            assert!($pred(value), "value {:?} failed to pass the test", value);
+        }
+        println!("successfully passed {} tests", $n);
+    }};
+    ($pred:expr, $gen:expr) => {{
+        for i in (0..10) {
+            let value = $gen();
+            assert!($pred(value), "value {:?} failed to pass the test", value);
+        }
+        println!("successfully passed 10 tests");
+    }};
+}
+endsnippet
+
+snippet error "custom error [rust]" b
+struct MyErr;
+
+impl Display for MyErr {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "invalid first item to double")
+    }
+}
+
+impl Debug for MyErr {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "invalid first item to double")
+    }
+}
+
+impl Error for MyErr {
+    fn description(&self) -> &str { "invalid first item to double" }
+
+    fn cause(&self) -> Option<&std::error::Error> {
+        // Generic error, underlying cause isn't tracked.
+        None
+    }
+}
+endsnippet
+
+snippet "f(or)?ma?t" "format!(msg, ...) [rust]" br
 format!("{}", ${1:"abc"})
 endsnippet 
 
-snippet fori "for i in ... { ... } [rust]" b
-for i in ${1:iterable}.iter() {
+# loops
 
+snippet fori "for i in 0.._ { ... } [rust]" b
+for ${1:i} in 0..${2:iterable}.len() {
+    $3                                        
+}
+endsnippet 
+
+snippet fore "for elem in ... { ... } [rust]" b
+for ${1:elem} in ${2:iterable} {
+    $3                                        
 }
 endsnippet 
 
@@ -19,126 +145,150 @@ fn ${1:area}(${2:rectangle}: ${3:&Rectangle}) -> ${4:u32} {
 }
 endsnippet 
 
-snippet main "fn main() { ... } [rust]" 
+snippet main "fn main() { ... } [rust]" b
 fn main() {
-	${1:// DO STUFF HERE.}
+    $1
 }
 endsnippet 
+
+snippet "(mod )?tests" "mod tests [rust]" rb
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn ok() {
+        assert!(true);
+    }
+}
+endsnippet 
+
+snippet unit "unit test [rust]" b
+#[test]
+fn ok() {
+    assert!(true, "expected {} to be {:?} but found {:?}");
+}
+endsnippet
 
 # statements
 
-snippet if "if (...) { ... } [rust]" 
-if ${1:condition} { ${2:do stuff} } else { ${3:do stuff} }
-endsnippet 
-
-snippet if "if statement [rust]" b
-if ${1:condition} {
-
+snippet if "if ... { ... } [rust]" 
+if ${1:condition} { 
+    ${2:do stuff} 
+} else { 
+    ${3:do stuff} 
 }
 endsnippet 
 
-snippet "elif?" "else if (...) { ... } [rust]" r
+snippet "elif?" "else if ... { ... } [rust]" r
 else if ${1:condition} {
-	${VISUAL}${2:${VISUAL/(.*)//}}
+    ${VISUAL}${2:${VISUAL/(.*)//}}
 } ${0}
 endsnippet
 
-snippet "match|switch" "match ... { ... } [rust]" rb
+snippet "match|switch|case" "match ... { ... } [rust]" rb
 match ${1:expression} {
-	${2:pattern} => ${3:expression},
-	${4:pattern} => ${5:expression},
-	${VISUAL}${6:${VISUAL/(.*)/_/}} => ${0:expression},
+    ${2:pattern} => ${3:expression},
+    ${4:_}       => ${5:expression},
 }
 endsnippet
 
-snippet use "use std :: ... :: ... [rust]" b
+snippet use "use std :: {namespace} :: {namespace} [rust]" b
 use ${1:std}::${2:collections}::${3:HashMap};
 endsnippet 
 
-snippet extern "external crate ... [rust]" b
+snippet "ex[tern]{,4}" "external crate {name} [rust]" br
 extern crate ${1:glob};
-endsnippet 
-
-# loops
-
-snippet "(derive)?debug" "debugging printing [rust]"
-#[derive(Debug)]
-endsnippet
-
-snippet let "let ... ... : ... = ... [rust]" b
-let ${2:} ${1:VARIABLE_NAME}: ${3:i32} = ${4:23};
 endsnippet 
 
 # constructs
 
+snippet let "let {pattern} : {type} = {expr} [rust]"
+let ${1:pattern} = $2;
+endsnippet 
+
 snippet "stru(ct?)?" "struct ... { ... } [rust]" rb
 struct ${1:Point} {
     ${2:x}: ${3:i32},
-    ${4:y}: ${5:i32},
 }
+endsnippet 
+
+snippet "stru(ct?)?" "inline struct ... { ... } [rust]" rb
+struct ${1:Point}(${2:i32, i32, i32});
 endsnippet 
 
 snippet enum "enum ... { ... } [rust]" b
 enum ${1:Message} {
     ${2:Quit},
-    ${3:ChangeColor}: i32,
+    ${3:ChangeColor}(i32),
 }
-
 endsnippet 
 
-snippet impl "impl ... { ... } [rust]" b
+snippet impl "impl {struct|enum} { ... } [rust]" b
 impl ${1:Circle} {
-
+    $2
 }
 endsnippet
 
-snippet trait "trait (...) { ... } [rust]" b
+snippet trait "trait {name} { ... } [rust]" b
 trait ${1:HasArea} {
     fn ${2:area}(&self) -> ${3:f64};
 }
 endsnippet 
 
+snippet mod "mod {name} { ... } [rust]" b
+mod ${1:my_module} {
+    $2
+}
+endsnippet 
+
+# trait impl
+
+snippet iter "trait Iterable impl [rust]" 
+// only fn next(&self) -> Option<T> is required 
+impl<T: AddAssign + Copy> Iterator for Fib<T> {
+    type Item = T;
+
+    fn next(&self) -> Option<T> {
+        let tmp = self.fst;
+        self.fst = self.snd;
+        self.snd += tmp;
+        return Some(tmp);
+    }
+}
+endsnippet 
+
+snippet "def[ault]{,5}" "trait Default impl [rust]" rb
+impl Default for ${1:Fib<u64>} {
+    fn default() -> Self {
+        ${2:Fib { fst: 1u64, snd: 2u64, }}
+    }
+}
+endsnippet 
+
+snippet "dis[play]{,4}" "trait Display impl [rust]" rb
+impl Display for ${1:PrimNode} {
+    fn fmt(&self, _f: &mut Formatter) -> Result<(), std::fmt::Error> {
+        $2
+    }
+}
+endsnippet 
+
 # data structures
 
-snippet "clojure|lambda" "| ... | ... [rust]" r
-|x: ${1:i32}| ${2:x + 1}
-endsnippet
-
-snippet "(h(ash)?)?map|dict" "let mut dictionary: HashMap < ... > = HashMap::new() [rust]" r
-let ${3:mut} ${2:dictionary}: HashMap<${1:i32}> = HashMap::new();
-endsnippet 
-
-snippet bmap "let mut dictionary: BTreeMap < ... > = BTreeMap::new() [rust]" 
-let ${3:mut} ${2:dictionary}: BTreeMap<${1:i32}> = BTreeMap::new();
-endsnippet 
-
-snippet "deq(ue)?" "let mut deque: VecDeque < ... > = VecDeque::new() [rust]" r
-let ${3:mut} ${2:deque}: VecDeque<${1:i32}> = VecDeque::new();
-endsnippet 
-
-snippet "(h(ash)?)?set" "let mut set: HashSet < ... > = HashSet::new() [rust]" r
-let mut ${1:set}: HashSet<${2:i32}> = HashSet::new();
-endsnippet 
-
-snippet vec "let mut vector = vec! [ ... ] [rust]" 
-let ${3:mut} ${1:vector} = vec![${2:}];
-endsnippet 
-
-snippet heap "let mut queue: BinaryHeap < ... > = BinaryHeap::new() [rust]" 
-let ${3:mut} ${2:queue}: BinaryHeap<${1:i32}> = BinaryHeap::new();
-endsnippet 
-
-snippet llist "let mut list: LinkedList < ... > = LinkedList::new() [rust]" 
-let ${3:mut} ${2:list}: LinkedList<${1:i32}> = LinkedList::new();
+snippet vec "vec![...] [rust]" 
+vec![$1]
 endsnippet 
 
 # utils
 
-snippet print "print [rust]" 
-println!("${2:The value is: \{:?\}}", ${1:item});
+snippet log "print [rust]" 
+println!("${2:\{\}}", $1);
 endsnippet 
 
-snippet "strf[time]{,4}" "strftime (...) [rust]" r
-println!("the value is: {:?}", time::strftime("%c", &time::now()).unwrap());
+snippet debug "print [rust]" 
+println!("{:?}", $1);
 endsnippet 
 
+snippet "time|now|strf[time]{,4}" "strftime (...) [rust]" rb
+println!("at {:?}", time::strftime("%c", &time::now()).unwrap());
+endsnippet 

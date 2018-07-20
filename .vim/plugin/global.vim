@@ -6,6 +6,7 @@ com! -nargs=0 ToDo          sil call splits#toggle_todo()
 com!          BufferWipeout sil call bufs#buffer_wipeout()
 
 setg rtp^=~/.vim/after winwidth=20 winminwidth=20 errorformat+=%f path+=~/.vim/plugin wildignore+=*.ipynb
+setg errorfile=.errors.log makeef=.make-output.log
 
 let g:template_vars = {
             \ 'author': systemlist("git config user.name")[0],
@@ -14,12 +15,6 @@ let g:template_vars = {
             \ 'keywords': '',
             \ 'now': strftime("%c"),
             \ }
-
-fu! g:RustInit()
-    nmap <LocalLeader>D <Plug>(rust-def)
-    nmap <LocalLeader>v <Plug>(rust-def-vertical)
-    nmap <LocalLeader>d <Plug>(rust-doc)
-endf
 
 com! TemplateSubstitute exe "python3 import vim, pystache; vim.current.buffer[:] = list(map(lambda x: pystache.render(x, ".string(g:template_vars)."), vim.current.buffer[:]))"
 
@@ -32,7 +27,6 @@ aug VariousAutoCmds
     au FileType        *             sil call templates#read_template()
     au FileType        nerdtree      nm <buffer> h u
     au FileType        nerdtree      nm <buffer> l C
-    au FileType        rust          sil call g:RustInit()
     au FileType        xml,html      im <buffer> <Tab> <plug>(emmet-expand-abbr)
     au Filetype        markdown      sil call inits#markdown_init()
     au Filetype        netrw         sil call inits#netrw_init()
@@ -40,5 +34,5 @@ aug VariousAutoCmds
     au QuickFixCmdPost lexpr,lgrep,lgrepadd,lgetexpr,laddexpr exe 'botright lwindow '.((len(getloclist(win_getid())[:10]) < 8) ? len(getloclist(win_getid())) + 1 : "")
     au VimEnter        bash-fc.*     setf sh
     au WinEnter        *             setl winwidth=20
-    exe "au FileType ".join(g:markup_langs + ['gitcommit'], ',')." silent WordyWordy"
+    exe "au FileType ".join(g:markup_langs + ['gitcommit'], ',')." sil WordyWordy"
 aug END

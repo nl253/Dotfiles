@@ -23,7 +23,7 @@ sy match manShortOption "\v(<|\s+)(-|−)[a-zA-Z](>|\s+)"
 sy match manURL         "\v<(https?|s?ftp|ssh|rsync)://\S+>"
 sy match manUnixPath    /\k\@<![\/~]\S\+\(\/\|[^ [:punct:]]\)/
 
-sy region manQuoted start="'" end="'"   oneline 
+sy region manQuoted start="'\v\w{3,}" end="'"   oneline 
 sy region manQuoted start="``" end="''" oneline 
 sy region manQuoted start="“" end="”"   oneline 
 sy region manQuoted start='"' end='"'   oneline 

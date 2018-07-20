@@ -69,6 +69,7 @@ fu! repl#list_repls(A, L, P)
                 \ 'erl': [], 
                 \ 'fish': [], 
                 \ 'ghci': [], 
+                \ 'stack ghci': [], 
                 \ 'git add': ['--patch'], 
                 \ 'git commit': ['--patch'], 
                 \ 'git diff': ['--patch'], 

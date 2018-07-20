@@ -10,9 +10,3 @@ snippet "h1|title" "current file without ext [markdown]" rb
 import re
 snip.rv = re.sub("\.\w+$", "", snip.fn).replace("-", " ").replace("_", " ").title()`
 endsnippet 
-
-snippet "^([A-Z][a-z A-Z])*[\t ]*:[ \t]*" "titled list [markup]" r
-`!p snip.rv = match.group(1)` 
-
-- $1
-endsnippet 

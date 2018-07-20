@@ -10,26 +10,35 @@ let g:html_font = [
             \ ]
 let html_wrong_comments = 1
 let g:html_hover_unfold = 1
+
 " might be computationally demanding
+" better beauitfy and use indent-based fold
 let g:xml_syntax_folding = 0 
 
-setl foldmethod=indent shiftwidth=2 tabstop=4 expandtab
-
-if executable('js-beautify')
-    setl formatprg=html-beautify
-elseif executable('prettier')
-    setl formatprg=prettier\ --parser=markdown
+" loading markdown loads html as well (prob related to syntax)
+" this is a workaround
+if &filetype =~# 'html' 
+    setl foldmethod=indent shiftwidth=2 tabstop=4 expandtab
+    if executable('js-beautify')
+        setl formatprg=html-beautify
+    elseif executable('prettier')
+        setl formatprg=prettier\ --parser=markdown
+    endif
+    if exists(':EmmetInstall')
+        EmmetInstall
+        imap <buffer> <Tab> <plug>(emmet-expand-abbr)
+    endif
 endif
 
 if len($BROWSER) == 0
     for i in ['google-chrome-stable', 
-            \ 'google-chrome-beta', 
-            \ 'google-chrome-unstable', 
-            \ 'google-chrome', 
-            \ 'chromium', 
-            \ 'firefox-developer', 
-            \ 'firefox-developer-edition', 
-            \ 'firefox']
+                \ 'google-chrome-beta', 
+                \ 'google-chrome-unstable', 
+                \ 'google-chrome', 
+                \ 'chromium', 
+                \ 'firefox-developer', 
+                \ 'firefox-developer-edition', 
+                \ 'firefox']
         if executable(i)
             let $BROWSER = i
             setl makeprg=$BROWSER\ %
@@ -38,7 +47,3 @@ if len($BROWSER) == 0
     endfor
 endif
 
-if exists(':EmmetInstall')
-	EmmetInstall
-	imap <buffer> <Tab> <plug>(emmet-expand-abbr)
-endif

@@ -9,7 +9,7 @@ hi link pythonKeyword pythonStatement
 
 " ADDED:
 " types (see the typing module)
-syn match PythonType "\v[A-Z][a-z][a-zA-Z]+"
+syn match PythonType "\v<[A-Z][a-z][a-zA-Z]+>"
 syn keyword pythonType deque BZ2File BZ2Compressor BZ2Decompressor ABCMeta ABC UDPServer  TCPServer TCPServer ForkingUDPServer ThreadingTCPServer ThreadingUDPServer HTTPMessage HTTPResponse
 hi link pythonType Type
 hi link pythonType Type

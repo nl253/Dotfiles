@@ -43,38 +43,24 @@ en
 
 if has('nvim') || has('patch8') | Plug 'w0rp/ale', {'on': ['ALEEnable', 'ALEEnableBuffer', 'ALEToggle', 'ALEToggleBuffer']} | el | Plug 'vim-syntastic/syntastic' | en
 
-let g:my_plug_dir = expand('~/Documents/Vim')
-
-if !isdirectory(g:my_plug_dir) && hostname() =~? "Chummy-Laptop"
-    call mkdir(g:my_plug_dir, 'p')
-en
-
-
-if isdirectory(g:my_plug_dir)
-    Plug 'nl252/fabulous', {'frozen': 1, 'dir': g:my_plug_dir.'/fabulous'}
-    " Plug 'nl253/vim-saner', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-saner'}
-    " Plug 'nl253/vim-markup', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-markup'}
-    " Plug 'nl253/vim-programming', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-programming'}
-    " Plug 'nl253/vim-webdev', {'frozen': 1, 'dir': g:my_plug_dir.'/vim-webdev'}
-en
 call plug#end()
 
 " these need to be called after plug#end()
 " ----------------------------------------
 colorscheme fabulous
-hi link javaScriptRegexpString Define
-hi Function guifg=Orange3
-hi PreProc guibg=Grey15 guifg=Magenta1
-hi Normal guibg=Grey10
-" hi Statement guifg=DarkMagenta
-hi Statement guifg=MediumOrchid
-hi Repeat guifg=Orange3
-hi Conditional guifg=Purple1
-hi Keyword guifg=SlateBlue
-hi Operator guifg=Grey50 gui=Bold
-hi Folded guifg=MediumPurple4 guibg=Grey13
-hi Boolean guifg=DarkOrange3
-hi Number guifg=Yellow3
-hi SpecialChar guifg=DeepPink4
-hi Comment guifg=DeepSkyBlue4
-hi String guifg=SeaGreen
+hi link        javaScriptRegexpString Define
+hi Function    guifg=Orange3          
+hi PreProc     guibg=Grey15           guifg=Magenta1
+hi Normal      guibg=Grey10           
+"  hi          Statement              guifg=DarkMagenta
+hi Statement   guifg=MediumOrchid     
+hi Repeat      guifg=Orange3          
+hi Conditional guifg=Purple1          
+hi Keyword     guifg=SlateBlue        
+hi Operator    guifg=Grey50           gui=Bold
+hi Folded      guifg=MediumPurple4    guibg=Grey13
+hi Boolean     guifg=DarkOrange3      
+hi Number      guifg=Yellow3          
+hi SpecialChar guifg=DeepPink4        
+hi Comment     guifg=DeepSkyBlue4     
+hi String      guifg=SeaGreen         
