@@ -2,28 +2,29 @@
 
 # Dependencies
 # ---------------------------
-# - GNU coreutils
 # - 7z
-# - perl
-# - pygmentize
-# - tar
-# - elinks
-# - exiftool
-# - unrar
-# - img2txt
-# - jupyter (python package)
+# - GNU coreutils
+# - astyle or clang
 # - atool
 # - bsdtar
-# - transmission
-# - odt2txt
-# - pdftotext
-# - astyle or clang
+# - elinks
+# - exiftool
+# - gofmt
 # - gofmt (part of golang)
+# - hindent
+# - img2txt
+# - jq
+# - js-beautify
 # - js-beautify (includes css-beautify and html-beautify)
-# - rst2html5.py (ships with the docutils python package)
+# - jupyter (python package)
 # - pandoc
-# - javap (part of jdk)
+# - pdftotext
+# - perl
+# - shfmt
+# - source-highlight
+# - tar
 # - tree
+# - unrar
 
 # If the option `use_preview_script` is set to `true`,
 # then this script will be called and its output will be displayed in ranger.
@@ -54,7 +55,7 @@ EXTENSION="${FILE_NAME#*.}"
 head() {
   if command head -n $PV_HEIGHT "$FILE_PATH"; then
     return 0
-  else 
+  else
     return 1
   fi
 }
@@ -62,7 +63,7 @@ head() {
 pandoc() {
   if command pandoc --self-contained --html-q-tags --ascii --mathml --columns=${PV_WIDTH} --highlight-style=breezedark -t html5 $@; then
     return 0
-  else 
+  else
     return 1
   fi
 }
@@ -74,14 +75,14 @@ elinks() {
 preview-stdout() {
   if command source-highlight -s $1 </dev/stdin | elinks; then
     return 0
-  else 
+  else
     return 1
   fi
 }
 
 preview() {
   if head | preview-stdout $1; then
-    return 0 
+    return 0
   elif head; then
     return 0
   else
@@ -165,7 +166,7 @@ handle_extension() {
       ;;
 
     h | hpp | cc | gv | dot)
-      if preview_cfamily c; then 
+      if preview_cfamily c; then
         exit 0
       else
         exit 2
@@ -173,7 +174,7 @@ handle_extension() {
       ;;
 
     *html)
-      if elinks <"$FILE_PATH"; then 
+      if elinks <"$FILE_PATH"; then
         exit 0
       else
         exit 2
@@ -181,9 +182,9 @@ handle_extension() {
       ;;
 
     json)
-      if jq -C < "$FILE_PATH"; then
+      if jq -C <"$FILE_PATH"; then
         exit 0
-      elif js-beautify < "$FILE_PATH" | preview-stdout json; then 
+      elif js-beautify <"$FILE_PATH" | preview-stdout json; then
         exit 0
       else
         exit 2
@@ -191,7 +192,7 @@ handle_extension() {
       ;;
 
     md | m*down | Rmd)
-      if head | pandoc_preview markdown+line_blocks+gfm_auto_identifiers+compact_definition_lists+fancy_lists+all_symbols_escapable+superscript+subscript+implicit_figures+footnotes+four_space_rule-emoji; then 
+      if head | pandoc_preview markdown+line_blocks+gfm_auto_identifiers+compact_definition_lists+fancy_lists+all_symbols_escapable+superscript+subscript+implicit_figures+footnotes+four_space_rule-emoji; then
         exit 0
       else
         exit 2
@@ -210,10 +211,10 @@ handle_extension() {
 
     csv)
       if head | column --separator ',' --table; then
-        exit 0 
-      elif preview; then 
         exit 0
-      else 
+      elif preview; then
+        exit 0
+      else
         exit 2
       fi
       ;;
@@ -221,7 +222,7 @@ handle_extension() {
     js | ts)
       if head | js-beautify; then
         exit 0
-      else 
+      else
         exit 2
       fi
       ;;
@@ -229,7 +230,7 @@ handle_extension() {
     sh | .bash* | .zsh* | .profile)
       if shfmt -s -i 2 -ci <"$FILE_PATH" | preview-stdout shell; then
         exit 0
-      else 
+      else
         exit 2
       fi
       ;;
@@ -237,23 +238,23 @@ handle_extension() {
     org)
       if head | pandoc_preview org; then
         exit 0
-      else 
+      else
         exit 2
       fi
       ;;
 
     css)
-      if head | css-beautify | preview-stdout css; then 
+      if head | css-beautify | preview-stdout css; then
         exit 0
-      else 
+      else
         exit 2
       fi
       ;;
 
     xml)
-      if head | html-beautify | preview-stdout xml; then 
+      if head | html-beautify | preview-stdout xml; then
         exit 0
-      else 
+      else
         exit 2
       fi
       ;;
@@ -261,7 +262,7 @@ handle_extension() {
     pdf)
       if preview_pdf; then
         exit 0
-      else 
+      else
         exit 1
       fi
       ;;
@@ -269,13 +270,13 @@ handle_extension() {
     puml | dot)
       if preview java; then
         exit 0
-      else 
+      else
         exit 2
       fi
       ;;
 
     go)
-      if ([[ -x $(command which gofmt 2>/dev/null) ]] && command gofmt -s || cat) <"$FILE_PATH" | preview-stdout go; then 
+      if ([[ -x $(command which gofmt 2>/dev/null) ]] && command gofmt -s || cat) <"$FILE_PATH" | preview-stdout go; then
         exit 0
       else
         exit 2
@@ -301,7 +302,7 @@ handle_extension() {
     docx)
       if pandoc_preview docx <"$FILE_PATH"; then
         exit 0
-      else 
+      else
         exit 1
       fi
       ;;
@@ -315,7 +316,7 @@ handle_extension() {
       ;;
 
     conf | cnf | cfg | toml | desktop)
-      if preview ini; then 
+      if preview ini; then
         exit 0
       else
         exit 2
@@ -334,7 +335,7 @@ handle_extension() {
       if [[ $EXTENSION == '' ]]; then
         return 0
       elif [[ $(source-highlight --lang-list | grep -Eo '^\w+') =~ $EXTENSION ]] && preview "$EXTENSION"; then
-        exit 0 
+        exit 0
       else
         return 1
       fi
