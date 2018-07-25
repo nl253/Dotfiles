@@ -8,5 +8,7 @@
 --exclude=[._]*
 --exclude=**%**
 --exclude=vimfiles
+--exclude=**/**.min.js
+--exclude=*[.-]min.js
 
---languages=Python,Haskell,Erlang,Sh,Rust,Markdown,JavaScript,Java,reStructuredText,Vim,OrgMode
+--languages=TypeScript,JavaScript,Haskell,Erlang,Sh,Rust,Markdown,Java,ReStructuredText,Vim,OrgMode

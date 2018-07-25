@@ -1,6 +1,6 @@
 if exists('g:loaded_vim_saner_autocommands') || !has('unix') | finish | endif
 
-fu! s:init()
+fu! s:init_completion()
     try
         let l:path = systemlist('git rev-parse --show-toplevel')[0]
 
@@ -29,12 +29,21 @@ fu! s:init()
     catch /\vE684/
     endtry
 
+endf
+
+fu! s:init()
+    sil call s:init_completion()
+
     if &omnifunc == '' && exists('+omnifunc')
         setl omnifunc=syntaxcomplete#Complete
     endif
 
     if &completefunc == '' && exists('+completefunc')
         setl completefunc=syntaxcomplete#Complete
+    endif
+
+    if (&makeprg != '') && (&makeprg != 'make')
+        nnoremap <buffer> <Space>me :make<CR>
     endif
 endf
 

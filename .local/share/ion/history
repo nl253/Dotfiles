@@ -1,0 +1,15 @@
+ls ls
+pwd
+ls -a
+ls -
+ls -g
+find
+ls -g
+pwd
+echo $PID
+help
+help alias
+help -h
+help set
+echo *
+find

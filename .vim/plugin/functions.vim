@@ -1,4 +1,4 @@
-if exists('g:loaded_vim_saner_functions') || !has('unix') || !executable('bash')
+if exists('g:loaded_vim_saner_functions')
     finish 
 endif
 

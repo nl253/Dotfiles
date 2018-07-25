@@ -1,9 +1,12 @@
-com!          Abbrs         sil 20vnew ~/.vim/plugin/lang.vim
-com!          Scripts       sil e ~/.vim/plugin/global.vim
-com!          WhiteSpace    %s/\v^\s+$| +$//
-com!          Synonym       !wn <cword> -synsn
-com! -nargs=0 ToDo          sil call splits#toggle_todo()
-com!          BufferWipeout sil call bufs#buffer_wipeout()
+com! Scripts       sil e ~/.vim/plugin/global.vim
+com! WhiteSpace    %s/\v^\s+$| +$//
+com! Define        !(wn <cword> -over) | fmt
+com! Synonym       !(wn <cword> -synsn || wn <cword> -synsv || wn <cword> -synsa || wn <cword> -synsr) | fmt 
+com! Hypernym      !(wn <cword> -hypen || wn <cword> -hypev || wn <cword> -hypea || wn <cword> -hyper) | fmt
+com! Hyponym       !(wn <cword> -hypon || wn <cword> -hypov || wn <cword> -hypoa || wn <cword> -hypor) | fmt
+com! Antonym       !(wn <cword> -antsn || wn <cword> -antsv || wn <cword> -antsa || wn <cword> -antsr) | fmt
+com! ToDo          sil call splits#toggle_todo()
+com! BufferWipeout sil call bufs#buffer_wipeout()
 
 setg rtp^=~/.vim/after winwidth=20 winminwidth=20 errorformat+=%f path+=~/.vim/plugin wildignore+=*.ipynb
 setg errorfile=.errors.log makeef=.make-output.log

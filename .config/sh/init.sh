@@ -92,8 +92,9 @@ alias logout="pkill -KILL -u \$USER"
 [ -x /usr/bin/acpi ] && alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 
+# rsync(1) is faster, more secure than cp(1)
 if [ -x /usr/bin/rsync ]; then
-  alias copy="rsync --progress --log-file=/tmp/rsync.log --recursive --backup --backup-dir=/tmp --human-readable --times --preallocate --partial --partial-dir=/tmp/rsync-partially-copied --suffix=rsync-backup --hard-links --group --perms -xattrs --executability --copy-links --copy-dirlinks --compress --compress-level 9 --verbose"
+  alias copy="rsync --progress --log-file=/tmp/rsync/rsync.log --recursive --backup --backup-dir=/tmp/rsync --human-readable --times --preallocate --partial --partial-dir=/tmp/rsync/partially-copied --suffix=rsync-backup --hard-links --group --perms -xattrs --executability --copy-links --copy-dirlinks --compress --compress-level 9"
 fi
 
 for i in mv rm; do
@@ -101,6 +102,7 @@ for i in mv rm; do
 done
 
 alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
+alias bat='bat --theme TwoDark --style plain'
 
 [ -x /usr/bin/libreoffice ] && alias libreoffice="libreoffice --norestore"
 [ -x /usr/bin/tmux ] && alias tmux='tmux -2'
@@ -150,11 +152,11 @@ if $(builtin dirs 2>/dev/null 1>/dev/null); then # bash and zsh
   f() (find -readable -regextype posix-extended -name "*${1}*" "${@:2}" -not -regex '.*(node_m|\.cache|\.cargo/registry/|rustup/toolchains/|libreoffice|site-packages|google-chrome|\.vim/(undo|plugged|backup|views|s(essions|wap))).*' -not -regex '.*(b(eam|ack)|log|tmp|/tags|fls|class|(py|s)?o|iml|hi|aux|pdf)$' 2>/dev/null)
   alias rg='rg --pretty --threads 4 --context 1 --max-count 3 --no-search-zip'
 
-  if [[ -n "$ZSH_VERSION" ]]; then # zsh
+  # if [[ -n "$ZSH_VERSION" ]]; then # zsh
     export PS1="${git_basic_info} ${non_git_prompt}"
-  else # bash
-    export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
-  fi
+  # else # bash
+    # export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
+  # fi
 
 else # dash
   export PS1="${git_basic_info} ${git_branch_info} ${non_git_prompt}"

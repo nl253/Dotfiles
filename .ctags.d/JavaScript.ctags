@@ -1,7 +1,9 @@
---regex-JavaScript=/function[ \t]*\*?[\t ]*\([^)]*\)/\1/f,function/
---regex-JavaScript=/^const (\S+)/\1/c,constant/
---regex-JavaScript=/const (\S+) = \/.*\//\1/r,regex/
---regex-JavaScript=/^var (\S+)/\1/v,variable/
---regex-JavaScript=/class (\S+)/\1/C,class/
---regex-JavaScript=/^\s*([a-z][A-Za-z]+)([^)]*) \{/\1/m,method/
---regex-JavaScript=/^(import|require) ([a-zA-Z0-9]+) from/\2/i,import/
+--langdef=JavaScript
+--langmap=JavaScript:.js.jsx
+--regex-JavaScript=/^\s*function\s*\*?\s*(\w{4,})\([^)]*\)/\1/f,function/
+--regex-JavaScript=/\s*static\s*(\w{4,})\([^)]*\)/\1/s,static function/
+--regex-JavaScript=/\s*const +(\w{4,}) *= *(\/.*\/|new +Regex)/\1/r,regex/
+--regex-JavaScript=/\s*class +(\w{4,})/\1/C,class/
+--regex-JavaScript=/^\s*get\s+([a-z]\w{3,})\s*([^)]*)/\1/g,getter/
+--regex-JavaScript=/^\s*set\s+([a-z]\w{3,})\s*([^)]*)/\1/s,setter/
+--regex-JavaScript=/^\s*export(\s*(\{\s*)?(default)?(\s*(class|function)\s+)?\s*(\}\s*)?)?\s*(\w{2,})\s*\}/\2/e,export/

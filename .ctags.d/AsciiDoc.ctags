@@ -6,13 +6,7 @@
 --regex-Asciidoc=/image::([^\[]+)/\1/i,image/
 --regex-Asciidoc=/image:([^:][^\[]+)/\1/I,image/
 --regex-Asciidoc=/include::([^\[]+)/\1/n/
---regex-asciidoc=/^=[ \t]+(.*)/# \1/h/
---regex-asciidoc=/^==[ \t]+(.*)/. \1/h/
---regex-asciidoc=/^===[ \t]+(.*)/. . \1/h/
---regex-asciidoc=/^====[ \t]+(.*)/. . . \1/h/
---regex-asciidoc=/^=====[ \t]+(.*)/. . . . \1/h/
---regex-asciidoc=/^======[ \t]+(.*)/. . . . \1/h/
---regex-asciidoc=/^=======[ \t]+(.*)/. . . . \1/h/
+--regex-asciidoc=/^={1,6}\s+(.*)/\1/h/
 --regex-asciidoc=/\[\[([^]]+)\]\]/\1/a/
 --regex-asciidoc=/^\.([^ \t].+)/\1/t/
 --regex-asciidoc=/image::([^\[]+)/\1/i/

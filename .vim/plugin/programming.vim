@@ -1,34 +1,51 @@
-
-" Title: Vim Plugin
-" Maintainer: nl253
-" Description: Entry point to other submodules, sets variables.
-
 if exists('g:loaded_vim_programming') | finish | endif
 
-let s:prog_langs = !exists('g:prog_langs') ? ['javascript', 'python', 'sql', 'sh', 'zsh', 'rust', 'haskell'] : g:prog_langs
+let s:prog_langs = !exists('g:prog_langs') ? [
+            \ 'javascript', 
+            \ 'python', 
+            \ 'sql', 
+            \ 'sh', 
+            \ 'zsh', 
+            \ 'rust', 
+            \ 'haskell'
+            \ ] : g:prog_langs
 
-for s:option in [
-            \ 'wildignore+=_*,*.class,*.so,*.o,*.obj,*.hi,.git,.svn,.rope*,*~,*.lock,*.swp,*.iml,*.ctxt',
-            \ 'wildignore+=*.db,*.sqlite*,*.beam,*.bk,*.bac,.idea,dist,out,target,build,.egg,.eggs'
+let s:wild_ignore_patterns = [
+            \ '*~',
+            \ '*.bac',
+            \ '*.beam',
+            \ '*.bk',
+            \ 'build', 
+            \ '*.class',
+            \ '*.ctxt', 
+            \ '*.db', 
+            \ 'dist', 
+            \ '.egg', 
+            \ '.eggs',
+            \ '.git',
+            \ '*.hi',
+            \ '.idea', 
+            \ '*.iml',
+            \ '*.lock',
+            \ '*.o',
+            \ '*.obj',
+            \ 'out', 
+            \ '.rope*',
+            \ '*.so',
+            \ '*.sqlite*',
+            \ '.svn',
+            \ '*.swp',
+            \ 'target', 
             \ ]
-    try
-        silent! exec 'set '.s:option
-    catch /\vE(518)/
-        silent call add(v:errors, '[vim-programming] could not set option "'.s:option.'"')
-    endtry
+
+for s:pattern in s:wild_ignore_patterns 
+    " if !(&wildignore =~# escape(s:pattern, '*.[]'))
+    if matchstr(&wildignore, ','.escape(s:pattern, '.*~[]').',') == ''
+        exe 'setg wildignore+='.s:pattern
+    endif
 endfor
 
-let s:dict_dir = expand('<sfile>:p:h:h').'/dicts/'
-
-fu! s:init()
-    for s:option in ['nospell']
-        try
-            silent! exec 'setl '.s:option
-        catch /.*/
-            silent call add(v:errors, '[vim-programming] could not set option "'.s:option.'"')
-        endtry
-    endfor
-
+fu! s:init_completion()
     for l:i in filter(['.', 'w', 't'], '!(&complete =~# ",".v:val)')
         exe 'setl complete+='.l:i
     endfor
@@ -38,14 +55,15 @@ fu! s:init()
     if l:ext != '' && !(&complete =~? '*.'.l:ext)
         exe 'setl complete+=k*.'.l:ext
     endif
+endf
 
-    if (&makeprg != '') && (&makeprg != 'make')
-        nnoremap <buffer> <Space>me :make<CR>
-    endif
+fu! s:init_dict()
 
     if &dictionary == ''
 
-        let l:candidate = s:dict_dir.&filetype.'.dict'
+        let l:dict_dir = expand('<sfile>:p:h:h').'/dicts/'
+
+        let l:candidate = l:dict_dir.&filetype.'.dict'
 
         if filereadable(l:candidate)
 
@@ -54,8 +72,9 @@ fu! s:init()
             if !(&complete =~# 'k')
                 setl complete+=k
             endif
+
         else
-            let l:candidate = s:dict_dir.expand('%:e').'.dict'
+            let l:candidate = l:dict_dir.expand('%:e').'.dict'
             if filereadable(l:candidate)
                 exec 'setl dictionary'.l:candidate
                 if !(&complete =~# ',k')
@@ -64,6 +83,22 @@ fu! s:init()
             endif
         endif
     endif
+endf
+
+fu! s:safe_setl(opts)
+    for l:option in a:opts
+        try
+            silent! exec 'setl '.l:option
+        catch /.*/
+            silent call add(v:errors, '[vim-programming] could not set option "'.l:option.'"')
+        endtry
+    endfor
+endf
+
+fu! s:init()
+    sil call s:safe_setl(['nospell'])
+    sil call s:init_completion()
+    sil call s:init_dict()
 endfu
 
 aug VimProgramming

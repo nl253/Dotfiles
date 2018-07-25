@@ -1,11 +1,14 @@
-
-" Title: Vim Plugin
-" Maintainer: nl253@github
-" Description: Alter completion to include in user-completion files with
+" Alter completion to include in user-completion files with
 " specified extensions in the current dict
 if exists('g:loaded_vim_markup') | finish | endif
 
-let s:markup_languages = !exists('g:markup_languages') ? ['markdown', 'rst', 'vimwiki' , 'asciidoc', 'org'] : g:markup_languages
+let s:markup_languages = !exists('g:markup_languages') ? [
+            \ 'markdown', 
+            \ 'rst', 
+            \ 'vimwiki' , 
+            \ 'asciidoc', 
+            \ 'org'
+            \ ] : g:markup_languages
 
 let s:dict_dir = expand('<sfile>:p:h:h').'/dicts/'
 
@@ -18,6 +21,8 @@ if &dictionary == ''
 endif
 
 fu! s:init()
+
+
     for s:option in [
                 \ 'conceallevel=3',
                 \ 'spell',
@@ -62,6 +67,8 @@ fu! s:init()
             silent call add(v:errors, s:msg)
         endif
     endif
+
+    call iabbrs#iab_init(&filetype)
 endfu
 
 aug MarkupCompletion
