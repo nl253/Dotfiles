@@ -12,7 +12,8 @@ endif
 
 nmap <LocalLeader>D <Plug>(rust-def)
 nmap <LocalLeader>v <Plug>(rust-def-vertical)
-nmap <LocalLeader>d <Plug>(rust-doc)
+" FOR NOW
+" nmap <LocalLeader>d <Plug>(rust-doc)
 
 let s:tags = fnamemodify(findfile("Cargo.toml"), ":p:h").'/tags'
 

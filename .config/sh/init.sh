@@ -152,11 +152,12 @@ if $(builtin dirs 2>/dev/null 1>/dev/null); then # bash and zsh
   f() (find -readable -regextype posix-extended -name "*${1}*" "${@:2}" -not -regex '.*(node_m|\.cache|\.cargo/registry/|rustup/toolchains/|libreoffice|site-packages|google-chrome|\.vim/(undo|plugged|backup|views|s(essions|wap))).*' -not -regex '.*(b(eam|ack)|log|tmp|/tags|fls|class|(py|s)?o|iml|hi|aux|pdf)$' 2>/dev/null)
   alias rg='rg --pretty --threads 4 --context 1 --max-count 3 --no-search-zip'
 
-  # if [[ -n "$ZSH_VERSION" ]]; then # zsh
-    export PS1="${git_basic_info} ${non_git_prompt}"
-  # else # bash
+  if [[ -n "$ZSH_VERSION" ]]; then # zsh
+    export PS1="${git_basic_info} "$'\n'"${non_git_prompt}"
+  else # bash
+    export PS1="${git_basic_info} \n${non_git_prompt}"
     # export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
-  # fi
+  fi
 
 else # dash
   export PS1="${git_basic_info} ${git_branch_info} ${non_git_prompt}"

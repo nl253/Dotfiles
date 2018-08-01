@@ -1,17 +1,25 @@
 module Main where
 
-enumerate :: Word -> [a] -> [(Word, a)]
-enumerate _ []     = [] 
-enumerate n (x:xs) = (n, x):(enumerate (succ n) xs)
+import Data.Foldable (concatMap)
+import System.Environment (getArgs)
+
+enumerate :: (Integral n, Show n) => [a] -> [(n, a)]
+enumerate xs = go 0 xs
+  where
+    go :: (Integral n, Show n) => n -> [a] -> [(n, a)]
+    go _ [] = []
+    go n (x:xs) = (n, x) : (go (succ n) xs)
+
+enumLinesInFile :: String -> IO String
+enumLinesInFile fileName = do
+  fileContent <- readFile fileName
+  pure $ concatMap showPair $ enumerate $ lines fileContent
+  where
+    showPair :: (Show n) => (n, String) -> String
+    showPair (n, line) = show n <> " " <> line <> "\n"
 
 main :: IO ()
 main = do
-  putStr "reading"
-  l
-  putStrLn fileName
-  let fileName    = "/home/norbert/.bashrc"
-        enumedLines = (enumerate 0 (lines fileText))
-      largestNo   = fst $ head $ reverse enumedLines
-   in { 
-        putStrLn $ unlines $ fmap (\(n, line) -> (show n) <> " " <> line) 
-        fileText <- readFile fileName
+  fileName <- getArgs >>= (pure . head)
+  s <- enumLinesInFile fileName
+  putStrLn $ "reading " <> (show fileName) <> "\n\n" <> s

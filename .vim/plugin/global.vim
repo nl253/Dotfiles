@@ -12,12 +12,20 @@ setg rtp^=~/.vim/after winwidth=20 winminwidth=20 errorformat+=%f path+=~/.vim/p
 setg errorfile=.errors.log makeef=.make-output.log
 
 let g:template_vars = {
-            \ 'author': systemlist("git config user.name")[0],
-            \ 'year': strftime("%Y"),
+            \ 'author':      systemlist("git config user.name")[0],
+            \ 'year':        strftime("%Y"),
+            \ 'now':         strftime("%c"),
             \ 'description': '',
-            \ 'keywords': '',
-            \ 'now': strftime("%c"),
+            \ 'keywords':    '',
             \ }
+
+function! g:RustInit() 
+    setl completefunc=LanguageClient#complete formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+    nn <silent> K              :call LanguageClient#textDocument_hover()<CR>
+    nn <silent> <LocalLeader>d :call LanguageClient#textDocument_definition()<CR>
+    nn <silent> <LocalLeader>i :call LanguageClient#textDocument_implementation()<CR>
+    nn <silent> <LocalLeader>r :call LanguageClient#textDocument_rename()<CR>
+endfunction
 
 com! TemplateSubstitute exe "python3 import vim, pystache; vim.current.buffer[:] = list(map(lambda x: pystache.render(x, ".string(g:template_vars)."), vim.current.buffer[:]))"
 
@@ -28,8 +36,8 @@ aug VariousAutoCmds
     au BufRead         /{etc,usr}/** setl nomodifiable readonly
     au BufReadPre      *.tex         let b:vimtex_main = 'main.tex'
     au FileType        *             sil call templates#read_template()
-    au FileType        nerdtree      nm <buffer> h u
-    au FileType        nerdtree      nm <buffer> l C
+    au FileType        rust          call g:RustInit()
+    au Filetype        nerdtree      sil call inits#nerdtree_init()
     au FileType        xml,html      im <buffer> <Tab> <plug>(emmet-expand-abbr)
     au Filetype        markdown      sil call inits#markdown_init()
     au Filetype        netrw         sil call inits#netrw_init()

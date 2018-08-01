@@ -29,7 +29,25 @@ Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
 Plug 'justmao945/vim-clang', {'for': 'c'}
 
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
-Plug 'racer-rust/vim-racer', {'for': 'rust'}
+" Plug 'racer-rust/vim-racer', {'for': 'rust'}
+
+Plug 'autozimu/LanguageClient-neovim', {
+            \ 'branch': 'next',
+            \ 'do': 'bash install.sh',
+            \ }
+
+let g:LanguageClient_serverCommands = {
+            \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+            \ 'sh':   ['bash-language-server', 'start'],
+            \ }
+
+if executable('bash-language-server')
+    au User lsp_setup call lsp#register_server({
+                \ 'name': 'bash-language-server',
+                \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
+                \ 'whitelist': ['sh'],
+                \ })
+endif
 
 Plug 'fatih/vim-go', {'for': 'go'}
 

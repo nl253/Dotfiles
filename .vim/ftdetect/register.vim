@@ -17,3 +17,6 @@ sil call s:register(['*.ts'], 'typescript.javascript')
 sil call s:register(['.tern-{config,project}', '.{markdown,html,es,style}lintrc', '.{babel,jsbeautify}rc' ,'*.lock', '.tsconfig'], 'json')
 sil call s:register(['*.{twig,nunj,njk}'], 'jinja')
 sil call s:register(['*.*css'], 'css')
+
+sil call s:register(['git-cmd'], 'git-cmd')
+sil call s:register(['git-status'], 'git-status')

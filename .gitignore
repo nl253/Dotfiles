@@ -1,3 +1,7 @@
+# Source Maps
+
+**/*.map
+
 # Password storage
 
 .netrc
@@ -258,14 +262,12 @@ Empty*
 
 # Stray scripts
 
-*.js
-*.html
-*.ts
-*.py
-*.sh
+# *.js
+# *.html
+# *.ts
+# *.py
+# *.sh
 .config/autostart/create-template.desktop
 .config/autostart/gnome-screensaver.desktop
 .config/sh/.history
 .config/zsh/.zcompdump
-grammar
-syntax

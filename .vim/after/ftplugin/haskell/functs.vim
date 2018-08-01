@@ -1,5 +1,13 @@
+if executable('stack') && isdirectory(finddir(".stack-work", "./;".$HOME))
+    let g:hoogle_executable = 'stack hoogle'
+elseif executable('hoogle')
+    let g:hoogle_executable = 'hoogle'
+else
+    finish
+endif
+
 fu! HoogleLookup()
-    lex system('hoogle --count=100 '.shellescape(expand('<cword>')))
+    lex system(g:hoogle_executable.' '.shellescape(expand('<cword>')))
     lop
 endf
 
@@ -26,7 +34,7 @@ if !exists('*HoogleSignature')
             echom l:try_hoogle
         elseif (len(l:word) > 2) && (get(g:hoogle_blacklist, l:word, 0) == 0)
             let l:lines = filter(readfile(expand('%')), 'v:val =~? "^\s*'.l:word.' :: .*$"')
-            let l:match = !empty(l:lines) ?  l:lines[0] : systemlist("hoogle --count=1 ".l:word." ")[0]
+            let l:match = !empty(l:lines) ?  l:lines[0] : systemlist(g:hoogle_executable." --count=1 ".l:word." ")[0]
             let g:hoogled_signatures[l:word] = l:match
             echom l:match
         en
@@ -34,10 +42,6 @@ if !exists('*HoogleSignature')
 endif
 
 let g:hoogled_completions = {}
-
-fu! RemoveHoogledCompletion(completion)
-    call remove(g:hoogled_completions, a:completion)
-endf
 
 if !exists('*HoogleOmniFunc')
     fu! HoogleOmniFunc(findstart, base)
@@ -67,7 +71,7 @@ if !exists('*HoogleOmniFunc')
 
         let l:no_matches = (&pumheight == '') || (&pumheight < 1) ? 12 : min([25, &pumheight])
 
-        for l:i in systemlist('hoogle --count='.l:no_matches.' '.shellescape(a:base))
+        for l:i in systemlist(g:hoogle_executable.' --count='.l:no_matches.' '.shellescape(a:base))
 
             " function
             " eg Data.Sequence.Internal State :: (s -> (s, a)) -> State s a
@@ -84,8 +88,8 @@ if !exists('*HoogleOmniFunc')
                             \ })
 
 
-                " type alias
-                " eg Control.Monad.State.Lazy type State s = StateT s Identity
+            " type alias
+            " eg Control.Monad.State.Lazy type State s = StateT s Identity
             elseif l:i =~# ' type '
                 let l:focus = split(l:i, ' type ') 
                 let l:name = split(l:focus[1], ' ')[0]
@@ -99,7 +103,7 @@ if !exists('*HoogleOmniFunc')
                             \ 'kind':  'type'
                             \ })
 
-                " eg Data.Semigroup newtype Sum a
+            " eg Data.Semigroup newtype Sum a
             elseif l:i =~# ' newtype '
                 let l:focus = split(l:i, ' newtype ') 
                 let l:name = split(l:focus[1], ' ')[0]
@@ -111,7 +115,7 @@ if !exists('*HoogleOmniFunc')
                             \ 'kind': 'newtype'
                             \ })
 
-                " eg Data.Aeson.Types data Parser a
+            " eg Data.Aeson.Types data Parser a
             elseif l:i =~# ' data '
                 let l:focus = split(l:i, ' data ') 
                 let l:name = split(l:focus[1], ' ')[0]
@@ -123,8 +127,8 @@ if !exists('*HoogleOmniFunc')
                             \ 'kind': 'data'
                             \ })
 
-                " eg Data.Functor.Compat class Functor (f :: * -> *)
-                " eg Distribution.Compat.Prelude.Internal class Applicative m => Monad (m :: * -> *)
+            " eg Data.Functor.Compat class Functor (f :: * -> *)
+            " eg Distribution.Compat.Prelude.Internal class Applicative m => Monad (m :: * -> *)
             elseif l:i =~# ' class '
 
                 let l:focus = split(l:i, ' class ') 
@@ -168,7 +172,7 @@ if !exists('*HoogleOmniFunc')
 
         let g:hoogled_completions[a:base] = l:completions
 
-        call timer_start(200, { -> remove(g:hoogled_completions, a:base)})
+        call timer_start(20, { -> remove(g:hoogled_completions, a:base)})
 
         return l:completions
     endf

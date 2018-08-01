@@ -31,3 +31,31 @@ fu! inits#markdown_init()
     nn @b viw<Esc>a**<Esc>hbi**<Esc>ll
     nn @e viw<Esc>a*<Esc>hbi*<Esc>ll
 endfunction
+
+fu! inits#nerdtree_bind_goto(key, where)
+    exe 'nm <buffer> <nowait> '.a:key.' :NERDTreeFind '.a:where.'<CR>cdCD'
+endf
+
+fu! inits#nerdtree_init() 
+    " move to the left
+    nm <buffer> <nowait> h u
+    " move to the right
+    nm <buffer> <nowait> l cdCD
+    " vsplit
+    nm <buffer> <nowait> v i
+    " split
+    nm <buffer> <nowait> v s
+    " preview
+    nm <buffer> <nowait> p go
+    " delete
+    nm <buffer> <nowait> D md
+    call inits#nerdtree_bind_goto('gh', '~/')
+    call inits#nerdtree_bind_goto('gD', '~/Documents')
+    call inits#nerdtree_bind_goto('gt', '/tmp')
+    call inits#nerdtree_bind_goto('ge', '/etc')
+    call inits#nerdtree_bind_goto('gr', '/')
+    call inits#nerdtree_bind_goto('g/', '/')
+    call inits#nerdtree_bind_goto('gm', '/mnt')
+    call inits#nerdtree_bind_goto('gN', '~/Documents/Notes')
+    call inits#nerdtree_bind_goto('gP', '~/Documents/Programming')
+endfunction
