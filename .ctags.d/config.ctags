@@ -11,4 +11,5 @@
 --exclude=**/**.min.js
 --exclude=*[.-]min.js
 
---languages=TypeScript,JavaScript,Haskell,Erlang,Sh,Rust,Markdown,Java,ReStructuredText,Vim,OrgMode
+# --languages=TypeScript,JavaScript,Haskell,Erlang,Sh,Rust,Markdown,Java,ReStructuredText,Vim,OrgMode
+--languages=TypeScript,JavaScript,Haskell,Erlang,Sh,MyRust,Markdown,Java,ReStructuredText,Vim,OrgMode

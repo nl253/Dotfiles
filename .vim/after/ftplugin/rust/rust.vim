@@ -10,24 +10,27 @@ if executable("cargo")
     exe 'setl formatprg='.escape(join(['rustfmt', '--color', 'never']), ' ')
 endif
 
-nmap <LocalLeader>D <Plug>(rust-def)
-nmap <LocalLeader>v <Plug>(rust-def-vertical)
-" FOR NOW
-" nmap <LocalLeader>d <Plug>(rust-doc)
+let s:cargo_toml = fnamemodify(findfile("Cargo.toml", '.;'), ':p:h')
 
-let s:tags = fnamemodify(findfile("Cargo.toml"), ":p:h").'/tags'
+let s:tags = fnamemodify(findfile("Cargo.toml", '.;'), ":p:h").'/tags'
 
+" not in a cargo project - exit
+if empty(s:cargo_toml) 
+    finish
+endif
+
+com! RustyTags call system('ctags '.substitute(expand(s:cargo_toml.'/**/*.rs'), '\n', ' ', 'g').' '.substitute(expand('~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src/libstd/**/*.rs'), '\n', ' ', 'g'))
+
+" check if stale
 if filereadable(s:tags) && (localtime() - getftime(s:tags)) > (60 * 10)
+    " if so, remove
     sil call system("rm ".s:tags)
 endif
 
-if !filereadable(s:tags)
-    let s:save_pwd = getcwd()
-    exe 'cd '.fnamemodify(findfile("Cargo.toml"), ":p:h")
-    if executable('rusty-tags')
-        sil call system('rusty-tags vi')
-    elseif executable('ctags')
-        !ctags -R
-    endif
-    exe 'cd '.s:save_pwd
+
+if !filereadable(s:tags) && executable('ctags')
+    " make them 
+    " also make tags for stdlib
+    RustyTags
+    echom 'created fresh tags'
 endif
