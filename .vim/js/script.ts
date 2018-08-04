@@ -2,6 +2,12 @@
 
 /** @format */
 
+/**
+ * NOTE: this is the main source file. 
+ *
+ * A corresponding *.js file exists in this dir but it is *generated* by tsc so do not mind it.
+ */
+
 function getLinkStyles() {
   return {
     background: 'var(--main-bg-color)',
@@ -220,19 +226,19 @@ function makeCodeHideBtns() {
     /* FIXME copying to clipboard doesn't work on my version of chrome */
     // noinspection JSUnresolvedFunction
     // codeNode.prepend(
-      // new Builder('a')
-        // .id('btn-code-copy')
-        // .text('copy')
-        // .attr('href', '#!')
-        // .styles(getLinkStyles())
-        // .styles({
-          // display: 'block',
-          // margin: '0 auto -25px auto',
-          // position: 'relative',
-          // right: '100px',
-          // textAlign: 'right',
-        // })
-        // .build()
+    // new Builder('a')
+    // .id('btn-code-copy')
+    // .text('copy')
+    // .attr('href', '#!')
+    // .styles(getLinkStyles())
+    // .styles({
+    // display: 'block',
+    // margin: '0 auto -25px auto',
+    // position: 'relative',
+    // right: '100px',
+    // textAlign: 'right',
+    // })
+    // .build()
     // );
   }
 }
@@ -244,18 +250,18 @@ function makeSectionToggleBtns() {
   for (const section of Array.from(document.querySelectorAll('section'))) {
     section.prepend(
       new Builder('a')
-        .text('hide section')
-        .styles(getLinkStyles())
-        .styles({
-          display: 'block',
-          float: 'right',
-          textAlign: 'right',
-        })
-        .attr('href', '#!')
-        .on('click', function hideParent() {
-          this.parentNode.style.display = 'none';
-        })
-        .build()
+      .text('hide section')
+      .styles(getLinkStyles())
+      .styles({
+        display: 'block',
+        float: 'right',
+        textAlign: 'right',
+      })
+      .attr('href', '#!')
+      .on('click', function hideParent() {
+        this.parentNode.style.display = 'none';
+      })
+      .build()
     );
   }
 }
@@ -286,18 +292,18 @@ function makeMasterCodeToggleBtn() {
 
   document.body.appendChild(
     new Builder('a')
-      .on('click', toggleCode)
-      .id('code-btn')
-      .text('hide code')
-      .styles(getLinkStyles())
-      .attr('href', '#!')
-      .styles({
-        display: 'block',
-        position: 'fixed',
-        right: '220px',
-        top: '20px',
-      })
-      .build()
+    .on('click', toggleCode)
+    .id('code-btn')
+    .text('hide code')
+    .styles(getLinkStyles())
+    .attr('href', '#!')
+    .styles({
+      display: 'block',
+      position: 'fixed',
+      right: '220px',
+      top: '20px',
+    })
+    .build()
   );
 }
 
@@ -305,7 +311,9 @@ function makeMasterCodeToggleBtn() {
  * The actual night mode toggler (helper function - see below).
  */
 function toggleNightMode() {
-  const { body } = document;
+  const {
+    body
+  } = document;
   const btn = document.querySelector('#night-mode-btn');
   if (!body.classList.contains('night-mode')) {
     btn.innerText = 'turn night mode off';
@@ -330,17 +338,17 @@ function toggleNightMode() {
 function makeNightModeBtn() {
   document.body.appendChild(
     new Builder('a')
-      .id('night-mode-btn')
-      .attr('href', '#!')
-      .text('turn night mode on')
-      .on('click', toggleNightMode)
-      .styles({
-        position: 'fixed',
-        right: '50px',
-        top: '20px',
-      })
-      .styles(getLinkStyles())
-      .build()
+    .id('night-mode-btn')
+    .attr('href', '#!')
+    .text('turn night mode on')
+    .on('click', toggleNightMode)
+    .styles({
+      position: 'fixed',
+      right: '50px',
+      top: '20px',
+    })
+    .styles(getLinkStyles())
+    .build()
   );
 }
 
@@ -373,17 +381,17 @@ function makeTOCBtn() {
 
   document.body.appendChild(
     new Builder('a')
-      .id('toc-btn')
-      .text('hide toc')
-      .attr('href', '#!')
-      .styles({
-        left: '50px',
-        position: 'fixed',
-        top: '20px',
-      })
-      .styles(getLinkStyles())
-      .on('click', toggleTOC)
-      .build()
+    .id('toc-btn')
+    .text('hide toc')
+    .attr('href', '#!')
+    .styles({
+      left: '50px',
+      position: 'fixed',
+      top: '20px',
+    })
+    .styles(getLinkStyles())
+    .on('click', toggleTOC)
+    .build()
   );
 }
 
@@ -394,7 +402,8 @@ function makeTOCBtn() {
  */
 function fixLinks() {
   // make URL_FRIENDLY
-  for (const heading of Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6, strong'))) {
+  for (const heading of Array.from(document.querySelectorAll(
+      'h1, h2, h3, h4, h5, h6, strong'))) {
     /*
      * replace all spaces with '-'
      * noinspection JSUndefinedPropertyAssignment
@@ -403,7 +412,8 @@ function fixLinks() {
     heading.id = slugify(heading.innerText);
   }
 
-  const changeSuffix = (target, suffix, newSuffix) => target.replace(new RegExp(`${suffix}$`), newSuffix);
+  const changeSuffix = (target, suffix, newSuffix) => target.replace(new RegExp(
+    `${suffix}$`), newSuffix);
 
   // see <./file.md> => See <./file.html>
   for (const link of Array.from(document.querySelectorAll('a[href]'))) {

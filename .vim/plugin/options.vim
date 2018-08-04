@@ -142,29 +142,29 @@ let s:globals = [
             \ 'writebackup',
             \ ]
 
-let s:locals = [
-            \ 'autoindent',
-            \ 'breakindent',
-            \ 'bufhidden=hide',
-            \ 'complete-=b',
-            \ 'complete-=u',
-            \ 'conceallevel=3',
-            \ 'copyindent',
-            \ 'expandtab',
-            \ 'foldminlines=4',
-            \ 'infercase',
-            \ 'matchpairs=(:),<:>,{:},[:]',
-            \ 'nowrap',
-            \ 'nrformats+=alpha',
-            \ 'nrformats=bin,hex',
-            \ 'smartindent',
-            \ 'spelllang=en_gb',
-            \ 'undofile',
-            \ 'spellfile=~/.vim/spell/en.utf-8.add,~/.config/nvim/spell/en.utf-8.add',
-            \ ]
 
 fu! s:set_locals()
-    for l:opt in s:locals
+    let l:locals = [
+                \ 'autoindent',
+                \ 'breakindent',
+                \ 'bufhidden=hide',
+                \ 'complete-=b',
+                \ 'complete-=u',
+                \ 'conceallevel=3',
+                \ 'copyindent',
+                \ 'expandtab',
+                \ 'foldminlines=4',
+                \ 'infercase',
+                \ 'matchpairs=(:),<:>,{:},[:]',
+                \ 'nowrap',
+                \ 'nrformats+=alpha',
+                \ 'nrformats=bin,hex',
+                \ 'smartindent',
+                \ 'spelllang=en_gb',
+                \ 'undofile',
+                \ 'spellfile=~/.vim/spell/en.utf-8.add,~/.config/nvim/spell/en.utf-8.add',
+                \ ]
+    for l:opt in l:locals
         try
             execute 'silent setl '.l:opt
         catch /\vE(518)/
@@ -229,8 +229,6 @@ au! BufWritePost,VimEnter,BufRead ~/**/* let b:git_status_summary = opts#git_sta
 exe 'setg statusline='.escape(' %-35.(%f #%n %q%r %w%m%) %=%-14.120(%(%<%{exists("b:git_status_summary") ? b:git_status_summary : ""} %{&tw} %{&wrap ? "wrap " : ""}%{&sw} %{&ts} %{&expandtab ? "expandtab " :""}%{&foldmethod == "marker" ? &foldmarker : &foldmethod}%) %(%y %p%% of %L%)%)     ', ' :",|')
 
 setg tabline=%!opts#my_tabline()
-
-"let s:base_tags = expand('<sfile>:p:h:h').'/tags/haskell'
 
 aug MoreOptions
     au! 

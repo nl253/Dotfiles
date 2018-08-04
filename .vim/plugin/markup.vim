@@ -21,8 +21,6 @@ if &dictionary == ''
 endif
 
 fu! s:init()
-
-
     for s:option in [
                 \ 'conceallevel=3',
                 \ 'spell',
@@ -51,23 +49,12 @@ fu! s:init()
         endif
     endfor
 
-    if !isdirectory(s:dict_dir)
-        silent call add(v:errors, '[vim-markup] could not find template')
-        return 1
-    endif
-
-    if &dictionary == ''
-        if filereadable(s:dict_dir.'frequent.dict')
-            exec 'setg dictionary='.s:dict_dir.'frequent.dict'
-            if !(&complete =~# ',k')
-                setl complete+=k
-            endif
-        else
-            let s:msg =  s:dict_dir.'frequent.dict could not be read!'
-            silent call add(v:errors, s:msg)
+    if &dictionary == '' && filereadable(s:dict_dir.'frequent.dict')
+        exec 'setg dictionary='.s:dict_dir.'frequent.dict'
+        if !(&complete =~# ',k')
+            setl complete+=k
         endif
     endif
-
     call iabbrs#iab_init(&filetype)
 endfu
 

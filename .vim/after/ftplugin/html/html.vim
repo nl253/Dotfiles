@@ -19,11 +19,10 @@ let g:xml_syntax_folding = 0
 " this is a workaround
 if &filetype =~# 'html' 
     setl foldmethod=indent shiftwidth=2 tabstop=4 expandtab
-    if executable('js-beautify')
-        setl formatprg=html-beautify
-    elseif executable('prettier')
-        setl formatprg=prettier\ --parser=markdown
-    endif
+    call setters#formatprg({ 
+                \ 'js-beautify': 'html-beautify',
+                \ 'prettier':    'prettier --stdin --parser markdown',
+                \ })
     if exists(':EmmetInstall')
         EmmetInstall
         imap <buffer> <Tab> <plug>(emmet-expand-abbr)
@@ -31,7 +30,9 @@ if &filetype =~# 'html'
 endif
 
 if len($BROWSER) == 0
-    for i in ['google-chrome-stable', 
+    let s:cfg = {}
+    for s:browser in [
+                \ 'google-chrome-stable', 
                 \ 'google-chrome-beta', 
                 \ 'google-chrome-unstable', 
                 \ 'google-chrome', 
@@ -39,11 +40,8 @@ if len($BROWSER) == 0
                 \ 'firefox-developer', 
                 \ 'firefox-developer-edition', 
                 \ 'firefox']
-        if executable(i)
-            let $BROWSER = i
-            setl makeprg=$BROWSER\ %
-            break
-        endif
+        let s:cfg[s:browser] = s:browser.' %'
     endfor
+    echo setters#makeprg(s:cfg)
 endif
 

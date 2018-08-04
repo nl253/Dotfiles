@@ -1,5 +1,5 @@
 if executable('javac')
-	exe 'setl makeprg='.escape(join(['javac', '%',  '&&', 'java', '%:t:r']), ' ')
+	exe 'setl makeprg='.escape(join(['javac', '%',  '&&', 'java', '%:t:r'], ' '), ' ')
 endif
 
 setl expandtab tabstop=8 shiftwidth=4 foldmethod=marker foldmarker={,} foldlevel=1

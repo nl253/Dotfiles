@@ -8,6 +8,7 @@ if exists(':EmmetInstall')
 	imap <buffer> <Tab> <plug>(emmet-expand-abbr)
 endif
 
-if executable('js-beautify')
-    setl formatprg=html-beautify
-endif
+call setters#formatprg({ 
+            \ 'js-beautify': 'html-beautify',
+            \ 'prettier':    'prettier --stdin --parser markdown',
+            \ })

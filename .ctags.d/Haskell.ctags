@@ -1,7 +1,7 @@
---langdef=Haskell
---langmap=Haskell:.hs 
---regex-Haskell=/^\s*([a-z]\w+)\s+::\s+.*/\1/f,function/
---regex-Haskell=/^module\s+([A-Z]\w+)/\1/m,module/
---regex-Haskell=/^\s*class\s+([A-Z]\w+)/\1/c,class/
---regex-Haskell=/^\s*data\s+([A-Z]\w+)/\1/d,data/
---regex-Haskell=/^\s*(new)?type\s+([A-Z]\w+)/\2/t,type alias/
+--langdef=MyHaskell
+--langmap=MyHaskell:.hs 
+--regex-MyHaskell=/^\s*([a-z]\w+)\s+::\s+.*/\1/f,function/
+--regex-MyHaskell=/^module\s+([A-Z][A-Za-z0-9.]+)/\1/m,module/
+--regex-MyHaskell=/^\s*class\b.*\b([A-Z][a-zA-Z0-9_]+)\b.*?\bwhere/\1/c,class/
+--regex-MyHaskell=/^\s*data\s+(family\s+)?([A-Z]\w+)/\1/d,data/
+--regex-MyHaskell=/^\s*(new)?type\s+([A-Z]\w+)/\2/t,type alias/
