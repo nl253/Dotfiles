@@ -19,7 +19,7 @@ if empty(s:cargo_toml)
     finish
 endif
 
-com! RustyTags call system('ctags '.substitute(expand(s:cargo_toml.'/**/*.rs'), '\n', ' ', 'g').' '.substitute(expand('~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src/libstd/**/*.rs'), '\n', ' ', 'g'))
+com! RustyTags call system('ctags '.substitute(expand(s:cargo_toml.'/**/*.rs'), '\n', ' ', 'g').' '.substitute(expand('~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src/**/*.rs'), '\n', ' ', 'g'))
 
 " check if stale
 if filereadable(s:tags) && (localtime() - getftime(s:tags)) > (60 * 10)
@@ -27,8 +27,9 @@ if filereadable(s:tags) && (localtime() - getftime(s:tags)) > (60 * 10)
     sil call system("rm ".s:tags)
 endif
 
+let s:tags = fnamemodify(findfile("Cargo.toml", '.;'), ":p:h").'/tags'
 
-if !filereadable(s:tags) && executable('ctags')
+if empty(s:tags) && executable('ctags')
     " make them 
     " also make tags for stdlib
     RustyTags

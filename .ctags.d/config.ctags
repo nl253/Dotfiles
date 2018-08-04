@@ -1,15 +1,14 @@
---maxdepth=6
+--maxdepth=15
 --recurse=yes
 --tag-relative=yes
 --sort=yes
 --guess-language-eagerly
 
 --exclude=.**(/(go|out|dist)/|cache|Downloads|target|build|node_modules).**
---exclude=[._]*
+# --exclude=[._]*
 --exclude=**%**
 --exclude=vimfiles
 --exclude=**/**.min.js
 --exclude=*[.-]min.js
 
-# --languages=TypeScript,JavaScript,Haskell,Erlang,Sh,Rust,Markdown,Java,ReStructuredText,Vim,OrgMode
 --languages=TypeScript,JavaScript,Haskell,Erlang,Sh,MyRust,Markdown,Java,ReStructuredText,Vim,OrgMode
