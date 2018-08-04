@@ -100,6 +100,14 @@ export JAVA_HOME=/usr/lib/jvm/default/
 # ----
 export DEFAULT_TOOLCHAIN=nightly
 
+# Python
+# ------
+mkdir -p /tmp/python/bytecode/ 
+# don't store __pycache__ in ~/
+export PYTHONPYCACHEPREFIX=/tmp/python/bytecode
+# Warn once per Python process
+export PYTHONWARNINGS=once     
+
 # FZF (keymap)
 # ------------------------
 #  enter   print to STDOUT

@@ -1,5 +1,4 @@
-setl conceallevel=0 foldmethod=indent
-setl shiftwidth=2 tabstop=2
+setl conceallevel=0 foldmethod=indent shiftwidth=2 tabstop=2
 let b:tex_stylish = 0
 let g:tex_conceal = 'b' 
 let g:tex_fold_enabled = 0

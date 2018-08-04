@@ -1,66 +1,62 @@
-snippet "init|__i((ni?)?t)?" "constructor [python]" r
-def __init__(self, ${1:value}: ${2:Text}):
-    self._${3:something} = ${4:value}
+snippet "(__){,2}init" "__init__ [python]" rb
+def __init__(self):
+    $1
 endsnippet
 
-snippet "diff[eretiate]?" "sympy differentiate [python]" br
+snippet "diff[ertia]{,8}" "differentiate {sympy} [python]" br
 import sympy
 x, y, z = sympy.symbols('x y z')
 expr = (x**2 + y * x + 2 / x + sympy.log(2, x)).simplify()
 print(sympy.diff(expr, x))
 endsnippet
 
-snippet integrate "sympy integrate [python]" b
+snippet integrate "integrate {sympy} [python]" b
 import sympy
 x, y, z = sympy.symbols('x y z')
 expr = (x**2 + y * x + 2 / x + sympy.log(2, x)).simplify()
 print(sympy.integrate(expr, x))
 endsnippet
 
-snippet simplify "sympy simplify algebraic expression [python]" b
+snippet simplify "simplify algebraic expression {sympy} [python]" b
 import sympy
 x, y = sympy.symbols('x y')
 expr = x**2 + y * x + 2 / x + sympy.log(2, x)
 print(expr.simplify())
 endsnippet
 
-snippet #! "shebang python [python]"
+snippet #! "#! [python]"
 #!/usr/bin/env python3 
 endsnippet
 
-snippet print "print (...) [python]" 
-print("${1:HELLO}")
+snippet print "print [python]" 
+print($1)
 endsnippet
 
-snippet printf "printf (...) [python]" 
-print(f"${1:HELLO}")
+snippet printf "printf [python]" 
+print(f"$1")
 endsnippet
 
-snippet "elif?" "elif ... : ... [python]" r
+snippet "elif?" "elif [python]" r
 elif ${1:CONDITION}:
     pass
 endsnippet
 
-snippet if "if Statement [python]" 
-if ${1:CONDITION}:
-    pass
+snippet if "if [python]" 
+if $1:
+    $2
 endsnippet
 
-snippet else "else : ... [python]" 
+snippet else "else [python]" 
 else:
-    ${1:pass}
+    $1
 endsnippet
 
-snippet urlopen "read from a website [python]" 
-from urllib.request import urlopen
-try:
-	with urlopen('https://www.some.com', timeout=10) as website:
-		HTML: Text = website.read().decode('utf-8')
-except Exception as e:
-	print(e)
+snippet "get|urlopen" "GET request {urllib.request} [python]" rb
+with urlopen('https://www.some.com', timeout=10) as website:
+    html: Text = website.read().decode('utf-8')
 endsnippet
 
-snippet "argp(ar(se?)?)?" "argparse boilerplate [python]" r
+snippet "argp(ar(se?)?)?" "argument parser {argparse} [python]" r
 from argparse import Namespace, ArgumentParser
 
 parser: ArgumentParser = ArgumentParser(
@@ -77,41 +73,33 @@ parser.add_argument(
 args: Namespace = parser.parse_args()
 endsnippet
 
-snippet class "class ... (...) : ... [python]"
-class ${1:NewClass}(${2:InheritFrom}):
-
-    def __init__(self):
-        super().__init__()
-        pass
+snippet class "class [python]"
+class $1:
+    $2
 endsnippet
 
-snippet "re(g(ex?)?)?" "regex [python]" r
-import re
-from typing import Pattern
-
-pattern: Pattern = re.compile("${1:PATTERN}")
-matches: List[Text] = pattern.findall(${2:STRING_VARIABLE})
+snippet "re[gex]{,3}" "regex {re} [python]" r
+pattern: Pattern = re.compile(r"$1")
+matches: List[Text] = pattern.findall($2)
 endsnippet
 
-snippet "(re(g(ex?)?)?)?groups" "match object with groups" r
+snippet "re[gex]{,3}groups" "regex groups {re} [python]" r
 groups: Tuple[str, str] = regex_object.groups(${1:0})
 endsnippet
 
 snippet "set[ter]{,3}" "setter [python]" r
-@${1:PROPERTY}.setter
-def ${2:PROPERTY}(new_value: Any):
-    self._${3:PROPERTY} = new_value
+@$1.setter
+def $1(new_value: $2):
+    self._$1 = new_value
 
 endsnippet
 
-snippet "doc[string]{,6}" "function docstring [python]" r
-"""this function ${1:DOES_THIS_AND_THAT}.
+snippet "doc[string]{,6}" "docstring [python]" r
+"""$1
 """
 endsnippet
 
-snippet "[unit]{,4}test" "unit test [python]" r
-import unittest
-
+snippet "[unit]{,4}test" "unit test {unittest} [python]" r
 class MyObjectTest(unittest.TestCase):
 
      def setUp(self):
@@ -127,80 +115,89 @@ if __name__ == '__main__':
     unittest.main()
 endsnippet
 
-snippet main "if __name__ == __main__ [python]" 
+snippet main "if __name__ == __main__ [python]" b
 def main():
-    ${1:pass}
+    $1
+endsnippet
 
+snippet "if _[_name]{,5}" "if __name__ == __main__ [python]" rb
 if __name__ == '__main__':
-    main()
+    $1
 endsnippet
 
-snippet "fun((ct?)ion)?|meth(od?)?|def" "function [python]" r
-def ${1:FUNCTION}(${2:})${3:}:
-    ${4:pass}
+snippet def "function [python]" b
+def $1($2) -> $3:
+    $4
 endsnippet
 
-snippet "exp(an)?d" "expand variables [python]" r
-def expand(text: str) -> str:
-    return os.path.expandvars(os.path.expanduser(text))
-endsnippet
+snippet "(mod(ule)?)?doc(str(ing)?)?" "module docstring [python]" r
+"""`!p import re; snip.rv = re.sub("\.\w+$", "", snip.fn).capitalize()`
 
-snippet "doc(str(ing)?)?" "doc string [python]" r
+Description: 
+    Project Description
+
+Contact:
+    Author: `echo $USER`
+    Github: https://github.com/`git config user.name`
+    Email:  `git config user.email`
+
+Todo:
+    * For module TODOs
+    * You have to also use ``sphinx.ext.todo`` extension
 """
-File: `!p 
-import re
-snip.rv = re.sub("\.\w+$", "", snip.fn)`
-Author: `echo $USER`
-Email: $EMAIL
-Github: $GITHUB
-Description: Project Description
-"""
 endsnippet
 
-snippet faker "Faker [python]" 
-import faker
-from faker import Faker
-fake_data: Faker = faker.Faker()
+snippet enum "enum {enum} [python]"
+@unique
+class Color(Enum):
+    RED   = auto()
+    BLUE  = auto()
+endsnippet
+
+snippet faker "mock data {faker} [python]" 
+mock_factory = Faker()
 endsnippet
 
 snippet write "write to a file [python]" 
-with open('${1:file_name.txt}', encoding='utf-8', mode="w") as f:
-	f.write(${2:TEXT})
+with open($1, encoding='utf-8', mode="w") as f:
+    f.write($2)
+    $2
 endsnippet
 
 snippet read "read from a file [python]"
-with open('${1:file_name.txt}', encoding='utf-8') as f:
-	text: Text = f.read()
+with open($1, encoding='utf-8') as f:
+    text: Text = f.read()
+    $2
 endsnippet
 
 snippet while "while loop [python]" 
-while ${1:True}:
-	${2:pass}
+while $1:
+    $2
 endsnippet
 
 snippet "prop(erty)?" "property [python]" r
 @property
-def ${1:function}() -> ${2:Any}:
-    return self._${3:value}
+def $1($2) -> $3:
+    return self._$1
 endsnippet
 
-snippet "log|info" "log.info (...) [python]" r
-log.info(f"${1:variable} is {${2:variable}}")
+snippet "log|info" "log info [python]" r
+log.info($1)
 endsnippet
 
-snippet "warn(ing)?" "log.warn (...) [python]" r
-log.warn(f"${1:variable} is {${2:variable}}")
+snippet "warn(ing)?" "log warn [python]" r
+log.warn($1)
 endsnippet
 
 snippet "err(or)?" "log.error (...) [python]" r
-log.error(f"${1:variable} is {${2:variable}}")
+log.error($1)
 endsnippet
 
 snippet "cri[tical]{,5}" "log.critical (...) [python]" r
-log.critical(f"${1:variable} is {${2:variable}}")
+log.critical($1)
 endsnippet
 
-snippet "logger|logging" "logging [python]" r
+snippet "logger|logging" "logging init {logging} [python]" r
 import logging
 from logging import Logger
 
@@ -213,15 +210,15 @@ logging.basicConfig(
 log: Logger = logging.getLogger(name=__name__)
 endsnippet
 
-snippet "breakp(oint)?|bp" "debugging break-point [python]" r
+snippet "breakp(oint)?|bp" "break point [python]" rb
 import ipdb ; ipdb.set_trace() # XXX
 endsnippet
 
-snippet try "try : ... except ... as ... : ... [python]" 
+snippet try "try [python]" b
 try:
-    exec(f'import {i}')
+    $1
 except Exception as e:
-    print(f"eRROR {e}")
+    $2
 endsnippet
 
 snippet "downl(oad)?|fetch(er)?" "download or read file [python]" r
@@ -285,37 +282,6 @@ import scipy as sc
 from scipy import stats, stats
 endsnippet
 
-snippet "complet[oe]r" "prompt Toolkit completer [python]" r 
-import shlex
-from typing import List
-
-from prompt_toolkit.completion import Completer
-from prompt_toolkit.document import Document
-from completions import sql_completions
-
-class MyCustomCompleter(Completer):
-    def get_completions(self, document: Document, complete_event):
-        try:
-            line: str = document.current_line
-            args: List[str] = shlex.split(document.current_line)
-            if len(args) > 0:
-                curr_word: str = document.get_word_under_cursor(WORD=True)
-                first_word: str = shlex.split(document.current_line)[0]
-                previous_word: str = shlex.split(
-                    document.current_line_before_cursor)[
-                        len(shlex.split(document.current_line_before_cursor)) -
-                        1]
-
-                for i in sql_completions(document):
-                    if i.text.startswith(
-                            curr_word.upper()) or i.text.startswith(curr_word):
-                        yield i
-
-        except (NameError, ValueError):
-            pass
-
-endsnippet
-
 snippet "sql(i(te?)?)?|datab(ase)?|db" "sQLite3 [python]" r
 import sqlite3
 from sqlite3 import Cursor, Connection
@@ -340,11 +306,11 @@ def query(query_string: Text, data: Iterable):
 				print(row)
 endsnippet
 
-snippet "type?(ing)?" "import types from typing [python]" r
+snippet "type?(ing)?" "import types from typing [python]" rb
 from typing import ${1:Text, List, Tuple, Any, Iterable}
 endsnippet
 
-snippet pathlib "file access utils - pathlib [python]" 
+snippet pathlib "file access utils {pathlib} [python]" 
 import os
 from pathlib import Path
 endsnippet
@@ -353,19 +319,16 @@ snippet copy "copy objects [python]"
 from copy import copy
 endsnippet
 
-snippet pprint "pPrinting [python]" 
-from pprint import pprint
-pprint(${1:"data"})
+snippet pprint "pprint {pprint} [python]" 
+pprint($1)
 endsnippet
 
-snippet islice "itertools iterator slice [python]" 
-from itertools import islice
-slice: Iterable = islice(${1:iterable}, ${2:start}, ${3:stop})
+snippet islice "islice {itertools} [python]" 
+slice: Iterable = islice(${1:iter}, ${2:start}, ${3:stop})
 endsnippet
 
-snippet "red(uce)?" "functools reduce [python]" r
-from functools import reduce
-reduced: Iterable = reduce(${1:function}, ${2:iterable})
+snippet "red(uce)?" "reduce {functools} [python]" r
+reduced: Iterable = reduce(${1:f}, ${2:iter})
 endsnippet
 
 snippet glob "uNIX-style globs [python]" 
@@ -373,35 +336,17 @@ from glob import glob, iglob
 nodes: List[Text] = glob('${1:DIRNAME}/**', recursive=True)
 endsnippet
 
-snippet fnmatch "file name match [python]" 
-import fnmatch
-
-for file in ${1:LIST_OF_FILES}:
-    if fnmatch.fnmatch(file, '*.txt'):
-        print('MATCH!')
+snippet "fori?" "for loop [python]" rb
+for i in $1:
+    $2
 endsnippet
 
-snippet "fori?" "for loop [python]" r
-for i in ${1:iterable}:
-    ${2:# DO_SOMETHING}
-endsnippet
-
-snippet fnfilter "file name match [python]" 
-import fnmatch
-
-filetered_nodes: List[Text] = fnmatch.filter(${1:file}, '*.${2:txt}')
-endsnippet
-
-snippet "tempf(ile?)?" "temporary file [python]" r
-from tempfile import TemporaryFile
+snippet "tempf(ile?)?" "temp file {tempfile} [python]" r
 fp = TemporaryFile()
-
 endsnippet
 
-snippet "tempd(ir?)?" "temporary dir [python]" r
-from tempfile import TemporaryDirectory
-fp = TemporaryFile()
-
+snippet "tempd(ir?)?" "temp dir {tempfile} [python]" r
+fp = TemporaryDirectory()
 endsnippet
 
 snippet "op?conc(at)?" "concat function [python]" r
@@ -452,7 +397,7 @@ with open('${1:CSV_FILENAME}.csv', 'w') as csvfile:
     writer.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
 endsnippet
 
-snippet with "with ... as ... : ... [python]"
-with ${1:open(FILE)}${2: as f}:
-    ${2:pass}
+snippet with "with [python]" b
+with open($1) as stream:
+    $2
 endsnippet

@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""{{ project }}
+
+Description: 
+    Project Description
+
+Contact:
+    Author: {{ author }}
+    Github: {{ github }}
+    Email:  {{ email }}
+
+Todo:
+    * For module TODOs
+    * You have to also use sphinx.ext.todo extension
 """
-AUTHOR: {{ author }}
-DATE: {{ now }}
-PYTHON: {{ python }}
-""" 
 
 # Standard Library
-import os, sys
+import os
+import sys
 import logging
 from logging import Logger
 
@@ -24,4 +34,4 @@ log: Logger = logging.getLogger()
 
 # run only if run as script
 if __name__ == "__main__":
-    pass 
+    pass

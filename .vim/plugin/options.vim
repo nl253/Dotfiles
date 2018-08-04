@@ -1,102 +1,53 @@
-if exists('g:loaded_vim_saner_options')
-    finish
-endif
+setg rtp^=~/.vim/after path+=~/.vim/plugin errorformat+=%f tabline=%!opts#my_tabline()
 
-let s:vim_dir = expand('~/.vim')
+call repl#set_repl({
+            \ 'haskell'   : 'ghci', 
+            \ 'python'    : 'ipython', 
+            \ 'erlang'    : 'erl', 
+            \ 'java'      : 'jshell', 
+            \ 'javascript': 'node', 
+            \ 'html'      : 'node',
+            \ })
 
-let s:vim_sub_dirs = [
-            \ 'undo',
-            \ 'backup',
-            \ 'swap',
-            \ 'views',
-            \ 'sessions',
-            \ 'templates',
-            \ 'snips'
-            \ ]
+let g:template_vars = {
+            \ 'author':      join(systemlist("git config user.name"), ' '),
+            \ 'year':        strftime("%Y"),
+            \ 'now':         strftime("%c"),
+            \ 'description': '',
+            \ 'keywords':    '',
+            \ }
 
-" Make Missing Dirs:
-for s:dir in filter(map(s:vim_sub_dirs, 's:vim_dir."/".v:val'), '!isdirectory(v:val)')
-    silent call mkdir(s:dir, 'p')
-endfor
+call opts#set_if_executable('grepprg', {
+            \ 'rg':   'rg --hidden --maxdepth=5 --color=never --threads=4 --vimgrep $*', 
+            \ },  1) 
+" \ 'git': 'git --no-pager grep --max-depth=5 --extended-regexp --threads=4 --color=never --line-number $*'
 
-" Options:
-if has('wildignore')
-
-    let s:ignore_paths = map([
-                \ 'sessions',
-                \ 'tmp',
-                \ 'swap'
-                \ ], '"**/".v:val."/**"')
-
-    let s:ignore_dirs = map(filter(split(system('bash -c "echo /{usr/,usr/local/,usr/local/share/,}{lost+found,run,srv,opt,var,sys,boot,dev,lib,lib32,lib64,man,bin,root,sbin,proc,mnt,include}"'), ' '), 'isdirectory(v:val)'), 'v:val."/*"')
-
-    let s:ignore_exts = map([
-                \ 'tab',
-                \ 'webm',
-                \ 'log',
-                \ 'swp',
-                \ 'pdf',
-                \ 'jpg',
-                \ 'png',
-                \ 'lock',
-                \ 'docx',
-                \ 'tmp',
-                \ 'bak',
-                \ 'info',
-                \ 'pptx',
-                \ 'mp3',
-                \ 'mp4',
-                \ 'toc',
-                \ 'out',
-                \ 'fls',
-                \ 'aux',
-                \ 'fdb_latexmk',
-                \ 'tab',
-                \ 'webm'
-                \ ], '"*.".v:val')
-
-    let s:ignore_exact = [
-                \ 'tags',
-                \ '*~',
-                \ 'swapfile'
-                \ ]
-
-    let s:ignore_phrases = map([
-                \ 'history',
-                \ 'cache',
-                \ 'chrome',
-                \ 'firefox',
-                \ '%'
-                \ ], "'**'.v:val.'**'")
-
-    exe 'silent set wildignore+='.join(
-                \ s:ignore_paths +
-                \ s:ignore_dirs +
-                \ s:ignore_exts +
-                \ s:ignore_exact +
-                \ s:ignore_phrases, ',')
-endif
-
-let s:globals = [
+call opts#dict()
+call opts#thesaurus()
+call opts#safe_setg([
             \ 'autochdir',
             \ 'autoread',
             \ 'autowriteall',
             \ 'backup',
-            \ 'backupdir='.s:vim_dir.'/backup',
-            \ 'breakat=\ .,:;!?',
+            \ 'backupdir=~/.vim/backup',
+            \ 'breakat= .,:;!?',
             \ 'clipboard=unnamed,unnamedplus',
             \ 'cm=blowfish2',
             \ 'cmdwinheight=3',
             \ 'completeopt=menuone,longest',
             \ 'cpoptions=aABceFsW',
             \ 'diffopt+=vertical,iwhite',
-            \ 'directory='.s:vim_dir.'/swap',
+            \ 'directory=~/.vim/swap',
             \ 'encoding=utf8',
             \ 'fileignorecase',
             \ 'foldclose=all',
             \ 'foldlevelstart=99',
-            \ 'formatprg=fmt\ -s\ -u\ --width=79',
+            \ 'formatprg=fmt -s -u --width=79',
             \ 'gdefault',
+            \ 'winwidth=20',
+            \ 'winminwidth=20',
+            \ 'errorfile=.errors.log',
+            \ 'makeef=.make-output.log',
             \ 'hidden',
             \ 'nohlsearch',
             \ 'inccommand=nosplit',
@@ -117,7 +68,7 @@ let s:globals = [
             \ 'sessionoptions-=options',
             \ 'shiftround',
             \ 'shortmess=stTAIcoOWF',
-            \ 'showbreak=\ ~>\ ',
+            \ 'showbreak= ~> ',
             \ 'sidescroll=1',
             \ 'sidescrolloff=30',
             \ 'spellsuggest=best,12,',
@@ -130,113 +81,132 @@ let s:globals = [
             \ 'tagrelative',
             \ 'tagstack',
             \ 'ttyfast',
-            \ 'undodir='.s:vim_dir.'/undo',
+            \ 'undodir=~/.vim/undo',
             \ 'undolevels=9999',
             \ 'updatetime=200',
-            \ 'viewdir='.s:vim_dir.'/views',
+            \ 'viewdir=~/.vim/views',
             \ 'viewoptions=folds,options,curdir,cursor',
             \ 'virtualedit=all',
             \ 'wildignorecase',
             \ 'wildmenu',
             \ 'wildoptions=tagfile',
             \ 'writebackup',
+            \ ])
+
+call opts#wildignore([
+            \ '*.bac',
+            \ '*.bac', 
+            \ '*.beam',
+            \ '*.bk',
+            \ '*.bk', 
+            \ '*.class',
+            \ '*.ctxt', 
+            \ '*.db', 
+            \ '*.hi',
+            \ '*.iml',
+            \ '*.iml', 
+            \ '*.lock',
+            \ '*.lock', 
+            \ '*.o',
+            \ '*.obj',
+            \ '*.so',
+            \ '*.sqlite*',
+            \ '*.ipynb',
+            \ '*.sqlite*', 
+            \ '*.swp',
+            \ '*.swp', 
+            \ '*_', 
+            \ '*~',
+            \ '*~', 
+            \ '.egg', 
+            \ '.eggs',
+            \ '.git',
+            \ '.git', 
+            \ '.idea', 
+            \ '.rope*',
+            \ '.svn',
+            \ '.svn', 
+            \ '_*', 
+            \ 'build',
+            \ 'build', 
+            \ 'dist', 
+            \ 'node_modules',
+            \ 'out', 
+            \ 'tags', 
+            \ 'target', 
+            \ ])
+
+let s:ignore_paths = map([
+            \ 'sessions',
+            \ 'tmp',
+            \ 'swap'
+            \ ], '"**/".v:val."/**"')
+
+let s:ignore_dirs = map(filter(split(system('bash -c "echo /{usr/,usr/local/,usr/local/share/,}{lost+found,run,srv,opt,var,sys,boot,dev,lib,lib32,lib64,man,bin,root,sbin,proc,mnt,include}"'), ' '), 'isdirectory(v:val)'), 'v:val."/*"')
+
+let s:ignore_exts = map([
+            \ 'tab',
+            \ 'webm',
+            \ 'log',
+            \ 'swp',
+            \ 'pdf',
+            \ 'jpg',
+            \ 'png',
+            \ 'lock',
+            \ 'docx',
+            \ 'tmp',
+            \ 'bak',
+            \ 'info',
+            \ 'pptx',
+            \ 'mp3',
+            \ 'mp4',
+            \ 'toc',
+            \ 'out',
+            \ 'fls',
+            \ 'aux',
+            \ 'fdb_latexmk',
+            \ 'tab',
+            \ 'webm'
+            \ ], '"*.".v:val')
+
+let s:ignore_exact = [
+            \ 'tags',
+            \ '*~',
+            \ 'swapfile'
             \ ]
 
+let s:ignore_phrases = map([
+            \ 'history',
+            \ 'cache',
+            \ 'chrome',
+            \ 'firefox',
+            \ '%'
+            \ ], "'**'.v:val.'**'")
 
-fu! s:set_locals()
-    let l:locals = [
-                \ 'autoindent',
-                \ 'breakindent',
-                \ 'bufhidden=hide',
-                \ 'complete-=b',
-                \ 'complete-=u',
-                \ 'conceallevel=3',
-                \ 'copyindent',
-                \ 'expandtab',
-                \ 'foldminlines=4',
-                \ 'infercase',
-                \ 'matchpairs=(:),<:>,{:},[:]',
-                \ 'nowrap',
-                \ 'nrformats+=alpha',
-                \ 'nrformats=bin,hex',
-                \ 'smartindent',
-                \ 'spelllang=en_gb',
-                \ 'undofile',
-                \ 'spellfile=~/.vim/spell/en.utf-8.add,~/.config/nvim/spell/en.utf-8.add',
-                \ ]
-    for l:opt in l:locals
-        try
-            execute 'silent setl '.l:opt
-        catch /\vE(518)/
-            silent call add(v:errors, '[vim-saner] could not set local option "'.l:opt.'"')
-        endtry
-    endfor
-endf
+call opts#wildignore(s:ignore_paths + s:ignore_dirs + s:ignore_exts + s:ignore_exact + s:ignore_phrases)
 
-for s:opt in s:globals
-    try
-        execute 'silent setg '.s:opt
-    catch /\vE(518)/
-        silent call add(v:errors, '[vim-saner] could not set global option "'.s:opt.'"')
-    endtry
-endfor
+exe 'setg shell='.system('/usr/bin/env which '.(executable("dash") ? "dash" : "bash"))
 
-" ripgrep <https://github.com/BurntSushi/ripgrep>
-if executable('rg')
-    exe 'setg grepprg='.escape('rg --hidden --maxdepth=5 --color=never --threads=4 --vimgrep $*', ' ')
+if has('gui') | call opts#gui() | endif
 
-" fall back to git grep
-else
-    exe 'setg grepprg='.escape('git --no-pager grep --max-depth=5 --extended-regexp --threads=4 --color=never --line-number $*', ' ')
+if !exists('$MYVIMRC') && exists(expand("~/.vimrc"))
+    let $MYVIMRC = expand('~/.vimrc')  " set automatically in nvim
+endif
 
+" Auto-Enable built-in 'Man' plugin
+if !exists(":Man") && filereadable($VIMRUNTIME.'/ftplugin/man.vim') 
+    execute 'source '.$VIMRUNTIME.'/ftplugin/man.vim'
 endif
 
 if has('nvim') 
     setg shada=!,'20,<50,s10,h,:50,f10
+    call opts#comma_opt('runtimepath', ['~/.vim', '~/.vim/after'])
+    let &packpath = &runtimepath
 endif
 
-if has('win32')
-    setg shell=powershell
-
-elseif has('unix')
-    exe 'setg shell='.system('/usr/bin/env which '.(executable("dash") ? "dash" : "bash"))
+" enable matchit (part of vim nowadays)
+if v:version >= 800 && !has('nvim')
+    packadd! matchit
+else
+    runtime macros/matchit.vim
 endif
-
-if has('gui')
-    exe 'set guifont='.(has('win32') ? 'consolas:h11.4:w5.8:qPROOF' : 'Monospace\ 13')
-    for i in filter(['T', 'm', 'l', 'L', 'b', 'R', 'r', 'g'], '&guioptions =~# v:val')
-        exec 'setg guioptions-='.i
-    endfor
-    for i in filter(['i', 'p', 'h', 'M', 'a'], '!(&guioptions =~# v:val)')
-        exec 'setg guioptions+='.i
-    endfor
-endif
-
-aug SanerOptsAutoCmds
-    au!
-    au FileType * silent call s:set_locals()
-    if !executable('rg')
-        au BufReadPost ~/** if !isdirectory(system('git rev-parse --show-toplevel')) | exe 'setl grepprg='.escape('grep -n -r $*', ' ') | endif
-    endif
-aug END
-
-" vim: foldmethod=indent
-let g:markdown_fenced_languages = g:prog_langs + ['java']
-let g:rst_syntax_code_list = g:markdown_fenced_languages
-
-au! BufWritePost,VimEnter,BufRead ~/**/* let b:git_status_summary = opts#git_status_summary()
-
-exe 'setg statusline='.escape(' %-35.(%f #%n %q%r %w%m%) %=%-14.120(%(%<%{exists("b:git_status_summary") ? b:git_status_summary : ""} %{&tw} %{&wrap ? "wrap " : ""}%{&sw} %{&ts} %{&expandtab ? "expandtab " :""}%{&foldmethod == "marker" ? &foldmarker : &foldmethod}%) %(%y %p%% of %L%)%)     ', ' :",|')
-
-setg tabline=%!opts#my_tabline()
-
-aug MoreOptions
-    au! 
-    au Filetype haskell setl cinwords=where,let,in,do,of
-    au Filetype * exe 'setl suffixesadd='.join(['erl', 'hs', 'py', 'md', 'ini', expand('%:e'), 'java', 'vim', 'rst', 'yaml', 'yml'], ',')
-    "au Filetype haskell if !(&tags =~? s:base_tags) | exec 'setl tags+='.s:base_tags | endif
-    "exe 'au BufRead '.fnamemodify(s:base_tags, ':h').'/base/**/*.hs setl readonly nomodifiable'
-    "exe 'au BufRead '.fnamemodify(s:base_tags, ':h').'/base/**/*.hs ALEDisableBuffer'
-aug END
-
-let g:loaded_vim_saner_options = 1

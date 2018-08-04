@@ -21,17 +21,32 @@ let g:config_ftypes = [
 let g:prog_langs = [
             \ 'sql',
             \ 'sh',
-            \ 'c',
-            \ 'go',
+            \ 'rust',
+            \ 'javascript',
+            \ 'typescript',
             \ 'haskell',
             \ 'vim',
             \ ]
+
+
+let g:markdown_fenced_languages = g:prog_langs + ['java']
+let g:rst_syntax_code_list = g:markdown_fenced_languages
 
 if has('nvim') | exe 'setl rtp=~/.vim,'.&runtimepath | endif
 
 so ~/.vim/plugin/plugins.vim
 
-silent call opts#append_to_path([
+call utils#make_missing_dirs(map([
+            \ 'undo',
+            \ 'backup',
+            \ 'swap',
+            \ 'views',
+            \ 'sessions',
+            \ 'templates',
+            \ 'snips'
+            \ ], '"~/.vim/".v:val'))
+
+call opts#append_to_path([
             \ '~/.gem/ruby/*/bin',
             \ '~/.fzf/bin',
             \ '~/go/bin',
@@ -43,12 +58,3 @@ silent call opts#append_to_path([
             \ '~/.local/share/fzf/bin',
             \ '~/.yarn/bin'
             \ ])
-
-silent call repl#set_repl({
-            \ 'haskell'   : 'ghci', 
-            \ 'python'    : 'ipython', 
-            \ 'erlang'    : 'erl', 
-            \ 'java'      : 'jshell', 
-            \ 'javascript': 'node', 
-            \ 'html'      : 'node',
-            \ })

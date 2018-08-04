@@ -6,6 +6,7 @@ compiler ghc
 " https://wiki.haskell.org/Vim
 setl foldmarker={-,-} tabstop=4 expandtab shiftround expandtab 
 setl softtabstop=2 shiftwidth=2 foldmethod=indent indentkeys-=<space>
+setl cinwords=where,let,in,do,of
 
 if exists('*HoogleOmniFunc')
     setl omnifunc=HoogleOmniFunc 
@@ -43,7 +44,7 @@ for s:i in filter(['types', 'debug', 'boolean', 'delimiters', 'more_types'], '!e
     exec 'let g:hs_highlight_'.s:i.' = 1'
 endfor
 
-call setters#formatprg({ 
+call opts#formatprg({ 
             \ 'hfmt':            'hfmt -',
             \ 'brittany':        'brittany --indent '.s:sw.' --columns '.s:tw,
             \ 'hindent':         'hindent --sort-imports --line-length '.s:tw,

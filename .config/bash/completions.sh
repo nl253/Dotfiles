@@ -1,8 +1,9 @@
-
+# vim:ft=sh:
 # Can also be sourced by zsh if you autoload bashcompinit, see zshcompsys(1)
 
 [[ -x $(type -P pandoc 2>/dev/null) ]] && eval "$(pandoc --bash-completion)"
 [[ -x $(type -P stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
+[[ -x $(type -P pip3 2>/dev/null) ]] && eval $(pip3 completion --bash)
 
 _cargo() {
   local cur prev words cword
@@ -13,8 +14,7 @@ _cargo() {
   # Skip past - and + options to find the command.
   local nwords=${#words[@]}
   local cmd_i cmd
-  for (( cmd_i=1; cmd_i<$nwords; cmd_i++ ));
-  do
+  for ((cmd_i = 1; cmd_i < $nwords; cmd_i++)); do
     if [[ ! "${words[$cmd_i]}" =~ ^[+-] ]]; then
       cmd="${words[$cmd_i]}"
       break
@@ -73,47 +73,47 @@ _cargo() {
   if [[ $cmd_i -ge $nwords-1 ]]; then
     # Completion before or at the command.
     if [[ "$cur" == -* ]]; then
-      COMPREPLY=( $( compgen -W "${opt___nocmd}" -- "$cur" ) )
+      COMPREPLY=($(compgen -W "${opt___nocmd}" -- "$cur"))
     elif [[ "$cur" == +* ]]; then
-      COMPREPLY=( $( compgen -W "$(_toolchains)" -- "$cur" ) )
+      COMPREPLY=($(compgen -W "$(_toolchains)" -- "$cur"))
     else
-      COMPREPLY=( $( compgen -W "$__cargo_commands" -- "$cur" ) )
+      COMPREPLY=($(compgen -W "$__cargo_commands" -- "$cur"))
     fi
   else
     case "${prev}" in
       --vcs)
-        COMPREPLY=( $( compgen -W "$vcs" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$vcs" -- "$cur"))
         ;;
       --color)
-        COMPREPLY=( $( compgen -W "$color" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$color" -- "$cur"))
         ;;
       --message-format)
-        COMPREPLY=( $( compgen -W "$msg_format" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$msg_format" -- "$cur"))
         ;;
       --manifest-path)
         _filedir toml
         ;;
       --bin)
-        COMPREPLY=( $( compgen -W "$(_bin_names)" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$(_bin_names)" -- "$cur"))
         ;;
       --test)
-        COMPREPLY=( $( compgen -W "$(_test_names)" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$(_test_names)" -- "$cur"))
         ;;
       --bench)
-        COMPREPLY=( $( compgen -W "$(_benchmark_names)" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$(_benchmark_names)" -- "$cur"))
         ;;
       --example)
-        COMPREPLY=( $( compgen -W "$(_get_examples)" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$(_get_examples)" -- "$cur"))
         ;;
       --target)
-        COMPREPLY=( $( compgen -W "$(_get_targets)" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$(_get_targets)" -- "$cur"))
         ;;
       help)
-        COMPREPLY=( $( compgen -W "$__cargo_commands" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "$__cargo_commands" -- "$cur"))
         ;;
       *)
         local opt_var=opt__${cmd//-/_}
-        COMPREPLY=( $( compgen -W "${!opt_var}" -- "$cur" ) )
+        COMPREPLY=($(compgen -W "${!opt_var}" -- "$cur"))
         ;;
     esac
   fi
@@ -121,14 +121,14 @@ _cargo() {
   # compopt does not work in bash version 3
 
   return 0
-} 
+}
 
 complete -F _cargo cargo
 
 __cargo_commands=$(cargo --list 2>/dev/null | tail -n +2)
 
 _locate_manifest() {
-  local manifest=`cargo locate-project 2>/dev/null`
+  local manifest=$(cargo locate-project 2>/dev/null)
   # regexp-replace manifest '\{"root":"|"\}' ''
   echo ${manifest:9:-2}
 }
@@ -145,8 +145,7 @@ _get_names_from_array() {
   local -a names
   local in_block=false
   local block_name=$1
-  while read line
-  do
+  while read line; do
     if [[ $last_line == "[[$block_name]]" ]]; then
       in_block=true
     else
@@ -165,7 +164,7 @@ _get_names_from_array() {
     fi
 
     last_line=$line
-  done < $manifest
+  done <$manifest
   echo "${names[@]}"
 }
 
@@ -196,7 +195,7 @@ _get_examples() {
 
 _get_targets() {
   local CURRENT_PATH
-  if [ `uname -o` == "Cygwin" -a -f "$PWD"/Cargo.toml ]; then
+  if [ $(uname -o) == "Cygwin" -a -f "$PWD"/Cargo.toml ]; then
     CURRENT_PATH=$PWD
   else
     CURRENT_PATH=$(_locate_manifest)
@@ -205,17 +204,17 @@ _get_targets() {
     return 1
   fi
   local TARGETS=()
-  local FIND_PATHS=( "/" )
+  local FIND_PATHS=("/")
   local FIND_PATH LINES LINE
   while [[ "$CURRENT_PATH" != "/" ]]; do
-    FIND_PATHS+=( "$CURRENT_PATH" )
+    FIND_PATHS+=("$CURRENT_PATH")
     CURRENT_PATH=$(dirname $CURRENT_PATH)
   done
   for FIND_PATH in ${FIND_PATHS[@]}; do
     if [[ -f "$FIND_PATH"/.cargo/config ]]; then
-      LINES=( `grep "$FIND_PATH"/.cargo/config -e "^\[target\."` )
+      LINES=($(grep "$FIND_PATH"/.cargo/config -e "^\[target\."))
       for LINE in ${LINES[@]}; do
-        TARGETS+=(`sed 's/^\[target\.\(.*\)\]$/\1/' <<< $LINE`)
+        TARGETS+=($(sed 's/^\[target\.\(.*\)\]$/\1/' <<<$LINE))
       done
     fi
   done
@@ -227,8 +226,7 @@ _toolchains() {
   local toolchains=$(rustup toolchain list)
   local channels="nightly|beta|stable|[0-9]\.[0-9]{1,2}\.[0-9]"
   local date="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-  while read line
-  do
+  while read line; do
     # Strip " (default)"
     line=${line%% *}
     if [[ "$line" =~ ^($channels)(-($date))?(-.*) ]]; then
@@ -240,30 +238,28 @@ _toolchains() {
       fi
       result+=("+$line")
     fi
-  done <<< "$toolchains"
+  done <<<"$toolchains"
   echo "${result[@]}"
 }
 
-# vim:ft=sh
+# _go() {
+  # local cur="${COMP_WORDS[COMP_CWORD]}"
+  # case "${COMP_WORDS[COMP_CWORD - 1]}" in
+    # "go")
+      # local comms="build clean doc env bug fix fmt generate get install list run test tool version vet"
+      # COMPREPLY=($(compgen -W "${comms}" -- ${cur}))
+      # ;;
+    # *)
+      # local files=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type f -iname "*.go" -exec basename {} \;)
+      # local dirs=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type d -not -name ".*" -exec basename {} \;)
+      # local repl="${files} ${dirs}"
+      # COMPREPLY=($(compgen -W "${repl}" -- ${cur}))
+      # ;;
+  # esac
+  # return 0
+# }
 
-_go() {
-  local cur="${COMP_WORDS[COMP_CWORD]}"
-  case "${COMP_WORDS[COMP_CWORD - 1]}" in
-    "go")
-      local comms="build clean doc env bug fix fmt generate get install list run test tool version vet"
-      COMPREPLY=($(compgen -W "${comms}" -- ${cur}))
-      ;;
-    *)
-      local files=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type f -iname "*.go" -exec basename {} \;)
-      local dirs=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type d -not -name ".*" -exec basename {} \;)
-      local repl="${files} ${dirs}"
-      COMPREPLY=($(compgen -W "${repl}" -- ${cur}))
-      ;;
-  esac
-  return 0
-}
-
-complete -F _go go
+# complete -F _go go
 
 _vim() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
@@ -292,7 +288,7 @@ _yarn_completion() {
 
   COMPREPLY=()
   curr="${COMP_WORDS[COMP_CWORD]}"
-  prev="${COMP_WORDS[COMP_CWORD-1]}"
+  prev="${COMP_WORDS[COMP_CWORD - 1]}"
   yarn_config="$HOME/.config/yarn"
   commands="access add autoclean bin cache check config create exec generate-lock-entry global help import info init install licenses link list login logout outdated owner pack publish remove run tag team unlink upgrade upgrade-interactive version versions why workspace"
   opts="-h --help -v --version --verbose --offline --prefer-offline --strict-semver --json --ignore-scripts --har --ignore-platform --ignore-engines --ignore-optional --force --skip-integrity-check --check-files --no-bin-links --flat --prod --production --no-lockfile --pure-lockfile --frozen-lockfile --link-duplicates --link-folder --global-folder --modules-folder --preferred-cache-folder --cache-folder --mutex --emoji -s --silent --cwd --proxy --https-proxy --registry --no-progress --network-concurrency --network-timeout --non-interactive --scripts-prepend-node-path --no-node-version-check"
@@ -344,7 +340,7 @@ _yarn_completion() {
       publish)
         opts="$opts --new-version --message --no-git-tag-version --access --tag"
         ;;
-      upgrade|upgrade-interactive)
+      upgrade | upgrade-interactive)
         opts="$opts -S --scope -L --latest -E --exact -P --pattern -T --tilde -C --caret"
         ;;
       version)
@@ -386,7 +382,7 @@ _yarn_completion() {
       licenses)
         comp="list generate-disclaimer"
         ;;
-      link|unlink)
+      link | unlink)
         if [[ -d "$yarn_config/link" ]]; then
           comp=$(find "$yarn_config/link" -type l | sed -e "s#$yarn_config/link/##")
         fi
@@ -394,7 +390,7 @@ _yarn_completion() {
       owner)
         comp="add remove list"
         ;;
-      info|outdated|remove|upgrade)
+      info | outdated | remove | upgrade)
         if [[ -f "./package.json" ]]; then
           comp=$(node -e "$get_dependencies")
         fi
@@ -425,19 +421,19 @@ _yarn_completion() {
   case "${COMP_WORDS[1]}" in
     global)
       case "${COMP_WORDS[2]}" in
-        remove|upgrade)
+        remove | upgrade)
           if [[ -f "$yarn_config/global/package.json" ]]; then
             comp=$(node -e "$get_global_dependencies")
           fi
           ;;
       esac
       ;;
-    link|unlink)
+    link | unlink)
       if [[ -d "$yarn_config/link" ]]; then
         comp=$(find "$yarn_config/link" -type l | sed -e "s#$yarn_config/link/##")
       fi
       ;;
-    outdated|remove|upgrade)
+    outdated | remove | upgrade)
       if [[ -f "./package.json" ]]; then
         comp=$(node -e "$get_dependencies")
       fi

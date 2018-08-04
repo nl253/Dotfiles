@@ -3,8 +3,9 @@
 --regex-MyRust=/^\s*pub\s+fn\s+(\w+)/\1/f,function/
 --regex-MyRust=/^\s*pub\s+struct\s+(\w+)/\1/C,struct/
 --regex-MyRust=/^\s*pub\s+union\s+(\w+)/\1/U,union/
---regex-MyRust=/^\s*pub\s+trait\s+(\w+)/\1/I,trait/
---regex-MyRust=/^\s*pub\s+const\s+(\w+)/\1/c,const/
+--regex-MyRust=/^\s*pub\s+(unsafe\s+)?trait\s+(\w+)/\2/I,trait/
+--regex-MyRust=/^\s*macro_rules!\s+(\w+)/\1/M,macro/
+--regex-MyRust=/^\s*pub\s+(static|const)\s+(mut\s+)?(\w+)/\3/c,\1/
 --regex-MyRust=/^\s*pub\s+type\s+(\w+)/\1/a,type alias/
 --regex-MyRust=/^\s*pub\s+enum\s+(\w+)/\1/E,enum/
 --regex-MyRust=/^\s*extern\s+crate\s+(\w+)/\1/e,extern crate/

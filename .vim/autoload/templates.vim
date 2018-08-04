@@ -1,13 +1,16 @@
-call funct#let_global_with_default('template_dir', expand("~/.vim/templates"))
-
+call opts#letg_default('template_dir', expand("~/.vim/templates"))
 
 fu! templates#read_template()
     if exists('b:_template_read') || !(expand('%:p:h') =~# $HOME)
         return 1 
     elseif line('.') == line('$')  && getline('.') =~# '^\s*$'
-        silent call templates#read_template_helper()
+        call templates#read_template_helper()
     endif
 endfu
+
+fu! templates#template_subst()
+    exe "python3 import vim, pystache; vim.current.buffer[:] = list(map(lambda x: pystache.render(x, ".string(g:template_vars)."), vim.current.buffer[:]))"
+endf
 
 fu! templates#read_template_helper()
     let b:_template_read = 1
@@ -19,10 +22,10 @@ fu! templates#read_template_helper()
             let l:t = expand(l:d . '/' . l:f)
             if filereadable(l:t)
                 exe '0r '.l:t
-                TemplateSubstitute
+                call templates#template_subst()
                 return 1
             endif
         endfor
     endfor
-    silent call add(v:errors, 'could not find template for ' . l:fname)
+    call add(v:errors, 'could not find template for ' . l:fname)
 endfu

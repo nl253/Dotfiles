@@ -1,15 +1,20 @@
 setl foldmethod=manual foldmarker={,}
 
-let b:rust_project_root = fnamemodify(findfile("Cargo.toml", '.;'), ':p:h')
-let b:project_name      = fnamemodify(b:rust_project_root, ':t')
-let b:logging_level     = 'debug'
+let g:rust_logging_lvl  = 'debug'
+let s:anchors = ['Cargo.toml', '.git']
 
-if executable("cargo") 
-    compiler cargo 
-    exe 'setl makeprg='.escape(join(['RUST_LOG\='.b:project_name.'\='.b:logging_level, 'cargo', 'run', '--jobs', '4', '--quiet', '--color', 'never']), ' ')
-    exe 'setl formatprg='.escape(join(['rustfmt', '--color', 'never']), ' ')
+let s:root = utils#proj_root(s:anchors)
+
+if isdirectory(s:root) && executable("cargo") 
+	let s:project_name = fnamemodify(s:root, ':t')
+	compiler cargo 
+	exe 'setl makeprg='.escape(join(['RUST_LOG\='.s:project_name.'\='.g:rust_logging_lvl, 'cargo', 'run', '--jobs', utils#cpu_cores(), '--quiet', '--color', 'never']), ' ')
 endif
 
-com! -bang RustyTags call s:generate_tags_from_sources('~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src', 'Cargo.toml', 0, <bang>0)
+call opts#formatprg({
+            \ 'rustfmt': 'rustfmt --color never',
+            \ })
 
-RustyTags
+call tags#lib(99999, 0, '~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src')
+call utils#add_project_files(s:anchors)
+call tags#project(s:anchors, 0)

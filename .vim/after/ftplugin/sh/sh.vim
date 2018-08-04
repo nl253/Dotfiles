@@ -1,7 +1,3 @@
-if !exists(":Man") && filereadable($VIMRUNTIME.'/ftplugin/man.vim') 
-    execute 'source '.$VIMRUNTIME.'/ftplugin/man.vim'
-endif
-
 if executable('shfmt')
     setl formatprg=shfmt\ -ci\ -i\ 2
 endif
@@ -18,5 +14,3 @@ let g:is_bash = 1
 let g:sh_fold_enabled = 4
 
 let b:match_words = '\<if\>:\<elif\>:\<else\>'
-let b:loaded_vim_programming_sh = 1
-

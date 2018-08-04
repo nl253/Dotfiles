@@ -3,7 +3,7 @@
     excludesfile   = ~/.config/git/gitignore
     whitespace     = space-before-tab,-indent-with-non-tab,trailing-space
 	compression    = 9
-	autocrlf = input
+	; autocrlf = input
 
 [credential]
 	helper = store
@@ -26,7 +26,7 @@
     whitespace = fix 
 
 [alias]
-    g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 16 --break
+    g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 4 --break
 
 
     # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
@@ -85,11 +85,12 @@
     browser = google-chrome-unstable
 
 [difftool]
-    prompt  = false
+    prompt  = true
 
 [diff]
     renames = copies  # Detect copies as well as renames
     tool    = vimdiff
+	context = 1
 
 [merge]
     # Include summaries of merged commits in 
@@ -152,9 +153,6 @@
 [instaweb]
     browser = google-chrome-unstable
 
-[interactive]
-    singlekey = true
-
 [column]
     ui = auto
     status = auto
@@ -166,5 +164,33 @@
 
 [github]
 	user = nl253
-	oauth-token = 6fb424e6ce59e5b6d689d35928f9d76a159d5404
+    oauth-token = 6fb424e6ce59e5b6d689d35928f9d76a159d5404
+
+[pager]
+    add         = off
+    aliases     = off
+    archive     = off
+    branch      = off
+    checkout    = off
+    clone       = off
+    commit      = off
+    diff        = on
+    fetch       = off
+    gc          = off
+    grep        = off
+    init        = off
+    log         = on
+    ls-files    = off
+    ls-remote   = off
+    merge       = off
+    mktag       = off
+    mv          = off
+    pull        = off
+    reflog      = off
+    rm          = off
+    show-branch = off
+    stash       = off
+    status      = off
+    tag         = off
+
 # vim: ts=4 sw=4 ft=gitconfig: 

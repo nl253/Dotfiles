@@ -135,9 +135,7 @@ fi
 # Archiving
 [ -x /usr/bin/7z ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 
-alias pip=pip3
-
-alias rusti="rustup run nightly-2016-08-01 $HOME/.cargo/bin/rusti"
+for i in pip pydoc python; do eval "alias ${i}=${i}3"; done
 
 # $EDITOR
 for i in nvim vim vi; do [ -x /usr/bin/$i ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done

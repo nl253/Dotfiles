@@ -4,6 +4,10 @@ setl shiftwidth=4 tabstop=8 linebreak formatoptions=torcn spell
 nn <buffer> [[ ?\v^#<CR>
 nn <buffer> ]] /\v^#<CR>
 
+nn <buffer> K     :exe '!wn '.expand('<cword>').' -over \| fold --spaces --width='.(join(systemlist("tput cols"), '') - 5).' \| head -n '.(join(systemlist('tput lines'), '') - 5)<CR>
+nn @b viw<Esc>a**<Esc>hbi**<Esc>ll
+nn @e viw<Esc>a*<Esc>hbi*<Esc>ll
+
 let s:plugin_root = expand('<sfile>:p:h:h:h:h') 
 
 if !exists('g:markdown_fenced_languages')

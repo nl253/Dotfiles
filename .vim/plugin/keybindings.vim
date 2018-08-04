@@ -1,3 +1,6 @@
+" New:
+vmap <M-r> :s/\v<>c<Left><Left><Left>
+
 " Move by screen lines instead of file lines.
 " http://vim.wikia.com/wiki/Moving_by_screen_lines_instead_of_file_lines
 noremap k gk
@@ -16,8 +19,8 @@ if has("nvim")
 endif
 
 " find sub-strings by default
-nn * g*
-nn # g#
+" nn * g*
+" nn # g#
 
 " sometimes writer is not needed
 nn :w<CR> :up<CR>
@@ -43,6 +46,9 @@ endfor
 for s:i in ['expr', 'getexpr', 'addexpr']
     exe 'ca c'.s:i.' c'.s:i.'!'
     exe 'ca l'.s:i.' l'.s:i.'!'
+endfor
+for s:i in ['log', 'grep', 'lgrep', 'llog']
+    exe 'ca G'.s:i.' G'.s:i.'!'
 endfor
 
 " POSIX regex by default

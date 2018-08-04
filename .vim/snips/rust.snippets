@@ -10,9 +10,13 @@ snippet "skip((rust)?fmt)?" "#[rustfmt::skip] [rust]" br
 #[rustfmt::skip]
 endsnippet
 
-snippet lint "lints from rustc [rust]" b
-#![warn(bad_style, missing_docs, unused, rust_2018_idioms, nonstandard_style)]
+snippet "(clippy)?lints?" "lints from rustc [rust]" br
+#![warn(bad_style, rust_2018_idioms, nonstandard_style)]
+// #![warn(missing_docs)]
+// #![warn(unused)]
 #![deny(future_incompatible)]
+#![warn(clippy_style, clippy_perf, clippy_cargo)]
+#![deny(clippy_correctness)]
 endsnippet
 
 snippet "nightly|features?" "nightly features [rust]" br
@@ -235,6 +239,14 @@ snippet "([dD]isplay|[Bb]inary|[Dd]ebug|[pP]ointer)" "trait {Display, Debug, Bin
 impl std::fmt::`!p snip.rv = match.group(1).capitalize() if match.group(1) is not None else "Display"` for ${1:MyObject} {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
         $2
+    }
+}
+endsnippet 
+
+snippet From "trait From [rust]" b
+impl From<$1> for $2 {
+    fn from($3: $4) -> Self { 
+        $5
     }
 }
 endsnippet 

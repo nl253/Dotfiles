@@ -13,3 +13,21 @@ help -h
 help set
 echo *
 find
+ls
+ls -ag
+ls -a
+find
+cd
+find
+l
+ls -a
+pwd
+pwd -h
+pwd --help
+cd -h
+cd --help
+cd ..
+ls -a
+cd
+ls -a
+find

@@ -1,19 +1,20 @@
 " vim:ft=vim:
+" Rust:
 let g:rust_fold = 2
 let g:rust_bang_comment_leader = 1
 
 " VimRacer:
 let g:racer_experimental_completer = 1
 
-" VimProgramming:
+" Haskell:
 let g:haskell_indent_if    = 2
 let g:haskell_indent_where = 2
 let g:haskell_indent_do    = 2
 
-" VimJavaScript:
+" JavaScript:
 let g:javascript_plugin_jsdoc = 1
 
-" VimGo:
+" Go:
 let g:go_fmt_autosave = 0
 
 " NERDTree:
@@ -28,7 +29,7 @@ let g:NERDTreeAutoDeleteBuffer  = 1
 let g:NERDMenuMode = 0
 let g:NERDSpaceDelims = 1
 
-" UltiSnips:
+" UtilSnips:
 let g:UltiSnipsEditSplit          = 'vertical'
 let g:UltiSnipsSnippetDirectories = [expand('~/.vim/snips')]
 let g:UltiSnipsEnableSnipMate     = 0
@@ -89,9 +90,36 @@ let g:netrw_browse_split   = 3
 let g:netrw_hide           = 1
 let g:netrw_list_hide      = '\v^[\._]|\.(beam|hi|pdf|class|lock)$|^tags$'
 let g:netrw_liststyle      = 3
+let g:netrw_mousemaps      = 0
+let g:netrw_preview        = 1 
+let g:netrw_scpport        = '-P 22' 
 let g:netrw_sizestyle      = 'H'
 let g:netrw_special_syntax = 1
+let g:netrw_sshport        = '-p 22'
 let g:netrw_wiw            = &winminwidth
+
+" XML:
+" might be computationally demanding
+" better beautify and use indent-based fold
+let g:xml_syntax_folding = 0 
+
+" YAML:
+let g:yaml_schema = 'pyyaml'
+let g:loaded_saner = 1
+
+" HTML:
+let g:html_use_xhtml = 0
+let g:html_dynamic_folds = 0
+let g:html_no_foldcolumn = 1 
+let g:html_use_encoding = 'UTF-8'
+let g:html_font = [
+            \ 'Sans Serif', 
+            \ 'DejaVu Sans Mono', 
+            \ 'Consolas', 
+            \ 'monospace'
+            \ ]
+let g:html_wrong_comments = 1
+let g:html_hover_unfold = 1
 
 hi netrwSymLink  term=NONE cterm=NONE gui=NONE ctermfg=Magenta guifg=Magenta
 hi netrwCompress term=NONE cterm=NONE gui=NONE ctermfg=Yellow guifg=Yellow 
@@ -118,3 +146,17 @@ let g:html5_event_handler_attributes_complete = 0
 let g:html5_rdfa_attributes_complete          = 0
 let g:html5_microdata_attributes_complete     = 0
 let g:html5_aria_attributes_complete          = 0
+
+" Lang Server:
+" Use an absolute configuration path if you want system-wide settings
+let g:LanguageClient_loadSettings = 1 
+let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
+let g:LanguageClient_serverCommands = {
+            \ 'rust':           ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+            \ 'sh':             ['~/.config/yarn/global/node_modules/.bin/bash-language-server', 'start'],
+            \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+            \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
+            \ 'python':         ['~/.local/bin/pyls'],
+            \ 'cpp':            ['/usr/bin/clangd'],
+            \ 'c':              ['/usr/bin/clangd'],
+            \ }

@@ -1,11 +1,4 @@
-"if exists('g:loaded_vim_saner_views') || !executable('bash') || !has('unix')
-    "finish
-"endif
-
-let g:view_dir = expand('~/').'.vim/views'
-let g:default_view_file = join([g:view_dir, expand('$USER').'.vim'], '/')
-
-fun! s:list_view_files(A, L, P)
+fun! views#list(A, L, P)
     let l:a = map(systemlist('ls ~/.vim/views/*.vim'), 'fnamemodify(v:val, ":t:r")')
     if !empty(l:a) && len(l:a[0]) < 2
         let l:a = []
@@ -13,7 +6,7 @@ fun! s:list_view_files(A, L, P)
     return l:a
 endfun
 
-fun! s:view_read(file)
+fun! views#read(file)
     if len(a:file) > 0
         let l:f = join([g:view_dir, substitute(a:file, '.vim', '', 'g').'.vim'], '/')
         echom '[vim-saner] loading view from '.l:f
@@ -26,7 +19,7 @@ fun! s:view_read(file)
     endif
 endfun
 
-fun! s:view_save(file)
+fun! views#save(file)
     if len(a:file) > 0 
         let l:f = join([g:view_dir, substitute(a:file, '.vim', '', 'g').'.vim'], '/')
         exe 'mkview! '.l:f
@@ -37,7 +30,7 @@ fun! s:view_save(file)
     endif
 endfun
 
-fun! s:view_delete(file, bang)
+fun! views#delete(file, bang)
     if len(a:file) > 0
         let l:f = join([g:view_dir, a:file.'.vim'], '/')
         if delete(l:f, 'rf') < 0
@@ -55,10 +48,3 @@ fun! s:view_delete(file, bang)
         echom '[vim-saner] removed '.g:default_view_file
     endif
 endfun
-
-com! -nargs=? -bang -complete=customlist,s:list_view_files DeleteView call s:view_delete(<q-args>, <bang>0)
-com! -nargs=? -bang -complete=customlist,s:list_view_files RemoveView call s:view_delete(<q-args>, <bang>0)
-com! -nargs=?       -complete=customlist,s:list_view_files SaveView   call s:view_save(<q-args>)
-com! -nargs=?       -complete=customlist,s:list_view_files ReadView   call s:view_read(<q-args>)
-
-let g:loaded_vim_saner_views = 1
