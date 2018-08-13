@@ -62,7 +62,7 @@ vn ? ?\v
 " enhanced X-Mode by default
 nn Q gQ
 
-nn <M-f>      :silent call project#project_files_qf()<CR>
+nn <M-f>      :silent call utils#project_files_qf()<CR>
 " IntelliJ
 nn <M-6>      :ToDo<CR>
 " IntelliJ

@@ -1,5 +1,8 @@
 --maxdepth=8
 --tag-relative=yes
+--exclude=test-*
+--exclude=test_*
+--exclude=test
 --sort=yes
 --guess-language-eagerly
---languages=Python,TypeScript,JavaScript,MyHaskell,Erlang,Sh,MyRust,Markdown,Java,ReStructuredText,Vim,OrgMode
+--languages=MyPython,TypeScript,JavaScript,MyHaskell,Erlang,Sh,MyRust,Markdown,Java,ReStructuredText,Vim,OrgMode

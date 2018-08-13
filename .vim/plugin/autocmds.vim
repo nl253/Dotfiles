@@ -28,7 +28,7 @@ aug VariousAutoCmds
     au CmdwinEnter                   *                          setl updatetime=2000
     au CmdwinLeave                   *                          setl updatetime=199
 
-    au QuickFixCmdPost               cadde,cgete,cex,grep,grepa exe 'botright cwindow '.((len(getqflist()[:10]) < 8) ? len(getqflist()) + 1 : "")
+    au QuickFixCmdPost               cadde,cex,grep,grepa exe 'botright cwindow '.((len(getqflist()[:10]) < 8) ? len(getqflist()) + 1 : "")
     au QuickFixCmdPost               lex,lgr,lgrepa,lgete,lad   exe 'botright lwindow '.((len(getloclist(win_getid())[:10]) < 8) ? len(getloclist(win_getid())) + 1 : "")
 
     exe 'au FileType '.join(g:markup_langs, ',').' call inits#markup()'

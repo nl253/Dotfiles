@@ -7,42 +7,45 @@ call opts#letg_default('default_session_file', join([g:session_dir, expand('$USE
 call opts#letg_default('view_dir',             expand('~/').'.vim/views')
 call opts#letg_default('default_view_file',    join([g:view_dir, expand('$USER').'.vim'], '/'))
 
-fu! utils#toggle_netrw() 
+fu! utils#toggle_netrw()
     if expand('%:t') =~# '^Netrw'
         wincmd c
     else
         windo if expand('%:t') =~# 'Netrw' | wincmd c | endif
-        exe 'botright '.g:netrw_slide_in_width.'Vexplore'
-        wincmd H
-        exe 'vert resize '.g:netrw_slide_in_width
-    endif
+    exe 'botright '.g:netrw_slide_in_width.'Vexplore'
+    wincmd H
+    exe 'vert resize '.g:netrw_slide_in_width
+endif
 endf
 
-fu! utils#slider_toggle(file, position, size) 
+fu! utils#slider_toggle(file, position, size)
+
     if expand('%:p') == fnamemodify(a:file, ':p')
         wincmd c
+        return 0
+    endif
+
+    exe 'botright split '.a:file
+
+    if a:position =~? '^l'
+        wincmd H
+        exe 'vert res '.a:size
+
+    elseif a:position =~? '^r'
+        wincmd L
+        exe 'vert res '.a:size
+
+    elseif a:position =~? '^t'
+        wincmd K
+        exe 'res '.a:size
+
     else
-        windo if expand('%:p') == fnamemodify(a:file, ':p') | wincmd c | endif
-
-        exe 'botright split '.a:file
-
-        if a:position =~? '^l'
-            wincmd H
-            exe 'vert res '.a:size
-        elseif a:position =~? '^r'
-            wincmd L
-            exe 'vert res '.a:size
-        elseif a:position =~? '^t'
-            wincmd K
-            exe 'res '.a:size
-        else 
-            wincmd J
-            exe 'res '.a:size
-        endif
+        wincmd J
+        exe 'res '.a:size
     endif
 endf
 
-fu! utils#toggle_todo() 
+fu! utils#toggle_todo()
     return utils#slider_toggle(g:todo_file, 'r', g:todo_slide_in_width)
 endf
 
@@ -54,11 +57,7 @@ endf
 
 fu! utils#cpu_cores()
     let l:try_get = systemlist('grep -c ^processor /proc/cpuinfo')
-    if v:shell_error 
-        return 1
-    else
-        return l:try_get[0]
-    endif
+    return v:shell_error ? 1 : l:try_get[0]
 endf
 
 fu! utils#project_files_qf()
@@ -66,14 +65,36 @@ fu! utils#project_files_qf()
     let l:root = utils#proj_root(['.git'])
     let l:ext = expand('%:e')
 
-    " list all files with the same extension 
-    if !empty(l:ext)
-        silent cgete systemlist('find -readable -type f -maxdepth 7 -name '.string('*.'.l:ext).' 2>/dev/null')
-        copen
-        wincmd J
-    else
+    " list all files with the same extension
+    if empty(l:ext)
         echoerr "no extension - no way to collect similar files"
+        return 1
     endif
+
+    cgete systemlist('find '.l:root.' -readable -type f -maxdepth 8 -name '.string('*.'.l:ext).' 2>/dev/null')
+    copen
+    wincmd J
+endf
+
+fu! utils#git_files_qf()
+
+    let l:root = utils#proj_root(['.git'])
+    let l:ext = expand('%:e')
+
+    " list all files with the same extension
+    if empty(l:ext)
+        echoerr "no extension - no way to collect similar files"
+        return 1
+    endif
+
+    let l:save_shell = &shell
+    let &shell = '/bin/bash'
+
+    cgete map(systemlist('git -C '.l:root.' ls-tree --full-name --name-only -r HEAD'), 'l:root."/".v:val')
+
+    let &shell = l:save_shell
+    copen
+    wincmd J
 endf
 
 fu! utils#str_to_list(str)
@@ -115,6 +136,10 @@ endf
 " Add to args all project files with the same extension starting " from the project root
 fu! utils#add_project_files(anchors)
 
+    if &ft == 'qf'
+        return 0
+    endif
+
     " start depth *NEEDS* to be 1
     let l:lvl = 1
     let l:root = utils#proj_root(a:anchors)
@@ -137,22 +162,27 @@ fu! utils#add_project_files(anchors)
         endif
     endwhile
 
-    exe 'argadd '.join(l:files, ' ') 
+    exe 'argadd '.join(l:files, ' ')
 endf
 
 fu! utils#append_to_dict(word)
-    if filereadable(&dictionary) 
-        call writefile(split(a:word), expand(&dictionary), 'a') 
+    if filereadable(&dictionary)
+        call writefile(split(a:word), expand(&dictionary), 'a')
         echom 'appended '.string(a:word).' to '.string(&dictionary)
-    else 
+    else
         echoerr 'dictionary not set'
     endif
 endf
 
 fu! utils#async_run(cmd)
-    let l:expanded = join(map(split(a:cmd), 'substitute(expand(v:val), "\n", " ", "g")'))
-    silent call system("bash -c '".shellescape(l:expanded)."' &")
-    echom string(l:expanded).' spawned in the background'
+    let l:save_shell = &shell
+    let &shell = '/bin/bash'
+    silent exe '!'.a:cmd.' &'
+    echom substitute(string(a:cmd).' spawned in the background', '\v\r|\n', ' ', 'g')
+    if v:shell_error
+        echoerr 'an error has '.v:shell_error.'occurred'
+    endif
+    let &shell = l:save_shell
 endf
 
 fu! utils#proj_root(anchors)
@@ -160,17 +190,19 @@ fu! utils#proj_root(anchors)
     let l:this_dir = expand('%:p:h')
 
     for l:anchor in a:anchors
-        let l:candidate = finddir(l:anchor, l:this_dir.';'.$HOME)
-        if !empty(l:candidate) && isdirectory(l:candidate) && (l:candidate != $HOME) && (l:candidate =~# $HOME)
-            let l:result = fnamemodify(l:candidate, ':h')
-            return l:result 
-        else
-            let l:candidate_file = findfile(l:anchor, l:this_dir.';'.$HOME)
-            if !empty(l:candidate_file) && filereadable(l:candidate_file) && (l:candidate_file =~# $HOME)
-                let l:result = fnamemodify(l:candidate_file, ':h')
-                return l:result
-            endif
+
+        let l:maybe_dir = finddir(l:anchor, l:this_dir.';'.$HOME)
+
+        if isdirectory(l:maybe_dir) && (l:maybe_dir != $HOME) && (l:maybe_dir =~# $HOME)
+            return fnamemodify(l:maybe_dir, ':h')
         endif
+
+        let l:maybe_file = findfile(l:anchor, l:this_dir.';'.$HOME)
+
+        if filereadable(l:maybe_file) && (l:maybe_file =~# $HOME)
+            return fnamemodify(l:maybe_file, ':h')
+        endif
+
     endfor
 
     return l:this_dir
@@ -199,7 +231,7 @@ fu! utils#is_stale(file, min_limit)
     return !filereadable(a:file) || ((localtime() - getftime(a:file)) > (60 * a:min_limit))
 endf
 
-fu! utils#close_dup_tabs() 
+fu! utils#close_dup_tabs()
     let cnt = 0
     let i = 1
     let tpbufflst = []
@@ -220,14 +252,14 @@ fu! utils#close_dup_tabs()
     endfor
 endf
 
-fu! utils#colorize(group, what) 
+fu! utils#colorize(group, what)
     setg redrawtime=200
-    for i in range(1, 255) 
-        echom "Color nr ".i 
-        exe 'hi '.a:group.' '.a:what.'='.i 
-        redraw 
+    for i in range(1, 255)
+        echom "Color nr ".i
+        exe 'hi '.a:group.' '.a:what.'='.i
+        redraw
         sleep 300m
-    endfor 
+    endfor
     setg redrawtime=2000
 endf
 
@@ -244,15 +276,33 @@ fu! utils#safe_subst(l1, l2)
 endf
 
 fu! utils#reformat_buffer()
+
+    " remove trailing whitespace
+    try
+        %s/\v\s+$//
+    catch /\vE486/
+    endtry
+
+    " save position
     let l:col = virtcol('.')
     let l:ln = line('.')
-    if empty(&formatprg) || (&formatprg =~# '^fmt')
-        normal gg=G
-    elseif &equalprg != ""
-        silent exec ("%!".&equalprg)
+
+    if !empty(&formatprg)
+        " if you defined a custom formatprg
+        " => filter the buffer through equalprg
+        silent exe ("%!".&formatprg)
+
+    elseif !empty(&equalprg)
+        " if you defined a custom equalprg
+        " => filter the buffer through equalprg
+        silent exe ("%!".&equalprg)
+
     else
-        silent exec ("%!".&formatprg)
+        " => use default Vim formatting
+        normal gg=G
     endif
+
+    " restore position
     exec ':'.l:ln
     exec 'normal '.l:col
 endf

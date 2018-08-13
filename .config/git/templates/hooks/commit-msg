@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# git-journal parses commit msgs and checks for presence of 
+# keywords such as 'modify', 'update', 'deprecate'.
+# See <https://github.com/saschagrunert/git-journal>.
+# Use git-joural only if availible.
+if [[ -x ~/.cargo/bin/git-journal ]] || [[ -x /usr/bin/git-journal ]]; then
+  git journal verify $1
+fi
+
 _fmt_heading() {
   command cat <<EOF
 $(tput bold)$(tput setaf 3)$*$(tput sgr0)
@@ -12,31 +20,26 @@ $(tput setaf 1)[ERROR] $*$(tput sgr0).
 EOF
 }
 
-for i in sed grep cat; do
-  if [[ ! -x $(command which $i) ]]; then
+for i in mktemp fmt sed grep cat; do
+  if [[ ! -x $(builtin type -P $i) ]]; then
     _fmt_error "$i is not installed, cannot validate the commit message"
-    exit 0
+    exit 0 # don't prevent committing
   fi
 done
 
+# To prevent unexpected behaviour, the script is to be run with Bash 4.
 if [[ ! $BASH_VERSION =~ ^4 ]]; then
   _fmt_error "your bash(1) is outdated, cannot validate the commit message."
-  exit 0
+  exit 0 # don't prevent committing
 fi
 
 commit_msg_file=$1
 
-subject_line() {
-  command head -n 1 $commit_msg_file
-}
+subject_line() { command head -n 1 $commit_msg_file; }
 
-line_count() {
-  command cat $commit_msg_file | command grep --count .
-}
+line_count() { command cat $commit_msg_file | command grep --count .; }
 
-second_line() {
-  command head -n 2 $commit_msg_file
-}
+second_line() { command head -n 2 $commit_msg_file; }
 
 # the main message
 message() {
@@ -70,63 +73,46 @@ EOF
 
 # THE SUBJECT LINE
 if [[ $(subject_line) =~ ^[[:space:]]+ ]]; then
-  error_msg "Leading spaces in the subject"
-  exit 1
+  error_msg "Leading spaces in the subject" && exit 1
 elif [[ $(subject_line) =~ ^[a-z] ]]; then
-  error_msg "Uncapitalised subject"
-  exit 1
+  error_msg "Uncapitalised subject" && exit 1
 elif [[ ! $(subject_line) =~ ^[[:print:][:space:]]+$ ]]; then
-  error_msg "Use of unprintable characters"
-  exit 1
+  error_msg "Use of unprintable characters" && exit 1
 elif [[ $(subject_line) =~ [[:alpha:]]{3,}ed[[:space:]] ]]; then
-  error_msg "Possible use of past tense"
-  exit 1
+  error_msg "Possible use of past tense" && exit 1
 elif [[ $(subject_line) =~ \.$ ]]; then
-  error_msg "The subject ends with a fullstop (period)"
-  exit 1
+  error_msg "The subject ends with a fullstop (period)" && exit 1
 elif [[ $(subject_line) =~ .{51,} ]]; then
-  error_msg "The subject is too long - max is 50 chars"
-  exit 1
+  error_msg "The subject is too long - max is 50 chars" && exit 1
 elif [[ $(subject_line) =~ \\t ]]; then
-  error_msg "Use of tab"
-  exit 1
+  error_msg "Use of the tab character \\t" && exit 1
 elif [[ $(subject_line) =~ \ +$ ]]; then
-  error_msg "Trailing spaces"
-  exit 1
+  error_msg "Trailing spaces" && exit 1
 fi
 
-# THE MESSAGE LINE
+# THE MESSAGE BODY
 if (($(line_count) > 1)); then
 
   # more than just the subject, check for blank line
   if [[ ! $(second_line) =~ [[:space:]]* ]]; then
-    error_msg "The second line needs to be blank"
-    exit 1
-  fi
-
-  if [[ $(message) =~ ^[[:space:]]+ ]]; then
-    error_msg "Leading spaces in the message body"
-    exit 1
-  fi
-
-  if [[ $(message) =~ [[:alpha:]]{3,}ed[[:space:]] ]]; then
-    error_msg "Possible use of past tense"
-    exit 1
+    error_msg "The second line needs to be blank" && exit 1
+  elif [[ $(message) =~ ^[[:space:]]+ ]]; then
+    error_msg "Leading spaces in the message body" && exit 1
+  elif [[ $(message) =~ [[:alpha:]]{3,}ed([[:space:][:punct:]]|$) ]]; then
+    error_msg "Possible use of past tense" && exit 1
   fi
 
   for i in $(message); do
     if [[ $i =~ .{81} ]]; then
-      error_msg "Over 80 characters on line:\n'$i'"
-      exit 1
+      error_msg "Over 80 characters on line:\n'$i'" && exit 1
     fi
   done
-
 fi
 
 # ------------------------------------------------------------------------
-
-command cat $commit_msg_file | command grep -E -v '^#' | fmt --uniform-spacing >/tmp/formatted_commit_msg_file.txt
-command cat /tmp/formatted_commit_msg_file.txt >$commit_msg_file
+tmp_file=$(mktemp)
+command cat $commit_msg_file | command grep -E -v '^#' | command fmt --uniform-spacing > $tmp_file
+command cat $tmp_file > $commit_msg_file
 command cat <<EOF
 
 $(tput bold)The following commit message has been submitted$(tput sgr0)

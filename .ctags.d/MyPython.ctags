@@ -1,0 +1,5 @@
+--langdef=MyPython 
+--langmap=MyPython:.py
+--regex-MyPython=/^class\s+(\w{,3})/\1/C,class/
+--regex-MyPython=/^def\s+([a-z]\w+)/\1/f,funct/
+--regex-MyPython=/^([A-Z][A-Z0-9_]+)\s*=\s*/\1/c,const/

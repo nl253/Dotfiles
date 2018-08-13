@@ -1,0 +1,12 @@
+--short    
+--branch
+--show-stash
+--porcelain
+--long     
+--verbose  
+--untracked-files
+--ignore-submodules
+--ignored
+--column
+--ahead-behind
+--no-ahead-behind
