@@ -1,25 +1,22 @@
 #!/usr/bin/env bash
 
+## Perform checks on commit msg.  See if it adheres to standards.
+
 # git-journal parses commit msgs and checks for presence of 
 # keywords such as 'modify', 'update', 'deprecate'.
 # See <https://github.com/saschagrunert/git-journal>.
 # Use git-joural only if availible.
 if [[ -x ~/.cargo/bin/git-journal ]] || [[ -x /usr/bin/git-journal ]]; then
-  git journal verify $1
+  command git-journal verify $1
 fi
-
-_fmt_heading() {
-  command cat <<EOF
-$(tput bold)$(tput setaf 3)$*$(tput sgr0)
-EOF
-}
 
 _fmt_error() {
   command cat <<EOF
-$(tput setaf 1)[ERROR] $*$(tput sgr0).
+$(command tput setaf 1)[ERROR] $*$(command tput sgr0).
 EOF
 }
 
+# Check for necessary executables
 for i in mktemp fmt sed grep cat; do
   if [[ ! -x $(builtin type -P $i) ]]; then
     _fmt_error "$i is not installed, cannot validate the commit message"
@@ -32,6 +29,12 @@ if [[ ! $BASH_VERSION =~ ^4 ]]; then
   _fmt_error "your bash(1) is outdated, cannot validate the commit message."
   exit 0 # don't prevent committing
 fi
+
+_fmt_heading() {
+  command cat <<EOF
+$(command tput bold)$(command tput setaf 3)$*$(command tput sgr0)
+EOF
+}
 
 commit_msg_file=$1
 
@@ -47,7 +50,7 @@ message() {
 }
 
 error_msg() {
-  cat <<EOF
+  command cat <<EOF
 $(_fmt_error "The commit message does not adhere to git style guide.")
 
 $(_fmt_heading "THE RULES")
@@ -62,16 +65,16 @@ For details see <https://github.com/agis/git-style-guide#messages>
 
 $(_fmt_heading "THE MESSAGE ")
 
-"$(cat "$commit_msg_file" | command grep -Ev '^#')"
+"$(command cat "$commit_msg_file" | command grep -Ev '^#')"
 
 $(_fmt_heading "ISSUE")
 >> ${1}.
 
-$(tput bold)Please fix it before re-comitting.$(tput sgr0)
+$(command tput bold)Please fix it before re-comitting.$(command tput sgr0)
 EOF
 }
 
-# THE SUBJECT LINE
+# CHECK SUBJECT LINE
 if [[ $(subject_line) =~ ^[[:space:]]+ ]]; then
   error_msg "Leading spaces in the subject" && exit 1
 elif [[ $(subject_line) =~ ^[a-z] ]]; then
@@ -90,10 +93,10 @@ elif [[ $(subject_line) =~ \ +$ ]]; then
   error_msg "Trailing spaces" && exit 1
 fi
 
-# THE MESSAGE BODY
+# CHECK MESSAGE BODY
 if (($(line_count) > 1)); then
 
-  # more than just the subject, check for blank line
+  # if more than just the subject, check for blank line
   if [[ ! $(second_line) =~ [[:space:]]* ]]; then
     error_msg "The second line needs to be blank" && exit 1
   elif [[ $(message) =~ ^[[:space:]]+ ]]; then
@@ -102,6 +105,7 @@ if (($(line_count) > 1)); then
     error_msg "Possible use of past tense" && exit 1
   fi
 
+  # All lines must be shorter than 80 chars
   for i in $(message); do
     if [[ $i =~ .{81} ]]; then
       error_msg "Over 80 characters on line:\n'$i'" && exit 1
@@ -110,12 +114,6 @@ if (($(line_count) > 1)); then
 fi
 
 # ------------------------------------------------------------------------
-tmp_file=$(mktemp)
+tmp_file=$(command mktemp)
 command cat $commit_msg_file | command grep -E -v '^#' | command fmt --uniform-spacing > $tmp_file
 command cat $tmp_file > $commit_msg_file
-# command cat <<EOF
-
-# $(tput bold)The following commit message has been submitted$(tput sgr0)
-
-# "$(command cat $commit_msg_file)"
-# EOF
