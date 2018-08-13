@@ -64,7 +64,7 @@ echo ""
 
 if ((commit_count >= 5)); then
   if ! _get_consent "Are you sure you don't want to squash / fixup those commits?"; then
-    fmt_heading "\nTo squash / fixup run:\n\tgit rebase -i HEAD~${commit_count}" 
+    _fmt_heading "\nTo squash / fixup run:\n\tgit rebase -i HEAD~${commit_count}" 
     builtin exit 1
   fi
 fi
