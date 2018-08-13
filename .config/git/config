@@ -3,6 +3,7 @@
     excludesfile   = ~/.config/git/gitignore
     whitespace     = space-before-tab,-indent-with-non-tab,trailing-space
 	compression    = 9
+	abbrev = 18
 	; autocrlf = input
 
 [credential]
@@ -28,11 +29,8 @@
 [alias]
     g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 4 --break
 
-
     # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
 	qq = "!command bash -c 'command git pull && command git commit -a && command git push'" 
-
-	; foreach = "!find -name .git -type d -exec dirname {} +"
 
     root      = rev-parse --show-toplevel
     tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
@@ -76,7 +74,7 @@
     find-author = "!f() { git log --stat --date=short --author=\"$1\"; }; f ; unset -f f"
 
     # Use the following command while being on "master", to list merged branches:
-    merged-branches = "!f() { command git branch --merged | grep -v \"\\*\"; }; f ; unset -f f"
+    merged-branches = "!f() { command git branch --merged | grep -v \"\\*\"; }; f ; unset -f f" 
 
     # List contributors with number of commits
     contributors = shortlog --summary --numbered  

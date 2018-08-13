@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-git --no-pager log -1 --stat --color=always
+
+## Show brief info about last commit right after committing
+command git --no-pager log -1 --stat --color=always

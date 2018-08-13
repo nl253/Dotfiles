@@ -155,9 +155,9 @@ git_branch_info="[${git_branch_info}]"
 non_git_prompt='$(basename $0):/$(pwd) :: '
 
 # bash and zsh
-if builtin dirs 1>/dev/null 2>/dev/null; then
+if builtin dirs 1>/dev/null 2>/dev/null; then 
 
-  f() {
+  f() { 
     local cmd="command find -atime -2 -not -empty -readable -regextype posix-extended"
     local n=$#
     if ((n > 0)); then
@@ -172,7 +172,7 @@ if builtin dirs 1>/dev/null 2>/dev/null; then
   }
 
   # zsh
-  if [[ -n "$ZSH_VERSION" ]]; then
+  if [[ -n "$ZSH_VERSION" ]]; then 
     export PS1="${git_basic_info} "$'\n'"${non_git_prompt}"
   else # bash
     export PS1="${git_basic_info} \n${non_git_prompt}"

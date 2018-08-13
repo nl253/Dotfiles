@@ -1,1 +1,82 @@
 #!/usr/bin/env bash
+
+## This hook is called by git push and can be used to prevent a push from taking place.
+##
+## It's called with two parameters which provide:
+##
+## 1) the name
+## 2) location of the destination remote
+##
+## If this hook exits with a non-zero status, git push will abort without pushing anything.
+##
+## Information about why the push is rejected may be sent to the user by writing to STDERR.
+
+# Allows us to read user input below, assigns STDIN to keyboard
+# Close STDIN again with 'exec <&-'
+exec </dev/tty
+
+_fmt_heading() {
+  command cat <<EOF
+$(command tput bold)$(command tput setaf 3)$*$(command tput sgr0)
+EOF
+}
+
+_fmt_error() {
+  command cat <<EOF
+$(command tput setaf 1)[ERROR] $*$(command tput sgr0).
+EOF
+}
+
+# To prevent unexpected behaviour, the script is to be run with Bash 4.
+if [[ ! $BASH_VERSION =~ ^4 ]]; then
+  _fmt_error "your bash(1) is outdated, cannot validate the commit message."
+  exit 0 # don't prevent committing
+fi
+
+_get_consent() {
+  _fmt_heading $*
+  # Save response to variable $response.
+  builtin read -n 1 -r -p "Type [Y/N] ~> " response
+  builtin echo ""
+  [[ ${response^^} =~ ^N ]] && _fmt_error "You disagreed. Aborting push" && return 1 || return 0
+}
+
+for i in cat git grep; do
+  if [[ ! -x $(builtin type -P $i) ]]; then
+    _fmt_error "$i is not installed, cannot validate the push"
+    builtin exit 0 # don't prevent committing
+  fi
+done
+
+# Count of commits since last push
+commit_count=$(command git --no-pager log origin/master..master --oneline | command grep --count '.')
+
+if [[ $commit_count == 0 ]]; then 
+  builtin exit 0
+fi
+
+repo_name=$1
+repo_addr=$2
+
+_fmt_heading "You are about to push $commit_count commits into $repo_name $repo_addr"
+
+echo ""
+
+if ((commit_count >= 5)); then
+  if ! _get_consent "Are you sure you don't want to squash / fixup those commits?"; then
+    fmt_heading "\nTo squash / fixup run:\n\tgit rebase -i HEAD~${commit_count}" 
+    builtin exit 1
+  fi
+fi
+
+echo ""
+
+_fmt_heading "The following commits will be pushed"
+builtin echo "------------------------------------"
+command git --no-pager log origin/master..master --oneline
+
+echo ""
+
+if ! _get_consent "Is this OK?"; then
+  builtin exit 1
+fi

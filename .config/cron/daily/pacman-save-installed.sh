@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
 
-log(){
-	echo "[INFO] ${@}."
-}
+log() { echo "[INFO] ${@}."; }
 
-error(){
-	echo "[ERROR] ${@}." 1>&2
-}
+error() { echo "[ERROR] ${@}." 1>&2; }
 
 # check for needed applications
 for i in pacman mkdir; do

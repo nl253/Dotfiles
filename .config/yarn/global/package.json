@@ -25,6 +25,7 @@
     "express-generator": "^4.15.0",
     "flow-bin": "^0.73.0",
     "gatsby-cli": "^1.1.52",
+    "git-standup": "^2.1.9",
     "gitbook-cli": "^2.3.2",
     "heroku-cli": "^6.14.36",
     "htmlhint": "^0.9.13",

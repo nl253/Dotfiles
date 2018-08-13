@@ -25,9 +25,8 @@ let g:prog_langs = [
             \ 'javascript',
             \ 'typescript',
             \ 'haskell',
-            \ 'vim',
             \ ]
-
+            " \ 'vim',
 
 let g:markdown_fenced_languages = g:prog_langs + ['java']
 let g:rst_syntax_code_list = g:markdown_fenced_languages

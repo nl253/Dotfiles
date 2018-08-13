@@ -17,13 +17,13 @@ aug VariousAutoCmds
     au FileType                      xml,html                   call inits#emmet()
 
     " automatically change dir to the file you are editing
-    au BufEnter                      ??*                        try | lchdir %:p:h | catch /\vE(472|344)/ | endtry
+    au BufEnter                      ??*                        try | lchdir %:p:h | catch /\vE(472|344|13)/ | endtry
 
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold,BufEnter           *                          silent! checktime
 
     " autosave on focus lost
-    au BufLeave,FocusLost            ??*                        try | up | catch /\vE(472|344)/ | endtry
+    au BufLeave,FocusLost            ??*                        try | up | catch /\vE(472|344|13)/ | endtry
 
     au CmdwinEnter                   *                          setl updatetime=2000
     au CmdwinLeave                   *                          setl updatetime=199
