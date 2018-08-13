@@ -13,7 +13,7 @@ esac
 export PS1="${USER}@"$(hostname)" ${0} >> "
 
 # set ls colors
-if [ $0 = bash ] || [ $0 = zsh ] || [ $0 = -bash ]; then
+if builtin dirs 1>/dev/null 2>/dev/null; then
   eval $(dircolors -b)
 fi
 
@@ -58,7 +58,7 @@ fi
 # this here is very format dependent - do not change
 # dirs and files
 ls_opts='-I=tags -I *cache* -I *history* -I ~* -I _* -I *~ -I *-log -I *-lock -I *.log -I *.class -I *.so -I *.beam -I *.o -I *.pyc -I *.pyg -I *.aux -I *.toc -I *.swp -I *.tmp -I *.fls -I *.fdb_latexmk -I *.lock -I *.hi --color=auto --group-directories-first'
-if [ -x ~/.cargo/bin/exa ]; then
+if builtin dirs 1>/dev/null 2>/dev/null && [ -x ~/.cargo/bin/exa ]; then
   # replace all occurances of ' -I ' with '|' required by exa
   alias ls="exa \"${ls_opts// -I /|}\" --git --git-ignore" 
 else
