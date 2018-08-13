@@ -75,6 +75,9 @@
     # Find commits by commit author
     find-author = "!f() { git log --stat --date=short --author=\"$1\"; }; f ; unset -f f"
 
+    # Use the following command while being on "master", to list merged branches:
+    merged-branches = "!f() { command git branch --merged | grep -v \"\\*\"; }; f ; unset -f f"
+
     # List contributors with number of commits
     contributors = shortlog --summary --numbered  
 
