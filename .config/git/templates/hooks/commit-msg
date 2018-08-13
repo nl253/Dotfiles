@@ -113,9 +113,9 @@ fi
 tmp_file=$(mktemp)
 command cat $commit_msg_file | command grep -E -v '^#' | command fmt --uniform-spacing > $tmp_file
 command cat $tmp_file > $commit_msg_file
-command cat <<EOF
+# command cat <<EOF
 
-$(tput bold)The following commit message has been submitted$(tput sgr0)
+# $(tput bold)The following commit message has been submitted$(tput sgr0)
 
-"$(command cat $commit_msg_file)"
-EOF
+# "$(command cat $commit_msg_file)"
+# EOF

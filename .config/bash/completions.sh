@@ -243,20 +243,20 @@ _toolchains() {
 }
 
 # _go() {
-  # local cur="${COMP_WORDS[COMP_CWORD]}"
-  # case "${COMP_WORDS[COMP_CWORD - 1]}" in
-    # "go")
-      # local comms="build clean doc env bug fix fmt generate get install list run test tool version vet"
-      # COMPREPLY=($(compgen -W "${comms}" -- ${cur}))
-      # ;;
-    # *)
-      # local files=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type f -iname "*.go" -exec basename {} \;)
-      # local dirs=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type d -not -name ".*" -exec basename {} \;)
-      # local repl="${files} ${dirs}"
-      # COMPREPLY=($(compgen -W "${repl}" -- ${cur}))
-      # ;;
-  # esac
-  # return 0
+# local cur="${COMP_WORDS[COMP_CWORD]}"
+# case "${COMP_WORDS[COMP_CWORD - 1]}" in
+# "go")
+# local comms="build clean doc env bug fix fmt generate get install list run test tool version vet"
+# COMPREPLY=($(compgen -W "${comms}" -- ${cur}))
+# ;;
+# *)
+# local files=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type f -iname "*.go" -exec basename {} \;)
+# local dirs=$(command find ${PWD} -mindepth 1 -maxdepth 1 -type d -not -name ".*" -exec basename {} \;)
+# local repl="${files} ${dirs}"
+# COMPREPLY=($(compgen -W "${repl}" -- ${cur}))
+# ;;
+# esac
+# return 0
 # }
 
 # complete -F _go go
@@ -445,5 +445,208 @@ _yarn_completion() {
 }
 
 complete -o default -F _yarn_completion yarn
+
+_git-journal() {
+  local i cur prev opts cmds
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD - 1]}"
+  cmd=""
+  opts=""
+
+  for i in ${COMP_WORDS[@]}; do
+    case "${i}" in
+      git-journal)
+        cmd="git-journal"
+        ;;
+
+      help)
+        cmd+="__help"
+        ;;
+      p)
+        cmd+="__p"
+        ;;
+      prepare)
+        cmd+="__prepare"
+        ;;
+      s)
+        cmd+="__s"
+        ;;
+      setup)
+        cmd+="__setup"
+        ;;
+      v)
+        cmd+="__v"
+        ;;
+      verify)
+        cmd+="__verify"
+        ;;
+      *) ;;
+
+    esac
+  done
+
+  case "${cmd}" in
+    git-journal)
+      opts=" -a -g -s -u -h -V -p -n -e -t -o  --all --generate --short --skip-unreleased --help --version --path --tags-count --template --output  <revision range>  prepare setup verify help  p  s  v"
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        --path)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        -p)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        --tags-count)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        -n)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        -e)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        --template)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        -t)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        --output)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        -o)
+          COMPREPLY=($(compgen -f ${cur}))
+          return 0
+          ;;
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+
+    git__journal__help)
+      opts=" -h -V  --help --version  "
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+    git__journal__p)
+      opts=" -h -V  --help --version  <COMMIT_MSG> <TYPE> "
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+    git__journal__prepare)
+      opts=" -h -V  --help --version  <COMMIT_MSG> <TYPE> "
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+    git__journal__s)
+      opts=" -h -V  --help --version  "
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+    git__journal__setup)
+      opts=" -h -V  --help --version  "
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+    git__journal__v)
+      opts=" -h -V  --help --version  <COMMIT_MSG> "
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+    git__journal__verify)
+      opts=" -h -V  --help --version  <COMMIT_MSG> "
+      if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+      fi
+      case "${prev}" in
+
+        *)
+          COMPREPLY=()
+          ;;
+      esac
+      COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+      return 0
+      ;;
+  esac
+}
+
+complete -F _git-journal -o bashdefault -o default git-journal
 
 [[ $(hostname) =~ raptor ]] && source /etc/bash_completion

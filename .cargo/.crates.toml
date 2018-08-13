@@ -11,7 +11,7 @@
 "exa 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["exa"]
 "fd-find 7.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["fd"]
 "fselect 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = ["fselect"]
-"git-journal 1.6.3 (registry+https://github.com/rust-lang/crates.io-index)" = ["git-journal"]
+"git-journal 1.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["git-journal"]
 "gluon_repl 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)" = ["gluon"]
 "hashdir 0.1.0 (git+https://github.com/Wilfred/remacs#328b3a5e018466c66eeceba26e3e73e23b935ee9)" = ["hashdir"]
 "hyperfine 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["hyperfine"]
