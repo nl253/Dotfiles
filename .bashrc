@@ -2,7 +2,10 @@
 
 [[ -n $ENV ]] && . $ENV
 
-if ((BASH_VERSINFO < 4)); then echo "[ERROR] your bash is outdated, install bash >= 4"; return 0; fi
+if ((BASH_VERSINFO < 4)); then
+  echo "[ERROR] your bash is outdated, install bash >= 4"
+  return 0
+fi
 
 [[ -f ~/.config/bash/completions.sh ]] && . ~/.config/bash/completions.sh
 

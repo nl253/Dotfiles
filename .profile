@@ -102,11 +102,11 @@ export DEFAULT_TOOLCHAIN=nightly
 
 # Python
 # ------
-mkdir -p /tmp/python/bytecode/ 
+mkdir -p /tmp/python/bytecode/
 # don't store __pycache__ in ~/
 export PYTHONPYCACHEPREFIX=/tmp/python/bytecode
 # Warn once per Python process
-export PYTHONWARNINGS=once     
+# export PYTHONWARNINGS=once
 
 # FZF (keymap)
 # ------------------------
@@ -134,7 +134,7 @@ else
 fi
 
 if [ $0 = zsh ] || [ $0 = $(which zsh 2>/dev/null) ]; then
-  # sh won't ever get here so [[ is fine 
+  # sh won't ever get here so [[ is fine
   # not run with -i (interactive) but with TMUX so make interactive anyway
   [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f $ZDOTDIR/.zshrc ]] && [[ -n $ZDOTDIR ]] && source $ZDOTDIR/.zshrc
 elif [ $0 = bash ] || [ $0 = $(which bash 2>/dev/null) ]; then

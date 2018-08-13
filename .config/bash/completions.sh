@@ -3,7 +3,7 @@
 
 [[ -x $(type -P pandoc 2>/dev/null) ]] && eval "$(pandoc --bash-completion)"
 [[ -x $(type -P stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
-[[ -x $(type -P pip3 2>/dev/null) ]] && eval $(pip3 completion --bash)
+[[ -x $(type -P pip3 2>/dev/null) ]] && eval "$(pip3 completion --bash)"
 
 _cargo() {
   local cur prev words cword

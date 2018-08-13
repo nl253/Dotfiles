@@ -1,3 +1,5 @@
+# vim:foldmethod=indent:foldlevel=1:foldmarker={,}:shiftwidth=2:tabstop=2:
+
 # ~/.shinit to be sourced by all interactive shells
 
 # This file is not read by bash(1) if ~/.bash_profile or ~/.bash_login exists.
@@ -77,6 +79,10 @@ for i in fgrep egrep grep; do
   eval "alias ${i}='${i} --color=auto'"
 done
 
+if [ -x ~/.cargo/bin/rg ]; then
+  alias rg='rg --pretty --threads $(grep -c ^processor /proc/cpuinfo) --context 1 --max-count 3 --no-search-zip'
+fi
+
 GLOBIGNORE='*.fls:*.out:*.aux:*.toc:*.beam:*.pyo:*.lock:*.tmp:*.bak:*.log:*.o:*.hi:*.class:*.so:tags:node_modules:iml:*cache*:*history*'
 FIGNORE=$GLOBIGNORE
 
@@ -97,7 +103,7 @@ if [ -x /usr/bin/rsync ]; then
   alias copy="rsync --progress --log-file=/tmp/rsync/rsync.log --recursive --backup --backup-dir=/tmp/rsync --human-readable --times --preallocate --partial --partial-dir=/tmp/rsync/partially-copied --suffix=rsync-backup --hard-links --group --perms -xattrs --executability --copy-links --copy-dirlinks --compress --compress-level 9"
 fi
 
-for i in mv rm; do
+for i in cp mv rm; do
   alias $i="$i --verbose"
 done
 
@@ -132,35 +138,48 @@ if [ -x /usr/bin/pacman ]; then
   fi
 fi
 
+
 # Archiving
 [ -x /usr/bin/7z ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 
+# Python
 for i in pip pydoc python; do eval "alias ${i}=${i}3"; done
+alias ranger='ranger 2>/dev/null'
 
 # $EDITOR
-for i in nvim vim vi; do [ -x /usr/bin/$i ] && [ $i = nvim ] && eval "alias vim=${i}" && break; done
+for i in nvim vim vi; do [ -x /usr/bin/$i ] && [ $i != vim ] && eval "alias vim=${i}" && break; done
 
 git_basic_info='$(git --no-pager log --color=never -1 --pretty=format:"%h %cr \"%s\"" 2>/dev/null)'
 git_branch_info='$(git --no-pager branch --color=never --format "%(refname:lstrip=-1)" 2>/dev/null) -> $(git --no-pager config --get remote.origin.url 2>/dev/null)@$(git --no-pager branch --color=never --format="%(upstream:lstrip=3)" 2>/dev/null) ($(git remote 2>/dev/null))'
 git_branch_info="[${git_branch_info}]"
 non_git_prompt='$(basename $0):/$(pwd) :: '
 
-if $(builtin dirs 2>/dev/null 1>/dev/null); then # bash and zsh
+# bash and zsh
+if builtin dirs 1>/dev/null 2>/dev/null; then
 
-  f() (find -readable -regextype posix-extended -name "*${1}*" "${@:2}" -not -regex '.*(node_m|\.cache|\.cargo/registry/|rustup/toolchains/|libreoffice|site-packages|google-chrome|\.vim/(undo|plugged|backup|views|s(essions|wap))).*' -not -regex '.*(b(eam|ack)|log|tmp|/tags|fls|class|(py|s)?o|iml|hi|aux|pdf)$' 2>/dev/null)
-  alias rg='rg --pretty --threads 4 --context 1 --max-count 3 --no-search-zip'
+  f() {
+    local cmd="command find -atime -2 -not -empty -readable -regextype posix-extended"
+    local n=$#
+    if ((n > 0)); then
+      local cmd="$cmd "'\('
+      local cmd="$cmd -iname *${1}*"
+      for pattern in ${@:2}; do
+        local cmd="$cmd -or -iname *${pattern}*"
+      done
+      local cmd="$cmd "'\)'
+    fi
+    eval "$cmd -not -regex '.*(/node_modules/|\\.cache|\\.cargo/registry/|/.rustup/toolchains/|libreoffice|/site-packages/|google-chrome|\\.vim/(undo|plugged|backup|views|s(essions|wap))).*' -not -regex '.*\\.(b(eam|ack)|log|tmp|/tags|fls|class|(py|s)?o|egg(-info)?|iml|hi|aux|pdf)$' 2>/dev/null"
+  }
 
-  if [[ -n "$ZSH_VERSION" ]]; then # zsh
+  # zsh
+  if [[ -n "$ZSH_VERSION" ]]; then
     export PS1="${git_basic_info} "$'\n'"${non_git_prompt}"
   else # bash
     export PS1="${git_basic_info} \n${non_git_prompt}"
-    # export PS1="${git_basic_info} ${git_branch_info} \\n${non_git_prompt}"
   fi
 
 else # dash
-  export PS1="${git_basic_info} ${git_branch_info} ${non_git_prompt}"
+  export PS1="${git_basic_info} ${non_git_prompt}"
 fi
 
 for var in git_basic_info git_branch_info non_git_prompt; do unset -v $var; done
-
-# vim:foldmethod=indent:foldlevel=1:foldmarker={,}:shiftwidth=2:tabstop=2:
