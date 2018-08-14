@@ -1,9 +1,10 @@
-# vim:ft=sh:
-# Can also be sourced by zsh if you autoload bashcompinit, see zshcompsys(1)
+## Completions for bash(1). 
+## 
+## Can also be sourced by zsh if you autoload bashcompinit, see zshcompsys(1).
 
-[[ -x $(type -P pandoc 2>/dev/null) ]] && eval "$(pandoc --bash-completion)"
-[[ -x $(type -P stack 2>/dev/null) ]] && eval "$(stack --bash-completion-script stack)"
-[[ -x $(type -P pip3 2>/dev/null) ]] && eval "$(pip3 completion --bash)"
+[[ -x $(type -P pandoc 2>/dev/null) ]] && eval "$(command pandoc --bash-completion)"
+[[ -x $(type -P stack 2>/dev/null) ]] && eval "$(command stack --bash-completion-script stack)"
+[[ -x $(type -P pip3 2>/dev/null) ]] && eval "$(command pip3 completion --bash)"
 
 _cargo() {
   local cur prev words cword
@@ -168,17 +169,17 @@ _get_names_from_array() {
   echo "${names[@]}"
 }
 
-#Gets the bin names from the manifest file
+# Gets the bin names from the manifest file
 _bin_names() {
   _get_names_from_array "bin"
 }
 
-#Gets the test names from the manifest file
+# Gets the test names from the manifest file
 _test_names() {
   _get_names_from_array "test"
 }
 
-#Gets the bench names from the manifest file
+# Gets the bench names from the manifest file
 _benchmark_names() {
   _get_names_from_array "bench"
 }
@@ -259,6 +260,7 @@ _toolchains() {
 # return 0
 # }
 
+# not using go for now
 # complete -F _go go
 
 _vim() {
@@ -649,4 +651,6 @@ _git-journal() {
 
 complete -F _git-journal -o bashdefault -o default git-journal
 
-[[ $(hostname) =~ raptor ]] && source /etc/bash_completion
+[[ $(command hostname) =~ raptor ]] && source /etc/bash_completion
+
+# vim:ft=sh:

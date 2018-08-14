@@ -13,6 +13,6 @@ endif
 
 call opts#formatprg({'rustfmt': 'rustfmt --color never'})
 
-call tags#lib(99999, 0, '~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src')
-call utils#add_project_files(s:anchors)
-call tags#project(s:anchors, 0)
+" call tags#lib(99999, 0, '~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src')
+" call utils#add_project_files(s:anchors)
+" call tags#project(s:anchors, 0)

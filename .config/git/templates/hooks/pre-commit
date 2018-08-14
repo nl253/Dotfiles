@@ -86,7 +86,7 @@ elif ((no_dirs > max_dirs)); then
     builtin exit 1
   fi
 elif ((no_ftypes > max_ftypes)); then
-  _fmt_heading "Detected more than $max_ftypes file types, namely"
+  _fmt_heading "Detected more than $max_ftypes file types, namely:"
   builtin echo ''
   ftypes
   if ! _get_consent; then
