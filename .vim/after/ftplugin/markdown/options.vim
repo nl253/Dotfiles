@@ -50,8 +50,7 @@ exe 'setl formatprg='.escape(join([
             \ '-f', 'markdown', 
             \ '--ascii',
             \ '--atx-headers',
-            \ '-t', 'markdown-'.join(s:no_md_exts, '-').'+'.join(s:md_exts, '+'),
-            \ '\| sed -E \"s/([-*+]) {2,3}/\\1 /\"'
+            \ '-t', 'markdown-'.join(s:no_md_exts, '-').'+'.join(s:md_exts, '+')
             \ ], ' '), ' |')
 
 " " guess browser

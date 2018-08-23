@@ -3,12 +3,13 @@
 Convert $1 -- a markdown file to an HTML file in /tmp.
 """
 
+# Standard Library
 import os
 import re
 import shutil
 import subprocess
 import sys
-from typing import Iterable, List, Set, Text, Optional, Union
+from typing import Iterable, List, Optional, Set, Text, Union
 
 
 def _up_by_n_dirs(path: Text, n: int) -> Text:
