@@ -1,11 +1,101 @@
+# -*- coding: utf-8 -*-
+# This file is part of ranger, the console file manager.
+# This configuration file is licensed under the same terms as ranger.
+# ===================================================================
+#
+# NOTE: If you copied this file to ~/.config/ranger/commands_full.py,
+# then it will NOT be loaded by ranger, and only serve as a reference.
+#
+# ===================================================================
+# This file contains ranger's commands.
+# It's all in python; lines beginning with # are comments.
+#
+# Note that additional commands are automatically generated from the methods
+# of the class ranger.core.actions.Actions.
+#
+# You can customize commands in the file ~/.config/ranger/commands.py.
+# It has the same syntax as this file.  In fact, you can just copy this
+# file there with `ranger --copy-config=commands' and make your modifications.
+# But make sure you update your configs when you update ranger.
+#
+# ===================================================================
+# Every class defined here which is a subclass of `Command' will be used as a
+# command in ranger.  Several methods are defined to interface with ranger:
+#   execute():   called when the command is executed.
+#   cancel():    called when closing the console.
+#   tab(tabnum): called when <TAB> is pressed.
+#   quick():     called after each keypress.
+#
+# tab() argument tabnum is 1 for <TAB> and -1 for <S-TAB> by default
+#
+# The return values for tab() can be either:
+#   None: There is no tab completion
+#   A string: Change the console to this string
+#   A list/tuple/generator: cycle through every item in it
+#
+# The return value for quick() can be:
+#   False: Nothing happens
+#   True: Execute the command afterwards
+#
+# The return value for execute() and cancel() doesn't matter.
+#
+# ===================================================================
+# Commands have certain attributes and methods that facilitate parsing of
+# the arguments:
+#
+# self.line: The whole line that was written in the console.
+# self.args: A list of all (space-separated) arguments to the command.
+# self.quantifier: If this command was mapped to the key "X" and
+#      the user pressed 6X, self.quantifier will be 6.
+# self.arg(n): The n-th argument, or an empty string if it doesn't exist.
+# self.rest(n): The n-th argument plus everything that followed.  For example,
+#      if the command was "search foo bar a b c", rest(2) will be "bar a b c"
+# self.start(n): Anything before the n-th argument.  For example, if the
+#      command was "search foo bar a b c", start(2) will be "search foo"
+#
+# ===================================================================
+# And this is a little reference for common ranger functions and objects:
+#
+# self.fm: A reference to the "fm" object which contains most information
+#      about ranger.
+# self.fm.notify(string): Print the given string on the screen.
+# self.fm.notify(string, bad=True): Print the given string in RED.
+# self.fm.reload_cwd(): Reload the current working directory.
+# self.fm.thisdir: The current working directory. (A File object.)
+# self.fm.thisfile: The current file. (A File object too.)
+# self.fm.thistab.get_selection(): A list of all selected files.
+# self.fm.execute_console(string): Execute the string as a ranger command.
+# self.fm.open_console(string): Open the console with the given string
+#      already typed in for you.
+# self.fm.move(direction): Moves the cursor in the given direction, which
+#      can be something like down=3, up=5, right=1, left=1, to=6, ...
+#
+# File objects (for example self.fm.thisfile) have these useful attributes and
+# methods:
+#
+# tfile.path: The path to the file.
+# tfile.basename: The base name only.
+# tfile.load_content(): Force a loading of the directories content (which
+#      obviously works with directories only)
+# tfile.is_directory: True/False depending on whether it's a directory.
+#
+# For advanced commands it is unavoidable to dive a bit into the source code
+# of ranger.
+# ===================================================================
+
 from __future__ import absolute_import, division, print_function
 
 # Standard Library
 from subprocess import run, DEVNULL, PIPE, Popen
 
+from typing import Text, List, Tuple, Any, Iterable, Optional, Set, Pattern
+import re
+from glob import iglob
+
 # 3rd Party
 # You always need to import ranger.api.commands here to get the Command class:
 from ranger.api.commands import Command
+
 
 class git(Command):
     """git <subcommand> [<option>, ...] [--] [<file>, ...]
@@ -13,14 +103,46 @@ class git(Command):
     Wrapper for git commands. Good completion.
     """
 
-    non_interactive_commands = {
-        'clone', 'rm', 'mv', 'init', 'clean', 'archive', 'pull', 'fetch',
-        'push', 'add'
+    non_i_cmds: Set[Text] = {
+        'add',
+        'archive',
+        'clean',
+        'clone',
+        'fetch',
+        'init',
+        'mv',
+        'pull',
+        'push',
+        'rm',
     }
 
-    opts = {'--no-pager', '-C'}
+    opts: Set[Text] = {
+        '--bare',
+        '--exec-path',
+        '--git-dir',
+        '--help',
+        '--html-path',
+        '--info-path',
+        '--man-path',
+        '--namespace',
+        '--no-pager',
+        '--no-replace-objects',
+        '--paginate',
+        '--version',
+        '--work-tree',
+        '-C',
+        '-c',
+        '-p',
+    }
 
-    commands = {
+    refs: Set[Text] = {
+        'HEAD',
+        'FETCH_HEAD',
+        'ORIG_HEAD',
+        'master',
+    }
+
+    cmds: Set[Text] = {
         'am',
         'apply',
         'bisect',
@@ -75,29 +197,48 @@ class git(Command):
         'write-tree',
     }
 
+    def _get_subcmd(self) -> Optional[Text]:
+        if not self.args or len(self.args) == 1:
+            return None
+        for word in self.args[1:]:
+            if not word.startswith('-') and (word in git.cmds or word in git.non_i_cmds):
+                return word
+        return None
+
     def execute(self):
-        if not self.args[1:] or self.args[1] not in (
-            git.commands | git.non_interactive_commands | git.opts
-        ):
+
+        if len(self.args) < 2:
             return
 
-        command = ['git'] + (['--paginate'] if not any(
-            map(lambda x: x in git.non_interactive_commands, self.args)
-        ) else []) + self.args[1:]
+        subcmd: Optional[Text] = self._get_subcmd()
 
+        if subcmd is None:
+            return
+
+        elif (subcmd not in git.cmds) and (subcmd not in git.non_i_cmds):
+            return
+
+        is_i: bool = subcmd in git.cmds
+
+        cmd: List[Text] = ['git'] + \
+            (['--paginate'] if is_i else []) + self.args[1:]
+
+        # if any files marked add them to args
         if len(self.fm.thistab.get_selection()) > 1:
-            command.append('--')
-            command.extend((i.path for i in self.fm.thistab.get_selection()))
+            cmd.append('--')
+            cmd.extend((i.path for i in self.fm.thistab.get_selection()))
 
         try:
-            if any(
-                map(lambda x: x in git.non_interactive_commands, self.args)
-            ):
-                import concurrent.futures
-                with concurrent.futures.ThreadPoolExecutor(16) as pool:
-                    pool.submit(Popen, command, stdout=DEVNULL, stderr=DEVNULL)
+            # synchronized
+            if is_i:
+                run(cmd)
+            # async
             else:
-                run(command)
+                from threading import Thread
+                thread: Thread = Thread(target=Popen, name=f"git-{subcmd}", kwargs={
+                    'args': cmd, 'stdout': DEVNULL, 'stderr': DEVNULL})
+                thread.start()
+                self.fm.notify(f'{" ".join(cmd)} spawned')
 
             self.fm.ui.redraw_main_column()
             self.fm.ui.need_redraw = True
@@ -107,31 +248,66 @@ class git(Command):
 
     def tab(self, tabnum):
 
-        if len(self.args) > 2 and self.args[-1].startswith('-'):
-            import re
+        if len(self.args) == 1:
+            return (f"git {cmd}" for cmd in
+                    (git.cmds | git.non_i_cmds | git.opts))
 
-            x = run(['git', '--no-pager', self.args[1], '-h'],
-                    stdout=PIPE,
-                    stderr=DEVNULL).stdout.decode('utf-8')
+        elif len(self.args) > 1:
 
-            pat = re.compile(r'--[a-z][-a-z_]+|-[a-zA-Z]')
+            # complete flags
+            if self.args[-1].startswith('-'):
 
-            return {(" ".join(self.args[:-1]) + ' ' + i).strip()
-                    for i in pat.findall(x)
-                    if len(self.args[1]) <= 2 or self.args[-1] in i
-                    or i in self.args[-1]}
+                subcmd: Optional[Text] = self._get_subcmd()
 
-        else:
-            return {
-                (" ".join(self.args[:-1]) + " " + i).strip()
-                for i in git.commands | git.non_interactive_commands
-                if self.args[-1] in i or i in self.args[-1]
-            } if len(self.args) > 1 else {f"git {i}"
-                                          for i in git.opts}
+                flags: Iterable[Text] = None
+
+                if subcmd:
+                    pat: Pattern[Text] = re.compile(
+                        r'--[a-z][-a-z_]+|-[a-zA-Z]')
+                    s: Text = run(['git', '--no-pager', subcmd, '-h'],
+                                  stdout=PIPE,
+                                  stderr=DEVNULL).stdout.decode('utf-8')
+                    flags = (
+                        (" ".join(self.args[:-1]) +
+                         ' ' + match.group(0)).strip()
+                        for match in pat.finditer(s))
+                else:
+                    flags = (
+                        (" ".join(self.args[:-1]) + " " + opt).strip()
+                        for opt in git.opts)
+
+                if self.args[-1] == '-' or self.args[-1] == '--':
+                    return flags
+
+                else:
+                    return (flag for flag in flags
+                            if (flag in self.args[-1]) or
+                            (self.args[-1] in flag))
+
+            # relative paths
+            elif self.args[-1].startswith('./'):
+                from os.path import join
+                return ((" ".join(self.args[:-1]) + " " + node).strip()
+                        for node in iglob(join(self.args[-1], '*'))
+                        if self.args[-1] in node or node in self.args[-1])
+
+            else:
+                from copy import deepcopy
+
+                pat: Pattern[Text] = re.compile(r'\w+')
+                stdout: Text = run(
+                    ['git', '--no-pager', 'branch'], stdout=PIPE, stderr=DEVNULL).stdout.decode('utf-8')
+                branches: Iterable[Text] = set((match.group(0)
+                                                for match in pat.finditer(stdout)))
+
+                return (
+                    (" ".join(self.args[:-1]) + " " + cmd)
+                    for cmd in (git.cmds | git.non_i_cmds | git.refs | deepcopy(branches) | {f'origin/{ref}' for ref in (git.refs | deepcopy(branches))})
+                    if self.args[-1].startswith(cmd) or cmd.startswith(self.args[-1])
+                )
 
 
 class vim(Command):
-
     """:vim [<option>, ...] [<filename>, ...]
     Open marked files in vim.
 
@@ -139,26 +315,42 @@ class vim(Command):
     """
 
     def execute(self):
-        command = ['vim'] + self.args[1:]
-        command.append('--')
-        command.extend(map(lambda x: x.path, self.fm.thistab.get_selection()))
-        run(command, stdout=DEVNULL)
+        cmd: List[Text] = ['vim'] + self.args[1:]
+        if len(self.fm.thistab.get_selection()) > 1:
+            cmd.append('--')
+            cmd.extend((i.path for i in self.fm.thistab.get_selection()))
+        run(cmd, stdout=DEVNULL)
         self.fm.ui.need_redraw = True
         self.fm.ui.redraw_main_column()
 
     def tab(self, tabnum):
 
-        from os import listdir
+        opts: Set[Text] = {'-t',
+                           '+',
+                           '-S',
+                           '--cmd',
+                           '-d',
+                           '-M',
+                           '-m',
+                           '-o',
+                           '-O',
+                           '-p',
+                           '-R'}
 
-        opts = {
-            '-t', '+', '-S', '--cmd', '-d', '-M', '-m', '-o', '-O', '-p', '-R'
-        }
-
-        return {(" ".join(self.args[:-1]) + " " + i).strip()
-                for i in opts | set(listdir(self.fm.thisdir.path))
-                if self.args[-1] in i or i in self.args[-1]
-                } if len(self.args) > 1 else {f"vim {i}"
-                                              for i in opts}
+        if len(self.args) > 1:
+            if self.args[-1].startswith('-'):
+                return ((" ".join(self.args[:-1]) + " " + opt).strip()
+                        for opt in opts
+                        if self.args[-1] in opt or opt in self.args[-1])
+            else:
+                from os.path import join
+                return ((" ".join(self.args[:-1]) + " " + node).strip()
+                        for node in iglob(join(self.args[-1], '*'))
+                        if self.args[-1] in node or node in self.args[-1])
+        elif len(self.args) == 1:
+            return (f"vim {i}" for i in opts)
+        else:
+            return None
 
 
 class lines_of_code(Command):
@@ -170,20 +362,42 @@ class lines_of_code(Command):
     """
 
     extensions = {
-        'vim', 'sh', 'java', 'c', 'cpp', 'py', 'rs', 'hs', 'pl', 'rb', 'tex',
-        'txt', 'md', 'rst', 'js', 'xml', 'html', 'css', 'php', 'yml', 'ini',
-        'zsh', 'json', 'toml', 'cfg', 'conf'
+        'vim',
+        'sh',
+        'java',
+        'c',
+        'cpp',
+        'py',
+        'rs',
+        'hs',
+        'pl',
+        'rb',
+        'tex',
+        'txt',
+        'md',
+        'rst',
+        'js',
+        'xml',
+        'html',
+        'css',
+        'php',
+        'yml',
+        'ini',
+        'zsh',
+        'json',
+        'toml',
+        'cfg',
+        'conf',
     }
 
     def execute(self):
         import os
-        import glob
 
         cmd = ['wc', '-l']
 
         path = os.path.join(self.fm.thisdir.path, '**')
 
-        files = glob.iglob(path, recursive=True)
+        files = iglob(path, recursive=True)
 
         if self.args[1:]:
             import fnmatch
@@ -193,7 +407,8 @@ class lines_of_code(Command):
 
         files = map(lambda i: os.path.relpath(i, self.fm.thisdir.path), files)
 
-        run(['less'], input=run(cmd + list(files), stdout=PIPE, stderr=DEVNULL).stdout)
+        run(['less'], input=run(cmd + list(files),
+                                stdout=PIPE, stderr=DEVNULL).stdout)
 
     def _pred(self, extension):
         return any({
@@ -229,7 +444,7 @@ class grep(Command):
                     'rg', '--pretty', '--smart-case', '--threads', '16',
                     '--after-context', '1', '--before-context', '1', '--regexp'
                 ] + self.args[1:],
-                        stdout=PIPE)
+                    stdout=PIPE)
 
             # try git grep if in a git repo
             elif exists(
@@ -242,7 +457,7 @@ class grep(Command):
                     '--after-context=3', '--threads=16', '--extended-regexp',
                     '--heading', '--break', '-e'
                 ] + self.args[1:],
-                        stdout=PIPE)
+                    stdout=PIPE)
 
             # fallback on grep
             else:
@@ -281,13 +496,11 @@ class tracked(Command):
 
     def execute(self):
         run(['git', '--paginate', 'ls-files'])
-
         self.fm.ui.need_redraw = True
         self.fm.ui.redraw_main_column()
 
 
 class yarn(Command):
-
     """:yarn <subcommand>
     """
 
@@ -310,7 +523,8 @@ class yarn(Command):
 
             x: dict = json.load(open('./package.json', encoding='utf-8'))
 
-            if x.get('scripts', None) == None: return
+            if x.get('scripts', None) == None:
+                return
 
             return {
                 'yarn run ' + i
@@ -320,15 +534,26 @@ class yarn(Command):
             }
 
         elif len(self.args) == 1 or self.args[1] != 'run':
-
-            return {
-                'yarn ' + i
+            return (
+                f'yarn {i}'
                 for i in (
-                    'install', 'update', 'upgrade', 'remove', 'pack', 'run',
-                    'unlink', 'generate-lock-entry', 'import', 'access', 'add',
-                    'autoclean', 'create', 'exec', 'publish'
+                    'install',
+                    'update',
+                    'upgrade',
+                    'remove',
+                    'pack',
+                    'run',
+                    'unlink',
+                    'generate-lock-entry',
+                    'import',
+                    'access',
+                    'add',
+                    'autoclean',
+                    'create',
+                    'exec',
+                    'publish'
                 ) if self.args[-1] in i or len(self.args) == 1
-            }
+            )
         else:
             return
 
@@ -363,7 +588,6 @@ class mkdir(Command):
 
 
 class touch(Command):
-
     """:touch [<fname>, ...]
 
     Creates files with given names.
@@ -391,7 +615,6 @@ class touch(Command):
 
 
 class make(Command):
-
     """:make <subcommand>
 
     Run make with specified rule.
@@ -403,19 +626,19 @@ class make(Command):
         run(['make'] + self.args[1:], stdout=DEVNULL)
 
     def tab(self, tabnum):
+
         from os.path import isfile
-        import re
 
         if not isfile('Makefile'):
-            self.fm.notify('No Makefile in this dir.', bad=True)
+            self.fm.notify('No Makefile in this dir', bad=True)
             return
 
         with open('./Makefile', mode='r', encoding='utf-8') as f:
-            text = f.read()
+            text: Text = f.read()
 
-        pat = re.compile(r'^(\w+):', flags=re.M)
+        pat: Pattern[Text] = re.compile(r'^(\w+):', flags=re.M)
 
-        return {'make ' + i.group(1) for i in pat.finditer(text)}
+        return (f'make {match.group(1)}' for match in pat.finditer(text))
 
 
 class mvn(Command):
@@ -503,7 +726,7 @@ class edit(Command):
         if not self.arg(1):
             run([os.environ['EDITOR'], self.fm.thisfile.path])
         else:
-            run([os.environ['EDITOR'], self.args[1:]])
+            run([os.environ['EDITOR']] + self.args[1:])
             #  self.fm.edit_file(self.rest(1))
 
     def tab(self, tabnum):
