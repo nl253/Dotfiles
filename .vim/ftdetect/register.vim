@@ -3,6 +3,11 @@ fu! s:register(patterns, filetype)
     exec 'au BufNewFile,BufRead '.join(a:patterns, ',').' if &filetype == "" | setl ft='.a:filetype.' | endif' 
 endf
 
+fu! s:force(patterns, filetype)
+    exec 'au BufNewFile,BufRead '.join(a:patterns, ',').' setl ft='.a:filetype
+endf
+
+
 sil call s:register(['requrements.txt', '.flake8', '.gitstats', '.mypyrc', '.myclirc'], 'cfg')
 sil call s:register(['.ideavimrc'], 'vim')
 sil call s:register(['*.pest'], 'pest')
@@ -13,11 +18,13 @@ sil call s:register(['*.toml'], 'cfg')
 sil call s:register(['*{ignore,conf}*'], 'config')
 sil call s:register(['yarn.lock'], 'yaml')
 sil call s:register(['*.puml'], 'plantuml')
-" sil call s:register(['*.ts'], 'typescript.javascript')
 sil call s:register(['*.ts'], 'typescript')
 sil call s:register(['.tern-{config,project}', '.{markdown,html,es,style}lintrc', '.{babel,jsbeautify}rc' ,'*.lock', '.tsconfig'], 'json')
 sil call s:register(['*.{twig,nunj,njk}'], 'jinja')
 sil call s:register(['*.*css'], 'css')
+" sil call s:register(['*.ts'], 'typescript.javascript')
+
+sil call s:force(['*.v', '*.coq'], 'coq')
 
 " sil call s:register(['git-cmd'], 'git-cmd')
 " sil call s:register(['git-status'], 'git-status')

@@ -1,4 +1,4 @@
-setg rtp^=~/.vim/after path+=~/.vim/plugin errorformat+=%f tabline=%!opts#my_tabline()
+setg rtp^=~/.vim/after errorformat+=%f tabline=%!opts#my_tabline()
 
 call repl#set_repl({
             \ 'haskell'   : 'ghci', 
@@ -60,7 +60,7 @@ call opts#safe_setg([
             \ 'nocompatible',
             \ 'noshowcmd',
             \ 'nostartofline',
-            \ 'path='.join(['./.', './..', './*'] + filter(split($CDPATH, ':'), 'v:val != ""'), ','),
+            \ 'path='.join(['./', '../', './*'], ','),
             \ 'pumheight=12',
             \ 'scrolloff=11',
             \ 'sessionoptions+=resize',

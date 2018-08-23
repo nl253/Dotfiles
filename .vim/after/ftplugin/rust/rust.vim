@@ -1,4 +1,4 @@
-setl foldmethod=manual foldmarker={,}
+setl nowrap foldmethod=manual foldmarker={,}
 
 let g:rust_logging_lvl  = 'debug'
 let s:anchors           = ['Cargo.toml', '.git']

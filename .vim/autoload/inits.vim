@@ -53,16 +53,18 @@ endf
 
 fu! inits#programming()
     let l:anchors = ['.git']
-    call tags#project(l:anchors, 0)
+    "call tags#project(l:anchors, 0)
     call opts#safe_setl(['nospell'])
     call opts#comma_opt('complete', ['.', 'w', 't'])
     let l:ext = expand('%:e')
+    let l:root = utils#proj_root(l:anchors)
     if !empty(l:ext)
         call opts#comma_opt('complete', [
                     \ 'k*.'.l:ext, 
-                    \ 'k'.utils#proj_root(l:anchors).'/*.'.l:ext,
+                    \ 'k'.l:root.'/*.'.l:ext,
                     \ ])
     endif
+    call opts#comma_opt('path', [l:root.'/**4/'])
     call utils#add_project_files(l:anchors)
 endf
 
