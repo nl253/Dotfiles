@@ -6,6 +6,7 @@
 "cargo-graph 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-graph"]
 "cargo-script 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-script", "run-cargo-script"]
 "cargo-tree 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-tree"]
+"cargo-update 1.6.2 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-install-update", "cargo-install-update-config"]
 "cargo-watch 7.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-watch"]
 "clippy 0.0.209 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-clippy", "clippy-driver"]
 "exa 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["exa"]

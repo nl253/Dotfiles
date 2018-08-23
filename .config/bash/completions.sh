@@ -653,4 +653,5 @@ complete -F _git-journal -o bashdefault -o default git-journal
 
 [[ $(command hostname) =~ raptor ]] && source /etc/bash_completion
 
+
 # vim:ft=sh:

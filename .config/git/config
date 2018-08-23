@@ -80,7 +80,7 @@
     contributors = shortlog --summary --numbered  
 
     # list aliases from this file
-    aliases      = "!git config -l | grep alias | sed 's/^alias\\.//g'"
+    aliases      = "!git config -l | grep alias | sed 's/^alias\\.//g' | sed -E 's/=/%%%/' | column --table --output-separator ' ' --separator '%%%'"
 
 [web]
     browser = google-chrome-unstable
@@ -193,5 +193,6 @@
     stash       = off
     status      = off
     tag         = off
+	shortlog = off
 
 # vim: ts=4 sw=4 ft=gitconfig: 

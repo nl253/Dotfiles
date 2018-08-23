@@ -62,42 +62,41 @@ macro_rules! matches {
 }
 endsnippet
 
-snippet ntimes! "ntimes! [rust]" b
-macro_rules! ntimes {
+snippet macro "macro [rust]" b
+macro_rules! my_macro {
     ($n:expr, $e:expr) => {
         for i in 0..$n { $e; }
     };
 }
 endsnippet
 
-snippet assert_all! "assert_all! [rust]" b
-macro_rules! all {
-    ( $pred:expr, $msg:expr, $( $rest:expr ),* ) => ( 
-        let mut passes = 0;
-        $( 
-            assert!($pred($rest), "{} failed to pass the test - {}", $rest, $msg)
-        );*
-        passes += 1;
-    );
+snippet ntimes! "ntimes! [rust]" b
+macro_rules! ntimes {
+    ($n:expr, $e:expr) => {
+        if $n < 0 {
+            while $n < 0 {
+                $e;
+                $n += 1;
+            }
+        } else {
+            for _ in 0..$n {
+                $e;
+            }
+        }
+    };
 }
 endsnippet
 
-snippet ntests! "test! [rust]" b
-macro_rules! test {
-    ($pred:expr, $gen:expr, $n:expr) => {{
-        for i in (0..$n) {
-            let value = $gen();
-            assert!($pred(value), "value {:?} failed to pass the test", value);
-        }
-        println!("successfully passed {} tests", $n);
-    }};
-    ($pred:expr, $gen:expr) => {{
-        for i in (0..10) {
-            let value = $gen();
-            assert!($pred(value), "value {:?} failed to pass the test", value);
-        }
-        println!("successfully passed 10 tests");
-    }};
+snippet assert_all! "assert_all! [rust]" b
+macro_rules! all {
+    ( $pred:expr, $msg:expr, $( $rest:expr ),* ) => (
+        let mut passes = 0;
+        $(
+            assert!($pred($rest), "{} failed to pass the test - {}",
+            $rest, $msg)
+        );*
+        passes += 1;
+    );
 }
 endsnippet
 

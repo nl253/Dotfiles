@@ -330,7 +330,7 @@ you should place your code here."
   (add-hook 'emacs-lisp-mode-hook 'electric-pair-mode)
   (add-hook 'markdown-mode-hook 'abbrev-mode)
   (add-hook 'markdown-mode-hook 'flyspell-mode)
-  
+
   ;; (setq-default abbrev-mode t)
   ;; (setq save-abbrevs t)
   ;; (setq abbrev-file-name "~/.config/emacs/abbrevs.el")
