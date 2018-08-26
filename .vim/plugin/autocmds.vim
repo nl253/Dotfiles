@@ -16,7 +16,7 @@ aug VariousAutoCmds
     au BufRead                       /{etc,usr,opt}/**          call inits#non_home()
     au BufEnter                      term://*                   call inits#term()
     au FileType                      xml,html                   call inits#emmet()
-    au FileType                      c,cpp,python,typescript,javascript,sh,rust
+    au FileType                      c,cpp,python,typescript,javascript,sh,rust 
                                                               \ call inits#lang_server()
 
     " automatically change dir to the file you are editing

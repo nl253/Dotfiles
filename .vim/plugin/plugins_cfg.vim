@@ -40,18 +40,18 @@ let g:snips_github                = 'https://github.com/nl253'
 " ALE:
 let g:ale_enabled                            = 0
 let g:ale_linters = {
-            \ 'rust': ['rls', 'cargo', 'rustfmt'],
+            \ 'rust': ['rls', 'cargo', 'rustfmt'], 
             \ 'python': [
-            \            'flake8',
-            \            'mypy',
-            \            'prospector',
-            \            'pycodestyle',
-            \            'pyflakes',
-            \            'pylint',
-            \            'pyls',
-            \            'pyre',
+            \            'flake8', 
+            \            'mypy', 
+            \            'prospector', 
+            \            'pycodestyle', 
+            \            'pyflakes', 
+            \            'pylint', 
+            \            'pyls', 
+            \            'pyre', 
             \            'vulture',
-            \           ]
+            \           ] 
             \ }
 let g:ale_sign_error                         = 'E'
 let g:ale_sign_warning                       = 'W'
@@ -83,7 +83,7 @@ let g:ale_python_pyls_use_global             = 1
 let g:ale_python_pyre_use_global             = 1
 let g:ale_python_vulture_use_global          = 1
 let g:ale_python_pycodestyle_use_global      = 1
-let g:ale_python_yapf_use_global             = 1
+let g:ale_python_yapf_use_global             = 1 
 
 " Other:
 
