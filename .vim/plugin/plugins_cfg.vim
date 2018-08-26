@@ -38,8 +38,6 @@ let g:snips_email                 = 'norbertlogiewa96@gmail.com'
 let g:snips_github                = 'https://github.com/nl253'
 
 " ALE:
-let g:ale_css_stylelint_use_global           = 1
-let g:ale_typescript_tslint_use_global       = 1
 let g:ale_enabled                            = 0
 let g:ale_linters = {
             \ 'rust': ['rls', 'cargo', 'rustfmt'],
@@ -91,7 +89,8 @@ let g:ale_python_yapf_use_global             = 1
 
 let g:ale_textlint_use_global                = 1
 let g:ale_yaml_swaglint_use_global           = 1
-let g:ale_linters = {'rust': ['rls', 'cargo', 'rustfmt']}
+let g:ale_gitcommit_gitlint_use_global       = 1
+let g:ale_html_htmlhint_use_global           = 1
 
 " Emmet:
 let g:user_emmet_install_global = 0
@@ -191,7 +190,8 @@ let g:LanguageClient_serverCommands = {
             \ 'rust':           ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
             \ 'sh':             ['~/.config/yarn/global/node_modules/.bin/bash-language-server', 'start'],
             \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-            \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
+            \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
+            \ 'typescript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
             \ 'python':         ['~/.local/bin/pyls'],
             \ 'cpp':            ['/usr/bin/clangd'],
             \ 'c':              ['/usr/bin/clangd'],

@@ -10,6 +10,7 @@
 "cargo-watch 7.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-watch"]
 "clippy 0.0.209 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-clippy", "clippy-driver"]
 "exa 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["exa"]
+"fcat 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["fcat"]
 "fd-find 7.0.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["fd"]
 "fselect 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = ["fselect"]
 "git-journal 1.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = ["git-journal"]
