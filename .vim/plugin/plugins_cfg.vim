@@ -41,18 +41,54 @@ let g:snips_github                = 'https://github.com/nl253'
 let g:ale_css_stylelint_use_global           = 1
 let g:ale_typescript_tslint_use_global       = 1
 let g:ale_enabled                            = 0
-let g:ale_typescript_tsserver_use_global     = 1
-let g:ale_typescript_tslint_config_path      = expand('~/.tslint.json')
-let g:ale_gitcommit_gitlint_use_global       = 1
-let g:ale_html_htmlhint_use_global           = 1
+let g:ale_linters = {
+            \ 'rust': ['rls', 'cargo', 'rustfmt'],
+            \ 'python': [
+            \            'flake8',
+            \            'mypy',
+            \            'prospector',
+            \            'pycodestyle',
+            \            'pyflakes',
+            \            'pylint',
+            \            'pyls',
+            \            'pyre',
+            \            'vulture',
+            \           ]
+            \ }
+let g:ale_sign_error                         = 'E'
+let g:ale_sign_warning                       = 'W'
+
+" CSS:
+let g:ale_css_stylelint_use_global           = 1
+
+let g:ale_scss_stylelint_use_global          = 1
+
+" JavaScript:
 let g:ale_javascript_eslint_use_global       = 1
 let g:ale_javascript_flow_use_global         = 0
 let g:ale_javascript_flow_use_home_config    = 1 
 let g:ale_javascript_flow_use_respect_pragma = 1
 let g:ale_javascript_prettier_use_global     = 1
-let g:ale_scss_stylelint_use_global          = 1
-let g:ale_sign_error                         = 'E'
-let g:ale_sign_warning                       = 'W'
+
+let g:ale_typescript_tslint_use_global       = 1
+let g:ale_typescript_tsserver_use_global     = 1
+let g:ale_typescript_tslint_config_path      = expand('~/.tslint.json')
+
+" Python:
+let g:ale_python_autopep8_use_global         = 1
+let g:ale_python_black_use_global            = 1
+let g:ale_python_flake8_use_global           = 1
+let g:ale_python_isort_use_global            = 1
+let g:ale_python_mypy_use_global             = 1
+let g:ale_python_pylint_use_global           = 1
+let g:ale_python_pyls_use_global             = 1
+let g:ale_python_pyre_use_global             = 1
+let g:ale_python_vulture_use_global          = 1
+let g:ale_python_pycodestyle_use_global      = 1
+let g:ale_python_yapf_use_global             = 1
+
+" Other:
+
 let g:ale_textlint_use_global                = 1
 let g:ale_yaml_swaglint_use_global           = 1
 let g:ale_linters = {'rust': ['rls', 'cargo', 'rustfmt']}
