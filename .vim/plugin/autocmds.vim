@@ -3,7 +3,6 @@ exe 'setg statusline='.escape(' %-35.(%f #%n %q%r %w%m%) %=%-14.120(%(%<%{exists
 aug VariousAutoCmds
     au!
 
-
     au BufWritePost,VimEnter,BufRead ~/**/*                     let b:git_status_summary = utils#git_status_summary()
     au BufReadPre                    *.tex                      let b:vimtex_main = 'main.tex'
     au VimEnter                      bash-fc.*                  setf sh

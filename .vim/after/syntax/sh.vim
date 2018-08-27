@@ -1,4 +1,9 @@
 "hi link scriptingLanguage Special
+"
+" runtime! syntax/python.vim
+" syn include @shPython syntax/python.vim
+" syn region shPython start='\vpython(\d(\.\d)?)?\s*\<{2}\s*EOF' end='\v^EOF' contains=@shPython
+
 hi shCmdSubRegion               ctermfg=DarkCyan guifg=Cyan   
 hi shCommandSub                 ctermfg=None                  
 hi shDerefVar       cterm=None  ctermfg=None 
