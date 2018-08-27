@@ -113,5 +113,5 @@ fu! inits#gui()
     exe 'set guifont='.(has('win32') ? 'consolas:h11.4:w5.8:qPROOF' : 'Monospace\ 13')
     call opts#letter_opt_unset('guioptions', ['T', 'm', 'l', 'L', 'b', 'R', 'r', 'g'])
     call opts#letter_opt('guioptions', ['i', 'p', 'h', 'M', 'a'])
-    call opts#letg_all(['no_buffers_menu', 'did_install_default_menus', 'did_install_syntax_menu'])
+    call opts#letg_all('no_buffers_menu', 'did_install_default_menus', 'did_install_syntax_menu')
 endf

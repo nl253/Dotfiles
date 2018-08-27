@@ -227,6 +227,70 @@ fu! utils#hl_word()
     endif
 endf
 
+fu! utils#my_tab_label(n)
+    let buflist = tabpagebuflist(a:n)
+    let winnr = tabpagewinnr(a:n)
+    let bname = bufname(buflist[winnr - 1])
+    return '#'.a:n.' '.substitute(bname, $HOME, '\~', '')
+endf
+
+" Helper function for statusline
+fu! utils#my_tabline()
+    let s = ''
+    for i in range(tabpagenr('$'))
+        " select the highlighting
+        if i + 1 == tabpagenr()
+            let s .= '%#TabLineSel#'
+        else
+            let s .= '%#TabLine#'
+        endif
+
+        " set the tab page number (for mouse clicks)
+        let s .= '%' . (i + 1) . 'T'
+
+        " the label is made by utils#my_tab_label()
+        let s .= ' %{utils#my_tab_label(' . (i + 1) . ')} '
+    endfor
+
+    " after the last tab fill with TabLineFill and reset tab page nr
+    let s .= '%#TabLineFill#%T'
+
+    return s
+endf
+
+" Helper function for statusline
+fu! utils#git_status_summary()
+    " see if in a git repository
+    call system('command git status') 
+
+    " not in a git repository
+    if v:shell_error 
+        return "not in git repo | "
+    endif 
+
+    " last commit message 
+    let l:msg = systemlist("command git --no-pager log --pretty=format:\"%h %ce %cr '%s'\" -1")[0] . " "
+
+    " modified since last commit
+    if system("command git ls-files -m") =~# expand("%:t")
+        let l:msg .= "[M]"
+
+    " not modified
+    elseif system("command git ls-files") =~# expand("%:t")
+        let l:msg .= ""
+
+    " not added 
+    elseif system("git ls-files --others --exclude-standard") =~#  expand('%:p')
+        let l:msg .= "[I]"
+
+    " ignored
+    else 
+        let l:msg .= "[?]"
+    endif
+
+    return l:msg.' | '
+endf
+
 fu! utils#is_stale(file, min_limit)
     return !filereadable(a:file) || ((localtime() - getftime(a:file)) > (60 * a:min_limit))
 endf

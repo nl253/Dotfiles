@@ -1,20 +1,29 @@
 {
   "compilerOptions": {
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
     "allowJS": true,
-    "lib": ["dom", "es5", "es6", "es7", "esnext"],
-    "types": ["node", "express"],
+    "lib": [
+      "dom",
+      "es5",
+      "es6",
+      "es7",
+      "esnext"
+    ],
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "sourceMap": true,
     "typeRoots": [
       "node_modules/@types"
+    ],
+    "types": [
+      "node",
+      "express"
     ]
   },
-  "include": [
-    "src/**/*"
-  ],
   "exclude": [
     "node_modules",
     "**/*.spec.ts"
+  ],
+  "include": [
+    "src/**/*"
   ]
 }

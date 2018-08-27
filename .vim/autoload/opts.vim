@@ -1,64 +1,3 @@
-" TODO dicts
-" TODO comma opts
-" TODO letter opts
-
-" Helper function for statusline
-fu! opts#my_tabline()
-    let s = ''
-    for i in range(tabpagenr('$'))
-        " select the highlighting
-        if i + 1 == tabpagenr()
-            let s .= '%#TabLineSel#'
-        else
-            let s .= '%#TabLine#'
-        endif
-
-        " set the tab page number (for mouse clicks)
-        let s .= '%' . (i + 1) . 'T'
-
-        " the label is made by opts#my_tab_label()
-        let s .= ' %{opts#my_tab_label(' . (i + 1) . ')} '
-    endfor
-
-    " after the last tab fill with TabLineFill and reset tab page nr
-    let s .= '%#TabLineFill#%T'
-
-    return s
-endf
-
-" Helper function for statusline
-fu! opts#git_status_summary()
-    " see if in a git repository
-    call system('command git status') 
-
-    " not in a git repository
-    if v:shell_error 
-        return "not in git repo | "
-    endif 
-
-    " last commit message 
-    let l:msg = systemlist("command git --no-pager log --pretty=format:\"%h %ce %cr '%s'\" -1")[0] . " "
-
-    " modified since last commit
-    if system("command git ls-files -m") =~# expand("%:t")
-        let l:msg .= "[M]"
-
-    " not modified
-    elseif system("command git ls-files") =~# expand("%:t")
-        let l:msg .= ""
-
-    " not added 
-    elseif system("git ls-files --others --exclude-standard") =~#  expand('%:p')
-        let l:msg .= "[I]"
-
-    " ignored
-    else 
-        let l:msg .= "[?]"
-    endif
-
-    return l:msg.' | '
-endf
-
 fu! opts#letg_default(var_name, val)
     if !exists('g:'.a:var_name)
         exe 'let g:'.a:var_name.' = '.string(a:val)
@@ -100,8 +39,9 @@ fu! opts#letter_opt_unset(opt_name, extra_flags)
     endfor
 endf
 
-fu! opts#letg_all(opts)
-    for i in filter(a:opts, '!exists("g:".v:val)')
+" @param {[string]} vargs
+fu! opts#letg_all(vars)
+    for i in filter(a:vars, '!exists("g:".v:val)')
         exec 'let g:'.i.' = 1'
     endfor
 endf
@@ -125,13 +65,6 @@ fu! opts#append_to_path(paths)
             let $PATH = l:dir.':'.$PATH
         endif
     endfor
-endf
-
-fu! opts#my_tab_label(n)
-    let buflist = tabpagebuflist(a:n)
-    let winnr = tabpagewinnr(a:n)
-    let bname = bufname(buflist[winnr - 1])
-    return '#'.a:n.' '.substitute(bname, $HOME, '\~', '')
 endf
 
 fu! opts#safe_setl(opts)
@@ -215,21 +148,6 @@ fu! opts#completion()
     call opts#comma_opt('complete', ['.', 'k', 't'])
 
     let l:ext = expand('%:e')
-endf
-
-" Intialise &tags for all filetypes
-fu! opts#tags()
-    let l:tags = split(&tags, ',')
-
-    let l:rec_tag_lookup = l:path.'/**3/tags'
-
-    if index(l:tags, l:rec_tag_lookup) < 0
-        exe 'setl tags+='.l:rec_tag_lookup
-    endif
-
-    if !filereadable(l:path.'/tags')
-        call system("cd ".l:path." && ctags -R")
-    endif
 endf
 
 " { string binary : string cmd to run }

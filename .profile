@@ -1,6 +1,7 @@
 # ~/.profile sourced by all login shells
 
 export ENV=$HOME/.config/sh/init.sh
+export ELINKS_CONFDIR=$HOME/.config/elinks
 # export BASH_ENV=$HOME/.config/bash/.bashrc
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8

@@ -1,37 +1,51 @@
 #!/usr/bin/env bash
 
-# Dependencies
-# ---------------------------
-# - 7z
-# - GNU coreutils
-# - astyle or clang
-# - atool
-# - bsdtar
-# - elinks
-# - exiftool
-# - gofmt
-# - gofmt (part of golang)
-# - hindent
-# - img2txt
-# - jq
-# - js-beautify
-# - js-beautify (includes css-beautify and html-beautify)
-# - jupyter (python package)
-# - pandoc
-# - pdftotext
-# - perl
-# - shfmt
-# - source-highlight
-# - tar
-# - tree
-# - unrar
-
-# If the option `use_preview_script` is set to `true`,
-# then this script will be called and its output will be displayed in ranger.
-# ANSI color codes are supported.
-# STDIN is disabled, so interactive scripts won't work properly
-
+# Dependencies:
+# ----------------------------------------------------------------------------
+#
+# * Very likely to have:
+# 
+# => cat
+# => column
+# => grep
+# => head
+# => ls OR tree
+# => man
+# => tar
+# 
+# * Might need to install:
+# 
+# ** Distro package manager (yum, pacman, apt etc.):
+# 
+# => 7z
+# => atool OR bsdtar
+# => elinks
+# => exiftool
+# => file
+# => jq
+# => pandoc
+# => source-highlight
+# => unrar
+# => pdftotext
+# 
+# ** NPM / Yarn:
+# 
+# => js-beautify
+# => jupyter
+# 
+# TO CHECK DEPS RUN IN BASH:
+# 
+# for i in $(builtin command grep -Eo 'command builtin \w+' < $THIS_DIR/scope.sh | builtin command grep -Eo '\w+$'); do [[ ! -x $(builtin command type -P $i) ]] && echo "$i not installed"; done
+# ----------------------------------------------------------------------------
+# - If the option `use_preview_script` is set to `true`,
+#   then this script will be called and its output will be displayed in ranger.
+#
+# - ANSI color codes are supported.
+#
+# - STDIN is disabled, so interactive scripts won't work properly.
+#
 # Meanings of exit codes:
+#
 # code | meaning    | action of ranger
 # -----+------------+-------------------------------------------
 # 0    | success    | Display stdout as preview
@@ -42,404 +56,387 @@
 # 5    | fix both   | Don't ever reload
 # 6    | image      | Display the image  "${IMAGE_CACHE_PATH}"  points to as an image preview
 # 7    | image      | Display the file directly as an image
+# ----------------------------------------------------------------------------
 
 # Script arguments
-FILE_PATH="${1}"        # Full path of the highlighted file
-PV_WIDTH="${2}"         # Width of the preview pane (number of fitting characters)
-PV_HEIGHT="${3}"        # Height of the preview pane (number of fitting characters)
-IMAGE_CACHE_PATH="${4}" # Full path that should be used to cache image preview
-PV_IMAGE_ENABLED="${5}" # 'True' if image previews are enabled, 'False' otherwise.
+FILE_PATH="${1}"
+# Width of the preview pane (number of fitting characters)
+PV_WIDTH="${2}"
+# Height of the preview pane (number of fitting characters)
+PV_HEIGHT="${3}"
+# Full path that should be used to cache image preview
+IMAGE_CACHE_PATH="${4}"
+# 'True' if image previews are enabled, 'False' otherwise.
+PV_IMAGE_ENABLED="${5}"
 FILE_NAME=$(basename "$FILE_PATH")
-EXTENSION="${FILE_NAME#*.}"
+FULL_EXTENSION="${FILE_NAME#*.}"
+EXTENSION="${FILE_NAME##*.}"
 
-head() {
-  if command head -n $PV_HEIGHT "$FILE_PATH"; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-pandoc() {
-  if command pandoc --self-contained --html-q-tags --ascii --mathml --columns=${PV_WIDTH} --highlight-style=breezedark -t html5 $@; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-elinks() {
-  command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width ${PV_WIDTH} </dev/stdin
-}
+head() { builtin command head -n $PV_HEIGHT $FILE_PATH; }
+elinks() { builtin command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width ${PV_WIDTH} </dev/stdin; }
 
 preview-stdout() {
-  if command source-highlight -s $1 </dev/stdin | elinks; then
-    return 0
+  if builtin command source-highlight -s $1 </dev/stdin | elinks; then
+    builtin return 0
+  elif builtin command cat </dev/stdin; then
+    builtin return 0
   else
-    return 1
+    builtin return 1
   fi
 }
 
 preview() {
   if head | preview-stdout $1; then
-    return 0
+    builtin return 0
   elif head; then
-    return 0
+    builtin return 0
   else
-    return 1
+    builtin return 1
   fi
-}
-
-report() {
-  cat <<EOF
-$(ls -l "$FILE_PATH")
-
-MIME:            $(command file --dereference --brief --mime-type -- "$FILE_PATH")
-
-EOF
-  exit 5
 }
 
 ## $1 from language
 ## this function always reads from stdin if $1 arg is set
-pandoc_preview() {
-  if [[ -n $1 ]] && pandoc -f $1 </dev/stdin | elinks; then
-    return 0
-  elif pandoc "$FILE_PATH" | elinks; then
-    return 0
+pandoc() {
+  if builtin command pandoc --self-contained --html-q-tags --ascii --mathml --columns=${PV_WIDTH} --highlight-style=breezedark -t html5 -f $1 </dev/stdin | elinks; then
+    builtin return 0
   else
-    return 1
+    builtin return 1
   fi
 }
 
-preview_img() {
-  if [[ -x $(command which img2txt 2>/dev/null) ]]; then
-    img2txt --gamma=0.6 --width="$PV_WIDTH" -- "$FILE_PATH"
-  fi
-}
+from_shebang() {
+  builtin local fst_ln=$(builtin command head -n 1 "$FILE_PATH")
 
-## $1 c | cpp | java
-preview_cfamily() {
-  # local filetype=$(command pygmentize -N "$FILE_PATH")
-  if [[ -x $(command which astyle 2>/dev/null) ]]; then
-    command astyle \
-      --max-code-length="$PV_WIDTH" \
-      --style=google \
-      --remove-braces \
-      --indent=spaces \
-      --pad-comma \
-      --pad-oper \
-      --pad-header \
-      --mode="$1" <"$FILE_PATH" | preview-stdout $1
-  elif [[ -x $(command which clang 2>/dev/null) ]]; then
-    command clang-format -style=Google <"$FILE_PATH" | preview-stdout $1
-  else
-    preview $1
+  if [[ $fst_ln =~ ^#! ]]; then
+    builtin local prog=$(builtin echo $fst_ln | builtin command grep -Eo '\w+$')
+    if preview $prog 2>/dev/null; then
+      builtin return 0
+    fi
   fi
-}
 
-guess_shebang() {
-  # guess from shebang
-  if [[ $(eval "command head -n 1 $FILE_PATH") =~ '#!' ]]; then
-    local executable=$(command head -n 1 "$FILE_PATH" | grep -Eo '\w+$')
-    preview $executable
-    exit 5
-  fi
-  ((RANGER_LEVEL < 1)) && exit 2 || preview
-}
-
-preview_pdf() {
-  command pdftotext -nopgbrk -f 1 -l 3 "$FILE_PATH" -
-  exit 5
+  builtin return 1
 }
 
 handle_extension() {
 
   case "$EXTENSION" in
 
-    java | cpp | c)
-      if preview_cfamily $EXTENSION; then
-        exit 0
-      else
-        exit 2
-      fi
-      ;;
-
-    h | hpp | cc | gv | dot)
-      if preview_cfamily c; then
-        exit 0
-      else
-        exit 2
-      fi
-      ;;
-
     *html)
-      if elinks <"$FILE_PATH"; then
-        exit 0
+      if elinks <"$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      elif preview html 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
-      fi
-      ;;
-
-    json)
-      if jq -C <"$FILE_PATH"; then
-        exit 0
-      elif js-beautify <"$FILE_PATH" | preview-stdout json; then
-        exit 0
-      else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
     md | m*down | Rmd)
-      if head | pandoc_preview markdown+line_blocks+gfm_auto_identifiers+compact_definition_lists+fancy_lists+all_symbols_escapable+superscript+subscript+implicit_figures+footnotes+four_space_rule-emoji; then
-        exit 0
+      if head | pandoc markdown+line_blocks+gfm_auto_identifiers+compact_definition_lists+fancy_lists+all_symbols_escapable+superscript+subscript+implicit_figures+footnotes+four_space_rule-emoji 2>/dev/null; then
+        builtin exit 0
+      elif preview markdown 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
-    ipynb)
-      if command jupyter nbconvert --stdout --to html "$FILE_PATH" | elinks; then
-        exit 0
-      elif head | js-beautify; then
-        exit 0
+    [jt]s)
+      if head | builtin command js-beautify | preview-stdout javascript 2>/dev/null; then
+        builtin exit 0
+      elif head | preview-stdout javascript 2>/dev/null; then
+        builtin exit 0
+      elif preview javascript 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
-      fi
-      ;;
-
-    csv)
-      if head | column --separator ',' --table; then
-        exit 0
-      elif preview; then
-        exit 0
-      else
-        exit 2
-      fi
-      ;;
-
-    js | ts)
-      if head | js-beautify; then
-        exit 0
-      else
-        exit 2
-      fi
-      ;;
-
-    sh | .bash* | .zsh* | .profile)
-      if shfmt -s -i 2 -ci <"$FILE_PATH" | preview-stdout shell; then
-        exit 0
-      else
-        exit 2
-      fi
-      ;;
-
-    org)
-      if head | pandoc_preview org; then
-        exit 0
-      else
-        exit 2
-      fi
-      ;;
-
-    css)
-      if head | css-beautify | preview-stdout css; then
-        exit 0
-      else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
     xml)
-      if head | html-beautify | preview-stdout xml; then
-        exit 0
+      if head | builtin command html-beautify | preview-stdout xml 2>/dev/null; then
+        builtin exit 0
+      elif head | preview-stdout xml 2>/dev/null; then
+        builtin exit 0
+      elif preview xml 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
+      fi
+      ;;
+
+    json)
+      if builtin command jq -C <"$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      elif builtin command js-beautify <"$FILE_PATH" | preview-stdout json 2>/dev/null; then
+        builtin exit 0
+      elif preview json 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
+    sh | bash* | zsh*)
+      if shfmt -s -i 2 -ci <"$FILE_PATH" | preview-stdout sh 2>/dev/null; then
+        builtin exit 0
+      elif preview sh 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
+    css)
+      if head | builtin command css-beautify | preview-stdout css 2>/dev/null; then
+        builtin exit 0
+      elif head | preview-stdout css 2>/dev/null; then
+        builtin exit 0
+      elif preview css 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
       fi
       ;;
 
     pdf)
-      if preview_pdf; then
-        exit 0
+      if builtin command pdftotext -nopgbrk -f 1 -l 3 "$FILE_PATH" - | builtin command grep -Eo '^.{4,}$'; then
+        builtin exit 0
+      elif builtin command pdftotext -nopgbrk -f 1 -l 3 "$FILE_PATH" -; then
+        builtin exit 0
       else
-        exit 1
+        builtin exit 1
       fi
       ;;
 
-    puml | dot)
-      if preview java; then
-        exit 0
+    csv)
+      if head | builtin command column --separator ',' --table 2>/dev/null; then
+        builtin exit 0
+      elif preview 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
-    go)
-      if ([[ -x $(command which gofmt 2>/dev/null) ]] && command gofmt -s || cat) <"$FILE_PATH" | preview-stdout go; then
-        exit 0
+    h | hpp | cc)
+      if preview c 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
-    hs)
-      if ([[ -x $(command which hindent 2>/dev/null) ]] && command hindent --line-length $PV_WIDTH --indent-size 4 --sort-imports || cat) <"$FILE_PATH" | preview-stdout haskell; then
-        exit 0
+    org)
+      if head | pandoc org 2>/dev/null; then
+        builtin exit 0
+      elif preview org 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
     rst)
-      if head | pandoc_preview rst; then
-        exit 0
+      if head | pandoc rst 2>/dev/null; then
+        builtin exit 0
+      elif preview rst 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
+      fi
+      ;;
+
+    ipynb)
+      if builtin command jupyter nbconvert --stdout --to html "$FILE_PATH" | elinks 2>/dev/null; then
+        builtin exit 0
+      elif head | builtin command js-beautify | preview-stdout json 2>/dev/null; then
+        builtin exit 0
+      elif head | builtin command js-beautify 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
       fi
       ;;
 
     docx)
-      if pandoc_preview docx <"$FILE_PATH"; then
-        exit 0
+      if pandoc docx <"$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
       else
-        exit 1
+        builtin exit 1
       fi
       ;;
 
     tex | lhs)
-      if pandoc_preview latex <"$FILE_PATH"; then
-        exit 0
+      if pandoc latex <"$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      elif preview tex 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
     conf | cnf | cfg | toml | desktop)
-      if preview ini; then
-        exit 0
+      if preview ini 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
       fi
       ;;
 
-    ?.gz | 1)
-      if MANWIDTH=$PV_WIDTH man -- "$FILE_PATH"; then
-        exit 0
+    1)
+      if MANWIDTH=$PV_WIDTH builtin command man -- "$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
       else
-        exit 1
+        builtin exit 1
+      fi
+      ;;
+
+    puml | dot | gv)
+      if preview java 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
+    tsv)
+      if head | builtin command column --separator "\t" --table 2>/dev/null; then
+        builtin exit 0
+      elif preview 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
       fi
       ;;
 
     *)
       if [[ $EXTENSION == '' ]]; then
-        return 0
-      elif [[ $(source-highlight --lang-list | grep -Eo '^\w+') =~ $EXTENSION ]] && preview "$EXTENSION"; then
-        exit 0
+        builtin return 1
+      elif [[ $(builtin command source-highlight --lang-list | builtin command grep -Eo '^\w+') =~ $EXTENSION ]]; then
+        if preview "$EXTENSION" 2>/dev/null; then
+          builtin exit 0
+        else
+          builtin exit 1
+        fi
       else
-        return 1
+        builtin return 1
       fi
       ;;
 
   esac
 }
 
+handle_full_extension() {
+  case "$FULL_EXTENSION" in
+    ?.gz)
+      if MANWIDTH=$PV_WIDTH builtin command man -- "$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 1
+      fi
+      ;;
+  esac
+}
+
 handle_mime() {
 
-  case $(command file --dereference --brief --mime-type -- "$FILE_PATH") in
+  case $(builtin command file --dereference --brief --mime-type -- "$FILE_PATH") in
 
     # Text files
     text/* | application/*xml | application/*script)
 
       # check if no extension
-      if [[ $EXTENSION == $FILE_NAME ]]; then
-        # if so look at the first line for shebang
-        guess_shebang && exit 0
+      # if so look at the first line for shebang
+      if [[ $FULL_EXTENSION == $FILE_NAME ]] && from_shebang 2>/dev/null; then
+        builtin exit 0
       else
-        exit 2
+        builtin exit 2
       fi
-      ((RANGER_LEVEL < 2)) && exit 2 || preview
       ;;
 
     inode/directory)
-      command tree -l -a --prune -L 4 -F --sort=mtime "$FILE_PATH" && exit 0
-      command ls --color=always "$FILE_PATH" -pNsh1goG && exit 0
-      exit 1
+      if builtin command tree -l -a --prune -L 4 -F --sort=mtime "$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      elif builtin command ls --color=always -pNsh1goG "$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 1
+      fi
       ;;
 
     # Image
     image/*)
-      if ((RANGER_LEVEL < 1)); then
-        preview_img
-      fi
-      exit 7
+      builtin exit 7
       ;;
   esac
 }
 
 handle_archive() {
 
-  # echo -e "archive preview\n________________\n"
-
-  case "$EXTENSION" in
-
-    zip | gz | tar | jar | 7z | bz2)
-      # Avoid password prompt by providing empty password
-      command 7z l -p -- "$FILE_PATH" && exit 5
-      exit 1
-      ;;
-
-    bz | lz | xz)
-      command atool --list -- "$FILE_PATH" && exit 5
-      command bsdtar --list --file "$FILE_PATH" && exit 5
-      exit 1
-      ;;
+  case "$FULL_EXTENSION" in
 
     tar.gz)
-      command tar ztf "$FILE_PATH" && exit 5
-      exit 1
+      if builtin command tar ztf "$FILE_PATH" 2>/dev/null; then
+        builtin exit 5
+      else
+        builtin exit 1
+      fi
       ;;
 
     tar.xz)
-      command tar Jtf "$FILE_PATH" && exit 5
-      exit 1
+      if builtin command tar Jtf "$FILE_PATH" 2>/dev/null; then
+        builtin exit 5
+      else
+        builtin exit 1
+      fi
       ;;
 
     tar.bz2)
-      command tar jtf "$FILE_PATH" && exit 5
-      exit 1
+      if builtin command tar jtf "$FILE_PATH" 2>/dev/null; then
+        builtin exit 5
+      else
+        builtin exit 1
+      fi
+      ;;
+
+    zip | gz | tar | jar | 7z | bz2)
+      # Avoid password prompt by providing empty password
+      if builtin command 7z l -p -- "$FILE_PATH" 2>/dev/null; then
+        builtin exit 5
+      else
+        builtin exit 1
+      fi
+      ;;
+
+    [blx]z)
+      if builtin command atool --list -- "$FILE_PATH" 2>/dev/null; then
+        builtin exit 5
+      elif builtin command bsdtar --list --file "$FILE_PATH" 2>/dev/null; then
+        builtin exit 5
+      else
+        builtin exit 1
+      fi
       ;;
 
     rar)
-      [[ -x $(command unrar 7z 2>/dev/null) ]] && command unrar lt -p- -- "${FILE_PATH}" && exit 5
-      exit 1
+      if builtin command unrar lt -p- -- "${FILE_PATH}" 2>/dev/null; then
+        builtin exit 5
+      else
+        builtin exit 1
+      fi
       ;;
-
   esac
-}
-
-handle_fallback() {
-
-  cat <<EOF
-
-$(report)
-
-======================================================================
-
-$(exiftool "$FILE_PATH")
-
-======================================================================
-
-$(command file --dereference --brief -- "$FILE_PATH" | $fmt)
-
-EOF
-  exit 5
 }
 
 handle_extension
 handle_mime
 handle_archive
-handle_fallback
+handle_full_extension
 
-exit 1
+builtin command exiftool "$FILE_PATH" 2>/dev/null
+builtin command file --dereference --brief -- "$FILE_PATH" 2>/dev/null
+builtin exit 5
 # vim: nowrap

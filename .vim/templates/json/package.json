@@ -10,17 +10,13 @@
     "webpack": "node_modules/.bin/webpack",
     "files": "find -regextype posix-extended -not -path '**node_modules**' -regex '.*\.([tj]sx?|css|html|md)$'",
     "prettify": "node_modules/.bin/prettier --write $(yarn run files)",
-    "lint": "node_modules/.bin/eslint $(yarn run files)",
+    "lint": "node_modules/.bin/eslint $(yarn run files)"
   },
   "repository": {
     "type": "git",
     "url": "{{ repo }}"
   },
-  "keywords": [{
-    {
-      keywords
-    }
-  }],
+  "keywords": ["{{ keywords }}"],
   "author": "{{ author }}",
   "license": "CC0-1.0",
   "bugs": {

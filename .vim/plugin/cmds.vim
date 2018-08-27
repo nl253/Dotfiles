@@ -5,6 +5,8 @@ com! Scripts       e ~/.vim/plugin/autocmds.vim
 com! ToDo          call utils#toggle_todo()
 com! BufferWipeout call utils#buffer_wipeout()
 
+com! GMail call mail#send()
+
 com! Define   !(wn <cword> -over) | fmt
 com! Synonym  !(wn <cword> -synsn || wn <cword> -synsv || wn <cword> -synsa || wn <cword> -synsr) | fmt
 com! Hypernym !(wn <cword> -hypen || wn <cword> -hypev || wn <cword> -hypea || wn <cword> -hyper) | fmt

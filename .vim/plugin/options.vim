@@ -1,11 +1,13 @@
-setg rtp^=~/.vim/after errorformat+=%f tabline=%!opts#my_tabline()
+" This file contains options that need to be set globally (ie only once on Vim startup).
+setg errorformat+=%f tabline=%!utils#my_tabline()
 
 call repl#set_repl({
             \ 'haskell'   : 'ghci', 
-            \ 'python'    : 'ipython', 
+            \ 'python'    : 'ptipython', 
             \ 'erlang'    : 'erl', 
             \ 'java'      : 'jshell', 
             \ 'javascript': 'node', 
+            \ 'css'       : 'node', 
             \ 'html'      : 'node',
             \ })
 
@@ -20,7 +22,13 @@ let g:template_vars = {
 call opts#set_if_executable('grepprg', {
             \ 'rg':   'rg --hidden --maxdepth=5 --color=never --threads=4 --vimgrep $*', 
             \ },  1) 
-" \ 'git': 'git --no-pager grep --max-depth=5 --extended-regexp --threads=4 --color=never --line-number $*'
+" 'git': 'git --no-pager grep --max-depth=5 --extended-regexp --threads=4 --color=never --line-number $*'
+
+call opts#set_if_executable('shell', {
+            \ 'dash': 'dash',
+            \ 'bash': 'bash',
+            \ 'zsh':  'zsh',
+            \ }, 1)
 
 call opts#dict()
 call opts#thesaurus()
@@ -183,9 +191,13 @@ let s:ignore_phrases = map([
             \ '%'
             \ ], "'**'.v:val.'**'")
 
-call opts#wildignore(s:ignore_paths + s:ignore_dirs + s:ignore_exts + s:ignore_exact + s:ignore_phrases)
+call opts#wildignore(
+            \ s:ignore_paths + 
+            \ s:ignore_dirs  + 
+            \ s:ignore_exts  + 
+            \ s:ignore_exact + 
+            \ s:ignore_phrases)
 
-exe 'setg shell='.system('/usr/bin/env which '.(executable("dash") ? "dash" : "bash"))
 
 if has('gui') | call opts#gui() | endif
 
@@ -194,8 +206,9 @@ if !exists('$MYVIMRC') && exists(expand("~/.vimrc"))
 endif
 
 " Auto-Enable built-in 'Man' plugin
-if !exists(":Man") && filereadable($VIMRUNTIME.'/ftplugin/man.vim') 
-    execute 'source '.$VIMRUNTIME.'/ftplugin/man.vim'
+if !exists(":Man") && filereadable($VIMRUNTIME.'/plugin/man.vim') 
+    exe 'so '.$VIMRUNTIME.'/plugin/man.vim'
+    exe 'so '.$VIMRUNTIME.'/ftplugin/man.vim'
 endif
 
 if has('nvim') 

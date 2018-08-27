@@ -4,7 +4,7 @@ aug VariousAutoCmds
     au!
 
 
-    au BufWritePost,VimEnter,BufRead ~/**/*                     let b:git_status_summary = opts#git_status_summary()
+    au BufWritePost,VimEnter,BufRead ~/**/*                     let b:git_status_summary = utils#git_status_summary()
     au BufReadPre                    *.tex                      let b:vimtex_main = 'main.tex'
     au VimEnter                      bash-fc.*                  setf sh
     au WinEnter                      ??*                        setl winwidth=20

@@ -93,8 +93,6 @@ alias show-path='echo -e ${PATH//:/\\n} | grep -E "^.{3,}$"'
 for i in df du; do alias $i="$i --human-readable --si --total"; done
 alias info='info --vi-keys'
 alias logout="pkill -KILL -u \$USER"
-[ -x $(command which ipython 2>/dev/null) ] && alias ipython="ipython3 --pylab=qt5 --gui=qt5"
-[ -x $(command which ipython3 2>/dev/null) ] && alias ipython3="ipython3 --pylab=qt5 --gui=qt5"
 [ -x /usr/bin/acpi ] && alias battery="acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 
@@ -107,17 +105,15 @@ for i in cp mv rm; do
   alias $i="$i --verbose"
 done
 
-alias show-term-capabilities="infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
+alias show-term-capabilities="command infocmp -1 | command sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 alias bat='bat --theme TwoDark --style plain'
 
 [ -x /usr/bin/libreoffice ] && alias libreoffice="libreoffice --norestore"
 [ -x /usr/bin/tmux ] && alias tmux='tmux -2'
 
 # Networking, Servers
-if [ -x $(command which python3 2>/dev/null) ]; then
-  alias http-server-python="python3 -m http.server"
-  alias pip-update-packages="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
-fi
+alias http-server-python="python3 -m http.server"
+alias pip-update-packages="pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
 # NOTE the php server requires index.php in the root dir
 [ -x $(command which php 2>/dev/null) ] && alias http-server-php="php -S 0.0.0.0:5000"
@@ -138,12 +134,11 @@ if [ -x /usr/bin/pacman ]; then
   fi
 fi
 
-
 # Archiving
 [ -x /usr/bin/7z ] && alias 7z='7z -mx=9 -mmt8 -bt -bb1'
 
 # Python
-for i in pip pydoc python; do eval "alias ${i}=${i}3"; done
+for i in pip pydoc python ptpython ptipython ipython; do eval "alias ${i}=${i}3"; done
 alias ranger='ranger 2>/dev/null'
 
 # $EDITOR

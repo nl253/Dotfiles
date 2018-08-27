@@ -1,18 +1,19 @@
-let s:tw = (&textwidth ==? '' ? 80 : &textwidth)
-let s:sw = (&shiftwidth ==? '' ? 2 : &shiftwidth)
-
 compiler ghc
 
-" https://wiki.haskell.org/Vim
+" From <https://wiki.haskell.org/Vim>
 setl foldmarker={-,-} tabstop=4 expandtab shiftround expandtab 
 setl softtabstop=2 shiftwidth=2 foldmethod=indent indentkeys-=<space>
 setl cinwords=where,let,in,do,of
+
+let s:anchors = ['.stack-work', '.git']
+let s:tw = (&textwidth  ==? '' ? 80 : &textwidth)
+let s:sw = (&shiftwidth ==? '' ?  2 : &shiftwidth)
 
 if exists('*HoogleOmniFunc')
     setl omnifunc=HoogleOmniFunc 
     nnoremap <buffer> K :silent call HoogleLookup()<CR>
 else
-    " fallback (still pretty good)
+    " failed to find hoogle -> use fallback (still pretty good)
     setl omnifunc=syntaxcomplete#Complete
 endif
 
@@ -37,12 +38,16 @@ elseif executable('runhaskell') && (getline(1) =~# '\v.*/bin/env.*stack\s*$')
     " + has GHC 
     " => compile and run with ghc
 elseif executable('ghc')
-    let &makeprg = 'X=$(mktemp -d) ; stack ghc -- -o $X/%:t:r % && $X/%:t:r'
+    exe 'setl makeprg='.escape('__X=$(mktemp -d) && stack ghc -- -o $__X/%:t:r % && $__X/%:t:r', ' ')
 endif
 
-for s:i in filter(['types', 'debug', 'boolean', 'delimiters', 'more_types'], '!exists("g:hs_highlight_".v:val)')
-    exec 'let g:hs_highlight_'.s:i.' = 1'
-endfor
+call opts#letg_all(map([
+            \ 'types', 
+            \ 'debug', 
+            \ 'boolean', 
+            \ 'delimiters', 
+            \ 'more_types'
+            \ ], '"hs_highlight_".v:val'))
 
 call opts#formatprg({ 
             \ 'hfmt':            'hfmt -',
@@ -51,6 +56,7 @@ call opts#formatprg({
             \ 'stylish-haskell': 'stylish-haskell',
             \ })
 
-com! -bang HaskyTags call tags#generate_tags_from_sources('~/.stack/indices/Hackage/packages', '.stack-work', 0, <bang>0)
-
-HaskyTags
+" NOTE: you will have to untar them
+call tags#lib(99999, 0, '~/.stack/indices/Hackage/packages')
+call utils#add_project_files(s:anchors)
+call tags#project(s:anchors, 0)
