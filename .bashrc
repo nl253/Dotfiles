@@ -7,7 +7,9 @@ if ((BASH_VERSINFO < 4)); then
   return 0
 fi
 
-[[ -f ~/.config/bash/completions.sh ]] && . ~/.config/bash/completions.sh
+for file in polyfill extras completions; do
+  . ~/.config/bash/$file.sh
+done
 
 shopt -s xpg_echo globasciiranges histappend checkjobs checkwinsize \
   globstar extglob dotglob nocasematch nocaseglob cdspell dirspell \

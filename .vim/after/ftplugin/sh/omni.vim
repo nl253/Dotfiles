@@ -1,3 +1,5 @@
+if exists("g:bash_env_vars") | finish | endif
+
 let g:bash_env_vars = [
             \ 'BASHOPTS',
             \ 'BASHPID',

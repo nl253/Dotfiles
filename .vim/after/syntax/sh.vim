@@ -15,7 +15,7 @@ hi shVarAssign      cterm=bold
 hi shVariable       cterm=bold  ctermfg=None     ctermbg=None
 hi zshPluginManager cterm=bold  gui=bold     
 
-sy match shOperator "\v (\=\~|\={1,2}|\&{2}|!\=) "
+sy match shOperator "\v( |>|^)(\=\~|\={1,2}|\&{2}|!\=)( |$|<)"
 
 hi link shOperator    Operator
 hi link shConditional Conditional

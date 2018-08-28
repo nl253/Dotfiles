@@ -651,6 +651,20 @@ _git-journal() {
 
 complete -F _git-journal -o bashdefault -o default git-journal
 
+_f() {
+  builtin local cur="${COMP_WORDS[COMP_CWORD]}"
+  if [[ "${COMP_WORDS[COMP_CWORD - 1]}" == f ]]; then
+    builtin local comms=''
+    for i in $(builtin command ls /tmp/f*@*/ | builtin command sed -E 's/[-_@+]/ /g'); do
+      builtin local comms="$comms $i"
+    done
+    COMPREPLY=($(compgen -W "${comms}" -- ${cur}))
+  fi
+  builtin return 0
+}
+
+complete -F _f f
+
 [[ $(command hostname) =~ raptor ]] && source /etc/bash_completion
 
 

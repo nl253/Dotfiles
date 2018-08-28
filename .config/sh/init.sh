@@ -152,42 +152,6 @@ non_git_prompt='$(basename $0):/$(pwd) :: '
 # bash and zsh
 if builtin dirs 1>/dev/null 2>/dev/null; then
 
-  f() {
-    # slugify args into a single file name
-    if [[ $# -eq 0 ]]; then
-      builtin local cache_name=$(builtin command python3 -c "print('$PWD'.replace(' ', '_').replace('/', '-'))")
-    else
-      builtin local cache_name=$(builtin command python3 -c 'from sys import argv; print("_".join(argv[1:]).replace(" ", "_"))' $@)
-    fi
-
-    # cache results
-    # format is f$DAY_OF_YEAR@$HOUR
-    builtin local cache_path="/tmp/f$(builtin printf '%(%j@%H)T')/$cache_name"
-
-    # if you already evaluated it, just print and return
-    if [[ -f $cache_path ]]; then
-      builtin command cat < $cache_path
-      builtin return 0
-    else
-      # prepare to cache
-      builtin command mkdir -p $(builtin command dirname $cache_path)
-    fi
-
-    builtin local cmd='builtin command find -atime -2 -not -empty -readable -regextype posix-extended -not -regex ".*(/node_modules/|\\.(mypy_)?cache|\\.git/|\\.cargo/registry/|/.rustup/toolchains/|libreoffice|/site-packages/|google-chrome|\\.vim/(undo|plugged|backup|views|s(essions|wap))).*" -not -regex ".*\\.(b(eam|ack)|log|tmp|/tags|fls|class|(py|s)?o|egg(-info)?|iml|hi|aux)$"'
-
-    if [[ $# -gt 0 ]]; then
-      builtin local cmd="$cmd "'\('
-      builtin local cmd="$cmd -iname \*${1}\*"
-      for pattern in ${@:2}; do
-        builtin local cmd="$cmd -or -iname \*${pattern}\*"
-      done
-      builtin local cmd="$cmd "'\)'
-    fi
-
-    # duplicate STDOUT, send to cache and print at the same time
-    builtin eval "$cmd | builtin command tee $cache_path 2>/dev/null"
-  }
-
   # zsh
   if [[ -n "$ZSH_VERSION" ]]; then
     export PS1="${git_basic_info} "$'\n'"${non_git_prompt}"
