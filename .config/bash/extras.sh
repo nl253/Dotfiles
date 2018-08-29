@@ -1,3 +1,5 @@
+# GENERIC CACHE FOR CLI UTILS
+
 # $1 binary name
 cached() {
 
@@ -11,15 +13,19 @@ cached() {
     builtin local cache_fname=$(builtin command python3 -c 'from sys import argv; print("_".join(argv[1:]).replace(" ", "_").replace("builtin_", "").replace("command_", ""))' $@)
   fi
 
-  # cache results
-  # format is f$DAY_OF_YEAR@$HOUR
-  if [[ $1 = command ]]; then
-    builtin local cache_path="/tmp/cache/$2/$(builtin printf '%(%j%H)T')/$cache_fname"
-  elif [[ $1 = builtin ]] && [[ $2 = command ]]; then
-    builtin local cache_path="/tmp/cache/$3/$(builtin printf '%(%j%H)T')/$cache_fname"
+  builtin local cache_path="/tmp/cache"
+
+  # get name of cmd to run
+  if [[ $1 == command ]]; then
+    builtin local cache_path="$cache_path/$2"
+  elif [[ $1 == builtin ]] && [[ $2 == command ]]; then
+    builtin local cache_path="$cache_path/$3"
   else
-    builtin local cache_path="/tmp/cache/$1/$(builtin printf '%(%j%H)T')/$cache_fname"
+    builtin local cache_path="$cache_path/$1"
   fi
+
+  # append day and time (just hour)
+  builtin local cache_path="$cache_path/$(builtin printf '%(%j%H)T')/$cache_fname"
 
   # if you already evaluated it, just print and return
   if [[ -f $cache_path ]]; then
@@ -30,7 +36,7 @@ cached() {
     builtin command mkdir -p $(builtin command dirname $cache_path)
   fi
 
-  # duplicate STDOUT, send to cache and print at the same time
+  # reun duplicating STDOUT, send to cache and print at the same time
   $* | builtin command tee $cache_path
 }
 
@@ -50,17 +56,47 @@ _f_() {
   builtin eval "$cmd 2>/dev/null"
 }
 
-hexadecimal() { builtin printf "%X\n" $1; }
-octal() { builtin printf "%o\n" $1; }
-binary() {
+builtin alias f='cached _f_'
+
+for i in bc sed {g,}awk jupyter-nbconvert pygmentize pandoc rst2{xml,s5,odt,html,html5,html4,man,pseudoxml,xetex}{.py,} wn tokei {z,xz}{cat,diff,less} wc tree sort pydoc{3,3.5,3.6,} find fd df du curl ps rg {xz,z,}{p,e,a,f,}grep; do
+  builtin eval "builtin alias $i='cached builtin command $i'"
+done
+
+# CHANGE OF NUMBER BASIS
+
+to_hex() { builtin printf "%X\n" $1; }
+to_oct() { builtin printf "%o\n" $1; }
+to_bin() {
   n="$1"
   bit=""
   while [ "$n" -gt 0 ]; do
     bit="$((n & 1))$bit"
     : $((n >>= 1))
   done
-  printf "%s\n" "$bit"
+  builtin printf "%s\n" "$bit"
 }
+
+to_base() {
+  builtin command python3 <<EOF
+from string import digits, ascii_letters
+digs = digits + ascii_letters
+def int2base(x, base):
+    if x < 0: sign = -1
+    elif x == 0: return digs[0]
+    else: sign = 1
+    x *= sign
+    digits = []
+    while x:
+        digits.append(digs[int(x % base)])
+        x = int(x / base)
+    if sign < 0: digits.append('-')
+    digits.reverse()
+    return ''.join(digits)
+print(int2base($1, $2))
+EOF
+}
+
+# STRING MANIPULATION
 
 upper() { builtin printf '%s\n' "${*^^}"; }
 lower() { builtin printf '%s\n' "${*,,}"; }
@@ -95,6 +131,8 @@ print(sub(r'$1', '$2', '''${*:3}'''))
 EOF
 }
 
+# DATA MANIPULATION
+
 count() {
   builtin command python3 <<EOF
 from collections import Counter
@@ -106,106 +144,152 @@ for key, val in counter.most_common(len(counter)):
 EOF
 }
 
-gcd() {
+# MATH
+
+pymath_int_funct() {
   builtin command python3 <<EOF
-from math import gcd
+from math import $1
 from shlex import split
 from functools import reduce
-print(reduce(gcd, map(int, split('''$*'''))))
+print(reduce($1, map(int, split('''${*:2}'''))))
 EOF
 }
 
-sum() {
-  builtin command python3 <<EOF
-from shlex import split
-from functools import reduce
-print(reduce(lambda x, y: x + y, map(float, split('''$*'''))))
-EOF
-}
+for f in gcd; do
+  builtin eval "builtin alias $f='pymath_int_funct $f'"
+done
 
-product() {
+py_float_funct() {
   builtin command python3 <<EOF
 from shlex import split
 from functools import reduce
-print(reduce(lambda x, y: x * y, map(float, split('''$*'''))))
+print(reduce($1, map(float, split('''${*:2}'''))))
 EOF
 }
 
-min() {
+for f in max min pow; do
+  builtin eval "builtin alias $f='py_float_funct $f'"
+done
+
+math-const() {
+  builtin command python3 <<EOF
+from math import $1
+print($1)
+EOF
+}
+
+for const in pi e tau; do
+  builtin eval "builtin alias $const='math-const $const'"
+done
+
+# ARITHMETIC
+
+pymath_bop() {
   builtin command python3 <<EOF
 from shlex import split
 from functools import reduce
-print(reduce(min, y: x + y, map(float, split('''$*'''))))
+print(reduce(lambda x, y: x $1 y, map(float, split('''${*:2}'''))))
 EOF
 }
 
-max() {
+builtin alias sum='pymath_bop "+"'
+builtin alias difference='pymath_bop "-"'
+builtin alias product='pymath_bop "*"'
+builtin alias quotient='pymath_bop "/"'
+
+pymath_uop() {
   builtin command python3 <<EOF
+from math import $1
+print($1($2))
+EOF
+}
+
+for f in log{2,10} degrees radians sqrt exp trunc; do
+  builtin eval "builtin alias $f='pymath_uop $f'"
+done
+
+# STATISTICS
+
+pystats_funct() {
+  builtin command python3 <<EOF
+from statistics import $1
 from shlex import split
-from functools import reduce
-print(reduce(max, y: x + y, map(float, split('''$*'''))))
+print($1(map(float, split('''${*:2}'''))))
 EOF
 }
 
-pi() {
+for f in mode {harmonic_,}mean median{_low,_high,_grouped,} {p,}{stdev,variance}; do
+  builtin eval "builtin alias $f='pystats_funct $f'"
+done
+
+# CALCULUS
+
+sympy-funct-pretty() {
   builtin command python3 <<EOF
-from math import pi
-print(pi)
+from sympy import *
+x, y, z = symbols('x y z')
+pprint($1(${*:2}), use_unicode=True)
 EOF
 }
 
-e() {
-  builtin command python3 <<EOF
-from math import e
-print(e)
+sympy-uop_list() {
+builtin command python3 <<EOF
+from sympy import divisors, divisor_count
+for n in divisors(24):
+    print(n)
 EOF
 }
 
-log2() {
+for f in binomial_coefficients_list primefactors divisors; do
+  eval "alias $f='sympy-uop_list $f'"
+done
+
+sympy-funct-ascii() {
   builtin command python3 <<EOF
-from math import log2
-print(log2($1))
+from sympy import *
+x, y, z = symbols('x y z')
+print($1(${*:2}))
 EOF
 }
 
-log10() {
+for f in differentiate integrate; do
+  eval "alias $f='sympy-funct-pretty $f'"
+done
+
+for f in simplify expand factor trigsimp; do
+  eval "alias $f='sympy-funct-ascii $f'"
+done
+
+sympy_logic_to_normal_form() {
   builtin command python3 <<EOF
-from math import log10
-print(log10($1))
+from sympy.abc import x, y, z
+from sympy.logic import simplify_logic
+print(simplify_logic(${*:2}, form='$1'))
+EOF
+ }
+
+for i in {d,c}nf; do
+  eval "alias to_$i='sympy_logic_to_normal_form $i'"
+done
+
+simplify_logic() {
+  builtin command python3 <<EOF
+from sympy.abc import x, y, z
+from sympy.logic import simplify_logic
+print(simplify_logic($*))
+EOF
+ }
+
+satisfiable() {
+  builtin command python3 <<EOF
+from sympy.abc import x, y, z
+from sympy.logic.inference import satisfiable
+for k, v in satisfiable($*).items():
+    print(k, v)
 EOF
 }
 
-mean() {
-  builtin command python3 <<EOF
-from statistics import mean
-from shlex import split
-print(mean(map(float, split('''$*'''))))
-EOF
-}
-
-median() {
-  builtin command python3 <<EOF
-from statistics import median
-from shlex import split
-print(median(map(float, split('''$*'''))))
-EOF
-}
-
-mode() {
-  builtin command python3 <<EOF
-from statistics import mode
-from shlex import split
-print(mode(map(float, split('''$*'''))))
-EOF
-}
-
-stdev() {
-  builtin command python3 <<EOF
-from statistics import stdev
-from shlex import split
-print(stdev(map(float, split('''$*'''))))
-EOF
-}
+# COMBINATORICS
 
 permutations() {
   builtin command python3 <<EOF
@@ -225,29 +309,22 @@ for i in combinations(split('''${*:2}'''), $1):
 EOF
 }
 
-cos() {
+# TRIGONOMETRY
+
+trig-funct() {
   builtin command python3 <<EOF
-from math import cos, radians
-print(cos(radians($1)))
+from math import $1, radians
+print($1(radians($2)))
 EOF
 }
 
-sin() {
-  builtin command python3 <<EOF
-from math import sin, radians
-print(sin(radians($1)))
-EOF
+plot-trig-funct() {
+  for degree in {0..360..30}; do
+    builtin printf "$1 %3s deg = %-10.2f\n" $degree $($1 $degree)
+  done
 }
 
-tan() {
-  builtin command python3 <<EOF
-from math import tan, radians
-print(tan(radians($1)))
-EOF
-}
-
-for i in bc {g,}awk jupyter-nbconvert pygmentize pandoc rst2{xml,s5,odt,html,html5,html4,man,pseudoxml,xetex}{.py,} wn tokei {z,xz}{cat,diff,less} wc tree sort pydoc{3,3.5,3.6,} find fd df du curl ps rg {xz,z,}{p,e,a,f,}grep; do
-  eval "alias $i='cached builtin command $i'"
+for f in {a,}{sin,cos,tan}{,h}; do
+  builtin eval "builtin alias $f='trig-funct $f'"
+  builtin eval "builtin alias plot-$f='plot-trig-funct \"trig-funct $f\"'"
 done
-
-alias f='cached _f_'
