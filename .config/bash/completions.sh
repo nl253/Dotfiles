@@ -655,7 +655,7 @@ _f() {
   builtin local cur="${COMP_WORDS[COMP_CWORD]}"
   if [[ "${COMP_WORDS[COMP_CWORD - 1]}" == f ]]; then
     builtin local comms=''
-    for i in $(builtin command ls /tmp/f*@*/ | builtin command sed -E 's/[-_@+]/ /g'); do
+    for i in $(builtin command ls /tmp/cache/_f_/*/ | builtin command sed -E 's/[^a-zA-Z0-9]/ /g'); do
       builtin local comms="$comms $i"
     done
     COMPREPLY=($(compgen -W "${comms}" -- ${cur}))
