@@ -1,4 +1,5 @@
 sy match cppOpAround "\v(::|\~|\=\=|!\=|\<\=|\>\=|\&\&?|\<\<|\>\>|\=|!|:|\<|\>|\+|\*)"
+sy match cppClass    "\v[A-Z][a-z]+"
+
 hi link cppOpAround Operator
-sy match cppClass "\v[A-Z][a-z]+"
-hi link cppClass Identifier
+hi link cppClass    Identifier

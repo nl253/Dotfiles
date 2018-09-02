@@ -1,6 +1,21 @@
 " Syntax for PEG and context-free (BNF / EBNF) grammars
 " -----------------------------------------------------
+
+if exists('b:current_syntax') 
+    if b:current_syntax == 'grammar'
+        finish
+    elseif exists('b:grammar_syntax_loaded ')
+        finish
+    else
+        let b:grammar_syntax_loaded = 1
+    endif
+else
+    let b:current_syntax = 'grammar' 
+endif
+
 runtime! syntax/regex.vim
+
+sy cluster grammarAll contains=grammarOrSymbol,grammarNonTerm,grammarRange,grammarTerm,grammarStr,grammarRegex,grammarChar,grammarOpt,grammarStar,grammarPlus,grammarGroup 
 
 " terminals have lower snake case: lowercase_terminal 
 sy match grammarTerm "\v<[a-z][a-z_]+[0-9]*>"                contains=@Spell
@@ -25,13 +40,13 @@ sy match grammarChar "\v'\\?.'"
 sy region grammarStr start='"' end='"'   oneline keepend
 
 " regex between '/' and '/': /\w+/
-sy region grammarRegex start='/' end='/' oneline contains=regexGroup,regexSpecial,regexComment,regexSet,regexQuant,regexAtom,regexEscape,regexOr keepend
+sy region grammarRegex start='/' end='/' oneline contains=@regexAll keepend
 
 " regex set between '[' and ']': [abc]
 sy region grammarSet start='\['ms=s+1 end='\]'me=e-1 oneline keepend contains=grammarSetRange,grammarSetChar
 
 " ( ... )
-sy region grammarGroup start='\V(' end='\V)' skip="\v['\"]." oneline keepend contains=grammarOrSymbol,grammarNonTerm,grammarRange,grammarTerm,grammarStr,grammarRegex,grammarChar,grammarOpt,grammarStar,grammarPlus,grammarGroup
+sy region grammarGroup start='\V(' end='\V)' skip="\v['\"]." oneline keepend contains=@grammarAll
 
 " 'a'..'z' means ( 'a' | 'b' | 'c' ... 'z' )
 " essentially the same as [a-z]
@@ -65,24 +80,24 @@ sy match grammarNegPred "\V!"
 " &'('
 sy match grammarPosPred "\V&"
 
-hi link grammarOpt        Operator
-hi link grammarPlus       Operator
-hi link grammarQuant      Operator
-hi link grammarStar       Operator
-hi link grammarRange      Operator
-hi link grammarPosPred    Operator
-hi link grammarNegPred    Operator
+hi def link grammarOpt        Operator
+hi def link grammarPlus       Operator
+hi def link grammarQuant      Operator
+hi def link grammarStar       Operator
+hi def link grammarRange      Operator
+hi def link grammarPosPred    Operator
+hi def link grammarNegPred    Operator
 
-hi link grammarRuleSymbol Delimiter
-hi link grammarOrSymbol   Delimiter
+hi def link grammarRuleSymbol Delimiter
+hi def link grammarOrSymbol   Delimiter
 
-hi link grammarChar       Character
-hi link grammarSet        Character
+hi def link grammarChar       Character
+hi def link grammarSet        Character
 
-hi link grammarComment    Comment
-hi link grammarGroup      Function
-hi link grammarNonTerm    Define
-hi link grammarRegex      PreProc
-hi link grammarSpecialSym Special
-hi link grammarStr        String
-hi link grammarTerm       Normal
+hi def link grammarComment    Comment
+hi def link grammarGroup      Function
+hi def link grammarNonTerm    Define
+hi def link grammarRegex      PreProc
+hi def link grammarSpecialSym Special
+hi def link grammarStr        String
+hi def link grammarTerm       Normal

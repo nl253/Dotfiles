@@ -1,214 +1,206 @@
-" if !exists("main_syntax")
-  " " quit when a syntax file was already loaded
-  " if exists("b:current_syntax")
-    " finish
-  " endif
-  " let main_syntax = 'javaScript'
-" elseif exists("b:current_syntax") && b:current_syntax == "javaScript"
-  " finish
-" endif
-
-let s:cpo_save = &cpo
-set cpo&vim
+if exists('b:current_syntax') 
+    if b:current_syntax == 'javascript'
+        finish
+    elseif exists('b:javascript_syntax_loaded ')
+        finish
+    else
+        let b:javascript_syntax_loaded = 1
+    endif
+else
+    sy clear
+    sy sync ccomment jsComment
+    let b:current_syntax = 'javascript' 
+endif
 
 sy sync fromstart
-sy sync maxlines=100
+sy sync minlines=120
 
 runtime! syntax/regex.vim
 runtime! syntax/docstring.vim
 
-sy keyword javaScriptArrayFunct        concat copyWithin every fill filter find findIndex includes indexOf join lastIndexOf map pop push reduce reduceRight reverse shift slice some sort splice unshift
-sy keyword javaScriptJSONStatics       parse stringify
-sy keyword javaScriptMapFunct          clear get set
-sy keyword javaScriptMathStatics       E LN10 LN2 LOG10E LOG2E PI SQRT1_2 SQRT2 abs acos acosh asin asinh atan atan2 atanh cbrt ceil clz32 cos cosh exp expm1 floor fround hypot imul log log10 log1p log2 max min pow random round sign sin sinh sqrt tan tanh trunc
-sy keyword javaScriptObjFunct          hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleStr toStr valueOf 
-sy keyword javaScriptObjStatics        length name assign create defineProperties defineProperty entries freeze getOwnPropertyDescriptor getOwnPropertyDescriptors getOwnPropertyNames getOwnPropertySymbols getPrototypeOf is isExtensible isFrozen isSealed keys preventExtensions seal setPrototypeOf values
-sy keyword javaScriptPromiseSONStatics all race reject resolve 
-sy keyword javaScriptSetFunct          add has size 
-sy keyword javaScriptStrFunct          charAt charCodeAt codePointAt concat endsWith fixed fontcolor fontsize includes localeCompare match normalize padEnd padStart repeat replace search split startsWith strike sub substr substring toLocaleLowerCase toLocaleUpperCase toLowerCase toUpperCase trim trimEnd trimLeft trimRight trimStart
+" mainly for syntax#complete
+sy keyword jsArrayFunct  concat copyWithin every fill filter find findIndex includes indexOf join lastIndexOf map pop push reduce reduceRight reverse shift slice some sort splice unshift
+sy keyword jsJSONStatics parse stringify
+sy keyword jsMapFunct    clear get set
+sy keyword jsMathStatics E LN10 LN2 LOG10E LOG2E PI SQRT1_2 SQRT2 abs acos acosh asin asinh atan atan2 atanh cbrt ceil clz32 cos cosh exp expm1 floor fround hypot imul log log10 log1p log2 max min pow random round sign sin sinh sqrt tan tanh trunc
+sy keyword jsObjFunct    hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleStr toStr valueOf 
+sy keyword jsObjStatics  length name assign create defineProperties defineProperty entries freeze getOwnPropertyDescriptor getOwnPropertyDescriptors getOwnPropertyNames getOwnPropertySymbols getPrototypeOf is isExtensible isFrozen isSealed keys preventExtensions seal setPrototypeOf values
+sy keyword jsPromise     all race reject resolve 
+sy keyword jsSetFunct    add has size 
+sy keyword jsStrFunct    charAt charCodeAt codePointAt concat endsWith fixed fontcolor fontsize includes localeCompare match normalize padEnd padStart repeat replace search split startsWith strike sub substr substring toLocaleLowerCase toLocaleUpperCase toLowerCase toUpperCase trim trimEnd trimLeft trimRight trimStart
 
 " #!/usr/bin/env node
-sy match javaScriptShebang '\v^#!.+$'
+sy match jsShebang '\v^#!.+$'
 
 " Comment:
-sy region  javaScriptComment      start="/\*"  end="\*/" contains=@Spell,javaScriptCommentTodo,docStringBulletPoint,docStringMetaTag,docStringDescr keepend
-sy match   javaScriptLineComment  "\/\/.*"               contains=@Spell,javaScriptCommentTodo
-sy region  javaScriptCommentTodo  start='\v<(FIXME|XXX|TODO)>' end="$" oneline contained
+sy region  jsComment      start="/\*"  end="\*/" contains=@Spell,@docstringAll keepend
+sy region  jsCommentTodo  start='\v<(FIXME|XXX|TODO)>' end="$" oneline contained
+sy match   jsLineComment  "\/\/.*"               contains=@Spell,jsCommentTodo
 
 " Builtin Types:
-sy keyword javaScriptBool true false
-sy keyword javaScriptCond if else switch
-sy keyword javaScriptNull null undefined
-sy match   javaScriptNum "-\=\<\d\+L\=\>\|0[xX][0-9a-fA-F]\+\>"
+sy keyword jsBool true false
+sy keyword jsCond if else switch
+sy keyword jsNull null undefined
+sy match   jsNum "-\=\<\d\+L\=\>\|0[xX][0-9a-fA-F]\+\>"
 
 " objects by convention capitalised
-sy match javaScriptType   "\v<(([A-Z][a-z]+)+|[A-Z]+[a-z][A-Za-z]+)>"
-sy keyword javaScriptType Array Boolean Date Function Number Object String RegExp Infinity Reflect Proxy Math Symbol Error EvalError InternalError RangeError ReferenceError SyntaxError TypeError URIError Generator GeneratorFunction AsyncFunction Promise JSON DataView ArrayBuffer Map Set WeakMap WeakSet Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array
+sy match jsType   "\v<(([A-Z][a-z]+)+|[A-Z]+[a-z][A-Za-z]+)>"
+" mainly for syntax#complete
+sy keyword jsType Array Boolean Date Function Number Object String RegExp Infinity Reflect Proxy Math Symbol Error EvalError InternalError RangeError ReferenceError SyntaxError TypeError URIError Generator GeneratorFunction AsyncFunction Promise JSON DataView ArrayBuffer Map Set WeakMap WeakSet Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array
 
-" sy region javaScriptObj start='{' end='}' oneline keepend contains=javaScriptObjKey
-" sy match javaScriptObjKey "\v<[[:alpha:]]+>:" 
-" hi link javaScriptObjKey String
+" sy region jsObj start='{' end='}' oneline keepend contains=jsObjKey
+" sy match jsObjKey "\v<[[:alpha:]]+>:" 
+" hi def link jsObjKey String
 
 " Str:
-sy match  javaScriptStrEscape "\v\\." contained containedin=javaScriptStrD,javaScriptStrS,javaScriptTemplStr
-sy region javaScriptStrD start=+"+  skip=+\\\\\|\\"+  end=+"\|$+ oneline  keepend
-sy region javaScriptStrS start=+'+  skip=+\\\\\|\\'+  end=+'\|$+ oneline  keepend
+sy match  jsStrEscape "\v\\." contained containedin=jsStrD,jsStrS,jsTemplStr
+sy region jsStrD start=+"+  skip=+\\\\\|\\"+  end=+"\|$+ oneline  keepend
+sy region jsStrS start=+'+  skip=+\\\\\|\\'+  end=+'\|$+ oneline  keepend
 " FIXME Doesn't look nice
-" sy match javaScriptStrSQuote "'"  contained containedin=javaScriptStrS
-" sy match javaScriptStrDQuote '"' contained containedin=javaScriptStrD
-" hi link javaScriptStrDQuote Delimiter
-" hi link javaScriptStrSQuote Delimiter
+" sy match jsStrSQuote "'"  contained containedin=jsStrS
+" sy match jsStrDQuote '"' contained containedin=jsStrD
+" hi def link jsStrDQuote Delimiter
+" hi def link jsStrSQuote Delimiter
 
 " `template string with ${vars}`
-sy region javaScriptTemplStr             start='`'   end='`' keepend contains=javaScriptTemplStrSubst,javaScriptTemplStrHtmlTag
-sy region javaScriptTemplStrSubst        start='\${' end='}' keepend oneline contained containedin=javaScriptTemplStr
+sy region jsTemplStr             start='`'   end='`' keepend contains=jsTemplStrSubst,jsTemplStrHtmlTag
+sy region jsTemplStrSubst        start='\${' end='}' keepend oneline contained containedin=jsTemplStr
 
 " often we put HTML tags in js templates
-sy region javaScriptTemplStrHtmlTag      start="\v\<([a-z]+)( [a-z]+(\=\".{,20}\")?)*\>" end="\v</\1\>" contained contains=javaScriptTemplStrHtmlTagInner,javaScriptTemplStrHtmlTag,javaScriptTemplStrHtmlTagAttr keepend
-sy region javaScriptTemplStrHtmlTagInner start="\v\>"ms=e+1 end="\v\<"me=s-1 contained keepend
-sy match javaScriptTemplStrHtmlTagAttr  "\v <[a-z]{3,15}>"ms=s+1 contained keepend
-sy region javaScriptTemplStrHtmlTagAttr  start="\v[a-z]{2,15}\=\"" end="\"" oneline contained contains=javaScriptTemplStrHtmlTagAttrName,javaScriptTemplStrHtmlTagAttrValue,javaScriptTemplStrHtmlTagAttrEq keepend
-sy match javaScriptTemplStrHtmlTagAttrName "\v[a-z]{2,15}\="me=e-1 contained keepend
-sy match javaScriptTemplStrHtmlTagAttrEq "\v\=" contained 
-sy region javaScriptTemplStrHtmlTagAttrValue start='"' end='"' oneline contained keepend
+sy region jsTemplStrHtmlTag      start="\v\<([a-z]+)( [a-z]+(\=\".{,20}\")?)*\>" end="\v</\1\>" contained contains=jsTemplStrHtmlTagInner,jsTemplStrHtmlTag,jsTemplStrHtmlTagAttr keepend
+sy region jsTemplStrHtmlTagInner start="\v\>"ms=e+1 end="\v\<"me=s-1 contained keepend
+sy match  jsTemplStrHtmlTagAttr  "\v <[a-z]{3,15}>"ms=s+1 contained keepend
+sy region jsTemplStrHtmlTagAttr  start="\v[a-z]{2,15}\=\"" end="\"" oneline contained contains=jsTemplStrHtmlTagAttrName,jsTemplStrHtmlTagAttrValue,jsTemplStrHtmlTagAttrEq keepend
+sy match  jsTemplStrHtmlTagAttrName "\v[a-z]{2,15}\="me=e-1 contained keepend
+sy match  jsTemplStrHtmlTagAttrEq "\v\=" contained 
+sy region jsTemplStrHtmlTagAttrValue start='"' end='"' oneline contained keepend
 
-sy region  javaScriptRegexStr  start=+/[^/*]+me=e-1 skip=+\\\\\|\\/+ end=+/[gim]\{0,2\}\s*$+ end=+/[gim]\{0,2\}\s*[;.,)\]}]+me=e-1 contains=regexGroup,regexSet,regexQuant,regexAtom,regexEscape,regexOr oneline keepend
+sy region  jsRegexStr  start=+/[^/*]+me=e-1 skip=+\\\\\|\\/+ end=+/[gim]\{0,2\}\s*$+ end=+/[gim]\{0,2\}\s*[;.,)\]}]+me=e-1 contains=@regexAll oneline keepend
 
 " $vars or $
-sy match javaScriptDollar '\v\$([a-z][A-Za-z0-9]*)?'
+sy match jsDollar '\v\$([a-z][A-Za-z0-9]*)?'
 
 " Statements:
-sy keyword javaScriptKeyword   super this case default arguments
-sy keyword javaScriptVarDecl   var let
-sy keyword javaScriptConstDecl const
-sy keyword javaScriptClassDecl interface class extends enum implements 
-sy keyword javaScriptStmt      return with break continue try then catch finally throw next 
-sy match   javaScriptStmt      '\v<yield ?\* ?$'
-sy keyword javaScriptFunct     async                
-sy match   javaScriptFunct     "\v<(async )?function\v ?\*?"
-sy keyword javascriptSpecial   apply call eval bind prototype constructor 
-sy match javaScriptConst "\v<[A-Z][A-Z_]{2}[A-Z0-9_]+>"
+sy keyword jsKeyword   super this case default arguments
+sy keyword jsVarDecl   var let
+sy keyword jsConstDecl const
+sy keyword jsClassDecl interface class extends enum implements 
+sy keyword jsStmt      return with break continue try then catch finally throw next 
+sy match   jsStmt      '\v<yield ?\* ?$'
+sy keyword jsFunct     async                
+sy match   jsFunct     "\v<(async )?function\v ?\*?"
+sy keyword jsSpecial   apply call eval bind prototype constructor 
+sy match jsConst "\v<[A-Z][A-Z_]{2}[A-Z0-9_]+>"
 
 " chained calls
-sy match javascriptSpecial '\v^\s*\.[a-z][a-zA-Z]+'ms=s+1
+sy match jsSpecial '\v^\s*\.[a-z][a-zA-Z]+'ms=s+1
 
 " import * from "./file.js"
 " require("./file.js")
-sy keyword javaScriptImport require import export
+sy keyword jsImport require import export
 
 " Loops:
-sy keyword javaScriptRepeat	do for while of in forEach
+sy keyword jsRepeat	do for while of in forEach
 
  " OOP:
-sy match javaScriptAccess "\v<(private|protected|public|static) "
-sy match javaScriptSpecifier "\v^\s*(get|set) "
-sy match javaScriptSpecifier "\v<(protected|abstract|public|static|final|package|throws|boolean) "
+sy match jsAccess "\v<(private|protected|public|static) "
+sy match jsSpecifier "\v^\s*(get|set) "
+sy match jsSpecifier "\v<(protected|abstract|public|static|final|package|throws|boolean) "
 
 " Deprecated:
 " __get_attribute__
-sy region javaScriptDepr start='__' end='__' oneline keepend
-sy keyword javaScriptDepr caller 
+sy region jsDepr start='__' end='__' oneline keepend
+sy keyword jsDepr caller 
 
 " Macros:
-sy keyword javaScriptNodeMacro __dirname __filename 
+sy keyword jsNodeMacro __dirname __filename 
 
 " Globals:
 " Node.js
-sy keyword javaScriptNodeGlobal module exports process 
+sy keyword jsNodeGlobal module exports process 
 " Browser
-sy keyword javaScriptBrowserGlobal window inspect origin document alert caches screen sessionStorage close confirm prompt stream fetch focus blur getSelection getComputedStyle closed applicationCache open parent screenLeft screenTop scroll scrollBy scrollX scrollY openDatabase print resizeBy resizeTo stop status pageXOffset pageYOffset outerWidth outerHeight opener dispatchEvent removeEventListener
+sy keyword jsBrowserGlobal window inspect origin document alert caches screen sessionStorage close confirm prompt stream fetch focus blur getSelection getComputedStyle closed applicationCache open parent screenLeft screenTop scroll scrollBy scrollX scrollY openDatabase print resizeBy resizeTo stop status pageXOffset pageYOffset outerWidth outerHeight opener dispatchEvent removeEventListener
 " shared 
-sy keyword javaScriptGlobal setInterval setTimeout console escape unescape eval clearTimeout clearInterval parseInt parseFloat decodeURI decodeURIComponent encodeURIComponent isFinite isNaN crypto
+sy keyword jsGlobal setInterval setTimeout console escape unescape eval clearTimeout clearInterval parseInt parseFloat decodeURI decodeURIComponent encodeURIComponent isFinite isNaN crypto
 " events
-sy match javaScriptEvent '\v<on[a-z]{4,}>'
+sy match jsEvent '\v<on[a-z]{4,}>'
 
 " Operators:
-sy keyword javaScriptOp await new typeof delete in
+sy keyword jsOp await new typeof delete in
 
 " ! || && : ? 
 " and bitwise | &
-sy match javaScriptOp '\v (([&]{1,2}|[|]{1,2}|\?)) '
+sy match jsOp '\v (([&]{1,2}|[|]{1,2}|\?)) '
 "key: value in objects
-sy match javaScriptOp '\v: '
+sy match jsOp '\v: '
 " bitwise continued ... >>> <<< ^ ~
-sy match javaScriptOp '\v (\>{2,3}|\<{2,3}|^) '
-sy match javaScriptOp '\~'
+sy match jsOp '\v (\>{2,3}|\<{2,3}|^) '
+sy match jsOp '\~'
 " logical negation
-sy match javaScriptOp '!'
+sy match jsOp '!'
 " == === <= >= < >
-sy match javaScriptOp "\v (\={2,3}|[><]\=?) "
+sy match jsOp "\v (\={2,3}|[><]\=?) "
 " !== !=
-sy match javaScriptOp "\v (!?\={1,2}) "
+sy match jsOp "\v (!?\={1,2}) "
 " -- ++ - + += -=
-sy match javaScriptOp "\v ([-+])\=? "
-sy match javaScriptOp " +$"
-sy match javaScriptOp "\v([-+]{2})"
+sy match jsOp "\v ([-+])\=? "
+sy match jsOp " +$"
+sy match jsOp "\v([-+]{2})"
 " rest / spread ...
-sy match javaScriptOp "\v\.{3}"
+sy match jsOp "\v\.{3}"
 " * / 
 " *= /=
-sy match javaScriptOp "\v ([*/])\=? "
+sy match jsOp "\v ([*/])\=? "
 " modulo % and %=
-sy match javaScriptOp "\v \%\=? "
+sy match jsOp "\v \%\=? "
 
 " x => x.something
-sy match javaScriptArrowFunc "\v(\\(\\))? (\=\>)($| )"
+sy match jsArrowFunc "\v(\\(\\))? (\=\>)($| )"
 
 " indexing eg xs[0]
-sy match javaScriptBracket "\v\]|\["
-hi link javaScriptBracket Operator
+sy match jsBracket "\v\]|\["
 
-hi link javaScriptAccess                   StorageClass
-hi link javaScriptArrowFunc                javaScriptFunct
-hi link javaScriptBool                     Boolean
-hi link javaScriptBrowserGlobal            Builtin
-hi link javaScriptClassDecl                javaScriptDecl
-hi link javaScriptComment                  Comment
-hi link javaScriptCommentTodo              WarningMsg
-hi link javaScriptCond                     Conditional
-hi link javaScriptConst                    Constant
-hi link javaScriptConstDecl                javaScriptDecl
-hi link javaScriptDecl                     javaScriptStmt
-hi link javaScriptDepr                     ErrorMsg
-hi link javaScriptDollar                   javaScriptGlobal
-hi link javaScriptEvent                    Procedure
-hi link javaScriptFunct                    javaScriptStmt
-hi link javaScriptGlobal                   Builtin
-hi link javaScriptImport                   Include
-hi link javaScriptKeyword                  Keyword
-hi link javaScriptLineComment              javaScriptComment
-hi link javaScriptNodeGlobal               Builtin
-hi link javaScriptNodeMacro                Macro
-hi link javaScriptNull                     Symbol
-hi link javaScriptNum                      Number
-hi link javaScriptOp                       Operator
-hi link javaScriptRegexStr                 PreProc
-hi link javaScriptRepeat                   Repeat
-hi link javaScriptShebang                  PreProc
-hi link javaScriptSpecifier                StorageClass
-hi link javaScriptStmt                     Statement
-hi link javaScriptStrD                     String
-hi link javaScriptStrEscape                SpecialChar
-hi link javaScriptStrS                     String
-hi link javaScriptTemplStr                 Macro
-hi link javaScriptTemplStrHtmlTag          Keyword
-hi link javaScriptTemplStrHtmlTagAttrEq    Operator
-hi link javaScriptTemplStrHtmlTagAttr      Constant
-hi link javaScriptTemplStrHtmlTagAttrName  Constant
-hi link javaScriptTemplStrHtmlTagAttrValue String
-hi link javaScriptTemplStrHtmlTagInner     Normal
-hi link javaScriptTemplStrSubst            SpecialChar
-hi link javaScriptType                     Type
-hi link javaScriptVarDecl                  javaScriptDecl
-hi link javascriptSpecial                  javaScriptSpecifier
-
-let b:current_syntax = "javascript"
-" if main_syntax == 'javascript'
-  " unlet main_syntax
-" endif
-" let &cpo = s:cpo_save
-" unlet s:cpo_save
-
-" if main_syntax == "javascript"
-  " sy sync ccomment javaScriptComment
-" endif
+hi def link jsBracket                  Operator
+hi def link jsAccess                   StorageClass
+hi def link jsArrowFunc                jsFunct
+hi def link jsBool                     Boolean
+hi def link jsBrowserGlobal            Builtin
+hi def link jsClassDecl                jsDecl
+hi def link jsComment                  Comment
+hi def link jsCommentTodo              WarningMsg
+hi def link jsCond                     Conditional
+hi def link jsConst                    Constant
+hi def link jsConstDecl                jsDecl
+hi def link jsDecl                     jsStmt
+hi def link jsDepr                     ErrorMsg
+hi def link jsDollar                   jsGlobal
+hi def link jsEvent                    Procedure
+hi def link jsFunct                    jsStmt
+hi def link jsGlobal                   Builtin
+hi def link jsImport                   Include
+hi def link jsKeyword                  Keyword
+hi def link jsLineComment              jsComment
+hi def link jsNodeGlobal               Builtin
+hi def link jsNodeMacro                Macro
+hi def link jsNull                     Symbol
+hi def link jsNum                      Number
+hi def link jsOp                       Operator
+hi def link jsRegexStr                 PreProc
+hi def link jsRepeat                   Repeat
+hi def link jsShebang                  PreProc
+hi def link jsSpecifier                StorageClass
+hi def link jsStmt                     Statement
+hi def link jsStrD                     String
+hi def link jsStrEscape                SpecialChar
+hi def link jsStrS                     String
+hi def link jsTemplStr                 Macro
+hi def link jsTemplStrHtmlTag          Keyword
+hi def link jsTemplStrHtmlTagAttrEq    Operator
+hi def link jsTemplStrHtmlTagAttr      Constant
+hi def link jsTemplStrHtmlTagAttrName  Constant
+hi def link jsTemplStrHtmlTagAttrValue String
+hi def link jsTemplStrHtmlTagInner     Normal
+hi def link jsTemplStrSubst            SpecialChar
+hi def link jsType                     Type
+hi def link jsVarDecl                  jsDecl
+hi def link jsSpecial                  jsSpecifier

@@ -3,9 +3,35 @@
 
 " to be triggered by BufReadPost
 fu! inits#all()
-    call opts#grepprg()
-    call opts#completion()
-    call opts#dict_local()
+    if !(expand('%:p') =~# $HOME) | return 0 | endif
+    call opts#comma_opt('cinwords', ['match', 'loop', 'foreach', 'until', 'case', 'select'])
+
+    if !executable('rg') && isdirectory(systemlist("git rev-parse --show-toplevel")[0]) 
+        call opts#safe_setl(["grepprg=git grep -n -r $*"])
+    endif
+
+    if empty(&omnifunc)
+        call opts#safe_setl(['omnifunc=syntaxcomplete#Complete'])
+    endif
+
+    call opts#comma_opt('complete', ['.', 'k', 't'])
+
+    " Looks in ~/.vim/dicts for a matching dict. 
+    " If it finds one thent it sets locally dict to it.
+    let l:dict_dir = expand('~/.vim/dicts/')
+    let l:candidate = l:dict_dir.&filetype.'.dict'
+
+    if filereadable(l:candidate)
+        call opts#safe_setl(['dictionary='.l:candidate])
+        call opts#comma_opt('complete', ['k'])
+    else
+        let l:candidate = l:dict_dir.expand('%:e').'.dict'
+        if filereadable(l:candidate)
+            call opts#safe_setl(['dictionary='.l:candidate])
+            call opts#comma_opt('complete', ['k'])
+        endif
+    endif
+
     call opts#safe_setl([
                 \ 'autoindent',
                 \ 'breakindent',
@@ -43,15 +69,19 @@ fu! inits#all()
                 \ 'yml',
                 \ ])
 
-    if empty(&makeprg) && !(makeprg =~# 'make')
-        nn <buffer> <Space>me :make<CR>
+    if !empty(&makeprg) && !(&makeprg =~# 'make')
+        nn <buffer> <LocalLeader>m :make!<CR>
     endif
+
+    nn <buffer> <LocalLeader>e megg=G'ezz
+    nn <buffer> <LocalLeader>f mfgggqG'fzz
 
     " go back to where you left off
     if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 endf
 
 fu! inits#programming()
+    if !(expand('%:p') =~# $HOME) | return 0 | endif
     let l:anchors = ['.git']
     "call tags#project(l:anchors, 0)
     call opts#safe_setl(['nospell'])
@@ -69,6 +99,7 @@ fu! inits#programming()
 endf
 
 fu! inits#markup()
+    if !(expand('%:p') =~# $HOME) | return 0 | endif
     call opts#safe_setl([
                 \ 'conceallevel=3',
                 \ 'spell',
@@ -84,28 +115,30 @@ fu! inits#markup()
 endf
 
 fu! inits#lang_server()
+    if !(expand('%:p') =~# $HOME) | return 0 | endif
     nn <buffer> <silent> <LocalLeader>R :call LanguageClient#textDocument_references()<CR>
     nn <buffer> <silent> K              :call LanguageClient#textDocument_definition()<CR>
     nn <buffer> <silent> <LocalLeader>h :call LanguageClient#textDocument_hover()<CR>
     nn <buffer> <silent> <LocalLeader>i :call LanguageClient#textDocument_implementation()<CR>
     nn <buffer> <silent> <LocalLeader>r :call LanguageClient#textDocument_rename()<CR>
     nn <buffer> <silent> <LocalLeader>s :call LanguageClient#textDocument_documentSymbol()<CR>
-    setl omnifunc=LanguageClient#complete formatexpr=LanguageClient_textDocument_rangeFormatting()
+    call opts#omni(['LanguageClient#complete', 'LanguageClient_textDocument_rangeFormatting()'])
 endf
 
 fu! inits#non_home()
-    setl nomodifiable readonly
+    call opts#safe_setl(['nomodifiable', 'readonly'])
 endf
 
 fu! inits#term()
-    setl modifiable nospell noreadonly 
+    call opts#safe_setl(['nomodifiable', 'readonly', 'nospell'])
     nn <buffer> <Leader>' :close<CR>
 endf
 
 fu! inits#emmet()
+    if !(expand('%:p') =~# $HOME) | return 0 | endif
     if exists(':EmmetInstall')
         EmmetInstall
-        imap <buffer> <Tab> <plug>(emmet-expand-abbr)
+        im <buffer> <Tab> <plug>(emmet-expand-abbr)
     endif
 endf
 

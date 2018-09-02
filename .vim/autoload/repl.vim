@@ -60,7 +60,7 @@ fu! repl#list_repls(A, L, P)
 
     let l:ok = []
     
-    let l:args = {
+    let l:map = {
                 \ 'ash': ['-i'], 
                 \ 'bash': ['-i'], 
                 \ 'ccsh': [], 
@@ -71,15 +71,15 @@ fu! repl#list_repls(A, L, P)
                 \ 'fish': [], 
                 \ 'ghci': [], 
                 \ 'git add': ['--patch'], 
+                \ 'git checkout': ['--patch'], 
                 \ 'git commit': ['--patch'], 
                 \ 'git diff --staged': ['--patch'], 
                 \ 'git diff': ['--patch'], 
-                \ 'git checkout': ['--patch'], 
                 \ 'git reset': ['--patch'], 
                 \ 'gitsome': [], 
                 \ 'guile': ['--no-debug', '--'], 
                 \ 'ion': [], 
-                \ 'ipython': [' --pprint', '--autoindent', '--pylab'], 
+                \ 'ipython': ['--pprint', '--autoindent', '--pylab'], 
                 \ 'ipython3': ['--pprint', '--autoindent', '--pylab'], 
                 \ 'iruby': [], 
                 \ 'jshell': [], 
@@ -95,17 +95,22 @@ fu! repl#list_repls(A, L, P)
                 \ 'pdksh': ['-i'], 
                 \ 'psql': [], 
                 \ 'psysh': [], 
+                \ 'ptipython': [], 
+                \ 'ptipython3': [], 
                 \ 'ptpython': [], 
                 \ 'ptpython3': [], 
                 \ 'pypy': ['-i'], 
                 \ 'pypy3': ['-i'], 
                 \ 'python': ['-i'], 
                 \ 'python3': ['-i'], 
+                \ 'racket': ['-i'],
                 \ 'ranger': [], 
                 \ 'rebar': ['shell'], 
                 \ 'rebar3': ['shell'], 
                 \ 'redis': [], 
                 \ 'redis-cli': [], 
+                \ 'rlwrap dash': ['-i'],
+                \ 'rlwrap racket': ['-i'],
                 \ 'ruby': [], 
                 \ 'sbcl': [], 
                 \ 'scsh': [], 
@@ -116,10 +121,12 @@ fu! repl#list_repls(A, L, P)
                 \ 'stack ghci': [], 
                 \ 'zsh': ['-i'],        
                 \ }
-
-    for l:bin in keys(l:args)
-        if executable(substitute(l:bin, '\v^(\S+) .*', '\1', '')) && l:bin =~? a:A 
-            call add(l:ok, l:bin . ' ' . join(l:args[l:bin]))
+    for l:bin in keys(l:map)
+        " check if the first non-space word in each key is executable
+        " optionally you can prefix commands with 'rlwrap' (adds line editing)
+        " and this will respond to that by checking the second non-space word
+        if (((l:bin =~# '^\s*rlwrap') && executable('rlwrap') && executable(substitute(l:bin, '\v^rlwrap\s+(\S+).*', '\1', ''))) || executable(substitute(l:bin, '\v^(\S+).*', '\1', ''))) && (l:bin =~? a:A)
+            call add(l:ok, l:bin . ' ' . join(l:map[l:bin]))
         endif
     endfor
     return l:ok

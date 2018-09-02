@@ -1,20 +1,24 @@
-"if exists("b:current_syntax") | finish | endif
-
-if !exists('main_syntax')
-    let main_syntax = 'markdown'
+if exists('b:current_syntax') 
+    if b:current_syntax == 'markdown'
+        finish
+    elseif exists('b:markdown_syntax_loaded ')
+        finish
+    else
+        let b:markdown_syntax_loaded = 1
+    endif
+else
+    sy clear
+    let b:current_syntax = 'markdown' 
 endif
 
-sy clear
+sy sync minlines=200
 
 runtime! syntax/html.vim
 
-unlet! b:current_syntax
-
-sy sync minlines=10
-sy case ignore
-
 " `int i = 0`
 sy region markdownCode start="\v`" end="\v`" skip="\v\\`" oneline keepend
+" ``int i = 0``
+sy region markdownCode start="``" end="``" skip="\v\\`"   oneline keepend
 " ```
 "
 " code ...
@@ -27,7 +31,7 @@ sy region markdownFenced start="\v {,3}`{3,}" end="\v {,3}`{3,}" keepend contain
 "
 " ~~~
 sy region pandocFenced start="\v {,3}\~{3,}" end="\v {,3}\~{3,}" keepend contains=pandocAttr
-" Indented block:
+" Indented block: (WIP)
 "
 "   34ddb532d73c71e147782d5b3...  data-structures.md
 "   da439b3a0b2178463fda1d45b...  floyd-warshall.md
@@ -58,14 +62,6 @@ sy region pandocURI start="\v\<((<[a-z234]{3,7}(://|\@))|(\~|\.?/))" end=">" one
 " FIXME too slow
 " sy match pandocURI "\v((<[a-z234]{3,7}(://|\@))|\~|\.?/)\S{5,140}"
 
-" HR:
-sy match markdownHR "\* *\* *\*[ *]*$" contained
-sy match markdownHR "- *- *-[ -]*$"    contained
-sy match markdownHR "\v^((-{3,})|(_{3,})|(\*{3,}))"
-sy match markdownHR "\v^(- ){2,}-[ -]*"
-sy match markdownHR "\v^(\* ){2,}-[ \*]*"
-sy match markdownHR "\v^(_ ){2,}-[ _]*"
-
 sy region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
 sy match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
 sy region markdownUrl      matchgroup=markdownUrlDelimiter start="<" end=">" oneline keepend nextgroup=markdownUrlTitle skipwhite contained
@@ -86,7 +82,7 @@ sy region pandocYamlMetaBlock start="\v%^\n*---" end="\v^(\.{3}|-{3})"
 " Line Blocks:
 " |  Left aligned text
 " |      with some indentation.
-sy region pandocLineBlockPipe start="\v^\|[ \t]*" end="$" oneline contains=pandocExampleListRef,pandocSuperscript,pandocSubscript,markdownBold,markdownItalic,markdownItalicDelimiter,markdownBoldItalic,markdownURI,markdownEscape,markdownCode,pandocStrikethrough,markdownLinkText,markdownLinkTextDelimiter,markdownLink
+sy region pandocLineBlockPipe start="\v^\|\s*" end="$" oneline contains=pandocExampleListRef,pandocSuperscript,pandocSubscript,markdownBold,markdownItalic,markdownItalicDelimiter,markdownBoldItalic,markdownURI,markdownEscape,markdownCode,pandocStrikethrough,markdownLinkText,markdownLinkTextDelimiter,markdownLink
 
 " Subscript Superscript: 
 " x~i~
@@ -99,22 +95,25 @@ sy region pandocSuperscript start="\v\^" end="\v\^"             oneline conceale
 sy region pandocStrikethrough start="\~\~" end="\~\~" skip="\\\~" oneline contains=markdownBold,markdownItalic,markdownBoldItalic,markdownURI,markdownEscape
 
 " Lists: 
-sy match pandocBulletListMarker "\v^[ \t]*(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) "
+sy match pandocBulletListMarker "\v^\s*(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) "
 " same but not stuck to start of line (note lack of '^')
-sy match pandocBulletListMarkerBare "\v[ \t]+(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) " contained
+sy match pandocBulletListMarkerBare "\v\s+(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) " contained
 sy region pandocExampleListRef start="\v\(\@" end="\v\)" skip="\v\\\)" oneline
 " Term
 " ~ def1
 " ~ def2
 sy match pandocDefMarker "\v^ {,2}[\~:] " 
-sy match pandocAmbiguous "\v> +- +<|[ \t]+$"
+sy match pandocAmbiguous "\v> +- +<|\s+$"
 " something -- obviously
-sy match pandocDash "\v[ \t]--[ \t\n]"
+sy match pandocDash "\v\s--[ \t\n]"
+
+" HR: (must be loaded after lists)
+sy match markdownHR "\v^ {,3}((\* {,3})|(- {,3})|(_ {,3})){3,}$"
 
 " Links:
-sy region markdownInLineReference      start="\[" end=")"  skip="\v\\\]|\\\)" keepend   contains=markdownInLineReferenceLabel,markdownInLineReferenceURI           
-sy region markdownInLineReferenceLabel start="\[" end="\]" skip="\\\]"        contained matchgroup=Delimiter                                                       
-sy region markdownInLineReferenceURI   start="("  end=")"  skip="\\)"         contained matchgroup=Delimiter
+" sy region markdownInLineReference      start="\[" end=")"  skip="\v\\\]|\\\)" keepend   contains=markdownInLineReferenceLabel,markdownInLineReferenceURI           
+" sy region markdownInLineReferenceLabel start="\[" end="\]" skip="\\\]"        contained matchgroup=Delimiter                                                       
+" sy region markdownInLineReferenceURI   start="("  end=")"  skip="\\)"         contained matchgroup=Delimiter
 
 " Math:
 " \dostuff
@@ -130,12 +129,10 @@ sy region pandocInlineMath    start="\$"     end="\$"     skip="\v\\\$" oneline
 sy region pandocMultiLineMath start="\$\$"   end="\$\$"   skip="\v\\\$"                                     
 sy region pandocMultiLineMath start="\v\\\[" end="\v\\\]"                                                   
 
-hi link pandocTexBrace Character
-hi link pandocTexCmd Constant
 
 for s:i in range(1, 6)
     exe 'sy region markdownH'.s:i.' matchgroup=markdownHeadingDelimiter start="^'.repeat('#', s:i).' " end="\v('.repeat('#', s:i).')?$" keepend oneline contains=@Spell'
-    exe 'hi link markdownH'.s:i.' htmlH'.s:i
+    exe 'hi def link markdownH'.s:i.' htmlH'.s:i
 endfor
 
 " Inlines:
@@ -165,7 +162,7 @@ sy region pandocSimpleTable start="\v(^  +[^\n]*)?$\n^  +----+( +----+)*" end="\
 " FIXME extended pandoc table
 " sy region pandocSimpleTable start="\v^  +-{20,}$"                         end="\v^  +-{20,}$\n" contains=@Spell
 sy match  pandocSimpleTableError "\v------+ {2,}-----+" contained containedin=pandocSimpleTable 
-sy match  pandocSimpleTableError "\v^[ \t]?\S+"         contained containedin=pandocSimpleTable 
+sy match  pandocSimpleTableError "\v^\s?\S+"         contained containedin=pandocSimpleTable 
 sy match  pandocSimpleTableLine "\v----+"                         containedin=pandocSimpleTable
 
 " BlockQuote:
@@ -176,50 +173,47 @@ sy region markdownBlockQuoteQuote       start="\v^ {,3}\> ?\> ?"     end="$" one
 " > > > triple quoted text
 sy region markdownBlockQuoteQuotedQuote start="\v^ {,3}\> ?\> ?\> ?" end="$" oneline contains=pandocBulletListMarkerBare,markdownBold,markdownItalic,pandocStrikethrough,markdownBoldItalic,markdownCode,markdownURI,pandocInlineMath,pandocDash
 
-hi link markdownAsterisk              Delimiter
-hi link markdownBlock                 SpecialComment
-hi link markdownBlockQuote            String
-hi link markdownBlockQuoteQuote       Macro
-hi link markdownBlockQuoteQuotedQuote Operator
-hi link markdownBlockquote            SpecialComment
-hi link markdownBold                  htmlBold
-hi link markdownBoldDelimiter         Delimiter
-hi link markdownCode                  PreProc
-hi link markdownFenced                markdownCode                 
-hi link markdownHR                    Special
-hi link markdownHeadingDelimiter      Comment
-hi link markdownInLineReferenceLabel  URI
-hi link markdownInLineReferenceURI    Comment
-hi link markdownItalic                htmlItalic
-hi link markdownItalicDelimiter       Delimiter
-hi link markdownLiteralBlock          PreProc
-hi link markdownUrl                   Comment
-hi link pandocAttr                    SpecialChar
-hi link pandocBulletListMarker        Delimiter
-hi link pandocBulletListMarkerBare    Delimiter
-hi link pandocDash                    Character
-hi link pandocDefMarker               Special
-hi link pandocExampleListRef          Define
-hi link pandocFenced                  markdownFenced                 
-hi link pandocFencedDiv               SpecialComment
-hi link pandocInlineMath              Special
-hi link pandocLineBlockPipe           SpecialComment
-hi link pandocMultiLineMath           Special
-hi link pandocSimpleTable             SpecialComment
-hi link pandocSimpleTableError        pandocAmbiguous
-hi link pandocSimpleTableLine         Define
-hi link pandocStrikethrough           Comment
-hi link pandocSubscript               Character
-hi link pandocSuperscript             Character
-hi link pandocTitleBlock              PreProc
-hi link pandocURI                     URI
-hi link pandocYamlMetaBlock           PreProc
+
+hi def link markdownAsterisk              Delimiter
+hi def link markdownBlock                 SpecialComment
+hi def link markdownBlockQuote            String
+hi def link markdownBlockQuoteQuote       Macro
+hi def link markdownBlockQuoteQuotedQuote Operator
+hi def link markdownBlockquote            SpecialComment
+hi def link markdownBold                  htmlBold
+hi def link markdownBoldDelimiter         Delimiter
+hi def link markdownCode                  PreProc
+hi def link markdownFenced                markdownCode                 
+hi def link markdownHR                    Special
+hi def link markdownHeadingDelimiter      Comment
+hi def link markdownInLineReferenceLabel  URI
+hi def link markdownInLineReferenceURI    Comment
+hi def link markdownItalic                htmlItalic
+hi def link markdownItalicDelimiter       Delimiter
+hi def link markdownLiteralBlock          PreProc
+hi def link markdownUrl                   Comment
+hi def link pandocAttr                    SpecialChar
+hi def link pandocBulletListMarker        Delimiter
+hi def link pandocBulletListMarkerBare    Delimiter
+hi def link pandocDash                    Character
+hi def link pandocDefMarker               Special
+hi def link pandocExampleListRef          Define
+hi def link pandocFenced                  markdownFenced                 
+hi def link pandocFencedDiv               SpecialComment
+hi def link pandocInlineMath              Special
+hi def link pandocLineBlockPipe           SpecialComment
+hi def link pandocMultiLineMath           Special
+hi def link pandocSimpleTable             SpecialComment
+hi def link pandocSimpleTableError        pandocAmbiguous
+hi def link pandocSimpleTableLine         Define
+hi def link pandocStrikethrough           Comment
+hi def link pandocSubscript               Character
+hi def link pandocSuperscript             Character
+hi def link pandocTexBrace                Character
+hi def link pandocTexCmd                  Constant
+hi def link pandocTitleBlock              PreProc
+hi def link pandocURI                     URI
+hi def link pandocYamlMetaBlock           PreProc
 
 hi markdownHeadingDelimiter guifg=Grey30 ctermfg=239
-hi pandocAmbiguous guibg=Red ctermfg=Red
-
-let b:current_syntax = "markdown"
-
-if main_syntax ==# 'markdown'
-    unlet main_syntax
-endif
+hi pandocAmbiguous                       ctermfg=Red guibg=Red 

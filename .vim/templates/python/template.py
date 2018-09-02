@@ -3,7 +3,7 @@
 
 """{{ project }}
 
-Description: 
+Description:
     Project Description
 
 Contact:
@@ -27,9 +27,9 @@ from typing import List, Iterator, Iterable
 
 # initalise logging with sane configuration
 logging.basicConfig(
-    level=logging.DEBUG, format='%(levelname)s:%(asctime)s  %(message)s')
+    level=logging.DEBUG, format="%(levelname)s:%(asctime)s  %(message)s"
+)
 
-# declare a logger
 log: Logger = logging.getLogger()
 
 # run only if run as script

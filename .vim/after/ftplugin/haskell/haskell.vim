@@ -1,21 +1,25 @@
 compiler ghc
 
 " From <https://wiki.haskell.org/Vim>
-setl foldmarker={-,-} tabstop=4 expandtab shiftround expandtab 
-setl softtabstop=2 shiftwidth=2 foldmethod=indent indentkeys-=<space>
-setl cinwords=where,let,in,do,of
+call opts#safe_setl([
+            \ 'foldmarker={-,-}', 
+            \ 'tabstop=4', 
+            \ 'expandtab', 
+            \ 'shiftround', 
+            \ 'expandtab' 
+            \ 'softtabstop=2', 
+            \ 'shiftwidth=2', 
+            \ 'foldmethod=indent', 
+            \ 'indentkeys-=<space>', 
+            \ 'cinwords=where,let,in,do,of',
+            \ ])
 
 let s:anchors = ['.stack-work', '.git']
 let s:tw = (&textwidth  ==? '' ? 80 : &textwidth)
 let s:sw = (&shiftwidth ==? '' ?  2 : &shiftwidth)
 
-if exists('*HoogleOmniFunc')
-    setl omnifunc=HoogleOmniFunc 
-    nnoremap <buffer> K :silent call HoogleLookup()<CR>
-else
-    " failed to find hoogle -> use fallback (still pretty good)
-    setl omnifunc=syntaxcomplete#Complete
-endif
+call opts#omni(['HoogleOmniFunc', 'syntaxcomplete#Complete'])
+nn <buffer> K :silent call HoogleLookup()<CR>
 
 " + has stack
 " + in a stack project

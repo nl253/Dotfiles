@@ -5,7 +5,8 @@ export ELINKS_CONFDIR=$HOME/.config/elinks
 # export BASH_ENV=$HOME/.config/bash/.bashrc
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
-export EMAIL=norbertlogiewa96@gmail.com
+export EMAIL='norbertlogiewa96@gmail.com'
+
 # export RIPGREP_CONFIG_PATH=~/.config/rg/config
 
 # plantuml() { dash -c "java -jar ~/.local/share/plant-uml/plantum*.jar $*"; }
@@ -123,8 +124,6 @@ export FZF_DEFAULT_OPTS=" --filepath-word --history-size=10000 --history=$HOME/.
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-y:yank,alt-c:execute(cd {})' --bind='alt-b:backward-word,alt-f:forward-word' --bind='alt-v:half-page-up,ctrl-v:half-page-down,ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview,ctrl-n:down,ctrl-p:up'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute(\$EDITOR {})' --bind='alt-l:execute:(\$PAGER {})'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:160,fg+:11,border:0,spinner:0,header:0,bg+:0,info:0"
-
-if [ ! -x /usr/bin/tree ]; then tree() { ls -l $@; }; fi
 
 if [ -e ~/.config/ranger/scope.sh ]; then
   export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'

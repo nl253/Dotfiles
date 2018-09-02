@@ -49,6 +49,7 @@
     "react-dom": "^16.4.0",
     "remark": "^9.0.0",
     "remark-lint": "^6.0.1",
+    "scmindent": "^1.0.4",
     "showdown": "^1.8.0",
     "stylelint": "^9.2.1",
     "stylelint-config-recommended": "^2.1.0",

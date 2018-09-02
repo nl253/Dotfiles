@@ -1,3 +1,16 @@
+if exists('b:current_syntax') 
+    if b:current_syntax == 'pest'
+        finish
+    elseif exists('b:pest_syntax_loaded ')
+        finish
+    else
+        let b:pest_syntax_loaded = 1
+    endif
+else
+    let b:current_syntax = 'pest' 
+endif
+
+
 " rule = ...
 sy match pestRule /\v[a-z_]{2,}/
 
@@ -76,11 +89,11 @@ sy match pestOp '\v\{\d{,2}(,\d{,2})?\}' contained
 " a $ 
 sy match pestOp "\v\$|\^"                contained
 
-hi link pestRule        Statement
-hi link pestSpecialRule Special
-hi link pestStr         String
-hi link pestBrace       Delimiter
-hi link pestOp          Operator
-hi link pestRange       Character
-hi link pestComment     Comment
-hi link pestEscape      SpecialChar
+hi def link pestRule        Statement
+hi def link pestSpecialRule Special
+hi def link pestStr         String
+hi def link pestBrace       Delimiter
+hi def link pestOp          Operator
+hi def link pestRange       Character
+hi def link pestComment     Comment
+hi def link pestEscape      SpecialChar

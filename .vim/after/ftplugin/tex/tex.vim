@@ -1,4 +1,5 @@
 setl conceallevel=0 foldmethod=indent shiftwidth=2 tabstop=2
+let b:vimtex_main = 'main.tex'
 let b:tex_stylish = 0
 let g:tex_conceal = 'b' 
 let g:tex_fold_enabled = 0

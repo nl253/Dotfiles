@@ -20,7 +20,7 @@ com!                             CloseDupTabs   call utils#close_dup_tabs()
 com!                             HLCurrentWord  call utils#hl_word()
 com!                             ReformatBuffer call utils#reformat_buffer()
 
-com! HL echo exists('*SyntaxAttr') ? SyntaxAttr() : join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
+com! HL echo exists('*utils#_syntax_attr') ? utils#syntax_attr() : join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 
 com!       -complete=dir  -nargs=* Root   exec 'silent lcd '.utils#proj_root(split(<q-args>, ' ') + ['.git']) | echom '$PWD = '.string($PWD)
 com! -bang -complete=file -nargs=* Ctags  call tags#project(split(<q-args>, ' ') + ['.git'], <bang>0)

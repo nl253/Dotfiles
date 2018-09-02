@@ -1,12 +1,19 @@
-" quit when a syntax file was already loaded.
-if exists("b:current_syntax") | finish | endif 
+if exists('b:current_syntax') 
+    if (b:current_syntax ==# 'python') || exists('b:python_syntax_loaded')
+        finish
+    else
+        let b:python_syntax_loaded = 1
+    endif
+else
+    sy clear
+    let b:current_syntax = 'python' 
+endif
 
-" We need nocompatible mode in order to continue lines with backslashes.
-" Original setting will be restored.
-let s:cpo_save = &cpo
-set cpo&vim
+runtime! syntax/regex.vim
 
-sy keyword pythonBuiltin abs all any ascii bin bool breakpoint bytearray bytes callable chr classmethod compile complex delattr dict dir divmod enumerate eval exec filter float format frozenset getattr globals has attr hash help hex id input int isinstance issubclass iter len list locals map max memoryview min next object oct open ord pow print property range repr reversed round set setattr slice so rted staticmethod str sum super tuple type vars zip 
+" mainly for syntax#complete
+exe 'sy keyword pythonBuiltin '.join(systemlist("command python3 -c \"import string as s; import builtins as b\n\nfor j in ((i for i in dir(b) if i.lower() == i and i[0] in s.ascii_letters)): print(j)\""), ' ')
+sy keyword pythonSelf self
 
 " Python 3.5 introduced the use of the same symbol for matrix multiplication: https://www.python.org/dev/peps/pep-0465/.  
 " We now have to exclude the symbol from highlighting when used in that context.
@@ -20,16 +27,37 @@ sy match pythonMatMul "[^\\]\\\s*\n\%(\s*\.\.\.\s\)\=\s\+@" contains=ALLBUT,pyth
 " the start of each continued line; very similar to decorators and complex.
 sy match pythonMatMul "^\s*\%(\%(>>>\|\.\.\.\)\s\+\)\=\zs\%(\h\|\%(\h\|[[(]\).\{-}\%(\w\|[])]\)\)\s*\n\%(\s*\.\.\.\s\)\=\s\+@\%(.\{-}\n\%(\s*\.\.\.\s\)\=\s\+@\)*" contains=ALLBUT,pythonDecoratorName,pythonDecorator,pythonFunct,pythonDoctestValue transparent
 
-sy match   pythonFunct	"\h\w*" display contained
-
-sy keyword pythonTodo		FIXME NOTE TODO XXX contained
-sy match   pythonComment	"#.*$" contains=pythonTodo,@Spell
+sy match  pythonTodo    '\v<(FIXME|NOTE|TODO|XXX)>' contained
+sy region pythonComment start="#" end="$"           contains=pythonTodo,@Spell oneline 
+sy region pythonShebang start='\v%1l^#!' end='$' oneline
+hi link pythonShebang PreProc
 
 " Triple-quoted strings can contain doctests.
-sy region pythonStr       matchgroup=pythonQuotes       start=+[uU]\=\z(['"]\)+ end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
-sy region pythonStr       matchgroup=pythonTripleQuotes start=+[uU]\=\z('''\|"""\)+ skip=+\\["']+ end="\z1" keepend contains=pythonEscape,pythonSpaceError,pythonDoctest,@Spell
-sy region pythonRawString matchgroup=pythonQuotes       start=+[uU]\=[rR]\z(['"]\)+ end="\z1" skip="\\\\\|\\\z1" contains=@Spell
-sy region pythonRawString matchgroup=pythonTripleQuotes start=+[uU]\=[rR]\z('''\|"""\)+ end="\z1" keepend contains=pythonSpaceError,pythonDoctest,@Spell
+sy region pythonStr     matchgroup=pythonQuotes       start=+[uU]\?\z(['"]\)+         end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
+sy region pythonStr     matchgroup=pythonTripleQuotes start=+[uU]\?\z('''\|"""\)+     end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
+
+" printf-style str formatting inside *regular* strings (not f-string nor bytes) 
+" see <https://docs.python.org/3/library/stdtypes.html#old-string-formatting>
+sy match pythonPrintfModifier "%(\v[a-z_]+\V)\v[-+ 0#]?(\d+|\*)?(\.\d+)?\d*[EFGXacdefgiorsux]" contained containedin=pythonStr
+
+" highlight python code inside f-strings 
+" see <https://docs.python.org/3.7/library/string.html> 
+sy region pythonFmtStr  matchgroup=pythonQuotes       start=+f\z(['"]\)+              end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
+sy region pythonFmtStr  matchgroup=pythonTripleQuotes start=+f\z('''\|"""\)+          end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
+
+" E.g.: f"false negative on {i + 2}"
+" NOTE: this CANNOT contain `pythonBraces`
+sy region pythonFmtStrInter start='\v\{' end='\}' oneline contained containedin=pythonFmtStr contains=pythonFmtStrInter,pythonBrackets,pythonNum,pythonBuiltin,pythonError,pythonSelf,pythonBoolean,pythonClass,pythonOp,pythonConditional
+sy match pythonFmtStrMod '\v(![rsa])?(:(\w[\<\>\=\^]?)?[- \+]?#?0?\d*,?(\.\d+)?[bcdeEfFgGnosxX\%]?)?' contained 
+
+" highlight regular expressions in raw strings e.g.: r"(abc)?"
+" see <https://docs.python.org/3/library/re.html>
+sy region pythonRawStr  matchgroup=pythonQuotes       start=+[uU]\?[rR]\z(['"]\)+     end="\z1" skip="\\\\\|\\\z1" contains=@Spell,@regexAll
+sy region pythonRawStr  matchgroup=pythonTripleQuotes start=+[uU]\?[rR]\z('''\|"""\)+ end="\z1"                    contains=pythonSpaceError,@Spell,@regexAll                  keepend 
+
+sy region pythonByteStr matchgroup=pythonQuotes       start=+b\z(['"]\)+              end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape
+sy region pythonByteStr matchgroup=pythonTripleQuotes start=+b\z('''\|"""\)+          end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError                      keepend 
+
 
 sy match pythonEscape +\\[abfnrtv'"\\]+           contained
 sy match pythonEscape "\\\o\{1,3}"                contained
@@ -67,10 +95,10 @@ sy match pythonNum "\%(^\|\W\)\zs\d*\.\d\+\%([eE][+-]\=\d\+\)\=[jJ]\=\>"
 " avoid highlighting attributes as builtins
 sy match pythonAttribute /\.\h\w*/hs=s+1 contains=ALLBUT,pythonBuiltin,pythonFunct,pythonAsync transparent
 
-sy match pythonError "\v<([A-Z][a-z]+)*(Exception|Exit|Error|Warning)([A-Z][a-z]+)*>"
+sy match pythonError "\v<([A-Z][a-z]+)*(E(x(ception|it)|rror)|Warning)([A-Z][a-z]+)*>"
 
 " trailing whitespace
-sy match pythonSpaceError display excludenl "\s\+$"
+sy match pythonSpaceError display "\s\+$" excludenl 
 " mixed tabs and spaces
 sy match pythonSpaceError display " \+\t"
 sy match pythonSpaceError display "\t\+ "
@@ -99,20 +127,21 @@ sy keyword pythonException	 except finally raise try
 sy keyword pythonInclude	 from import
 sy keyword pythonAsync		 async await
 sy keyword pythonStatement	 lambda class def nextgroup=pythonFunct skipwhite
+sy match   pythonFunct       "\h\w*" contained display 
 sy keyword pythonKeyword     with as pass nonlocal assert break continue return yield exec global del
-sy match   pythonStatement	 '\v<yield\s+from>'
+sy match   pythonKeyword	 '\v<yield\s+from>'
 sy keyword pythonBoolean     True False None
-
-sy match   pythonType    "\v<[A-Z][a-z][a-zA-Z]+>"
-sy keyword pythonType    deque BZ2File BZ2Compressor BZ2Decompressor ABCMeta ABC UDPServer  TCPServer TCPServer ForkingUDPServer ThreadingTCPServer ThreadingUDPServer HTTPMessage HTTPResponse
-
-" type annotations
+sy match   pythonClass        "\v<[A-Z][a-z][a-zA-Z]+>"
+" a few exceptions that don't match the regexp above
+sy keyword pythonClass        deque BZ2File BZ2Compressor BZ2Decompressor ABCMeta ABC UDPServer TCPServer TCPServer ForkingUDPServer ThreadingTCPServer ThreadingUDPServer HTTPMessage HTTPResponse
 
 " punctuation
 sy match pythonColon ":" 
 sy match pythonComma "," 
-sy match pythonDot "\v\."
+sy match pythonDot   "\v\."
 sy match pythonKwArg "\v\w[[:alnum:]_]*\@=\="
+sy match pythonEq             '='     contained
+sy match pythonFunctSignArrow '\v-\>' contained
 
 " DELIMITERS:
 " sy match parenthesis "\v[\(\)]"
@@ -121,36 +150,50 @@ sy match pythonBraces "\v[\{\}]"
 sy match pythonBrackets "\v[\[\]]"
 
 " OPERATORS:
-" boolean ops
-sy keyword pythonOp and in is not or
-" + - / * (arithmetic)
-" //      (floor division)
-" **      (exponentiation)
-" %       (modulo)
-sy match   pythonOp "\v( |>)(-|//?|\+|\V%\v|\*\*?)( |<|$)"
-" set ops: | |= & &=
-sy match   pythonOp "\v( |>)(\||\&)\=?( |<|$)"
-" negative numbers
-sy match   pythonOp "\v-<"
-" > < <= >= -= == += *= iff *between* expressions
-sy match pythonComparison "\v( |>)(\=?[\*\=<>]|[-\*/\+]\=)( |<|$)"
+"
+" binary operators:
+"
+" pow:           x  ** 2
+" floor division x  // 2
+" bit shift left x  << 2
+" bit shift righ x  >> 2
+" eq             3  == 3
+" not equal      3  != 3
+" not            ! True
+" assignment     a  =  20
+" less than      3  <  3
+" greater than   3  >  3
+" modulo         3  %  3
+" addition       3  +  3
+" subtraction    3  -  3
+" multiplication 3  *  3
+" division       3  /  3
+" union          s  |  s2 
+" difference     s  ^  s2 
+" intersection   s  &  s2 
+" assignment (ie update) version of the above (with '=')
+sy match pythonOp "\v( |^|>)(([\*/\>\<]{2}|[-!\|\&\^/\%\*\+\>\<\=])\=?)( |$|<)"
 
-sy region pythonFunctSignature start="\v\s+-\>\s+" end=":" contains=pythonType,pythonBuiltin,pythonBrackets,pythonError
+" boolean ops
+sy keyword pythonOp and in is not or 
+
+" unary operators:
+"
+" negative num -10
+" bit flip     ~10
+sy match   pythonOp "\v[-\~]( |<)"
+
 
 " CORE:
-hi pythonStatement   guifg=gold   ctermfg=220
-hi pythonError       guifg=maroon ctermfg=Brown
-hi pythonKwArg       guifg=purple
-hi pythonSyntaxNoise guifg=grey   ctermfg=darkgrey
 hi def link pythonAsync          Statement
-hi def link pythonBoolean        Special
+hi def link pythonBoolean        Symbol
 hi def link pythonBraces         pythonSyntaxNoise
 hi def link pythonBrackets       pythonSyntaxNoise
 hi def link pythonBuiltin        Builtin
+hi def link pythonClass          Type
 hi def link pythonColon          pythonSyntaxNoise
 hi def link pythonComma          pythonSyntaxNoise
 hi def link pythonComment        Comment
-hi def link pythonComparison     Operator
 hi def link pythonConditional    Conditional
 hi def link pythonConditional    Conditional
 hi def link pythonDecorator      Define
@@ -159,28 +202,48 @@ hi def link pythonDoctest        Operator
 hi def link pythonDoctest        Special
 hi def link pythonDoctestValue   Define
 hi def link pythonDot            pythonSyntaxNoise
+hi def link pythonEq             pythonSyntaxNoise
 hi def link pythonEscape         Special
+hi def link pythonFmtStrMod      pythonEscape
+hi def link pythonPrintfModifier pythonEscape
 hi def link pythonException      Exception
+hi def link pythonFmtStr         pythonStr 
 hi def link pythonFunct          Function
-hi def link pythonFunctSignature Operator
+hi def link pythonFunctSignArrow pythonSyntaxNoise
 hi def link pythonInclude        Include
 hi def link pythonInclude        Special
 hi def link pythonKeyword        pythonStatement
 hi def link pythonMatMul         Operator
 hi def link pythonNum            Number
 hi def link pythonOp             Operator
-hi def link pythonQuotes         String
-hi def link pythonRawString      String
+hi def link pythonPolyType       pythonSyntaxNoise
+hi def link pythonQuotes         Operator
+hi def link pythonRawStr         String
 hi def link pythonRepeat         Repeat
 hi def link pythonRepeat         Repeat
 hi def link pythonSelf           Macro
 hi def link pythonSpaceError     Visual
 hi def link pythonStr            String
+hi def link pythonByteStr        SpecialComment
 hi def link pythonTodo           Todo
 hi def link pythonTripleQuotes   pythonQuotes
-hi def link pythonType           Type
+hi def link pythonTypeLabel      Type
+hi def      pythonStatement      guifg=gold   ctermfg=220
+hi def      pythonError          guifg=maroon ctermfg=Brown
+hi def      pythonKwArg          guifg=purple
+hi def      pythonSyntaxNoise    guifg=grey   ctermfg=darkgrey
 
-let b:current_syntax = "python"
+sy cluster pythonTypeInfo contains=pythonTypeLabel,pythonBrackets,pythonComma
 
-let &cpo = s:cpo_save
-unlet s:cpo_save
+" NOTE: this needs to be at the bottom to overwrite the follwing rules:
+" - `pythonBuiltin`
+" - `pythonClass`
+" - `pythonOp`
+"
+" NOTE: the order of rules below cannot change.
+" name of type such as: Text, int, float, Set etc. 
+sy match  pythonTypeLabel '\v_?([a-z][_a-z0-9]*|[A-Z]\w*)+' contained nextgroup=pythonPolyType,pythonEq
+" ... -> float:
+sy region pythonFunctSignature start="\v\s+-\>\s+" end=":" contains=@pythonTypeInfo,pythonFunctSignArrow,pythonColon transparent keepend
+" my_var: int = 22 
+sy region pythonTypedVar start='\v(^\s*[_a-zA-Z]\w*\s*)@<=:' end='=' oneline contains=@pythonTypeInfo,pythonEq,pythonColon transparent keepend

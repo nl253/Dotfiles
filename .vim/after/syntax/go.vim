@@ -199,12 +199,12 @@ sy match goFunction "\v([A-Za-z][a-z]+)+\@=\("
 sy match goFunction "\v\)"
 sy keyword goSwitch case default
 
-hi link goOperator Operator
+hi link goOperator        Operator
 hi link goOperatorBetween Operator
-hi link goOperatorRight Operator
-hi link goOperatorLeft Operator
-hi link goOperatorSticky Operator
-hi link goOperator Operator
-hi link goDelim Delimiter
-hi link goSwitch Conditional
+hi link goOperatorRight   Operator
+hi link goOperatorLeft    Operator
+hi link goOperatorSticky  Operator
+hi link goOperator        Operator
+hi link goDelim           Delimiter
+hi link goSwitch          Conditional
 "hi link goStdPackage Include

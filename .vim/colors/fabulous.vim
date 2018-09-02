@@ -1,41 +1,33 @@
-
-" Vim color file
-" Maintainer: Norbert Logiewa (github:nl253)
-" Last Change: 2017
-
 set background=dark
 
 hi clear
 
 if v:version > 580
-    " no guarantees for version 5.8 and below, but this makes it stop
-    " complaining
+    " no guarantees for version 5.8 and below, but this makes it stop complaining
     hi clear
-    if exists('g:syntax_on')
-        syntax reset
-    endif
+    if exists('g:syntax_on') | syntax reset | endif
 endif
 
 let g:colors_name = 'fabulous'
 
 " refer to http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 let s:color256 = {
-            \ 0 : '#000000',  1 : '#800000',  2 : '#008000',  3 : '#808000',  4 : '#000080',  5 : '#800080',  6 : '#008080' , 7 : '#c0c0c0',
-            \ 8 : '#808080',  9 : '#ff0000', 10 : '#00ff00', 11 : '#ffff00', 12 : '#0000ff', 13 : '#ff00ff', 14 : '#00ffff', 15 : '#ffffff',
-            \ 16 : '#000000',  17 : '#00005f',  18 : '#000087',  19 : '#0000af',  20 : '#0000d7',  21 : '#0000ff',
-            \ 22 : '#005f00',  23 : '#005f5f',  24 : '#005f87',  25 : '#005faf',  26 : '#005fd7',  27 : '#005fff',
-            \ 28 : '#008700',  29 : '#00875f',  30 : '#008787',  31 : '#0087af',  32 : '#0087d7',  33 : '#0087ff',
-            \ 34 : '#00af00',  35 : '#00af5f',  36 : '#00af87',  37 : '#00afaf',  38 : '#00afd7',  39 : '#00afff',
-            \ 40 : '#00d700',  41 : '#00d75f',  42 : '#00d787',  43 : '#00d7af',  44 : '#00d7d7',  45 : '#00d7ff',
-            \ 46 : '#00ff00',  47 : '#00ff5f',  48 : '#00ff87',  49 : '#00ffaf',  50 : '#00ffd7',  51 : '#00ffff',
-            \ 52 : '#5f0000',  53 : '#5f005f',  54 : '#5f0087',  55 : '#5f00af',  56 : '#5f00d7',  57 : '#5f00ff',
-            \ 58 : '#5f5f00',  59 : '#5f5f5f',  60 : '#5f5f87',  61 : '#5f5faf',  62 : '#5f5fd7',  63 : '#5f5fff',
-            \ 64 : '#5f8700',  65 : '#5f875f',  66 : '#5f8787',  67 : '#5f87af',  68 : '#5f87d7',  69 : '#5f87ff',
-            \ 70 : '#5faf00',  71 : '#5faf5f',  72 : '#5faf87',  73 : '#5fafaf',  74 : '#5fafd7',  75 : '#5fafff',
-            \ 76 : '#5fd700',  77 : '#5fd75f',  78 : '#5fd787',  79 : '#5fd7af',  80 : '#5fd7d7',  81 : '#5fd7ff',
-            \ 82 : '#5fff00',  83 : '#5fff5f',  84 : '#5fff87',  85 : '#5fffaf',  86 : '#5fffd7',  87 : '#5fffff',
-            \ 88 : '#870000',  89 : '#87005f',  90 : '#870087',  91 : '#8700af',  92 : '#8700d7',  93 : '#8700ff',
-            \ 94 : '#875f00',  95 : '#875f5f',  96 : '#875f87',  97 : '#875faf',  98 : '#875fd7',  99 : '#875fff',
+            \   0 : '#000000',   1 : '#800000',   2 : '#008000',   3 : '#808000',   4 : '#000080',   5 : '#800080',  6 : '#008080' , 7 : '#c0c0c0',
+            \   8 : '#808080',   9 : '#ff0000',  10 : '#00ff00',  11 : '#ffff00',  12 : '#0000ff',  13 : '#ff00ff', 14 : '#00ffff', 15 : '#ffffff',
+            \  16 : '#000000',  17 : '#00005f',  18 : '#000087',  19 : '#0000af',  20 : '#0000d7',  21 : '#0000ff',
+            \  22 : '#005f00',  23 : '#005f5f',  24 : '#005f87',  25 : '#005faf',  26 : '#005fd7',  27 : '#005fff',
+            \  28 : '#008700',  29 : '#00875f',  30 : '#008787',  31 : '#0087af',  32 : '#0087d7',  33 : '#0087ff',
+            \  34 : '#00af00',  35 : '#00af5f',  36 : '#00af87',  37 : '#00afaf',  38 : '#00afd7',  39 : '#00afff',
+            \  40 : '#00d700',  41 : '#00d75f',  42 : '#00d787',  43 : '#00d7af',  44 : '#00d7d7',  45 : '#00d7ff',
+            \  46 : '#00ff00',  47 : '#00ff5f',  48 : '#00ff87',  49 : '#00ffaf',  50 : '#00ffd7',  51 : '#00ffff',
+            \  52 : '#5f0000',  53 : '#5f005f',  54 : '#5f0087',  55 : '#5f00af',  56 : '#5f00d7',  57 : '#5f00ff',
+            \  58 : '#5f5f00',  59 : '#5f5f5f',  60 : '#5f5f87',  61 : '#5f5faf',  62 : '#5f5fd7',  63 : '#5f5fff',
+            \  64 : '#5f8700',  65 : '#5f875f',  66 : '#5f8787',  67 : '#5f87af',  68 : '#5f87d7',  69 : '#5f87ff',
+            \  70 : '#5faf00',  71 : '#5faf5f',  72 : '#5faf87',  73 : '#5fafaf',  74 : '#5fafd7',  75 : '#5fafff',
+            \  76 : '#5fd700',  77 : '#5fd75f',  78 : '#5fd787',  79 : '#5fd7af',  80 : '#5fd7d7',  81 : '#5fd7ff',
+            \  82 : '#5fff00',  83 : '#5fff5f',  84 : '#5fff87',  85 : '#5fffaf',  86 : '#5fffd7',  87 : '#5fffff',
+            \  88 : '#870000',  89 : '#87005f',  90 : '#870087',  91 : '#8700af',  92 : '#8700d7',  93 : '#8700ff',
+            \  94 : '#875f00',  95 : '#875f5f',  96 : '#875f87',  97 : '#875faf',  98 : '#875fd7',  99 : '#875fff',
             \ 100 : '#878700', 101 : '#87875f', 102 : '#878787', 103 : '#8787af', 104 : '#8787d7', 105 : '#8787ff',
             \ 106 : '#87af00', 107 : '#87af5f', 108 : '#87af87', 109 : '#87afaf', 110 : '#87afd7', 111 : '#87afff',
             \ 112 : '#87d700', 113 : '#87d75f', 114 : '#87d787', 115 : '#87d7af', 116 : '#87d7d7', 117 : '#87d7ff',
@@ -64,18 +56,9 @@ let s:color256 = {
             \ 250 : '#bcbcbc', 251 : '#c6c6c6', 252 : '#d0d0d0', 253 : '#dadada', 254 : '#e4e4e4', 255 : '#eeeeee',
             \ }
 
-" ========|===========
-" Red     | 160 168
-" Blue    | 67  68  111
-" Yellow  | 114 179
-" Orange  | 173 178
-" Purple  | 140
-" Magenta | 128
-" ========|===========
-
 let s:colors = {
-            \ 16: '#292b2e', 24: '#3C8380', 28: '#c269fe', 30: '#2aa1ae', 36: '#20af81', 40: '#00ff00',
-            \ 59: '#FF73B9', 68: '#4f97d7', 75: '#FF62B0', 76: '#86dc2f', 81: '#f9bb00', 88: '#330033',
+            \  16: '#292b2e',  24: '#3C8380',  28: '#c269fe',  30: '#2aa1ae',  36: '#20af81',  40: '#00ff00',
+            \  59: '#FF73B9',  68: '#4f97d7',  75: '#FF62B0',  76: '#86dc2f',  81: '#f9bb00',  88: '#330033',
             \ 104: '#df90ff', 114: '#67b11d', 128: '#e76a49', 135: '#B7B7FF', 136: '#dc752f', 139: '#d698fe',
             \ 140: '#b888e2', 141: '#9a9aba', 151: '#74BAAC', 160: '#e0211d', 161: '#E469FE', 167: '#ce537a',
             \ 168: '#ce537a', 169: '#bc6ec5', 171: '#6094DB', 173: '#e18254', 176: '#E697E6', 177: '#D881ED',
@@ -84,22 +67,22 @@ let s:colors = {
             \ 236: '#34323e', 238: '#544a65', 241: '#534b5d', 244: '#b4d1b6',
             \ }
 
-function! s:hi(item, fg, bg, cterm, gui)
+fu! s:hi(item, fg, bg, cterm, gui)
     let l:fg = empty(a:fg) ? '' : printf('ctermfg=%d guifg=%s', a:fg, get(s:colors, a:fg, s:color256[a:fg]))
     let l:bg = empty(a:bg) ? '' : printf('ctermbg=%d guibg=%s', a:bg, get(s:colors, a:bg, s:color256[a:bg]))
     let l:style = printf('cterm=%s gui=%s', a:cterm, a:gui)
-    execute 'hi '.a:item.' '.l:fg.' '.l:bg.' '.l:style
-endfunction
+    exe 'hi '.a:item.' '.l:fg.' '.l:bg.' '.l:style
+endfu
 
 let s:fg = 249
 let s:bg = get(g:, 'space_vim_dark_background', 235)
 
 let s:bias = s:bg - 235
-let s:bg0 = s:bg - 1
-let s:bg1 = s:bg + 1
-let s:bg2 = s:bg + 2
-let s:bg3 = s:bg + 3
-let s:bg4 = s:bg + 4
+let s:bg0  = s:bg - 1
+let s:bg1  = s:bg + 1
+let s:bg2  = s:bg + 2
+let s:bg3  = s:bg + 3
+let s:bg4  = s:bg + 4
 
 hi clear Cursor
 hi clear Error
@@ -130,7 +113,7 @@ call s:hi('Folded'      , 133   , s:bg1 , 'bold'      , 'bold')
 call s:hi('Function'    , 202   , ''    , 'bold'      , 'bold')
 call s:hi('Normal'      , 0     , ''    , 'none'      , 'none')
 call s:hi('Repeat'      , 68    , ''    , 'bold'      , 'bold')
-call s:hi('Include'     , 203   , ''    , 'none'      ,  'none')
+call s:hi('Include'     , 203   , ''    , 'none'      , 'none')
 call s:hi('SignColumn'  , 234   , s:bg0 , 'none'      , 'none')
 call s:hi('SpecialChar' , 198   , ''    , 'bold'      , 'bold')
 call s:hi('SpellBad'    , 168   , ''    , 'underline' , 'undercurl')
@@ -167,6 +150,22 @@ hi TabLineSel   ctermfg=NONE         ctermbg=DarkYellow guifg=Black       guibg=
 hi Title        cterm=BOLD           gui=BOLD           guifg=DarkYellow  ctermfg=DarkYellow
 hi TypeDef      guifg=LightMagenta   ctermfg=Magenta                                                                        
 hi WildMenu     term=bold            cterm=BOLD         gui=bold          ctermfg=white      ctermbg=Yellow     guibg=Black  guifg=Yellow
+
+hi Function    guifg=Orange3          
+hi PreProc     guibg=Grey15           guifg=Magenta1
+hi Normal      guibg=Grey10           
+"  hi          Statement              guifg=DarkMagenta
+hi Statement   guifg=MediumOrchid     
+hi Repeat      guifg=Orange3          
+hi Conditional guifg=Purple1          
+hi Keyword     guifg=SlateBlue        
+hi Operator    guifg=Grey50           gui=Bold
+hi Folded      guifg=MediumPurple4    guibg=Grey13
+hi Boolean     guifg=DarkOrange3      
+hi Number      guifg=Yellow3          
+hi SpecialChar guifg=DeepPink4        
+hi Comment     guifg=DeepSkyBlue4     
+hi String      guifg=SeaGreen         
 
 hi link Error          Exception
 hi link FoldColumn     Blank

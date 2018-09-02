@@ -69,7 +69,7 @@ fi
 unset -v ls_opts
 
 if [ -x /usr/bin/rlwrap ]; then
-  for i in 'dash -i'; do
+  for i in 'dash -i' 'racket -i' guile{2.0,}; do
     eval "alias $(echo $i | sed -E 's/^(\S+).*/\1/')='rlwrap $i'"
   done
 fi

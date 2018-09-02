@@ -1,4 +1,4 @@
-hi link jsonBraces Delimiter
-hi link jsonKeyword Keyword
-hi link jsonBoolean Boolean
-hi link jsonNumber Number
+hi def link jsonBraces  Delimiter
+hi def link jsonKeyword Keyword
+hi def link jsonBoolean Boolean
+hi def link jsonNumber  Number

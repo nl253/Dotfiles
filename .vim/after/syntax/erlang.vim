@@ -1,20 +1,17 @@
-hi link erlangVariable Constant
-hi link erlangStringModifier SpecialChar
-hi link erlangAtom Symbol
-hi link erlangBracket NONE
-
 " EDoc
 sy region erlangEDocMetaTag  start="@\v[a-z]{2,}" end="$" contained containedin=erlangComment keepend
-hi link erlangEDocMetaTag erlangComment
+sy region erlangEDocParam    start="\v\@param "   end="$" contained containedin=erlangComment
+sy region erlangEDocDescr    start="\v\@doc "     end="$" contained containedin=erlangComment keepend
+sy match erlangEDocParamVal      "\v<([A-Z][a-zA-Z]*)>" contained containedin=erlangEDocParam keepend
+sy match erlangEDocMetaTagMarker "@\v[a-z]{2,}"         contained containedin=erlangEDocMetaTag,erlangEDocDescr
 
-sy match erlangEDocMetaTagMarker "@\v[a-z]{2,}" contained containedin=erlangEDocMetaTag,erlangEDocDescr
-hi link erlangEDocMetaTagMarker Special
+hi link erlangVariable          Constant
+hi link erlangStringModifier    SpecialChar
+hi link erlangAtom              Symbol
+hi link erlangBracket           NONE
 
-sy region erlangEDocParam  start="\v\@param " end="$" contained containedin=erlangComment
-sy match erlangEDocParamVal  "\v<([A-Z][a-zA-Z]*)>" contained containedin=erlangEDocParam keepend
-hi link erlangEDocParamVal Type
-hi link erlangEDocParam erlangEDocMetaTagMarker
-
-sy region erlangEDocDescr  start="\v\@doc " end="$" contained containedin=erlangComment keepend
-hi link erlangEDocDescr Type
-
+hi def link erlangEDocDescr         Type
+hi def link erlangEDocParamVal      Type
+hi def link erlangEDocMetaTagMarker Special
+hi def link erlangEDocParam         erlangEDocMetaTagMarker
+hi def link erlangEDocMetaTag       erlangComment

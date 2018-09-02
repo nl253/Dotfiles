@@ -1,30 +1,30 @@
-
 fu! s:register(patterns, filetype)
-    exec 'au BufNewFile,BufRead '.join(a:patterns, ',').' if &filetype == "" | setl ft='.a:filetype.' | endif' 
+    exe 'au BufNewFile,BufRead '.join(a:patterns, ',').' if &filetype == "" | setl ft='.a:filetype.' | endif' 
 endf
 
 fu! s:force(patterns, filetype)
-    exec 'au BufNewFile,BufRead '.join(a:patterns, ',').' setl ft='.a:filetype
+    exe 'au BufNewFile,BufRead '.join(a:patterns, ',').' setl ft='.a:filetype
 endf
 
+sil cal s:register(['requrements.txt', '.flake8', '.gitstats', '.mypyrc', '.myclirc'], 'cfg')
+sil cal s:register(['.ideavimrc'], 'vim')
+sil cal s:register(['*.pest'], 'pest')
+sil cal s:register(['*.grammar', 'grammar', '*.peg', '*.bnf', '*.ebnf'], 'grammar')
+sil cal s:register(['.emacs', '.spacemacs'], 'lisp')
+sil cal s:register(['*.gv'], 'dot')
+sil cal s:register(['*.toml'], 'cfg')
+sil cal s:register(['*{ignore,conf}*'], 'config')
+sil cal s:register(['yarn.lock'], 'yaml')
+sil cal s:register(['*.puml'], 'plantuml')
+sil cal s:register(['*.ts'], 'typescript')
+sil cal s:register(['.tern-{config,project}', '.{markdown,html,es,style}lintrc', '.{babel,jsbeautify}rc' ,'*.lock', '.tsconfig'], 'json')
+sil cal s:register(['*.{twig,nunj,njk}'], 'jinja')
+sil cal s:register(['*.*css'], 'css')
 
-sil call s:register(['requrements.txt', '.flake8', '.gitstats', '.mypyrc', '.myclirc'], 'cfg')
-sil call s:register(['.ideavimrc'], 'vim')
-sil call s:register(['*.pest'], 'pest')
-sil call s:register(['*.grammar', 'grammar', '*.peg', '*.bnf', '*.ebnf'], 'grammar')
-sil call s:register(['.emacs', '.spacemacs'], 'lisp')
-sil call s:register(['*.gv'], 'dot')
-sil call s:register(['*.toml'], 'cfg')
-sil call s:register(['*{ignore,conf}*'], 'config')
-sil call s:register(['yarn.lock'], 'yaml')
-sil call s:register(['*.puml'], 'plantuml')
-sil call s:register(['*.ts'], 'typescript')
-sil call s:register(['.tern-{config,project}', '.{markdown,html,es,style}lintrc', '.{babel,jsbeautify}rc' ,'*.lock', '.tsconfig'], 'json')
-sil call s:register(['*.{twig,nunj,njk}'], 'jinja')
-sil call s:register(['*.*css'], 'css')
-" sil call s:register(['*.ts'], 'typescript.javascript')
+sil cal s:force(['*.v', '*.coq'], 'coq')
+" sil cal s:force(['.rkt', '.rktl', '.rktd', '.scrbl', '.plt', '.ss'], 'scheme')
 
-sil call s:force(['*.v', '*.coq'], 'coq')
+" sil cal s:register(['*.ts'], 'typescript.javascript')
 
-" sil call s:register(['git-cmd'], 'git-cmd')
-" sil call s:register(['git-status'], 'git-status')
+" sil cal s:register(['git-cmd'], 'git-cmd')
+" sil cal s:register(['git-status'], 'git-status')
