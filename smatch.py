@@ -56,7 +56,7 @@ def test(s, non_matches: List[Text] = ["wooo", "asdlkfjasd", "alsjd"]):
         assert match(s, i), f"false negative on {i}"
 
     for i in non_matches:
-        assert not match(s, i), f"false positive %(something)s on {i}"
+        assert not match(s, i), f"false positive on {i}"
 
     print("OK!")
 

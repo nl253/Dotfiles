@@ -9,6 +9,9 @@ else
     let b:current_syntax = 'python' 
 endif
 
+" for strings
+runtime! syntax/printf.vim
+" for raw strings
 runtime! syntax/regex.vim
 
 " mainly for syntax#complete
@@ -33,17 +36,17 @@ sy region pythonShebang start='\v%1l^#!' end='$' oneline
 hi link pythonShebang PreProc
 
 " Triple-quoted strings can contain doctests.
-sy region pythonStr     matchgroup=pythonQuotes       start=+[uU]\?\z(['"]\)+         end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
-sy region pythonStr     matchgroup=pythonTripleQuotes start=+[uU]\?\z('''\|"""\)+     end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
+sy region pythonStr     matchgroup=pythonQuotes       start=+[uU]\?\z(['"]\)+     end="\z1" skip="\\\\\|\\\z1" contains=printf,pythonEscape,@Spell
+sy region pythonStr     matchgroup=pythonTripleQuotes start=+[uU]\?\z('''\|"""\)+ end="\z1" skip=+\\["']+      contains=printf,pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
 
 " printf-style str formatting inside *regular* strings (not f-string nor bytes) 
 " see <https://docs.python.org/3/library/stdtypes.html#old-string-formatting>
-sy match pythonPrintfModifier "%(\v[a-z_]+\V)\v[-+ 0#]?(\d+|\*)?(\.\d+)?\d*[EFGXacdefgiorsux]" contained containedin=pythonStr
+" sy match pythonPrintfModifier "%(\v[a-z_]+\V)\v[-+ 0#]?(\d+|\*)?(\.\d+)?\d*[EFGXacdefgiorsux]" contained containedin=pythonStr
 
 " highlight python code inside f-strings 
 " see <https://docs.python.org/3.7/library/string.html> 
-sy region pythonFmtStr  matchgroup=pythonQuotes       start=+f\z(['"]\)+              end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
-sy region pythonFmtStr  matchgroup=pythonTripleQuotes start=+f\z('''\|"""\)+          end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
+sy region pythonFmtStr  matchgroup=pythonQuotes       start=+f\z(['"]\)+ms=s+1     end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
+sy region pythonFmtStr  matchgroup=pythonTripleQuotes start=+f\z('''\|"""\)+ms=s+3 end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
 
 " E.g.: f"false negative on {i + 2}"
 " NOTE: this CANNOT contain `pythonBraces`
@@ -55,9 +58,8 @@ sy match pythonFmtStrMod '\v(![rsa])?(:(\w[\<\>\=\^]?)?[- \+]?#?0?\d*,?(\.\d+)?[
 sy region pythonRawStr  matchgroup=pythonQuotes       start=+[uU]\?[rR]\z(['"]\)+     end="\z1" skip="\\\\\|\\\z1" contains=@Spell,@regexAll
 sy region pythonRawStr  matchgroup=pythonTripleQuotes start=+[uU]\?[rR]\z('''\|"""\)+ end="\z1"                    contains=pythonSpaceError,@Spell,@regexAll                  keepend 
 
-sy region pythonByteStr matchgroup=pythonQuotes       start=+b\z(['"]\)+              end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape
-sy region pythonByteStr matchgroup=pythonTripleQuotes start=+b\z('''\|"""\)+          end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError                      keepend 
-
+sy region pythonByteStr matchgroup=pythonQuotes       start=+b\z(['"]\)+ms=s+1        end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape
+sy region pythonByteStr matchgroup=pythonTripleQuotes start=+b\z('''\|"""\)+me=e+3    end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError                      keepend 
 
 sy match pythonEscape +\\[abfnrtv'"\\]+           contained
 sy match pythonEscape "\\\o\{1,3}"                contained
@@ -185,12 +187,13 @@ sy match   pythonOp "\v[-\~]( |<)"
 
 
 " CORE:
+" hi def link pythonClass          Type
 hi def link pythonAsync          Statement
 hi def link pythonBoolean        Symbol
 hi def link pythonBraces         pythonSyntaxNoise
 hi def link pythonBrackets       pythonSyntaxNoise
 hi def link pythonBuiltin        Builtin
-hi def link pythonClass          Type
+hi def link pythonByteStr        SpecialComment
 hi def link pythonColon          pythonSyntaxNoise
 hi def link pythonComma          pythonSyntaxNoise
 hi def link pythonComment        Comment
@@ -204,10 +207,9 @@ hi def link pythonDoctestValue   Define
 hi def link pythonDot            pythonSyntaxNoise
 hi def link pythonEq             pythonSyntaxNoise
 hi def link pythonEscape         Special
-hi def link pythonFmtStrMod      pythonEscape
-hi def link pythonPrintfModifier pythonEscape
 hi def link pythonException      Exception
 hi def link pythonFmtStr         pythonStr 
+hi def link pythonFmtStrMod      pythonEscape
 hi def link pythonFunct          Function
 hi def link pythonFunctSignArrow pythonSyntaxNoise
 hi def link pythonInclude        Include
@@ -217,6 +219,7 @@ hi def link pythonMatMul         Operator
 hi def link pythonNum            Number
 hi def link pythonOp             Operator
 hi def link pythonPolyType       pythonSyntaxNoise
+hi def link pythonPrintfModifier pythonEscape
 hi def link pythonQuotes         Operator
 hi def link pythonRawStr         String
 hi def link pythonRepeat         Repeat
@@ -224,14 +227,20 @@ hi def link pythonRepeat         Repeat
 hi def link pythonSelf           Macro
 hi def link pythonSpaceError     Visual
 hi def link pythonStr            String
-hi def link pythonByteStr        SpecialComment
 hi def link pythonTodo           Todo
 hi def link pythonTripleQuotes   pythonQuotes
-hi def link pythonTypeLabel      Type
-hi def      pythonStatement      guifg=gold   ctermfg=220
-hi def      pythonError          guifg=maroon ctermfg=Brown
-hi def      pythonKwArg          guifg=purple
-hi def      pythonSyntaxNoise    guifg=grey   ctermfg=darkgrey
+hi def link pythonTypeLabel      pythonClass
+hi def link pythonTypedVar       pythonClass
+
+" hi def      pythonStatement      guifg=Gold   ctermfg=220
+" hi def      pythonClass          guifg=Orchid2
+" hi def      pythonError          guifg=Maroon ctermfg=Brown
+hi def link pythonClass          Type
+hi def link pythonStatement      Statement
+hi def link pythonError          Error
+
+hi def      pythonKwArg          guifg=Purple
+hi def      pythonSyntaxNoise    guifg=Grey   ctermfg=Darkgrey
 
 sy cluster pythonTypeInfo contains=pythonTypeLabel,pythonBrackets,pythonComma
 

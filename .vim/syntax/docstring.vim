@@ -1,3 +1,5 @@
+" Syntax for C-Style docstrings 
+" -----------------------------
 if exists('b:docstring_syntax_loaded ')
     finish
 else

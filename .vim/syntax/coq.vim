@@ -1,3 +1,16 @@
+if exists('b:current_syntax') 
+    if b:current_syntax == 'coq'
+        finish
+    elseif exists('b:coq_syntax_loaded ')
+        finish
+    else
+        let b:coq_syntax_loaded = 1
+    endif
+else
+    sy clear
+    let b:current_syntax = 'coq' 
+endif
+
 sy keyword coqStmt    Definition Eval Print Fixpoint Theorem Proof Set Unset Strict Implicit Require Import Arguments
 sy keyword coqType    nat Prop Type
 sy keyword coqBuiltin intros induction simpl reflexivity rewrite exact
@@ -13,11 +26,11 @@ sy match   coqOp '\v^\s*\|( |<)'
 sy match   coqOp '\v(<|>| ):\=?( |$|<|>)'
 sy region  coqComment start='(\*' end='\*)'
 
-hi link coqStmt    Statement
-hi link coqKeyword Keyword
-hi link coqBuiltin Builtin
-hi link coqType    Type
-hi link coqOp      Operator
-hi link coqDelim   Delimiter
-hi link coqComment Comment
-hi link coqNum     Number
+hi def link coqStmt    Statement
+hi def link coqKeyword Keyword
+hi def link coqBuiltin Builtin
+hi def link coqType    Type
+hi def link coqOp      Operator
+hi def link coqDelim   Delimiter
+hi def link coqComment Comment
+hi def link coqNum     Number
