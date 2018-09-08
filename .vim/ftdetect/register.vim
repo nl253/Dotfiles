@@ -6,11 +6,17 @@ fu! s:force(patterns, filetype)
     exe 'au BufNewFile,BufRead '.join(a:patterns, ',').' setl ft='.a:filetype
 endf
 
-sil cal s:register(['requrements.txt', '.flake8', '.gitstats', '.mypyrc', '.myclirc'], 'cfg')
+sil cal s:register([
+            \ 'requrements.txt', 
+            \ '.flake8', 
+            \ '.gitstats', 
+            \ '.mypyrc', 
+            \ '.myclirc'
+            \ ], 'cfg')
 sil cal s:register(['.ideavimrc'], 'vim')
 sil cal s:register(['*.pest'], 'pest')
-sil cal s:register(['*.grammar', 'grammar', '*.peg', '*.bnf', '*.ebnf'], 'grammar')
-sil cal s:register(['.emacs', '.spacemacs'], 'lisp')
+sil cal s:register(['*.grammar', 'grammar', '*.{peg,bnf,ebnf}'], 'grammar')
+sil cal s:register(['.{space,e}macs'], 'lisp')
 sil cal s:register(['*.gv'], 'dot')
 sil cal s:register(['*.toml'], 'cfg')
 sil cal s:register(['*{ignore,conf}*'], 'config')
@@ -22,9 +28,6 @@ sil cal s:register(['*.{twig,nunj,njk}'], 'jinja')
 sil cal s:register(['*.*css'], 'css')
 
 sil cal s:force(['*.v', '*.coq'], 'coq')
-" sil cal s:force(['.rkt', '.rktl', '.rktd', '.scrbl', '.plt', '.ss'], 'scheme')
+sil cal s:force(['*.ctags'], 'ctags')
 
 " sil cal s:register(['*.ts'], 'typescript.javascript')
-
-" sil cal s:register(['git-cmd'], 'git-cmd')
-" sil cal s:register(['git-status'], 'git-status')

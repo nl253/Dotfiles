@@ -324,7 +324,6 @@ you should place your code here."
 
   (setq scroll-margin 12)
   (setq hscroll-margin 12)
-  (setq racer-rust-src-path "/home/norbert/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib")
 
   (add-hook 'emacs-lisp-mode-hook 'electric-pair-mode)
   (add-hook 'markdown-mode-hook 'abbrev-mode)

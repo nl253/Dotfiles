@@ -1,11 +1,11 @@
 " These *need* to be set!
 call opts#letg_default('todo_slide_in_width',  65)
-call opts#letg_default('todo_file',            expand('~/Documents/Notes/todo.md'))
+call opts#letg_default('todo_file',            findfile("todo.md", expand("~/")."**6/"))
 call opts#letg_default('netrw_slide_in_width', 25)
 call opts#letg_default('session_dir',          expand('~/').'.vim/sessions')
-call opts#letg_default('default_session_file', join([g:session_dir, expand('$USER').'.vim'], '/'))
+call opts#letg_default('default_session_file', join([g:session_dir, $USER.'.vim'], '/'))
 call opts#letg_default('view_dir',             expand('~/').'.vim/views')
-call opts#letg_default('default_view_file',    join([g:view_dir, expand('$USER').'.vim'], '/'))
+call opts#letg_default('default_view_file',    join([g:view_dir, $USER.'.vim'], '/'))
 
 function! utils#syntax_attr()
      let synid = ""
@@ -123,7 +123,7 @@ endf
 
 fu! utils#project_files_qf()
 
-    let l:root = utils#proj_root(['.git'])
+    let l:root = utils#proj_root('.git')
     let l:ext = expand('%:e')
 
     " list all files with the same extension
@@ -139,7 +139,7 @@ endf
 
 fu! utils#git_files_qf()
 
-    let l:root = utils#proj_root(['.git'])
+    let l:root = utils#proj_root('.git')
     let l:ext = expand('%:e')
 
     " list all files with the same extension
@@ -195,20 +195,22 @@ fu! utils#_buffer_wipeout_helper(path, bufno)
 endf
 
 " Add to args all project files with the same extension starting " from the project root
-fu! utils#add_project_files(anchors)
+fu! utils#add_project_files(anchor, ...) abort
 
+    let l:anchors = filter([a:anchor] + a:000, '!empty(v:val)')
+
+    " lack of proper anchors
+    "   OR
     " not run at home
-    if !(expand('%:p') =~# $HOME) 
-        return 0 
-
+    "   OR
     " not in a regular buffer
-    elseif !(&buflisted) || (&buftype == 'nofile') || (&buftype == 'quickfix') 
+    if empty(l:anchors) || !(expand('%:p') =~# $HOME) || !(&buflisted) || (&buftype == 'nofile') || (&buftype == 'quickfix') 
         return 0
     endif
 
     " start depth *NEEDS* to be 1
     let l:lvl = 1
-    let l:root = utils#proj_root(a:anchors)
+    let l:root = execute('echo utils#proj_root('.join(map(l:anchors, 'string(v:val)'), ',').')')
     let l:ext = expand('%:e')
     let l:max_depth = 6
     " you always start with some loaded files
@@ -231,7 +233,7 @@ fu! utils#add_project_files(anchors)
     exe 'argadd '.join(l:files, ' ')
 endf
 
-fu! utils#append_to_dict(word)
+fu! utils#append_to_dict(word) abort
     if filereadable(&dictionary)
         call writefile(split(a:word), expand(&dictionary), 'a')
         echom 'appended '.string(a:word).' to '.string(&dictionary)
@@ -240,7 +242,7 @@ fu! utils#append_to_dict(word)
     endif
 endf
 
-fu! utils#async_run(cmd)
+fu! utils#async_run(cmd) abort
     let l:save_shell = &shell
     let &shell = '/bin/bash'
     silent exe '!'.a:cmd.' &'
@@ -251,11 +253,12 @@ fu! utils#async_run(cmd)
     let &shell = l:save_shell
 endf
 
-fu! utils#proj_root(anchors)
+fu! utils#proj_root(anchor, ...)
 
     let l:this_dir = expand('%:p:h')
+    let l:anchors = filter([a:anchor] + a:000, '!empty(v:val)')
 
-    for l:anchor in a:anchors
+    for l:anchor in l:anchors
 
         let l:maybe_dir = finddir(l:anchor, l:this_dir.';'.$HOME)
 
@@ -405,7 +408,7 @@ fu! utils#safe_subst(l1, l2)
     endif
 endf
 
-fu! utils#reformat_buffer()
+fu! utils#reformat_buffer() abort
 
     " remove trailing whitespace
     try

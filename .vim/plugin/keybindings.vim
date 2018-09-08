@@ -214,8 +214,8 @@ ino <M-Space> <C-o>:call<Space>emacs#i_del_space_between_words()<CR>
 " Don't know what these do:
 " ino  <C-X><C-A> <C-A>
 
-"ino <M-b> <C-o>b<Left>
-"ino <M-f> <C-o>e<Right>
+ino <M-b> <C-o>b<Left>
+ino <M-f> <C-o>e<Right>
 "cno <M-f> <S-Right>
 "cno <C-a> <Home>
 "cno <M-b> <S-Left>

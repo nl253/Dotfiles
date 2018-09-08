@@ -11,8 +11,8 @@ export EMAIL='norbertlogiewa96@gmail.com'
 
 # plantuml() { dash -c "java -jar ~/.local/share/plant-uml/plantum*.jar $*"; }
 
-if [ -x $(which go 2>/dev/null) ]; then
-  export PATH=$PATH:$(go env GOPATH)/bin
+if [ -x $(command which go 2>/dev/null) ]; then
+  export PATH=$PATH:$(command go env GOPATH)/bin
 fi
 
 # Don't check mail when opening terminal.
@@ -55,7 +55,7 @@ export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; histor
 export QT_SELECT=5
 
 # $PATH
-for directory in .local .yarn .stack .cabal .cargo .config/composer/vendor .local/share/fzf go node_modules; do
+for directory in .racket .local .yarn .stack .cabal .cargo .config/composer/vendor .local/share/fzf go node_modules; do
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
 

@@ -1,0 +1,3 @@
+--langdef=MyMake
+--langmap=MyMake:.Makefile
+--regex-MyMake=/^([^# \t]*):/\1/t,target/

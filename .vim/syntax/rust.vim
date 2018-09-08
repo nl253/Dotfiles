@@ -1,10 +1,6 @@
 if exists('b:current_syntax') 
-    if b:current_syntax == 'rust'
+    if b:current_syntax ==# 'rust'
         finish
-    elseif exists('b:rust_syntax_loaded ')
-        finish
-    else
-        let b:rust_syntax_loaded = 1
     endif
 else
     let b:current_syntax = 'rust' 

@@ -1,3 +1,13 @@
+fu! views#err(msg, ...)
+    let l:msg = '[views] '.a:msg.' '.join(a:000, ' ')
+    call add(v:errors, l:msg)
+    echoerr l:msg
+endf
+
+fu! views#msg(msg, ...)
+    echom '[views] '.a:msg.' '.join(a:000, ' ')
+endf
+
 fun! views#list(A, L, P)
     let l:a = map(systemlist('ls ~/.vim/views/*.vim'), 'fnamemodify(v:val, ":t:r")')
     if !empty(l:a) && len(l:a[0]) < 2
@@ -9,24 +19,24 @@ endfun
 fun! views#read(file)
     if len(a:file) > 0
         let l:f = join([g:view_dir, substitute(a:file, '.vim', '', 'g').'.vim'], '/')
-        echom '[vim-saner] loading view from '.l:f
+        call views#msg('loading view from', l:f)
         exe 'so '.l:f
     elseif filereadable(g:default_view_file)
-        echom '[vim-saner] loading view from '.g:default_view_file
+        call views#msg('loading view from', g:default_view_file)
         exe 'so '.g:default_view_file
     else
-        echoerr '[vim-saner] no view file in '.g:default_view_file
+        call views#err('no view file in ', g:default_view_file)
     endif
 endfun
 
 fun! views#save(file)
     if len(a:file) > 0 
         let l:f = join([g:view_dir, substitute(a:file, '.vim', '', 'g').'.vim'], '/')
-        exe 'mkview! '.l:f
-        echom '[vim-saner] created a view file in '.l:f
+        exe 'mkvie! '.l:f
+        call views#msg('created a view file in', l:f)
     else
-        exe 'mkview! '.g:default_view_file
-        echom '[vim-saner] created a view file in '.g:default_view_file
+        exe 'mkvie! '.g:default_view_file
+        call views#msg('created a view file in', g:default_view_file)
     endif
 endfun
 
@@ -37,14 +47,14 @@ fun! views#delete(file, bang)
             let l:f = join([g:view_dir, a:file], '/')
             echo delete(l:f, 'rf')
         endif
-        echom '[vim-saner] removed '.l:f
+        call views#msg('removed', l:f)
     elseif a:bang
         for i in systemlist('ls '.g:view_dir.'/*')
             silent call delete(i)
         endfor
-        echom '[vim-saner] removed all view files'
+        call views#msg('removed all view files')
     else
         silent call delete(g:default_view_file, 'rf')
-        echom '[vim-saner] removed '.g:default_view_file
+        call views#msg('removed', g:default_view_file)
     endif
 endfun

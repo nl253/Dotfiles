@@ -61,6 +61,7 @@ call opts#formatprg({
             \ })
 
 " NOTE: you will have to untar them
-call tags#lib(99999, 0, '~/.stack/indices/Hackage/packages')
-call utils#add_project_files(s:anchors)
-call tags#project(s:anchors, 0)
+CtagsLib ~/.stack/indices/Hackage/packages
+for l:cmd in ['ProjectFiles', 'CtagsProject']
+    exe l:cmd.' '.join(s:anchors, ' ')
+endfor

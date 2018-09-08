@@ -1,11 +1,5 @@
 " Syntax for C-Style docstrings 
 " -----------------------------
-if exists('b:docstring_syntax_loaded ')
-    finish
-else
-    let b:docstring_syntax_loaded = 1
-endif
-
 sy region docstringMetaTag     start='\V* @\v[a-z]+>'ms=s+2     end='$'  contained keepend oneline 
 sy region docstringType        start=/{/                        end=/}/  contained keepend oneline containedin=docstringMetaTag 
 sy region docstringParam       start='\v (([a-z][ A-Za-z]*)|$)' end='$'  contained keepend oneline containedin=docstringMetaTag 

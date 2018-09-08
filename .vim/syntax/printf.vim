@@ -1,10 +1,5 @@
 " Syntax for printf(3) (to be used inside of strings)
 " ---------------------------------------------------
-if exists('b:printf_syntax_loaded ')
-    finish
-else
-    let b:printf_syntax_loaded = 1
-endif
 sy region printf start="%" end="\v[EFGXacdefgiorsux]" contained nextgroup=printfFlags    contains=printfFlags,printfMinWidth,printfPrec,printfLen  
 sy match  printfFlags "\v[-+ 0#]{,5}"                 contained nextgroup=printfMinWidth
 sy match  printfMinWidth "\v(\.\d+)?"                 contained nextgroup=printfPrec

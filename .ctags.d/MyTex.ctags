@@ -1,0 +1,12 @@
+--langdef=MyTex
+--langmap=MyTex:.tex.latex
+--regex-MyTex=/\\label\{([^}]*)\}/\1/l,label/
+--regex-MyTex=/\\(section|paragraph)\{([^}]*)\}/\2/t,\1/
+--regex-MyTex=/\\sub(section|paragraph)\{([^}]*)\}/\2/T,\1/
+--regex-MyTex=/\\subsub(section|paragraph)\{([^}]*)\}/\2/u,\1/
+--regex-MyTex=/\\includegraphics[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/g,graphic/
+--regex-MyTex=/\\lstinputlisting[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/L,listing/
+--regex-MyTex=/\\pageref[[:space:]]*\{([^}]+)\}/\1/p,pageref/
+--regex-MyTex=/\\ref[[:space:]]*\{([^}]+)\}/\1/r,ref/
+--regex-MyTex=/^\\(chapter|part)[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/ \3/s,chapter/
+--regex-MyTex=/^\\(chapter|part)[[:space:]]*\*[[:space:]]*\{([^}]+)\}/ \2/S,chapter/ 

@@ -1,5 +1,5 @@
 if exists('b:current_syntax') 
-    if b:current_syntax == 'markdown'
+    if b:current_syntax ==# 'markdown'
         finish
     elseif exists('b:markdown_syntax_loaded ')
         finish

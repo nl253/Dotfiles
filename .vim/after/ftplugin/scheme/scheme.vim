@@ -5,7 +5,3 @@ call opts#safe_setl([
             \ 'foldmethod=indent'
             \ ])
 call opts#formatprg({'scmindent': 'scmindent'})
-call opts#makeprg({'racket': 'racket %'})
-
-" CtagsProject .git
-CtagsLib! /usr/share/racket/collects/racket

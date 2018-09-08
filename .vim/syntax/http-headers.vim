@@ -1,10 +1,6 @@
 if exists('b:current_syntax') 
-    if b:current_syntax == 'http-headers'
+    if b:current_syntax ==# 'http-headers'
         finish
-    elseif exists('b:http_headers_syntax_loaded ')
-        finish
-    else
-        let b:http_headers_syntax_loaded = 1
     endif
 else
     let b:current_syntax = 'http-headers' 

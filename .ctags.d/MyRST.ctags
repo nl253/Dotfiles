@@ -1,0 +1,9 @@
+--langdef=MyRST
+--langmap=MyRST:.rst
+--regex-MyRST=/^:: _([^:]+): (.*)/\1/U,URI/
+--regex-MyRST=/^\s*(\S+) : (.*)$/\1: \2/d,defintion/
+--regex-MyRST=/^\s*(\S+) : (.*) : (.*)$/k,\1/D,defintion/
+--regex-MyRST=/^\.{2} _(.*): .*$/\1/E,external hyperlink/
+--regex-MyRST=/`([^` \t]+) ([^`]+)`__?/\1/a,hyperlink/
+--regex-MyRST=/_`([^`]+)`: /\1/i,inline internal reference/
+# --regex-MyRST=/`([^`]+)`_/\1/A,hyperlink/

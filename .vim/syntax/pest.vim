@@ -1,10 +1,6 @@
 if exists('b:current_syntax') 
-    if b:current_syntax == 'pest'
+    if b:current_syntax ==# 'pest'
         finish
-    elseif exists('b:pest_syntax_loaded ')
-        finish
-    else
-        let b:pest_syntax_loaded = 1
     endif
 else
     let b:current_syntax = 'pest' 

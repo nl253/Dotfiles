@@ -3,7 +3,7 @@ setl nowrap foldmethod=manual foldmarker={,}
 let g:rust_logging_lvl  = 'debug'
 let s:anchors           = ['Cargo.toml', '.git']
 
-let s:root = utils#proj_root(s:anchors)
+let s:root = execute('echo utils#proj_root('.join(map(s:anchors, 'string(v:val)'), ',').')')
 
 if isdirectory(s:root) && executable("cargo")
     let s:project_name = fnamemodify(s:root, ':t')
@@ -13,6 +13,10 @@ endif
 
 call opts#formatprg({'rustfmt': 'rustfmt --color never'})
 
-" call tags#lib(99999, 0, '~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src')
-" call utils#add_project_files(s:anchors)
-" call tags#project(s:anchors, 0)
+exe 'CtagsProject '.join(s:anchors, ' ') 
+
+if !empty($DEFAULT_TOOLCHAIN) 
+    exe 'CtagsLib ~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
+endif
+
+exe 'ProjectFiles '.join(s:anchors, ' ') 

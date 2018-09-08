@@ -1,0 +1,19 @@
+--langdef=MyBibTex
+--langmap=MyBibTex:.bib
+--regex-MyBibTex=/^@[A-Za-z]+\{([^,]*)/\1/b,MyBibTex/
+--regex-MyBibTex=/@string\{([^ "#%')(,=}{]+)/\1/s,BibTeX-Strings/i
+--regex-MyBibTex=/[[:space:]]*author[[:space:]]*=[[:space:]]*("([^"]+)"|\{([^\}]+)\})[[:space:]]*,?[[:space:]]*$/\2\3/a,BibTeX-Authors/i
+--regex-MyBibTex=/^@article\{([^,]*)/\1/a,article/i
+--regex-MyBibTex=/^@book\{([^,]*)/\1/b,book/i
+--regex-MyBibTex=/^@booklet\{([^,]*)/\1/L,booklet/i
+--regex-MyBibTex=/^@conference\{([^,]*)/\1/c,conference/i
+--regex-MyBibTex=/^@inbook\{([^,]*)/\1/B,inbook/i
+--regex-MyBibTex=/^@incollection\{([^,]*)/\1/C,incollection/i
+--regex-MyBibTex=/^@inproceedings\{([^,]*)/\1/P,inproceedings/i
+--regex-MyBibTex=/^@manual\{([^,]*)/\1/m,manual/i
+--regex-MyBibTex=/^@mastersthesis\{([^,]*)/\1/T,mastersthesis/i
+--regex-MyBibTex=/^@misc\{([^,]*)/\1/M,misc/i
+--regex-MyBibTex=/^@phdthesis\{([^,]*)/\1/t,phdthesis/i
+--regex-MyBibTex=/^@proceedings\{([^,]*)/\1/p,proceedings/i
+--regex-MyBibTex=/^@techreport\{([^,]*)/\1/r,techreport/i
+--regex-MyBibTex=/^@unpublished\{([^,]*)/\1/u,unpublished/i

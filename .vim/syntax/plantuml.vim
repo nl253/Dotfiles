@@ -1,10 +1,6 @@
 if exists('b:current_syntax') 
-    if b:current_syntax == 'plantuml'
+    if b:current_syntax ==# 'plantuml'
         finish
-    elseif exists('b:plantuml_syntax_loaded ')
-        finish
-    else
-        let b:plantuml_syntax_loaded = 1
     endif
 else
     let b:current_syntax = 'plantuml' 

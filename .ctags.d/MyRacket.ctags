@@ -1,0 +1,6 @@
+--langdef=MyRacket 
+--langmap=MyRacket:.rkt.rktl.rktd.scrbl.plt.ss.scm
+--regex-MyRacket=/\(\s*define[-a-zA-Z0-9*:#\/,]*\s+\(\s*([a-z_A-Z*][-a-z_A-Z0-9*:\/]{3,})/\1/f,funct/
+--regex-MyRacket=/\(\s*define[-a-zA-Z0-9*:#\/,]*\s+([a-z_A-Z*][-a-z_A-Z0-9*:\/]{3,})/\1/c,const/
+--regex-MyRacket=/\(\s*struct[-a-zA-Z0-9*:#\/,]*\s+\(\s*([a-z_A-Z*][-a-z_A-Z0-9*:\/]{3,})/\1/s,struct/
+--regex-MyRacket=/\(\s*module[-a-zA-Z0-9*:#\/,]*\s+\(\s*([a-z_A-Z*][-a-z_A-Z0-9*:\/]{3,})/\1/m,module/

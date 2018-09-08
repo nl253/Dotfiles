@@ -1,10 +1,6 @@
 if exists('b:current_syntax') 
-    if b:current_syntax == 'coq'
+    if b:current_syntax ==# 'coq'
         finish
-    elseif exists('b:coq_syntax_loaded ')
-        finish
-    else
-        let b:coq_syntax_loaded = 1
     endif
 else
     sy clear

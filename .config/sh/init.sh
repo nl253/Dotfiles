@@ -16,7 +16,7 @@ export PS1="${USER}@"$(hostname)" ${0} >> "
 
 # set ls colors
 if builtin dirs 1>/dev/null 2>/dev/null; then
-  eval $(dircolors -b)
+  builtin eval $(command dircolors -b)
 fi
 
 # reset
@@ -75,8 +75,8 @@ if [ -x /usr/bin/rlwrap ]; then
 fi
 
 # pattern matching
-for i in fgrep egrep grep; do
-  eval "alias ${i}='${i} --color=auto'"
+for i in f e ''; do
+  eval "alias ${i}grep='${i} --color=auto'"
 done
 
 if [ -x ~/.cargo/bin/rg ]; then

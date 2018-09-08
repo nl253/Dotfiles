@@ -1,53 +1,21 @@
 #!/usr/bin/env bash
 
-# Dependencies:
-# ----------------------------------------------------------------------------
-#
-# * Very likely to have:
-# 
-# => cat
-# => column
-# => grep
-# => head
-# => ls OR tree
-# => man
-# => tar
-# 
+# Dependencies
+# ------------
+# * Very likely to have: cat column grep head ls OR tree man tar
 # * Might need to install:
-# 
-# ** Distro package manager (yum, pacman, apt etc.):
-# 
-# => 7z
-# => atool OR bsdtar
-# => elinks
-# => exiftool
-# => file
-# => jq
-# => pandoc
-# => source-highlight
-# => unrar
-# => pdftotext
-# 
-# ** NPM / Yarn:
-# 
-# => js-beautify
-# => jupyter
-# 
-# TO CHECK DEPS RUN IN BASH:
-# 
-# for i in $(builtin command grep -Eo 'command builtin \w+' < $THIS_DIR/scope.sh | builtin command grep -Eo '\w+$'); do [[ ! -x $(builtin command type -P $i) ]] && echo "$i not installed"; done
-# ----------------------------------------------------------------------------
+# ** Distro package manager (yum, pacman, apt etc.): 7z atool OR bsdtar elinks exiftool file jq pandoc highlight unrar pdftotext
+# ** NPM / Yarn: js-beautify jupyter
+#
+# TO CHECK DEPS RUN IN BASH: for i in $(builtin command grep -Eo 'command builtin \w+' < $THIS_DIR/scope.sh | builtin command grep -Eo '\w+$'); do [[ ! -x $(builtin command type -P $i) ]] && echo "$i not installed"; done
+#
 # - If the option `use_preview_script` is set to `true`,
 #   then this script will be called and its output will be displayed in ranger.
-#
 # - ANSI color codes are supported.
-#
 # - STDIN is disabled, so interactive scripts won't work properly.
 #
-# Meanings of exit codes:
-#
-# code | meaning    | action of ranger
-# -----+------------+-------------------------------------------
+# code | meaning    | action
+# -----+------------+--------------------------------------
 # 0    | success    | Display stdout as preview
 # 1    | no preview | Display no preview at all
 # 2    | plain text | Display the plain content of the file
@@ -56,9 +24,7 @@
 # 5    | fix both   | Don't ever reload
 # 6    | image      | Display the image  "${IMAGE_CACHE_PATH}"  points to as an image preview
 # 7    | image      | Display the file directly as an image
-# ----------------------------------------------------------------------------
-
-# Script arguments
+# ---------------------------------------------------------
 FILE_PATH="${1}"
 # Width of the preview pane (number of fitting characters)
 PV_WIDTH="${2}"
@@ -73,10 +39,11 @@ FULL_EXTENSION="${FILE_NAME#*.}"
 EXTENSION="${FILE_NAME##*.}"
 
 head() { builtin command head -n $PV_HEIGHT $FILE_PATH; }
+
 elinks() { builtin command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width ${PV_WIDTH} </dev/stdin; }
 
-preview-stdout() {
-  if builtin command source-highlight -s $1 </dev/stdin | elinks; then
+preview_stdout() {
+ if builtin command highlight --kw-case=upper --line-range=1-${PV_HEIGHT} --style=molokai --stdout --out-format=xterm256 --reformat=java  --line-length=${PV_WIDTH} --replace-tabs=4 --line-numbers --syntax=${1} < /dev/stdin 2>/dev/null; then
     builtin return 0
   elif builtin command cat </dev/stdin; then
     builtin return 0
@@ -86,7 +53,7 @@ preview-stdout() {
 }
 
 preview() {
-  if head | preview-stdout $1; then
+  if head | preview_stdout $1; then
     builtin return 0
   elif head; then
     builtin return 0
@@ -109,7 +76,16 @@ from_shebang() {
   builtin local fst_ln=$(builtin command head -n 1 "$FILE_PATH")
 
   if [[ $fst_ln =~ ^#! ]]; then
-    builtin local prog=$(builtin echo $fst_ln | builtin command grep -Eo '\w+$')
+    # regex handles: #!/usr/bin/env  <prog> [-] flag*
+    #                #!/usr/sbin/env <prog> [-] flag*
+    #                #!/bin/env      <prog> [-] flag*
+    #                #!/bin/<prog>          [-] flag*
+    #                #!/sbin/env     <prog> [-] flag*
+    #                #!/sbin/<prog>         [-] flag*
+    #                #!/usr/bin/<prog>      [-] flag*
+    #                #!/usr/sbin/<prog>     [-] flag*
+    #                #!<prog>               [-] flag*
+    builtin local prog=$(builtin echo $fst_ln | builtin command sed -E 's/^#!\s*(\/(usr\/)?s?bin\/(env\s+)?)?([0-9a-zA-Z][-\.0-9a-zA-Z_]{2,})(\s+-\S*)*\s*$/\4/')
     if preview $prog 2>/dev/null; then
       builtin return 0
     fi
@@ -122,78 +98,10 @@ handle_extension() {
 
   case "$EXTENSION" in
 
-    *html)
-      if elinks <"$FILE_PATH" 2>/dev/null; then
-        builtin exit 0
-      elif preview html 2>/dev/null; then
-        builtin exit 0
-      else
-        builtin exit 2
-      fi
-      ;;
-
     md | m*down | Rmd)
       if head | pandoc markdown+line_blocks+gfm_auto_identifiers+compact_definition_lists+fancy_lists+all_symbols_escapable+superscript+subscript+implicit_figures+footnotes+four_space_rule-emoji 2>/dev/null; then
         builtin exit 0
       elif preview markdown 2>/dev/null; then
-        builtin exit 0
-      else
-        builtin exit 2
-      fi
-      ;;
-
-    [jt]s)
-      if head | builtin command js-beautify | preview-stdout javascript 2>/dev/null; then
-        builtin exit 0
-      elif head | preview-stdout javascript 2>/dev/null; then
-        builtin exit 0
-      elif preview javascript 2>/dev/null; then
-        builtin exit 0
-      else
-        builtin exit 2
-      fi
-      ;;
-
-    xml)
-      if head | builtin command html-beautify | preview-stdout xml 2>/dev/null; then
-        builtin exit 0
-      elif head | preview-stdout xml 2>/dev/null; then
-        builtin exit 0
-      elif preview xml 2>/dev/null; then
-        builtin exit 0
-      else
-        builtin exit 2
-      fi
-      ;;
-
-    json)
-      if builtin command jq -C <"$FILE_PATH" 2>/dev/null; then
-        builtin exit 0
-      elif builtin command js-beautify <"$FILE_PATH" | preview-stdout json 2>/dev/null; then
-        builtin exit 0
-      elif preview json 2>/dev/null; then
-        builtin exit 0
-      else
-        builtin exit 2
-      fi
-      ;;
-
-    sh | bash* | zsh*)
-      if shfmt -s -i 2 -ci <"$FILE_PATH" | preview-stdout sh 2>/dev/null; then
-        builtin exit 0
-      elif preview sh 2>/dev/null; then
-        builtin exit 0
-      else
-        builtin exit 2
-      fi
-      ;;
-
-    css)
-      if head | builtin command css-beautify | preview-stdout css 2>/dev/null; then
-        builtin exit 0
-      elif head | preview-stdout css 2>/dev/null; then
-        builtin exit 0
-      elif preview css 2>/dev/null; then
         builtin exit 0
       else
         builtin exit 2
@@ -210,6 +118,62 @@ handle_extension() {
       fi
       ;;
 
+    json)
+      if builtin command jq -C <"$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      elif builtin command js-beautify <"$FILE_PATH" | preview_stdout json 2>/dev/null; then
+        builtin exit 0
+      elif preview json 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
+    sh | bash* | zsh*)
+      if shfmt -s -i 2 -ci <"$FILE_PATH" | preview_stdout sh 2>/dev/null; then
+        builtin exit 0
+      elif preview sh 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
+    *html)
+      if elinks <"$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      elif preview html 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
+    xml)
+      if head | builtin command html-beautify | preview_stdout xml 2>/dev/null; then
+        builtin exit 0
+      elif head | preview_stdout xml 2>/dev/null; then
+        builtin exit 0
+      elif preview xml 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
+    css)
+      if head | builtin command css-beautify | preview_stdout css 2>/dev/null; then
+        builtin exit 0
+      elif head | preview_stdout css 2>/dev/null; then
+        builtin exit 0
+      elif preview css 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
     csv)
       if head | builtin command column --separator ',' --table 2>/dev/null; then
         builtin exit 0
@@ -220,18 +184,16 @@ handle_extension() {
       fi
       ;;
 
-    h | hpp | cc)
-      if preview c 2>/dev/null; then
+    conf | cnf | cfg | toml | desktop)
+      if preview ini 2>/dev/null; then
         builtin exit 0
       else
         builtin exit 2
       fi
       ;;
 
-    org)
-      if head | pandoc org 2>/dev/null; then
-        builtin exit 0
-      elif preview org 2>/dev/null; then
+    h | hpp | cc)
+      if preview c 2>/dev/null; then
         builtin exit 0
       else
         builtin exit 2
@@ -248,10 +210,20 @@ handle_extension() {
       fi
       ;;
 
+    org)
+      if head | pandoc org 2>/dev/null; then
+        builtin exit 0
+      elif preview org 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
     ipynb)
       if builtin command jupyter nbconvert --stdout --to html "$FILE_PATH" | elinks 2>/dev/null; then
         builtin exit 0
-      elif head | builtin command js-beautify | preview-stdout json 2>/dev/null; then
+      elif head | builtin command js-beautify | preview_stdout json 2>/dev/null; then
         builtin exit 0
       elif head | builtin command js-beautify 2>/dev/null; then
         builtin exit 0
@@ -278,19 +250,19 @@ handle_extension() {
       fi
       ;;
 
-    conf | cnf | cfg | toml | desktop)
-      if preview ini 2>/dev/null; then
-        builtin exit 0
-      else
-        builtin exit 2
-      fi
-      ;;
-
     1)
       if MANWIDTH=$PV_WIDTH builtin command man -- "$FILE_PATH" 2>/dev/null; then
         builtin exit 0
       else
         builtin exit 1
+      fi
+      ;;
+
+    scm | rkt* | ss | ls*p | [ce]l)
+      if preview lisp 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
       fi
       ;;
 
@@ -315,7 +287,7 @@ handle_extension() {
     *)
       if [[ $EXTENSION == '' ]]; then
         builtin return 1
-      elif [[ $(builtin command source-highlight --lang-list | builtin command grep -Eo '^\w+') =~ $EXTENSION ]]; then
+      elif [[ $(builtin command highlight --list-scripts=langs | builtin command sed -E -ne 's/(\S+)\s+:\s+(.*)$/\L\2 \L\1/g' -e 's/\(/ /g' -e 's/\)/ /g' -e 's/\s+/ /g' -e '4,223p') =~ $EXTENSION ]]; then
         if preview "$EXTENSION" 2>/dev/null; then
           builtin exit 0
         else
@@ -439,4 +411,4 @@ handle_full_extension
 builtin command exiftool "$FILE_PATH" 2>/dev/null
 builtin command file --dereference --brief -- "$FILE_PATH" 2>/dev/null
 builtin exit 5
-# vim: nowrap
+# vim:foldmethod=indent:

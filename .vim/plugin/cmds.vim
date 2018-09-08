@@ -8,10 +8,11 @@ com! BufferWipeout call utils#buffer_wipeout()
 com! GMail call mail#send()
 
 com! Define   !(wn <cword> -over) | fmt
-com! Synonym  !(wn <cword> -synsn || wn <cword> -synsv || wn <cword> -synsa || wn <cword> -synsr) | fmt
-com! Hypernym !(wn <cword> -hypen || wn <cword> -hypev || wn <cword> -hypea || wn <cword> -hyper) | fmt
-com! Hyponym  !(wn <cword> -hypon || wn <cword> -hypov || wn <cword> -hypoa || wn <cword> -hypor) | fmt
-com! Antonym  !(wn <cword> -antsn || wn <cword> -antsv || wn <cword> -antsa || wn <cword> -antsr) | fmt
+" FIXME Synonym, Antonym, Hypernym, Hyponym
+" com! Synonym  !(wn <cword> -synsn || wn <cword> -synsv || wn <cword> -synsa || wn <cword> -synsr) | fmt
+" com! Hypernym !(wn <cword> -hypen || wn <cword> -hypev || wn <cword> -hypea || wn <cword> -hyper) | fmt
+" com! Hyponym  !(wn <cword> -hypon || wn <cword> -hypov || wn <cword> -hypoa || wn <cword> -hypor) | fmt
+" com! Antonym  !(wn <cword> -antsn || wn <cword> -antsv || wn <cword> -antsa || wn <cword> -antsr) | fmt
 
 com! -nargs=1 -complete=tag      AppendToDict   call utils#append_to_dict(<q-args>)
 com! -range=%                    SubstituteWord call utils#safe_subst("".<line1>, "".<line2>)
@@ -22,12 +23,27 @@ com!                             ReformatBuffer call utils#reformat_buffer()
 
 com! HL echo exists('*utils#_syntax_attr') ? utils#syntax_attr() : join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 
-com!       -complete=dir  -nargs=* Root   exec 'silent lcd '.utils#proj_root(split(<q-args>, ' ') + ['.git']) | echom '$PWD = '.string($PWD)
-com! -bang -complete=file -nargs=* Ctags  call tags#project(split(<q-args>, ' ') + ['.git'], <bang>0)
+com!       -complete=dir  -nargs=* Root   exe 'sil lcd '.utils#proj_root(<f-args> '.git') | echom '$PWD = '.string($PWD)
 com! -bang                         GFiles call utils#git_files_qf()
 com! -bang                         PFiles call utils#project_files_qf()
 
-com! ResetTags for i in tagfiles() | echo system("rm ".i." && echo removed ".i) | endfor
+com! -bang -complete=file -nargs=* Ctags  
+            \ call tags#project(split(<q-args>, ' ') + ['.git'], <bang>0)
+com! CtagsDelete for i in tagfiles() | echo system("rm ".shellescape(i)." && echo removed ".shellescape(i)) | endfor
+
+" Generate tags from <project_root>/**/*.<extension> 
+" place them in ~/.cache/vim/<filetype>
+" Return path to the tag file
+com! -nargs=+ -bang -complete=file CtagsProject
+            \ call tags#project(<bang>0, <f-args>) 
+
+" 99999 min is around 70 days
+com! -nargs=+ -bang -complete=dir CtagsLib 
+            \ call tags#lib(99999, <bang>0, <f-args>) 
+
+" 99999 min is around 70 days
+com! -nargs=+ -bang -complete=file ProjectFiles 
+            \ call utils#add_project_files(<f-args>) 
 
 com! -range=% SnakeToCamel  <line1>,<line2>s#_\(\l\)#\u\1#g
 com! -range=% SnakeToPascal <line1>,<line2>s#\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)#\u\1\2#g

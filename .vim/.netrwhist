@@ -1,6 +1,6 @@
 let g:netrw_dirhistmax  =10
 let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/home/norbert/.vim/after/ftplugin'
-let g:netrw_dirhist_2='/home/norbert/.vim'
-let g:netrw_dirhist_3='/home/norbert/Documents/Notes/AI/NN'
-let g:netrw_dirhist_4='/home/norbert/Documents/Notes/AI/NN/keras'
+let g:netrw_dirhist_1='/home/norbert/.cache/vim/racket'
+let g:netrw_dirhist_2='/home/norbert/.vim/ftdetect'
+let g:netrw_dirhist_3='/usr/share/aclocal'
+let g:netrw_dirhist_4='/home/norbert/.vim/syntax'

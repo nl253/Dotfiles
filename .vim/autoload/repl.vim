@@ -1,4 +1,4 @@
-fu! repl#set_repl(dict)
+fu! repl#set_repl(dict) abort
     aug ReplFtypes
         au!
         for l:entry in items(a:dict)
@@ -27,10 +27,10 @@ fu! repl#open_repl(repl)
     for i in values(s:open_terms)
         let s:old = winnr()
         " bottom-most window
-        wincmd b
+        winc b
         " successfully changed windown
         if winnr() != s:old
-            startinsert
+            star
         endif
         return 1
     endfor
@@ -38,17 +38,17 @@ fu! repl#open_repl(repl)
     " term buffer exists but not in a split -- reopen split
     for i in range(1, bufnr("$") - 1, 1) 
         if bufname(i) =~# 'term://'
-            exe 'botright '.l:height.'split'
+            exe 'bo '.l:height.'sp'
             exe 'b + '.i
-            startinsert " auto-enter insert in terminal
+            star " auto-enter insert in terminal
             " because of the return the loop will exit when found
             return 1
         endif 
     endfor
 
     " term not open -- make a new split and open term in it
-    exe 'botright '.l:height.'split'
-    exe 'terminal '.a:repl
+    exe 'bo '.l:height.'sp'
+    exe 'te '.a:repl
 
     startinsert
 endf
@@ -109,6 +109,7 @@ fu! repl#list_repls(A, L, P)
                 \ 'rebar3': ['shell'], 
                 \ 'redis': [], 
                 \ 'redis-cli': [], 
+                \ 'rlwrap clojure': ['--repl'],
                 \ 'rlwrap dash': ['-i'],
                 \ 'rlwrap racket': ['-i'],
                 \ 'ruby': [], 
@@ -140,4 +141,5 @@ fu! repl#shell_repl_cmd(args)
     endif 
 endf
 
-com! -nargs=* -complete=customlist,repl#list_repls ShellREPL call repl#shell_repl_cmd(<q-args>)
+com! -nargs=* -complete=customlist,repl#list_repls ShellREPL 
+            \ call repl#shell_repl_cmd(<q-args>)

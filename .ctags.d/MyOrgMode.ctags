@@ -1,0 +1,10 @@
+--langdef=MyOrgMode
+--langmap=MyOrgMode:.org 
+--regex-MyOrgMode=/.*(TODO|FEEDBACK|VERIFY|DONE|DELEGATED|BUG|FIXED|CANCELLED|REPORT|WAIT) ([a-zA-Z][ a-z][-\(\)"'\*\=\/,A-Za-z ]+).*/\2/t,\2 \1/
+--regex-MyOrgMode=/^\#+((SUB)?(TITLE|CAPTION|DATE|AUTHOR|TAGS|EMAIL|NAME)): (.+.*)/\2/t,hashtag/
+--regex-MyOrgMode=/^\*+( [A-Z]{3,8})?( \[\#[A-Z]{1,8}\])?( [A-Z]{3,8})?( [A-Z][a-z ][-\(\)"'\*\=\/,A-Za-z ]+).*/\4/h,heading/
+--regex-MyOrgMode=/^[ \t]*\[fn:(\S+)\] (.+)/\1/f,footnote/
+--regex-MyOrgMode=/^\[\[(.*)\]\[(.*)\]\]/\2/a,hyperlink/
+--regex-MyOrgMode=/<<(.+)>>/\1/H,hyperlink-target/
+--regex-MyOrgMode=/^[ \t]*:?(CUSTOM_ID|NAME)\+?: (.+)/\2/i,id/
+--regex-MyOrgMode=/^[ \t]*- (.+) ::/\1/d,definition/

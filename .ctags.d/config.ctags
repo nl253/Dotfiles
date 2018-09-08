@@ -5,4 +5,4 @@
 --exclude=test
 --sort=yes
 --guess-language-eagerly
---languages=MyPython,TypeScript,JavaScript,MyHaskell,Erlang,Sh,MyRust,Markdown,Java,ReStructuredText,Vim,OrgMode
+--languages=MyRacket,MyPython,MyTypeScript,MyJavaScript,MyHaskell,Erlang,Sh,MyRust,MyMarkdown,Java,MyRST,Vim,MyOrgMode

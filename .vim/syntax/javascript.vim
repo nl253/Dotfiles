@@ -1,10 +1,6 @@
 if exists('b:current_syntax') 
-    if b:current_syntax == 'javascript'
+    if b:current_syntax ==# 'javascript'
         finish
-    elseif exists('b:javascript_syntax_loaded ')
-        finish
-    else
-        let b:javascript_syntax_loaded = 1
     endif
 else
     sy clear
@@ -90,7 +86,7 @@ sy match   jsStmt      '\v<yield ?\* ?$'
 sy keyword jsFunct     async                
 sy match   jsFunct     "\v<(async )?function\v ?\*?"
 sy keyword jsSpecial   apply call eval bind prototype constructor 
-sy match jsConst "\v<[A-Z][A-Z_]{2}[A-Z0-9_]+>"
+sy match   jsConst    "\v<[A-Z][A-Z_]{2}[A-Z0-9_]+>"
 
 " chained calls
 sy match jsSpecial '\v^\s*\.[a-z][a-zA-Z]+'ms=s+1
@@ -103,7 +99,7 @@ sy keyword jsImport require import export
 sy keyword jsRepeat	do for while of in forEach
 
  " OOP:
-sy match jsAccess "\v<(private|protected|public|static) "
+sy match jsAccess    "\v<(private|protected|public|static) "
 sy match jsSpecifier "\v^\s*(get|set) "
 sy match jsSpecifier "\v<(protected|abstract|public|static|final|package|throws|boolean) "
 
@@ -117,13 +113,13 @@ sy keyword jsNodeMacro __dirname __filename
 
 " Globals:
 " Node.js
-sy keyword jsNodeGlobal module exports process 
+sy keyword jsNodeGlobal    module exports process 
 " Browser
 sy keyword jsBrowserGlobal window inspect origin document alert caches screen sessionStorage close confirm prompt stream fetch focus blur getSelection getComputedStyle closed applicationCache open parent screenLeft screenTop scroll scrollBy scrollX scrollY openDatabase print resizeBy resizeTo stop status pageXOffset pageYOffset outerWidth outerHeight opener dispatchEvent removeEventListener
 " shared 
-sy keyword jsGlobal setInterval setTimeout console escape unescape eval clearTimeout clearInterval parseInt parseFloat decodeURI decodeURIComponent encodeURIComponent isFinite isNaN crypto
+sy keyword jsGlobal        setInterval setTimeout console escape unescape eval clearTimeout clearInterval parseInt parseFloat decodeURI decodeURIComponent encodeURIComponent isFinite isNaN crypto
 " events
-sy match jsEvent '\v<on[a-z]{4,}>'
+sy match   jsEvent         '\v<on[a-z]{4,}>'
 
 " Operators:
 sy keyword jsOp await new typeof delete in

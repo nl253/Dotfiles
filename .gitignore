@@ -322,3 +322,9 @@ Storage/
 .local/share/fish/
 .rusty-tags/cache/
 .w3m/
+.config/enchant
+.racket/6*
+.clojure/.cpcache
+.local/share/gnome-shell
+.local/oni/Loc*
+.glide/cache

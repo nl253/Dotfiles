@@ -2,7 +2,7 @@
 " on startup see ./opts.vim
 
 " to be triggered by BufReadPost
-fu! inits#all()
+fu! inits#all() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
     call opts#comma_opt('cinwords', ['match', 'loop', 'foreach', 'until', 'case', 'select'])
 
@@ -80,25 +80,24 @@ fu! inits#all()
     if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 endf
 
-fu! inits#programming()
+fu! inits#programming() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
-    let l:anchors = ['.git']
     "call tags#project(l:anchors, 0)
     call opts#safe_setl(['nospell'])
     call opts#comma_opt('complete', ['.', 'w', 't'])
     let l:ext = expand('%:e')
-    let l:root = utils#proj_root(l:anchors)
+    let l:root = utils#proj_root('.git')
     if !empty(l:ext)
         call opts#comma_opt('complete', [
                     \ 'k*.'.l:ext, 
                     \ 'k'.l:root.'/*.'.l:ext,
                     \ ])
     endif
-    call opts#comma_opt('path', [l:root.'/**4/'])
-    call utils#add_project_files(l:anchors)
+        call opts#comma_opt('path', [l:root.'/**4/'])
+    call utils#add_project_files('.git')
 endf
 
-fu! inits#markup()
+fu! inits#markup() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
     call opts#safe_setl([
                 \ 'conceallevel=3',
@@ -114,7 +113,7 @@ fu! inits#markup()
     call iabbrs#iab_init(&filetype)
 endf
 
-fu! inits#lang_server()
+fu! inits#lang_server() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
     nn <buffer> <silent> <LocalLeader>R :call LanguageClient#textDocument_references()<CR>
     nn <buffer> <silent> K              :call LanguageClient#textDocument_definition()<CR>
@@ -125,16 +124,16 @@ fu! inits#lang_server()
     call opts#omni(['LanguageClient#complete', 'LanguageClient_textDocument_rangeFormatting()'])
 endf
 
-fu! inits#non_home()
+fu! inits#non_home() abort
     call opts#safe_setl(['nomodifiable', 'readonly'])
 endf
 
-fu! inits#term()
+fu! inits#term() abort
     call opts#safe_setl(['nomodifiable', 'readonly', 'nospell'])
     nn <buffer> <Leader>' :close<CR>
 endf
 
-fu! inits#emmet()
+fu! inits#emmet() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
     if exists(':EmmetInstall')
         EmmetInstall
@@ -142,7 +141,7 @@ fu! inits#emmet()
     endif
 endf
 
-fu! inits#gui()
+fu! inits#gui() abort
     exe 'set guifont='.(has('win32') ? 'consolas:h11.4:w5.8:qPROOF' : 'Monospace\ 13')
     call opts#letter_opt_unset('guioptions', ['T', 'm', 'l', 'L', 'b', 'R', 'r', 'g'])
     call opts#letter_opt('guioptions', ['i', 'p', 'h', 'M', 'a'])

@@ -7,12 +7,6 @@
 "
 "     sy region mySyntaxRule start='/' end='/' oneline contains=@regexAll
 "
-if exists('b:regex_syntax_loaded ')
-    finish
-else
-    let b:regex_syntax_loaded = 1
-endif
-
 sy match  regexAtom   "\v[[:alnum:]]" contained containedin=regexGroup,regexSet
 sy match  regexEscape "\v\\."         contained containedin=regexGroup
 sy match  regexOr     '|'             contained containedin=regexGroup

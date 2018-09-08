@@ -22,6 +22,7 @@
 "parallel 0.11.3 (registry+https://github.com/rust-lang/crates.io-index)" = ["parallel"]
 "pulldown-cmark 0.1.2 (git+https://github.com/google/pulldown-cmark#dad39d1be53015eb940c2672facba97cd98fbff6)" = ["pulldown-cmark"]
 "racer 2.1.3 (registry+https://github.com/rust-lang/crates.io-index)" = ["racer"]
+"ripgrep 0.10.0 (git+https://github.com/BurntSushi/ripgrep#7ebed3ace695aa89ae2bfed2c02d5ab005da1dce)" = ["rg"]
 "rls 0.122.2 (registry+https://github.com/rust-lang/crates.io-index)" = ["rls"]
 "rustfmt-nightly 0.8.2 (registry+https://github.com/rust-lang/crates.io-index)" = ["cargo-fmt", "git-rustfmt", "rustfmt", "rustfmt-format-diff"]
 "rusti 0.0.1 (git+https://github.com/murarth/rusti#2dddea34eb70044eb24cf8c54bb3cb8fccfafbb6)" = ["rusti"]

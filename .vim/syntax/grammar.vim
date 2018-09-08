@@ -2,12 +2,8 @@
 " -----------------------------------------------------
 
 if exists('b:current_syntax') 
-    if b:current_syntax == 'grammar'
+    if b:current_syntax ==# 'grammar'
         finish
-    elseif exists('b:grammar_syntax_loaded ')
-        finish
-    else
-        let b:grammar_syntax_loaded = 1
     endif
 else
     let b:current_syntax = 'grammar' 

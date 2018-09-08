@@ -1,0 +1,14 @@
+--langdef=MyAsciiDoc
+--langmap=MyAsciiDoc:.ad.adoc.MyAsciiDoc
+#--regex-MyAsciiDoc=/^=+ +([-[:alnum:][:space:] \(\)]{4,})/\1/h,heading/h/
+--regex-MyAsciiDoc=/\[\[([^]]+)\]\]/\1/a/
+--regex-MyAsciiDoc=/^\.([^ \t].+)/\1/t/
+--regex-MyAsciiDoc=/image::([^\[]+)/\1/i,image/
+--regex-MyAsciiDoc=/image:([^:][^\[]+)/\1/I,image/
+--regex-MyAsciiDoc=/include::([^\[]+)/\1/n/
+--regex-MyAsciiDoc=/^={1,6}\s+(.*)/\1/h/
+--regex-MyAsciiDoc=/\[\[([^]]+)\]\]/\1/a/
+--regex-MyAsciiDoc=/^\.([^ \t].+)/\1/t/
+--regex-MyAsciiDoc=/image::([^\[]+)/\1/i/
+--regex-MyAsciiDoc=/image:([^:][^\[]+)/\1/I/
+--regex-MyAsciiDoc=/include::([^\[]+)/\1/n/

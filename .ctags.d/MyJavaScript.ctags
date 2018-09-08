@@ -1,0 +1,9 @@
+--langdef=MyJavaScript
+--langmap=MyJavaScript:.js.jsx
+--regex-MyJavaScript=/^\s*function\s*\*?\s*(\w{4,})\([^)]*\)/\1/f,function/
+--regex-MyJavaScript=/\s*static\s*(\w{4,})\([^)]*\)/\1/s,static function/
+--regex-MyJavaScript=/\s*const +(\w{4,}) *= *(\/.*\/|new +Regex)/\1/r,regex/
+--regex-MyJavaScript=/\s*class +(\w{4,})/\1/C,class/
+--regex-MyJavaScript=/^\s*get\s+([a-z]\w{3,})\s*([^)]*)/\1/g,getter/
+--regex-MyJavaScript=/^\s*set\s+([a-z]\w{3,})\s*([^)]*)/\1/s,setter/
+--regex-MyJavaScript=/^\s*export(\s*(\{\s*)?(default)?(\s*(class|function)\s+)?\s*(\}\s*)?)?\s*(\w{2,})\s*\}/\2/e,export/

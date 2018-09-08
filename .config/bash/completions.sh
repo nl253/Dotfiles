@@ -2,9 +2,9 @@
 ## 
 ## Can also be sourced by zsh if you autoload bashcompinit, see zshcompsys(1).
 
-[[ -x $(type -P pandoc 2>/dev/null) ]] && eval "$(command pandoc --bash-completion)"
-[[ -x $(type -P stack 2>/dev/null) ]] && eval "$(command stack --bash-completion-script stack)"
-[[ -x $(type -P pip3 2>/dev/null) ]] && eval "$(command pip3 completion --bash)"
+[[ -x $(builtin type -P pandoc 2>/dev/null) ]] && builtin eval "$(command pandoc --bash-completion)"
+[[ -x $(builtin type -P stack 2>/dev/null) ]] && builtin eval "$(command stack --bash-completion-script stack)"
+[[ -x $(builtin type -P pip3 2>/dev/null) ]] && builtin eval "$(command pip3 completion --bash)"
 
 _cargo() {
   local cur prev words cword

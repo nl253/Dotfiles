@@ -1,5 +1,0 @@
---langdef=Vorg 
---langmap=Vorg:.vorg
---regex-Vorg=/[^\w]#([A-Z]+)/\1/t,hashtag/
---regex-Vorg=/( {4}|\t)*=> (.+)/\2/d,defition/
---regex-Vorg=/( {4}|\t)*(>|\(){1,6} (.+)/\3/h,heading/
