@@ -1,9 +1,26 @@
-for i in {sym,num}py pandas ptpython; do
-  if [[ ! -e ~/.local/lib/python3.6/site-packages/${i} ]]; then
-    builtin echo "installing python package $i"
-    builtin command pip3 --no-color --quiet --retries 2 install --progress-bar off --user --pre $i
-  fi
-done
+function packages() {
+  builtin local package_dir="$1"
+  builtin local install_cmd="$2"
+  builtin local package_mgr="$(builtin echo $install_cmd | builtin command sed -nE 's/^\s*(\w+).*/\1/')"
+  for package in ${@:3}; do
+    if [[ ! -e "$package_dir/$package" ]]; then
+      builtin echo "installing $package_mgr package $package"
+      builtin eval "builtin command $install_cmd $package"
+    fi
+  done
+}
+
+packages \
+  ~/.local/lib/python3.6/site-packages \
+  'pip3 --no-color --quiet --retries 2 install --progress-bar off --user --pre' \
+  n{etworkx,otebook} y{outube_dl,apf} matplotlib seaborn isort {sym,num,my}py py{stache,gments,lint} p{andas,tpython} jupyter{hub,lab,_console}
+
+packages \
+  ~/.config/yarn/global/node_modules \
+  'yarn global add' \
+  configurable-http-proxy
+
+builtin unset -f packages
 
 # UTILS
 
@@ -305,7 +322,7 @@ EOF
 # NOTE: expects input from STDIN.
 function map() {
   for i in $(cat /dev/stdin); do
-    eval "$1 $i"
+    builtin eval "$1 $i"
   done
 }
 
@@ -397,7 +414,26 @@ builtin alias sum='pymath_bop add'
 builtin alias remainder='pymath_bop mod'
 builtin alias difference='pymath_bop sub'
 builtin alias product='pymath_bop mul'
-builtin alias quotient='pymath_bop div'
+builtin alias quotient='pymath_bop truediv'
+
+function series() {
+  builtin local size=${2:-100}
+  builtin local dtype=${3:-uint32}
+  builtin command python3 <<EOF
+from math import pi, e, tau
+for n in map(lambda x: $1, range(1, $size + 1)): print(n)
+EOF
+}
+
+function finite_difference() {
+  builtin local order=$1
+  builtin command python3 <<EOF
+import numpy as np
+from shlex import split
+for n in np.diff(np.array(list(map(float, split('''${@:2}'''))))): print(n)
+EOF
+
+}
 
 function math_const() {
   builtin command python3 <<EOF
