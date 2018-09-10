@@ -16,7 +16,7 @@ if [ -x $(command which go 2>/dev/null) ]; then
 fi
 
 # Don't check mail when opening terminal.
-unset MAILCHECK
+unset -v MAILCHECK
 
 # $EDITOR
 for i in nvim vim vi; do

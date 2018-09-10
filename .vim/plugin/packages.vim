@@ -1,5 +1,4 @@
-" don't source
-finish
+finish " don't source
 
 let s:stack_packages = [
             \ 'brittany', 

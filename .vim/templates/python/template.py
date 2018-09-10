@@ -27,7 +27,8 @@ from typing import List, Iterator, Iterable
 
 # initalise logging with sane configuration
 logging.basicConfig(
-    level=logging.DEBUG, format="%(levelname)s:%(asctime)s  %(message)s"
+    level=logging.DEBUG,
+    format="%(levelname)s:%(asctime)s  %(message)s"
 )
 
 log: Logger = logging.getLogger()

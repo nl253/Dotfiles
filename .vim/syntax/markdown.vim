@@ -137,9 +137,13 @@ endfor
 
 " Inlines:
 " *italic*
-sy region markdownItalic start="\v\*" end="\v\*" skip="\v\\\*"   oneline keepend  matchgroup=Delimiter concealends contains=markdownAsterisk
+" _italic_
+sy region markdownItalic  start="\v\*" end="\v\*" skip="\v\\\*"   oneline keepend  matchgroup=Delimiter concealends contains=markdownAsterisk
+sy region markdownItalic  start="_" end="_" skip="\v\\_"     oneline keepend  matchgroup=Delimiter concealends
 " **bold**
-sy region markdownBold   start="\v\*\*" end="\v\*\*" skip="\v\\\*" oneline keepend  matchgroup=Delimiter concealends contains=markdownAsterisk
+" __bold__
+sy region markdownBold    start="\v\*\*" end="\v\*\*" skip="\v\\\*" oneline keepend  matchgroup=Delimiter concealends contains=markdownAsterisk
+sy region markdownBold    start="__" end="__" skip="\v\\_"    oneline keepend  matchgroup=Delimiter concealends
 sy match markdownAsterisk '\v\*+' contained
 
 " Simple Table:
@@ -180,7 +184,6 @@ hi def link markdownBlockQuote            String
 hi def link markdownBlockQuoteQuote       Macro
 hi def link markdownBlockQuoteQuotedQuote Operator
 hi def link markdownBlockquote            SpecialComment
-hi def link markdownBold                  htmlBold
 hi def link markdownBoldDelimiter         Delimiter
 hi def link markdownCode                  PreProc
 hi def link markdownFenced                markdownCode                 
@@ -188,10 +191,10 @@ hi def link markdownHR                    Special
 hi def link markdownHeadingDelimiter      Comment
 hi def link markdownInLineReferenceLabel  URI
 hi def link markdownInLineReferenceURI    Comment
-hi def link markdownItalic                htmlItalic
 hi def link markdownItalicDelimiter       Delimiter
 hi def link markdownLiteralBlock          PreProc
 hi def link markdownUrl                   Comment
+hi def link markdownLinkText              URI
 hi def link pandocAttr                    SpecialChar
 hi def link pandocBulletListMarker        Delimiter
 hi def link pandocBulletListMarkerBare    Delimiter
@@ -215,5 +218,7 @@ hi def link pandocTitleBlock              PreProc
 hi def link pandocURI                     URI
 hi def link pandocYamlMetaBlock           PreProc
 
-hi markdownHeadingDelimiter guifg=Grey30 ctermfg=239
-hi pandocAmbiguous                       ctermfg=Red guibg=Red 
+hi def markdownBold             gui=bold     cterm=bold
+hi def markdownItalic           gui=italic   cterm=italic
+hi def markdownHeadingDelimiter guifg=Grey30 ctermfg=239
+hi def pandocAmbiguous                       ctermfg=Red guibg=Red
