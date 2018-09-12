@@ -1,26 +1,29 @@
-function packages() {
-  builtin local package_dir="$1"
-  builtin local install_cmd="$2"
-  builtin local package_mgr="$(builtin echo $install_cmd | builtin command sed -nE 's/^\s*(\w+).*/\1/')"
-  for package in ${@:3}; do
-    if [[ ! -e "$package_dir/$package" ]]; then
-      builtin echo "installing $package_mgr package $package"
-      builtin eval "builtin command $install_cmd $package"
-    fi
-  done
+function install_packages() {
+
+  function packages() {
+    builtin local package_dir="$1"
+    builtin local install_cmd="$2"
+    builtin local package_mgr="$(builtin echo $install_cmd | builtin command sed -nE 's/^\s*(\w+).*/\1/')"
+    for package in ${@:3}; do
+      if [[ ! -e "$package_dir/$package" ]]; then
+        builtin echo "installing $package_mgr package $package"
+        builtin eval "builtin command $install_cmd $package"
+      fi
+    done
+  }
+
+  packages \
+    "$HOME/.local/lib/python3.$(builtin command python3 <<<'from sys import version as v; print(v[2:3])')/site-packages" \
+    'pip3 --no-color --quiet --retries 2 install --progress-bar off --user --pre' \
+    n{etworkx,otebook} y{outube_dl,apf} matplotlib seaborn isort {sym,num,my}py py{stache,gments,lint} p{andas,tpython} jupyter{hub,lab,_console}
+
+  packages \
+    ~/.config/yarn/global/node_modules \
+    'yarn global add' \
+    configurable-http-proxy
+
+  builtin unset -f packages
 }
-
-packages \
-  ~/.local/lib/python3.6/site-packages \
-  'pip3 --no-color --quiet --retries 2 install --progress-bar off --user --pre' \
-  n{etworkx,otebook} y{outube_dl,apf} matplotlib seaborn isort {sym,num,my}py py{stache,gments,lint} p{andas,tpython} jupyter{hub,lab,_console}
-
-packages \
-  ~/.config/yarn/global/node_modules \
-  'yarn global add' \
-  configurable-http-proxy
-
-builtin unset -f packages
 
 # UTILS
 
@@ -32,7 +35,6 @@ builtin unset -f packages
 #
 # NOTE: if the program uses STDIN then the cache cannot be used.
 function cached() {
-
   # stringify all args
   builtin local total="${*}"
 
@@ -426,11 +428,22 @@ EOF
 }
 
 function finite_difference() {
-  builtin local order=$1
+  builtin local order=${1:-1}
   builtin command python3 <<EOF
 import numpy as np
 from shlex import split
-for n in np.diff(np.array(list(map(float, split('''${@:2}'''))))): print(n)
+from functools import reduce
+
+def compose(*xs): return reduce(lambda f1, f2: lambda x: f1(f2(x)), xs)
+
+array = compose(
+    lambda array: np.diff(array, ${order}),
+    np.array,
+    list,
+    lambda n: map(float, n),
+    split)('''$(builtin command cat /dev/stdin)''')
+
+for n in array: print(n)
 EOF
 
 }
@@ -548,8 +561,8 @@ def run_it(tries = 3, guess = 1.0):
         (n, took) = result
         print("%s" % "x = %.2f" % n)
         print("%s" % "took %.8f seconds" % took)
-    elif tries == 0: print("no solution")
-    else: run_it(tries - 1, -(guess + guess * 0.01))
+      elif tries == 0: print("no solution")
+      else: run_it(tries - 1, -(guess + guess * 0.01))
 
 run_it()
 EOF
@@ -747,8 +760,8 @@ for f in {a,}{sin,cos,tan}; do
 done
 
 # init cache for commands that don't change their output (too often)
-for i in bc sed {g,}awk jupyter-nbconvert pygmentize pandoc rst2{xml,s5,odt,html,html5,html4,man,pseudoxml,xetex}{.py,} wn tokei {z,xz}{cat,diff,less} wc tree sort pydoc{3,3.5,3.6,} find fd df du curl ps rg {xz,z,}{p,e,a,f,}grep; do
-  builtin eval "builtin alias $i='cached builtin command $i'"
+for i in bc sed {g,}awk jupyter-nbconvert pygmentize pandoc rst2{xml,s5,odt,html,html5,html4,man,pseudoxml,xetex}{.py,} wn tokei {z,xz}{cat,diff,less} wc tree sort pydoc{3,3.5,3.6,} fd df du curl ps rg {xz,z,}{p,e,a,f,}grep; do
+  builtin eval "builtin alias $i='cached command $i'"
 done
 
 for i in substrings fibbonacci sympy_uop_list pymath_{b,u}op pymath_{int,float}_funct to_{hex,oct,bin,base} satisfiable {permut,combin}ations; do

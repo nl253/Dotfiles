@@ -65,7 +65,7 @@ preview() {
 ## $1 from language
 ## this function always reads from stdin if $1 arg is set
 pandoc() {
-  if builtin command pandoc --self-contained --html-q-tags --ascii --mathml --columns=${PV_WIDTH} --highlight-style=breezedark -t html5 -f $1 </dev/stdin | elinks; then
+  if builtin command pandoc --self-contained --html-q-tags --ascii --mathml --columns=${PV_WIDTH} --highlight-style=breezedark -t html5 -f $@ </dev/stdin | elinks; then
     builtin return 0
   else
     builtin return 1

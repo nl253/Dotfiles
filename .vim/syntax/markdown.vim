@@ -1,10 +1,6 @@
 if exists('b:current_syntax') 
     if b:current_syntax ==# 'markdown'
         finish
-    elseif exists('b:markdown_syntax_loaded ')
-        finish
-    else
-        let b:markdown_syntax_loaded = 1
     endif
 else
     sy clear
@@ -14,6 +10,8 @@ endif
 sy sync minlines=200
 
 runtime! syntax/html.vim
+
+" sy region markdownParagraph start='\v^( {,3}|\t)' end='\n\n' contains=@Spell
 
 " `int i = 0`
 sy region markdownCode start="\v`" end="\v`" skip="\v\\`" oneline keepend
@@ -41,9 +39,9 @@ sy region markdownLiteralBlock start='\v    +[^ ]{20,}'ms=s+4   end='$'         
 sy match  markdownFootnote           "\[^[^\]]\+\]"
 sy match  markdownFootnoteDefinition "^\[^[^\]]\+\]:"
 
-sy region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart
+sy region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart,@Spell
 sy region markdownLink     matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained
-sy region markdownId       matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
+sy region markdownId       matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained contains=@Spell
 
 " FIXME setext headings
 " sy match markdownH1 "\v^ {,3}[^#+*-]+\n {,3}\=+$" contained contains=@Spell,markdownInline,markdownHeadingRule
@@ -62,12 +60,12 @@ sy region pandocURI start="\v\<((<[a-z234]{3,7}(://|\@))|(\~|\.?/))" end=">" one
 " FIXME too slow
 " sy match pandocURI "\v((<[a-z234]{3,7}(://|\@))|\~|\.?/)\S{5,140}"
 
-sy region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
-sy match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
-sy region markdownUrl      matchgroup=markdownUrlDelimiter start="<" end=">" oneline keepend nextgroup=markdownUrlTitle skipwhite contained
-sy region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+"+ keepend contained
-sy region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+'+ end=+'+ keepend contained
-sy region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+(+ end=+)+ keepend contained
+sy region markdownIdDeclaration matchgroup=markdownLinkDelimiter     start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite contains=@Spell
+sy match  markdownUrl "\S\+"    nextgroup=markdownUrlTitle skipwhite contained
+sy region markdownUrl           matchgroup=markdownUrlDelimiter      start="<" end=">" oneline keepend nextgroup=markdownUrlTitle skipwhite contained
+sy region markdownUrlTitle      matchgroup=markdownUrlTitleDelimiter start=+"+ end=+"+ keepend contained contains=@Spell
+sy region markdownUrlTitle      matchgroup=markdownUrlTitleDelimiter start=+'+ end=+'+ keepend contained contains=@Spell
+sy region markdownUrlTitle      matchgroup=markdownUrlTitleDelimiter start=+(+ end=+)+ keepend contained contains=@Spell
 
 " Blocks:
 " ::: My fenced div :::
@@ -82,7 +80,7 @@ sy region pandocYamlMetaBlock start="\v%^\n*---" end="\v^(\.{3}|-{3})"
 " Line Blocks:
 " |  Left aligned text
 " |      with some indentation.
-sy region pandocLineBlockPipe start="\v^\|\s*" end="$" oneline contains=pandocExampleListRef,pandocSuperscript,pandocSubscript,markdownBold,markdownItalic,markdownItalicDelimiter,markdownBoldItalic,markdownURI,markdownEscape,markdownCode,pandocStrikethrough,markdownLinkText,markdownLinkTextDelimiter,markdownLink
+sy region pandocLineBlockPipe start="\v^\|\s*" end="$" oneline contains=pandocExampleListRef,pandocSuperscript,pandocSubscript,markdownBold,markdownItalic,markdownItalicDelimiter,markdownBoldItalic,markdownURI,markdownEscape,markdownCode,pandocStrikethrough,markdownLinkText,markdownLinkTextDelimiter,markdownLink,@Spell
 
 " Subscript Superscript: 
 " x~i~
@@ -92,12 +90,12 @@ sy region pandocSuperscript start="\v\^" end="\v\^"             oneline conceale
 
 " Strikethrough:
 " ~~woooo~~
-sy region pandocStrikethrough start="\~\~" end="\~\~" skip="\\\~" oneline contains=markdownBold,markdownItalic,markdownBoldItalic,markdownURI,markdownEscape
+sy region pandocStrikethrough start="\~\~" end="\~\~" skip="\\\~" oneline contains=markdownBold,markdownItalic,markdownBoldItalic,markdownURI,markdownEscape,@Spell
 
 " Lists: 
-sy match pandocBulletListMarker "\v^\s*(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) "
+sy match  pandocBulletListMarker "\v^\s*(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) "
 " same but not stuck to start of line (note lack of '^')
-sy match pandocBulletListMarkerBare "\v\s+(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) " contained
+sy match  pandocBulletListMarkerBare "\v\s+(\(?[a-z0-9]\)|[1-9#iIVv]\.|\+|-|\*) " contained
 sy region pandocExampleListRef start="\v\(\@" end="\v\)" skip="\v\\\)" oneline
 " Term
 " ~ def1
@@ -138,12 +136,12 @@ endfor
 " Inlines:
 " *italic*
 " _italic_
-sy region markdownItalic  start="\v\*" end="\v\*" skip="\v\\\*"   oneline keepend  matchgroup=Delimiter concealends contains=markdownAsterisk
-sy region markdownItalic  start="_" end="_" skip="\v\\_"     oneline keepend  matchgroup=Delimiter concealends
+sy region markdownItalic start="\v\*" end="\v\*" skip="\v\\\*" oneline keepend matchgroup=Delimiter concealends contains=markdownAsterisk,@Spell
+sy region markdownItalic start="_" end="_" skip="\v\\_"        oneline keepend matchgroup=Delimiter concealends contains=@Spell
 " **bold**
 " __bold__
-sy region markdownBold    start="\v\*\*" end="\v\*\*" skip="\v\\\*" oneline keepend  matchgroup=Delimiter concealends contains=markdownAsterisk
-sy region markdownBold    start="__" end="__" skip="\v\\_"    oneline keepend  matchgroup=Delimiter concealends
+sy region markdownBold    start="\v\*\*" end="\v\*\*" skip="\v\\\*" oneline keepend matchgroup=Delimiter concealends contains=markdownAsterisk,@Spell
+sy region markdownBold    start="__"     end="__"     skip="\v\\_"  oneline keepend matchgroup=Delimiter concealends contains=@Spell
 sy match markdownAsterisk '\v\*+' contained
 
 " Simple Table:
@@ -171,12 +169,11 @@ sy match  pandocSimpleTableLine "\v----+"                         containedin=pa
 
 " BlockQuote:
 " > quoted text
-sy region markdownBlockQuote            start="\v^ {,3}\> ?"         end="$" oneline contains=pandocBulletListMarkerBare,markdownBold,markdownItalic,pandocStrikethrough,markdownBoldItalic,markdownCode,markdownURI,pandocInlineMath,pandocDash
+sy region markdownBlockQuote            start="\v^ {,3}\> ?"         end="$" oneline contains=pandocBulletListMarkerBare,markdownBold,markdownItalic,pandocStrikethrough,markdownBoldItalic,markdownCode,markdownURI,pandocInlineMath,pandocDash,@Spell
 " > > double quoted text
-sy region markdownBlockQuoteQuote       start="\v^ {,3}\> ?\> ?"     end="$" oneline contains=pandocBulletListMarkerBare,markdownBold,markdownItalic,pandocStrikethrough,markdownBoldItalic,markdownCode,markdownURI,pandocInlineMath,pandocDash
+sy region markdownBlockQuoteQuote       start="\v^ {,3}\> ?\> ?"     end="$" oneline contains=pandocBulletListMarkerBare,markdownBold,markdownItalic,pandocStrikethrough,markdownBoldItalic,markdownCode,markdownURI,pandocInlineMath,pandocDash,@Spell
 " > > > triple quoted text
-sy region markdownBlockQuoteQuotedQuote start="\v^ {,3}\> ?\> ?\> ?" end="$" oneline contains=pandocBulletListMarkerBare,markdownBold,markdownItalic,pandocStrikethrough,markdownBoldItalic,markdownCode,markdownURI,pandocInlineMath,pandocDash
-
+sy region markdownBlockQuoteQuotedQuote start="\v^ {,3}\> ?\> ?\> ?" end="$" oneline contains=pandocBulletListMarkerBare,markdownBold,markdownItalic,pandocStrikethrough,markdownBoldItalic,markdownCode,markdownURI,pandocInlineMath,pandocDash,@Spell
 
 hi def link markdownAsterisk              Delimiter
 hi def link markdownBlock                 SpecialComment
@@ -217,8 +214,9 @@ hi def link pandocTexCmd                  Constant
 hi def link pandocTitleBlock              PreProc
 hi def link pandocURI                     URI
 hi def link pandocYamlMetaBlock           PreProc
+" hi def link markdownParagraph             Normal
 
 hi def markdownBold             gui=bold     cterm=bold
 hi def markdownItalic           gui=italic   cterm=italic
 hi def markdownHeadingDelimiter guifg=Grey30 ctermfg=239
-hi def pandocAmbiguous                       ctermfg=Red guibg=Red
+hi def pandocAmbiguous                       ctermfg=Red guibg=Red 

@@ -6,12 +6,28 @@ fu! emacs#c_cut_till_end()
     endif
 endf
 
-" FIXME emacs#i_transpose_words()
-fu! emacs#i_transpose_words()
-    normal! viWE"xdi=join(reverse(split(@x, ' ')), ' ')
+" Correct spelling of the current word *without* moving the cursor.
+fu! emacs#i_correct_spelling_err()
+    let l:col       = virtcol('.') - 1
+    let l:bad_word  = expand('<cword>')
+    let l:good_word = spellsuggest(l:bad_word)[0]
+    exe 'normal ciw'.l:good_word
+    normal 0
+    exe 'norm '.l:col.'l'
+    let l:len_diff = len(l:good_word) - len(l:bad_word)  
+    if l:len_diff > 0
+        exe 'norm '.l:len_diff.'l'
+    elseif l:len_diff < 0
+        exe 'norm '.abs(l:len_diff).'h'
+    endif
 endf
 
-" Indecies are INCLUSIVE
+" FIXME emacs#i_transpose_words()
+fu! emacs#i_transpose_words()
+    norm! viWE"xdi=join(reverse(split(@x, ' ')), ' ')
+endf
+
+" Indices are INCLUSIVE
 " getcmdpos wrongly gives pos + 1 
 fu! emacs#c_navigate_r(pat)
     let l:pos = getcmdpos() - 1
@@ -21,9 +37,9 @@ endf
 
 " @param {char[]} chars
 fu! emacs#c_navigate_l(chars)
-    " getcmdpos overreports by 1 (so - 1)
+    " getcmdpos over reports by 1 (so - 1)
     " search from the next pos (another - 1)
-    " but don't reach negative indecies because they wrap around
+    " but don't reach negative indices because they wrap around
     " remember that Vim slices inclusively
     let l:end = getcmdpos() - 2
     " slice cmd line from start till your current position
@@ -57,9 +73,9 @@ endf
 
 fu! emacs#i_del_space_between_words()
  while getline(".")[getpos(".")[2] - 1:] =~ '\v^\s'
-        normal x
+        norm x
     endwhile
     while getline(".")[:getpos(".")[2] - 1] =~ '\v\s$'
-        normal i<BS>
+        norm i<BS>
     endwhile
 endf

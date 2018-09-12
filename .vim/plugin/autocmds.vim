@@ -1,6 +1,5 @@
 exe 'setg statusline='.escape(' %-35.(%f #%n %q%r %w%m%) %=%-14.120(%(%<%{exists("b:git_status_summary") ? b:git_status_summary : ""} %{&tw} %{&wrap ? "wrap " : ""}%{&sw} %{&ts} %{&expandtab ? "expandtab " :""}%{&foldmethod == "marker" ? &foldmarker : &foldmethod}%) %(%y %p%% of %L%)%)     ', ' :",|')
 
-
 aug VariousAutoCmds
     au!
 

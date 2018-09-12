@@ -1,6 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_cnt =8
 let g:netrw_dirhist_1='/home/norbert/.cache/vim/racket'
 let g:netrw_dirhist_2='/home/norbert/.vim/ftdetect'
 let g:netrw_dirhist_3='/usr/share/aclocal'
 let g:netrw_dirhist_4='/home/norbert/.vim/syntax'
+let g:netrw_dirhist_5='/home/norbert/.jupyter/nbconfig'
+let g:netrw_dirhist_6='/home/norbert/.config/bash'
+let g:netrw_dirhist_7='/usr/lib/kitty/terminfo'
+let g:netrw_dirhist_8='/usr/lib/kitty/terminfo/x'

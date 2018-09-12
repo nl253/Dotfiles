@@ -14,9 +14,9 @@ fu! opts#omni(omnilist)
 endf
 
 fu! opts#comma_opt(opt_name, extra_flags)
-    let l:present_flags = split(execute("echo &".a:opt_name), ',')
+    let l:sorted_present_flags = sort(split(execute("echo &".a:opt_name), ','))
     for l:flag in a:extra_flags
-        if index(l:present_flags, l:flag) < 0
+        if utils#bsearch(l:sorted_present_flags, l:flag) ==# v:false
             call opts#safe_setl([a:opt_name.'+='.l:flag])
         endif
     endfor
@@ -49,12 +49,13 @@ endf
 
 " Add to $PATH bin dirs for package managers in case they aren't in $PATH already
 fu! opts#append_to_path(paths) abort
-    let l:path = map(filter(split($PATH, ':'), 'empty(v:val)'), 'expand(v:val)')
+    let l:sorted_path = sort(map(filter(split($PATH, ':'), '!empty(v:val)'), 'expand(v:val)'))
     for l:dir in filter(a:paths, 'isdirectory(v:val)')
-        if index(l:path, l:dir) < 0
-            let $PATH = l:dir.':'.$PATH
+        if utils#bsearch(l:sorted_path, l:dir) ==# v:false
+            let l:sorted_path = call add(l:sorted_path, l:dir)
         endif
     endfor
+    let $PATH = join(l:sorted_path, ':') 
 endf
 
 fu! opts#safe_setl(opts)
@@ -78,9 +79,9 @@ endf
 
 fu! opts#wildignore(pattern_list)
     if has('wildignore')
-        let l:existing_patterns = split(&wildignore, ',')
+        let l:sorted_existing_patterns = sort(split(&wildignore, ','))
         for l:pattern in a:pattern_list 
-            if index(l:existing_patterns, l:pattern) < 0
+            if utils#bsearch(l:sorted_existing_patterns, l:pattern) ==# v:false
                 exe 'setg wildignore+='.l:pattern
             endif
         endfor

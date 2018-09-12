@@ -1,6 +1,8 @@
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o
 if !has('unix') | finish | endif
 
+let $MYVIMRC = expand('~/.vimrc')
+
 setg runtimepath-=~/.vim
 exe 'setg runtimepath-='.expand('~/.vim')
 setg runtimepath^=~/.vim
@@ -8,6 +10,8 @@ setg runtimepath^=~/.vim
 setg runtimepath-=~/.vim/after
 exe 'setg runtimepath-='.expand('~/.vim/after')
 setg runtimepath+=~/.vim/after
+
+let &packpath = &runtimepath
 
 setg termguicolors
 

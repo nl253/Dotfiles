@@ -9,7 +9,7 @@ fu! templates#read_template()
 endfu
 
 fu! templates#template_subst()
-    exe "python3 import vim, pystache; vim.current.buffer[:] = list(map(lambda x: pystache.render(x, ".string(g:template_vars)."), vim.current.buffer[:]))"
+    exe "python3 import vim, pystache; vim.current.buffer[:] = list(map(lambda x: pystache.render(x, ".string(GetTemplateVars())."), vim.current.buffer[:]))"
 endf
 
 fu! templates#read_template_helper()

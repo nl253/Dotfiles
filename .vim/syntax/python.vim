@@ -37,11 +37,11 @@ sy region pythonStr     matchgroup=pythonTripleQuotes start=+[uU]\?\z('''\|"""\)
 " Docstrings:
 
 " :param my-param:
-sy region pythonDocStrTag start="\v:([a-z][-a-z_]+)" end=":" oneline contained containedin=pythonStr
+sy region pythonDocStrTag start="\v:([a-z][-a-z_]+)" end=":" oneline contained containedin=pythonStr contains=@Spell
 " Google
-sy match  pythonDocStrTag "\v^\s*([A-Z][a-z]+)( [A-Z][a-z]+)?\s*:\s*$" contained containedin=pythonStr
+sy match  pythonDocStrTag "\v^\s*([A-Z][a-z]+)( [A-Z][a-z]+)?\s*:\s*$" contained containedin=pythonStr contains=@Spell
 " NumPy
-sy region pythonDocStrTag start="\v^\s*\w+\s+:\s+" end="$" oneline contained containedin=pythonStr
+sy region pythonDocStrTag start="\v^\s*\w+\s+:\s+" end="$" oneline contained containedin=pythonStr contains=@Spell
 
 " `method_that_does_A()`
 " ``method_that_does_A()``
@@ -54,7 +54,7 @@ sy match pythonDocStrHR "\v^\s*(-{4,}|\={4,})\s*$" contained containedin=pythonS
 "       See Also
 "       Notes
 "       Examples
-sy match pythonDocStrHeading "\v^\s*([A-Z][a-z]+)( [A-Z][a-z]+)?\s*$" contained containedin=pythonStr
+sy match pythonDocStrHeading "\v^\s*([A-Z][a-z]+)( [A-Z][a-z]+)?\s*$" contained containedin=pythonStr contains=@Spell
 "       * bp1 
 "       * bp2 
 sy match pythonDocStrNumpyBullet "\v^\s*\*\s+" contained containedin=pythonStr
@@ -71,16 +71,16 @@ sy region pythonFmtStr  matchgroup=pythonTripleQuotes start=+f\z('''\|"""\)+ms=s
 
 " E.g.: f"false negative on {i + 2}"
 " NOTE: this CANNOT contain `pythonBraces`
-sy region pythonFmtStrInter start='\v\{' end='\}' oneline contained containedin=pythonFmtStr contains=pythonFmtStrInter,pythonBrackets,pythonNum,pythonBuiltin,pythonError,pythonSelf,pythonBoolean,pythonObj,pythonOp,pythonConditional
+sy region pythonFmtStrInter start='\v\{' end='\}' oneline contained containedin=pythonFmtStr contains=pythonFmtStrInter,pythonBrackets,pythonNum,pythonBuiltin,pythonError,pythonSelf,pythonBoolean,pythonObj,pythonOp,pythonConditional,pythonKwArg,pythonCall,pythonConst
 sy match pythonFmtStrMod '\v(![rsa])?(:(\w[\<\>\=\^]?)?[- \+]?#?0?\d*,?(\.\d+)?[bcdeEfFgGnosxX\%]?)?' contained 
 
 " highlight regular expressions in raw strings e.g.: r"(abc)?"
 " see <https://docs.python.org/3/library/re.html>
 sy region pythonRawStr  matchgroup=pythonQuotes       start=+[uU]\?[rR]\z(['"]\)+     end="\z1" skip="\\\\\|\\\z1" contains=@Spell,@regexAll
-sy region pythonRawStr  matchgroup=pythonTripleQuotes start=+[uU]\?[rR]\z('''\|"""\)+ end="\z1"                    contains=pythonSpaceError,@Spell,@regexAll                  keepend 
+sy region pythonRawStr  matchgroup=pythonTripleQuotes start=+[uU]\?[rR]\z('''\|"""\)+ end="\z1"                    contains=pythonSpaceError,@regexAll    keepend 
 
 sy region pythonByteStr matchgroup=pythonQuotes       start=+b\z(['"]\)+ms=s+1        end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape
-sy region pythonByteStr matchgroup=pythonTripleQuotes start=+b\z('''\|"""\)+me=e+3    end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError                      keepend 
+sy region pythonByteStr matchgroup=pythonTripleQuotes start=+b\z('''\|"""\)+me=e+3    end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError keepend 
 
 sy match pythonEscape +\\[abfnrtv'"\\]+           contained
 sy match pythonEscape "\\\o\{1,3}"                contained
@@ -163,7 +163,7 @@ sy match pythonConst        '\v_?<[A-Z][_A-Z0-9]+>'
 sy match pythonColon ":" 
 sy match pythonComma "," 
 sy match pythonDot   "\v\."
-sy match pythonKwArg "\v\w[[:alnum:]_]*\@=\="
+sy match pythonKwArg "\v_?[a-z][a-z0-9_]+\=@="
 sy match pythonEq             '='     contained
 sy match pythonFunctSignArrow '\v-\>' contained
 
@@ -196,7 +196,7 @@ sy match pythonBrackets "\v[\[\]]"
 " difference     s  ^  s2 
 " intersection   s  &  s2 
 " assignment (ie update) version of the above (with '=')
-sy match pythonOp "\v( |^|>)(([\*/\>\<]{2}|[-!\|\&\^/\%\*\+\>\<\=])\=?)( |$|<)"
+sy match pythonOp "\v( |^|>)(([\*/\>\<]{2}|[-!\|\&\^/\%\*\+\>\<\=])\=?)( |$|<|[\(\{\"'\[]@=)"
 
 " boolean ops
 sy keyword pythonOp and in is not or 

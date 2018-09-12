@@ -3,6 +3,25 @@ def __init__(self):
     $1
 endsnippet
 
+snippet "sched(ul(er)?)?" "scheduler wrapper [python]" 
+class MyScheduler():                                                                                
+
+    def __init__(self, scheduler=sched.scheduler()) -> None:
+        self.s: sched.scheduler = scheduler
+
+    def rel(self, task, delay: float = 0, priority: int = 1, kwargs={}) -> MyScheduler:
+        self.s.enter(action=task, delay=delay, priority=priority, kwargs=kwargs)                                                                   
+        return self
+
+    def abs(self, task, time: float = time.monotonic(), priority: int = 1, kwargs={}) -> MyScheduler:
+        self.s.enterabs(action=task, time=time, priority=priority, kwargs=kwargs)                                                                   
+        return self
+
+    def run(self) -> MyScheduler:
+        self.s.run()
+        return self  
+endsnippet
+
 snippet "diff[ertia]{,8}" "differentiate {sympy} [python]" br
 import sympy
 x, y, z = sympy.symbols('x y z')

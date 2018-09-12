@@ -1,33 +1,23 @@
 priority -50
 
 snippet ol "ordered list (ol) [markup]"
-${1:List Heading}:
-
-1. ${2:first item}
+1. $1
 endsnippet
 
 snippet al "alphabetic list (al) [markup]"
-${1:List Heading}:
-
-a) ${2:first item}
+a) $1
 endsnippet
 
-snippet "hr|-{3,}" " ----- (hr) [markup]" rb
+snippet "hr|-{3,}" "----- (hr) [markup]" rb
 -----
 endsnippet
 
-snippet eg "for example .. [markup]" 
+snippet eg "for example ... (eg) [markup]" 
 for example: $1
 endsnippet
 
-snippet Eg "For example .. [markup]" 
+snippet Eg "For example ... (Eg) [markup]" 
 For example: 
 
   - $1
-endsnippet
-
-snippet ls "list (ls) [markup]"
-${1:List Heading}:
-
-- ${2:first item}
 endsnippet

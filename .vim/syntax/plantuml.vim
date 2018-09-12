@@ -21,7 +21,7 @@ sy region puml start='\v^\s*\@startuml\s*$' end='\v^\s*\@enduml\s*$' contains=pu
 sy match pumlStartEnd '\v^\s*\@(start|end)uml\s*$' contained
 
 sy match pumlKeyword "\v<(((abstract\s+)?class)|interface|extends|implements)>" contained
-sy region pumlNote start='\v^\s*note\s+(left|right|top|bottom)\s+of\s+\w+\s*$' end='\v^\s*end\s+note\s*$' contained
+sy region pumlNote start='\v^\s*note\s+(left|right|top|bottom)\s+of\s+\w+\s*$' end='\v^\s*end\s+note\s*$' contained contains=@spell
 
 " --->
 " -->
@@ -44,13 +44,13 @@ sy region pumlMultiplicity  start='\v\['ms=s+1 end='\v\]'me=e-1   oneline contai
 
 sy region pumlAssignment  start='=' end='$' contained keepend oneline contains=pumlEq,pumlNum,pumlStr 
 sy match  pumlNum '\v-?\d+(\.\d+)?([Ee]-?\d+)?' contained
-sy region pumlStr start='"' end='"' oneline contained
-sy region pumlStr start="'" end="'" oneline contained
+sy region pumlStr start='"' end='"' oneline contained contains=@spell
+sy region pumlStr start="'" end="'" oneline contained contains=@spell
 
 sy region pumlProps start='{'ms=s+1 end='}'me=e-1 oneline contained contains=pumlComma,pumlProp 
-sy match pumlComma ','        contained
-sy match pumlProp  '\v\w{2,}' contained 
-sy match pumlEq    '='        contained
+sy match  pumlComma ','        contained
+sy match  pumlProp  '\v\w{2,}' contained 
+sy match  pumlEq    '='        contained
 
 " e.g.: Builder .> ComplexObject: << create >>
 sy region pumlStereotypeSpec       start='\v:\s*\<' end='\v(,|\)|$)@=' oneline keepend contains=pumlStereotype
@@ -60,11 +60,11 @@ sy match pumlOperation  "\v([A-Za-z][a-z0-9]+)+\(@=" contained
 " + public
 " - private
 " # protected
-sy match pumlVisibility "\v^\s*[-\+#]( |<)" contained
+sy match  pumlVisibility "\v^\s*[-\+#]( |<)" contained
 sy region pumlInsideClass start='{' end='}' contained contains=pumlVisibility,pumlOperation,pumlAttrs
 " ' comment till end of line
-sy region pumlComment    start="'"    end="$"    skip="\\'"  oneline contained
-sy region pumlComment    start="/'"   end="'/"                       contained
+sy region pumlComment    start="'"    end="$"    skip="\\'"  oneline contained contains=@spell
+sy region pumlComment    start="/'"   end="'/"                       contained contains=@spell
 sy region pumlStereotype start="\V<<" end="\V>>"             oneline contained
 
 sy match pumlPreProcKeyword "\v<(AttributeIconSize|Font(Name|Color|Size)|skinparam|(Border|Arrow|Background)Color)>" contained

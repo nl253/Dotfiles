@@ -19,6 +19,7 @@ sy sync match rstHighlight groupthere NONE #^\_s\@!#
 for pair in ['""', "''", '()', '{}', '<>']
     call s:inline_char('PhaseHyperLinkReference', '`', '`__\=', pair[0] ,pair[1],)
 endfor
+
 call s:inline_char('PhaseHyperLinkReference', '`', '`__\=', '\[','\]')
 call s:inline_char('PhaseHyperLinkReference', '`', '`__\=', '\%(^\|\s\|[/:]\)','')
 

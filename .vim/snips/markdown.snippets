@@ -5,7 +5,7 @@ snippet img "image [markdown]" b
 ![${1:image alt text}](${2:#path-to-img}${3/.+/ "/}${3:opt title}${3/.+/"/})$0
 endsnippet
 
-snippet "h1|title" "current file without ext [markdown]" rb
+snippet "(( {1,3}|\t)?\#\s)?\s*h1\s*" "current file without ext [markdown]" r
 # `!p 
 import re
 snip.rv = re.sub("\.\w+$", "", snip.fn).replace("-", " ").replace("_", " ").title()`

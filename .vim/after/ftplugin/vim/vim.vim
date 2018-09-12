@@ -5,6 +5,9 @@ call opts#safe_setl([
             \ 'complete+=k~/.vimrc', 
             \ 'tabstop=4', 
             \ 'shiftwidth=4', 
+            \ 'iskeyword+=:', 
+            \ 'iskeyword+=&', 
+            \ 'iskeyword+=$', 
             \ 'path+=~/.vim/plugin', 
             \ 'keywordprg=:help', 
             \ 'foldmethod=syntax'

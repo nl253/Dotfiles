@@ -11,13 +11,11 @@ fu! mail#send()
 endf
 
 fu! mail#check_flag(flag)
-	let l:response = input('flag '.a:flag.' is required correct [Y/N]? ')
-	return l:response =~ '\vy|Y'
+	return tolower(input('flag '.a:flag.' is required correct [Y/N]? ')) ==# 'y'
 endf
 
 fu! mail#get_details(what, default)
-	let l:response = input(a:what.' is '.string(a:default).' correct [Y/N]? ')
-	if l:response =~ '\vy|Y'
+	if tolower(input(a:what.' is '.string(a:default).' correct [Y/N]? ')) ==# 'y'
 		return a:default
 	else
 		return input('edit '.a:what.' => ', a:default)

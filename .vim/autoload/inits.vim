@@ -99,8 +99,11 @@ endf
 
 fu! inits#markup() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
+
     call opts#safe_setl([
                 \ 'conceallevel=3',
+                \ 'iskeyword+=\-',
+                \ 'iskeyword-=_',
                 \ 'spell',
                 \ 'tagcase=ignore',
                 \ 'expandtab',

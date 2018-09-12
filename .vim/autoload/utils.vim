@@ -7,6 +7,38 @@ call opts#letg_default('default_session_file', join([g:session_dir, $USER.'.vim'
 call opts#letg_default('view_dir',             expand('~/').'.vim/views')
 call opts#letg_default('default_view_file',    join([g:view_dir, $USER.'.vim'], '/'))
 
+fu! utils#bsearch(list, val)
+
+    if empty(a:list)
+        return v:false
+    endif
+
+    let l:middle_idx = len(a:list) / 2
+
+    let l:middle_val = a:list[l:middle_idx]
+
+    " found !
+    if l:middle_val == a:val 
+        return v:true
+
+    " NOTE: VimScript slices lists inclusively
+
+    " search left half
+    " exclude middle value (checked above)
+    elseif a:val < l:middle_val
+        if (l:middle_idx - 1) < 0 
+            return v:false
+        else
+            return utils#bsearch(a:list[:(l:middle_idx - 1)], a:val)
+        endif
+
+    " search right half
+    " exclude middle value (checked above)
+    else 
+        return utils#bsearch(a:list[(l:middle_idx + 1):], a:val)
+    endif
+endf
+
 function! utils#syntax_attr()
      let synid = ""
      let guifg = ""

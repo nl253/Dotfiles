@@ -50,8 +50,8 @@ sy keyword jsType Array Boolean Date Function Number Object String RegExp Infini
 
 " Str:
 sy match  jsStrEscape "\v\\." contained containedin=jsStrD,jsStrS,jsTemplStr
-sy region jsStrD start=+"+  skip=+\\\\\|\\"+  end=+"\|$+ oneline  keepend
-sy region jsStrS start=+'+  skip=+\\\\\|\\'+  end=+'\|$+ oneline  keepend
+sy region jsStrD start=+"+  skip=+\\\\\|\\"+  end=+"\|$+ oneline  keepend contains=@Spell
+sy region jsStrS start=+'+  skip=+\\\\\|\\'+  end=+'\|$+ oneline  keepend contains=@Spell
 " FIXME Doesn't look nice
 " sy match jsStrSQuote "'"  contained containedin=jsStrS
 " sy match jsStrDQuote '"' contained containedin=jsStrD
@@ -59,7 +59,7 @@ sy region jsStrS start=+'+  skip=+\\\\\|\\'+  end=+'\|$+ oneline  keepend
 " hi def link jsStrSQuote Delimiter
 
 " `template string with ${vars}`
-sy region jsTemplStr             start='`'   end='`' keepend contains=jsTemplStrSubst,jsTemplStrHtmlTag
+sy region jsTemplStr             start='`'   end='`' keepend contains=jsTemplStrSubst,jsTemplStrHtmlTag,@Spell
 sy region jsTemplStrSubst        start='\${' end='}' keepend oneline contained containedin=jsTemplStr
 
 " often we put HTML tags in js templates

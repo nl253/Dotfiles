@@ -42,12 +42,12 @@ nn <C-w>< :silent exe 'silent vertical resize -'.max([10, system("tput cols") / 
 nn Q gQ
 
 " alway search using very magic (POSIX-ish regex) & case-sensitive mode 
-nn / /\v\C
-nn ? ?\v\C
+nn  /   /\v\C
+nn  ?   ?\v\C
 cno %s/ %s/\v\C
-cno g/ g/\v\C
-vn / /\v\C
-vn ? ?\v\C
+cno g/  g/\v\C
+vn  /   /\v\C
+vn  ?   ?\v\C
 
 " fill qf buffer with files in this project
 nn <M-f>      :silent call utils#project_files_qf()<CR>
@@ -128,6 +128,8 @@ ino <C-A> <C-O>^
 
 " => => Editing
 
+" delete word
+ino <M-BS> <C-w>
 " delete char backword
 ino <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 " delete word backward
@@ -188,7 +190,7 @@ ino <C-x><C-b> <C-o>:ls<CR>
 " write i.e. save
 ino <C-x><C-s> <C-o>:w<CR>
 " correct spelling
-ino <M-$> <C-o>z=1<CR>
+ino <M-$> <C-o>:call emacs#i_correct_spelling_err()<CR>
 " manipulate windows
 ino <C-x>1 <C-o><C-w>o
 ino <C-x>2 <C-o><C-w>s
@@ -223,5 +225,4 @@ ino <M-f> <C-o>e<Right>
 "ino <C-b> <Left>
 "ino <C-e> <End>
 "ino <C-r> <C-o>?\v
-"ino <M-BS> <C-w>
 "ino <C-u> <C-o>d^

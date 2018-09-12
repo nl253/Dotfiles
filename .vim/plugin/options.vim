@@ -1,6 +1,5 @@
-" This file contains options that need to be set globally (ie only once on Vim startup).
+" This file contains options that need to be set globally (ie only once on Vim start-up).
 
-let $MYVIMRC = expand('~/.vimrc')
 if has('gui_running') | call opts#gui() | endif
 if !exists(":Man") | runtime! ftplugin/man.vim | endif
 packadd justify
@@ -39,13 +38,25 @@ call repl#set_repl({
             \ 'html'      : 'node -i',
             \ })
 
-let g:template_vars = {
-            \ 'author':      join(systemlist("git config user.name"), ' '),
-            \ 'year':        strftime("%Y"),
-            \ 'now':         strftime("%c"),
-            \ 'description': '',
-            \ 'keywords':    '',
-            \ }
+" Lazy evaluation (shell is called for `author` and `email` which may slow down start-up)
+fu! GetTemplateVars()
+    if exists('g:template_vars')
+        return g:template_vars
+    else    
+        let g:template_vars = {
+                    \ 'author':      join(systemlist("git config user.name"), ' '),
+                    \ 'date':        strftime("%c"),
+                    \ 'description': '',
+                    \ 'email':       join(systemlist("git config user.email"), ' '),
+                    \ 'github':      'https://github.com/'.join(systemlist("git config user.name"), ' '),
+                    \ 'keywords':    join([], ', '),
+                    \ 'now':         strftime("%c"),
+                    \ 'summary':     '',
+                    \ 'year':        strftime("%Y"),
+                    \ }
+        return GetTemplateVars()
+    endif
+endf
 
 call opts#set_if_executable('grepprg', {
             \ 'rg':   'rg --hidden --maxdepth=5 --color=never --threads=4 --vimgrep $*', 
@@ -117,7 +128,7 @@ call opts#safe_setg([
             \ 'sessionoptions-=options',
             \ 'shiftround',
             \ 'shortmess=stTAIcoOWF',
-            \ 'showbreak= ~> ',
+            \ 'showbreak= >> ',
             \ 'sidescroll=1',
             \ 'sidescrolloff=30',
             \ 'spellsuggest=best,12,',
@@ -146,99 +157,77 @@ call opts#safe_setg([
             \ 'writebackup',
             \ ])
 
-call opts#wildignore([
-            \ '*.bac',
-            \ '*.bac', 
-            \ '*.beam',
-            \ '*.bk',
-            \ '*.bk', 
-            \ '*.class',
-            \ '*.ctxt', 
-            \ '*.db', 
-            \ '*.hi',
-            \ '*.iml',
-            \ '*.iml', 
-            \ '*.lock',
-            \ '*.lock', 
-            \ '*.o',
-            \ '*.obj',
-            \ '*.so',
-            \ '*.sqlite*',
-            \ '*.ipynb',
-            \ '*.sqlite*', 
-            \ '*.swp',
-            \ '*.swp', 
-            \ '*_', 
-            \ '*~',
-            \ '*~', 
-            \ '.egg', 
-            \ '.eggs',
-            \ '.git',
-            \ '.git', 
-            \ '.idea', 
-            \ '.rope*',
-            \ '.svn',
-            \ '.svn', 
-            \ '_*', 
-            \ 'build',
-            \ 'build', 
-            \ 'dist', 
-            \ 'node_modules',
-            \ 'out', 
-            \ 'tags', 
-            \ 'target', 
-            \ ])
-
-let s:ignore_paths = map([
+" dirs
+let s:wildignore_patterns = map([
             \ 'sessions',
             \ 'tmp',
             \ 'swap',
-            \ ], '"**/".v:val."/**"')
+            \ '.git', 
+            \ '.idea', 
+            \ '.svn',
+            \ 'node_modules',
+            \ 'build', 
+            \ 'dist', 
+            \ 'out', 
+            \ 'target', 
+            \ ], 'v:val."/**"')
 
-let s:ignore_dirs = map(filter(split(system('bash -c "echo /{usr/,usr/local/,usr/local/share/,}{lost+found,run,srv,opt,var,sys,boot,dev,lib,lib32,lib64,man,bin,root,sbin,proc,mnt,include}"'), ' '), 'isdirectory(v:val)'), 'v:val."/*"')
+call extend(s:wildignore_patterns, map(filter(split(system('bash -c "echo /{usr/,usr/local/,usr/local/share/,}{lost+found,run,srv,opt,var,sys,boot,dev,lib,lib32,lib64,man,bin,root,sbin,proc,mnt,include}"'), ' '), 'isdirectory(v:val)'), 'v:val."/*"'))
 
-let s:ignore_exts = map([
-            \ 'tab',
-            \ 'webm',
-            \ 'log',
-            \ 'swp',
-            \ 'pdf',
-            \ 'jpg',
-            \ 'png',
-            \ 'lock',
-            \ 'docx',
-            \ 'tmp',
-            \ 'bak',
-            \ 'info',
-            \ 'pptx',
-            \ 'mp3',
-            \ 'mp4',
-            \ 'toc',
-            \ 'out',
-            \ 'fls',
+" exts
+call extend(s:wildignore_patterns, map([
             \ 'aux',
+            \ 'ba[kc]',
+            \ 'beam',
+            \ 'bk',
+            \ 'class',
+            \ 'ctxt',
+            \ 'db',
+            \ 'docx',
+            \ 'egg', 
+            \ 'eggs',
             \ 'fdb_latexmk',
+            \ 'fls',
+            \ 'hi',
+            \ 'iml',
+            \ 'info',
+            \ 'ipynb',
+            \ 'jpg',
+            \ 'lock',
+            \ 'log',
+            \ 'mp[34]',
+            \ 'o',
+            \ 'obj',
+            \ 'out',
+            \ 'pdf',
+            \ 'png',
+            \ 'pptx',
+            \ 'rope*',
+            \ 'so',
+            \ 'sqlite*',
+            \ 'swp',
             \ 'tab',
+            \ 'tmp',
+            \ 'toc',
             \ 'webm',
-            \ ], '"*.".v:val')
+            \ ], '"*.".v:val'))
 
-let s:ignore_exact = [
+" files
+call extend(s:wildignore_patterns, [
             \ 'tags',
             \ '*~',
+            \ '*_', 
+            \ '*~',
             \ 'swapfile',
-            \ ]
+            \ ])
 
-let s:ignore_phrases = map([
+" contains 
+call extend(s:wildignore_patterns, map([
             \ 'history',
             \ 'cache',
             \ 'chrome',
             \ 'firefox',
             \ '%',
-            \ ], "'**'.v:val.'**'")
+            \ ], "'**'.v:val.'**'"))
 
-call opts#wildignore(
-            \ s:ignore_paths + 
-            \ s:ignore_dirs  + 
-            \ s:ignore_exts  + 
-            \ s:ignore_exact + 
-            \ s:ignore_phrases)
+call opts#wildignore(s:wildignore_patterns)
