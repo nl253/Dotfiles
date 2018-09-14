@@ -265,10 +265,16 @@ fu! utils#add_project_files(anchor, ...) abort
     exe 'argadd '.join(l:files, ' ')
 endf
 
-fu! utils#append_to_dict(word) abort
+" Efficiently insert word into sorted dictionary file
+fu! utils#append_to_dict(word)
     if filereadable(&dictionary)
-        call writefile(split(a:word), expand(&dictionary), 'a')
-        echom 'appended '.string(a:word).' to '.string(&dictionary)
+        exe '!look '.shellescape(a:word).' '.shellescape(&dictionary)
+        if v:shell_error
+            silent! exe "!_TMP_FILE=$(command mktemp) && command sort --merge ".shellescape(&dictionary)." <(echo ".shellescape(a:word).") > $_TMP_FILE && command cat $_TMP_FILE > ".shellescape(&dictionary)." && command rm -f $_TMP_FILE"
+            echom 'appended '.string(a:word).' to '.string(&dictionary)
+        else
+            echom string(a:word).' already in '.string(&dictionary)
+        endif
     else
         echoerr 'dictionary not set'
     endif
@@ -285,20 +291,20 @@ fu! utils#async_run(cmd) abort
     let &shell = l:save_shell
 endf
 
-fu! utils#proj_root(anchor, ...)
+fu! utils#proj_root(...)
 
     let l:this_dir = expand('%:p:h')
-    let l:anchors = filter([a:anchor] + a:000, '!empty(v:val)')
+    let l:anchors = filter(a:000 + [expand('%:t'), '.git'], '!empty(v:val)')
 
     for l:anchor in l:anchors
 
-        let l:maybe_dir = finddir(l:anchor, l:this_dir.';'.$HOME)
+        let l:maybe_dir = fnamemodify(finddir(l:anchor, l:this_dir.';'.$HOME), ':p')
 
         if isdirectory(l:maybe_dir) && (l:maybe_dir != $HOME) && (l:maybe_dir =~# $HOME)
             return fnamemodify(l:maybe_dir, ':h')
         endif
 
-        let l:maybe_file = findfile(l:anchor, l:this_dir.';'.$HOME)
+        let l:maybe_file = fnamemodify(findfile(l:anchor, l:this_dir.';'.$HOME), ':p')
 
         if filereadable(l:maybe_file) && (l:maybe_file =~# $HOME)
             return fnamemodify(l:maybe_file, ':h')

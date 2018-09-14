@@ -215,7 +215,6 @@ call extend(s:wildignore_patterns, map([
 " files
 call extend(s:wildignore_patterns, [
             \ 'tags',
-            \ '*~',
             \ '*_', 
             \ '*~',
             \ 'swapfile',

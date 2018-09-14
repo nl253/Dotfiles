@@ -63,9 +63,9 @@ sy match grammarOpt  '\V?'
 " // comment
 " # comment
 " -- comment
-sy region grammarComment start="\v(#|//|--) " end='$' oneline
+sy region grammarComment start="\v(#|//|--) " end='$' oneline contains=@Spell
 " /* multi-line comment */
-sy region grammarComment start="\V/*" end='\V*/' keepend 
+sy region grammarComment start="\V/*" end='\V*/' keepend  contains=@Spell
 
 " ^ Operator 
 " Operator $ 
