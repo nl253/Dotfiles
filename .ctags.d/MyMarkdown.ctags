@@ -3,11 +3,10 @@
 --langmap=MyMarkdown:+.markdown
 --langmap=MyMarkdown:+.mdown
 --langmap=MyMarkdown:+.Rmd
---regex-MyMarkdown=/^ {,3}#{1,6} +([A-Z][-() 'a-zA-Z0-9,_?!".]{2,20})/\1/h,heading/
---regex-MyMarkdown=/!?\[\*{,2}([^\]]{4,})\*{,2}\]\([^\)]{5,}\)/\1/a,hyperlink/
---regex-MyMarkdown=/!?\[\*{,2}([^\]]{4,})\*{,2}\]\[[^\)]{5,}\]/\1/A,local reference link/
---regex-MyMarkdown=/^\**([A-Z][a-z]{3,})\**$/\1/d,definition/
---regex-MyMarkdown=/^ {,3}*\[([-a-zA-Z_]{3,})\]: (.+).*/\1/r,reference/
+--regex-MyMarkdown=/^( {1,3}|\t)?#{1,6}\s+([A-Z][-() 'a-zA-Z0-9,_?!".]{2,20}\s?)+/\2/h,heading/
+--regex-MyMarkdown=/!?\[([^\]]{4,})\]\([^\)]{5,}\)/\1/a,hyperlink/
+--regex-MyMarkdown=/^( {1,3}|\t)?\*{1,2}\s*([A-Z][a-z]{3,})\s*\*{1,2}\s*$/\2/d,definition/
+--regex-MyMarkdown=/^( {1,3}|\t)?\[([-a-zA-Z_]{3,})\]:\s*(.+)/\2/r,reference/
 # --regex-MyMarkdown=/.*\{#([-a-zA-Z]{4,})\}.*/\1/l,local reference/
 # --regex-MyMarkdown=/\w[^a-zA-Z]\[(.{5,})\][^a-zA-Z][a-z\.]/\1/i,inline reference/
 # --regex-Markdowwn=/.*:::+ ([A-Z][a-z]{3,}) :::+.*/\1/f,fenced div/

@@ -15,5 +15,5 @@ call opts#formatprg({
 
 let b:match_words = '\<if\>:\<elif\>:\<else\>'
 
-CtagsProject Pipfile.lock setup.py requirements.txt .git
-CtagsLib     ~/.local/lib/python3.6/site-packages /usr/lib/python3.6
+Ctags    Pipfile.lock setup.py requirements.txt .git
+CtagsLib ~/.local/lib/python3.6/site-packages /usr/lib/python3.6

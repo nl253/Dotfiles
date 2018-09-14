@@ -1,6 +1,6 @@
 fu! tags#project(force, ...) abort
 
-    let l:anchors = filter(a:000 + [], '!empty(v:val)') + [expand('%:t'), '.git']
+    let l:anchors = filter(a:000 + [], '!empty(v:val)') + []
 
     let l:ext = expand('%:e')
 

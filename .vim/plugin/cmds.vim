@@ -29,15 +29,14 @@ com!       -complete=file  -nargs=* Root   exe "let g:_x = utils#proj_root(".joi
 com! -bang                         GFiles call utils#git_files_qf()
 com! -bang                         PFiles call utils#project_files_qf()
 
-com! -bang -complete=file -nargs=* Ctags  exe 'call tags#project('.join([<bang>0] + map(split(<q-args>, " "), 'string(v:val)'), ', ').')'
 com! CtagsDelete for i in tagfiles() | echo system("rm ".shellescape(i)." && echo removed ".shellescape(i)) | endfor
 
 " Generate tags from <project_root>/**/*.<extension> 
-" place them in ~/.cache/vim/<filetype>
-" Return path to the tag file
-com! -nargs=+ -bang -complete=file CtagsProject
-            \ call tags#project(<bang>0, <f-args>) 
+com! -bang -complete=file -nargs=* Ctags  
+            \ exe 'call tags#project('.join([<bang>0] + map(split(<q-args>, " "), 'string(v:val)'), ', ').')'
 
+" Generate tags from <lib>/**/*.<ext>
+" place them in ~/.cache/vim/<filetype>
 " 99999 min is around 70 days
 com! -nargs=+ -bang -complete=dir CtagsLib 
             \ call tags#lib(99999, <bang>0, <f-args>) 

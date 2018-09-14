@@ -26,48 +26,71 @@ sy match pythonMatMul "[^\\]\\\s*\n\%(\s*\.\.\.\s\)\=\s\+@" contains=ALLBUT,pyth
 " the start of each continued line; very similar to decorators and complex.
 sy match pythonMatMul "^\s*\%(\%(>>>\|\.\.\.\)\s\+\)\=\zs\%(\h\|\%(\h\|[[(]\).\{-}\%(\w\|[])]\)\)\s*\n\%(\s*\.\.\.\s\)\=\s\+@\%(.\{-}\n\%(\s*\.\.\.\s\)\=\s\+@\)*" contains=ALLBUT,pythonDecoratorName,pythonDecorator,pythonFunct,pythonDoctestValue transparent
 
+" Comments:
 sy match  pythonTodo    '\v<(FIXME|NOTE|TODO|XXX)>' contained
 sy region pythonComment start="#" end="$"           contains=pythonTodo,@Spell oneline 
-sy region pythonShebang start='\v%1l^#!' end='$' oneline
+sy region pythonShebang start='\v%1l^#!' end='$'                               oneline
 
-" Triple-quoted strings can contain doctests.
-sy region pythonStr     matchgroup=pythonQuotes       start=+[uU]\?\z(['"]\)+     end="\z1" skip="\\\\\|\\\z1" contains=printf,pythonEscape,@Spell
-sy region pythonStr     matchgroup=pythonTripleQuotes start=+[uU]\?\z('''\|"""\)+ end="\z1" skip=+\\["']+      contains=printf,pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
+" Strings:
+" It is assumed printf(3) syntax will only be used in single-line string literals.
+sy region pythonStr matchgroup=pythonQuotes start=+[uU]\?\z(['"]\)+ end="\z1" skip="\\\\\|\\\z1" contains=printf,pythonEscape,@Spell
 
-" Docstrings:
-
+" Docstrings: (Triple-quoted strings can contain doctests)
+" The assumption is that docstrings won't be f-strings, raw-strings, nor will they be bytes.
+sy region pythonDocStr matchgroup=pythonTripleQuotes start=+\v(f|F|u|U|b|B|r|R)@<![uU]?\V\z('''\|"""\)+ end="\z1" skip=+\\["']+ contains=pythonEscape,pythonSpaceError,pythonDocTest,pythonDocStrTag,pythonDocStrRef,pythonDocStrHR,pythonDocStrRstCmd,pythonDocStrHeading,pythonDocStrNumpyBullet,@Spell keepend 
 " :param my-param:
-sy region pythonDocStrTag start="\v:([a-z][-a-z_]+)" end=":" oneline contained containedin=pythonStr contains=@Spell
+sy region pythonDocStrTag start="\v:([a-z][-a-z_]+)" end=":"           oneline contained contains=@Spell
 " Google
-sy match  pythonDocStrTag "\v^\s*([A-Z][a-z]+)( [A-Z][a-z]+)?\s*:\s*$" contained containedin=pythonStr contains=@Spell
+sy match  pythonDocStrTag "\v^\s*([A-Z][a-z]+)( [A-Z][a-z]+)?\s*:\s*$"         contained contains=@Spell
 " NumPy
-sy region pythonDocStrTag start="\v^\s*\w+\s+:\s+" end="$" oneline contained containedin=pythonStr contains=@Spell
+sy region pythonDocStrTag start="\v^(\s*)@=\w+\s+:\s+" end="$"             oneline contained contains=@Spell
 
 " `method_that_does_A()`
 " ``method_that_does_A()``
-sy region pythonDocStrRef start="\z(`\{1,2\}\)" end="\v\z1" oneline contained containedin=pythonStr
+sy region pythonDocStrRef start="\z(`\{1,2\}\)" end="\v\z1" oneline contained
 " .. dostuff:: woooo
-sy region pythonDocStrRstCmd start="\v(^\s*)@<=(\.{2}\s+([a-z][-a-z_]+)\s*:{1,2})" end="$" oneline contained containedin=pythonStr contains=pythonNum
+sy region pythonDocStrRstCmd start="\v(^\s*)@<=(\.{2}\s+([a-z][-a-z_]+)\s*:{1,2})" end="$" oneline contained contains=pythonNum
 " Heading
 " -------
-sy match pythonDocStrHR "\v^\s*(-{4,}|\={4,})\s*$" contained containedin=pythonStr
+sy match pythonDocStrHR "\v^(\s*)@=(-{4,}|\={4,})\s*$" contained
 "       See Also
 "       Notes
 "       Examples
-sy match pythonDocStrHeading "\v^\s*([A-Z][a-z]+)( [A-Z][a-z]+)?\s*$" contained containedin=pythonStr contains=@Spell
+sy match pythonDocStrHeading "\v^(\s*)@=([A-Z][a-z]+)( [A-Z][a-z]+)?\s*$" contained contains=@Spell
+
+"       Markers:
+"
 "       * bp1 
 "       * bp2 
-sy match pythonDocStrNumpyBullet "\v^\s*\*\s+" contained containedin=pythonStr
-
+"       - bp1
+"       - bp2
+"       + bp1
+"       + bp2
+"
+"       Alpha:
+"
+"       a) bp1
+"       b) bp2
+"       a. bp1
+"       b. bp2
+"
+"       Numeric:
+"
+"       1) bp1
+"       2) bp2
+"       1. bp1
+"       2. bp2
+"
+sy match pythonDocStrNumpyBullet "\v^(\s*)@=([-\*\+]|([0-9]|[1-9][0-9]*|[a-zA-Z])(\.|\)))\s+" contained
 
 " printf-style str formatting inside *regular* strings (not f-string nor bytes) 
 " see <https://docs.python.org/3/library/stdtypes.html#old-string-formatting>
-" sy match pythonPrintfModifier "%(\v[a-z_]+\V)\v[-+ 0#]?(\d+|\*)?(\.\d+)?\d*[EFGXacdefgiorsux]" contained containedin=pythonStr
+sy match pythonPrintfModifier "%(\v[a-z_]+\V)\v[-+ 0#]?(\d+|\*)?(\.\d+)?\d*[EFGXacdefgiorsux]" contained containedin=pythonStr
 
 " highlight python code inside f-strings 
 " see <https://docs.python.org/3.7/library/string.html> 
-sy region pythonFmtStr  matchgroup=pythonQuotes       start=+f\z(['"]\)+ms=s+1     end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
-sy region pythonFmtStr  matchgroup=pythonTripleQuotes start=+f\z('''\|"""\)+ms=s+3 end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError,pythonDoctest,@Spell keepend 
+sy region pythonFmtStr matchgroup=pythonQuotes       start=+[fF]\z(['"]\)+ms=s+1     end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,@Spell
+sy region pythonFmtStr matchgroup=pythonTripleQuotes start=+[fF]\z('''\|"""\)+ end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError,@Spell keepend
 
 " E.g.: f"false negative on {i + 2}"
 " NOTE: this CANNOT contain `pythonBraces`
@@ -79,8 +102,8 @@ sy match pythonFmtStrMod '\v(![rsa])?(:(\w[\<\>\=\^]?)?[- \+]?#?0?\d*,?(\.\d+)?[
 sy region pythonRawStr  matchgroup=pythonQuotes       start=+[uU]\?[rR]\z(['"]\)+     end="\z1" skip="\\\\\|\\\z1" contains=@Spell,@regexAll
 sy region pythonRawStr  matchgroup=pythonTripleQuotes start=+[uU]\?[rR]\z('''\|"""\)+ end="\z1"                    contains=pythonSpaceError,@regexAll    keepend 
 
-sy region pythonByteStr matchgroup=pythonQuotes       start=+b\z(['"]\)+ms=s+1        end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape
-sy region pythonByteStr matchgroup=pythonTripleQuotes start=+b\z('''\|"""\)+me=e+3    end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError keepend 
+sy region pythonByteStr matchgroup=pythonQuotes       start=+[bB]\z(['"]\)+ms=s+1        end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape
+sy region pythonByteStr matchgroup=pythonTripleQuotes start=+[bB]\z('''\|"""\)+me=e+3    end="\z1" skip=+\\["']+      contains=pythonEscape,pythonSpaceError keepend 
 
 sy match pythonEscape +\\[abfnrtv'"\\]+           contained
 sy match pythonEscape "\\\o\{1,3}"                contained
@@ -115,9 +138,6 @@ sy match pythonNum "\<\d\+[eE][+-]\=\d\+[jJ]\=\>"
 sy match pythonNum "\<\d\+\.\%([eE][+-]\=\d\+\)\=[jJ]\=\%(\W\|$\)\@="
 sy match pythonNum "\%(^\|\W\)\zs\d*\.\d\+\%([eE][+-]\=\d\+\)\=[jJ]\=\>"
 
-" avoid highlighting attributes as builtins
-" sy match pythonAttribute /\.\h\w*/hs=s+1 contains=ALLBUT,pythonBuiltin,pythonFunct transparent
-
 sy match pythonError "\v<([A-Z][a-z]+)*(E(x(ception|it)|rror)|Warning)([A-Z][a-z]+)*>"
 
 " trailing whitespace
@@ -130,10 +150,10 @@ sy match pythonSpaceError display "\t\+ "
 " Notice that the end of a string, either ''', or """, will end the contained
 " doctest too.  Thus, we do *not* need to have it as an end pattern.
 if !exists("python_no_doctest_code_highlight")
-    sy region pythonDoctest start="^\s*>>>\s" end="^\s*$" contained contains=ALLBUT,pythonDoctest,pythonDecorator,pythonDecoratorName,pythonFunct,@Spell
+    sy region pythonDocTest start="^\s*>>>\s" end="^\s*$" contained contains=ALLBUT,pythonDocTest,pythonDecorator,pythonDecoratorName,pythonFunct,@Spell
     sy region pythonDoctestValue start=+^\s*\%(>>>\s\|\.\.\.\s\|"""\|'''\)\@!\S\++ end="$" contained
 else
-    sy region pythonDoctest start="^\s*>>>" end="^\s*$" contained contains=@NoSpell
+    sy region pythonDocTest start="^\s*>>>" end="^\s*$" contained contains=@NoSpell
 endif
 
 " Sync at the beginning of class, function, or method definition.
@@ -164,8 +184,8 @@ sy match pythonColon ":"
 sy match pythonComma "," 
 sy match pythonDot   "\v\."
 sy match pythonKwArg "\v_?[a-z][a-z0-9_]+\=@="
-sy match pythonEq             '='     contained
-sy match pythonFunctSignArrow '\v-\>' contained
+sy match pythonEq    '='                        contained
+sy match pythonFunctSignArrow '\v-\>'           contained
 
 " DELIMITERS:
 " sy match parenthesis "\v[\(\)]"
@@ -238,20 +258,21 @@ hi def link pythonConditional       Conditional
 hi def link pythonConst             Constant
 hi def link pythonDecorator         PreProc
 hi def link pythonDecoratorName     PreProc
-hi def link pythonDocStrRef  URI
+hi def link pythonDocStr            String
+hi def link pythonDocStrRef         URI
 hi def link pythonDocStrHR          Statement
 hi def link pythonDocStrHeading     Statement
 hi def link pythonDocStrNumpyBullet Operator
 hi def link pythonDocStrRstCmd      PreProc
 hi def link pythonDocStrTag         Constant
-hi def link pythonDoctest           Operator
+hi def link pythonDocTest           Operator
 hi def link pythonDoctestValue      Define
 hi def link pythonDot               pythonOp
 hi def link pythonEq                pythonOp
 hi def link pythonError             Error
 hi def link pythonEscape            Special
 hi def link pythonException         Exception
-hi def link pythonFmtStr            pythonStr
+hi def link pythonFmtStr            String
 hi def link pythonFmtStrMod         pythonEscape
 hi def link pythonFunct             Function
 hi def link pythonFunctSignArrow    pythonOp
@@ -275,7 +296,7 @@ hi def link pythonTypeLabel         Type
 hi def link pythonTypedVar          Type
 " hi def link pythonPolyType       pythonSyntaxNoise
 " hi def link pythonStatement      Statement
-" hi def link pythonDoctest        Special
+" hi def link pythonDocTest        Special
 " hi def link pythonBuiltin        Builtin
 
 hi def      pythonKwArg          guifg=Purple

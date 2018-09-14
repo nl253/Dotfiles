@@ -106,6 +106,7 @@ fu! inits#markup() abort
                 \ 'iskeyword-=_',
                 \ 'spell',
                 \ 'tagcase=ignore',
+                \ 'ignorecase',
                 \ 'expandtab',
                 \ 'textwidth=79',
                 \ 'linebreak',

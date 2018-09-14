@@ -17,3 +17,4 @@ let g:vimsyn_embed = 'P'
 let g:vimsyn_folding = 'afP'
 
 exe 'CtagsLib ~/.vim '.$VIM.'/runtime'
+Ctags

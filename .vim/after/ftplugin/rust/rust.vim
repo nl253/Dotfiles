@@ -13,7 +13,7 @@ endif
 
 call opts#formatprg({'rustfmt': 'rustfmt --color never'})
 
-exe 'CtagsProject '.join(s:anchors, ' ') 
+exe 'Ctags '.join(s:anchors, ' ') 
 
 if !empty($DEFAULT_TOOLCHAIN) 
     exe 'CtagsLib ~/.rustup/toolchains/'.$DEFAULT_TOOLCHAIN.'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'

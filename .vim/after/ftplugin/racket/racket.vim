@@ -7,5 +7,5 @@ call opts#safe_setl([
 call opts#formatprg({'scmindent': 'scmindent'})
 call opts#makeprg({'racket': 'racket %'})
 
-" CtagsProject .git
+Ctags
 CtagsLib! /usr/share/racket/collects/racket
