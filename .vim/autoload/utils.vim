@@ -12,7 +12,7 @@ fu! utils#is_regular_buffer()
     let l:this_file_path = expand("%:p")
     let l:ext = fnamemodify(l:this_file_path, ':e')
 
-    if !filewritable(l:this_file_path) || (fnamemodify(l:this_file_path, ':t') ==? '[Command Line]') || (&filetype ==# 'qf') || (&buftype ==# 'nofile') || empty(&filetype) || empty(l:ext)
+    if !filewritable(l:this_file_path) || (fnamemodify(l:this_file_path, ':t') ==? '[Command Line]') || (&filetype ==# 'qf') || (&buftype ==# 'nofile') || empty(&filetype)
         return v:false
     else
         return v:true
