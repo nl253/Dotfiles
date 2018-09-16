@@ -7,6 +7,18 @@ call opts#letg_default('default_session_file', join([g:session_dir, $USER.'.vim'
 call opts#letg_default('view_dir',             expand('~/').'.vim/views')
 call opts#letg_default('default_view_file',    join([g:view_dir, $USER.'.vim'], '/'))
 
+fu! utils#is_regular_buffer()
+
+    let l:this_file_path = expand("%:p")
+    let l:ext = fnamemodify(l:this_file_path, ':e')
+
+    if !filewritable(l:this_file_path) || (fnamemodify(l:this_file_path, ':t') ==? '[Command Line]') || (&filetype ==# 'qf') || (&buftype ==# 'nofile') || empty(&filetype) || empty(l:ext)
+        return v:false
+    else
+        return v:true
+    endif
+endf
+
 fu! utils#bsearch(list, val)
 
     if empty(a:list)
@@ -39,7 +51,7 @@ fu! utils#bsearch(list, val)
     endif
 endf
 
-function! utils#syntax_attr()
+fu! utils#syntax_attr()
      let synid = ""
      let guifg = ""
      let guibg = ""
@@ -260,7 +272,7 @@ fu! utils#add_project_files(anchor, ...) abort
             let i += len(l:results)
             call extend(l:files, l:results)
         endif
-    endwhile
+    endw
 
     exe 'argadd '.join(l:files, ' ')
 endf
@@ -341,7 +353,7 @@ fu! utils#my_tab_label(n)
     return '#'.a:n.' '.substitute(bname, $HOME, '\~', '')
 endf
 
-" Helper function for statusline
+" Helper fu for statusline
 fu! utils#my_tabline()
     let s = ''
     for i in range(tabpagenr('$'))
@@ -365,7 +377,7 @@ fu! utils#my_tabline()
     return s
 endf
 
-" Helper function for statusline
+" Helper fu for statusline
 fu! utils#git_status_summary()
     " see if in a git repository
     call system('command git status') 

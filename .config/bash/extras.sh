@@ -323,7 +323,7 @@ EOF
 #
 # NOTE: expects input from STDIN.
 function map() {
-  for i in $(cat /dev/stdin); do
+  for i in $(builtin command cat /dev/stdin); do
     builtin eval "$1 $i"
   done
 }
@@ -336,7 +336,7 @@ function map() {
 #
 # NOTE: expects input from STDIN.
 function foreach() {
-  for i in $(cat /dev/stdin); do
+  for i in $(builtin command cat /dev/stdin); do
     builtin eval "$1"
   done
 }
@@ -348,7 +348,7 @@ function pymath_int_funct() {
 from math import $1
 from shlex import split
 from functools import reduce
-from math import pi, e, tau
+from math import *
 print(reduce($1, map(int, split('''${*:2}'''))))
 EOF
 }
@@ -381,7 +381,7 @@ function __gcd() {
 function pymath_float_funct() {
   builtin command python3 <<EOF
 from shlex import split
-from math import pi, e, tau
+from math import *
 from functools import reduce
 print(reduce($1, map(float, split('''${*:2}'''))))
 EOF
@@ -422,7 +422,7 @@ function series() {
   builtin local size=${2:-100}
   builtin local dtype=${3:-uint32}
   builtin command python3 <<EOF
-from math import pi, e, tau
+from math import *
 for n in map(lambda x: $1, range(1, $size + 1)): print(n)
 EOF
 }
@@ -469,8 +469,7 @@ done
 
 function pymath_uop() {
   builtin command python3 <<EOF
-from math import $1
-from math import pi, e, tau
+from math import *
 print($1($2))
 EOF
 }
@@ -503,7 +502,7 @@ done
 function pystats_funct() {
   builtin command python3 <<EOF
 from statistics import $1
-from math import pi, e, tau
+from math import *
 from shlex import split
 print($1(map(float, split('''$(builtin command cat /dev/stdin)'''))))
 EOF
@@ -541,7 +540,7 @@ done
 # NOTE: expects the independent variable to be called 'x'.
 function solve_polynomial() {
   builtin command python3 <<EOF
-from math import pi, e, tau
+from math import *
 from time import perf_counter
 
 def solve(f, f_, guess = 1.0, timeout = 1.5, verbose = False):
@@ -637,6 +636,18 @@ for f in integrate simplify expand factor trigsimp integrate; do
   eval "alias ${f}_pretty='sympy_funct_pretty $f'"
 done
 
+function indefinite_integral() {
+  builtin shopt -s expand_aliases
+  builtin local F="lambda x: $(integrate $1)"
+  builtin local a=$2
+  builtin local b=$3
+  builtin command python3 <<EOF
+from math import *
+print(($F)($b) - ($F)($a))
+EOF
+  builtin shopt -u expand_aliases
+}
+
 function sympy_logic_to_normal_form() {
   builtin command python3 <<EOF
 from sympy.abc import x, y, z
@@ -723,7 +734,7 @@ EOF
 function trig_funct() {
   builtin command python3 <<EOF
 from math import $1, radians
-from math import pi, e, tau
+from math import *
 print($1(radians($2)))
 EOF
 }
@@ -760,7 +771,7 @@ for f in {a,}{sin,cos,tan}; do
 done
 
 # init cache for commands that don't change their output (too often)
-for i in bc sed {g,}awk jupyter-nbconvert pygmentize pandoc rst2{xml,s5,odt,html,html5,html4,man,pseudoxml,xetex}{.py,} wn tokei {z,xz}{cat,diff,less} wc tree sort pydoc{3,3.5,3.6,} fd df du curl ps rg {xz,z,}{p,e,a,f,}grep; do
+for i in wn tokei {z,xz}diff pydoc{3,3.5,3.6,} fd d{u,f} curl ps; do
   builtin eval "builtin alias $i='cached command $i'"
 done
 

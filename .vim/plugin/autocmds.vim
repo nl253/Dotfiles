@@ -12,7 +12,9 @@ aug VariousAutoCmds
     exe 'au FileType             '.join(g:markup_langs, ',').'  call inits#markup()'
     exe 'au FileType             '.join(g:prog_langs,   ',').'  call inits#programming()'
     au BufRead                       /{etc,usr,opt}/*           call inits#non_home()
-    au TermOpen                      *                          call inits#term()
+    if has('nvim') 
+        au TermOpen                  *                          call inits#term() 
+    endif
     au FileType                      xml,html                   call inits#emmet()
     au FileType                      c{pp,},python,{java,type}script,sh,rust call inits#lang_server()
     " automatically change dir to the file you are editing

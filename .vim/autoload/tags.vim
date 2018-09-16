@@ -1,12 +1,12 @@
 fu! tags#project(force, ...) abort
 
+    if !utils#is_regular_buffer() | return 0 | endif
+
+    let l:ext = expand("%:e")
+
+    if empty(l:ext) | return 0 | endif
+
     let l:anchors = filter(a:000 + [], '!empty(v:val)') + []
-
-    let l:ext = expand('%:e')
-
-    if empty(l:ext) 
-        throw 'empty extension -- could not gather similar files'
-    endif
 
     exe "let l:root = utils#proj_root(".join(map(l:anchors, 'string(v:val)'), ', ').")"
 
@@ -44,39 +44,29 @@ fu! tags#project(force, ...) abort
 endf
 
 fu! tags#lib(age_min, force, lib_path, ...) abort
- 
-    if empty(&filetype) 
-		throw 'could not determine filetype'
-    endif
 
+    if !utils#is_regular_buffer() | return 0 | endif
+
+    let l:ext = expand("%:e")
+
+    if empty(l:ext) | return 0 | endif
+ 
     for l:dir in a:000 + [a:lib_path]
         call assert_true(isdirectory(expand(l:dir)), "non-existent library dir")
     endfor
 
-    let l:vim_tmp_dir = expand("~/.cache/vim")
-
-    let l:ext = expand('%:e')
-
-    if empty(l:ext) 
-        throw 'empty extension -- could not gather similar files'
-    endif
-
-    let l:subdir = &filetype
-
-    let l:tmp_dir = l:vim_tmp_dir.'/'.l:subdir
-
-    let l:tag_file = l:tmp_dir.'/tags'
+    let l:tag_file = join([expand('~'), '.cache', 'vim', &filetype, 'tags'], '/')
 
     if !a:force && !utils#is_stale(l:tag_file, 10)
-        echomsg 'tags not stale (tip: force with a bang!)'
+        echom 'tags not stale (tip: force with a bang!)'
         return 0
     endif
 
+    let l:parent_dir = fnamemodify(l:tag_file, ':h')
 
-    call mkdir(l:tmp_dir , "p")
+    if !isdirectory(l:parent_dir) | call mkdir(l:parent_dir, 'p') | endif
 
     let l:libs = join(map([a:lib_path] + a:000, 'shellescape(expand(v:val))'), ' ')
-
 
     let l:save_shell = &shell
     let &shell = '/bin/bash'
