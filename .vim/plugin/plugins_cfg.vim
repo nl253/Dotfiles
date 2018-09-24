@@ -173,7 +173,7 @@ hi netrwCompress term=NONE cterm=NONE gui=NONE ctermfg=Yellow guifg=Yellow
 let g:gitgutter_enabled = 0
 
 " Bullets:
-let g:bullets_enabled_file_types      = g:markup_langs + g:config_ftypes
+let g:bullets_enabled_file_types      = g:markup_langs + g:config_ftypes + ['gitcommit']
 let g:bullets_enable_in_empty_buffers = 1
 
 " HTML Omni:

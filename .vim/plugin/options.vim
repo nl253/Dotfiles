@@ -1,8 +1,22 @@
 " This file contains options that need to be set globally (ie only once on Vim start-up).
 
-if has('gui_running') | call opts#gui() | endif
-if !exists(":Man") | runtime! ftplugin/man.vim | endif
-packadd justify
+if has('gui_running') | call opts#gui()      | endif
+if !exists(":Man")    | ru! ftplugin/man.vim | endif
+pa justify
+
+if !exists('$BROWSER')
+    call utils#set_browser(
+                \ 'google-chrome', 
+                \ 'chromium', 
+                \ 'vivaldi', 
+                \ 'firefox', 
+                \ 'brave', 
+                \ 'safari', 
+                \ 'palemoon',
+                \ 'seamonkey',
+                \ 'konqueror',
+                \ )
+endif
 
 call utils#make_missing_dirs(map([
             \ 'undo',

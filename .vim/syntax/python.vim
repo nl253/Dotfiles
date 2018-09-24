@@ -7,8 +7,6 @@ else
     let b:current_syntax = 'python' 
 endif
 
-" for strings
-runtime! syntax/printf.vim
 " for raw strings
 runtime! syntax/regex.vim
 
@@ -33,7 +31,7 @@ sy region pythonShebang start='\v%1l^#!' end='$'                               o
 
 " Strings:
 " It is assumed printf(3) syntax will only be used in single-line string literals.
-sy region pythonStr matchgroup=pythonQuotes start=+[uU]\?\z(['"]\)+ end="\z1" skip="\\\\\|\\\z1" contains=printf,pythonEscape,@Spell
+sy region pythonStr matchgroup=pythonQuotes start=+[uU]\?\z(['"]\)+ end="\z1" skip="\\\\\|\\\z1" contains=pythonEscape,pythonPrintfModifier,@Spell
 
 " Docstrings: (Triple-quoted strings can contain doctests)
 " The assumption is that docstrings won't be f-strings, raw-strings, nor will they be bytes.
@@ -84,6 +82,7 @@ sy match pythonDocStrHeading "\v^(\s*)@=([A-Z][a-z]+)( [A-Z][a-z]+)?\s*$" contai
 sy match pythonDocStrNumpyBullet "\v^(\s*)@=([-\*\+]|([0-9]|[1-9][0-9]*|[a-zA-Z])(\.|\)))\s+" contained
 
 " printf-style str formatting inside *regular* strings (not f-string nor bytes) 
+" This is *slightly* different than printf(3) syntax so 
 " see <https://docs.python.org/3/library/stdtypes.html#old-string-formatting>
 sy match pythonPrintfModifier "%(\v[a-z_]+\V)\v[-+ 0#]?(\d+|\*)?(\.\d+)?\d*[EFGXacdefgiorsux]" contained containedin=pythonStr
 
@@ -168,7 +167,6 @@ sy keyword pythonConditional elif else if
 sy keyword pythonRepeat	     for while
 sy keyword pythonException	 except finally raise try
 sy keyword pythonInclude	 from import
-" sy keyword pythonStatement	  nextgroup=pythonFunct skipwhite
 " sy match   pythonFunct       "\h\w*" contained display 
 sy keyword pythonKeyword     lambda class def with async await as pass nonlocal assert break continue return yield exec global del
 sy match   pythonKeyword	 '\v<yield\s+from>'
@@ -242,15 +240,19 @@ sy region pythonTypedVar start='\v(^\s*[_a-zA-Z]\w*\s*)@<=:' end='=' oneline con
 
 sy match pythonCall '\v[_a-z]\w*\(@='
 
-" mainly for syntax#complete
-" exe 'sy keyword pythonBuiltin '.join(systemlist("command python3 -c \"import string as s; import builtins as b\n\nfor j in ((i for i in dir(b) if i.lower() == i and i[0] in s.ascii_letters)): print(j)\""), ' ')
+if has('eval') && has('insert_expand') && &omnifunc ==? 'syntaxcomplete#Complete'
+	exe 'sy keyword pythonBuiltin '.join(systemlist("command python3 -c \"import string as s; import builtins as b\n\nfor j in ((i for i in dir(b) if i.lower() == i and i[0] in s.ascii_letters)): print(j)\""), ' ')
+	exe 'sy keyword pythonBuiltinModule '.join(systemlist("python -c \"from sys import path, builtin_module_names as modules\nfrom pathlib import Path\nfor i in modules:\n\tif i[0] != '_':\n\t\tprint(i)\nfor p in filter(lambda p: p.is_dir(), map(Path, path)):\n\tfor c in p.iterdir():\n\t\tif c.is_dir() and '-info' not in str(c) and str(c)[0] != '_':\n\t\t\tprint(c.stem)\""), ' ')
+	hi def link pythonBuiltin        Builtin
+	hi def link pythonBuiltinModule  Builtin
+endif
 
 " CORE:
 hi def link pythonBoolean           Boolean
 hi def link pythonBraces            pythonOp
 hi def link pythonBrackets          pythonOp
 hi def link pythonByteStr           SpecialComment
-hi def link pythonCall              Procedure
+hi def link pythonCall              Function
 hi def link pythonColon             pythonOp
 hi def link pythonComma             pythonOp
 hi def link pythonComment           Comment
@@ -294,15 +296,7 @@ hi def link pythonTodo              Todo
 hi def link pythonTripleQuotes      pythonQuotes
 hi def link pythonTypeLabel         Type
 hi def link pythonTypedVar          Type
-" hi def link pythonPolyType       pythonSyntaxNoise
-" hi def link pythonStatement      Statement
-" hi def link pythonDocTest        Special
-" hi def link pythonBuiltin        Builtin
 
-hi def      pythonKwArg          guifg=Purple
-" hi def      pythonSyntaxNoise    guifg=Grey   ctermfg=Darkgrey
-" hi def      pythonStatement      guifg=Gold   ctermfg=220
-" hi def      pythonClass          guifg=Orchid2
-" hi def      pythonError          guifg=Maroon ctermfg=Brown
+hi def      pythonKwArg             guifg=Purple
 
 sy cluster pythonTypeInfo contains=pythonTypeLabel,pythonBrackets,pythonComma

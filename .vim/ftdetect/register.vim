@@ -22,12 +22,12 @@ sil cal s:register(['*.toml'], 'cfg')
 sil cal s:register(['*{ignore,conf}*'], 'config')
 sil cal s:register(['yarn.lock'], 'yaml')
 sil cal s:register(['*.puml'], 'plantuml')
-sil cal s:register(['*.ts'], 'typescript')
 sil cal s:register(['.tern-{config,project}', '.{markdown,html,es,style}lintrc', '.{babel,jsbeautify}rc' ,'*.lock', '.tsconfig'], 'json')
 sil cal s:register(['*.{twig,nunj,njk}'], 'jinja')
 sil cal s:register(['*.*css'], 'css')
 
 sil cal s:force(['*.v', '*.coq'], 'coq')
 sil cal s:force(['*.ctags'], 'ctags')
+sil cal s:force(['*.ts'], 'typescript')
 
 " sil cal s:register(['*.ts'], 'typescript.javascript')

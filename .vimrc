@@ -18,7 +18,7 @@ setg termguicolors
 " Variables: (these need to be global)
 let g:mapleader      = ' '
 let g:maplocalleader = ','
-let g:markup_langs   = ['markdown', 'tex']
+let g:markup_langs   = ['markdown', 'tex', 'gitcommit', 'mail']
 
 let g:config_ftypes  = [
             \ 'yaml',

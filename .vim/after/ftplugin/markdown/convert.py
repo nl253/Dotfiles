@@ -5,7 +5,12 @@ Convert $1 -- a markdown file to an HTML file in `/tmp/vim/<parent>/<basename>.h
 
 # Standard Library
 from os.path import realpath, basename, isfile, isdir, dirname, abspath
-import os, shutil, subprocess, sys, re, logging
+import os
+import shutil
+import subprocess
+import sys
+import re
+import logging
 from logging import Logger
 from typing import Dict, Iterable, Optional, Set, Text, List
 from subprocess import DEVNULL, PIPE, run
@@ -14,13 +19,15 @@ from meta import MATHJAX_CONFS, LongOpt, CodeStyle, FromFmt, Ext, ToFmt
 from utils import validate_executables, require_exists, vimdir_path, ensure_exists
 
 # initalise logging with sane configuration
-logging.basicConfig(level=logging.WARN, format="%(levelname)s:%(asctime)s  %(message)s")
+logging.basicConfig(level=logging.WARN,
+                    format="%(levelname)s:%(asctime)s  %(message)s")
 
 log: Logger = logging.getLogger()
 
 validate_executables(["pandoc"])
 
 
+# NOTE this will try to include a lua filter from `./task-list.lua`.
 class PandocCmd:
     def __init__(
         self,
@@ -82,6 +89,14 @@ class PandocCmd:
 
         if toc_depth:
             self.set_toc_depth(toc_depth).set_opt(LongOpt.TOC)
+
+        lua_filter: str = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), 'task-list.lua')
+
+        if isfile(lua_filter):
+            self.set_opt(LongOpt.LUA_FILTER, lua_filter)
+        else:
+            log.error(f'failed to find lua filter ./{lua_filter}')
 
     def set_from_fmt(self, fmt: FromFmt) -> object:
         assert fmt in FromFmt, f"from format '{fmt}' invalid"
@@ -146,7 +161,7 @@ class PandocCmd:
         return self
 
     def set_ext(self, ext: Ext) -> object:
-        self.no_exts.append(ext)
+        self.exts.append(ext)
         return self
 
     def set_no_ext(self, ext: Ext) -> object:
@@ -268,7 +283,9 @@ if __name__ == "__main__":
     ensure_exists(OUTPUT_FILE)
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as output:
-        output.write(PandocCmd(INPUT_FILE).execute())
-        print(output.name)
+        cmd = PandocCmd(INPUT_FILE)
+        output.write(cmd.execute())
+        print(f"Cmd: {' '.join(cmd.args)}")
+        print(f'Output: {output.name}')
 
 # vim:foldmethod=manual:

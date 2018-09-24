@@ -14,6 +14,8 @@ if exists(':EmmetInstall')
     imap <buffer> <Tab> <plug>(emmet-expand-abbr)
 endif
 
+com! -buffer ToMarkdown :%!pandoc -f html -t markdown-fenced_divs-inline_code_attributes-fenced_code_attributes-header_attributes-link_attributes-all_symbols_escapable
+
 if len($BROWSER) == 0
     let s:cfg = {}
     for s:browser in [

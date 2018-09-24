@@ -7,11 +7,36 @@ call opts#letg_default('default_session_file', join([g:session_dir, $USER.'.vim'
 call opts#letg_default('view_dir',             expand('~/').'.vim/views')
 call opts#letg_default('default_view_file',    join([g:view_dir, $USER.'.vim'], '/'))
 
+fu! utils#find_browser(browser, ...)
+    for l:channel in ['nightly', 
+                    \ 'unstable', 
+                    \ 'beta', 
+                    \ 'stable',
+                    \ ] + a:000 
+        let l:candidate = a:browser.'-'.l:channel
+        if executable(l:candidate)
+            return l:candidate
+        endif
+    endfor
+    return executable(a:browser) ? a:browser : ''
+endf
+
+" Set $BROWSER environmental variable
+"
+" @params {string} browser
+fu! utils#set_browser(browser, ...)
+    for l:browser in [a:browser] + a:000 
+        let l:candidate = utils#find_browser(l:browser)
+        if !empty(l:candidate)
+            let $BROWSER = l:candidate 
+            return v:true
+        endif
+    endfor
+    return v:false
+endf
+
 fu! utils#is_regular_buffer()
-
     let l:this_file_path = expand("%:p")
-    let l:ext = fnamemodify(l:this_file_path, ':e')
-
     if !filewritable(l:this_file_path) || (fnamemodify(l:this_file_path, ':t') ==? '[Command Line]') || (&filetype ==# 'qf') || (&buftype ==# 'nofile') || empty(&filetype)
         return v:false
     else

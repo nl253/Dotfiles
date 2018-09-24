@@ -1,4 +1,4 @@
-sy sync minlines=200
+sy sync minlines=350
 
 runtime! syntax/html.vim
 
@@ -11,6 +11,10 @@ else
     let b:current_syntax = 'markdown' 
 endif
 
+" necessary else the line below won't source
+unlet b:current_syntax 
+exe 'sy include @pandocTex '.$VIMRUNTIME.'/syntax/tex.vim'
+
 sy match markdownEscape '\v\\.'
 
 " <./relative/link_1>
@@ -22,8 +26,8 @@ sy match markdownEscape '\v\\.'
 " NOTE: </root/is/absolute> is not allowed as it clashes with html syntax
 sy region markdownURI start="\v\<((<[a-z234]{3,7}(://|\@))|(\~|\./))" end=">" oneline
 sy match  markdownUrl "\v\S+" nextgroup=markdownUrlTitle skipwhite                        contained
-sy region markdownUrlTitle   matchgroup=Delimiter start=+\v\z(["'])+ end="\v\z1" keepend contained contains=@Spell
-sy region markdownUrlTitle   matchgroup=Delimiter start=+(+          end=+)+     keepend contained contains=@Spell
+sy region markdownUrlTitle matchgroup=Delimiter start=+\v\z(["'])+ end="\v\z1" keepend contained contains=@Spell
+sy region markdownUrlTitle matchgroup=Delimiter start=+(+          end=+)+     keepend contained contains=@Spell
 
 " Indented block: (WIP)
 "
@@ -41,8 +45,8 @@ sy match markdownFootnoteRef        "\v\[(\d+|[^\]]{3,})\]((( {1,3}|\t)?)@=(\[[^
 sy region markdownFootnoteDefinition start="\v^\s*\[[^\]]+\]:" end="$" oneline contains=markdownAutoURI
 
 sy region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@Spell
-sy region markdownLink     matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained
-sy region markdownId       matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained contains=@Spell
+sy region markdownLink     matchgroup=markdownLinkDelimiter     start="("  end=")"  keepend contained contains=markdownUrl 
+sy region markdownId       matchgroup=markdownIdDelimiter       start="\[" end="\]" keepend contained contains=@Spell
 
 " FIXME setext headings
 " sy match markdownH1 "\v^ {,3}[^#+*-]+\n {,3}\=+$" contained contains=@Spell,markdownInline,markdownHeadingRule
@@ -57,7 +61,10 @@ sy match markdownAutoURI "\v((<[a-z234]{3,7}(://|\@))|\~|\./)[-a-zA-Z0-9_%\.\~/]
 " ::: My fenced div :::
 sy region pandocFencedDiv start="\v:::+" end="\v:::+" contains=pandocAttr,pandocExampleListRef,pandocSuperscript,pandocSubscript,markdownBold,markdownItalic,markdownURI,markdownEscape,markdownCode,pandocStrikethrough,markdownLinkText,markdownLinkTextDelimiter,markdownLink keepend
 " {.pretty #fancy}
-sy region pandocAttr start="{" end="}" skip="\v\\\}" contained oneline containedin=markdownCode
+sy region pandocAttr start="{" end="}" skip="\v\\\}" contained oneline keepend
+sy match  pandocAttrId    "\v#\w+>"   contained containedin=pandocAttr
+sy match  pandocAttrClass "\v\.\w+>"  contained containedin=pandocAttr
+sy match  pandocAttrKV "\v<\w+\=\w+>" contained containedin=pandocAttr
 "
 " Meta:
 sy region pandocTitleBlock start="^%" end="$" oneline
@@ -92,7 +99,7 @@ sy match pandocAmbiguous "\v>\s+-\s+<|\s+$"
 sy match pandocDash "\v(\s+|>|^)@=--(\s+|<|$)@="
 
 " HR: (must be loaded after lists)
-sy match markdownHR "\v^( {1,3}|\t)?((\*( {,3}|\t))|(-( {,3}|\t))|(_( {,3}\t))){3,}\s*$"
+sy match markdownHR "\v^( {1,3}|\t)?((\*( {1,3}|\t)?)|(-( {1,3}|\t)?)|(_( {1,3}|\t)?)){3,}\s*$"
 
 " Links:
 " sy region markdownInLineReference      start="\[" end=")"  skip="\v\\\]|\\\)" keepend   contains=markdownInLineReferenceLabel,markdownInLineReferenceURI           
@@ -100,21 +107,18 @@ sy match markdownHR "\v^( {1,3}|\t)?((\*( {,3}|\t))|(-( {,3}|\t))|(_( {,3}\t))){
 " sy region markdownInLineReferenceURI   start="("  end=")"  skip="\\)"         contained matchgroup=Delimiter
 
 " Math:
-" \dostuff
-sy match  pandocTexCmd   "\v\\\w+" contained containedin=pandocInlineMath,pandocMultiLineMath
-" \dostuff{withthis}
-sy match  pandocTexBrace "\v\{|\}"    contained containedin=pandocMultiLineMath,pandocInlineMath
 " \( math \)
-sy region pandocInlineMath start="\\(" end="\\)"               oneline matchgroup=Delimiter
-sy region pandocInlineMath start="\$"  end="\$"  skip="\v\\\$" oneline matchgroup=Delimiter
+" $math$
+sy region pandocInlineMath start="\\(" end="\\)" skip='\v\\\)' oneline matchgroup=Delimiter contains=@pandocTex transparent
+sy region pandocInlineMath start="\$"  end="\$"  skip="\v\\\$" oneline matchgroup=Delimiter contains=@pandocTex transparent
 " $$ 
 "    math ...
 " $$
-sy region pandocMultiLineMath start="\$\$"   end="\$\$"   skip="\v\\\$" matchgroup=Delimiter
-sy region pandocMultiLineMath start="\v\\\[" end="\v\\\]"               matchgroup=Delimiter
+sy region pandocMultiLineMath start="\$\$"   end="\$\$"   skip="\v\\\$" matchgroup=Delimiter transparent
+sy region pandocMultiLineMath start="\v\\\[" end="\v\\\]" skip="\v\\\]" matchgroup=Delimiter transparent
 
 for s:i in range(1, 6)
-    exe 'sy region markdownH'.s:i.' matchgroup=Comment start="^'.repeat('#', s:i).' " end="\v('.repeat('#', s:i).')?$" keepend oneline contains=markdownBold,markdownURI,markdownItalic,markdownEscape,markdownCode,@Spell'
+    exe 'sy region markdownH'.s:i.' matchgroup=Operator start="^'.repeat('#', s:i).'\v @=" end="\v('.repeat('#', s:i).')?$" keepend oneline contains=markdownBold,markdownURI,markdownItalic,markdownEscape,markdownCode,@Spell'
     exe 'hi def link markdownH'.s:i.' htmlH'.s:i
 endfor
 
@@ -144,29 +148,29 @@ sy region markdownBold start="\v_{2}_@!"ms=s+2     end="__"ms=e-2     skip="\v\\
 "               1       1          1             1
 "           -------     ------ ----------   -------
 "
-sy region pandocSimpleTable start="\v(^  +[^\n]*)?$\n^  +----+( +----+)*" end="\n\n" contains=markdownBold,markdownItalic,markdownURI,pandocStrikethrough,pandocSubscript,pandocSuperscript,markdownCode,pandocInlineMath,pandocDash,@Spell
+sy region pandocSimpleTable start="\v(^  +[^\n]*)?\n  +----+( +----+)*" end="\n\n" contains=markdownBold,markdownItalic,markdownURI,pandocStrikethrough,pandocSubscript,pandocSuperscript,markdownCode,pandocInlineMath,pandocDash,@Spell
  
 " FIXME extended pandoc table
 " sy region pandocSimpleTable start="\v^  +-{20,}$"                         end="\v^  +-{20,}$\n" contains=@Spell
-sy match  pandocSimpleTableError "\v------+ {2,}-----+" contained containedin=pandocSimpleTable 
-sy match  pandocSimpleTableError "\v^\s?\S+"            contained containedin=pandocSimpleTable 
-sy match  pandocSimpleTableLine "\v----+"                         containedin=pandocSimpleTable
+sy match pandocSimpleTableError "\v------+ {2,}-----+" contained containedin=pandocSimpleTable 
+sy match pandocSimpleTableError "\v^\s?\S+"            contained containedin=pandocSimpleTable 
+sy match pandocSimpleTableLine  "\v----+"              contained containedin=pandocSimpleTable
 
 " BlockQuote:
 "
 " NOTE: the order here is crucial.
 " > quoted text
-sy region markdownBlockQuote            start="\v^( {1,3}|\t)?\>( {1,3}|\t)?"                             end="$" oneline contains=pandocBulletListMarker,markdownBold,markdownItalic,pandocStrikethrough,markdownCode,markdownURI,pandocInlineMath,pandocDash,pandocSubscript,pandocSuperscript,markdownFootnoteRef,@Spell
+sy region markdownBlockQuote            start="\v^( {1,3}|\t)?\>( {1,3}|\t)?" end="$" oneline contains=pandocBulletListMarker,markdownBold,markdownItalic,pandocStrikethrough,markdownCode,markdownURI,pandocInlineMath,pandocDash,pandocSubscript,pandocSuperscript,markdownFootnoteRef,@Spell
 " > > double quoted text
-sy region markdownBlockQuoteQuote       start="\v^( {1,3}|\t)?\>( {1,3}|\t)?\>( {1,3}|\t)?"               end="$" oneline contains=pandocBulletListMarker,markdownBold,markdownItalic,pandocStrikethrough,markdownCode,markdownURI,pandocInlineMath,pandocDash,pandocSubscript,pandocSuperscript,markdownFootnoteRef,@Spell
+sy region markdownBlockQuoteQuote       start="\v^(( {1,3}|\t)?\>){2}"        end="$" oneline contains=pandocBulletListMarker,markdownBold,markdownItalic,pandocStrikethrough,markdownCode,markdownURI,pandocInlineMath,pandocDash,pandocSubscript,pandocSuperscript,markdownFootnoteRef,@Spell
 " > > > triple quoted text
-sy region markdownBlockQuoteQuotedQuote start="\v^( {1,3}|\t)?\>( {1,3}|\t)?\>( {1,3}|\t)?\>( {1,3}|\t)?" end="$" oneline contains=pandocBulletListMarker,markdownBold,markdownItalic,pandocStrikethrough,markdownCode,markdownURI,pandocInlineMath,pandocDash,pandocSubscript,pandocSuperscript,markdownFootnoteRef,@Spell
+sy region markdownBlockQuoteQuotedQuote start="\v^(( {1,3}|\t)?\>){3}"        end="$" oneline contains=pandocBulletListMarker,markdownBold,markdownItalic,pandocStrikethrough,markdownCode,markdownURI,pandocInlineMath,pandocDash,pandocSubscript,pandocSuperscript,markdownFootnoteRef,@Spell
 
 " NOTE: Single-backtick `markdownCode` *MUST* come *BEFORE* double backtick `markdownCode`.
 " `int i = 0`
-sy region markdownCode start="\v``@!" end="\v`" skip="\v\\`"   oneline keepend matchgroup=Comment
+sy region markdownCode start="\v``@!"    end="\v`" skip="\v\\`" oneline keepend matchgroup=Comment contains=@NoSpell
 " ``int i = 0``
-sy region markdownCode start="\v`{2}`@!" end="``" skip="\v\\`" oneline keepend matchgroup=Comment
+sy region markdownCode start="\v`{2}`@!" end="``"  skip="\v\\`" oneline keepend matchgroup=Comment contains=@NoSpell
 
 " ```
 " code ...
@@ -180,25 +184,33 @@ sy region markdownFenced start="\v^(\s*)@=\z(`{,3}|\~{3,}){3,}(\s*)@=" end="\v\z
 
 " get all fenced languages in this file (faster than it looks)
 let s:languages = systemlist("command grep -Eo '^\\s*(`{3,}|~{3,})\\s*(\\{\\s*\\.)?\\w+' < ".fnameescape(expand('%:p'))." | command sort | command uniq | command sed -E 's/\\s*(`{3,}|~{3,})\\s*(\\{\\s*\\.)?(\\w+).*/\\3/'")
+" TODO load from all types of attr not only fenced code but also inline code
 
 if v:shell_error ==# v:false
-    let s:loaded = {}
     for s:type in s:languages
-        let s:loaded[s:type] = 0
+        " necessary else the logic below won't source any syntax files
         unlet! b:current_syntax
-        try
-            exe 'sy include @markdownHighlight'.s:type.'1 '.$VIMRUNTIME.'/syntax/'.s:type.'.vim'
-            let s:loaded[s:type] = 1
-        catch /E484/
-            let s:loaded[s:type] = 0
-        endtry
-        for s:i in ['sy include @markdownHighlight'.s:type.'2 '.$HOME.'/syntax/'.s:type.'.vim', 
-                  \ 'sy include @markdownHighlight'.s:type.'3 '.$HOME.'/syntax/after/'.s:type.'.vim'] 
-            try | exe s:i | catch /E484/ | endtry
-        endfor
-        if s:loaded[s:type] ==# 1  
-            exe 'sy region  markdownHighlight'.s:type.' matchgroup=Delimiter start="\v^\s*\z(\~{3,}|`{3,})\s*(\{\.\s*)?'.s:type.'>.*" end="^\s*\z1\s*$" keepend contains=@markdownHighlight'.s:type.'1,@markdownHighlight'.s:type.'2,@markdownHighlight'.s:type.'3'
+        if filereadable($HOME.'/syntax/'.s:type.'.vim')
+            exe 'sy include @markdownHighlight'.s:type.'2 '.$HOME.'/syntax/'.s:type.'.vim' 
+        elseif filereadable($VIMRUNTIME.'/syntax/'.s:type.'.vim')
+            exe 'sy include @markdownHighlight'.s:type.'1 '.$VIMRUNTIME.'/syntax/'.s:type.'.vim' 
+        else
+            continue
         endif
+        " NOTE: don't change the order!
+        " `ls -a`{.sh}
+        exe 'sy region markdownHighlight'.s:type.' start="\v``@!"                                                                             end="\v`\s*\{\s*([^\}]+\s+)*\.'.s:type.'(\s+[^\}]+)*\s*\}" matchgroup=markdownCode contains=@markdownHighlight'.s:type.'1,@markdownHighlight'.s:type.'2,@NoSpell keepend oneline'
+        " ```{.sh}
+        " ls -a
+        " ```
+        " ~~~ {.sh}
+        " ls -a
+        " ~~~
+        exe 'sy region markdownHighlight'.s:type.' start="\v^( {1,3}|\t)?\z(\~{3,}|`{3,})\s*\{\s*([^\}]+\s+)*\.'.s:type.'>[^\}\n\r]{-}\}\s*$" end="\v^( {1,3}|\t)?\z1\s*$"                               matchgroup=markdownCode contains=@markdownHighlight'.s:type.'1,@markdownHighlight'.s:type.'2,@NoSpell keepend'
+        " ```sh
+        " ls -a
+        " ```
+        exe 'sy region markdownHighlight'.s:type.' start="\v^( {1,3}|\t)?`{3,}\s*'.s:type.'\s*$"                                              end="\v^( {1,3}|\t)?`{3,}\s*$"                             matchgroup=markdownCode contains=@markdownHighlight'.s:type.'1,@markdownHighlight'.s:type.'2,@NoSpell keepend'
     endfor
 endif
 
@@ -224,26 +236,29 @@ hi def link markdownURI                   URI
 hi def link markdownUrl                   String
 hi def link markdownUrlTitle              String
 hi def link pandocAttr                    SpecialChar
+hi def link pandocAttrId                  Constant
+hi def link pandocAttrClass               Constant
+hi def link pandocAttrKV                  Constant
 hi def link pandocBulletListMarker        Delimiter
 hi def link pandocDash                    Character
 hi def link pandocDefMarker               Special
 hi def link pandocExampleListRef          Define
 hi def link pandocFenced                  markdownFenced                 
 hi def link pandocFencedDiv               SpecialComment
-hi def link pandocInlineMath              Special
 hi def link pandocLineBlockPipe           SpecialComment
-hi def link pandocMultiLineMath           Special
+" hi def link pandocInlineMath              Special
+" hi def link pandocMultiLineMath           Special
 hi def link pandocSimpleTable             SpecialComment
 hi def link pandocSimpleTableError        pandocAmbiguous
 hi def link pandocSimpleTableLine         Define
 hi def link pandocStrikethrough           Comment
 hi def link pandocSubscript               Character
 hi def link pandocSuperscript             Character
-hi def link pandocTexBrace                Character
-hi def link pandocTexCmd                  Constant
 hi def link pandocTitleBlock              PreProc
 hi def link pandocYamlMetaBlock           PreProc
 
 hi def markdownBold    gui=bold   cterm=bold   term=bold
 hi def markdownItalic  gui=italic cterm=italic term=italic
 hi def pandocAmbiguous ctermfg=Red  guibg=Red 
+
+setl conceallevel=0

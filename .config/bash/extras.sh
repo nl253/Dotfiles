@@ -207,6 +207,13 @@ print('\n'.join(split(r"$1", '''$(builtin command cat /dev/stdin)''', M)))
 EOF
 }
 
+function columnise() { 
+	builtin local h_=$2
+	builtin local h=${#h}
+	builtin eval "echo {$1..$2}" | command xargs -n "$3" printf "$(replicate $3 %${h}s' ' | command xargs)\n";
+}
+
+
 # Finds all occurrences of pattern $1 in STDIN.
 #
 # Usage:
@@ -613,7 +620,6 @@ EOF
 #   integrate     <formula_string>
 #   simplify      <formula_string>
 #   expand        <formula_string>
-#   factor 			  <formula_string>
 #   trigsimp 		  <formula_string>
 #
 # Unicode versions of the above:
@@ -622,7 +628,6 @@ EOF
 #   integrate_pretty     <formula_string>
 #   simplify_pretty      <formula_string>
 #   expand_pretty        <formula_string>
-#   factor_pretty 			 <formula_string>
 #   trigsimp_pretty 		 <formula_string>
 #
 # NOTE: unicode versions cannot be fed as input into another function.
@@ -631,7 +636,7 @@ EOF
 alias differentiate='sympy_funct_ascii diff'
 alias differentiate_pretty='sympy_funct_pretty diff'
 
-for f in integrate simplify expand factor trigsimp integrate; do
+for f in integrate simplify expand trigsimp integrate; do
   eval "alias ${f}='sympy_funct_ascii $f'"
   eval "alias ${f}_pretty='sympy_funct_pretty $f'"
 done

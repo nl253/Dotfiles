@@ -14,23 +14,24 @@ fu! inits#all() abort
         call opts#safe_setl(['omnifunc=syntaxcomplete#Complete'])
     endif
 
+    " words from all loaded buffers 
+    setl completefunc=complete#AllBufsWords
+
     call opts#comma_opt('complete', ['.', 'k', 't'])
 
     " Looks in ~/.vim/dicts for a matching dict. 
     " If it finds one thent it sets locally dict to it.
-    let l:dict_dir = expand('~/.vim/dicts/')
-    let l:candidate = l:dict_dir.&filetype.'.dict'
+    fu! GetDict(root) closure
+        return expand('~').'/.vim/dicts/'.a:root.'.dict'
+    endfu
 
-    if filereadable(l:candidate)
-        call opts#safe_setl(['dictionary='.l:candidate])
-        call opts#comma_opt('complete', ['k'])
-    else
-        let l:candidate = l:dict_dir.expand('%:e').'.dict'
+    for l:candidate in map([&filetype, expand('%:e')], 'GetDict(v:val)') 
         if filereadable(l:candidate)
             call opts#safe_setl(['dictionary='.l:candidate])
             call opts#comma_opt('complete', ['k'])
+            break
         endif
-    endif
+    endfor
 
     call opts#safe_setl([
                 \ 'autoindent',
@@ -132,6 +133,7 @@ fu! inits#non_home() abort
     call opts#safe_setl(['nomodifiable', 'readonly'])
 endf
 
+" Note: autocmd for this needs to be TermOpen (which requires feature check `has('nvim')`).
 fu! inits#term() abort
     call opts#safe_setl(['nomodifiable', 'readonly', 'nospell'])
     nn <buffer> <Leader>' :close<CR>

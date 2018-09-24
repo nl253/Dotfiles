@@ -11,15 +11,11 @@ esac
 # normalise prompt in case somthing goes wrong
 export PS1="${USER}@"$(hostname)" ${0} >> "
 
-# set ls colors
-if builtin dirs 1>/dev/null 2>/dev/null; then
-  builtin eval $(command dircolors -b)
-fi
 
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ~/Documents ~/Documents/Programming ~/Documents/PDF ; do
+for directory in ~/Documents ~/Documents/Programming ~/Documents/PDF; do
   [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
 done
 
@@ -32,7 +28,7 @@ export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1
 alias sudo='sudo '
 
 # get MIME type of a file
-[ -x $(command which file) ] && alias mime-type='command file --dereference --brief --mime-type -- '
+[ -x /usr/bin/file ] && alias mime-type='command file --dereference --brief --mime-type -- '
 
 if [ -x /usr/bin/ghci ]; then
   ghc_exts='-XApplicativeDo -XBangPatterns -XBinaryLiterals -XDeriveAnyClass -XDeriveFoldable -XDeriveFunctor -XDeriveGeneric -XDeriveTraversable -XEmptyDataDecls -XFlexibleContexts -XFlexibleInstances -XFunctionalDependencies -XGADTs -XKindSignatures -XLambdaCase -XMonadComprehensions -XMultiParamTypeClasses -XMultiWayIf -XNamedWildCards -XNumDecimals -XParallelListComp -XPartialTypeSignatures -XPatternGuards -XPostfixOperators -XScopedTypeVariables -XTupleSections -XTypeOperators -XViewPatterns'
@@ -67,14 +63,12 @@ unset -v ls_opts
 
 if [ -x /usr/bin/rlwrap ]; then
   for i in 'dash -i' 'racket -i' guile{2.0,}; do
-    eval "alias $(echo $i | sed -E 's/^(\S+).*/\1/')='rlwrap $i'"
+    eval "alias $(echo $i | command sed -E 's/^(\S+).*/\1/')='command rlwrap $i'"
   done
 fi
 
 # pattern matching
-for i in f e ''; do
-  eval "alias ${i}grep='command ${i} --color=auto'"
-done
+alias grep='command grep -E -I --color=auto'
 
 if [ -x ~/.cargo/bin/rg ]; then
   alias rg='command rg --pretty --threads $(grep -c ^processor /proc/cpuinfo) --context 1 --max-count 3 --no-search-zip'
@@ -86,11 +80,12 @@ FIGNORE=$GLOBIGNORE
 alias diff='command diff --color=auto --suppress-common-lines --ignore-trailing-space --minimal --text --side-by-side --width=$(tput cols) --ignore-tab-expansion --ignore-space-change --ignore-all-space --ignore-blank-lines'
 
 # split path on ":"
-alias show-path='echo -e ${PATH//:/\\n} | grep -E "^.{3,}$"'
+alias show-path='echo -e ${PATH//:/\\n} | command grep -E "^.{3,}$"'
 for i in df du; do alias $i="command $i --human-readable --si --total"; done
 alias info='command info --vi-keys'
+alias pgrep='command pgrep --list-full'
 alias logout="command pkill -KILL -u \$USER"
-[ -x /usr/bin/acpi ] && alias battery="acpi -V"
+[ -x /usr/bin/acpi ] && alias battery="command acpi -V"
 alias cp="cp --recursive --verbose --interactive --preserve=mode,ownership,timestamps"
 
 # rsync(1) is faster, more secure than cp(1)
@@ -105,23 +100,39 @@ done
 alias show-term-capabilities="command infocmp -1 | command sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'|column -c80"
 alias bat='command bat --theme TwoDark --style plain'
 
-[ -x /usr/bin/libreoffice ] && alias libreoffice="libreoffice --norestore"
-[ -x /usr/bin/tmux ] && alias tmux='tmux -2'
+[ -x /usr/bin/libreoffice ] && alias libreoffice="libreoffice --norestore 2>/dev/null 1>/dev/null &"
+# alias tmux='tmux -2'
 
 # Networking, Servers
-alias http-server-python="command python3 -m http.server"
 # NOTE the php server requires index.php in the root dir
-[ -x $(command which php 2>/dev/null) ] && alias http-server-php="command php -S 0.0.0.0:5000"
-[ -x $(command which ruby 2>/dev/null) ] && alias http-server-ruby="command ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd.start'"
+[ -x /usr/bin/php ] && alias http-server-php="command php -S 0.0.0.0:5000"
+[ -x /usr/bin/ruby ] && alias http-server-ruby="command ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd.start'"
+
+# because kitty is not recognised as a terminal emulator
+[ -x /usr/bin/ssh ] && alias ssh='TERM=xterm command ssh'
 
 # Python
-alias pip-update="command pip3 freeze --local | command grep -v '^\\-e' | command cut -d = -f 1  | command xargs -n1 pip install -U"
+alias pip-update-all="command pip3 freeze --local | command grep -v '^\\-e' | command cut -d = -f 1  | command xargs -n1 pip install -U"
 alias pip-uninstall="for i in \$(command pip3 list --user --not-required | command sed -n -E -e 's/^(\\S+)\\s+.*/\\1/' -e '3,\$p' | command fzf); do command pip3 uninstall -y \$i; done"
-for i in pip pydoc python ptpython ipython; do eval "alias ${i}=${i}3"; done
-alias ranger='command ranger 2>/dev/null'
 
-alias ptipython3='command ptipython3 --interactive=/home/norbert/.jupyter/init.py'
-alias ptipython=' command ptipython3 --interactive=/home/norbert/.jupyter/init.py'
+for i in ptipython ptpython ipython; do 
+  if [ -x "$HOME/.local/bin/${i}3" ]; then
+    eval "alias ${i}='command ${i}3 --interactive=/home/norbert/.jupyter/init.py'"
+  fi
+done
+
+[ -x ~/.local/bin/isympy ] && alias isympy='command isympy -I  -p unicode'
+
+[ -x /usr/bin/python3 ] && alias python='command python3'
+
+# alias http-server-python="command python3 -m http.server"
+
+for i in pip pydoc 'http.server'; do 
+  eval "alias $i='command python3 -m $i'"
+  eval "alias ${i}3='command python3 -m $i'"
+done
+
+alias ranger='command ranger 2>/dev/null'
 
 # get ip address
 [ -x /usr/bin/curl ] && alias my-ip='command curl ipinfo.io/ip'
@@ -152,6 +163,9 @@ non_git_prompt='$(command basename $0):/$PWD :: '
 # bash and zsh
 if builtin dirs 1>/dev/null 2>/dev/null; then
 
+  # set ls colors
+  builtin eval $(command dircolors -b)
+
   # zsh
   if [[ -n "$ZSH_VERSION" ]]; then
     export PS1="${git_basic_info} "$'\n'"${non_git_prompt}"
@@ -165,4 +179,3 @@ fi
 
 for var in git_basic_info git_branch_info non_git_prompt; do unset -v $var; done
 # vim:foldmethod=indent:foldmarker={,}:shiftwidth=2:tabstop=2:foldlevel=4:
-

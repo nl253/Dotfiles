@@ -1,37 +1,67 @@
-// vim:ft=javascript.typescript:
-
 /** @format */
 
 /**
- * NOTE: this is the main source file. 
+ * NOTE: this is the main source file.
  *
  * A corresponding *.js file exists in this dir but it is *generated* by tsc so do not mind it.
  */
 
-function getLinkStyles() {
-  return {
-    background: 'var(--main-bg-color)',
-    border: 'none',
-    fontStyle: 'italic',
-  };
+enum Theme {LIGHT, DARK}
+
+enum TocState {// noinspection JSUnusedGlobalSymbols
+  HIDDEN, VISIBLE
 }
 
-function slugify(nonURLTxt) {
-  return nonURLTxt.replace(/ +/g, '-').replace(/\t/g, '_');
+const DEFAULT_THEME: Theme = Theme.LIGHT;
+const DEFAULT_TOC_STATE: TocState = TocState.HIDDEN;
+const MATHJAX_TIMEOUT = 5000;
+
+// this is what MathJax tells you to paste (do not touch)
+const MATHJAX_CFG: object = {
+  tex2jax: {
+    inlineMath: [
+      ['$', '$'], // make sure that things $between$ dollar signs are rendered
+      ['\\(', '\\)'],
+    ],
+    processEscapes: true,
+  },
+};
+
+const LINK_STYLES = {
+  background: 'var(--main-bg-color)',
+  border: 'none',
+  fontStyle: 'italic',
+};
+
+function slugify(nonURLTxt: string): string {
+  return nonURLTxt.replace(/ +/g, '-').replace(/\t/g, '_').replace(/\n/g, '_-_');
+}
+
+// noinspection TsLint
+function isDefined(v: any): boolean {
+  return v !== null && v !== undefined;
+}
+
+function changeSuffix(target: string, suffix: string, newSuffix: string): string {
+  return target.replace(new RegExp(`${suffix}$`), newSuffix);
+}
+
+function changeExtension(target: string, ext: string, newExt: string): string {
+  return changeSuffix(target, `.${ext}`, `.${newExt}`);
 }
 
 class Builder {
-  private tagName: string;
-  private _text: string;
-  private _classes: string[];
-  private _attrs: Object;
+  private readonly tagName: string;
+  private readonly _classes: string[];
+  private readonly _attrs: object;
+  private readonly _wrap: string[];
+  private readonly _styles: object;
+  private readonly _eventListeners: object;
+  private _children: HTMLElement[];
   private _flagAttrs: string[];
-  private _wrap: string[];
-  private _styles: Object;
-  private _children: Element[];
-  private _eventListeners: Object;
+  private _text: string;
 
-  constructor(tagName) {
+  constructor(tagName: string) {
     this.tagName = tagName;
     this._children = [];
     this._styles = {};
@@ -43,24 +73,28 @@ class Builder {
     this._eventListeners = {};
   }
 
-  public classes(classes) {
+  // noinspection JSUnusedGlobalSymbols
+  public classes(classes: string[]): Builder {
     for (const c of classes) {
       this._classes.push(c);
     }
     return this;
   }
 
-  public class(c) {
+  // noinspection JSUnusedGlobalSymbols
+  public class(c: string): Builder {
     this._classes.push(c);
     return this;
   }
 
-  public id(id) {
+  public id(id: string): Builder {
+    // @ts-ignore
     this._attrs.id = id;
     return this;
   }
 
-  public on(event, funct) {
+  // noinspection TsLint
+  public on(event: string, funct: (Builder?) => any): Builder {
     if (!this._eventListeners[event]) {
       this._eventListeners[event] = [];
     }
@@ -68,26 +102,28 @@ class Builder {
     return this;
   }
 
-  public style(k, v) {
-    this._styles[k] = v;
+  public style(key: string, value: string): Builder {
+    this._styles[key] = value;
     return this;
   }
 
-  public styles(dict) {
+  public styles(dict: object): Builder {
     for (const key in dict) {
       this._styles[key] = dict[key];
     }
     return this;
   }
 
-  public attr(k, v) {
-    if (v) this._attrs[k] = v;
-    else this._flagAttrs.push(k);
+  public attr(key: string, value: string): Builder {
+    if (value) this._attrs[key] = value;
+    else this._flagAttrs.push(key);
     return this;
   }
 
-  public attrs(attrs) {
+  // noinspection JSUnusedGlobalSymbols
+  public attrs(attrs: object | string[]): Builder {
     if (Object.getPrototypeOf(attrs).constructor.name.toLowerCase() === 'array') {
+      // @ts-ignore
       this._flagAttrs = this._flagAttrs.concat(attrs);
     } else {
       for (const key in attrs) {
@@ -97,32 +133,37 @@ class Builder {
     return this;
   }
 
-  public text(text) {
+  public text(text: string): Builder {
     this._text = text;
     return this;
   }
 
-  public append(text) {
+  // noinspection JSUnusedGlobalSymbols
+  public append(text: string): Builder {
     this._text += text;
     return this;
   }
 
-  public children(children) {
+  // noinspection JSUnusedGlobalSymbols
+  public children(children: HTMLElement[]): Builder {
     this._children = this._children.concat(children);
     return this;
   }
 
-  public wrap(beforeTag) {
+  // noinspection JSUnusedGlobalSymbols
+  public wrap(beforeTag): this {
     this._wrap.push(beforeTag);
     return this;
   }
 
-  public child(child) {
+  // noinspection JSUnusedGlobalSymbols
+  public child(child: HTMLElement): Builder {
     this._children.push(child);
     return this;
   }
 
-  public build() {
+  // noinspection TsLint
+  public build(): HTMLElement {
     let node = document.createElement(this.tagName);
 
     node.innerText = this._text;
@@ -166,8 +207,9 @@ class Builder {
 /**
  * All mentions of defined terms are turned into links.
  */
-function addDefinitionLinks() {
-  for (const term of Array.from(document.querySelectorAll('dt, h2, h3, h4, h5, h6'))) {
+function addDefinitionLinks(): void {
+  const nodes: NodeListOf<HTMLElement> = document.querySelectorAll('dt, h2, h3, h4, h5, h6');
+  for (const term of Array.from(nodes)) {
     term.classList.add('seen');
     term.id = `term-${slugify(term.innerText)}`;
     const regex = new RegExp(` (${term.innerText}) `, 'i');
@@ -188,7 +230,7 @@ function addDefinitionLinks() {
 /**
  * Hack because pandoc wraps (for some reason) <img> in <p>.
  */
-function unwrapImgs() {
+function unwrapImgs(): void {
   for (const img of Array.from(document.querySelectorAll('p>img[src]'))) {
     const parent = img.parentNode;
     const grandparent = parent.parentNode;
@@ -199,28 +241,30 @@ function unwrapImgs() {
 /**
  * Add a single master button that hides all code blocks.
  */
-function makeCodeHideBtns() {
-  for (const codeNode of Array.from(document.querySelectorAll('div.sourceCode'))) {
+function makeCodeHideBtns(): void {
+  const nodes: NodeListOf<HTMLElement> = document.querySelectorAll('div.sourceCode');
+  for (const codeNode of Array.from(nodes)) {
+    // @ts-ignore
     codeNode.prepend(
       new Builder('a')
-      .attr('href', '#!')
-      .text('hide')
-      .on('click', function hideParent() {
-        this.parentNode.style.display = 'none';
-      })
-      .styles(getLinkStyles())
-      .styles({
-        background: 'none',
-        float: 'right',
-        margin: '0 auto',
-        marginBottom: '-30px',
-        padding: '11px 10px 0px 0px',
-        position: 'relative',
-        right: '12px',
-        textAlign: 'right',
-        top: '-1px',
-      })
-      .build()
+        .attr('href', '#!')
+        .text('hide')
+        .on('click', function hideParent() {
+          this.parentNode.style.display = 'none';
+        })
+        .styles(LINK_STYLES)
+        .styles({
+          background: 'none',
+          float: 'right',
+          margin: '0 auto',
+          marginBottom: '-30px',
+          padding: '11px 10px 0px 0px',
+          position: 'relative',
+          right: '12px',
+          textAlign: 'right',
+          top: '-1px',
+        })
+        .build(),
     );
 
     /* FIXME copying to clipboard doesn't work on my version of chrome */
@@ -246,22 +290,23 @@ function makeCodeHideBtns() {
 /**
  * Add a button to every section that hides it.
  */
-function makeSectionToggleBtns() {
+function makeSectionToggleBtns(): void {
   for (const section of Array.from(document.querySelectorAll('section'))) {
+    // @ts-ignore
     section.prepend(
       new Builder('a')
-      .text('hide section')
-      .styles(getLinkStyles())
-      .styles({
-        display: 'block',
-        float: 'right',
-        textAlign: 'right',
-      })
-      .attr('href', '#!')
-      .on('click', function hideParent() {
-        this.parentNode.style.display = 'none';
-      })
-      .build()
+        .text('hide section')
+        .styles(LINK_STYLES)
+        .styles({
+          display: 'block',
+          float: 'right',
+          textAlign: 'right',
+        })
+        .attr('href', '#!')
+        .on('click', function hideParent() {
+          this.parentNode.style.display = 'none';
+        })
+        .build(),
     );
   }
 }
@@ -269,10 +314,11 @@ function makeSectionToggleBtns() {
 /**
  * Does the actual hiding of code blocks (helper function - see below).
  */
-function toggleCode() {
-  const btn = document.querySelector('#code-btn');
+function toggleCode(): void {
+  const btn: HTMLElement = document.querySelector('#code-btn');
+  const nodes: NodeListOf<HTMLElement> = document.querySelectorAll('pre.sourceCode');
 
-  for (const x of Array.from(document.querySelectorAll('pre.sourceCode'))) {
+  for (const x of Array.from(nodes)) {
     if (x.style.display === 'none') {
       x.style.display = 'block';
       btn.innerText = 'hide code';
@@ -286,86 +332,84 @@ function toggleCode() {
 /**
  * Add button to each code block to hide it.
  */
-function makeMasterCodeToggleBtn() {
+function makeMasterCodeToggleBtn(): void {
   // no code to hide
   if (!document.querySelector('pre')) return;
 
   document.body.appendChild(
     new Builder('a')
-    .on('click', toggleCode)
-    .id('code-btn')
-    .text('hide code')
-    .styles(getLinkStyles())
-    .attr('href', '#!')
-    .styles({
-      display: 'block',
-      position: 'fixed',
-      right: '220px',
-      top: '20px',
-    })
-    .build()
+      .on('click', toggleCode)
+      .id('code-btn')
+      .text('hide code')
+      .styles(LINK_STYLES)
+      .attr('href', '#!')
+      .styles({
+        display: 'block',
+        position: 'fixed',
+        right: '220px',
+        top: '20px',
+      })
+      .build(),
   );
 }
 
 /**
  * The actual night mode toggler (helper function - see below).
  */
-function toggleNightMode() {
-  const {
-    body
-  } = document;
-  const btn = document.querySelector('#night-mode-btn');
-  if (!body.classList.contains('night-mode')) {
-    btn.innerText = 'turn night mode off';
-    body.classList.add('night-mode');
-    for (const codeNode of Array.from(body.querySelectorAll('pre, code, kbd'))) {
-      codeNode.classList.add('night-mode-code');
-    }
-    console.info('night mode on');
-  } else {
+function toggleNightMode(): void {
+  const {body} = document;
+  const btn: HTMLElement = document.querySelector('#night-mode-btn');
+  if (body.classList.contains('night-mode')) {
     btn.innerText = 'turn night mode on';
     body.classList.remove('night-mode');
     for (const codeNode of Array.from(body.querySelectorAll('pre, code, kbd'))) {
       codeNode.classList.remove('night-mode-code');
     }
     console.info('night mode off');
+  } else {
+    btn.innerText = 'turn night mode off';
+    body.classList.add('night-mode');
+    for (const codeNode of Array.from(body.querySelectorAll('pre, code, kbd'))) {
+      codeNode.classList.add('night-mode-code');
+    }
+    console.info('night mode on');
   }
 }
 
 /**
  * Add a button to toggle night mode.
  */
-function makeNightModeBtn() {
+function makeNightModeBtn(): void {
   document.body.appendChild(
     new Builder('a')
-    .id('night-mode-btn')
-    .attr('href', '#!')
-    .text('turn night mode on')
-    .on('click', toggleNightMode)
-    .styles({
-      position: 'fixed',
-      right: '50px',
-      top: '20px',
-    })
-    .styles(getLinkStyles())
-    .build()
+      .id('night-mode-btn')
+      .attr('href', '#!')
+      .text('turn night mode on')
+      .on('click', toggleNightMode)
+      .styles({
+        position: 'fixed',
+        right: '50px',
+        top: '20px',
+      })
+      .styles(LINK_STYLES)
+      .build(),
   );
 }
 
 /**
  * Add a button to toggle the table of contents (TOC).
  */
-function makeTOCBtn() {
+function makeTOCBtn(): void {
   // tOC too short
-  const tryFindTOC = document.querySelector('#TOC > ul');
+  const tryFindTOC: HTMLElement = document.querySelector('#TOC > ul');
   if (tryFindTOC.childElementCount <= 1) {
     document.querySelector('#TOC').remove();
     return;
   }
 
-  function toggleTOC() {
-    const toc = document.querySelector('#TOC');
-    const tocBtn = document.querySelector('#toc-btn');
+  function toggleTOC(): void {
+    const toc: HTMLElement = document.querySelector('#TOC');
+    const tocBtn: HTMLElement = document.querySelector('#toc-btn');
 
     // when hidden
     if (toc.style.display === 'none') {
@@ -381,18 +425,31 @@ function makeTOCBtn() {
 
   document.body.appendChild(
     new Builder('a')
-    .id('toc-btn')
-    .text('hide toc')
-    .attr('href', '#!')
-    .styles({
-      left: '50px',
-      position: 'fixed',
-      top: '20px',
-    })
-    .styles(getLinkStyles())
-    .on('click', toggleTOC)
-    .build()
+      .id('toc-btn')
+      .text('hide toc')
+      .attr('href', '#!')
+      .styles({
+        left: '50px',
+        position: 'fixed',
+        top: '20px',
+      })
+      .styles(LINK_STYLES)
+      .on('click', toggleTOC)
+      .build(),
   );
+}
+
+/**
+ * Add the `id` attribute to heading nodes.
+ *
+ * e.g.: <h1>Subject of Discussion</h1> becomes <h1 id="Subject_of_Discussion">Subject of Discussion</h1>
+ */
+function addIds() {
+  const nodes: NodeListOf<HTMLElement> = document.querySelectorAll('h1, h2, h3, h4, h5, h6, strong');
+
+  for (const heading of Array.from(nodes)) {
+    heading.id = slugify(heading.innerText);
+  }
 }
 
 /**
@@ -400,25 +457,16 @@ function makeTOCBtn() {
  *
  * e.g.: <a href="./my_notes.md">here</a> with links to converted html files
  */
-function fixLinks() {
-  // make URL_FRIENDLY
-  for (const heading of Array.from(document.querySelectorAll(
-      'h1, h2, h3, h4, h5, h6, strong'))) {
-    /*
-     * replace all spaces with '-'
-     * noinspection JSUndefinedPropertyAssignment
-     */
-
-    heading.id = slugify(heading.innerText);
-  }
-
-  const changeSuffix = (target, suffix, newSuffix) => target.replace(new RegExp(
-    `${suffix}$`), newSuffix);
+function fixLinks(): void {
 
   // see <./file.md> => See <./file.html>
-  for (const link of Array.from(document.querySelectorAll('a[href]'))) {
-    link.href = changeSuffix(link.href, '.md', '.html');
-    link.href = changeSuffix(link.href, '.ipynb', '.html');
+  const links: NodeListOf<HTMLElement> = document.querySelectorAll('a[href]');
+
+  for (const link of Array.from(links)) {
+    for (const badExt in ['md', 'ipynb']) {
+      // @ts-ignore
+      link.href = changeExtension(link.href, badExt, 'html');
+    }
   }
 }
 
@@ -426,13 +474,15 @@ function fixLinks() {
  * Vim-like and pager keybindings.
  * Like everything, might only work in Chrome because this is the only browser I tested it with.
  */
-function overrideKeyboardShortcuts() {
+function overrideKeyboardShortcuts(): void {
   const moveAmount = 150;
   const scrollBehaviour = 'instant';
+  // noinspection TsLint
   const scrollAmount = moveAmount * 3;
+  // noinspection TsLint
   const pageAmount = moveAmount * 5;
 
-  const move = moveBy =>
+  const move: (moveBy: number) => void = moveBy =>
     window.scroll({
       behavior: scrollBehaviour,
       top: moveBy,
@@ -447,10 +497,11 @@ function overrideKeyboardShortcuts() {
   const topOfPg = () => window.scrollTo(0, -document.body.scrollHeight);
   const botOfPg = () => window.scrollTo(0, document.body.scrollHeight);
 
+  // noinspection JSUnusedGlobalSymbols
   const keymap = {
+    G: botOfPg,
     d: scrollDown,
     g: topOfPg,
-    G: botOfPg,
     h: pageUp,
     j: down,
     k: up,
@@ -458,7 +509,7 @@ function overrideKeyboardShortcuts() {
     u: scrollUp,
     x: window.close,
   };
-  document.onkeydown = function captureKey(e) {
+  document.onkeydown = e => {
     for (const key in keymap) {
       if (key === e.key) {
         keymap[key]();
@@ -467,9 +518,14 @@ function overrideKeyboardShortcuts() {
   };
 }
 
-// call all functions
-document.addEventListener('DOMContentLoaded', () => {
+// noinspection TsLint
+/**
+ * Call all functions.
+ */
+function main(): void {
+
   // my stuff
+  addIds();
   fixLinks();
   makeTOCBtn();
   makeNightModeBtn();
@@ -480,26 +536,36 @@ document.addEventListener('DOMContentLoaded', () => {
   overrideKeyboardShortcuts();
   addDefinitionLinks();
 
-  setTimeout(() => {
-    // this is what MathJax tells you to paste (do not touch)
-
+  if (isDefined(MATHJAX_CFG)) {
+    // @ts-ignore
     // noinspection JSUnresolvedVariable
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [
-          ['$', '$'], // make sure that things $between$ dollar signs are rendered
-          ['\\(', '\\)'],
-        ],
-        processEscapes: true,
-      },
-    });
-  }, 5000);
+    setTimeout(() => MathJax.Hub.Config(MATHJAX_CFG), MATHJAX_TIMEOUT);
+  } else {
+    console.error(`MATHJAX_CFG not defined`);
+
+  }
 
   // hide toc
-  if (document.querySelector('#toc-btn')) {
-    document.querySelector('#toc-btn').dispatchEvent(new Event('click'));
+  if (isDefined(DEFAULT_TOC_STATE)) {
+    if (DEFAULT_TOC_STATE === TocState.HIDDEN) {
+      const tryFind = document.querySelector('#toc-btn');
+      if (tryFind) {
+        tryFind.dispatchEvent(new Event('click'));
+      } else {
+        console.warn('could not find the toc');
+      }
+    }
+  } else {
+    console.info('DEFAULT_TOC_STATE not set');
   }
 
   // turn on night mode
-  document.querySelector('#night-mode-btn').dispatchEvent(new Event('click'));
-});
+  if (isDefined(DEFAULT_THEME) && DEFAULT_THEME === Theme.DARK) {
+    document.querySelector('#night-mode-btn').dispatchEvent(new Event('click'));
+  } else {
+    console.info('DEFAULT_THEME not set');
+  }
+}
+
+// register
+document.addEventListener('DOMContentLoaded', main);

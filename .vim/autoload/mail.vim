@@ -6,7 +6,8 @@ fu! mail#send()
 	let l:mail = mail#get_details('mail_file', expand('%:p')) 
 	let l:user = mail#get_details('user', 'norbertlogiewa96@gmail.com')
 	let l:pass = inputsecret('password => ')
-	let l:cmd = mail#get_details('curl command', join(['curl', '--url', l:url] + l:flags + ['--mail-from', l:from, '--mail-rcpt', l:to, '--upload-file', l:mail, '--user', l:user.':'.l:pass] , ' '))
+	let l:cmd = mail#get_details('curl command', join([
+                \ 'curl', '--url', l:url] + l:flags + ['--mail-from', l:from, '--mail-rcpt', l:to, '--upload-file', l:mail, '--user', l:user.':'.l:pass] , ' '))
 	echo system(l:cmd)
 endf
 

@@ -1,12 +1,41 @@
-function getLinkStyles() {
-    return {
-        background: 'var(--main-bg-color)',
-        border: 'none',
-        fontStyle: 'italic'
-    };
-}
+var Theme;
+(function (Theme) {
+    Theme[Theme["LIGHT"] = 0] = "LIGHT";
+    Theme[Theme["DARK"] = 1] = "DARK";
+})(Theme || (Theme = {}));
+var TocState;
+(function (TocState) {
+    TocState[TocState["HIDDEN"] = 0] = "HIDDEN";
+    TocState[TocState["VISIBLE"] = 1] = "VISIBLE";
+})(TocState || (TocState = {}));
+var DEFAULT_THEME = Theme.LIGHT;
+var DEFAULT_TOC_STATE = TocState.HIDDEN;
+var MATHJAX_TIMEOUT = 5000;
+var MATHJAX_CFG = {
+    tex2jax: {
+        inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)'],
+        ],
+        processEscapes: true
+    }
+};
+var LINK_STYLES = {
+    background: 'var(--main-bg-color)',
+    border: 'none',
+    fontStyle: 'italic'
+};
 function slugify(nonURLTxt) {
-    return nonURLTxt.replace(/ +/g, '-').replace(/\t/g, '_');
+    return nonURLTxt.replace(/ +/g, '-').replace(/\t/g, '_').replace(/\n/g, '_-_');
+}
+function isDefined(v) {
+    return v !== null && v !== undefined;
+}
+function changeSuffix(target, suffix, newSuffix) {
+    return target.replace(new RegExp(suffix + "$"), newSuffix);
+}
+function changeExtension(target, ext, newExt) {
+    return changeSuffix(target, "." + ext, "." + newExt);
 }
 var Builder = (function () {
     function Builder(tagName) {
@@ -42,8 +71,8 @@ var Builder = (function () {
         this._eventListeners[event].push(funct);
         return this;
     };
-    Builder.prototype.style = function (k, v) {
-        this._styles[k] = v;
+    Builder.prototype.style = function (key, value) {
+        this._styles[key] = value;
         return this;
     };
     Builder.prototype.styles = function (dict) {
@@ -52,11 +81,11 @@ var Builder = (function () {
         }
         return this;
     };
-    Builder.prototype.attr = function (k, v) {
-        if (v)
-            this._attrs[k] = v;
+    Builder.prototype.attr = function (key, value) {
+        if (value)
+            this._attrs[key] = value;
         else
-            this._flagAttrs.push(k);
+            this._flagAttrs.push(key);
         return this;
     };
     Builder.prototype.attrs = function (attrs) {
@@ -128,6 +157,7 @@ var Builder = (function () {
     return Builder;
 }());
 function addDefinitionLinks() {
+    var nodes = document.querySelectorAll('dt, h2, h3, h4, h5, h6');
     var _loop_1 = function (term) {
         term.classList.add('seen');
         term.id = "term-" + slugify(term.innerText);
@@ -142,7 +172,7 @@ function addDefinitionLinks() {
             node.outerHTML = node.outerHTML.replace(regex, " " + link.outerHTML + " ");
         }
     };
-    for (var _i = 0, _a = Array.from(document.querySelectorAll('dt, h2, h3, h4, h5, h6')); _i < _a.length; _i++) {
+    for (var _i = 0, _a = Array.from(nodes); _i < _a.length; _i++) {
         var term = _a[_i];
         _loop_1(term);
     }
@@ -156,7 +186,8 @@ function unwrapImgs() {
     }
 }
 function makeCodeHideBtns() {
-    for (var _i = 0, _a = Array.from(document.querySelectorAll('div.sourceCode')); _i < _a.length; _i++) {
+    var nodes = document.querySelectorAll('div.sourceCode');
+    for (var _i = 0, _a = Array.from(nodes); _i < _a.length; _i++) {
         var codeNode = _a[_i];
         codeNode.prepend(new Builder('a')
             .attr('href', '#!')
@@ -164,7 +195,7 @@ function makeCodeHideBtns() {
             .on('click', function hideParent() {
             this.parentNode.style.display = 'none';
         })
-            .styles(getLinkStyles())
+            .styles(LINK_STYLES)
             .styles({
             background: 'none',
             float: 'right',
@@ -184,7 +215,7 @@ function makeSectionToggleBtns() {
         var section = _a[_i];
         section.prepend(new Builder('a')
             .text('hide section')
-            .styles(getLinkStyles())
+            .styles(LINK_STYLES)
             .styles({
             display: 'block',
             float: 'right',
@@ -199,7 +230,8 @@ function makeSectionToggleBtns() {
 }
 function toggleCode() {
     var btn = document.querySelector('#code-btn');
-    for (var _i = 0, _a = Array.from(document.querySelectorAll('pre.sourceCode')); _i < _a.length; _i++) {
+    var nodes = document.querySelectorAll('pre.sourceCode');
+    for (var _i = 0, _a = Array.from(nodes); _i < _a.length; _i++) {
         var x = _a[_i];
         if (x.style.display === 'none') {
             x.style.display = 'block';
@@ -218,7 +250,7 @@ function makeMasterCodeToggleBtn() {
         .on('click', toggleCode)
         .id('code-btn')
         .text('hide code')
-        .styles(getLinkStyles())
+        .styles(LINK_STYLES)
         .attr('href', '#!')
         .styles({
         display: 'block',
@@ -231,23 +263,23 @@ function makeMasterCodeToggleBtn() {
 function toggleNightMode() {
     var body = document.body;
     var btn = document.querySelector('#night-mode-btn');
-    if (!body.classList.contains('night-mode')) {
-        btn.innerText = 'turn night mode off';
-        body.classList.add('night-mode');
-        for (var _i = 0, _a = Array.from(body.querySelectorAll('pre, code, kbd')); _i < _a.length; _i++) {
-            var codeNode = _a[_i];
-            codeNode.classList.add('night-mode-code');
-        }
-        console.info('night mode on');
-    }
-    else {
+    if (body.classList.contains('night-mode')) {
         btn.innerText = 'turn night mode on';
         body.classList.remove('night-mode');
-        for (var _b = 0, _c = Array.from(body.querySelectorAll('pre, code, kbd')); _b < _c.length; _b++) {
-            var codeNode = _c[_b];
+        for (var _i = 0, _a = Array.from(body.querySelectorAll('pre, code, kbd')); _i < _a.length; _i++) {
+            var codeNode = _a[_i];
             codeNode.classList.remove('night-mode-code');
         }
         console.info('night mode off');
+    }
+    else {
+        btn.innerText = 'turn night mode off';
+        body.classList.add('night-mode');
+        for (var _b = 0, _c = Array.from(body.querySelectorAll('pre, code, kbd')); _b < _c.length; _b++) {
+            var codeNode = _c[_b];
+            codeNode.classList.add('night-mode-code');
+        }
+        console.info('night mode on');
     }
 }
 function makeNightModeBtn() {
@@ -261,7 +293,7 @@ function makeNightModeBtn() {
         right: '50px',
         top: '20px'
     })
-        .styles(getLinkStyles())
+        .styles(LINK_STYLES)
         .build());
 }
 function makeTOCBtn() {
@@ -291,20 +323,24 @@ function makeTOCBtn() {
         position: 'fixed',
         top: '20px'
     })
-        .styles(getLinkStyles())
+        .styles(LINK_STYLES)
         .on('click', toggleTOC)
         .build());
 }
-function fixLinks() {
-    for (var _i = 0, _a = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6, strong')); _i < _a.length; _i++) {
+function addIds() {
+    var nodes = document.querySelectorAll('h1, h2, h3, h4, h5, h6, strong');
+    for (var _i = 0, _a = Array.from(nodes); _i < _a.length; _i++) {
         var heading = _a[_i];
         heading.id = slugify(heading.innerText);
     }
-    var changeSuffix = function (target, suffix, newSuffix) { return target.replace(new RegExp(suffix + "$"), newSuffix); };
-    for (var _b = 0, _c = Array.from(document.querySelectorAll('a[href]')); _b < _c.length; _b++) {
-        var link = _c[_b];
-        link.href = changeSuffix(link.href, '.md', '.html');
-        link.href = changeSuffix(link.href, '.ipynb', '.html');
+}
+function fixLinks() {
+    var links = document.querySelectorAll('a[href]');
+    for (var _i = 0, _a = Array.from(links); _i < _a.length; _i++) {
+        var link = _a[_i];
+        for (var badExt in ['md', 'ipynb']) {
+            link.href = changeExtension(link.href, badExt, 'html');
+        }
     }
 }
 function overrideKeyboardShortcuts() {
@@ -327,9 +363,9 @@ function overrideKeyboardShortcuts() {
     var topOfPg = function () { return window.scrollTo(0, -document.body.scrollHeight); };
     var botOfPg = function () { return window.scrollTo(0, document.body.scrollHeight); };
     var keymap = {
+        G: botOfPg,
         d: scrollDown,
         g: topOfPg,
-        G: botOfPg,
         h: pageUp,
         j: down,
         k: up,
@@ -337,7 +373,7 @@ function overrideKeyboardShortcuts() {
         u: scrollUp,
         x: window.close
     };
-    document.onkeydown = function captureKey(e) {
+    document.onkeydown = function (e) {
         for (var key in keymap) {
             if (key === e.key) {
                 keymap[key]();
@@ -345,7 +381,8 @@ function overrideKeyboardShortcuts() {
         }
     };
 }
-document.addEventListener('DOMContentLoaded', function () {
+function main() {
+    addIds();
     fixLinks();
     makeTOCBtn();
     makeNightModeBtn();
@@ -355,19 +392,32 @@ document.addEventListener('DOMContentLoaded', function () {
     makeSectionToggleBtns();
     overrideKeyboardShortcuts();
     addDefinitionLinks();
-    setTimeout(function () {
-        MathJax.Hub.Config({
-            tex2jax: {
-                inlineMath: [
-                    ['$', '$'],
-                    ['\\(', '\\)'],
-                ],
-                processEscapes: true
-            }
-        });
-    }, 5000);
-    if (document.querySelector('#toc-btn')) {
-        document.querySelector('#toc-btn').dispatchEvent(new Event('click'));
+    if (isDefined(MATHJAX_CFG)) {
+        setTimeout(function () { return MathJax.Hub.Config(MATHJAX_CFG); }, MATHJAX_TIMEOUT);
     }
-    document.querySelector('#night-mode-btn').dispatchEvent(new Event('click'));
-});
+    else {
+        console.error("MATHJAX_CFG not defined");
+    }
+    if (isDefined(DEFAULT_TOC_STATE)) {
+        if (DEFAULT_TOC_STATE === TocState.HIDDEN) {
+            var tryFind = document.querySelector('#toc-btn');
+            if (tryFind) {
+                tryFind.dispatchEvent(new Event('click'));
+            }
+            else {
+                console.warn('could not find the toc');
+            }
+        }
+    }
+    else {
+        console.info('DEFAULT_TOC_STATE not set');
+    }
+    if (isDefined(DEFAULT_THEME) && DEFAULT_THEME === Theme.DARK) {
+        document.querySelector('#night-mode-btn').dispatchEvent(new Event('click'));
+    }
+    else {
+        console.info('DEFAULT_THEME not set');
+    }
+}
+document.addEventListener('DOMContentLoaded', main);
+//# sourceMappingURL=script.js.map

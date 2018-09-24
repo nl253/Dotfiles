@@ -40,10 +40,10 @@ EXTENSION="${FILE_NAME##*.}"
 
 head() { builtin command head -n $PV_HEIGHT $FILE_PATH; }
 
-elinks() { builtin command elinks -no-references -no-numbering -dump -dump-color-mode 4 -dump-width ${PV_WIDTH} </dev/stdin; }
+elinks() { builtin command elinks -no-references -no-numbering -dump -dump-width ${PV_WIDTH} </dev/stdin; }
 
 preview_stdout() {
- if builtin command highlight --kw-case=upper --line-range=1-${PV_HEIGHT} --style=molokai --stdout --out-format=xterm256 --reformat=java  --line-length=${PV_WIDTH} --replace-tabs=4 --line-numbers --syntax=${1} < /dev/stdin 2>/dev/null; then
+ if builtin command highlight --kw-case=upper --line-range=1-${PV_HEIGHT} --style=github --stdout --out-format=xterm256 --reformat=java  --line-length=${PV_WIDTH} --replace-tabs=4 --line-numbers --syntax=${1} < /dev/stdin 2>/dev/null; then
     builtin return 0
   elif builtin command cat </dev/stdin; then
     builtin return 0

@@ -265,7 +265,7 @@ hi def link rustOperator                Operator
 hi def link rustPanic                   PreCondit                                                                           
 hi def link rustPubScopeCrate           rustKeyword                                                                         
 hi def link rustPubScopeDelim           Delimiter                                                                           
-hi def link rustPunct                   Comment                                                                             
+hi def link rustPunct                   Operator                                                                             
 hi def link rustQuestionMark            Special                                                                             
 hi def link rustRepeat                  Conditional                                                                         
 hi def link rustReservedKeyword         Error                                                                               

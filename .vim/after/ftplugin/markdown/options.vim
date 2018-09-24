@@ -1,4 +1,4 @@
-setl shiftwidth=4 tabstop=8 linebreak formatoptions=torcn spell
+setl shiftwidth=4 tabstop=8 linebreak formatoptions=torcn spell conceallevel=0
 
 " jump to headings 
 nn <buffer> [[ ?\v^#<CR>
@@ -22,48 +22,10 @@ if !exists('g:markdown_fenced_languages')
                 \ ]
 endif
 
-" avoid nesting
 if !executable('pandoc') | finish | endif
 
 exe 'setl makeprg='.expand('<sfile>:p:h').'/convert.py\ \"%:p\"'
-
-let s:no_md_exts = [
-            \ 'ascii_identifiers', 
-            \ 'citations', 
-            \ 'fancy_lists', 
-            \ 'four_space_rule', 
-            \ 'grid_tables', 
-            \ 'header_attributes', 
-            \ 'ignore_line_breaks', 
-            \ 'lists_without_preceding_blankline', 
-            \ 'mmd_link_attributes', 
-            \ 'mmd_title_block', 
-            \ 'spaced_reference_links', 
-            \ 'startnum', 
-            \ 'mmd_header_identifiers', 
-            \ 'pandoc_title_block']
-
-let s:md_exts = ['smart', 'intraword_underscores']
-
-exe 'setl formatprg='.escape(join([
-            \ 'pandoc', '--quiet', 
-            \ '-f', 'markdown', 
-            \ '--ascii',
-            \ '--atx-headers',
-            \ '-t', 'markdown-'.join(s:no_md_exts, '-').'+'.join(s:md_exts, '+')
-            \ ], ' '), ' |')
-
-" " guess browser
-let s:browser = get(filter([
-            \ 'google-chrome-unstable', 
-            \ 'google-chrome-beta', 
-            \ 'google-chrome-stable', 
-            \ 'chromium', 
-            \ 'firefox', 
-            \ 'firefox-developer-edition'
-            \ ], 'executable(v:val)'), 0, $BROWSER)
+exe 'setl formatprg='.escape('pandoc --ascii --atx-headers -f markdown+abbreviations+angle_brackets_escapable+ascii_identifiers+autolink_bare_uris+compact_definition_lists+empty_paragraphs+gfm_auto_identifiers+lists_without_preceding_blankline+markdown_attribute+mmd_header_identifiers+mmd_link_attributes+mmd_title_block+ntb+spaced_reference_links+styles+tex_math_single_backslash -t markdown-fenced_divs-inline_code_attributes-fenced_code_attributes-header_attributes-link_attributes-all_symbols_escapable', ' ')
 
 " preview generated HTML
-if !empty(s:browser)
-    exe 'nn <buffer> <M-p> :!'.s:browser.' "/tmp/vim/%:p:h:t:r/%:r.html" &<CR>'
-endif
+exe 'nn <buffer> <M-p> :!'.$BROWSER.' "/tmp/vim/%:p:h:t:r/%:r.html" &<CR>'

@@ -10,7 +10,7 @@ if executable('standard')
 endif
 
 " I added plenty of syntax keywords so 'syntaxcomplete#Complete' is better than 'javascriptcomplete#CompleteJS'
-if empty(&omnifunc) || &omnifunc == 'javascriptcomplete#CompleteJS'
+if empty(&omnifunc) || &omnifunc ==? 'javascriptcomplete#CompleteJS'
     setl omnifunc=syntaxcomplete#Complete
 endif
 

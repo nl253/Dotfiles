@@ -1,9 +1,9 @@
  " vim::foldmethod=indent:
+exe 'let $PLUGINS = '.string(expand('<sfile>'))
 
 " Init Vim-Plug
 call plug#begin('~/.vim/plugged')
 
-Plug 'konfekt/fastfold'
 Plug 'wlangstroth/vim-racket'
 Plug 'wellle/targets.vim'
 Plug 'scrooloose/nerdcommenter'
@@ -26,8 +26,6 @@ Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
             \ 'do': 'bash install.sh',
             \ }
-
-Plug 'fatih/vim-go', {'for': 'go'}
 
 if has('python3') || has('python')
     " Plug 'davidhalter/jedi-vim', {'for': 'python'}
