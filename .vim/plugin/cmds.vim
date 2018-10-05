@@ -1,3 +1,4 @@
+exe 'let $CMDS = '.string(expand('<sfile>'))
 com! TemplateSubstitute call templates#template_subst()
 
 com! Scripts       e ~/.vim/plugin/autocmds.vim

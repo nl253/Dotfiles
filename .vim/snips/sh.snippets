@@ -1,32 +1,32 @@
 snippet for "for (...) in  (...) ; do ... done [sh]"
-for ${1:file in *.txt}; do
-  ${2:mv "$file" "$file.bak"}
+for $1; do
+  $2
 done
 endsnippet
 
 snippet "printf?" "printf [sh]" rb
-printf "${1:%s}" ${2:"something"}
+printf "${1:%s}" $2
 endsnippet
 
 snippet read "read -e -p ... -i ... ... [sh]"
-# read input into ${1:var}
-read -e -p "Agree ? [y/n] => " ${1:var}
+# read input into RESPONSE
+read -n 1 -p "Agree ? [y/n] => "
 endsnippet
 
 snippet array "declare -a ... [sh]"
-declare -a my-array # array
+declare -a $1
 endsnippet
 
 snippet "readonly|const|final" "declare -r ... [sh]" rb
-declare -r my-readonly-var # constant
+declare -r $1
 endsnippet
 
 snippet int "declare -i ... [sh]"
 declare -i my-int # int variable
 endsnippet
 
-snippet dict "declare -A ... [sh]"
-declare -A my-dict # associative array
+snippet "aarray|dict" "declare -A ... [sh]" r
+declare -A $1
 endsnippet
 
 snippet "dec[lare]{,4}" "declare [sh]" rb
@@ -60,20 +60,20 @@ done
 endsnippet
 
 snippet fori "for i in ... ; do ... done [sh]"
-for i in ${1:{1..20}}; do
-  ${2:echo "$i"}
+for i in $1; do
+  $2
 done
 endsnippet
 
 snippet forc "for (( i = 1 ; i < ... ; i++ )) ; do ... done  [sh]"
 for ((i = 1; i <= 20; ++i)); do
-  ${1:echo $i}
+  $1
 done
 endsnippet
 
 snippet while "while [[ ... ]] ; do ... done [sh]"
 while [[ ${1:-e wait.txt} ]]; do
-  ${2:sleep 3 # "sleep" for three seconds}
+  $2
 done
 endsnippet
 
@@ -82,7 +82,7 @@ snippet "#!" "shebang #! [sh]" r
 endsnippet
 
 snippet echo "echo -e ... [sh]" 
-echo -e "${1:a message}"
+echo -e "$1"
 endsnippet
 
 snippet "py[thon]{,4}" "python << EOF ... EOF [sh]" rb
@@ -93,7 +93,7 @@ endsnippet
 
 snippet cat "cat << EOF ... EOF [sh]" 
 cat << EOF
-${1:CONTENT OF HEREDOC}
+$1
 EOF
 endsnippet
 
@@ -104,7 +104,7 @@ endsnippet
 
 snippet elif "elif [[ ... ]] ; then ... [sh]"
 elif [[ ${1:-t 0} ]]; then
-  ${2:local PASSWORD}
+  $2
 endsnippet
 
 snippet "\(\(" "((...)) [sh]" r
@@ -117,13 +117,13 @@ endsnippet
 
 snippet if "if [[ ... ]] ; then ... fi [sh]"
 if [[ ${1:-t 0} ]]; then
-  ${2:local PASSWORD}
+  $2
 fi
 endsnippet
 
 snippet until "until [[ ... ]] ; do ... done [sh]"
 until [[ ${1:-e proceed.txt} ]]; do
-  ${1:sleep 3 # "sleep" for three seconds}
+  $1
 done
 endsnippet
 

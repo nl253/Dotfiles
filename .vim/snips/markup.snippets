@@ -1,23 +1,27 @@
 priority -50
 
 snippet ol "ordered list (ol) [markup]"
-1. $1
+1.  $1
 endsnippet
 
 snippet al "alphabetic list (al) [markup]"
-a) $1
+a)  $1
+endsnippet
+
+snippet ul "unordered list (ul) [markup]"
+-   $1
 endsnippet
 
 snippet "hr|-{3,}" "----- (hr) [markup]" rb
 -----
 endsnippet
 
-snippet eg "for example ... (eg) [markup]" 
+snippet "\be.?g.?:?\s*" "for example ... (eg) [markup]" r
 for example: $1
 endsnippet
 
-snippet Eg "For example ... (Eg) [markup]" 
-For example: 
+snippet "\bE.?g.?:?\s*" "For example ... (Eg) [markup]" r
+For example:
 
-  - $1
+-   $1
 endsnippet

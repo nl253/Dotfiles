@@ -1,14 +1,14 @@
 fu! tags#project(force, ...) abort
 
-    if !utils#is_regular_buffer() | return 0 | endif
+    if !utils#is_regular_buffer() | return v:false | endif
 
     let l:ext = expand("%:e")
 
-    if empty(l:ext) | return 0 | endif
+    if empty(l:ext) | return v:false | endif
 
     let l:anchors = filter(a:000 + [], '!empty(v:val)') + []
 
-    exe "let l:root = utils#proj_root(".join(map(l:anchors, 'string(v:val)'), ', ').")"
+    exe "let l:root = utils#proj_root(".join(map(deepcopy(l:anchors), 'string(v:val)'), ', ').")"
 
     if !isdirectory(l:root)
         throw 'could not locate project root (found: '.l:root.')'
@@ -45,11 +45,11 @@ endf
 
 fu! tags#lib(age_min, force, lib_path, ...) abort
 
-    if !utils#is_regular_buffer() | return 0 | endif
+    if !utils#is_regular_buffer() | return v:false | endif
 
     let l:ext = expand("%:e")
 
-    if empty(l:ext) | return 0 | endif
+    if empty(l:ext) | return v:false | endif
  
     for l:dir in a:000 + [a:lib_path]
         call assert_true(isdirectory(expand(l:dir)), "non-existent library dir")
@@ -59,7 +59,7 @@ fu! tags#lib(age_min, force, lib_path, ...) abort
 
     if !a:force && !utils#is_stale(l:tag_file, 10)
         echom 'tags not stale (tip: force with a bang!)'
-        return 0
+        return v:false
     endif
 
     let l:parent_dir = fnamemodify(l:tag_file, ':h')

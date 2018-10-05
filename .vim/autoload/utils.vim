@@ -192,7 +192,7 @@ endf
 
 fu! utils#project_files_qf()
 
-    let l:root = utils#proj_root('.git')
+    let l:root = utils#proj_root()
     let l:ext = expand('%:e')
 
     " list all files with the same extension
@@ -208,7 +208,7 @@ endf
 
 fu! utils#git_files_qf()
 
-    let l:root = utils#proj_root('.git')
+    let l:root = utils#proj_root()
     let l:ext = expand('%:e')
 
     " list all files with the same extension

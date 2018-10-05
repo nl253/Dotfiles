@@ -41,7 +41,7 @@ aug VariousAutoCmds
 
     " au BufReadPost                   markdown                   if max(map(readfile(expand("%")), 'len(v:val)')) >= &textwidth | setl wrap | endif
     exe "au FileType ".join(g:markup_langs + ['gitcommit'], ',')." WordyWordy"
-    au BufReadPost,BufEnter          *.{txt,org,asciidoc,*wiki}  if (empty(&ft) || &ft == 'text') && !empty(expand('%:t')) && filereadable(expand('%')) && (line("$") < 600) && (max(map(readfile(expand("%")), 'len(v:val)')) < 150) | setf markdown | endif
+    au BufReadPost,BufEnter          *.{txt,org,asciidoc,*wiki} if (empty(&ft) || &ft == 'text') && !empty(expand('%:t')) && filereadable(expand('%')) && (line("$") < 600) && (max(map(readfile(expand("%")), 'len(v:val)')) < 150) | setf markdown | endif
 
     " save each session before quitting
     " au VimLeavePre * SaveSession

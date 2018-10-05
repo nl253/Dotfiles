@@ -36,8 +36,3 @@ en
 if has('nvim') || has('patch8') | Plug 'w0rp/ale', {'on': ['ALEEnable', 'ALEEnableBuffer', 'ALEToggle', 'ALEToggleBuffer']} | el | Plug 'vim-syntastic/syntastic' | en
 
 call plug#end()
-
-" these need to be called after plug#end()
-" ----------------------------------------
-colorscheme fabulous
-hi link        javaScriptRegexpString Define
