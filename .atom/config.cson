@@ -1,0 +1,20 @@
+"*":
+  core:
+    projectHome: "/home/norbert/Projects"
+    telemetryConsent: "limited"
+    themes: [
+      "one-dark-ui"
+      "base16-tomorrow-dark-theme"
+    ]
+    uriHandlerRegistration: "always"
+  editor:
+    fontFamily: "Hack, Menlo, Consolas, DejaVu Sans Mono, monospace"
+    fontSize: 18
+    invisibles: {}
+    scrollPastEnd: true
+    tabLength: 4
+  "exception-reporting":
+    userId: "c5fb44c3-cf30-4bef-b187-524f0ce5c4f6"
+  "vim-mode-plus":
+    showHoverSearchCounter: true
+    useSmartcaseForSearch: true

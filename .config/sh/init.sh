@@ -11,7 +11,6 @@ esac
 # normalise prompt in case somthing goes wrong
 export PS1="${USER}@"$(hostname)" ${0} >> "
 
-
 # reset
 export CDPATH="${HOME}:"
 
@@ -110,16 +109,17 @@ alias bat='command bat --theme TwoDark --style plain'
 
 # because kitty is not recognised as a terminal emulator
 [ -x /usr/bin/ssh ] && alias ssh='TERM=xterm command ssh'
+[ -x /usr/bin/kitty ] && [ -x ~/.local/bin/kitty ] && alias kitty=~/.local/bin/kitty
 
 # Python
 alias pip-update-all="command pip3 freeze --local | command grep -v '^\\-e' | command cut -d = -f 1  | command xargs -n1 pip install -U"
 alias pip-uninstall="for i in \$(command pip3 list --user --not-required | command sed -n -E -e 's/^(\\S+)\\s+.*/\\1/' -e '3,\$p' | command fzf); do command pip3 uninstall -y \$i; done"
 
-for i in ptipython ptpython ipython; do 
-  if [ -x "$HOME/.local/bin/${i}3" ]; then
-    eval "alias ${i}='command ${i}3 --interactive=/home/norbert/.jupyter/init.py'"
-  fi
-done
+# for i in ptipython ptpython; do
+  # if [ -x "$HOME/.local/bin/${i}3" ]; then
+    # eval "alias ${i}='command ${i}3 --interactive=/home/norbert/.jupyter/init.py'"
+  # fi
+# done
 
 [ -x ~/.local/bin/isympy ] && alias isympy='command isympy -I  -p unicode'
 
@@ -127,7 +127,7 @@ done
 
 # alias http-server-python="command python3 -m http.server"
 
-for i in pip pydoc 'http.server'; do 
+for i in pip pydoc 'http.server'; do
   eval "alias $i='command python3 -m $i'"
   eval "alias ${i}3='command python3 -m $i'"
 done
