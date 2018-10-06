@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+path=~/.local/share/plantuml.jar 
+
+panic() {
+  builtin echo "could not $path"
+  builtin exit 1
+}
+
+run() { builtin command java -jar $path $@; }
+
+[[ -f $path ]] && run $@ || panic
