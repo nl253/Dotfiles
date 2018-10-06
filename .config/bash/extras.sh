@@ -15,7 +15,7 @@ function install_packages() {
   packages \
     "$HOME/.local/lib/python3.$(builtin command python3 <<<'from sys import version as v; print(v[2:3])')/site-packages" \
     'pip3 --no-color --quiet --retries 2 install --progress-bar off --user --pre' \
-    n{etworkx,otebook} y{outube_dl,apf} matplotlib seaborn isort {sym,num,my}py py{stache,gments,lint} p{andas,tpython} jupyter{hub,lab,_console}
+    networkx  docrepr 'python-language-server[all]' y{outube_dl,apf} matplotlib seaborn i{sort,python} {sym,num,my}py rope py{stache,gments,lint,flakes} pandas pyls-{mypy,isort} 
 
   packages \
     ~/.config/yarn/global/node_modules \
