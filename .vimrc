@@ -1,7 +1,7 @@
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o
 if !has('unix') | finish | endif
 
-let $MYVIMRC = expand('~/.vimrc')
+exe 'let $MYVIMRC = '.string(expand('<sfile>'))
 
 setg runtimepath-=~/.vim
 exe 'setg runtimepath-='.expand('~/.vim')
@@ -12,8 +12,6 @@ exe 'setg runtimepath-='.expand('~/.vim/after')
 setg runtimepath+=~/.vim/after
 
 let &packpath = &runtimepath
-
-setg termguicolors
 
 " Variables: (these need to be global)
 let g:mapleader      = ' '
@@ -38,10 +36,26 @@ let g:prog_langs = [
             \ 'typescript',
             \ 'haskell',
             \ ]
-            " \ 'vim',
-
-let g:markdown_fenced_languages = g:prog_langs + ['java']
-let g:rst_syntax_code_list      = g:markdown_fenced_languages
 
 " Only source after the above vars have been set!
 so ~/.vim/plugin/plugins.vim
+
+if has('termguicolors') && $TERM !=? 'linux'
+    setg termguicolors
+    "               Jn  Fb  Mr  Ap  Jn  Jl  Ag  St  Ot  Nv   Dc
+    let s:months = [16, 16, 17, 18, 18, 19, 18, 17, 17, 16, 16]
+    let s:this_month = strftime('%m')
+    " remove leading spaces and leading zeros eg '  09' -> 9
+    while (s:this_month[0] == ' ') || (s:this_month[0] == '0')
+        let s:this_month = s:this_month[1:]
+    endwhile
+    " index from 0
+    let s:this_month -= 1
+    if (strftime('%H') <= (24 - s:months[s:this_month])) || (strftime('%H') >= s:months[s:this_month])
+        colorscheme fabulous_dark
+    else
+        colorscheme fabulous
+    endif
+else
+    colorscheme delek
+endif
