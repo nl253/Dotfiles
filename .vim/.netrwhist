@@ -1,7 +1,11 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/norbert/Documents/Programming/C/project/cmake-build-debug'
-let g:netrw_dirhist_2='/home/norbert/.vim/autoload'
-let g:netrw_dirhist_3='/home/norbert/Documents/Notes/Uni/Theory-and-Practice-of-Concurrency'
-let g:netrw_dirhist_4='/home/norbert/.vim/js'
-let g:netrw_dirhist_5='/home/norbert/.vim/after/ftplugin/typescript'
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/home/norbert/.config/alacritty'
+let g:netrw_dirhist_2='/home/norbert/.vim/after/ftplugin/python'
+let g:netrw_dirhist_3='/home/norbert/.config/Android Open Source Project'
+let g:netrw_dirhist_4='/home/norbert/.config/matplotlib'
+let g:netrw_dirhist_5='/home/norbert/Documents/Programming/Web-Dev/JS/D3/static'
+let g:netrw_dirhist_6='/home/norbert/.vim/after/ftplugin/markdown/__pycache__'
+let g:netrw_dirhist_7='/home/norbert'
+let g:netrw_dirhist_8='/home/norbert/Documents/Programming/Python/FlaskyBlog/FlaskyBlog'
+let g:netrw_dirhist_9='/home/norbert/Documents/Programming/Python/FlaskyBlog/.git'

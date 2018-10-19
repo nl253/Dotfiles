@@ -29,7 +29,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 
 if has('python3') || has('python')
     " Plug 'davidhalter/jedi-vim', {'for': 'python'}
-    Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'php', 'ejs']}
+    Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'php']}
     Plug 'SirVer/ultisnips'
 en
 

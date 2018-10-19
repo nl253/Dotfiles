@@ -1,10 +1,10 @@
 # Standard Library
-import os, shutil
+import os
+import shutil
 from os import makedirs, mknod
-from os.path import exists, isfile, isdir, dirname, abspath, realpath
-
+from os.path import abspath, dirname, exists, isdir, isfile, realpath
 # import types for static typing (mypy, pycharm etc)
-from typing import Text, Iterable, Optional
+from typing import Iterable, Optional, Text
 
 
 def up_by_n_dirs(path: Text, n: int) -> Text:

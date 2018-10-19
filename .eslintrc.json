@@ -115,11 +115,6 @@
     "filenames/match-regex": 2,
     "filenames/no-index": 2,
     "for-direction": 2,
-    "func-name-matching": 1,
-    "func-names": [
-      1,
-      "as-needed"
-    ],
     "generator-star-spacing": [
       1,
       {

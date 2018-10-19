@@ -4,7 +4,7 @@
 
 [[ -x $(builtin type -P pandoc 2>/dev/null) ]] && builtin eval "$(command pandoc --bash-completion)"
 [[ -x $(builtin type -P stack 2>/dev/null) ]] && builtin eval "$(command stack --bash-completion-script stack)"
-[[ -x $(builtin type -P pip3 2>/dev/null) ]] && builtin eval "$(command pip3 completion --bash)"
+[[ -x $(builtin type -P pip3 2>/dev/null) ]] && builtin eval "$(command python3 -m pip completion --bash)"
 
 _cargo() {
   local cur prev words cword

@@ -29,6 +29,7 @@ image/x-portable-graymap=feh.desktop;
 image/x-portable-pixmap=feh.desktop;
 image/x-tga=feh.desktop;
 image/x-xbitmap=feh.desktop;
+text/x-matlab=org.octave.Octave.desktop;
 
 [Default Applications]
 application/pdf=evince.desktop;

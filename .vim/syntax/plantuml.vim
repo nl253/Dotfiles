@@ -15,13 +15,23 @@ endif
 
 sy sync minlines=150
 
+" class Content {
+"   id         <b>INT PRIMARY KEY AUTOINCREMENT</b>
+"   -- FK --
+"   creator    <b>REFERENCES User(email)</b>
+"   -- other --
+"   summary    <b>TEXT</b>
+" }
+sy match pumlSeparator "\v^\s*--\s*[^-]+\s*--\s*$" contained containedin=pumlInsideClass
+sy match pumlSeparator "\v^\s*\.\.\s*[^-]+\s*\.\.\s*$" contained containedin=pumlInsideClass
+
 " @startuml
 " @enduml
 sy region puml start='\v^\s*\@startuml\s*$' end='\v^\s*\@enduml\s*$' contains=pumlComment,pumlKeyword,pumlPreProcKeyword,pumlArrow,pumlStereotype,pumlInsideClass,pumlStereotypeSpec,pumlStartEnd,pumlNote transparent
 sy match pumlStartEnd '\v^\s*\@(start|end)uml\s*$' contained
 
 sy match pumlKeyword "\v<(((abstract\s+)?class)|interface|extends|implements)>" contained
-sy region pumlNote start='\v^\s*note\s+(left|right|top|bottom)\s+of\s+\w+\s*$' end='\v^\s*end\s+note\s*$' contained contains=@spell
+sy region pumlNote start='\v^\s*(note|legend)\s+(left|right|top|bottom)\s+of\s+\w+\s*$' end='\v^\s*end\s+note\s*$' contained contains=@spell
 
 " --->
 " -->
@@ -63,11 +73,11 @@ sy match pumlOperation  "\v([A-Za-z][a-z0-9]+)+\(@=" contained
 sy match  pumlVisibility "\v^\s*[-\+#]( |<)" contained
 sy region pumlInsideClass start='{' end='}' contained contains=pumlVisibility,pumlOperation,pumlAttrs
 " ' comment till end of line
-sy region pumlComment    start="'"    end="$"    skip="\\'"  oneline contained contains=@spell
-sy region pumlComment    start="/'"   end="'/"                       contained contains=@spell
+sy region pumlComment    start="'"    end="$"    skip="\\'"  oneline contained containedin=pumlInsideClass contains=@Spell
+sy region pumlComment    start="/'"   end="'/"                       contained contains=@Spell
 sy region pumlStereotype start="\V<<" end="\V>>"             oneline contained
 
-sy match pumlPreProcKeyword "\v<(AttributeIconSize|Font(Name|Color|Size)|skinparam|(Border|Arrow|Background)Color)>" contained
+sy match pumlPreProcKeyword "\v<(AttributeIconSize|Font(Name|Color|Size)|skinparam|title|scale|(head|foot)er|(Border|Arrow|Background)Color)>" contained
 
 hi def link pumlArrow          Operator
 hi def link pumlAssignment     Normal
@@ -77,13 +87,14 @@ hi def link pumlComment        Comment
 hi def link pumlEq             Operator
 hi def link pumlKeyword        Keyword
 hi def link pumlMultiplicity   Number
+hi def link pumlNote           SpecialComment
 hi def link pumlNum            Number
 hi def link pumlPreProcKeyword PreProc
 hi def link pumlProps          Special
+hi def link pumlSeparator      Special
 hi def link pumlStartEnd       PreProc
 hi def link pumlStereotype     Statement
 hi def link pumlStr            String
 hi def link pumlType           Type
-hi def link pumlNote           SpecialComment
 hi def link pumlVisibility     Operator
 hi def link pumloperation      Function

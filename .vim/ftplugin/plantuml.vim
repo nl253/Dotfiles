@@ -1,4 +1,4 @@
-setl sw=2 tw=4 foldmethod=indent noautoindent fo=
+setl sw=2 ts=4 foldmethod=indent noautoindent fo=
 
 let s:output_dir = '/tmp/'.(has('nvim') ? 'neovim' : 'vim').'/%:p:h:t:r'
 let s:output_file = s:output_dir.'/%:t:r.png'

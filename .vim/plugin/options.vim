@@ -8,13 +8,14 @@ if !exists('$BROWSER')
     call utils#set_browser(
                 \ 'google-chrome', 
                 \ 'chromium', 
-                \ 'vivaldi', 
                 \ 'firefox', 
+                \ 'firefox-developer', 
+                \ 'vivaldi', 
                 \ 'brave', 
-                \ 'safari', 
                 \ 'palemoon',
                 \ 'seamonkey',
                 \ 'konqueror',
+                \ 'safari', 
                 \ )
 endif
 

@@ -3,14 +3,14 @@ fu! mail#send()
 	let l:flags = filter(map(['ssl-reqd', 'insecure'], '"--".v:val'), 'mail#check_flag(v:val)')
 	let l:from  = mail#get_details('from', 'norbertlogiewa96@gmail.com')
 	let l:to    = mail#get_details('to', 'norbertlogiewa96@gmail.com')
-	let l:mail  = mail#get_details('mail_file', expand('%:p'))
+	let l:mail  = mail#get_details('mail_file', expand('%:p')) 
 	let l:user  = mail#get_details('user', 'norbertlogiewa96@gmail.com')
 	let l:pass  = inputsecret('password => ')
 	let l:cmd   = mail#get_details('curl command', join(
-                \ ['curl', '--url', l:url] + l:flags +
-                \ ['--mail-from',   l:from,
-                \  '--mail-rcpt',   l:to,
-                \  '--upload-file', l:mail,
+                \ ['curl', '--url', l:url] + l:flags + 
+                \ ['--mail-from',   l:from, 
+                \  '--mail-rcpt',   l:to, 
+                \  '--upload-file', l:mail, 
                 \  '--user',        l:user.':'.l:pass] , ' '))
 	echo system(l:cmd)
 endf

@@ -10,14 +10,14 @@ call opts#safe_setl([
 if executable('isort')
     call opts#formatprg({ 
                 \ 'black':    'isort - \| black - 2>/dev/null',
-                \ 'yapf':     'isort - \| yapf',
-                \ 'autopep8': 'isort - \| autopep8 -',
+                \ 'yapf':     'isort - \| yapf 2>/dev/null',
+                \ 'autopep8': 'isort - \| autopep8 - 2>/dev/null',
                 \ })
 else
     call opts#formatprg({ 
                 \ 'black':    'black - 2>/dev/null',
-                \ 'yapf':     'yapf',
-                \ 'autopep8': 'autopep8 -',
+                \ 'yapf':     'yapf 2>/dev/null',
+                \ 'autopep8': 'autopep8 - 2>/dev/null',
                 \ })
 endif
 

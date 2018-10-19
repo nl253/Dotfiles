@@ -1,4 +1,3 @@
-
 ## tmp files
 
 **/*.swap
@@ -9,16 +8,16 @@
 **/*.bk
 **/*.tmp
 **/*~
-.**/*-cache
-**/.mypy_cache/
+**/~*
+**/*-cache
+**/*_cache
 **/.cache*
-**/.cache**
 
 ## VCS
 
-**/.git/
-**/.idea/
-**/.svn/
+**/.git
+**/.idea
+**/.svn
 
 ## archives
 
@@ -32,11 +31,12 @@
 
 ## documents
 
-**/*.pdf
-**/*.docx
-**/*.pptx
 **/*.doc
+**/*.docx
+**/*.pdf
+**/*.PDF
 **/*.ppt
+**/*.pptx
 
 ## package managers
 
@@ -58,28 +58,35 @@
 ## Java
 
 **/*.class
-**/target/
-**/out/
-**/docs/
-**/build/
-**/dist/
+**/target
+**/out
+**/docs
+**/build
+**/dist
+
+## Erlang
+
+**/*.beam
 
 ## C and C++
 
 **/*.o
-**/doc/
-
+**/doc
 
 ## Python
 
-**/.eggs/
+**/.eggs
 **/*.egg
-**/develop-eggs/
+**/develop-eggs
 **/*.pyc
 
-# LaTeX
+## LaTeX
 
 **/*.aux
 **/*.out
 **/*.tox
 **/*.fls
+
+## Haskell
+
+**/.stack-work

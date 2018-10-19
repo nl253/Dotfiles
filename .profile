@@ -77,16 +77,17 @@ fi
 # MySQL
 if [ -x /usr/bin/mysql ]; then
   export MYSQL_PS1=' MySQL ~> '
-  if [ $(hostname) = raptor ]; then
+  if [ $HOSTNAME = raptor ]; then
     export MYSQL_HOST='dragon.kent.ac.uk'
   fi
 fi
 
 # $BROWSER
-for i in google-chrome-stable google-chrom-beta google-chrome-unstable firefox-developer; do
-  if [ -x /usr/bin/$i ]; then
-    export BROWSER=/usr/bin/$i && break
-  fi
+for browser in google-chrome chromium  firefox-developer firefox vivaldi brave palemoon; do
+  for channel in snapshot nightly unstable beta stable; do
+    [ -x /usr/bin/${browser}-${channel} ] && export BROWSER=/usr/bin/${browser}-${channel} && break 2
+  done
+  [ -x /usr/bin/$browser ] && export BROWSER=/usr/bin/$browser && break
 done
 
 # Erlang
@@ -119,18 +120,18 @@ export PYTHONPYCACHEPREFIX=/tmp/python/bytecode
 #  alt-d   cd
 #  alt-p   preview toggle
 #  alt-l   open in  less`
-export FZF_DEFAULT_COMMAND='git ls-tree -r --name-only HEAD || rg --files || find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | sed s/^..//\ 2> /dev/null'
+export FZF_DEFAULT_COMMAND='command git ls-tree -r --name-only HEAD || command rg --files || command find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | command sed s/^..//\ 2> /dev/null'
 export FZF_DEFAULT_OPTS=" --filepath-word --history-size=10000 --history=$HOME/.config/fzf/.history --preview-window=right:hidden --tiebreak=end --no-mouse --multi --ansi --margin 3% --filepath-word --prompt=' >> ' --reverse --tiebreak=end,length"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-y:yank,alt-c:execute(cd {})' --bind='alt-b:backward-word,alt-f:forward-word' --bind='alt-v:half-page-up,ctrl-v:half-page-down,ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview,ctrl-n:down,ctrl-p:up'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute(\$EDITOR {})' --bind='alt-l:execute:(\$PAGER {})'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:160,fg+:11,border:0,spinner:0,header:0,bg+:0,info:0"
 
 if [ -e ~/.config/ranger/scope.sh ]; then
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="bash ~/.config/ranger/scope.sh {} $(tput cols) $(tput lines) /tmp/ False"'
+  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="command bash ~/.config/ranger/scope.sh {} $(command tput cols) $(command tput lines) /tmp/ False"'
 elif [ -x $(command which pygmentize 2>/dev/null) ]; then
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="([ -f {} ] && head -n $(tput lines) {} | pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {})"'
+  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="([ -f {} ] && command head -n $(tput lines) {} | command pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && command tree -l -a --prune -L 4 -F --sort=mtime {})"'
 else
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="[ -f {} ] && head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
+  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="[ -f {} ] && command head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
 fi
 
 if [ $0 = zsh ] || [ $0 = $(which zsh 2>/dev/null) ]; then

@@ -1,6 +1,5 @@
-from enum import Enum, auto, unique
-
 # Standard Library
+from enum import Enum, auto, unique
 # import types for static typing (mypy, pycharm etc)
 from typing import Set, Text
 
