@@ -60,6 +60,8 @@ else
 fi
 unset -v ls_opts
 
+[ -x ~/.cargo/bin/bat ] && alias cat='bat' 
+
 if [ -x /usr/bin/rlwrap ]; then
   for i in 'dash -i' 'racket -i' guile{2.0,}; do
     eval "alias $(echo $i | command sed -E 's/^(\S+).*/\1/')='command rlwrap $i'"
