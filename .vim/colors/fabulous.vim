@@ -78,13 +78,14 @@ endfu
 let s:fg = 0
 let s:bg = 15
 
+hi clear Conceal
 hi clear Cursor
 hi clear Error
-hi clear NonText
 hi clear FoldColumn 
 hi clear Function
 hi clear Identifier
 hi clear LineNr Comment
+hi clear NonText
 hi clear SpecialComment 
 hi clear TermCursor
 hi clear Todo
@@ -96,6 +97,8 @@ call s:hi('Builtin'     ,  134,   '')
 call s:hi('Character'   ,  190,   '')
 call s:hi('ColorColumn' ,   '', s:bg)
 call s:hi('Comment'     ,   32,  255)
+" call s:hi('Conceal'     , s:fg,   s:bg)
+hi link Conceal Normal
 call s:hi('Conditional' ,  172,   '', 'bold')
 call s:hi('Constant'    ,   44,   '', 'italic')
 call s:hi('Cursor'      , s:fg,  130)

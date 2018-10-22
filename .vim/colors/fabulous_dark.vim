@@ -78,6 +78,7 @@ let s:fg   = 249
 let s:bg   = 234
 let s:bg1  = 240
 
+hi clear Conceal
 hi clear Cursor
 hi clear Error
 hi clear FoldColumn 
@@ -95,6 +96,8 @@ call s:hi('Builtin'     ,  134,    '')
 call s:hi('Character'   ,   11,    '')
 call s:hi('ColorColumn' ,   '',  s:bg)
 call s:hi('Comment'     ,   32,    '')
+" call s:hi('Conceal'     , s:fg,   s:bg)
+hi link Conceal Normal
 call s:hi('Conditional' ,   95,    '', 'bold')
 call s:hi('Constant'    ,  165,    '')
 call s:hi('Cursor'      , s:bg,   130)

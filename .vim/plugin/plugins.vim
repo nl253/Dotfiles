@@ -21,6 +21,7 @@ Plug 'othree/csscomplete.vim', {'for': ['css', 'html']}
 Plug 'lervag/vimtex', {'for': 'tex'}
 
 Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
+Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoUpdateBinaries'}
 
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
