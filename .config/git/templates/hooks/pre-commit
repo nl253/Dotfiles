@@ -9,7 +9,7 @@
 
 # Allows us to read user input below, assigns STDIN to keyboard
 # Close STDIN again with 'exec <&-'
-exec </dev/tty
+builtin exec </dev/tty
 
 _fmt_error() {
   command cat <<EOF
@@ -45,24 +45,24 @@ for i in cat head git basename dirname; do
   fi
 done
 
-added_files() { command git --no-pager ls-files -m; }
+staged() { command git --no-pager  diff --name-only --cached; }
 
-file_count() { command git --no-pager ls-files -m | grep --count .; }
+file_count() { command git --no-pager  diff --name-only --cached | command grep --count .; }
 
-ftypes() { for i in $(command git --no-pager ls-files -m); do [[ $i =~ \.[a-zA-Z0-9]{1,7}$ ]] && builtin echo $i | command sed -E 's/.*\.([a-zA-Z0-9]{1,5})$/\1/'; done | command sort | command uniq -u; }
+ftypes() { for i in $(command git --no-pager  diff --name-only --cached); do [[ $i =~ \.[a-zA-Z0-9]{1,7}$ ]] && builtin echo $i | command sed -E 's/.*\.([a-zA-Z0-9]{1,5})$/\1/'; done | command sort | command uniq -u; }
 
-ftype_count() { for i in $(command git --no-pager ls-files -m); do [[ $i =~ \.[a-zA-Z0-9]{1,7}$ ]] && builtin echo $i | command sed -E 's/.*\.([a-zA-Z0-9]{1,5})$/\1/'; done | command sort | command uniq -u | command grep --count .; }
+ftype_count() { for i in $(command git --no-pager  diff --name-only --cached); do [[ $i =~ \.[a-zA-Z0-9]{1,7}$ ]] && builtin echo $i | command sed -E 's/.*\.([a-zA-Z0-9]{1,5})$/\1/'; done | command sort | command uniq -u | command grep --count .; }
 
 dir_count() {
-  local fst_file=$(added_files | command head -n 1)
+  local fst_file=$(staged | command head -n 1)
   local fst_file_dir=$(command basename $(command dirname $fst_file))
   local odd_dir_count=0
-  for file in added_files; do
+  for file in staged; do
     if [[ $(command basename $(command dirname $file)) != $fst_file_dir ]]; then
       ((odd_dir_count++))
     fi
   done
-  return $odd_dir_count
+  builtin return $odd_dir_count
 }
 
 no_dirs=$(dir_count)
@@ -76,7 +76,7 @@ max_ftypes=2
 if ((no_files > max_files)); then
   _fmt_heading "You are about to commit changes to more than $max_files separate files, namely:"
   builtin echo ''
-  added_files
+  staged
   if ! _get_consent; then
     builtin exit 1
   fi
