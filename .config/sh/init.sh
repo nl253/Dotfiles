@@ -14,8 +14,13 @@ export PS1="${USER}@"$(hostname)" ${0} >> "
 # reset
 export CDPATH="${HOME}:"
 
-for directory in ~/Documents ~/Documents/Programming ~/Documents/PDF; do
-  [ -d $directory ] && export CDPATH="${directory}:${CDPATH}:" 2>/dev/null
+for dir in ~/Documents ~/Documents/Programming ~/Documents/PDF; do
+  [ -d $dir ] && export CDPATH="${dir}:${CDPATH}:" 2>/dev/null
+done
+
+# when working in   
+for dir in ../../../../../node_modules/.bin  ../../../../node_modules/.bin ../../../node_modules/.bin ../../node_modules/.bin ../node_modules/.bin ./node_modules/.bin; do
+  export PATH="${dir}:${PATH}"
 done
 
 # make less more friendly for non-text input files, see lesspipe(1)
