@@ -1,6 +1,8 @@
 exe 'let $CMDS = '.string(expand('<sfile>'))
 com! TemplateSubstitute call templates#template_subst()
 
+com! -nargs=? -complete=file_in_path VS exe 'vs '.<f-args>
+
 com! Scripts       e ~/.vim/plugin/autocmds.vim
 
 com! ToDo          call utils#toggle_todo()

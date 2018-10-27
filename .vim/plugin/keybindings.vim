@@ -1,8 +1,11 @@
 nn :e<Space>~ :find<Space>~
 nn :e<Space>  :find<Space>./
 
-nn :vs<Space>~ :vert sfind<Space>~
-nn :vs<Space>  :vert sfind<Space>./
+" nn :vs<Space>~ :vert sfind<Space>~
+" nn :vs<Space>  :vert sfind<Space>./
+
+nn :vs<Space>~ :VS<Space>~
+nn :vs<Space>  :VS<Space>./
 
 " send data to :terminal
 " nn <Leader>w :call jobsend(g:last_terminal_job_id, expand("<cword>"))<CR>
