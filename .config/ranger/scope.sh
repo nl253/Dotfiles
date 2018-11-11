@@ -44,9 +44,9 @@ if [[ $hour =~ ^0 ]]; then
   hour=${hour:1}
 fi
 
-if [[ $hour -lt 6 ]] || [[ $hour -ge 17 ]]; then
+if [[ $hour -lt 7 ]] || [[ $hour -ge 15 ]]; then
   COLORS=molokai
-elif [[ $hour -lt 6 ]] || [[ $hour -lt 17 ]]; then
+else
   COLORS=github
 fi
 
@@ -56,8 +56,8 @@ head() { builtin command head -n $PV_HEIGHT $FILE_PATH; }
 
 elinks() { builtin command elinks -no-references -no-numbering -dump -dump-width ${PV_WIDTH} </dev/stdin; }
 
-preview_stdout() {
- if builtin command highlight --kw-case=upper --line-range=1-${PV_HEIGHT} --style=${COLORS} --stdout --out-format=xterm256 --reformat=java  --line-length=${PV_WIDTH} --replace-tabs=4 --line-numbers --syntax=${1} < /dev/stdin 2>/dev/null; then
+preview_stdin() {
+ if builtin command highlight --kw-case=upper --line-range=1-${PV_HEIGHT} --style=${COLORS} --stdout --out-format=xterm256 --reformat=java --line-length=${PV_WIDTH} --replace-tabs=4 --line-numbers --syntax=${1} < /dev/stdin 2>/dev/null; then
     builtin return 0
   elif builtin command cat </dev/stdin; then
     builtin return 0
@@ -67,7 +67,7 @@ preview_stdout() {
 }
 
 preview() {
-  if head | preview_stdout $1; then
+  if head | preview_stdin $1; then
     builtin return 0
   elif head; then
     builtin return 0
@@ -132,10 +132,20 @@ handle_extension() {
       fi
       ;;
 
+    [jt]s | [js]x)
+      if preview_stdin js <"$FILE_PATH" 2>/dev/null; then
+        builtin exit 0
+      elif preview js 2>/dev/null; then
+        builtin exit 0
+      else
+        builtin exit 2
+      fi
+      ;;
+
     json)
       if builtin command jq -C <"$FILE_PATH" 2>/dev/null; then
         builtin exit 0
-      elif builtin command js-beautify <"$FILE_PATH" | preview_stdout json 2>/dev/null; then
+      elif builtin command js-beautify <"$FILE_PATH" | preview_stdin json 2>/dev/null; then
         builtin exit 0
       elif preview json 2>/dev/null; then
         builtin exit 0
@@ -145,7 +155,7 @@ handle_extension() {
       ;;
 
     sh | bash* | zsh*)
-      if shfmt -s -i 2 -ci <"$FILE_PATH" | preview_stdout sh 2>/dev/null; then
+      if shfmt -s -i 2 -ci <"$FILE_PATH" | preview_stdin sh 2>/dev/null; then
         builtin exit 0
       elif preview sh 2>/dev/null; then
         builtin exit 0
@@ -165,9 +175,9 @@ handle_extension() {
       ;;
 
     xml)
-      if head | builtin command html-beautify | preview_stdout xml 2>/dev/null; then
+      if head | builtin command html-beautify | preview_stdin xml 2>/dev/null; then
         builtin exit 0
-      elif head | preview_stdout xml 2>/dev/null; then
+      elif head | preview_stdin xml 2>/dev/null; then
         builtin exit 0
       elif preview xml 2>/dev/null; then
         builtin exit 0
@@ -177,9 +187,9 @@ handle_extension() {
       ;;
 
     css)
-      if head | builtin command css-beautify | preview_stdout css 2>/dev/null; then
+      if head | builtin command css-beautify | preview_stdin css 2>/dev/null; then
         builtin exit 0
-      elif head | preview_stdout css 2>/dev/null; then
+      elif head | preview_stdin css 2>/dev/null; then
         builtin exit 0
       elif preview css 2>/dev/null; then
         builtin exit 0
@@ -237,7 +247,7 @@ handle_extension() {
     ipynb)
       if builtin command jupyter nbconvert --stdout --to html "$FILE_PATH" | elinks 2>/dev/null; then
         builtin exit 0
-      elif head | builtin command js-beautify | preview_stdout json 2>/dev/null; then
+      elif head | builtin command js-beautify | preview_stdin json 2>/dev/null; then
         builtin exit 0
       elif head | builtin command js-beautify 2>/dev/null; then
         builtin exit 0
@@ -298,19 +308,20 @@ handle_extension() {
       fi
       ;;
 
-    *)
-      if [[ $EXTENSION == '' ]]; then
-        builtin return 1
-      elif [[ $(builtin command highlight --list-scripts=langs | builtin command sed -E -ne 's/(\S+)\s+:\s+(.*)$/\L\2 \L\1/g' -e 's/\(/ /g' -e 's/\)/ /g' -e 's/\s+/ /g' -e '4,223p') =~ $EXTENSION ]]; then
-        if preview "$EXTENSION" 2>/dev/null; then
-          builtin exit 0
-        else
-          builtin exit 1
-        fi
-      else
-        builtin return 1
-      fi
-      ;;
+    # *)
+      # if [[ $EXTENSION == '' ]]; then
+        # builtin return 1
+      # XXX the code below is very slow
+      # elif [[ $(builtin command highlight --list-scripts=langs | builtin command sed -E -ne 's/(\S+)\s+:\s+(.*)$/\L\2 \L\1/g' -e 's/\(/ /g' -e 's/\)/ /g' -e 's/\s+/ /g' -e '4,223p') =~ $EXTENSION ]]; then
+        # if preview "$EXTENSION" 2>/dev/null; then
+          # builtin exit 0
+        # else
+          # builtin exit 1
+        # fi
+      # else
+        # builtin return 1
+      # fi
+      # ;;
 
   esac
 }

@@ -85,12 +85,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+import os, re, shlex
+from subprocess import run
+from threading import Thread
 from collections import deque
-import os
-import re
+from concurrent.futures import ThreadPoolExecutor
 
 from ranger.api.commands import Command
 
+pool = ThreadPoolExecutor(max_workers=4)
 
 class alias(Command):
 
@@ -214,15 +217,12 @@ class shell(Command):
     escape_macros_for_shell = True
 
     def execute(self):
-        if self.arg(1) and self.arg(1)[0] == "-":
-            flags = self.arg(1)[1:]
-            command = self.rest(2)
+        if self.line:
+            cmds = shlex.split(self.line.strip().replace('shell ', ''))
+            pool.submit(lambda: run(cmds))
+            self.fm.notify('started "' + ' '.join(cmds) + '"')
         else:
-            flags = ""
-            command = self.rest(1)
-
-        if command:
-            self.fm.execute_command(command, flags=flags)
+            self.fm.notify('empty cmd line', bad=True)
 
     def tab(self, tabnum):
         from ranger.ext.get_executables import get_executables
