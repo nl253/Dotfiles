@@ -17,7 +17,7 @@ aug VariousAutoCmds
         au TermOpen                  *                          call inits#term() 
     endif
     au FileType                      xml,html                   call inits#emmet()
-    au FileType                      c{pp,},python,{java,type}script,sh,rust call inits#lang_server()
+    au FileType                      c{pp,},python,sh,rust call inits#lang_server()
     " automatically change dir to the file you are editing
     au BufEnter                      ??*                        try | sil! lch %:p:h | cat /\vE(472|344|13)/ | endtry
 

@@ -44,10 +44,6 @@ sy match jsType   "\v<(([A-Z][a-z]+)+|[A-Z]+[a-z][A-Za-z]+)>"
 " mainly for syntax#complete
 sy keyword jsType Array Boolean Date Function Number Object String RegExp Infinity Reflect Proxy Math Symbol Error EvalError InternalError RangeError ReferenceError SyntaxError TypeError URIError Generator GeneratorFunction AsyncFunction Promise JSON DataView ArrayBuffer Map Set WeakMap WeakSet Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array
 
-" sy region jsObj start='{' end='}' oneline keepend contains=jsObjKey
-" sy match jsObjKey "\v<[[:alpha:]]+>:" 
-" hi def link jsObjKey String
-
 " Str:
 sy match  jsStrEscape "\v\\." contained containedin=jsStrD,jsStrS,jsTemplStr
 sy region jsStrD start=+"+  skip=+\\\\\|\\"+  end=+"\|$+ oneline  keepend contains=@Spell
@@ -59,8 +55,8 @@ sy region jsStrS start=+'+  skip=+\\\\\|\\'+  end=+'\|$+ oneline  keepend contai
 " hi def link jsStrSQuote Delimiter
 
 " `template string with ${vars}`
-sy region jsTemplStr             start='`'   end='`' keepend contains=jsTemplStrSubst,jsTemplStrHtmlTag,@Spell
-sy region jsTemplStrSubst        start='\${' end='}' keepend oneline contained containedin=jsTemplStr
+sy region jsTemplStr      start='`'   end='`' keepend contains=jsTemplStrSubst,jsTemplStrHtmlTag,@Spell
+sy region jsTemplStrSubst start='\${' end='}' keepend matchgroup=Delimiter contained containedin=jsTemplStr contains=jsStrD,jsStrS,jsOp,jsArrowFunc,jsRegexStr,jsGlobal,jsEvent,jsBool,jsNull,jsNum,jsDollar
 
 " often we put HTML tags in js templates
 sy region jsTemplStrHtmlTag      start="\v\<([a-z]+)( [a-z]+(\=\".{,20}\")?)*\>" end="\v</\1\>" contained contains=jsTemplStrHtmlTagInner,jsTemplStrHtmlTag,jsTemplStrHtmlTagAttr keepend
@@ -87,6 +83,9 @@ sy keyword jsFunct     async
 sy match   jsFunct     "\v<(async )?function\v ?\*?"
 sy keyword jsSpecial   apply call eval bind prototype constructor 
 sy match   jsConst    "\v<[A-Z][A-Z_]{2}[A-Z0-9_]+>"
+
+" call function e.g.: myFunct()
+sy match jsFunctCall '\v[a-z]+\w+\(@='
 
 " chained calls
 sy match jsSpecial '\v^\s*\.[a-z][a-zA-Z]+'ms=s+1
@@ -150,6 +149,10 @@ sy match jsOp "\v ([*/])\=? "
 " modulo % and %=
 sy match jsOp "\v \%\=? "
 
+" cond ? ifT : ifF
+sy match jsOp "\v( |^)\?( |$)"
+sy match jsOp "\v^:"
+
 " x => x.something
 sy match jsArrowFunc "\v(\\(\\))? (\=\>)($| )"
 
@@ -172,6 +175,7 @@ hi def link jsDepr                     ErrorMsg
 hi def link jsDollar                   jsGlobal
 hi def link jsEvent                    Procedure
 hi def link jsFunct                    jsStmt
+hi def link jsFunctCall                Function
 hi def link jsGlobal                   Builtin
 hi def link jsImport                   Include
 hi def link jsKeyword                  Keyword
@@ -196,7 +200,7 @@ hi def link jsTemplStrHtmlTagAttr      Constant
 hi def link jsTemplStrHtmlTagAttrName  Constant
 hi def link jsTemplStrHtmlTagAttrValue String
 hi def link jsTemplStrHtmlTagInner     Normal
-hi def link jsTemplStrSubst            SpecialChar
+hi def link jsTemplStrSubst            Normal
 hi def link jsType                     Type
 hi def link jsVarDecl                  jsDecl
 hi def link jsSpecial                  jsSpecifier

@@ -189,10 +189,16 @@ let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_serverCommands = {
             \ 'rust':           ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
             \ 'sh':             ['~/.config/yarn/global/node_modules/.bin/bash-language-server', 'start'],
-            \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-            \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
-            \ 'typescript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
             \ 'python':         ['~/.local/bin/pyls'],
             \ 'cpp':            ['/usr/bin/clangd'],
             \ 'c':              ['/usr/bin/clangd'],
+            \ }
+            " \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+            " \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
+            " \ 'typescript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
+
+let g:LanguageClient_rootMarkers = {
+            \ 'javascript': ['package.json', '.git'],
+            \ 'python':     ['requirements.txt', 'setup.py', '.git'],
+            \ 'rust':       ['Cargo.toml'],
             \ }

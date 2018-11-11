@@ -1,3 +1,11 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_cnt =9
 let g:netrw_dirhist_1='/home/norbert/Documents/Programming/Python/SQLiteREPL/screens'
+let g:netrw_dirhist_2='/home/norbert/Documents/Programming/Uni/CO600/database'
+let g:netrw_dirhist_3='/home/norbert/.vim'
+let g:netrw_dirhist_4='/home/norbert/Documents/Programming/Uni/CO600/database'
+let g:netrw_dirhist_5='/home/norbert/Documents/Programming/Uni/CO600/routes'
+let g:netrw_dirhist_6='/home/norbert/Documents/Programming/Uni/CO600/public/javascripts'
+let g:netrw_dirhist_7='/home/norbert/Documents/Programming/Uni/CO600/routes/api/module'
+let g:netrw_dirhist_8='/home/norbert/Documents/Programming/Uni/CO600/routes/api/user'
+let g:netrw_dirhist_9='/home/norbert/Documents/Programming/Uni/CO600/routes/api'

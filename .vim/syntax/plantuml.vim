@@ -72,18 +72,36 @@ sy match pumlOperation  "\v([A-Za-z][a-z0-9]+)+\(@=" contained
 " # protected
 sy match  pumlVisibility "\v^\s*[-\+#]( |<)" contained
 sy region pumlInsideClass start='{' end='}' contained contains=pumlVisibility,pumlOperation,pumlAttrs
-" ' comment till end of line
-sy region pumlComment    start="'"    end="$"    skip="\\'"  oneline contained containedin=pumlInsideClass contains=@Spell
-sy region pumlComment    start="/'"   end="'/"                       contained contains=@Spell
 sy region pumlStereotype start="\V<<" end="\V>>"             oneline contained
 
 sy match pumlPreProcKeyword "\v<(AttributeIconSize|Font(Name|Color|Size)|skinparam|title|scale|(head|foot)er|(Border|Arrow|Background)Color)>" contained
 
+" Commons
+" ' comment till end of line
+sy region pumlComment start="'"  end="$"  skip="\\'"  oneline contained containedin=pumlInsideClass,pumlActDiagram contains=@Spell
+sy region pumlComment start="/'" end="'/"                     contained containedin=pumlInsideClass,pumlActDiagram contains=@Spell
+" sy region pumlHeader  start='\v^\s*(head|foot)er\s*$' end='$' contained containedin=puml
+
+" Activity Diagrams
+sy region pumlActDiagram  start='\v^\s*start\s*$' end='\v^\s*stop\s*$' contained containedin=puml
+sy match  pumlActKeyWord  '\v<(end\s+(fork|if)|if|split|then|detach|else|(fork|split(\s+again)?))>' contained containedin=pumlActDiagram
+sy region pumlActSwimLane start='|'ms=s+1 end='|'me=e-1 oneline contained containedin=pumlActDiagram
+sy region pumlActBubble   start='\v^\s*:' end=';' contained containedin=pumlActDiagram
+
+
+" Activity Diagrams
+hi def link pumlActBubble      Statement
+hi def link pumlActKeyWord     Keyword
+hi def link pumlActSwimLane    Function
+
+" Commons
+hi def link pumlComment        Comment
+
+" Class Diagrams
 hi def link pumlArrow          Operator
 hi def link pumlAssignment     Normal
 hi def link pumlAttrs          Normal
 hi def link pumlComma          Operator
-hi def link pumlComment        Comment
 hi def link pumlEq             Operator
 hi def link pumlKeyword        Keyword
 hi def link pumlMultiplicity   Number

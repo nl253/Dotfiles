@@ -1,4 +1,4 @@
-setl foldmarker={,} foldmethod=syntax shiftwidth=2 tabstop=2 expandtab formatprg=
+setl foldmarker={,} foldmethod=marker shiftwidth=2 tabstop=2 expandtab formatprg=
 
 call opts#formatprg({ 
             \ 'prettier':    'prettier --stdin --parser typescript',
@@ -10,7 +10,7 @@ if executable('standard')
 endif
 
 " I added plenty of syntax keywords so 'syntaxcomplete#Complete' is better than 'javascriptcomplete#CompleteJS'
-if empty(&omnifunc) || &omnifunc ==? 'javascriptcomplete#CompleteJS'
-    setl omnifunc=syntaxcomplete#Complete
-endif
+" if empty(&omnifunc) || &omnifunc ==? 'javascriptcomplete#CompleteJS'
+setl omnifunc=syntaxcomplete#Complete
+" endif
 
