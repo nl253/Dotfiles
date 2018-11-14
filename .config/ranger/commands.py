@@ -1,96 +1,101 @@
 # -*- coding: utf-8 -*-
-# This file is part of ranger, the console file manager.
-# This configuration file is licensed under the same terms as ranger.
-# ===================================================================
-#
-# NOTE: If you copied this file to ~/.config/ranger/commands_full.py,
-# then it will NOT be loaded by ranger, and only serve as a reference.
-#
-# ===================================================================
-# This file contains ranger's commands.
-# It's all in python; lines beginning with # are comments.
-#
-# Note that additional commands are automatically generated from the methods
-# of the class ranger.core.actions.Actions.
-#
-# You can customize commands in the file ~/.config/ranger/commands.py.
-# It has the same syntax as this file.  In fact, you can just copy this
-# file there with `ranger --copy-config=commands' and make your modifications.
-# But make sure you update your configs when you update ranger.
-#
-# ===================================================================
-# Every class defined here which is a subclass of `Command' will be used as a
-# command in ranger.  Several methods are defined to interface with ranger:
-#   execute():   called when the command is executed.
-#   cancel():    called when closing the console.
-#   tab(tabnum): called when <TAB> is pressed.
-#   quick():     called after each keypress.
-#
-# tab() argument tabnum is 1 for <TAB> and -1 for <S-TAB> by default
-#
-# The return values for tab() can be either:
-#   None: There is no tab completion
-#   A string: Change the console to this string
-#   A list/tuple/generator: cycle through every item in it
-#
-# The return value for quick() can be:
-#   False: Nothing happens
-#   True: Execute the command afterwards
-#
-# The return value for execute() and cancel() doesn't matter.
-#
-# ===================================================================
-# Commands have certain attributes and methods that facilitate parsing of
-# the arguments:
-#
-# self.line: The whole line that was written in the console.
-# self.args: A list of all (space-separated) arguments to the command.
-# self.quantifier: If this command was mapped to the key "X" and
-#      the user pressed 6X, self.quantifier will be 6.
-# self.arg(n): The n-th argument, or an empty string if it doesn't exist.
-# self.rest(n): The n-th argument plus everything that followed.  For example,
-#      if the command was "search foo bar a b c", rest(2) will be "bar a b c"
-# self.start(n): Anything before the n-th argument.  For example, if the
-#      command was "search foo bar a b c", start(2) will be "search foo"
-#
-# ===================================================================
-# And this is a little reference for common ranger functions and objects:
-#
-# self.fm: A reference to the "fm" object which contains most information
-#      about ranger.
-# self.fm.notify(string): Print the given string on the screen.
-# self.fm.notify(string, bad=True): Print the given string in RED.
-# self.fm.reload_cwd(): Reload the current working directory.
-# self.fm.thisdir: The current working directory. (A File object.)
-# self.fm.thisfile: The current file. (A File object too.)
-# self.fm.thistab.get_selection(): A list of all selected files.
-# self.fm.execute_console(string): Execute the string as a ranger command.
-# self.fm.open_console(string): Open the console with the given string
-#      already typed in for you.
-# self.fm.move(direction): Moves the cursor in the given direction, which
-#      can be something like down=3, up=5, right=1, left=1, to=6, ...
-#
-# File objects (for example self.fm.thisfile) have these useful attributes and
-# methods:
-#
-# tfile.path: The path to the file.
-# tfile.basename: The base name only.
-# tfile.load_content(): Force a loading of the directories content (which
-#      obviously works with directories only)
-# tfile.is_directory: True/False depending on whether it's a directory.
-#
-# For advanced commands it is unavoidable to dive a bit into the source code
-# of ranger.
-# ===================================================================
+"""
+This file is part of ranger, the console file manager.
+This configuration file is licensed under the same terms as ranger.
+===================================================================
+
+NOTE: If you copied this file to ~/.config/ranger/commands_full.py,
+then it will NOT be loaded by ranger, and only serve as a reference.
+
+===================================================================
+This file contains ranger's commands.
+It's all in python; lines beginning with # are comments.
+
+Note that additional commands are automatically generated from the methods
+of the class ranger.core.actions.Actions.
+
+You can customize commands in the file ~/.config/ranger/commands.py.
+It has the same syntax as this file.  In fact, you can just copy this
+file there with `ranger --copy-config=commands' and make your modifications.
+But make sure you update your configs when you update ranger.
+
+===================================================================
+Every class defined here which is a subclass of `Command' will be used as a
+command in ranger.  Several methods are defined to interface with ranger:
+  execute():   called when the command is executed.
+  cancel():    called when closing the console.
+  tab(tabnum): called when <TAB> is pressed.
+  quick():     called after each keypress.
+
+tab() argument tabnum is 1 for <TAB> and -1 for <S-TAB> by default
+
+The return values for tab() can be either:
+  None: There is no tab completion
+  A string: Change the console to this string
+  A list/tuple/generator: cycle through every item in it
+
+The return value for quick() can be:
+  False: Nothing happens
+  True: Execute the command afterwards
+
+The return value for execute() and cancel() doesn't matter.
+
+===================================================================
+Commands have certain attributes and methods that facilitate parsing of
+the arguments:
+
+self.line: The whole line that was written in the console.
+self.args: A list of all (space-separated) arguments to the command.
+self.quantifier: If this command was mapped to the key "X" and
+     the user pressed 6X, self.quantifier will be 6.
+self.arg(n): The n-th argument, or an empty string if it doesn't exist.
+self.rest(n): The n-th argument plus everything that followed.  For example,
+     if the command was "search foo bar a b c", rest(2) will be "bar a b c"
+self.start(n): Anything before the n-th argument.  For example, if the
+     command was "search foo bar a b c", start(2) will be "search foo"
+
+===================================================================
+And this is a little reference for common ranger functions and objects:
+
+self.fm: A reference to the "fm" object which contains most information
+     about ranger.
+self.fm.notify(string): Print the given string on the screen.
+self.fm.notify(string, bad=True): Print the given string in RED.
+self.fm.reload_cwd(): Reload the current working directory.
+self.fm.thisdir: The current working directory. (A File object.)
+self.fm.thisfile: The current file. (A File object too.)
+self.fm.thistab.get_selection(): A list of all selected files.
+self.fm.execute_console(string): Execute the string as a ranger command.
+self.fm.open_console(string): Open the console with the given string
+     already typed in for you.
+self.fm.move(direction): Moves the cursor in the given direction, which
+     can be something like down=3, up=5, right=1, left=1, to=6, ...
+
+File objects (for example self.fm.thisfile) have these useful attributes and
+methods:
+
+tfile.path: The path to the file.
+tfile.basename: The base name only.
+tfile.load_content(): Force a loading of the directories content (which
+     obviously works with directories only)
+tfile.is_directory: True/False depending on whether it's a directory.
+
+For advanced commands it is unavoidable to dive a bit into the source code
+of ranger.
+===================================================================
+"""
 
 from __future__ import absolute_import, division, print_function
 
 # Standard Library
-from subprocess import run, DEVNULL, PIPE, Popen
-
-from typing import Text, List, Tuple, Any, Iterable, Optional, Set, Pattern
-import re
+import re, os, fnmatch
+from copy import deepcopy
 from glob import iglob
+from json import load as jsonLoad
+from os import environ, makedirs, mknod
+from os.path import exists, expanduser, isfile, join, lexists, relpath
+from subprocess import DEVNULL, PIPE, Popen, run
+from typing import Any, Iterable, List, Optional, Pattern, Set, Text, Tuple
 
 # 3rd Party
 # You always need to import ranger.api.commands here to get the Command class:
@@ -286,13 +291,11 @@ class git(Command):
 
             # relative paths
             elif self.args[-1].startswith('./'):
-                from os.path import join
                 return ((" ".join(self.args[:-1]) + " " + node).strip()
                         for node in iglob(join(self.args[-1], '*'))
                         if self.args[-1] in node or node in self.args[-1])
 
             else:
-                from copy import deepcopy
 
                 pat: Pattern[Text] = re.compile(r'\w+')
                 stdout: Text = run(
@@ -343,7 +346,6 @@ class vim(Command):
                         for opt in opts
                         if self.args[-1] in opt or opt in self.args[-1])
             else:
-                from os.path import join
                 return ((" ".join(self.args[:-1]) + " " + node).strip()
                         for node in iglob(join(self.args[-1], '*'))
                         if self.args[-1] in node or node in self.args[-1])
@@ -354,7 +356,6 @@ class vim(Command):
 
 
 class lines_of_code(Command):
-
     """:lines_of_code
 
     Counts lines of code recursively from the current directory.
@@ -391,24 +392,20 @@ class lines_of_code(Command):
     }
 
     def execute(self):
-        import os
 
-        cmd = ['wc', '-l']
+        pattern = re.compile(r'^\s*([1-9]\d*)\s+.*')
 
-        path = os.path.join(self.fm.thisdir.path, '**')
-
-        files = iglob(path, recursive=True)
+        files = iglob(join(self.fm.thisdir.path, '**'), recursive=True)
 
         if self.args[1:]:
-            import fnmatch
             files = fnmatch.filter(files, '*.' + self.args[1])
 
-        files = filter(os.path.isfile, files)
+        files = filter(pattern.search, filter(isfile, files))
 
-        files = map(lambda i: os.path.relpath(i, self.fm.thisdir.path), files)
+        files = sorted((f for f in map(lambda i: relpath(i, self.fm.thisdir.path), files)
+                        if not 'node_modules' in f.strip()), key=(lambda x: pattern.search(x.lstrip()).group(1)), reverse=True)
 
-        run(['less'], input=run(cmd + list(files),
-                                stdout=PIPE, stderr=DEVNULL).stdout)
+        return run(['less'], input=run(['wc', '-l'] + files, stdout=PIPE, stderr=DEVNULL).stdout)
 
     def _pred(self, extension):
         return any({
@@ -424,7 +421,6 @@ class lines_of_code(Command):
 
 
 class grep(Command):
-
     """:grep <string>
 
     Looks for a string in all marked files or directories.
@@ -433,7 +429,6 @@ class grep(Command):
     """
 
     def execute(self):
-        from os.path import exists, expanduser
 
         if self.rest(1):
 
@@ -473,7 +468,6 @@ class grep(Command):
 
 
 class untracked(Command):
-
     """:untracked
 
     List files not tracked by git (ignored).
@@ -486,7 +480,6 @@ class untracked(Command):
 
 
 class tracked(Command):
-
     """:tracked
 
     List files tracked by git.
@@ -511,9 +504,6 @@ class yarn(Command):
 
         if len(self.args) > 2 and self.args[1] == 'run':
 
-            from os.path import isfile
-            import json
-
             if not isfile('package.json'):
                 self.fm.notify('No package.json in this dir.', bad=True)
                 return
@@ -521,7 +511,7 @@ class yarn(Command):
             with open('./package.json', mode='r', encoding='utf-8') as f:
                 text = f.read()
 
-            x: dict = json.load(open('./package.json', encoding='utf-8'))
+            x: dict = jsonLoad(open('./package.json', encoding='utf-8'))
 
             if x.get('scripts', None) == None:
                 return
@@ -559,7 +549,6 @@ class yarn(Command):
 
 
 class mkdir(Command):
-
     """:mkdir [<dirname>, ...]
 
     Creates a directories with given names.
@@ -568,9 +557,6 @@ class mkdir(Command):
     def execute(self):
         if not self.args[1:]:
             return
-
-        from os.path import join, expanduser, lexists
-        from os import makedirs
 
         for i in self.args[1:]:
 
@@ -597,17 +583,14 @@ class touch(Command):
         if not self.args[1:]:
             return
 
-        from os.path import join, expanduser, lexists
-        from os import mknod
-
-        for i in self.args[1:]:
-            fname = join(self.fm.thisdir.path, expanduser(i))
+        for arg in self.args[1:]:
+            fname = join(self.fm.thisdir.path, expanduser(arg))
 
             if not lexists(fname):
                 mknod(fname)
 
             else:
-                self.fm.notify(f"file/directory {fname} exists!", bad=True)
+                self.fm.notify(f"file {fname} exists!", bad=True)
                 break
 
     def tab(self, tabnum):
@@ -627,8 +610,6 @@ class make(Command):
 
     def tab(self, tabnum):
 
-        from os.path import isfile
-
         if not isfile('Makefile'):
             self.fm.notify('No Makefile in this dir', bad=True)
             return
@@ -642,7 +623,6 @@ class make(Command):
 
 
 class mvn(Command):
-
     """:mvn <subcommand>
 
     Run make with specified rule.
@@ -655,7 +635,6 @@ class mvn(Command):
         Popen(['mvn'] + self.args[1:], stdout=DEVNULL)
 
     def tab(self, tabnum):
-        from os.path import isfile
 
         if not isfile('./pom.xml'):
             return
@@ -670,7 +649,6 @@ class mvn(Command):
 
 
 class modified(Command):
-
     """:modified
 
     List files modified (Git).
@@ -686,7 +664,6 @@ class modified(Command):
 
 
 class vimdiff(Command):
-
     """:vimdiff <file1> <file2> | <file1> <file2> <file3>
 
     Open vim in diff mode with passed files.
@@ -722,11 +699,10 @@ class edit(Command):
     """
 
     def execute(self):
-        import os
         if not self.arg(1):
-            run([os.environ['EDITOR'], self.fm.thisfile.path])
+            run([environ['EDITOR'], self.fm.thisfile.path])
         else:
-            run([os.environ['EDITOR']] + self.args[1:])
+            run([environ['EDITOR']] + self.args[1:])
             #  self.fm.edit_file(self.rest(1))
 
     def tab(self, tabnum):

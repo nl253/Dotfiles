@@ -185,6 +185,7 @@ let g:html5_aria_attributes_complete          = 0
 " Lang Server:
 " Use an absolute configuration path if you want system-wide settings
 let g:LanguageClient_loadSettings = 1 
+let g:LanguageClient_autoStart    = 0
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_serverCommands = {
             \ 'rust':           ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],

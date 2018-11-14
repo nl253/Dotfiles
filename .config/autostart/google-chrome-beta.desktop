@@ -107,6 +107,7 @@ Comment[zh_HK]=連線到網際網路
 Comment[zh_TW]=連線到網際網路
 StartupWMClass=Google-chrome-beta
 Exec=/usr/bin/google-chrome-beta %U
+StartupNotify=true
 Terminal=false
 Icon=google-chrome-beta
 Type=Application

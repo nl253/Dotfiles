@@ -14,7 +14,7 @@ export PS1="${USER}@"$(hostname)" ${0} >> "
 # reset
 export CDPATH="${HOME}:"
 
-for dir in ~/Documents ~/Documents/Programming ~/Documents/PDF; do
+for dir in ~/Documents ~/Documents/Programming ~/Documents/PDF ~/Documents/Programming/Uni; do
   [ -d $dir ] && export CDPATH="${dir}:${CDPATH}:" 2>/dev/null
 done
 

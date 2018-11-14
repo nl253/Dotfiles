@@ -1,5 +1,8 @@
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o
-if !has('unix') | finish | endif
+if !has('unix') || !has('nvim') 
+    setg runtimepath-=~/.vim
+    finish 
+endif
 
 exe 'let $MYVIMRC = '.string(expand('<sfile>'))
 
@@ -43,7 +46,7 @@ so ~/.vim/plugin/plugins.vim
 if has('termguicolors') && $TERM !=? 'linux'
     setg termguicolors
     "               Jn  Fb  Mr  Ap  Jn  Jl  Ag  St  Ot  Nv   Dc
-    let s:months = [16, 16, 17, 18, 18, 19, 18, 17, 17, 16, 16]
+    let s:months = [16, 16, 17, 18, 18, 18, 18, 17, 16, 15, 15]
     let s:this_month = strftime('%m')
     " remove leading spaces and leading zeros eg '  09' -> 9
     while (s:this_month[0] == ' ') || (s:this_month[0] == '0')

@@ -7,12 +7,12 @@ if [[ $hour =~ ^0 ]]; then
   hour=${hour:1}
 fi
 
-if [[ $hour -lt 6 ]] || [[ $hour -ge 17 ]]; then
+if [[ $hour -lt 7 ]] || [[ $hour -ge 15 ]]; then
   colors=dark
-elif [[ $hour -lt 17 ]]; then
+else
   colors=light
 fi
 
-if [[ -x "$(builtin command readlink -f /usr/bin/kitty)" ]] && [[ -f ~/.config/kitty/kitty-${colors}.conf ]] ; then
-	builtin command "$(builtin command readlink -f /usr/bin/kitty)" --config ~/.config/kitty/kitty-${colors}.conf
+if [[ -x "$(builtin command readlink -f /usr/bin/kitty)" ]] && [[ -f ~/.config/kitty/kitty-${colors}.conf ]]; then
+  builtin command "$(builtin command readlink -f /usr/bin/kitty)" --config ~/.config/kitty/kitty-${colors}.conf $*
 fi
