@@ -86,7 +86,7 @@ sy region pandocSuperscript start="\v\^\^@!" end="\v\^"             oneline conc
 sy region pandocStrikethrough start="\v\~{2}\~@!" end="\v\~{2}" skip="\\\~" oneline contains=markdownEscape,@Spell
 
 " Lists: 
-sy match  pandocBulletListMarker "\v^\s*(\(?[a-z0-9]\)|[1-9#iIVv]\.|[-\+\*])( {1,3}|\t)"
+sy match  pandocBulletListMarker "\v^\s*(\(?([a-zA-Z]|[1-9][0-9]*)[).]|#\.|[-+*])( {1,3}|\t)"
 sy region pandocExampleListRef start="\v\(\@" end="\v\)" skip="\v\\\)" oneline contains=@Spell
 " Term
 " ~ def1
