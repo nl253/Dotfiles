@@ -11,7 +11,7 @@ body {
   --main-font-color: #4a4a4a;
   --code-bg-color: #f5f5f5 !important;
   --sans-font: Raleway, "Helvetica Neue", Helvetica, sans-serif;
-  --mono-font: "Oxygen Mono", Menlo, Monaco, "Courier New", monospace !important;
+  --mono-font: "Fira Code", "Oxygen Mono", Menlo, Monaco, "Courier New", monospace !important;
   --default-h-color: #5a6875;
   --primary-color: #b8860b;
   --primary-light-color: #caa472;
