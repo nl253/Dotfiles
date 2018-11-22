@@ -26,7 +26,7 @@ call utils#make_missing_dirs(map([
             \ 'views',
             \ 'sessions',
             \ 'templates',
-            \ 'snips'
+            \ 'snips',
             \ ], '"~/.vim/".v:val'))
 
 call opts#append_to_path([
@@ -39,7 +39,7 @@ call opts#append_to_path([
             \ '~/.cabal/bin',
             \ '~/.config/yarn/global/node_modules/.bin',
             \ '~/.local/share/fzf/bin',
-            \ '~/.yarn/bin'
+            \ '~/.yarn/bin',
             \ ])
 
 call repl#set_repl({
@@ -177,6 +177,8 @@ let s:wildignore_patterns = map([
             \ 'sessions',
             \ 'tmp',
             \ 'swap',
+            \ 'doc',
+            \ 'docs',
             \ '.git', 
             \ '.idea', 
             \ '.svn',
@@ -185,7 +187,7 @@ let s:wildignore_patterns = map([
             \ 'dist', 
             \ 'out', 
             \ 'target', 
-            \ ], 'v:val."/**"')
+            \ ], '"**/".v:val."/**"')
 
 call extend(s:wildignore_patterns, map(filter(split(system('bash -c "echo /{usr/,usr/local/,usr/local/share/,}{lost+found,run,srv,opt,var,sys,boot,dev,lib,lib32,lib64,man,bin,root,sbin,proc,mnt,include}"'), ' '), 'isdirectory(v:val)'), 'v:val."/*"'))
 
@@ -198,6 +200,7 @@ call extend(s:wildignore_patterns, map([
             \ 'class',
             \ 'ctxt',
             \ 'db',
+            \ 'doc',
             \ 'docx',
             \ 'egg', 
             \ 'eggs',
@@ -210,12 +213,15 @@ call extend(s:wildignore_patterns, map([
             \ 'jpg',
             \ 'lock',
             \ 'log',
+            \ '*.map',
+            \ 'min.*',
             \ 'mp[34]',
             \ 'o',
             \ 'obj',
             \ 'out',
             \ 'pdf',
             \ 'png',
+            \ 'ppt',
             \ 'pptx',
             \ 'rope*',
             \ 'so',
@@ -233,6 +239,7 @@ call extend(s:wildignore_patterns, [
             \ '*_', 
             \ '*~',
             \ 'swapfile',
+            \ '*-lock.*',
             \ ])
 
 " contains 
