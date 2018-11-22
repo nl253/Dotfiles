@@ -1,9 +1,9 @@
 [core]
 	# Use custom `.gitignore` and `.gitattributes`
     excludesfile = ~/.config/git/gitignore
-    whitespace   = space-before-tab,-indent-with-non-tab,trailing-space
+    whitespace   = -space-before-tab,-indent-with-non-tab,-trailing-space
 	compression  = 9
-	abbrev       = 18
+	abbrev       = 9
 
 [credential]
 	helper   = store
@@ -26,9 +26,6 @@
 
 [alias]
     g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 4 --break
-
-    # quick add unstaged, commit using "Quick Commit" as a message and push upstream.
-	qq = "!command bash -c 'command git pull && command git commit -a && command git push'" 
 
     root      = rev-parse --show-toplevel
     tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
@@ -85,15 +82,12 @@
     prompt  = true
 
 [diff]
-    renames = copies  # Detect copies as well as renames
-    tool    = vimdiff
+	renames = copies  # Detect copies as well as renames
+	tool    = vimdiff
 	context = 1
 
 [merge]
-    # Include summaries of merged commits in 
-    # newly created merge commit messages
-    conflictstyle = diff3
-    tool          = vimdiff
+	tool          = vimdiff
 
 [sendemail]
     smtpserver     = smtp.gmail.com
@@ -139,7 +133,8 @@
 
 # best not to touch these (very legible as is)
 [format]
-    pretty = ________________________________________________________________%n%n%C(93)%H%n%n%C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%n%b
+    ; pretty = ________________________________________________________________%n%n%C(93)%h %C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%b
+    pretty = %C(184)%<|(8)%ad %C(93)%h %Creset%s%Creset
 
 [gui]
     commitmsgwidth = 79
@@ -159,12 +154,12 @@
     compression = 9
     threads     = 4
 
-[github]
-	user        = nl253
-    oauth-token = 6fb424e6ce59e5b6d689d35928f9d76a159d5404
+[log]
+	abbrevCommit = true
+    date         = short
 
 [pager]
-	diff        =  on
+	diff = off
 	shortlog    = off
     add         = off
     aliases     = off
@@ -177,7 +172,7 @@
     gc          = off
     grep        = off
     init        = off
-    log         =  on
+    log         = off
     ls-files    = off
     ls-remote   = off
     merge       = off
