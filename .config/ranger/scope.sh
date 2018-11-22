@@ -120,6 +120,7 @@ case "$EXTENSION" in
     fi
     ;;
 
+
   *html)
     if elinks <"$FILE_PATH" 2>/dev/null; then
       builtin exit 0
@@ -208,7 +209,7 @@ case "$EXTENSION" in
     fi
     ;;
 
-  rst)
+  rst | txt)
     if head | pandoc rst 2>/dev/null; then
       builtin exit 0
     elif preview rst 2>/dev/null; then
