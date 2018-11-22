@@ -28,7 +28,7 @@
     g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 4 --break
 
     root      = rev-parse --show-toplevel
-    tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date=short
+    tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date='format:%d-%m-%g %R'
     unpushed  = log --branches --not --remotes
  	ignored   = ls-files . --ignored --exclude-standard --others
     untracked = ls-files . --ignored --exclude-standard --others
@@ -156,10 +156,10 @@
 
 [log]
 	abbrevCommit = true
-    date         = short
+    date         = format:%d-%m-%g %R
 
 [pager]
-	diff = off
+	diff        = off
 	shortlog    = off
     add         = off
     aliases     = off
