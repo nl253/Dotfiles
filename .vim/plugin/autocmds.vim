@@ -20,6 +20,7 @@ aug VariousAutoCmds
     au FileType                      c{pp,},python,sh,rust call inits#lang_server()
     " automatically change dir to the file you are editing
     au BufEnter                      ??*                        try | sil! lch %:p:h | cat /\vE(472|344|13)/ | endtry
+    au BufRead,BufNewFile            *.{hbs,njk,jinja}          if &ft == '' | setf htmldjango | endif
 
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold,BufEnter           ~/*                        sil! checkt
