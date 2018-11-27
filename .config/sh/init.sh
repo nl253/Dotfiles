@@ -56,7 +56,7 @@ fi
 
 # this here is very format dependent - do not change
 # dirs and files
-ls_opts='-I=tags -I *cache* -I *history* -I ~* -I _* -I *~ -I *-log -I *-lock -I *.log -I *.class -I *.so -I *.beam -I *.o -I *.pyc -I *.pyg -I *.aux -I *.toc -I *.swp -I *.tmp -I *.fls -I *.fdb_latexmk -I *.lock -I *.hi --color=auto --group-directories-first'
+ls_opts='-I=tags -I *cache* -I *.synctex* -I *history* -I ~* -I _* -I *~ -I *-log -I *-lock -I *.log -I *.class -I *.so -I *.beam -I *.o -I *.pyc -I *.pyg -I *.aux -I *.toc -I *.swp -I *.tmp -I *.fls -I *.fdb_latexmk -I *.lock -I *.hi --color=auto --group-directories-first'
 if builtin dirs 1>/dev/null 2>/dev/null && [ -x ~/.cargo/bin/exa ]; then
   # replace all occurances of ' -I ' with '|' required by exa
   alias ls="command exa \"${ls_opts// -I /|}\" --git --git-ignore"
