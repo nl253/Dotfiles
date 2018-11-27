@@ -93,6 +93,11 @@ elif [[ $(subject_line) == $(command git --no-pager log -1 --format='%s') ]]; th
   error_msg "Identical commit msg to previous commit $(command git --no-pager log -1 --format='%h')" && exit 1
 fi
 
+# BANNED FIRST WORDS
+for w in Update Modify Work Push Init Tweak Forgot Sync; do
+  builtin eval "[[ \$(subject_line) =~ ^$w([^a-zA-Z0-9]|$) ]] && error_msg 'Vague wording, dont use ${w}' && builtin exit 1"
+done
+
 # CHECK MESSAGE BODY
 if (($(line_count) > 1)); then
 
