@@ -89,8 +89,8 @@ elif [[ $(subject_line) =~ ^.{,3}$ ]]; then
   error_msg "The subject is too short - min. is 3 chars" && exit 1
 elif [[ $(subject_line) =~ \\t ]]; then
   error_msg "Use of the tab character \\t" && exit 1
-elif [[ $(subject_line) =~ \ +$ ]]; then
-  error_msg "Trailing spaces" && exit 1
+elif [[ $(subject_line) == $(command git --no-pager log -1 --format='%s') ]]; then
+  error_msg "Identical commit msg to previous commit $(command git --no-pager log -1 --format='%h')" && exit 1
 fi
 
 # CHECK MESSAGE BODY
