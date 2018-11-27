@@ -18,7 +18,7 @@ fi
 
 _fmt_error() {
   command cat <<EOF
-$(command tput setaf 1)[ERROR] $*$(command tput sgr0).
+$(command tput setaf 1)[ERROR] $*.$(command tput sgr0)
 EOF
 }
 
@@ -29,12 +29,6 @@ for i in mktemp fmt sed grep cat; do
     exit 0 # don't prevent committing
   fi
 done
-
-# To prevent unexpected behaviour, the script is to be run with Bash 4.
-if [[ ! $BASH_VERSION =~ ^4 ]]; then
-  _fmt_error "your bash(1) is outdated, cannot validate the commit message."
-  exit 0 # don't prevent committing
-fi
 
 _fmt_heading() {
   command cat <<EOF
@@ -51,26 +45,22 @@ line_count() { command cat $commit_msg_file | command grep --count .; }
 second_line() { command head -n 2 $commit_msg_file; }
 
 # the main message
-message() {
-  command sed -n "2,$(command grep --count $commit_msg_file)p" $commit_msg_file
-}
+message() { command sed -n "2,$(command grep --count $commit_msg_file)p" $commit_msg_file; }
 
 error_msg() {
   command cat <<EOF
-$(_fmt_error "The commit message does not adhere to git style guide.")
+$(_fmt_error "The commit message does not adhere to git style guide")
 
 $(_fmt_heading "THE RULES")
-
-- the summary line should be descriptive yet succinct (max 50 characters)
-- use imperative, present tense
+- the summary line should be descriptive yet succinct (max. 50 characters)
+- use imperative, present tense in the summary
 - capitalize the subject 
 - use printable characters
 - don't use fullstops (periods) at the end (it's a title and not a sentence)
 
 For details see <https://github.com/agis/git-style-guide#messages>
 
-$(_fmt_heading "THE MESSAGE ")
-
+$(_fmt_heading "THE MESSAGE")
 "$(command cat "$commit_msg_file" | command grep -Ev '^#')"
 
 $(_fmt_heading "ISSUE")
