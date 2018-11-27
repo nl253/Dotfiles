@@ -362,3 +362,12 @@ Android
 .local/share/desktop-directories
 .local/share/Trash
 .local/share/plantuml.jar
+.ipfs/blocks
+.config/vivaldi-snapshot/ShaderCache
+.config/vivaldi*
+.config/Postman/
+.config/Electron/
+.config/BraveSoftware/
+.ipfs/datastore/
+*history*
+.local/share/klavaro
