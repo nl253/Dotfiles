@@ -162,9 +162,9 @@ fi
 # $EDITOR
 for i in nvim vim vi; do [ -x /usr/bin/$i ] && [ $i != vim ] && eval "alias vim='command ${i}'" && break; done
 
-git_basic_info='$(command git branch -vv --no-color | command head -n 1 | command sed -E -e "s/\\*?\\s+/ /g" -e "s/^ //" -e "s/(.{,$(command expr $(command tput cols) - 3)}).*?/\1/")'
-git_branch_info='$(command git --no-pager branch --color=never --format "%(refname:lstrip=-1)" 2>/dev/null) -> $(command git --no-pager config --get remote.origin.url 2>/dev/null)@$(command git --no-pager branch --color=never --format="%(upstream:lstrip=3)" 2>/dev/null) ($(command git remote 2>/dev/null))'
-git_branch_info="[${git_branch_info}]"
+git_basic_info='$(command git branch -vv --no-color | command grep "*" | command head -n 1 | command sed -E -e "s/\\*?\\s+/ /g" -e "s/^ //" -e "s/(.{,$(command expr $(command tput cols) - 3)}).*?/\1/")'
+# git_branch_info='$(command git --no-pager branch --color=never --format "%(refname:lstrip=-1)" 2>/dev/null) -> $(command git --no-pager config --get remote.origin.url 2>/dev/null)@$(command git --no-pager branch --color=never --format="%(upstream:lstrip=3)" 2>/dev/null) ($(command git remote 2>/dev/null))'
+# git_branch_info="[${git_branch_info}]"
 non_git_prompt='$(command basename $0):/$PWD :: '
 
 # bash and zsh
