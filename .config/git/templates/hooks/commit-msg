@@ -79,7 +79,7 @@ elif [[ $(subject_line) =~ ^[a-z] ]]; then
   error_msg "Uncapitalised subject" && exit 1
 elif [[ ! $(subject_line) =~ ^[[:print:][:space:]]+$ ]]; then
   error_msg "Use of unprintable characters" && exit 1
-elif [[ $(subject_line) =~ [[:alpha:]]{3,}ed[[:space:]] ]]; then
+elif [[ $(subject_line) =~ ^\w{3,}ed[^a-zA-Z0-9] ]]; then
   error_msg "Possible use of past tense" && exit 1
 elif [[ $(subject_line) =~ \.$ ]]; then
   error_msg "The subject ends with a fullstop (period)" && exit 1
