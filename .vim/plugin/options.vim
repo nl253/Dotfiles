@@ -193,6 +193,7 @@ call extend(s:wildignore_patterns, map(filter(split(system('bash -c "echo /{usr/
 
 " exts
 call extend(s:wildignore_patterns, map([
+            \ '*.map',
             \ 'aux',
             \ 'ba[kc]',
             \ 'beam',
@@ -213,7 +214,6 @@ call extend(s:wildignore_patterns, map([
             \ 'jpg',
             \ 'lock',
             \ 'log',
-            \ '*.map',
             \ 'min.*',
             \ 'mp[34]',
             \ 'o',
@@ -227,6 +227,7 @@ call extend(s:wildignore_patterns, map([
             \ 'so',
             \ 'sqlite*',
             \ 'swp',
+            \ 'synctex.gz',
             \ 'tab',
             \ 'tmp',
             \ 'toc',

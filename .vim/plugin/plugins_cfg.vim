@@ -99,25 +99,25 @@ let g:user_emmet_mode           = 'i'
 
 " VimTex:
 let g:vimtex_syntax_minted = map(g:prog_langs + ['xml'], '{"lang": v:val}')
-let g:vimtex_compiler_latexmk = {
-            \ 'backend' : has('nvim') ? 'nvim' : 'jobs',
-            \ 'background' : 1,
-            \ 'build_dir' : '../build',
-            \ 'callback' : has('clientserver') || has('nvim') ? 1 : 0,
-            \ 'continuous' : 1,
-            \ 'executable' : 'latexmk',
-            \ 'options' : [
-            \   '-pdf',
-            \   '-view=pdf',
-            \   '-verbose',
-            \   '-output-directory=../build',
-            \   '-file-line-error',
-            \   '-synctex=1',
-            \   '-print=pdf',
-            \   '-aux-directory=/tmp/latexmk/aux',
-            \   '-interaction=nonstopmode',
-            \ ],
-            \}
+            " \ 'build_dir' : '../build',
+            " \   '-output-directory=../build',
+" let g:vimtex_compiler_latexmk = {
+            " \ 'backend' : has('nvim') ? 'nvim' : 'jobs',
+            " \ 'background' : 1,
+            " \ 'callback' : has('clientserver') || has('nvim') ? 1 : 0,
+            " \ 'continuous' : 1,
+            " \ 'executable' : 'latexmk',
+            " \ 'options' : [
+            " \   '-pdf',
+            " \   '-view=pdf',
+            " \   '-verbose',
+            " \   '-file-line-error',
+            " \   '-synctex=1',
+            " \   '-print=pdf',
+            " \   '-aux-directory=/tmp/latexmk/aux',
+            " \   '-interaction=nonstopmode',
+            " \ ],
+            " \}
 
 " Netrw:
 let g:netrw_banner         = 0
