@@ -38,10 +38,6 @@
     # go forward (and backward) by 1 commit
 	forward = "!git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout"
 
-    # form tpope
-    recursive-update = "!sh -c 'find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} remote update \\;' _"
-	recursive-qq     = "!find \"${@:-.}\" -type d -name .git -exec dirname {} \\; -exec git --git-dir={} qq \\;"
-
     # bundle repo
     archive-zip = "archive --format=zip --output=bundle.zip --verbose HEAD"
     archive-tar = "archive --format=tar --output=bundle.tar --verbose HEAD"
