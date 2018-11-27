@@ -106,8 +106,10 @@ if (($(line_count) > 1)); then
     error_msg "The second line needs to be blank" && exit 1
   elif [[ $(message) =~ ^[[:space:]]+ ]]; then
     error_msg "Leading spaces in the message body" && exit 1
-  elif [[ $(message) =~ [[:alpha:]]{3,}ed([[:space:][:punct:]]|$) ]]; then
-    error_msg "Possible use of past tense" && exit 1
+  elif [[ $(message) =~ \\t ]]; then
+    error_msg "Use of the tab character \\t in the message body" && exit 1
+  elif [[ ! $(message) =~ ^[[:print:][:space:]]+$ ]]; then
+    error_msg "Use of unprintable characters in the message body" && exit 1
   fi
 
   # All lines must be shorter than 80 chars
