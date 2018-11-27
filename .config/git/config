@@ -80,6 +80,10 @@
 	renames = copies  # Detect copies as well as renames
 	tool    = vimdiff
 	context = 1
+	algorithm = minimal
+	colorMoved = dimmed_zebra
+	wordRegex = \\w+
+	indentHeuristic = true
 
 [merge]
 	tool          = vimdiff
