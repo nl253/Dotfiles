@@ -112,10 +112,10 @@ if (($(line_count) > 1)); then
     error_msg "Use of unprintable characters in the message body" && exit 1
   fi
 
-  # All lines must be shorter than 80 chars
+  # All lines must be shorter than 72 chars
   for i in $(message); do
-    if [[ $i =~ .{81} ]]; then
-      error_msg "Over 80 characters on line:\n'$i'" && exit 1
+    if [[ $i =~ .{72} ]]; then
+      error_msg "Over 72 characters on line:\n'$i'" && exit 1
     fi
   done
 fi
