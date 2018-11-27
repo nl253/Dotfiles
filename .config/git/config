@@ -186,3 +186,15 @@
     tag         = off
 
 # vim: ts=4 sw=4 ft=gitconfig: 
+[status]
+	showUntrackedFiles = all
+	short = true
+[grep]
+	threads = 4
+	patternType = extended
+	lineNumber = true
+[color "grep"]
+	match = yellow
+	filename = magenta
+	linenumber = green
+	separator = white
