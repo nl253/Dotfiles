@@ -73,6 +73,8 @@ EOF
 # CHECK SUBJECT LINE
 if [[ $(subject_line) =~ ^[[:space:]]+ ]]; then
   error_msg "Leading spaces in the subject" && exit 1
+elif [[ $(subject_line) =~ [[:space:]]+$ ]]; then
+  error_msg "Trailing spaces in the subject" && exit 1
 elif [[ $(subject_line) =~ ^[a-z] ]]; then
   error_msg "Uncapitalised subject" && exit 1
 elif [[ ! $(subject_line) =~ ^[[:print:][:space:]]+$ ]]; then
