@@ -6,9 +6,10 @@
 # keywords such as 'modify', 'update', 'deprecate'.
 # See <https://github.com/saschagrunert/git-journal>.
 # Use git-joural only if availible.
-if [[ -x ~/.cargo/bin/git-journal ]] || [[ -x /usr/bin/git-journal ]]; then
-  command git-journal verify $1
-fi
+# XXX TOO BUGGY TO USE
+# if [[ -x ~/.cargo/bin/git-journal ]] || [[ -x /usr/bin/git-journal ]]; then
+  # command git-journal verify $1
+# fi
 
 if [[ ! $BASH_VERSION =~ ^[45] ]]; then
   builtin echo "Your bash(1) is out of date. Install bash 4 or 5 to and re-run this script."
