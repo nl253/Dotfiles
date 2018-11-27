@@ -122,5 +122,5 @@ fi
 
 # ------------------------------------------------------------------------
 tmp_file=$(command mktemp)
-command cat $commit_msg_file | command grep -E -v '^#' | command fmt --uniform-spacing > $tmp_file
+command cat $commit_msg_file | command grep -E -v '^#' > $tmp_file
 command cat $tmp_file > $commit_msg_file
