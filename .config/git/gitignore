@@ -86,6 +86,7 @@
 **/*.out
 **/*.tox
 **/*.fls
+**/*.fdb_latexmk
 
 ## Haskell
 
