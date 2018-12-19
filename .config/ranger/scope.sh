@@ -121,7 +121,7 @@ case "$EXTENSION" in
     ;;
 
 
-  *html)
+  *html | hbs)
     if elinks <"$FILE_PATH" 2>/dev/null; then
       builtin exit 0
     elif preview html 2>/dev/null; then
