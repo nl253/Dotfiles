@@ -1,11 +1,13 @@
+# vim:sw=2:ts=4:expandtab:
 [core]
-	# Use custom `.gitignore` and `.gitattributes`
+    # Use custom `.gitignore` and `.gitattributes`
     excludesfile = ~/.config/git/gitignore
-        compression = 9
-        abbrev       = 9
+    compression  = 9
+    abbrev       = 9
+    whitespace   = cr-at-eol
 
 [credential]
-	helper   = store
+    helper   = store
     username = nl253
 
 [init]
@@ -16,27 +18,22 @@
     name  = Norbert Logiewa
 
 [help]
-	# Automatically correct and execute mistyped commands
+    # Automatically correct and execute mistyped commands
     autocorrect = 0  
 
 [apply]
-	# Detect whitespace errors when applying a patch
+    # Detect whitespace errors when applying a patch
     whitespace = fix 
 
 [alias]
-    g = grep --extended-regexp --line-number --color=always --full-name --heading --threads 4 --break
-
     root      = rev-parse --show-toplevel
     tree      = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date='format:%d-%m-%g %R'
     unpushed  = log --branches --not --remotes
- 	ignored   = ls-files . --ignored --exclude-standard --others
+    ignored   = ls-files . --ignored --exclude-standard --others
     untracked = ls-files . --ignored --exclude-standard --others
-    modified  = ls-files --modified
+    commits-since = "!for i in $(git branch --format='%(refname)' | sed -E 's/\\s+/\\n/'); do builtin printf \"%3d commits since $(builtin echo $i | sed -E 's/refs\\/heads\\///')\\n\" $(git log --format=oneline \"${i}..HEAD\" | grep --count ''); done | sort"
 
     untracked = "!git status --untracked-files --short | grep -E '^\\?' | sed -E 's/^(\\?{2}) //'"
-
-    # go forward (and backward) by 1 commit
-	forward = "!git log --reverse --pretty=%H master | grep -A 1 $(git rev-parse HEAD) | tail -n1 | xargs git checkout"
 
     # bundle repo
     archive-zip = "archive --format=zip --output=bundle.zip --verbose HEAD"
@@ -77,16 +74,18 @@
     prompt  = true
 
 [diff]
-	renames = copies  # Detect copies as well as renames
-	tool    = vimdiff
-	context = 1
-	algorithm = minimal
-	colorMoved = dimmed_zebra
-	wordRegex = \\w+
-	indentHeuristic = true
+    renames    = copies  # Detect copies as well as renames
+    tool       = vimdiff
+    context    = 1
+    algorithm  = minimal
+    colorMoved = dimmed_zebra
+    wordRegex  = \\w+
+    indentHeuristic = true
 
 [merge]
-	tool          = vimdiff
+    tool      = vimdiff
+    verbosity = 1
+    summary   = true
 
 [sendemail]
     smtpserver     = smtp.gmail.com
@@ -112,8 +111,8 @@
 [color "diff"]
     meta = "127"
     frag = magenta bold # line info
-    old  = "167" 		# deletions
-    new  = "78" 		# additions
+    old  = "167"        # deletions
+    new  = "78"         # additions
 
 # best not to touch these (very legible as is)
 [color "diff-highlight"]
@@ -132,14 +131,18 @@
 
 # best not to touch these (very legible as is)
 [format]
-    ; pretty = ________________________________________________________________%n%n%C(93)%h %C(184)%an%Creset [%ae] %C(173)%ar%Creset%n%n%C(204 bold)%s%Creset%b
     pretty = %C(184)%<|(8)%ad %C(93)%h %Creset%s%Creset
 
 [gui]
     commitmsgwidth = 79
     fastcopyblame  = true
-	fontui         = -family Cantarell -size 12 -weight normal -slant roman -underline 0 -overstrike 0
-	fontdiff       = -family \"Bitstream Vera Sans Mono\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
+    fontui = -family \"Noto Sans\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
+    fontdiff = -family \"Fira Code\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0
+    warndetachedcommit = true
+    pruneduringfetch = true
+    matchtrackingbranch = true
+    diffopts = -w
+    tabsize = 4
 
 [instaweb]
     browser = google-chrome-unstable
@@ -154,12 +157,12 @@
     threads     = 4
 
 [log]
-	abbrevCommit = true
+    abbrevCommit = true
     date         = format:%d-%m-%g %R
 
 [pager]
-	diff        = off
-	shortlog    = off
+    diff        = off
+    shortlog    = off
     add         = off
     aliases     = off
     archive     = off
@@ -187,14 +190,16 @@
 
 # vim: ts=4 sw=4 ft=gitconfig: 
 [status]
-	showUntrackedFiles = all
-	short = true
+    showUntrackedFiles = all
+    short = true
+
 [grep]
-	threads = 4
-	patternType = extended
-	lineNumber = true
+    threads     = 4
+    patternType = extended
+    lineNumber  = true
+
 [color "grep"]
-	match = yellow
-	filename = magenta
-	linenumber = green
-	separator = white
+    match      = yellow
+    filename   = magenta
+    linenumber = green
+    separator  = white
