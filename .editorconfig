@@ -11,7 +11,7 @@ indent_style = space
 insert_final_newline = true
 tab_width = 2
 
-[*.{js,ts,jsx,json,css,md,yml,html}]
+[*.{js,ts,jsx,json,sass,scss,pcss,css,md,yml,html}]
 indent_size = 2
 indent_style = space
 tab_width = 4
