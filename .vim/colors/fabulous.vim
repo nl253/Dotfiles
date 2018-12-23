@@ -83,6 +83,7 @@ hi clear Cursor
 hi clear Error
 hi clear FoldColumn 
 hi clear Function
+hi clear EndOfBuffer
 hi clear Identifier
 hi clear LineNr Comment
 hi clear NonText
@@ -93,38 +94,36 @@ hi clear TypeDef
 hi clear VertSplit 
 
 call s:hi('Boolean'     ,  130,   '', 'bold')
-call s:hi('Builtin'     ,  134,   '')
 call s:hi('Character'   ,  190,   '')
-call s:hi('ColorColumn' ,   '', s:bg)
-call s:hi('Comment'     ,   32,  255)
-" call s:hi('Conceal'     , s:fg,   s:bg)
-hi link Conceal Normal
-call s:hi('Conditional' ,  172,   '', 'bold')
-call s:hi('Constant'    ,   44,   '', 'italic')
-call s:hi('Cursor'      , s:fg,  130)
+call s:hi('ColorColumn' ,   '',   '')
+call s:hi('Comment'     ,   32,  '')
+" call s:hi('Conceal'     ,   '',   s:bg)
+" hi link Conceal Normal
+call s:hi('Conditional' ,  130,   '', 'bold')
+call s:hi('Constant'    ,  239,   '', 'italic')
+call s:hi('Cursor'      ,   '',  130)
 call s:hi('CursorLine'  ,   '',  255)
-call s:hi('CursorLineNr',  204, s:bg)
+call s:hi('CursorLineNr',  204,   '')
 call s:hi('DiffAdd'     ,   '',  120)
 call s:hi('DiffChange'  ,   '',  159)
 call s:hi('DiffDelete'  ,  125,  125)
 call s:hi('DiffText'    ,   '',  255)
 call s:hi('Directory'   ,   25,   '')
-call s:hi('EndOfBuffer' ,  '',  s:bg)
-call s:hi('FoldColumn'  ,   67, s:bg)
+call s:hi('FoldColumn'  ,   67,   '')
 call s:hi('Function'    ,  130,   '', 'bold')
 call s:hi('Include'     ,  160,   '', 'bold')
 call s:hi('Keyword'     ,   99,   '', 'bold')
-call s:hi('Macro'       ,  135,   '')
+call s:hi('Macro'       ,    0,   '', 'italic')
 call s:hi('MatchParen'  ,   '',   '', 'inverse')
 call s:hi('ModeMsg'     ,   89,   '')
 call s:hi('Number'      ,    3,   '')
-call s:hi('Operator'    ,  246,   '', 'bold')
+call s:hi('Operator'    ,  240,   '', 'bold')
 call s:hi('Pmenu'       ,   '',    7)
 call s:hi('PmenuSbar'   ,   '',  244)
 call s:hi('PmenuSel'    ,   '',  230)
-call s:hi('PreProc'     ,  197,   '')
+call s:hi('PreProc'     ,  197,   '', 'italic')
 call s:hi('Repeat'      ,   31,   '', 'bold')
-call s:hi('SignColumn'  ,   '', s:bg)
+call s:hi('SignColumn'  ,   '',   '')
 call s:hi('Special'     ,   56,   '')
 call s:hi('SpecialChar' ,   89,   '', 'bold')
 call s:hi('SpecialKey'  ,  174,   '', 'bold')
@@ -133,21 +132,24 @@ call s:hi('SpellCap'    ,  105,   '', 'underline')
 call s:hi('SpellLocal'  ,  253,   '', 'underline')
 call s:hi('SpellRare'   ,  218,   '', 'underline')
 call s:hi('Statement'   ,  126,   '', 'bold')
-call s:hi('StatusLine'  , s:fg,  210)
-call s:hi('StatusLineNC', s:fg,    7, 'bold')
+call s:hi('StatusLine'  ,   '',  210)
+call s:hi('StatusLineNC',   '',    7, 'bold')
 call s:hi('StorageClass',  138,   '', 'bold')
 call s:hi('String'      ,    2,   '')
 call s:hi('TabLine'     ,   '',   '')
 call s:hi('TabLineFill' ,   '',  255)
 call s:hi('TabLineSel'  ,   '',  214, 'bold')
 call s:hi('Title'       ,  136,   '', 'bold')
-call s:hi('Type'        ,   69,   '', 'bold')
+call s:hi('Type'        ,   56,   '', 'bold')
 call s:hi('TypeDef'     ,   90,   '')
 call s:hi('VertSplit'   ,  234,   '')
 call s:hi('WarningMsg'  ,  124,   '', 'bold')
-call s:hi('WildMenu'    , s:fg,    7, 'bold')
+call s:hi('WildMenu'    ,   '',    7, 'bold')
 
-hi Normal guibg=White guifg=Black
+" OWN
+call s:hi('Builtin'     ,  93,   '')
+call s:hi('URI'         ,  21, '', 'underline')
+call s:hi('Quote'       ,  51, '')
 
 hi link Error          Exception
 hi link NonText        Comment
@@ -166,12 +168,10 @@ hi link Value          Normal
 hi link Variable       Normal
 hi link SpecialComment Comment
 
-
 hi link HtmlH1 Title
 hi link HtmlH2 Special
 hi link HtmlH3 Type
 
-hi Quote guifg=Cyan ctermfg=Cyan
 "call s:hi('Delimiter'   , 151 , '' , 'None' , 'None')
 "hi CommentTitle term=bold cterm=BOLD gui=BOLD ctermfg=NONE guifg=ivory2
 "hi IncSearch guifg=gold guibg=black ctermbg=black ctermfg=yellow cterm=BOLD,italic gui=BOLD,italic
@@ -179,5 +179,4 @@ hi Quote guifg=Cyan ctermfg=Cyan
 "hi Visual term=INVERSE cterm=INVERSE gui=INVERSE
 
 " OWN
-hi URI guifg=DeepSkyBlue2 ctermfg=LightBlue gui=underline cterm=underline term=undercurl
-hi ALEWarning cterm=NONE
+" hi ALEWarning cterm=NONE

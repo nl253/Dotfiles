@@ -59,8 +59,11 @@ sy region jsStrS start=+'+  skip=+\\\\\|\\'+  end=+'\|$+ oneline  keepend contai
 sy region jsTemplStr      start='`'   end='`' keepend contains=jsTemplStrSubst,jsTemplStrHtmlTag,@Spell
 sy region jsTemplStrSubst start='\${' end='}' keepend matchgroup=Delimiter contained containedin=jsTemplStr contains=jsStrD,jsStrS,jsOp,jsArrowFunc,jsRegexStr,jsGlobal,jsEvent,jsBool,jsNull,jsNum,jsDollar
 
+" sy region jsJSXTag start="\v\<([a-z]+)( [a-z]+(\=\".{,20}\")?)*\>" end="\v</\1\>" keepend
+" sy region jsJSXTagInner start="\v\<([a-z]+)( [a-z]+(\=\".{,20}\")?)*\>" end="\v</\1\>" keepend
+
 " often we put HTML tags in js templates
-sy region jsTemplStrHtmlTag          start="\v\<([a-z]+)( [a-z]+(\=\".{,20}\")?)*\>" end="\v</\1\>" contained contains=jsTemplStrHtmlTagInner,jsTemplStrHtmlTag,jsTemplStrHtmlTagAttr keepend
+sy region jsTemplStrHtmlTag          start="\v\<([a-z]+[1-6]?)([ \n\t]+[-a-zA-Z]+(\=\"[^\"]*\")?)*\>" end="\v</\1\>" contained contains=jsTemplStrHtmlTagInner,jsTemplStrHtmlTag,jsTemplStrHtmlTagAttr keepend
 sy region jsTemplStrHtmlTagInner     start="\v\>"ms=e+1 end="\v\<"me=s-1 contained keepend
 sy match  jsTemplStrHtmlTagAttr      "\v <[a-z]{3,15}>"ms=s+1 contained keepend
 sy region jsTemplStrHtmlTagAttr      start="\v[a-z]{2,15}\=\"" end="\"" oneline contained contains=jsTemplStrHtmlTagAttrName,jsTemplStrHtmlTagAttrValue,jsTemplStrHtmlTagAttrEq keepend

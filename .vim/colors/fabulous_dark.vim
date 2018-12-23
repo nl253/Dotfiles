@@ -82,6 +82,7 @@ hi clear Conceal
 hi clear Cursor
 hi clear Error
 hi clear FoldColumn 
+hi clear EndOfBuffer 
 hi clear Function
 hi clear Identifier
 hi clear LineNr Comment
@@ -94,40 +95,41 @@ hi clear VertSplit
 call s:hi('Boolean'     ,  130,    '', 'bold')
 call s:hi('Builtin'     ,  134,    '')
 call s:hi('Character'   ,   11,    '')
-call s:hi('ColorColumn' ,   '',  s:bg)
+call s:hi('ColorColumn' ,   '',    '')
 call s:hi('Comment'     ,   32,    '')
+" call s:hi('EndOfBuffer' ,   '',    s:bg)
 " call s:hi('Conceal'     , s:fg,   s:bg)
 hi link Conceal Normal
 call s:hi('Conditional' ,   95,    '', 'bold')
 call s:hi('Constant'    ,  165,    '')
-call s:hi('Cursor'      , s:bg,   130)
-call s:hi('CursorLine'  ,   '',  s:bg)
-call s:hi('CursorLine'  ,   '',  s:bg)
-call s:hi('CursorLineNr',  204,  s:bg)
+call s:hi('Cursor'      ,   '',   130)
+call s:hi('CursorLine'  ,   '',   236)
+call s:hi('CursorLineNr',  204,    '')
 call s:hi('DiffAdd'     ,   '',     6)
 call s:hi('DiffChange'  ,  236,    '')
 call s:hi('DiffDelete'  ,  125,   125)
 call s:hi('DiffText'    ,   '',   102)
 " call s:hi('Directory'   ,    4,    '', 'bold')
 hi Directory guifg=RoyalBlue gui=bold cterm=bold term=bold
-call s:hi('FoldColumn'  ,   67,  s:bg)
-call s:hi('Folded'      ,  133, s:bg1, 'bold')
+call s:hi('FoldColumn'  ,   67,    '')
+call s:hi('Folded'      ,  133,   235, 'bold')
 call s:hi('Function'    ,  172,    '', 'bold')
 call s:hi('Include'     ,  203,    '')
 call s:hi('Keyword'     ,   99,    '', 'bold')
 call s:hi('Macro'       ,   36,    '')
-call s:hi('MatchParen'  ,  200,     0, 'underline', 'bold')
+call s:hi('MatchParen'  ,  200,    '', 'underline', 'bold')
 call s:hi('ModeMsg'     ,    4,    '')
-call s:hi('Normal'      ,   15,   234)
+" call s:hi('Normal'      ,   15,   234)
 call s:hi('Number'      ,  148,    '')
 call s:hi('Operator'    ,  240,    '', 'bold')
-call s:hi('Pmenu'       , s:fg,   238)
-call s:hi('PmenuSbar'   ,  214,  s:bg)
-call s:hi('PmenuSel'    ,    0,   214, 'bold')
+call s:hi('Pmenu'       ,   '',   238)
+call s:hi('PmenuSbar'   ,  214,    '')
+call s:hi('PmenuSel'    ,   '',   214, 'bold')
+call s:hi('Visual'      ,  '',    236)
 call s:hi('PreProc'     ,  201,   235)
 call s:hi('Quote'       ,   51,    '')
 call s:hi('Repeat'      ,   95,    '', 'bold')
-call s:hi('SignColumn'  ,  234,  s:bg)
+call s:hi('SignColumn'  ,  234,    '')
 call s:hi('Special'     ,  197,    '')
 call s:hi('SpecialChar' ,   89,    '', 'bold')
 call s:hi('SpecialKey'  ,  174,    '', 'bold')
@@ -136,18 +138,18 @@ call s:hi('SpellCap'    ,  110,    '', 'underline')
 call s:hi('SpellLocal'  ,  253,    '', 'underline')
 call s:hi('SpellRare'   ,  218,    '', 'underline')
 call s:hi('Statement'   ,  207,    '', 'bold')
-call s:hi('StatusLine'  ,  197,     0)
-call s:hi('StatusLineNC',  242,     0)
+call s:hi('StatusLine'  ,  197,    '')
+call s:hi('StatusLineNC',  242,    '')
 call s:hi('StorageClass',  180,    '', 'bold')
 call s:hi('String'      ,   72,    '')
-call s:hi('TabLine'     , s:bg,     0, 'bold')
-call s:hi('TabLineFil'  ,    0,     0)
-call s:hi('TabLineSel'  ,    0,   100)
+call s:hi('TabLine'     ,    0,    '', 'bold')
+call s:hi('TabLineFill'  ,    0,   100)
+call s:hi('TabLineSel'  ,   '',   100)
 call s:hi('Title'       ,  100,    '', 'bold')
 call s:hi('Type'        ,   69,    '', 'bold')
 call s:hi('TypeDef'     ,  165,    '', 'bold')
 call s:hi('VertSplit'   ,  234,    '')
-call s:hi('WildMenu'    , s:bg,    11, 'bold')
+call s:hi('WildMenu'    ,   '',    11, 'bold')
 
 hi link Error          Exception
 hi link FoldColumn     Blank
@@ -170,10 +172,6 @@ hi link SpecialComment Comment
 hi link HtmlH1 Title
 hi link HtmlH2 Special
 hi link HtmlH3 Type
-
-" OWN
-hi URI ctermfg=LightBlue guifg=SkyBlue2
-hi ALEWarning cterm=NONE
 
 "call s:hi('Delimiter'   , 151 , '' , 'None' , 'None')
 "hi CommentTitle term=bold cterm=BOLD gui=BOLD ctermfg=NONE guifg=ivory2
