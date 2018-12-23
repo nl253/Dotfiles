@@ -211,21 +211,38 @@ function makeCodeHideBtns() {
     }
 }
 function makeSectionToggleBtns() {
-    for (var _i = 0, _a = Array.from(document.querySelectorAll('section')); _i < _a.length; _i++) {
-        var section = _a[_i];
+    var _loop_2 = function (section) {
         section.prepend(new Builder('a')
             .text('hide section')
             .styles(LINK_STYLES)
             .styles({
             display: 'block',
+            fontSize: '0.9em',
             float: 'right',
             textAlign: 'right'
         })
             .attr('href', '#!')
             .on('click', function hideParent() {
-            this.parentNode.style.display = 'none';
+            this.parentNode.remove();
+            var toc = document.querySelector('#TOC');
+            if (toc === null)
+                return;
+            var h2 = section.querySelector('h2');
+            if (h2 === null)
+                return;
+            for (var _i = 0, _a = toc.querySelectorAll('li'); _i < _a.length; _i++) {
+                var li = _a[_i];
+                if (li.innerText === h2.innerText) {
+                    li.remove();
+                    break;
+                }
+            }
         })
             .build());
+    };
+    for (var _i = 0, _a = Array.from(document.querySelectorAll('section')); _i < _a.length; _i++) {
+        var section = _a[_i];
+        _loop_2(section);
     }
 }
 function toggleCode() {
@@ -259,6 +276,20 @@ function makeMasterCodeToggleBtn() {
         top: '20px'
     })
         .build());
+}
+function makeDisbleJSBtn() {
+    return document.body.insertAdjacentElement('afterBegin', new Builder('a').text('clear')
+        .style('position', 'fixed')
+        .style('top', '55px')
+        .style('right', '168px')
+        .attr('href', '#!')
+        .on('click', function (event) {
+        event.preventDefault();
+        for (var _i = 0, _a = document.body.querySelectorAll('a[href^="#!"]'); _i < _a.length; _i++) {
+            var a = _a[_i];
+            a.remove();
+        }
+    }).build());
 }
 function toggleNightMode() {
     var body = document.body;
@@ -297,10 +328,11 @@ function makeNightModeBtn() {
         .build());
 }
 function makeTOCBtn() {
-    var tryFindTOC = document.querySelector('#TOC > ul');
-    if (tryFindTOC.childElementCount <= 1) {
-        document.querySelector('#TOC').remove();
+    var tryFindTOC = document.querySelector('#TOC');
+    if (tryFindTOC === null)
         return;
+    if (Array.from(tryFindTOC.querySelectorAll('li')).length <= 2) {
+        return document.querySelector('#TOC').remove();
     }
     function toggleTOC() {
         var toc = document.querySelector('#TOC');
@@ -392,6 +424,7 @@ function main() {
     makeSectionToggleBtns();
     overrideKeyboardShortcuts();
     addDefinitionLinks();
+    makeDisbleJSBtn();
     if (isDefined(MATHJAX_CFG)) {
         setTimeout(function () { return MathJax.Hub.Config(MATHJAX_CFG); }, MATHJAX_TIMEOUT);
     }

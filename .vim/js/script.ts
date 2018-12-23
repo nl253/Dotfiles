@@ -299,12 +299,23 @@ function makeSectionToggleBtns(): void {
         .styles(LINK_STYLES)
         .styles({
           display: 'block',
+          fontSize: '0.9em',
           float: 'right',
           textAlign: 'right',
         })
         .attr('href', '#!')
         .on('click', function hideParent() {
-          this.parentNode.style.display = 'none';
+          this.parentNode.remove();
+          const toc = document.querySelector('#TOC');
+          if (toc === null) return;
+          const h2 = section.querySelector('h2');
+          if (h2 === null) return;
+          for (const li of toc.querySelectorAll('li')) {
+            if (li.innerText === h2.innerText) {
+              li.remove();
+              break;
+            }
+          }
         })
         .build(),
     );
@@ -354,6 +365,25 @@ function makeMasterCodeToggleBtn(): void {
 }
 
 /**
+ * Add a btn that removes all JavaScript extras created in this script.
+ */
+function makeDisbleJSBtn(): void {
+  return document.body.insertAdjacentElement(
+    'afterBegin',
+    new Builder('a').text('clear')
+    .style('position', 'fixed')
+    .style('top', '55px')
+    .style('right', '168px')
+    .attr('href', '#!')
+    .on('click', (event) => {
+      event.preventDefault();
+      for (const a of document.body.querySelectorAll('a[href^="#!"]')) {
+        a.remove();
+      }
+    }).build());
+}
+
+/**
  * The actual night mode toggler (helper function - see below).
  */
 function toggleNightMode(): void {
@@ -400,11 +430,13 @@ function makeNightModeBtn(): void {
  * Add a button to toggle the table of contents (TOC).
  */
 function makeTOCBtn(): void {
-  // tOC too short
-  const tryFindTOC: HTMLElement = document.querySelector('#TOC > ul');
-  if (tryFindTOC.childElementCount <= 1) {
-    document.querySelector('#TOC').remove();
-    return;
+  const tryFindTOC: HTMLElement = document.querySelector('#TOC');
+
+  if (tryFindTOC === null) return; 
+
+  // TOC too short
+  if (Array.from(tryFindTOC.querySelectorAll('li')).length <= 2) {
+    return document.querySelector('#TOC').remove();
   }
 
   function toggleTOC(): void {
@@ -437,6 +469,21 @@ function makeTOCBtn(): void {
       .on('click', toggleTOC)
       .build(),
   );
+}
+
+function countWords(threshold = 10) {
+const words = document.body.innerText.replace(/[^a-zA-Z0-9 \n]+/g, '').replace(/\s+/g, ' ').split(/\s/).filter(w => w.match(/^[a-zA-Z]{2,}$/));
+  const counter = {};
+  for (const w of words) {
+    if (counter[w] === undefined) counter[w] = 1;
+    else counter[w]++;
+  }
+  let bodyCpy = document.body.outerHTML; 
+  for (const w of words) {
+    bodyCpy = bodyCpy.replace(w, `<span style="color: red;">${w}</span>`);
+  }
+  console.log(counter);
+  return counter;
 }
 
 /**
@@ -535,6 +582,7 @@ function main(): void {
   makeSectionToggleBtns();
   overrideKeyboardShortcuts();
   addDefinitionLinks();
+  makeDisbleJSBtn();
 
   if (isDefined(MATHJAX_CFG)) {
     // @ts-ignore
