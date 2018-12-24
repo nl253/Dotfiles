@@ -1,6 +1,6 @@
 exe 'let $AUTOCMDS = '.string(expand('<sfile>'))
 
-exe 'setg statusline='.escape(' %-35.(%f #%n %q%r %w%m%) %=%-14.120(%(%<%{exists("b:git_status_summary") ? b:git_status_summary : ""} %{&tw} %{&wrap ? "wrap " : ""}%{&sw} %{&ts} %{&expandtab ? "expandtab " :""}%{&foldmethod == "marker" ? &foldmarker : &foldmethod}%) %(%y %3p%% of %L%)%)     ', ' :",|')
+exe 'setg statusline='.escape(' %-36.(%f #%n %q%r %w%m%) %=%-14.120(%(%<%{exists("b:git_status_summary") ? b:git_status_summary : ""} %{&tw} %{&wrap ? "wrap " : ""}%{&sw} %{&ts} %{&expandtab ? "expandtab " :""}%{&foldmethod == "marker" ? &foldmarker : &foldmethod}%) %(%y %3p%% of %L%)%)     ', ' :",|')
 
 aug VariousAutoCmds
     au!
@@ -17,10 +17,11 @@ aug VariousAutoCmds
         au TermOpen                  *                          call inits#term() 
     endif
     au FileType                      xml,html                   call inits#emmet()
-    au FileType                      c{pp,},python,sh,rust call inits#lang_server()
+    au FileType                      c{pp,},python,sh,rust,{java,type}script,json call inits#lang_server()
     " automatically change dir to the file you are editing
     au BufEnter                      ??*                        try | sil! lch %:p:h | cat /\vE(472|344|13)/ | endtry
-    au BufRead,BufNewFile            *.{hbs,njk,jinja}          if &ft == '' | setf htmldjango | endif
+    au BufRead,BufNewFile            *.{hbs,njk,jinja}          setf htmldjango
+    au FileType                      html,htmldjango            if line("$") <= 1000 | syntax sync fromstart | endif
 
     " automatically reload external changes NOTE: doesn't always work properly
     au CursorHold,BufEnter           ~/*                        sil! checkt

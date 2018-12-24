@@ -66,6 +66,7 @@ nn <Leader>'  :silent call repl#open_shell()<CR>
 " IntelliJ  - Toggle Terminal
 nn <F12>      :silent call repl#open_shell()<CR>
 
+
 " automatically append '!' to grep & make 
 " don't make a new file from the output
 for s:i in ['grep', 'grepadd', 'make']
@@ -82,7 +83,7 @@ endfor
 
 " Emacs:
 
-" => CmdLine:
+" => CmdLine
 
 " => => Movement
 
@@ -159,6 +160,9 @@ ino <M-l> <Esc><Right>gueea
 ino <M-u> <Esc><Right>gUeea
 " join lines
 ino <M-^> <C-o>J
+" (un)indent
+ino <Tab>   <C-o>>><Right><Right>
+ino <S-Tab> <C-o><<<Left><Left>
 
 " => => Movement
 
@@ -232,3 +236,9 @@ ino <M-f> <C-o>e<Right>
 "ino <C-e> <End>
 "ino <C-r> <C-o>?\v
 "ino <C-u> <C-o>d^
+
+" => Normal
+
+" (un)indent
+" nn  <Tab>   >>
+" nn  <S-Tab> <<

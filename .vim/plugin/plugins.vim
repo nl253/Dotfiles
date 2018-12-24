@@ -13,7 +13,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeToggle']}
 Plug 'tpope/vim-eunuch', {'on' : ['Delete', 'Find', 'Mkdir', 'Move', 'Rename', 'SudoEdit', 'SudoWrite']}
 
 Plug 'dkarter/bullets.vim', {'for': g:markup_langs + g:config_ftypes}
-Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:markup_langs + ['gitcommit']}
+Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:markup_langs}
 
 Plug 'othree/html5.vim', {'for': ['markdown', 'html']}
 Plug 'othree/csscomplete.vim', {'for': ['css', 'html']}
@@ -30,7 +30,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 
 if has('python3') || has('python')
     " Plug 'davidhalter/jedi-vim', {'for': 'python'}
-    Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'php']}
+    Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'php', 'htmldjango']}
     Plug 'SirVer/ultisnips'
 en
 

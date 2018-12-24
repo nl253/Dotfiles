@@ -1,5 +1,7 @@
 hi clear htmlLink 
 hi htmlH4 guifg=#00af5f ctermfg=35 gui=bold cterm=bold term=bold
+" sy region htmlStyleTagPair start="[-a-z]{4,}\s*:\s*" end='\v[;"]' contained
+" sy region htmlStyleTag start='\v<style\="' end='"' contained con oneline contains=htmlStyleTagPair
 
 hi def link htmlStatement Statement
 hi def link htmlTagName   Statement

@@ -3,10 +3,8 @@ com! TemplateSubstitute call templates#template_subst()
 
 com! -nargs=? -complete=file_in_path VS exe 'vs '.<f-args>
 
-com! Scripts       e ~/.vim/plugin/autocmds.vim
-
-com! ToDo          call utils#toggle_todo()
-com! BufferWipeout call utils#buffer_wipeout()
+" com! ToDo          call utils#toggle_todo()
+" com! BufferWipeout call utils#buffer_wipeout()
 
 com! GMail call mail#send()
 
@@ -18,12 +16,12 @@ com! -nargs=1 -complete=customlist,complete#buffers_words Define :!command wn <a
 " com! Hyponym  !(wn <cword> -hypon || wn <cword> -hypov || wn <cword> -hypoa || wn <cword> -hypor) | fmt
 " com! Antonym  !(wn <cword> -antsn || wn <cword> -antsv || wn <cword> -antsa || wn <cword> -antsr) | fmt
 
-com! -nargs=1 -complete=customlist,complete#buffer_words 
-                               \ AppendToDict   call utils#append_to_dict(<q-args>)
+" com! -nargs=1 -complete=customlist,complete#buffer_words
+                               " \ AppendToDict   call utils#append_to_dict(<q-args>)
 com! -range=%                    SubstituteWord call utils#safe_subst("".<line1>, "".<line2>)
-com! -nargs=+ -complete=shellcmd AsyncRun       call utils#async_run(<q-args>)
-com!                             CloseDupTabs   call utils#close_dup_tabs()
-com!                             HLCurrentWord  call utils#hl_word()
+" com! -nargs=+ -complete=shellcmd AsyncRun       call utils#async_run(<q-args>)
+" com!                             CloseDupTabs   call utils#close_dup_tabs()
+" com!                             HLCurrentWord  call utils#hl_word()
 com!                             ReformatBuffer call utils#reformat_buffer()
 
 com! HL echo exists('*utils#_syntax_attr') ? utils#syntax_attr() : join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')

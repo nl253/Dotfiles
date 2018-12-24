@@ -45,16 +45,15 @@ so ~/.vim/plugin/plugins.vim
 
 if has('termguicolors') && $TERM !=? 'linux'
     setg termguicolors
-    "               Jn  Fb  Mr  Ap  Jn  Jl  Ag  St  Ot  Nv   Dc
-    let s:months = [16, 16, 17, 18, 18, 18, 18, 17, 16, 15, 15]
+    "               Jn  Fb  Mr  Ap  My  Jn  Jl  Ag  St  Ot  Nv  Dc
+    let s:months = [16, 16, 17, 18, 18, 18, 18, 18, 17, 16, 15, 15]
     let s:this_month = strftime('%m')
     " remove leading spaces and leading zeros eg '  09' -> 9
     while (s:this_month[0] == ' ') || (s:this_month[0] == '0')
         let s:this_month = s:this_month[1:]
     endwhile
     " index from 0
-    let s:this_month -= 1
-    if (strftime('%H') <= (24 - s:months[s:this_month])) || (strftime('%H') >= s:months[s:this_month])
+    if (strftime('%H') <= (24 - s:months[s:this_month - 1])) || (strftime('%H') >= s:months[s:this_month - 1])
         colorscheme fabulous_dark
     else
         colorscheme fabulous

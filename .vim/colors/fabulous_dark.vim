@@ -74,10 +74,6 @@ fu! s:hi(item, fg, bg, ...)
     exe join(['hi', a:item, l:fg, l:bg, l:effects], ' ')
 endfu
 
-let s:fg   = 249
-let s:bg   = 234
-let s:bg1  = 240
-
 hi clear Conceal
 hi clear Cursor
 hi clear Error
@@ -97,8 +93,6 @@ call s:hi('Builtin'     ,  134,    '')
 call s:hi('Character'   ,   11,    '')
 call s:hi('ColorColumn' ,   '',    '')
 call s:hi('Comment'     ,   32,    '')
-" call s:hi('EndOfBuffer' ,   '',    s:bg)
-" call s:hi('Conceal'     , s:fg,   s:bg)
 hi link Conceal Normal
 call s:hi('Conditional' ,   95,    '', 'bold')
 call s:hi('Constant'    ,  165,    '')
@@ -129,7 +123,7 @@ call s:hi('Visual'      ,  '',    236)
 call s:hi('PreProc'     ,  201,   235)
 call s:hi('Quote'       ,   51,    '')
 call s:hi('Repeat'      ,   95,    '', 'bold')
-call s:hi('SignColumn'  ,  234,    '')
+call s:hi('SignColumn'  ,  234,    0)
 call s:hi('Special'     ,  197,    '')
 call s:hi('SpecialChar' ,   89,    '', 'bold')
 call s:hi('SpecialKey'  ,  174,    '', 'bold')
@@ -150,6 +144,8 @@ call s:hi('Type'        ,   69,    '', 'bold')
 call s:hi('TypeDef'     ,  165,    '', 'bold')
 call s:hi('VertSplit'   ,  234,    '')
 call s:hi('WildMenu'    ,   '',    11, 'bold')
+
+hi SignColumn guibg=Black
 
 hi link Error          Exception
 hi link FoldColumn     Blank

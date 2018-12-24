@@ -1,3 +1,6 @@
+call opts#letg_default('session_dir',          expand('~/').'.vim/sessions')
+call opts#letg_default('default_session_file', join([g:session_dir, $USER.'.vim'], '/'))
+
 fu! sessions#err(msg, ...)
     let l:msg = '[sessions] '.a:msg.' '.join(a:000, ' ')
     call add(v:errors, l:msg)

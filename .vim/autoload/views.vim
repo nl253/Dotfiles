@@ -1,3 +1,6 @@
+call opts#letg_default('view_dir',             expand('~/').'.vim/views')
+call opts#letg_default('default_view_file',    join([g:view_dir, $USER.'.vim'], '/'))
+
 fu! views#err(msg, ...)
     let l:msg = '[views] '.a:msg.' '.join(a:000, ' ')
     call add(v:errors, l:msg)

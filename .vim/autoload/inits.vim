@@ -120,16 +120,17 @@ endf
 
 fu! inits#lang_server() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
+    LanguageClientStart
     nn <buffer> <silent> <LocalLeader>R :call LanguageClient#textDocument_references()<CR>
     nn <buffer> <silent> K              :call LanguageClient#textDocument_definition()<CR>
     nn <buffer> <silent> <LocalLeader>h :call LanguageClient#textDocument_hover()<CR>
     nn <buffer> <silent> <LocalLeader>i :call LanguageClient#textDocument_implementation()<CR>
     nn <buffer> <silent> <LocalLeader>r :call LanguageClient#textDocument_rename()<CR>
     nn <buffer> <silent> <LocalLeader>s :call LanguageClient#textDocument_documentSymbol()<CR>
-    " call opts#omni(['LanguageClient#complete', 'LanguageClient_textDocument_rangeFormatting()'])
-    if &filetype != 'javascript' && &filetype != 'typescript' 
-        setl omnifunc=LanguageClient#complete
-    endif
+    call opts#omni(['LanguageClient#complete'])
+    " if &filetype != 'javascript' && &filetype != 'typescript'
+        " setl omnifunc=LanguageClient#complete
+    " endif
 endf
 
 fu! inits#non_home() abort

@@ -1,12 +1,3 @@
-" These *need* to be set!
-call opts#letg_default('todo_slide_in_width',  65)
-call opts#letg_default('todo_file',            findfile("todo.md", expand("~/")."**6/"))
-call opts#letg_default('netrw_slide_in_width', 25)
-call opts#letg_default('session_dir',          expand('~/').'.vim/sessions')
-call opts#letg_default('default_session_file', join([g:session_dir, $USER.'.vim'], '/'))
-call opts#letg_default('view_dir',             expand('~/').'.vim/views')
-call opts#letg_default('default_view_file',    join([g:view_dir, $USER.'.vim'], '/'))
-
 fu! utils#find_browser(browser, ...)
     for l:channel in ['snapshot',
                     \ 'nightly', 
@@ -138,47 +129,48 @@ fu! utils#syntax_attr()
      echohl None
 endfunction
 
-fu! utils#toggle_netrw()
-    if expand('%:t') =~# '^Netrw'
-        wincmd c
-    else
-        windo if expand('%:t') =~# 'Netrw' | wincmd c | endif
-    exe 'botright '.g:netrw_slide_in_width.'Vexplore'
-    wincmd H
-    exe 'vert resize '.g:netrw_slide_in_width
-endif
-endf
+" fu! utils#toggle_netrw()
+    " let l:width = 25
+    " if expand('%:t') =~# '^Netrw'
+        " wincmd c
+    " else
+        " windo if expand('%:t') =~# 'Netrw' | wincmd c | endif
+    " exe 'botright '.l:width.'Vexplore'
+    " wincmd H
+    " exe 'vert resize '.l:width
+" endif
+" endf
 
-fu! utils#slider_toggle(file, position, size)
+" fu! utils#slider_toggle(file, position, size)
 
-    if expand('%:p') == fnamemodify(a:file, ':p')
-        wincmd c
-        return 0
-    endif
+    " if expand('%:p') == fnamemodify(a:file, ':p')
+        " wincmd c
+        " return 0
+    " endif
 
-    exe 'botright split '.a:file
+    " exe 'botright split '.a:file
 
-    if a:position =~? '^l'
-        wincmd H
-        exe 'vert res '.a:size
+    " if a:position =~? '^l'
+        " wincmd H
+        " exe 'vert res '.a:size
 
-    elseif a:position =~? '^r'
-        wincmd L
-        exe 'vert res '.a:size
+    " elseif a:position =~? '^r'
+        " wincmd L
+        " exe 'vert res '.a:size
 
-    elseif a:position =~? '^t'
-        wincmd K
-        exe 'res '.a:size
+    " elseif a:position =~? '^t'
+        " wincmd K
+        " exe 'res '.a:size
 
-    else
-        wincmd J
-        exe 'res '.a:size
-    endif
-endf
+    " else
+        " wincmd J
+        " exe 'res '.a:size
+    " endif
+" endf
 
-fu! utils#toggle_todo()
-    return utils#slider_toggle(g:todo_file, 'r', g:todo_slide_in_width)
-endf
+" fu! utils#toggle_todo() abort
+    " return utils#slider_toggle(findfile("todo.md", expand("~/")."**5/"), 'r', 65)
+" endf
 
 fu! utils#make_missing_dirs(dir_list)
     for l:dir in filter(map(deepcopy(a:dir_list), 'expand(v:val)'), '!isdirectory(v:val)')
@@ -239,14 +231,14 @@ fu! utils#str_to_list(str)
     return l:list
 endf
 
-fu! utils#buffer_wipeout()
-    for l:b in range(1, bufnr('$'), 1)
-        let l:info = getbufinfo(l:b)
-        if !empty(l:info)
-            silent call utils#_buffer_wipeout_helper(l:info['name']['name'], l:b)
-        endif
-    endfor
-endf
+" fu! utils#buffer_wipeout()
+    " for l:b in range(1, bufnr('$'), 1)
+        " let l:info = getbufinfo(l:b)
+        " if !empty(l:info)
+            " silent call utils#_buffer_wipeout_helper(l:info['name']['name'], l:b)
+        " endif
+    " endfor
+" endf
 
 fu! utils#_buffer_wipeout_helper(path, bufno)
     if getbufvar(a:bufno, '&modified')
@@ -303,31 +295,31 @@ fu! utils#add_project_files(anchor, ...) abort
     exe 'argadd '.join(l:files, ' ')
 endf
 
-" Efficiently insert word into sorted dictionary file
-fu! utils#append_to_dict(word)
-    if filereadable(&dictionary)
-        exe '!look '.shellescape(a:word).' '.shellescape(&dictionary)
-        if v:shell_error
-            silent! exe "!_TMP_FILE=$(command mktemp) && command sort --merge ".shellescape(&dictionary)." <(echo ".shellescape(a:word).") > $_TMP_FILE && command cat $_TMP_FILE > ".shellescape(&dictionary)." && command rm -f $_TMP_FILE"
-            echom 'appended '.string(a:word).' to '.string(&dictionary)
-        else
-            echom string(a:word).' already in '.string(&dictionary)
-        endif
-    else
-        echoerr 'dictionary not set'
-    endif
-endf
+" " Efficiently insert word into sorted dictionary file
+" fu! utils#append_to_dict(word)
+    " if filereadable(&dictionary)
+        " exe '!look '.shellescape(a:word).' '.shellescape(&dictionary)
+        " if v:shell_error
+            " silent! exe "!_TMP_FILE=$(command mktemp) && command sort --merge ".shellescape(&dictionary)." <(echo ".shellescape(a:word).") > $_TMP_FILE && command cat $_TMP_FILE > ".shellescape(&dictionary)." && command rm -f $_TMP_FILE"
+            " echom 'appended '.string(a:word).' to '.string(&dictionary)
+        " else
+            " echom string(a:word).' already in '.string(&dictionary)
+        " endif
+    " else
+        " echoerr 'dictionary not set'
+    " endif
+" endf
 
-fu! utils#async_run(cmd) abort
-    let l:save_shell = &shell
-    let &shell = '/bin/bash'
-    silent exe '!'.a:cmd.' &'
-    echom substitute(string(a:cmd).' spawned in the background', '\v\r|\n', ' ', 'g')
-    if v:shell_error
-        echoerr 'an error has '.v:shell_error.'occurred'
-    endif
-    let &shell = l:save_shell
-endf
+" fu! utils#async_run(cmd) abort
+    " let l:save_shell = &shell
+    " let &shell = '/bin/bash'
+    " silent exe '!'.a:cmd.' &'
+    " echom substitute(string(a:cmd).' spawned in the background', '\v\r|\n', ' ', 'g')
+    " if v:shell_error
+        " echoerr 'an error has '.v:shell_error.'occurred'
+    " endif
+    " let &shell = l:save_shell
+" endf
 
 fu! utils#proj_root(...)
 
@@ -353,24 +345,24 @@ fu! utils#proj_root(...)
     return l:this_dir
 endf
 
-fu! utils#hl_word()
-    let @/ = ''
-    if exists('#auto_highlight')
-        au! auto_highlight
-        aug! auto_highlight
-        setl updatetime=4000
-        echo 'Highlight current word: OFF'
-        return 0
-    else
-        aug auto_highlight
-            au!
-            au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-        aug end
-        setl updatetime=500
-        echo 'Highlight current word: ON'
-        return 1
-    endif
-endf
+" fu! utils#hl_word()
+    " let @/ = ''
+    " if exists('#auto_highlight')
+        " au! auto_highlight
+        " aug! auto_highlight
+        " setl updatetime=4000
+        " echo 'Highlight current word: OFF'
+        " return 0
+    " else
+        " aug auto_highlight
+            " au!
+            " au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+        " aug end
+        " setl updatetime=500
+        " echo 'Highlight current word: ON'
+        " return 1
+    " endif
+" endf
 
 fu! utils#my_tab_label(n)
     let buflist = tabpagebuflist(a:n)
@@ -440,37 +432,37 @@ fu! utils#is_stale(file, min_limit)
     return !filereadable(a:file) || ((localtime() - getftime(a:file)) > (60 * a:min_limit))
 endf
 
-fu! utils#close_dup_tabs()
-    let cnt = 0
-    let i = 1
-    let tpbufflst = []
-    let dups = []
-    let tabpgbufflst = tabpagebuflist(i)
-    while type(tabpagebuflist(i)) == 3
-        if index(tpbufflst, tabpagebuflist(i)) >= 0
-            call add(dups, i)
-        else
-            call add(tpbufflst, tabpagebuflist(i))
-        endif
-        let i += 1
-        let cnt += 1
-    endw
-    call reverse(dups)
-    for tb in dups
-        exe "tabclose ".tb
-    endfor
-endf
+" fu! utils#close_dup_tabs()
+    " let cnt = 0
+    " let i = 1
+    " let tpbufflst = []
+    " let dups = []
+    " let tabpgbufflst = tabpagebuflist(i)
+    " while type(tabpagebuflist(i)) == 3
+        " if index(tpbufflst, tabpagebuflist(i)) >= 0
+            " call add(dups, i)
+        " else
+            " call add(tpbufflst, tabpagebuflist(i))
+        " endif
+        " let i += 1
+        " let cnt += 1
+    " endw
+    " call reverse(dups)
+    " for tb in dups
+        " exe "tabclose ".tb
+    " endfor
+" endf
 
-fu! utils#colorize(group, what)
-    setg redrawtime=200
-    for i in range(1, 255)
-        echom "Color nr ".i
-        exe 'hi '.a:group.' '.a:what.'='.i
-        redraw
-        sleep 300m
-    endfor
-    setg redrawtime=2000
-endf
+" fu! utils#colorize(group, what)
+    " setg redrawtime=200
+    " for i in range(1, 255)
+        " echom "Color nr ".i
+        " exe 'hi '.a:group.' '.a:what.'='.i
+        " redraw
+        " sleep 300m
+    " endfor
+    " setg redrawtime=2000
+" endf
 
 fu! utils#safe_subst(l1, l2)
     let l:word = expand('<cword>')
