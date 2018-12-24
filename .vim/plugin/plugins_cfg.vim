@@ -1,4 +1,8 @@
 " vim:ft=vim:
+
+" Built In:
+let g:omni_syntax_minimum_length = 2
+
 " Rust:
 let g:rust_fold = 2
 let g:rust_bang_comment_leader = 1
@@ -188,18 +192,24 @@ let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_autoStart    = 0
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_serverCommands = {
+            \ 'c':              ['/usr/bin/clangd'],
+            \ 'cpp':            ['/usr/bin/clangd'],
+            \ 'css':            ['~/.config/yarn/global/node_modules/.bin/css-languageserver --stdio', '--stdio'],
+            \ 'html':           ['~/.config/yarn/global/node_modules/.bin/html-languageserver', '--stdio'],
+            \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
+            \ 'json':           ['~/.config/yarn/global/node_modules/.bin/vscode-json-languageserver', '--stdio'],
+            \ 'python':         ['~/.local/bin/pyls'],
             \ 'rust':           ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
             \ 'sh':             ['~/.config/yarn/global/node_modules/.bin/bash-language-server', 'start'],
-            \ 'python':         ['~/.local/bin/pyls'],
-            \ 'cpp':            ['/usr/bin/clangd'],
-            \ 'c':              ['/usr/bin/clangd'],
+            \ 'sql':            ['~/.config/yarn/global/node_modules/.bin/sql-language-server', 'up', '--method', 'stdio'],
+            \ 'typescript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
+            \ 'yaml':           ['/usr/bin/node', '~/.config/yarn/global/node_modules/.bin/yaml-language-server', '--stdio'],
             \ }
-            " \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-            " \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
-            " \ 'typescript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-langserver'],
 
 let g:LanguageClient_rootMarkers = {
             \ 'javascript': ['package.json', '.git'],
+            \ 'typescript': ['package.json', '.git'],
+            \ 'json':       ['package.json', '.git'],
             \ 'python':     ['requirements.txt', 'setup.py', '.git'],
             \ 'rust':       ['Cargo.toml'],
             \ }

@@ -51,6 +51,7 @@
     "remark-lint": "^6.0.1",
     "scmindent": "^1.0.4",
     "showdown": "^1.8.0",
+    "sql-language-server": "^0.0.2",
     "stylelint": "^9.6.0",
     "stylelint-config-recommended": "^2.1.0",
     "stylelint-config-standard": "^18.2.0",
@@ -67,10 +68,13 @@
     "typescript-language-server": "^0.3.6",
     "uglify-es": "^3.1.9",
     "vale": "^0.1.0",
+    "vscode-css-languageserver-bin": "^1.4.0",
+    "vscode-html-languageserver-bin": "^1.4.0",
+    "vscode-json-languageserver": "^1.0.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^2.1.4",
     "write-good": "^0.13.0",
-    "yaml-language-server": "^0.0.17",
+    "yaml-language-server": "^0.2.0",
     "yarn": "^1.10.1",
     "yo": "^2.0.5"
   }
