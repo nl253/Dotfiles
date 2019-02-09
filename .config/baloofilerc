@@ -1,7 +1,0 @@
-[General]
-dbVersion = 2
-exclude filters = *.po,*.o,*~,__pycache__,*.pyc,.hg,.bzr,lost+found,*.class,*.aux,.git
-exclude filters version = 2
-first run = false
-
-# vim:ft=cfg:

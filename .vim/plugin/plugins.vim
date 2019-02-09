@@ -4,6 +4,7 @@ exe 'let $PLUGINS = '.string(expand('<sfile>'))
 " Init Vim-Plug
 call plug#begin('~/.vim/plugged')
 
+Plug 'junegunn/fzf', {'dir': '~/.local/fzf', 'do': './install --all'}
 Plug 'wlangstroth/vim-racket'
 Plug 'wellle/targets.vim'
 Plug 'scrooloose/nerdcommenter'

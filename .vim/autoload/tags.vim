@@ -1,4 +1,5 @@
 fu! tags#project(force, ...) abort
+	return
 
     if !utils#is_regular_buffer() | return v:false | endif
 
@@ -44,6 +45,7 @@ fu! tags#project(force, ...) abort
 endf
 
 fu! tags#lib(age_min, force, lib_path, ...) abort
+	return
 
     if !utils#is_regular_buffer() | return v:false | endif
 

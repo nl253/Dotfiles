@@ -16,3 +16,5 @@ shopt -s xpg_echo globasciiranges histappend checkjobs checkwinsize \
   checkhash cdable_vars
 
 PROMPT_COMMAND="history -a"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
