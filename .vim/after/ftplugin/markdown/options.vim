@@ -1,4 +1,4 @@
-setl shiftwidth=4 tabstop=8 linebreak formatoptions=torcn spell conceallevel=0
+setl shiftwidth=2 tabstop=4 linebreak formatoptions=torcn spell conceallevel=0
 
 " jump to headings 
 nn <buffer> [[ ?\v^#<CR>

@@ -27,7 +27,7 @@ aug VariousAutoCmds
     au CursorHold,BufEnter           ~/*                        sil! checkt
 
     " autosave on focus lost
-    au BufLeave,FocusLost            ??*                        try | up | cat /\vE(472|344|13)/ | endt
+    au BufLeave,FocusLost            ??*                        try | up | cat /\vE(472|344|13)/ | echo 'saved '.expand('%') | endt
 
     au WinEnter                      ??*                        setl winwidth=20
     au CmdwinEnter                   *                          setl updatetime=2000

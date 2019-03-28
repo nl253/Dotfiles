@@ -116,7 +116,7 @@ alias bat='command bat --theme TwoDark --style plain'
 
 # because kitty is not recognised as a terminal emulator
 [ -x /usr/bin/ssh ] && alias ssh='TERM=xterm command ssh'
-[ -x /usr/bin/kitty ] && [ -x ~/.local/bin/kitty ] && alias kitty=~/.local/bin/kitty
+[ -x /usr/bin/kitty ] && [ -x ~/.local/bin/kitty ] && alias kitty="~/.local/kitty.app/bin/kitty --config ~/.config/kitty/kitty-dark.conf"
 
 # Python
 alias pip-update-all="command pip3 freeze --local | command grep -v '^\\-e' | command cut -d = -f 1  | command xargs -n1 pip install -U"

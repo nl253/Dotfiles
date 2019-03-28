@@ -7,7 +7,7 @@ if ((BASH_VERSINFO < 4)); then
   return 0
 fi
 
-for file in polyfill extras completions; do
+for file in completions; do
   . ~/.config/bash/$file.sh
 done
 

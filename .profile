@@ -7,10 +7,6 @@ export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export EMAIL='norbertlogiewa96@gmail.com'
 
-# export RIPGREP_CONFIG_PATH=~/.config/rg/config
-
-# plantuml() { dash -c "java -jar ~/.local/share/plant-uml/plantum*.jar $*"; }
-
 if [ -x $(command which go 2>/dev/null) ]; then
   export PATH=$PATH:$(command go env GOPATH)/bin
 fi
@@ -63,10 +59,6 @@ for directory in .config/yarn/global/node_modules/.bin; do
   [ -d "${HOME}/${directory}" ] && export PATH="${HOME}/${directory}:${PATH}:" 2>/dev/null
 done
 
-# for directory in '/usr/lib/jvm/java-9-openjdk'; do
-# [ -d "${directory}/bin" ] && export PATH="${directory}/bin:${PATH}:" 2>/dev/null
-# done
-
 # PostgreSQL
 if [ -x /usr/bin/psql ]; then
   export PGUSER=postgres
@@ -83,7 +75,7 @@ if [ -x /usr/bin/mysql ]; then
 fi
 
 # $BROWSER
-for browser in google-chrome chromium  firefox-developer firefox vivaldi brave palemoon; do
+for browser in google-chrome chromium chromium-browser firefox-developer firefox vivaldi brave palemoon; do
   for channel in snapshot nightly unstable beta stable; do
     [ -x /usr/bin/${browser}-${channel} ] && export BROWSER=/usr/bin/${browser}-${channel} && break 2
   done
@@ -97,7 +89,7 @@ export ERL_LIBS=/home/norbert/.local/lib/erlang
 
 # Java
 # ----
-export JAVA_HOME=/usr/lib/jvm/default/
+export JAVA_HOME=/usr/lib/jvm/default
 
 # Rust
 # ----
@@ -105,7 +97,7 @@ export DEFAULT_TOOLCHAIN=nightly
 
 # Python
 # ------
-mkdir -p /tmp/python/bytecode/
+mkdir -p /tmp/python/bytecode
 # don't store __pycache__ in ~/
 export PYTHONPYCACHEPREFIX=/tmp/python/bytecode
 # Warn once per Python process
