@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-path=~/.local/share/plantuml.jar 
+for fname in puml plantuml; do
+  for dir in ~/.{local/share,config}{/$fname,/bin/$fname,} /{usr/,usr/share/,}{bin,$fname,}; do
+    path="$dir/$fname.jar"
+    if [[ -f "$path" ]]; then
+      builtin command java -jar $path $@ && exit 0
+    fi
+  done
+done
 
-panic() {
-  builtin echo "could not $path"
-  builtin exit 1
-}
-
-run() { builtin command java -jar $path $@; }
-
-[[ -f $path ]] && run $@ || panic
+builtin echo "could not plantuml .jar file"
+builtin exit 1
