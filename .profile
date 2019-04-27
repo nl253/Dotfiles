@@ -1,7 +1,9 @@
 # ~/.profile sourced by all login shells
 
 export ENV=$HOME/.config/sh/init.sh
+export NODE_REPL_HISTORY=$HOME/.config/node/.history
 export ELINKS_CONFDIR=$HOME/.config/elinks
+export UV_THREADPOOL_SIZE=4
 # export BASH_ENV=$HOME/.config/bash/.bashrc
 export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
@@ -42,8 +44,6 @@ export SAVEHIST=$HISTSIZE
 # After each command, append to the history file and reread it
 export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
-[ -f ~/.makepkg.conf ] && export MAKEPKG_CONF=~/.makepkg.conf
-
 # Needs to be set for ranger to load configuration
 [ -f ~/.config/ranger/rc.conf ] && export RANGER_LOAD_DEFAULT_RC=false
 
@@ -51,28 +51,13 @@ export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; histor
 export QT_SELECT=5
 
 # $PATH
-for directory in .racket .local .yarn .stack .cabal .cargo .config/composer/vendor .local/share/fzf go node_modules; do
+for directory in .racket .local .yarn .stack .cabal .cargo .config/composer/vendor .local/share/fzf go node_modules /usr/local; do
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
 
 for directory in .config/yarn/global/node_modules/.bin; do
   [ -d "${HOME}/${directory}" ] && export PATH="${HOME}/${directory}:${PATH}:" 2>/dev/null
 done
-
-# PostgreSQL
-if [ -x /usr/bin/psql ]; then
-  export PGUSER=postgres
-  export PGHOST=localhost
-  # export PGDATABASE=testing
-fi
-
-# MySQL
-if [ -x /usr/bin/mysql ]; then
-  export MYSQL_PS1=' MySQL ~> '
-  if [ $HOSTNAME = raptor ]; then
-    export MYSQL_HOST='dragon.kent.ac.uk'
-  fi
-fi
 
 # $BROWSER
 for browser in google-chrome chromium chromium-browser firefox-developer firefox vivaldi brave palemoon; do
@@ -81,11 +66,6 @@ for browser in google-chrome chromium chromium-browser firefox-developer firefox
   done
   [ -x /usr/bin/$browser ] && export BROWSER=/usr/bin/$browser && break
 done
-
-# Erlang
-# ------
-export ERL_AFLAGS="-kernel shell_history enabled"
-export ERL_LIBS=/home/norbert/.local/lib/erlang
 
 # Java
 # ----

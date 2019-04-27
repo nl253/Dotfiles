@@ -329,3 +329,7 @@ wekafiles
 .octave_hist
 .xinputrc
 .vim/.netrwhist
+.config/kdenliverc
+.config/session
+.keras/keras.json
+.config/zsh/.zcompdump

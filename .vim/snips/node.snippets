@@ -1,6 +1,6 @@
 priority -50
 
-snippet "req[uire]{,4}" "require node.js module [javascript]" rb
+snippet "req[uire]{,4}" "require [node]" rb
 require("${1:fs}");
 endsnippet 
 
@@ -19,6 +19,56 @@ net.createServer(function(${1:socket}){
 }).listen(${6:8124});
 endsnippet
 
-snippet "#!" "shebang node.js [javascript]" rb
+snippet "#!" "shebang [node]" rb
 #!/usr/bin/env node
+endsnippet
+
+snippet logger "logger [node]"
+const { Writable } = require('stream');
+const { createWriteStream } = require('fs');
+
+class Logger extends Writable {
+  constructor(opts) {
+    super();
+    Object.assign(this, Object.assign({
+      fName: 'log',
+      vars: {
+        lvl: 'INFO',
+        time: () => (new Date()).toLocaleTimeString(),
+        // prefix: 'ROOT',
+        // date: () => (new Date()).toLocaleDateString(),
+        // dateISO: () => (new Date()).toISOString(),
+        // dateGMT: () => (new Date()).toGMTString(),
+        // year: () => (new Date()).getFullYear(),
+        // month: () => (new Date()).getMonth(),
+        // day: () => (new Date()).getDay(),
+        // min: () => (new Date()).getMinutes(),
+        // sec: () => (new Date()).getSeconds(),
+        // ms: () => (new Date()).getMiliseconds(),
+      },
+      flags: 'a',
+      fmtStr: '[%(lvl)s] %(time)s %(msg)s\n',
+    }, opts));
+    if (this.file === undefined) {
+      this.file = createWriteStream(this.fName, {flags: this.flags});
+    } else if (this.file.constructor.name === 'String' && this.file.toLocaleLowerCase() === 'stdout') {
+      this.file = process.stdout;
+    }
+  }
+
+  _write(chunk, enc, cb) {
+    this.file.write(
+      Object.keys(this.vars)
+        .reduce((acc, v) => acc.replace(`%(${v})s`, this.vars[v].constructor.name[0] === 'F' ? this.vars[v]() : this.vars[v]), this.fmtStr)
+        .replace('%(msg)s', chunk)
+    );
+    cb();
+  }
+
+  _final() {
+    this.file.end();
+  }
+}
+
+module.exports = Logger;
 endsnippet

@@ -92,8 +92,9 @@ import re, os, fnmatch
 from copy import deepcopy
 from glob import iglob
 from json import load as jsonLoad
-from os import environ, makedirs, mknod
+from os import environ, makedirs, mknod, getenv
 from os.path import exists, expanduser, isfile, join, lexists, relpath
+from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen, run
 from typing import Any, Iterable, List, Optional, Pattern, Set, Text, Tuple
 
@@ -310,6 +311,41 @@ class git(Command):
                 )
 
 
+class toPDF(Command):
+    """:toPDF [<file>, ...]
+    Convert files to PDF.
+
+    NOTE requires libreoffice
+    """
+    def execute(self):
+        d = Path('.')
+        did_files = []
+        args = ['libreoffice', '--headless', '--invisible', '--convert-to', 'pdf']
+        if len(self.args) > 1:
+            for node in self.args[1:]:
+                try:
+                    run(args + [node])
+                    did_files.append(node)
+                except Exception as e:
+                    self.fm.notify(str(e), bad=True)
+        else:
+            for ext in ['ppt', 'pptx', 'doc', 'docx']:
+                for node in d.glob(f'*.{ext}'):
+                    try:
+                        run(args + [node])
+                        did_files.append(node)
+                    except Exception as e:
+                        self.fm.notify(str(e), bad=True)
+        if len(did_files) == 0:
+            self.fm.notify('no *.{doc,docx,ppt,pptx} files', bad=True)
+        else:
+            self.fm.notify(f'converted {", ".join(did_files)}')
+
+
+    def tab(self, tabnum):
+        return self._tab_directory_content()
+
+
 class vim(Command):
     """:vim [<option>, ...] [<filename>, ...]
     Open marked files in vim.
@@ -318,7 +354,7 @@ class vim(Command):
     """
 
     def execute(self):
-        cmd: List[Text] = ['vim'] + self.args[1:]
+        cmd = [getenv('EDITOR', 'vim')] + self.args[1:]
         if len(self.fm.thistab.get_selection()) > 1:
             cmd.append('--')
             cmd.extend((i.path for i in self.fm.thistab.get_selection()))
@@ -436,8 +472,8 @@ class grep(Command):
             if exists(expanduser('~/.cargo/bin/rg')):
 
                 x = run([
-                    'rg', '--pretty', '--smart-case', '--threads', '16',
-                    '--after-context', '1', '--before-context', '1', '--regexp'
+                    'rg', '--pretty', '--smart-case', '--threads=4',
+                    '--after-context=1', '--before-context=1', '--regexp'
                 ] + self.args[1:],
                     stdout=PIPE)
 
@@ -449,7 +485,7 @@ class grep(Command):
 
                 x = run([
                     'git', 'grep', '--line-number', '--color=always', '-I',
-                    '--after-context=3', '--threads=16', '--extended-regexp',
+                    '--after-context=3', '--threads=4', '--extended-regexp',
                     '--heading', '--break', '-e'
                 ] + self.args[1:],
                     stdout=PIPE)
@@ -461,10 +497,18 @@ class grep(Command):
                     '--color=always', '--with-filename', '-r', '-e'
                 ] + self.args[1:])
 
-            run(['less', '-R', '-X', '-I'], input=x.stdout)
+            if x.stdout:
+                run(['less', '-R', '-X', '-I'], input=x.stdout)
+                self.fm.ui.need_redraw = True
+                self.fm.ui.redraw_main_column()
+            else:
+                self.fm.notify('no matches', bad=True)
 
-            self.fm.ui.need_redraw = True
-            self.fm.ui.redraw_main_column()
+
+    def tab(self, tabnum):
+        for flag in ('--after-context', '--basic-regexp', '--before-context', '--binary-files', '--byte-offset', '--dereference-recursive', '--exclude-dir', '--exclude-from', '--extended-regexp', '--files-with', '--files-without', '--fixed-strings', '--ignore-case', '--initial-tab', '--invert-match', '--line-buffered', '--line-number', '--line-regexp', '--max-count', '--no-filename', '--no-messages', '--null-data', '--only-matching', '--perl-regexp', '--unix-byte', '--with-filename', '--word-regexp'):
+            if self.args[-1] in flag or flag in self.args[-1]:
+                yield f'{" ".join(self.args[:-1])} {flag}'
 
 
 class untracked(Command):
@@ -566,7 +610,7 @@ class mkdir(Command):
                 makedirs(dirname, exist_ok=True)
 
             else:
-                self.fm.notify(f"file/directory {dirname} exists!", bad=True)
+                self.fm.notify(f"directory {dirname} exists!", bad=True)
                 break
 
     def tab(self, tabnum):
@@ -617,35 +661,10 @@ class make(Command):
         with open('./Makefile', mode='r', encoding='utf-8') as f:
             text: Text = f.read()
 
-        pat: Pattern[Text] = re.compile(r'^(\w+):', flags=re.M)
+        pat = re.compile(r'^(\w+):', flags=re.M)
 
         return (f'make {match.group(1)}' for match in pat.finditer(text))
 
-
-class mvn(Command):
-    """:mvn <subcommand>
-
-    Run make with specified rule.
-
-    NOTE Must have a Makefile in the same directory.
-    """
-
-    def execute(self):
-        #  run()
-        Popen(['mvn'] + self.args[1:], stdout=DEVNULL)
-
-    def tab(self, tabnum):
-
-        if not isfile('./pom.xml'):
-            return
-
-        return {
-            'mvn ' + i
-            for i in {
-                'site', 'compile', 'package', 'validate', 'install', 'deploy',
-                'test', 'integration-test', 'clean'
-            } if self.args[-1] in i or len(self.args) == 1
-        }
 
 
 class modified(Command):
@@ -693,9 +712,9 @@ class vimdiff(Command):
 
 
 class edit(Command):
-    """:edit <filename>
+    """:edit [<filename>, ...]
 
-    Opens the specified file in vim
+    Open file in $EDITOR
     """
 
     def execute(self):
@@ -703,7 +722,6 @@ class edit(Command):
             run([environ['EDITOR'], self.fm.thisfile.path])
         else:
             run([environ['EDITOR']] + self.args[1:])
-            #  self.fm.edit_file(self.rest(1))
 
     def tab(self, tabnum):
         return self._tab_directory_content()

@@ -1,10 +1,8 @@
 " source javascript runtime files 
 exec 'so '.expand('<sfile>:p:h:h').'/javascript/javascript.vim'
 
-                                                      
-
 if executable("tsc")
-    let s:out_dir  = '/tmp/vim/typescript'
+    let s:out_dir  = '%:p:h'
     let s:out_file = s:out_dir.'/%:t:r.js'
     let s:libs = ['es5', 
                 \ 'es2015', 
@@ -16,7 +14,20 @@ if executable("tsc")
                 \ 'scripthost',
                 \ 'webworker',  
                 \ ]
-    let s:tsc_cmd  = 'tsc --listEmittedFiles --forceConsistentCasingInFileNames --sourceMap --outFile '.s:out_file.' --lib '.join(s:libs, ',').' --removeComments --esModuleInterop --allowJs %'
+    let s:flags = join([
+                \ '--lib '.join(s:libs, ','),
+                \ '--listEmittedFiles',
+                \ '--sourceMap',
+                \ '--removeComments',
+                \ '--noUnusedLocals',
+                \ '--noUnusedParameters',
+                \ '--noFallthroughCasesInSwitch',
+                \ '--allowJs',
+                \ '--strictNullChecks',
+                \ '--strictFunctionTypes',
+                \ '--outFile '.s:out_file,
+                \ ], ' ')
+    let s:tsc_cmd  = 'tsc '.s:flags.' %'
     exe 'setl makeprg='.escape(s:tsc_cmd, ' ') 
 endif
 

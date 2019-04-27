@@ -11,7 +11,7 @@ fu! inits#all() abort
     endif
 
     if empty(&omnifunc)
-        call opts#safe_setl(['omnifunc=syntaxcomplete#Complete'])
+        call opts#omni(['syntaxcomplete#Complete'])
     endif
 
     " words from all loaded buffers 
@@ -49,9 +49,9 @@ fu! inits#all() abort
                 \ 'nrformats+=alpha',
                 \ 'nrformats=bin,hex',
                 \ 'smartindent',
+                \ 'spellfile=~/.vim/spell/en.utf-8.add,~/.config/nvim/spell/en.utf-8.add',
                 \ 'spelllang=en_gb',
                 \ 'undofile',
-                \ 'spellfile=~/.vim/spell/en.utf-8.add,~/.config/nvim/spell/en.utf-8.add',
                 \ ])
     call opts#comma_opt('suffixesadd', [
                 \ expand('%:e'), 
@@ -59,12 +59,12 @@ fu! inits#all() abort
                 \ 'hs', 
                 \ 'ini', 
                 \ 'java', 
-                \ 'md', 
                 \ 'js', 
-                \ 'ts', 
+                \ 'md', 
                 \ 'py', 
                 \ 'rs', 
                 \ 'rst', 
+                \ 'ts', 
                 \ 'vim', 
                 \ 'yaml', 
                 \ 'yml',
@@ -83,35 +83,35 @@ endf
 
 fu! inits#programming() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
-    "call tags#project(l:anchors, 0)
     call opts#safe_setl(['nospell'])
     call opts#comma_opt('complete', ['.', 'w', 't'])
     let l:ext = expand('%:e')
     let l:root = utils#proj_root('.git')
     if !empty(l:ext)
-        call opts#comma_opt('complete', [
+        call opts#comma_opt(
+                    \ 'complete', 
+                    \ [
                     \ 'k*.'.l:ext, 
                     \ 'k'.l:root.'/*.'.l:ext,
                     \ ])
     endif
-        call opts#comma_opt('path', [l:root.'/**4/'])
+    call opts#comma_opt('path', [l:root.'/**4/'])
     call utils#add_project_files('.git')
 endf
 
 fu! inits#markup() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
-
     call opts#safe_setl([
                 \ 'conceallevel=3',
+                \ 'expandtab',
+                \ 'ignorecase',
                 \ 'iskeyword+=\-',
                 \ 'iskeyword-=_',
-                \ 'spell',
-                \ 'tagcase=ignore',
-                \ 'ignorecase',
-                \ 'expandtab',
-                \ 'textwidth=79',
                 \ 'linebreak',
                 \ 'nowrap',
+                \ 'spell',
+                \ 'tagcase=ignore',
+                \ 'textwidth=79',
                 \ ])
     call opts#letter_opt('formatoptions', ['t', 'o', 'r', 'c', 'n', 'q', 'j', 'l', '1'])
     call opts#comma_opt('complete', ['.', 'w', 'k*.'.expand('%:e')])
@@ -121,23 +121,23 @@ endf
 fu! inits#lang_server() abort
     if !(expand('%:p') =~# $HOME) | return 0 | endif
     LanguageClientStart
-    nn <buffer> <silent> <LocalLeader>R :call LanguageClient#textDocument_references()<CR>
-    nn <buffer> <silent> K              :call LanguageClient#textDocument_definition()<CR>
     nn <buffer> <silent> <LocalLeader>h :call LanguageClient#textDocument_hover()<CR>
+    nn <buffer> <silent> K              :call LanguageClient#textDocument_definition()<CR>
+    nn <buffer> <silent> <LocalLeader>t :call LanguageClient#textDocument_typeDefinition()<CR>
     nn <buffer> <silent> <LocalLeader>i :call LanguageClient#textDocument_implementation()<CR>
     nn <buffer> <silent> <LocalLeader>r :call LanguageClient#textDocument_rename()<CR>
-    nn <buffer> <silent> <LocalLeader>s :call LanguageClient#textDocument_documentSymbol()<CR>
+    nn <buffer> <silent> <LocalLeader><LocalLeader> :call LanguageClient#textDocument_codeAction()<CR>
+    nn <buffer> <silent> <LocalLeader>f :call LanguageClient#textDocument_formatting()<CR>
+    nn <buffer> <silent> <LocalLeader>* :call LanguageClient#textDocument_documentHighlight()<CR>
+    nn <buffer> <silent> <LocalLeader>c :call LanguageClient#clearDocumentHighlight()<CR>
     call opts#omni(['LanguageClient#complete'])
-    " if &filetype != 'javascript' && &filetype != 'typescript'
-        " setl omnifunc=LanguageClient#complete
-    " endif
 endf
 
 fu! inits#non_home() abort
     call opts#safe_setl(['nomodifiable', 'readonly'])
 endf
 
-" Note: autocmd for this needs to be TermOpen (which requires feature check `has('nvim')`).
+" NOTE: autocmd for this needs to be TermOpen (which requires feature check `has('nvim')`).
 fu! inits#term() abort
     call opts#safe_setl(['nomodifiable', 'readonly', 'nospell'])
     nn <buffer> <Leader>' :close<CR>

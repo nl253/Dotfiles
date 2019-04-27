@@ -1,12 +1,12 @@
 {
   "dependencies": {
+    "@angular/cli": "^7.3.8",
     "alex": "^6.0.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.1",
     "bash-language-server": "^1.5.4",
     "configurable-http-proxy": "^3.1.1",
     "create-react-app": "^2.1.1",
-    "css-language-server": "^0.0.2",
     "csslint": "^1.0.5",
     "ejs-lint": "^0.3.0",
     "eslint": "^5.7.0",
@@ -50,6 +50,7 @@
     "remark": "^9.0.0",
     "remark-lint": "^6.0.1",
     "scmindent": "^1.0.4",
+    "semver": "^6.0.0",
     "showdown": "^1.8.0",
     "sql-language-server": "^0.0.2",
     "stylelint": "^9.6.0",

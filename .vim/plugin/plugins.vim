@@ -1,11 +1,10 @@
- " vim::foldmethod=indent:
+ " vim:foldmethod=indent:
 exe 'let $PLUGINS = '.string(expand('<sfile>'))
 
 " Init Vim-Plug
 call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', {'dir': '~/.local/fzf', 'do': './install --all'}
-Plug 'wlangstroth/vim-racket'
 Plug 'wellle/targets.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
@@ -21,8 +20,8 @@ Plug 'othree/csscomplete.vim', {'for': ['css', 'html']}
 
 Plug 'lervag/vimtex', {'for': 'tex'}
 
-Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
-Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoUpdateBinaries'}
+" Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
+" Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoUpdateBinaries'}
 
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
@@ -30,8 +29,7 @@ Plug 'autozimu/LanguageClient-neovim', {
             \ }
 
 if has('python3') || has('python')
-    " Plug 'davidhalter/jedi-vim', {'for': 'python'}
-    Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'php', 'htmldjango']}
+    Plug 'mattn/emmet-vim', {'for': ['xml', 'html', 'php', 'htmldjango'], 'on': 'Emmet'}
     Plug 'SirVer/ultisnips'
 en
 

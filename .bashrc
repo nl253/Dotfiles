@@ -8,7 +8,7 @@ if ((BASH_VERSINFO < 4)); then
 fi
 
 for file in completions; do
-  . ~/.config/bash/$file.sh
+  [[ -f ~/.config/bash/$file.sh ]] && . ~/.config/bash/$file.sh
 done
 
 shopt -s xpg_echo globasciiranges histappend checkjobs checkwinsize \
@@ -17,4 +17,11 @@ shopt -s xpg_echo globasciiranges histappend checkjobs checkwinsize \
 
 PROMPT_COMMAND="history -a"
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+  . /usr/share/bash-completion/bash_completion 
+  for c in pgrep psql 7z man gzip curl pdftotext apt{,titude,-get} aspell chown chgrp dot feh find file git host{,name} java{,c} kill{,all} python{,3} R ssh sqlite3 whatis; do
+    if ([[ -f /usr/bin/$c ]] || [[ -f /usr/local/bin/$c ]] || [[ -f /bin/$c ]]) && [[ -f /usr/share/bash-completion/completions/$c ]]; then 
+      . /usr/share/bash-completion/completions/$c
+    fi
+  done
+fi

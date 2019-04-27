@@ -5,6 +5,7 @@ from statistics import mode, stdev, variance
 # 3rd Party
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 from numpy import (
     abs, arange, cast, ceil, column_stack, concatenate, cos, dot, empty, floor, fromfunction, fromiter, full, linspace,
     log2, log10, matrix, mean, median, ones, prod, round, row_stack, sin, std, sum, tan, trunc, var, vstack, zeros

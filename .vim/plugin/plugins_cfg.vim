@@ -1,22 +1,17 @@
 " vim:ft=vim:
 
 " Built In:
-let g:omni_syntax_minimum_length = 2
+let g:omni_syntax_minimum_length   = 2
 
 " Rust:
-let g:rust_fold = 2
-let g:rust_bang_comment_leader = 1
+let g:rust_fold                    = 2
+let g:rust_bang_comment_leader     = 1
 
 " VimRacer:
 let g:racer_experimental_completer = 1
 
-" Haskell:
-let g:haskell_indent_if    = 2
-let g:haskell_indent_where = 2
-let g:haskell_indent_do    = 2
-
 " JavaScript:
-let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_jsdoc      = 1
 
 " Go:
 let g:go_fmt_autosave = 0
@@ -143,22 +138,21 @@ let g:netrw_wiw            = &winminwidth
 let g:xml_syntax_folding = 0 
 
 " YAML:
-let g:yaml_schema = 'pyyaml'
-let g:loaded_saner = 1
+let g:yaml_schema  = 'pyyaml'
 
 " HTML:
-let g:html_use_xhtml = 0
-let g:html_dynamic_folds = 0
-let g:html_no_foldcolumn = 1 
-let g:html_use_encoding = 'UTF-8'
+let g:html_wrong_comments = 1
+let g:html_hover_unfold   = 1
+let g:html_use_xhtml      = 0
+let g:html_dynamic_folds  = 0
+let g:html_no_foldcolumn  = 1 
+let g:html_use_encoding   = 'UTF-8'
 let g:html_font = [
             \ 'Sans Serif', 
             \ 'DejaVu Sans Mono', 
             \ 'Consolas', 
             \ 'monospace'
             \ ]
-let g:html_wrong_comments = 1
-let g:html_hover_unfold = 1
 
 hi netrwSymLink  term=NONE cterm=NONE gui=NONE ctermfg=Magenta guifg=Magenta
 hi netrwCompress term=NONE cterm=NONE gui=NONE ctermfg=Yellow guifg=Yellow 
@@ -188,14 +182,14 @@ let g:html5_aria_attributes_complete          = 0
 
 " Lang Server:
 " Use an absolute configuration path if you want system-wide settings
-let g:LanguageClient_loadSettings = 1 
-let g:LanguageClient_autoStart    = 0
-let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
+let g:LanguageClient_autoStart      = 0
+let g:LanguageClient_settingsPath   = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_serverCommands = {
             \ 'c':              ['/usr/bin/clangd'],
             \ 'cpp':            ['/usr/bin/clangd'],
-            \ 'css':            ['~/.config/yarn/global/node_modules/.bin/css-languageserver --stdio', '--stdio'],
+            \ 'css':            ['~/.config/yarn/global/node_modules/.bin/css-languageserver', '--stdio'],
             \ 'html':           ['~/.config/yarn/global/node_modules/.bin/html-languageserver', '--stdio'],
+            \ 'go':             ['~/go/bin/go-langserver'],
             \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
             \ 'json':           ['~/.config/yarn/global/node_modules/.bin/vscode-json-languageserver', '--stdio'],
             \ 'python':         ['~/.local/bin/pyls'],
@@ -210,6 +204,6 @@ let g:LanguageClient_rootMarkers = {
             \ 'javascript': ['package.json', '.git'],
             \ 'typescript': ['package.json', '.git'],
             \ 'json':       ['package.json', '.git'],
-            \ 'python':     ['requirements.txt', 'setup.py', '.git'],
-            \ 'rust':       ['Cargo.toml'],
+            \ 'python':     ['requirements.txt', 'setup.py', 'Pipfile', 'setup.cfg', 'MANIFEST.in', 'tox.ini', '.git', 'README.md', 'LICENSE', 'Makefile'],
+            \ 'rust':       ['Cargo.toml', '.git'],
             \ }

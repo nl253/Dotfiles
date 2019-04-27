@@ -37,11 +37,11 @@ sy match   jsLineComment "\/\/.*"                     contains=@Spell,jsCommentT
 sy keyword jsBool true false
 sy keyword jsCond if else switch
 sy keyword jsNull null undefined
-sy match   jsNum "-\=\<\d\+L\=\>\|0[xX][0-9a-fA-F]\+\>"
+sy match   jsNum "\v<-?((\d*\.)?\d+([Ee]-?\d+)?|0[bB][01]+|0[oO][0-7]+|0[xX][0-9a-fA-F]+([Ee]-?[0-9a-fA-F]))>"
 sy keyword jsNum Infinity NaN
 
 " objects by convention capitalised
-sy match jsType  "\v<(([A-Z][a-z]+)+|[A-Z]+[a-z][A-Za-z]+)>"
+sy match jsType  "\v<(([A-Z][a-z0-9]+)+|[A-Z]+[a-z0-9][A-Za-z0-9]+)>"
 " mainly for syntax#complete
 " sy keyword jsType Array Boolean Date Function Number Object String RegExp Infinity Reflect Proxy Math Symbol Error EvalError InternalError RangeError ReferenceError SyntaxError TypeError URIError Generator GeneratorFunction AsyncFunction Promise JSON DataView ArrayBuffer Map Set WeakMap WeakSet Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array
 
