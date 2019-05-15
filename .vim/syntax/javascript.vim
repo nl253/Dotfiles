@@ -83,7 +83,7 @@ sy keyword jsClassDecl interface class extends enum implements
 sy keyword jsStmt      return with break continue try then catch finally throw next yield
 sy match   jsFunct     "\v<(async\s+)?(function>\s*\*?|\(\))"
 sy keyword jsSpecial   apply call eval bind prototype constructor 
-sy match   jsConst    "\v<[A-Z][A-Z_]{2}[A-Z0-9_]+>"
+sy match   jsConst    "\v<[A-Z][A-Z_]{2}[A-Z0-9_]*>"
 
 " chained calls
 sy match jsSpecial '\v^\s*\.[a-z][a-zA-Z]+'ms=s+1
@@ -97,7 +97,7 @@ sy keyword jsRepeat	do for while of in forEach
 
  " OOP:
 sy match jsAccess    "\v<(p(rivate|rotected|ublic)|static) "
-sy match jsSpecifier "\v^\s*[gs]et "
+sy match jsSpecifier "\v^\s*([gs]et|async) "
 sy match jsSpecifier "\v<(package|abstract|final|throws|boolean) "
 
 " Deprecated:

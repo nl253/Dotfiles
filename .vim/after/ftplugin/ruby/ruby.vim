@@ -1,4 +1,3 @@
-
 for i in filter(['ruby_operators', 
             \ 'ruby_space_errors', 
             \ 'ruby_fold', 

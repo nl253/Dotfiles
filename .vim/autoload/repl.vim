@@ -1,11 +1,3 @@
-fu! repl#set_repl(dict) abort
-    aug ReplFtypes
-        au!
-        for l:entry in items(a:dict)
-            exe "au Filetype ".l:entry[0]." nn <buffer> <Leader>' :silent call repl#open_repl(".string(l:entry[1]).")<CR>"
-        endfor
-    aug END
-endf
 
 fu! repl#open_shell()
     let l:shell = executable('bash') ? 'bash' : executable('zsh') ? 'zsh' : executable('fish') ? 'fish' : executable('ksh') ? 'ksh' : 'sh'
@@ -54,7 +46,6 @@ fu! repl#open_repl(repl)
 endf
 
 " Commands ---------------------------------
-"
 "
 fu! repl#list_repls(A, L, P)
 

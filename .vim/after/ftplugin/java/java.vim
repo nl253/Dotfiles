@@ -1,6 +1,4 @@
-if executable('javac')
-	exe 'setl makeprg='.escape(join(['javac', '%',  '&&', 'java', '%:t:r'], ' '), ' ')
-endif
+exe 'setl makeprg='.escape(join(['javac', '%:p:h/*.java', '&&', 'java', '%:t:r']), ' ')
 
 setl expandtab tabstop=8 shiftwidth=4 foldmethod=marker foldmarker={,} foldlevel=1
 
@@ -38,9 +36,9 @@ elseif executable('clang')
     exec 'setl formatprg='.escape(join(['clang-format', '-style=file', '-fallback-style=llvm']), ' ')
 endif
 
-let java_highlight_java_lang_ids = 1
-let java_highlight_functions = 'style'
-let java_highlight_debug = 1
-let java_javascript = 0 
-let java_css = 0
-let java_vb = 0 
+let g:java_highlight_java_lang_ids = 1
+let g:java_highlight_functions = 'style'
+let g:java_highlight_debug = 1
+let g:java_javascript = 0 
+let g:java_css = 0
+let g:java_vb = 0 

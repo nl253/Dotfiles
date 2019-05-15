@@ -1,4 +1,4 @@
-call opts#letg_default('template_dir', expand("~/.vim/templates"))
+let g:template_dir = expand("~/.vim/templates")
 
 fu! templates#read_template()
     if exists('b:_template_read') || !(expand('%:p:h') =~# $HOME)

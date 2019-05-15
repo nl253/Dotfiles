@@ -9,7 +9,7 @@ endsnippet
 
 snippet import "import (...)"
 import (
-	"${1:package}"
+	"$1"
 )
 endsnippet
 
@@ -82,6 +82,10 @@ res, err := $1
 if err != nil {
 	$2
 }
+endsnippet
+
+snippet "pac[kage]{,6}" "package [go]" r
+package ${1:main}
 endsnippet
 
 snippet main "func main() { ... } [go]"

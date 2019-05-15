@@ -19,7 +19,7 @@ aug VariousAutoCmds
     endif
 
     au FileType xml,html,htmldjango call inits#emmet() | if line("$") <= 1000 | syntax sync fromstart | endif
-    au FileType c{pp,},python,sh,rust,{java,type}script,json call inits#lang_server()
+    au FileType c{pp,},python,sh,rust,{java,type}script,json,go call inits#lang_server()
 
     " automatically change dir to the file you are editing
     au BufEnter ??* try | sil! lch %:p:h | cat /\vE(472|344|13)/ | endtry
@@ -44,7 +44,4 @@ aug VariousAutoCmds
 
     " au BufReadPost                   markdown                   if max(map(readfile(expand("%")), 'len(v:val)')) >= &textwidth | setl wrap | endif
     exe "au FileType ".join(g:markup_langs + ['gitcommit'], ',')." WordyWordy"
-
-    " save each session before quitting
-    " au VimLeavePre * SaveSession
 aug END

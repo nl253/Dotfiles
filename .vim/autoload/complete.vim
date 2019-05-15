@@ -18,7 +18,6 @@ endf
 
 " Usage: `setl completefunc=complete#BufWords`
 " NOTE: it requirest grep(1)
-" Note
 fu! complete#TabWords(findstart, base)
     if a:findstart
         " locate the start of the word
@@ -42,7 +41,6 @@ endfun
 
 " Usage: `setl completefunc=complete#BufWords`
 " NOTE: it requirest grep(1)
-" Note
 fu! complete#AllBufsWords(findstart, base)
     if a:findstart
         " locate the start of the word

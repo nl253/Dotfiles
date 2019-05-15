@@ -1,32 +1,3 @@
-fu! utils#find_browser(browser, ...)
-    for l:channel in ['snapshot',
-                    \ 'nightly', 
-                    \ 'unstable', 
-                    \ 'beta', 
-                    \ 'stable',
-                    \ ] + a:000 
-        let l:candidate = a:browser.'-'.l:channel
-        if executable(l:candidate)
-            return l:candidate
-        endif
-    endfor
-    return executable(a:browser) ? a:browser : ''
-endf
-
-" Set $BROWSER environmental variable
-"
-" @params {string} browser
-fu! utils#set_browser(browser, ...)
-    for l:browser in [a:browser] + a:000 
-        let l:candidate = utils#find_browser(l:browser)
-        if !empty(l:candidate)
-            let $BROWSER = l:candidate 
-            return v:true
-        endif
-    endfor
-    return v:false
-endf
-
 fu! utils#is_regular_buffer()
     let l:this_file_path = expand("%:p")
     if !filewritable(l:this_file_path) || (fnamemodify(l:this_file_path, ':t') ==? '[Command Line]') || (&filetype ==# 'qf') || (&buftype ==# 'nofile') || empty(&filetype)
@@ -255,71 +226,6 @@ fu! utils#_buffer_wipeout_helper(path, bufno)
         exe 'bw '.a:bufno
     endif
 endf
-
-" Add to args all project files with the same extension starting " from the project root
-fu! utils#add_project_files(anchor, ...) abort
-
-    let l:anchors = filter([a:anchor] + a:000, '!empty(v:val)')
-
-    " lack of proper anchors
-    "   OR
-    " not run at home
-    "   OR
-    " not in a regular buffer
-    if empty(l:anchors) || !(expand('%:p') =~# $HOME) || !(&buflisted) || (&buftype == 'nofile') || (&buftype == 'quickfix') 
-        return 0
-    endif
-
-    " start depth *NEEDS* to be 1
-    let l:lvl = 1
-    let l:root = execute('echo utils#proj_root('.join(map(l:anchors, 'string(v:val)'), ',').')')
-    let l:ext = expand('%:e')
-    let l:max_depth = 6
-    " you always start with some loaded files
-    let l:files = argv()
-    " count collected files
-    let l:i = len(l:files)
-
-    while (l:lvl < l:max_depth) && (l:i < 50)
-        let l:query = l:root.'/'.join(utils#str_to_list(repeat("*", l:lvl)), '/').'.'.l:ext
-        let l:results = split(expand(l:query), '\n')
-        " slices are safe even if the list is empty
-        if len(l:results[:10]) <= 1
-            break
-        else
-            let i += len(l:results)
-            call extend(l:files, l:results)
-        endif
-    endw
-
-    exe 'argadd '.join(l:files, ' ')
-endf
-
-" " Efficiently insert word into sorted dictionary file
-" fu! utils#append_to_dict(word)
-    " if filereadable(&dictionary)
-        " exe '!look '.shellescape(a:word).' '.shellescape(&dictionary)
-        " if v:shell_error
-            " silent! exe "!_TMP_FILE=$(command mktemp) && command sort --merge ".shellescape(&dictionary)." <(echo ".shellescape(a:word).") > $_TMP_FILE && command cat $_TMP_FILE > ".shellescape(&dictionary)." && command rm -f $_TMP_FILE"
-            " echom 'appended '.string(a:word).' to '.string(&dictionary)
-        " else
-            " echom string(a:word).' already in '.string(&dictionary)
-        " endif
-    " else
-        " echoerr 'dictionary not set'
-    " endif
-" endf
-
-" fu! utils#async_run(cmd) abort
-    " let l:save_shell = &shell
-    " let &shell = '/bin/bash'
-    " silent exe '!'.a:cmd.' &'
-    " echom substitute(string(a:cmd).' spawned in the background', '\v\r|\n', ' ', 'g')
-    " if v:shell_error
-        " echoerr 'an error has '.v:shell_error.'occurred'
-    " endif
-    " let &shell = l:save_shell
-" endf
 
 fu! utils#proj_root(...)
 

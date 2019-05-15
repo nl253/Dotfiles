@@ -1,25 +1,10 @@
-" This file contains options that need to be set globally (ie only once on Vim start-up).
+" Options that need to be set globally (i.e. only once on Vim start-up).
 
 if has('gui_running') | call opts#gui()      | endif
 if !exists(":Man")    | ru! ftplugin/man.vim | endif
 pa justify
 
-if !exists('$BROWSER')
-    call utils#set_browser(
-                \ 'google-chrome', 
-                \ 'chromium', 
-                \ 'firefox', 
-                \ 'firefox-developer', 
-                \ 'vivaldi', 
-                \ 'brave', 
-                \ 'palemoon',
-                \ 'seamonkey',
-                \ 'konqueror',
-                \ 'safari', 
-                \ )
-endif
-
-call utils#make_missing_dirs(map([
+for s:dir in filter(map([
             \ 'undo',
             \ 'backup',
             \ 'swap',
@@ -27,22 +12,13 @@ call utils#make_missing_dirs(map([
             \ 'sessions',
             \ 'templates',
             \ 'snips',
-            \ ], '"~/.vim/".v:val'))
+            \ ], 'expand("~/.vim/".v:val)'), '!isdirectory(v:val)')
+    call mkdir(s:dir, 'p')
+endfor
 
-call opts#append_to_path([
-            \ '~/.gem/ruby/*/bin',
-            \ '~/.fzf/bin',
-            \ '~/go/bin',
-            \ '~/.cargo/bin',
-            \ '~/.local/bin',
-            \ '~/.stack/bin',
-            \ '~/.cabal/bin',
-            \ '~/.config/yarn/global/node_modules/.bin',
-            \ '~/.local/share/fzf/bin',
-            \ '~/.yarn/bin',
-            \ ])
-
-call repl#set_repl({
+aug ReplFtypes
+    au!
+    for entry in items({
             \ 'haskell'   : 'ghci', 
             \ 'python'    : 'ptipython', 
             \ 'erlang'    : 'erl', 
@@ -52,6 +28,9 @@ call repl#set_repl({
             \ 'css'       : 'node -i', 
             \ 'html'      : 'node -i',
             \ })
+        exe "au Filetype ".entry[0]." nn <buffer> <Leader>' :silent call repl#open_repl(".string(entry[1]).")<CR>"
+    endfor
+aug END
 
 " Lazy evaluation (shell is called for `author` and `email` which may slow down start-up)
 fu! GetTemplateVars()
@@ -73,104 +52,28 @@ fu! GetTemplateVars()
     endif
 endf
 
-call opts#set_if_executable('grepprg', {
+for s:pair in items({
             \ 'rg':   'rg --hidden --maxdepth=5 --color=never --threads=4 --vimgrep $*', 
             \ 'grep': 'grepprg=grep -n -r $*',
-            \ },  1) 
+            \ })
+    if executable(s:pair[0])
+        exe 'setg grepprg='.escape(s:pair[1], ' ')
+    endif
+endfor
 
-call opts#set_if_executable('shell', {
+for s:pair in items({            
             \ 'dash': 'dash',
             \ 'bash': 'bash',
             \ 'zsh':  'zsh',
-            \ }, 1)
+            \ })
+    if executable(s:pair[0])
+        exe 'setg shell='.s:pair[1]
+        break
+    endif
+endfor
 
-let s:dict_dir = expand('~/.vim/dicts/')
-
-let s:thesaurus = s:dict_dir.'thesaurus.dict'
-
-if empty(&thesaurus) && filereadable(s:thesaurus)
-    call opts#safe_setg(['thesaurus='.s:thesaurus])
-endif
-
-let s:dict = s:dict_dir.'frequent.dict'
-
-if filereadable(s:dict)
-    call opts#safe_setg(['dictionary='.s:dict])
-    call opts#comma_opt('complete', ['k'])
-endif
-
-call opts#safe_setg([
-            \ "shada=!,'20,<50,s10,h,:50,f10",
-            \ 'autochdir',
-            \ 'autoread',
-            \ 'autowriteall',
-            \ 'backup',
-            \ 'backupdir=~/.vim/backup',
-            \ 'breakat= .,:;!?',
-            \ 'clipboard=unnamed,unnamedplus',
-            \ 'cm=blowfish2',
-            \ 'cmdwinheight=3',
-            \ 'completeopt=menuone,longest',
-            \ 'cpoptions=aABceFsW',
-            \ 'diffopt+=vertical,iwhite',
-            \ 'directory=~/.vim/swap',
-            \ 'encoding=utf8',
-            \ 'errorfile=.errors.log',
-            \ 'errorformat+=%f',
-            \ 'fileignorecase',
-            \ 'foldclose=all',
-            \ 'foldlevelstart=99',
-            \ 'formatprg=fmt -s -u --width=79',
-            \ 'gdefault',
-            \ 'hidden',
-            \ 'inccommand=nosplit',
-            \ 'incsearch',
-            \ 'laststatus=2',
-            \ 'magic',
-            \ 'makeef=.make-output.log',
-            \ 'maxmempattern=200000',
-            \ 'mouse=',
-            \ 'nocompatible',
-            \ 'nohlsearch',
-            \ 'noignorecase',
-            \ 'noshowcmd',
-            \ 'nostartofline',
-            \ 'path='.join(['./', '../', './*'], ','),
-            \ 'pumheight=12',
-            \ 'scrolloff=11',
-            \ 'sessionoptions+=resize',
-            \ 'sessionoptions-=blank',
-            \ 'sessionoptions-=options',
-            \ 'shiftround',
-            \ 'shortmess=stTAIcoOWF',
-            \ 'showbreak= >> ',
-            \ 'sidescroll=1',
-            \ 'sidescrolloff=30',
-            \ 'spellsuggest=best,12,',
-            \ 'splitbelow',
-            \ 'splitright',
-            \ 'switchbuf=usetab,newtab,',
-            \ 'tabline=%!utils#my_tabline()',
-            \ 'tagcase=ignore',
-            \ 'tagcase=match',
-            \ 'taglength=20',
-            \ 'tagrelative',
-            \ 'tagstack',
-            \ 'ttyfast',
-            \ 'undodir=~/.vim/undo',
-            \ 'undolevels=9999',
-            \ 'updatetime=200',
-            \ 'viewdir=~/.vim/views',
-            \ 'viewoptions=folds,options,curdir,cursor',
-            \ 'viminfo=NONE',
-            \ 'virtualedit=all',
-            \ 'wildignorecase',
-            \ 'wildmenu',
-            \ 'wildoptions=tagfile',
-            \ 'winminwidth=20',
-            \ 'winwidth=20',
-            \ 'writebackup',
-            \ ])
+setg thesaurus=~/.vim/dicts/thesaurus.dict dictionary=~/.vim/dicts/frequent.dict path+=./,../,./*,~/.gem/ruby/*/bin,~/.fzf/bin,~/go/bin,~/.cargo/bin,~/.local/bin,~/.stack/bin,~/.cabal/bin,~/.config/yarn/global/node_modules/.bin,~/.local/share/fzf/bin,~/.yarn/bin  autochdir autoread autowriteall backup backupdir=~/.vim/backup breakat=\ .,:;!? clipboard=unnamed,unnamedplus cmdwinheight=3 completeopt=menuone,longest cpoptions=aABceFsW diffopt+=vertical,iwhite directory=~/.vim/swap encoding=utf8 errorfile=.errors.log errorformat+=%f fileignorecase foldclose=all foldlevelstart=99 formatprg=fmt\ -s\ -u\ --width=79 gdefault hidden inccommand=nosplit incsearch laststatus=2 magic makeef=.make-output.log maxmempattern=200000 mouse= nocompatible hlsearch noignorecase noshowcmd nostartofline pumheight=12 scrolloff=11 sessionoptions+=resize sessionoptions-=blank sessionoptions-=options shiftround shortmess=stTAIcoOWF showbreak=\ >> sidescroll=1 sidescrolloff=30 spellsuggest=best,12, splitbelow splitright switchbuf=usetab,newtab, tabline=%!utils#my_tabline() tagcase=ignore tagcase=match taglength=20 tagrelative tagstack ttyfast undodir=~/.vim/undo undolevels=9999 updatetime=200 viewdir=~/.vim/views viewoptions=folds,options,curdir,cursor virtualedit=all wildignorecase wildmenu wildoptions=tagfile winminwidth=20 winwidth=20 writebackup
+" setg shada=!,20,<50,s10,h,:50,f10
 
 " dirs
 let s:wildignore_patterns = map([
@@ -252,4 +155,4 @@ call extend(s:wildignore_patterns, map([
             \ '%',
             \ ], "'**'.v:val.'**'"))
 
-call opts#wildignore(s:wildignore_patterns)
+exec 'setg wildignore+='.join(s:wildignore_patterns, ',')

@@ -1,9 +1,14 @@
 setl foldmarker={,} foldmethod=marker shiftwidth=2 tabstop=2 expandtab formatprg=
 
-call opts#formatprg({ 
+for s:pair in items({ 
             \ 'prettier':    'prettier --stdin --parser typescript',
             \ 'js-beautify': 'js-beautify',
             \ })
+    if executable(s:pair[0])
+        exe 'setl formatprg='.s:pair[1]
+        break
+    endif
+endfor
 
 if executable('standard') 
     exe 'setl '.escape('formatprg=standard --fix --stdin'.(empty(&formatprg) ? '' : ' \| '.&formatprg), ' \|')
