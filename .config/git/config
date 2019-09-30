@@ -1,199 +1,200 @@
-# vim:sw=2:ts=4:expandtab:
-[core]
-    # Use custom `.gitignore` and `.gitattributes`
-    excludesfile = ~/.config/git/gitignore
-    compression  = 9
-    abbrev       = 9
-    whitespace   = cr-at-eol
-
+# vim:sw=2:ts=4:expandtab:foldmethod=indent:
 [credential]
-    helper   = store
-    username = nl253
+  helper   = store
+  username = nl253
 
 [init]
-    templatedir = ~/.config/git/templates
+  templatedir = ~/.config/git/templates
 
 [user]
-    email = norbertlogiewa96@gmail.com
-    name  = Norbert Logiewa
+  email = norbertlogiewa96@gmail.com
+  name  = Norbert Logiewa
 
-[help]
-    # Automatically correct and execute mistyped commands
-    autocorrect = 0  
-
-[apply]
-    # Detect whitespace errors when applying a patch
-    whitespace = fix 
-
-[alias]
-    # show git history in tree format
-    tree = !git log --format=\"%C(93)%h%Creset [%C(173)%ad%Creset] %>|($(tput cols),trunc)%s\" --graph --all --date='format:%d-%m-%g %R'
-
-    # show untracked files (takes into account .gitignore)
-    untracked = ls-files . --ignored --exclude-standard --others
-
-    # show project dir 
-    root = rev-parse --show-toplevel
-
-    # merge commits
-    ; merges = log --min-parents=2
-
-    # show counts of how far you've moved from all branches  
-    commits-since = "!for i in $(git branch --format='%(refname)' | sed -E 's/\\s+/\\n/'); do builtin printf \"%3d commits since $(builtin echo $i | sed -E 's/refs\\/heads\\///')\\n\" $(git log --format=oneline \"${i}..HEAD\" | grep --count ''); done | sort"
-
-    # show local branches in a more legible format
-    branches = branch --format='%(if)%(HEAD)%(then)%(color:bold magenta)%(end)%(align:42,left)  %(refname:lstrip=2) %(end) %(color:bold yellow)%(objectname:short=10)%(color:reset) => %(color:bold blue)%(upstream:lstrip=2)'
-
-    # bundle repo
-    archive-zip = "archive --format=zip --output=bundle.zip --verbose HEAD"
-    archive-tar = "archive --format=tar --output=bundle.tar --verbose HEAD"
-    archive-7z  = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
-
-    # Use the following command while being on "master", to list merged branches:
-    merged-branches = "!f() { command git branch --merged | grep -v \"\\*\"; }; f ; unset -f f" 
-
-    # List contributors with number of commits
-    contributors = shortlog --summary --numbered  
-
-    # list aliases from this file
-    aliases = "!git config -l | grep alias | sed 's/^alias\\.//g' | sed -E 's/=/%%%/' | column --table --output-separator ' ' --separator '%%%'"
-
-    # recursively update repos
-    rec-pull = "!for i in $(find -type d -name '.git' -exec readlink  -f {} \\;); do git --no-pager -C \"$(dirname $i)\" pull; done"
-
-[web]
-    browser = google-chrome-beta
-
-[difftool]
-    prompt  = true
+[core]
+  excludesfile = ~/.config/git/gitignore
+  compression  = 9
+  abbrev       = 9
+  whitespace   = cr-at-eol
 
 [diff]
-    renames    = copies  # Detect copies as well as renames
-    tool       = vimdiff
-    context    = 1
-    algorithm  = minimal
-    colorMoved = dimmed_zebra
-    wordRegex  = \\w+
-    indentHeuristic = true
+  renames    = copies  # Detect copies as well as renames
+  tool       = vimdiff
+  context    = 1
+  algorithm  = minimal
+  colorMoved = dimmed_zebra
+  wordRegex  = \\w+
+  indentHeuristic = true
+
+[help]
+  autocorrect = true  
+
+[difftool]
+  prompt  = true
+
+[log]
+  abbrevCommit = true
+  date         = format:%d-%m-%g %R
+
+[apply]
+  # Detect whitespace errors when applying a patch
+  whitespace = fix 
+
+[web]
+  browser = google-chrome-beta
 
 [merge]
-    tool      = vimdiff
-    verbosity = 1
-    summary   = true
+  tool      = vimdiff
+  verbosity = 1
+  summary   = true
+
+[status]
+  showUntrackedFiles = all
+  short = true
+
+[format]
+  pretty = %>(16)%ad %Cblue%>(22)%cN%Creset %Cgreen%h%Creset %s
+
+[grep]
+  threads = 4
+  patternType = extended
+  lineNumber = 1
 
 [sendemail]
-    smtpserver     = smtp.gmail.com
-    smtpserverport = 587
-    smtpencryption = tls
-    smtpuser       = norbertlogiewa96@gmail.com
+  smtpserver     = smtp.gmail.com
+  smtpserverport = 587
+  smtpencryption = tls
+  smtpuser       = norbertlogiewa96@gmail.com
 
 [color]
-    ui         = auto
-    branch     = auto
-    diff       = auto
-    grep       = auto
-    status     = auto
-    showbranch = auto
-
-# best not to touch these (very legible as is)
-[color "branch"]
-    current = magenta bold
-    local   = normal
-    remote  = yellow
+  ui         = auto
+  branch     = auto
+  diff       = auto
+  grep       = auto
+  status     = auto
+  showbranch = auto
 
 # best not to touch these (very legible as is)
 [color "diff"]
-    meta = "127"
-    frag = magenta bold # line info
-    old  = "167"        # deletions
-    new  = "78"         # additions
+  meta = "127"
+  frag = magenta bold # line info
+  old  = "167"        # deletions
+  new  = "78"         # additions
 
 # best not to touch these (very legible as is)
 [color "diff-highlight"]
-    oldNormal    = "167 bold"
-    oldHighlight = "167 reverse"
-    newNormal    = "78"
-    newHighlight = "78 reverse"
-
-# best not to touch these (very legible as is)
+  oldNormal    = "167 bold"
+  oldHighlight = "167 reverse"
+  newNormal    = "78"
+  newHighlight = "78 reverse"
 [color "status"]
-    added     = green
-    changed   = "yellow bold"
-    untracked = "normal bold"
-    header    = "white dim"
-    nobranch  = "red dim"
+  added     = green
+  changed   = "yellow bold"
+  untracked = "normal bold"
+  header    = "white dim"
+  nobranch  = "red dim"
 
-# best not to touch these (very legible as is)
-[format]
-    pretty = %C(184)%<|(8)%ad %C(93)%h %Creset%s%Creset
+[color "branch"]
+  current = magenta bold
+  local   = normal
+  remote  = yellow
 
 [gui]
-    commitmsgwidth = 79
-    fastcopyblame  = true
-    fontui = -family \"Noto Sans\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
-    fontdiff = -family \"Fira Code\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0
-    warndetachedcommit = true
-    pruneduringfetch = true
-    matchtrackingbranch = true
-    diffopts = -w
-    tabsize = 4
-
-[instaweb]
-    browser = google-chrome-unstable
-
-[column]
-    ui     = auto
-    status = auto
-    branch = auto
-
-[pack]
-    compression = 9
-    threads     = 4
-
-[log]
-    abbrevCommit = true
-    date         = format:%d-%m-%g %R
-
-[pager]
-    diff        = off
-    shortlog    = off
-    add         = off
-    aliases     = off
-    archive     = off
-    branch      = off
-    checkout    = off
-    clone       = off
-    commit      = off
-    fetch       = off
-    gc          = off
-    grep        = off
-    init        = off
-    log         = off
-    ls-files    = off
-    ls-remote   = off
-    merge       = off
-    mktag       = off
-    mv          = off
-    pull        = off
-    reflog      = off
-    rm          = off
-    show-branch = off
-    stash       = off
-    status      = off
-    tag         = off
-
-# vim: ts=4 sw=4 ft=gitconfig: 
-[status]
-    showUntrackedFiles = all
-    short = true
-
-[grep]
-    threads     = 4
-    patternType = extended
-    lineNumber  = true
+  commitmsgwidth = 79
+  fastcopyblame  = true
+  fontui = -family \"Noto Sans\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
+  fontdiff = -family \"Fira Code\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0
+  warndetachedcommit = true
+  pruneduringfetch = true
+  matchtrackingbranch = true
+  diffopts = -w
+  tabsize = 4
 
 [color "grep"]
-    match      = yellow
-    filename   = magenta
-    linenumber = green
-    separator  = white
+  match      = yellow
+  filename   = magenta
+  linenumber = green
+  separator  = white
+
+[instaweb]
+  browser = google-chrome-unstable
+
+[column]
+  ui     = auto
+  status = auto
+  branch = auto
+
+[pack]
+  compression = 9
+  threads     = 4
+
+[pager]
+  diff        = off
+  shortlog    = off
+  add         = off
+  aliases     = off
+  archive     = off
+  branch      = off
+  checkout    = off
+  clone       = off
+  commit      = off
+  fetch       = off
+  gc          = off
+  grep        = off
+  init        = off
+  log         = off
+  ls-files    = off
+  ls-remote   = off
+  merge       = off
+  mktag       = off
+  mv          = off
+  pull        = off
+  reflog      = off
+  rm          = off
+  show-branch = off
+  stash       = off
+  status      = off
+  tag         = off
+
+
+
+
+[alias]
+
+  worddiff = diff --word-diff=color -word-diff-regex="[A-Za-z0-9. ]|[^[:space:]]" 
+  # search through history
+  find = log -G  
+  find-added    = log --diff-filter=A -G  
+  find-created  = log --diff-filter=A -G  
+  find-deleted  = log --diff-filter=D -G  
+  find-removed  = log --diff-filter=D -G  
+  find-modified = log --diff-filter=M -G  
+  find-changed  = log --diff-filter=M -G  
+
+  unpushed = !git log "$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))..HEAD"
+
+  graph = log --graph 
+  tree = log --graph 
+
+  root = rev-parse --show-toplevel
+
+  ignored = !git status --ignored | grep -E '^!' | sed -E 's/!! //' | sed -E 's/\\/$//' 
+  untracked = ls-files . --ignored --exclude-standard --others
+
+  commits-since = "!for i in $(git branch --format='%(refname)' | sed -E 's/\\s+/\\n/'); do builtin printf \"%3d commits since $(builtin echo $i | sed -E 's/refs\\/heads\\///')\\n\" $(git log --format=oneline \"${i}..HEAD\" | grep --count ''); done | sort"
+  branches = branch --format='%(if)%(HEAD)%(then)%(color:bold magenta)%(end)%(align:42,left)  %(refname:lstrip=2) %(end) %(color:bold yellow)%(objectname:short=10)%(color:reset) => %(color:bold blue)%(upstream:lstrip=2)'
+
+  # bundle repo
+  archive-zip = "archive --format=zip --output=bundle.zip --verbose HEAD"
+  archive-tar = "archive --format=tar --output=bundle.tar --verbose HEAD"
+  archive-7z  = "!bash -c ' cd $(git rev-parse --show-toplevel) && 7z a -mx=9 bundle.7z -- $(git ls-files)'"
+
+    # Use the following command while being on "master", to list merged branches:
+  merged-branches = "!f() { command git branch --merged | grep -v \"\\*\"; }; f ; unset -f f" 
+
+  contributors = shortlog --summary --numbered  
+
+    # list aliases from this file
+  aliases = "!git config -l | grep alias | sed 's/^alias\\.//g' | sed -E 's/=/%%%/' | column --table --output-separator ' ' --separator '%%%'"
+
+    # recursively update repos
+  rec-pull = "!for i in $(find -type d -name '.git' -exec readlink  -f {} \\;); do git --no-pager -C \"$(dirname $i)\" pull; done"

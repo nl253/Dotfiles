@@ -333,3 +333,7 @@ wekafiles
 .config/session
 .keras/keras.json
 .config/zsh/.zcompdump
+.local/share/node*
+.config/google-chrome
+.GoLand2019.2
+.local/share/orca

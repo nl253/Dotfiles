@@ -9,11 +9,8 @@
     "worker": true
   },
   "extends": [
-    "eslint:recommended",
-    "plugin:node/recommended",
-    "plugin:security/recommended",
-    "plugin:promise/recommended",
-    "airbnb"
+    "eslint:all",
+    "eslint:recommended"
   ],
   "globals": {
     "Array": true,
@@ -32,6 +29,7 @@
     "process": true,
     "window": true
   },
+  "parser": "typescript-eslint-parser",
   "parserOptions": {
     "codeFrame": false,
     "ecmaFeatures": {
@@ -41,13 +39,7 @@
     "ecmaVersion": 8,
     "sourceType": "module"
   },
-  "plugins": [
-    "optimize-regex",
-    "filenames",
-    "promise",
-    "compat",
-    "security"
-  ],
+  "plugins": [],
   "root": true,
   "rules": {
     "accessor-pairs": [
@@ -113,6 +105,11 @@
     "filenames/match-regex": 2,
     "filenames/no-index": 2,
     "for-direction": 2,
+    "func-name-matching": 1,
+    "func-names": [
+      1,
+      "as-needed"
+    ],
     "generator-star-spacing": [
       1,
       {
@@ -237,9 +234,7 @@
         "ignore": [
           0,
           1,
-          2,
-          -1,
-          -2,
+          2, -1, -2,
           10,
           100
         ],

@@ -8,6 +8,8 @@ case $- in
   *) return ;;
 esac
 
+alias emacs='emacs -nw'
+
 # normalise prompt in case somthing goes wrong
 export PS1="${USER}@"$(hostname)" ${0} >> "
 

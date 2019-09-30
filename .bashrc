@@ -25,3 +25,5 @@ if [[ -f /usr/share/bash-completion/bash_completion ]]; then
     fi
   done
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

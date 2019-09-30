@@ -7,7 +7,7 @@ if executable('isort')
                 \ 'autopep8': 'isort - \| autopep8 - 2>/dev/null',
                 \ })
         if executable(s:pair[0])
-            exe 'setl formatprg='.s:pair[1]
+            exe 'setl formatprg='.escape(s:pair[1], ' ')
             break
         endif
     endfor
@@ -18,7 +18,7 @@ else
                 \ 'autopep8': 'autopep8 - 2>/dev/null',
                 \ })
         if executable(s:pair[0])
-            exe 'setl formatprg='.s:pair[1]
+            exe 'setl formatprg='.escape(s:pair[1], ' ')
             break
         endif
     endfor
