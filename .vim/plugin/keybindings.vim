@@ -1,17 +1,4 @@
-nn :e<Space>~ :find<Space>~
-nn :e<Space>  :find<Space>./
-
-" nn :vs<Space>~ :vert sfind<Space>~
-" nn :vs<Space>  :vert sfind<Space>./
-
-nn :vs<Space>~ :VS<Space>~
-nn :vs<Space>  :VS<Space>./
-
-" send data to :terminal
-" nn <Leader>w :call jobsend(g:last_terminal_job_id, expand("<cword>"))<CR>
-" nn <Leader>W :call jobsend(g:last_terminal_job_id, expand("<cWORD>"))<CR>
-" nn <Space>l  :call jobsend(g:last_terminal_job_id, getline('.'))<CR>
-" nn <M-CR>    :call jobsend(g:last_terminal_job_id, "\n")<CR>
+nn :e<Space>  :find<Space>
 
 " Move by screen lines instead of file lines.
 " http://vim.wikia.com/wiki/Moving_by_screen_lines_instead_of_file_lines
@@ -19,24 +6,13 @@ no k gk
 no j gj
 
 nn <M-r>   :SubstituteWord<CR>
-nn <M-C-l> :ReformatBuffer<CR>
-nn <M-t>   :Ctags<CR>
 nn <M-w>   :SaveView<CR>
 nn <M-S-w> :ReadView<CR>
-
-" sometimes write is not needed so just update
-nn :w<CR> :up<CR>
 
 if has("nvim") | tno <Esc> <C-\><C-n> | endif
 
 im <C-Space> <C-x><C-o>
 
-" Intellij-like behaviour
-if exists(':NERDTree') > 0  
-    nn <M-1> :NERDTreeToggle<CR>
-else
-    nn <M-1> :silent call utils#toggle_netrw()<CR>
-endif
 
 " quicker window resize use terminal proportions
 nn <C-w>- :silent exe 'silent resize -'.max([3, system("tput lines") / 6])<CR>
@@ -48,24 +24,15 @@ nn <C-w>< :silent exe 'silent vertical resize -'.max([10, system("tput cols") / 
 nn Q gQ
 
 " alway search using very magic (POSIX-ish regex) & case-sensitive mode 
-nn  /   /\v\C
-nn  ?   ?\v\C
-cno %s/ %s/\v\C
-cno g/  g/\v\C
-vn  /   /\v\C
-vn  ?   ?\v\C
+nn  /   /\v
+nn  ?   ?\v
+cno %s/ %s/\v
+cno g/  g/\v
+vn  /   /\v
+vn  ?   ?\v
 
 " fill qf buffer with files in this project
-nn <M-f>      :silent call utils#project_files_qf()<CR>
-" IntelliJ  - Show todo 
-nn <M-6>      :ToDo<CR>
-" IntelliJ  - Display Git Info
-nn <M-9>      :exe expand('%') == 'index' ? 'clo' : 'Gstatus'<CR> 
-" Spacemacs - Toggle Terminal
-nn <Leader>'  :silent call repl#open_shell()<CR>
-" IntelliJ  - Toggle Terminal
-nn <F12>      :silent call repl#open_shell()<CR>
-
+nn <M-f> :silent call utils#project_files_qf()<CR>
 
 " automatically append '!' to grep & make 
 " don't make a new file from the output

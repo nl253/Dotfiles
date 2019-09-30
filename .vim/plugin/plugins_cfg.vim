@@ -3,13 +3,6 @@
 " Built In:
 let g:omni_syntax_minimum_length   = 2
 
-" Rust:
-let g:rust_fold                    = 2
-let g:rust_bang_comment_leader     = 1
-
-" VimRacer:
-let g:racer_experimental_completer = 1
-
 " JavaScript:
 let g:javascript_plugin_jsdoc      = 1
 
@@ -17,15 +10,15 @@ let g:javascript_plugin_jsdoc      = 1
 let g:go_fmt_autosave = 0
 
 " NERDTree:
-let g:NERDTreeMinimalUI         = 1
-let g:NERDTreeChDirMode         = 2
+let g:NERDTreeMinimalUI         =  1
+let g:NERDTreeChDirMode         =  2
 let g:NERDTreeWinSize           = 15
-let g:NERDTreeRespectWildIgnore = 0
-let g:NERDTreeMouseMode         = 0
-let g:NERDTreeAutoDeleteBuffer  = 1
+let g:NERDTreeRespectWildIgnore =  0
+let g:NERDTreeMouseMode         =  0
+let g:NERDTreeAutoDeleteBuffer  =  1
 
 " NERDCommenter:
-let g:NERDMenuMode = 0
+let g:NERDMenuMode    = 0
 let g:NERDSpaceDelims = 1
 
 " UtilSnips:
@@ -95,28 +88,6 @@ let g:ale_html_htmlhint_use_global           = 1
 let g:user_emmet_install_global = 0
 let g:user_emmet_complete_tag   = 1
 let g:user_emmet_mode           = 'i'
-
-" VimTex:
-let g:vimtex_syntax_minted = map(g:prog_langs + ['xml'], '{"lang": v:val}')
-            " \ 'build_dir' : '../build',
-            " \   '-output-directory=../build',
-" let g:vimtex_compiler_latexmk = {
-            " \ 'backend' : has('nvim') ? 'nvim' : 'jobs',
-            " \ 'background' : 1,
-            " \ 'callback' : has('clientserver') || has('nvim') ? 1 : 0,
-            " \ 'continuous' : 1,
-            " \ 'executable' : 'latexmk',
-            " \ 'options' : [
-            " \   '-pdf',
-            " \   '-view=pdf',
-            " \   '-verbose',
-            " \   '-file-line-error',
-            " \   '-synctex=1',
-            " \   '-print=pdf',
-            " \   '-aux-directory=/tmp/latexmk/aux',
-            " \   '-interaction=nonstopmode',
-            " \ ],
-            " \}
 
 " Netrw:
 let g:netrw_banner         = 0

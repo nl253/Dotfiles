@@ -5,9 +5,9 @@ if !exists(":Man")    | ru! ftplugin/man.vim | endif
 pa justify
 
 for s:dir in filter(map([
-            \ 'undo',
-            \ 'backup',
-            \ 'swap',
+            \ '.undo',
+            \ '.bak',
+            \ '.swp',
             \ 'views',
             \ 'sessions',
             \ 'templates',
@@ -15,6 +15,7 @@ for s:dir in filter(map([
             \ ], 'expand("~/.vim/".v:val)'), '!isdirectory(v:val)')
     call mkdir(s:dir, 'p')
 endfor
+
 
 aug ReplFtypes
     au!
@@ -61,18 +62,14 @@ for s:pair in items({
     endif
 endfor
 
-for s:pair in items({            
-            \ 'dash': 'dash',
-            \ 'bash': 'bash',
-            \ 'zsh':  'zsh',
-            \ })
+for s:pair in [['dash', 'dash'], ['bash', 'bash'], ['zsh', 'zsh']]
     if executable(s:pair[0])
         exe 'setg shell='.s:pair[1]
         break
     endif
 endfor
 
-setg thesaurus=~/.vim/dicts/thesaurus.dict dictionary=~/.vim/dicts/frequent.dict path+=./,../,./*,~/.gem/ruby/*/bin,~/.fzf/bin,~/go/bin,~/.cargo/bin,~/.local/bin,~/.stack/bin,~/.cabal/bin,~/.config/yarn/global/node_modules/.bin,~/.local/share/fzf/bin,~/.yarn/bin  autochdir autoread autowriteall backup backupdir=~/.vim/backup breakat=\ .,:;!? clipboard=unnamed,unnamedplus cmdwinheight=3 completeopt=menuone,longest cpoptions=aABceFsW diffopt+=vertical,iwhite directory=~/.vim/swap encoding=utf8 errorfile=.errors.log errorformat+=%f fileignorecase foldclose=all foldlevelstart=99 formatprg=fmt\ -s\ -u\ --width=79 gdefault hidden inccommand=nosplit incsearch laststatus=2 magic makeef=.make-output.log maxmempattern=200000 mouse= nocompatible hlsearch noignorecase noshowcmd nostartofline pumheight=12 scrolloff=11 sessionoptions+=resize sessionoptions-=blank sessionoptions-=options shiftround shortmess=stTAIcoOWF showbreak=\ >> sidescroll=1 sidescrolloff=30 spellsuggest=best,12, splitbelow splitright switchbuf=usetab,newtab, tabline=%!utils#my_tabline() tagcase=ignore tagcase=match taglength=20 tagrelative tagstack ttyfast undodir=~/.vim/undo undolevels=9999 updatetime=200 viewdir=~/.vim/views viewoptions=folds,options,curdir,cursor virtualedit=all wildignorecase wildmenu wildoptions=tagfile winminwidth=20 winwidth=20 writebackup
+setg thesaurus=~/.vim/dicts/thesaurus.dict dictionary=~/.vim/dicts/frequent.dict path+=. autochdir autoread autowriteall backup backupdir=~/.vim/.bak breakat=\ .,:;!? clipboard=unnamed,unnamedplus cmdwinheight=3 completeopt=menuone,longest cpoptions=aABceFsW diffopt+=vertical,iwhite directory=~/.vim/swap encoding=utf8 errorfile=.errors.log errorformat+=%f fileignorecase foldclose=all foldlevelstart=99 formatprg=fmt\ -s\ -u\ --width=79 gdefault hidden inccommand=nosplit incsearch laststatus=2 magic makeef=.make-output.log maxmempattern=200000 mouse= nocompatible hlsearch noignorecase noshowcmd nostartofline pumheight=12 scrolloff=11 sessionoptions+=resize sessionoptions-=blank sessionoptions-=options shiftround shortmess=stTAIcoOWF showbreak=\ >> sidescroll=1 sidescrolloff=30 spellsuggest=best,12, splitbelow splitright switchbuf=usetab,newtab, tabline=%!utils#my_tabline() tagcase=ignore tagcase=match taglength=20 tagrelative tagstack ttyfast undodir=~/.vim/.undo undolevels=9999 updatetime=200 viewdir=~/.vim/views viewoptions=folds,options,curdir,cursor virtualedit=all wildignorecase wildmenu wildoptions=tagfile winminwidth=20 winwidth=20 writebackup
 " setg shada=!,20,<50,s10,h,:50,f10
 
 " dirs

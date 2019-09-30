@@ -9,9 +9,9 @@ export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export EMAIL='norbertlogiewa96@gmail.com'
 
-if [ -x $(command which go 2>/dev/null) ]; then
-  export PATH=$PATH:$(command go env GOPATH)/bin
-fi
+export GOROOT=/usr/local/share/go1.13
+export GOPATH=/usr/local/share/go1.13:$HOME/go
+export PATH=/usr/local/share/go1.13/bin:$PATH
 
 # Don't check mail when opening terminal.
 unset -v MAILCHECK

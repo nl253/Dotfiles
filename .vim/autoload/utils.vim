@@ -100,49 +100,6 @@ fu! utils#syntax_attr()
      echohl None
 endfunction
 
-" fu! utils#toggle_netrw()
-    " let l:width = 25
-    " if expand('%:t') =~# '^Netrw'
-        " wincmd c
-    " else
-        " windo if expand('%:t') =~# 'Netrw' | wincmd c | endif
-    " exe 'botright '.l:width.'Vexplore'
-    " wincmd H
-    " exe 'vert resize '.l:width
-" endif
-" endf
-
-" fu! utils#slider_toggle(file, position, size)
-
-    " if expand('%:p') == fnamemodify(a:file, ':p')
-        " wincmd c
-        " return 0
-    " endif
-
-    " exe 'botright split '.a:file
-
-    " if a:position =~? '^l'
-        " wincmd H
-        " exe 'vert res '.a:size
-
-    " elseif a:position =~? '^r'
-        " wincmd L
-        " exe 'vert res '.a:size
-
-    " elseif a:position =~? '^t'
-        " wincmd K
-        " exe 'res '.a:size
-
-    " else
-        " wincmd J
-        " exe 'res '.a:size
-    " endif
-" endf
-
-" fu! utils#toggle_todo() abort
-    " return utils#slider_toggle(findfile("todo.md", expand("~/")."**5/"), 'r', 65)
-" endf
-
 fu! utils#make_missing_dirs(dir_list)
     for l:dir in filter(map(deepcopy(a:dir_list), 'expand(v:val)'), '!isdirectory(v:val)')
         call mkdir(l:dir, 'p')
@@ -202,15 +159,6 @@ fu! utils#str_to_list(str)
     return l:list
 endf
 
-" fu! utils#buffer_wipeout()
-    " for l:b in range(1, bufnr('$'), 1)
-        " let l:info = getbufinfo(l:b)
-        " if !empty(l:info)
-            " silent call utils#_buffer_wipeout_helper(l:info['name']['name'], l:b)
-        " endif
-    " endfor
-" endf
-
 fu! utils#_buffer_wipeout_helper(path, bufno)
     if getbufvar(a:bufno, '&modified')
         " all good -- valid buffer
@@ -250,25 +198,6 @@ fu! utils#proj_root(...)
 
     return l:this_dir
 endf
-
-" fu! utils#hl_word()
-    " let @/ = ''
-    " if exists('#auto_highlight')
-        " au! auto_highlight
-        " aug! auto_highlight
-        " setl updatetime=4000
-        " echo 'Highlight current word: OFF'
-        " return 0
-    " else
-        " aug auto_highlight
-            " au!
-            " au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-        " aug end
-        " setl updatetime=500
-        " echo 'Highlight current word: ON'
-        " return 1
-    " endif
-" endf
 
 fu! utils#my_tab_label(n)
     let buflist = tabpagebuflist(a:n)
@@ -338,38 +267,6 @@ fu! utils#is_stale(file, min_limit)
     return !filereadable(a:file) || ((localtime() - getftime(a:file)) > (60 * a:min_limit))
 endf
 
-" fu! utils#close_dup_tabs()
-    " let cnt = 0
-    " let i = 1
-    " let tpbufflst = []
-    " let dups = []
-    " let tabpgbufflst = tabpagebuflist(i)
-    " while type(tabpagebuflist(i)) == 3
-        " if index(tpbufflst, tabpagebuflist(i)) >= 0
-            " call add(dups, i)
-        " else
-            " call add(tpbufflst, tabpagebuflist(i))
-        " endif
-        " let i += 1
-        " let cnt += 1
-    " endw
-    " call reverse(dups)
-    " for tb in dups
-        " exe "tabclose ".tb
-    " endfor
-" endf
-
-" fu! utils#colorize(group, what)
-    " setg redrawtime=200
-    " for i in range(1, 255)
-        " echom "Color nr ".i
-        " exe 'hi '.a:group.' '.a:what.'='.i
-        " redraw
-        " sleep 300m
-    " endfor
-    " setg redrawtime=2000
-" endf
-
 fu! utils#safe_subst(l1, l2)
     let l:word = expand('<cword>')
     if !empty(l:word)
@@ -380,36 +277,4 @@ fu! utils#safe_subst(l1, l2)
             echoerr 'empty string'
         endif
     endif
-endf
-
-fu! utils#reformat_buffer() abort
-
-    " remove trailing whitespace
-    try
-        %s/\v\s+$//
-    catch /\vE486/
-    endtry
-
-    " save position
-    let l:col = virtcol('.')
-    let l:ln = line('.')
-
-    if !empty(&formatprg)
-        " if you defined a custom formatprg
-        " => filter the buffer through equalprg
-        silent exe ("%!".&formatprg)
-
-    elseif !empty(&equalprg)
-        " if you defined a custom equalprg
-        " => filter the buffer through equalprg
-        silent exe ("%!".&equalprg)
-
-    else
-        " => use default Vim formatting
-        normal gg=G
-    endif
-
-    " restore position
-    exec ':'.l:ln
-    exec 'normal '.l:col
 endf

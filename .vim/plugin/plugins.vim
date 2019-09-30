@@ -8,19 +8,13 @@ Plug 'junegunn/fzf', {'dir': '~/.local/fzf', 'do': './install --all'}
 Plug 'wellle/targets.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
-Plug 'scrooloose/nerdtree', {'on': ['NERDTreeToggle']}
-Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeToggle']}
-Plug 'tpope/vim-eunuch', {'on' : ['Delete', 'Find', 'Mkdir', 'Move', 'Rename', 'SudoEdit', 'SudoWrite']}
 
 Plug 'dkarter/bullets.vim', {'for': g:markup_langs + g:config_ftypes}
 Plug 'reedes/vim-wordy', {'on': ['Wordy', 'WordyWordy'], 'for': g:markup_langs}
 
 Plug 'othree/html5.vim', {'for': ['markdown', 'html']}
-Plug 'othree/csscomplete.vim', {'for': ['css', 'html']}
+Plug 'othree/csscomplete.vim', {'for': ['css', 'scss', 'html']}
 
-Plug 'lervag/vimtex', {'for': 'tex'}
-
-" Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoUpdateBinaries'}
 
 Plug 'autozimu/LanguageClient-neovim', {

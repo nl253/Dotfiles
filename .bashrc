@@ -19,11 +19,9 @@ PROMPT_COMMAND="history -a"
 
 if [[ -f /usr/share/bash-completion/bash_completion ]]; then
   . /usr/share/bash-completion/bash_completion 
-  for c in pgrep psql 7z man gzip curl pdftotext apt{,titude,-get} aspell chown chgrp dot feh find file git host{,name} java{,c} kill{,all} python{,3} R ssh sqlite3 whatis; do
+  for c in pgrep psql 7z man gzip curl pdftotext apt{,titude,-get} aspell chown chgrp dot feh find file git host{,name} kill{,all} python{,3} ssh sqlite3 whatis; do
     if ([[ -f /usr/bin/$c ]] || [[ -f /usr/local/bin/$c ]] || [[ -f /bin/$c ]]) && [[ -f /usr/share/bash-completion/completions/$c ]]; then 
       . /usr/share/bash-completion/completions/$c
     fi
   done
 fi
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash

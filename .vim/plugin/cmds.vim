@@ -5,7 +5,6 @@ com! -nargs=? -complete=file_in_path VS exe 'vs '.<f-args>
 com! -nargs=1 -complete=customlist,complete#buffers_words Define :!command wn <args> -over | command pandoc -f markdown -t markdown
 
 com! -range=% SubstituteWord call utils#safe_subst("".<line1>, "".<line2>)
-com!          ReformatBuffer call utils#reformat_buffer()
 
 com! HL echo exists('*utils#_syntax_attr') ? utils#syntax_attr() : join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")'), '/')
 
@@ -14,7 +13,3 @@ com! -bang                          GFiles call utils#git_files_qf()
 com! -bang                          PFiles call utils#project_files_qf()
 
 com! CtagsDelete for i in tagfiles() | echo system("rm ".shellescape(i)." && echo removed ".shellescape(i)) | endfor
-
-" Generate tags from <project_root>/**/*.<extension> 
-com! -bang -complete=file -nargs=* Ctags  
-            \ exe 'call tags#project('.join([<bang>0] + map(split(<q-args>, " "), 'string(v:val)'), ', ').')'
