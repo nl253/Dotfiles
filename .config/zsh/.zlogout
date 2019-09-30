@@ -1,1 +1,0 @@
-/home/norbert/.config/sh/logout.sh

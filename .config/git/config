@@ -23,16 +23,16 @@
   algorithm  = minimal
   colorMoved = dimmed_zebra
   wordRegex  = \\w+
-  indentHeuristic = true
+  indentHeuristic = 1
 
 [help]
-  autocorrect = true  
+  autocorrect = 1  
 
 [difftool]
-  prompt  = true
+  prompt  = 1
 
 [log]
-  abbrevCommit = true
+  abbrevCommit = 1
   date         = format:%d-%m-%g %R
 
 [apply]
@@ -45,11 +45,11 @@
 [merge]
   tool      = vimdiff
   verbosity = 1
-  summary   = true
+  summary   = 1
 
 [status]
   showUntrackedFiles = all
-  short = true
+  short = 1
 
 [format]
   pretty = %>(16)%ad %Cblue%>(22)%cN%Creset %Cgreen%h%Creset %s
@@ -100,12 +100,12 @@
 
 [gui]
   commitmsgwidth = 79
-  fastcopyblame  = true
+  fastcopyblame  = 1
   fontui = -family \"Noto Sans\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
   fontdiff = -family \"Fira Code\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0
-  warndetachedcommit = true
-  pruneduringfetch = true
-  matchtrackingbranch = true
+  warndetachedcommit = 1
+  pruneduringfetch = 1
+  matchtrackingbranch = 1
   diffopts = -w
   tabsize = 4
 

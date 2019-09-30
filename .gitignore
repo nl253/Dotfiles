@@ -337,3 +337,6 @@ wekafiles
 .config/google-chrome
 .GoLand2019.2
 .local/share/orca
+.local/share/mime
+.local/share/locale
+.local/share/kazam
