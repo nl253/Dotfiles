@@ -18,6 +18,7 @@ Plug 'othree/csscomplete.vim', {'for': ['css', 'scss', 'html']}
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoUpdateBinaries'}
 
 Plug 'autozimu/LanguageClient-neovim', {
+            \ 'on': 'LanguageClientStart',
             \ 'branch': 'next',
             \ 'do': 'bash install.sh',
             \ }

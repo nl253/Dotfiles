@@ -1,5 +1,6 @@
 # ~/.profile sourced by all login shells
 
+export PATH=/usr/bin:/usr/local/bin:/bin:/sbin:/usr/sbin
 export ENV=$HOME/.config/sh/init.sh
 export NODE_REPL_HISTORY=$HOME/.config/node/.history
 export ELINKS_CONFDIR=$HOME/.config/elinks
@@ -9,10 +10,6 @@ export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export EMAIL='norbertlogiewa96@gmail.com'
 
-export GOROOT=/usr/local/share/go1.13
-export GOPATH=/usr/local/share/go1.13:$HOME/go
-export PATH=/usr/local/share/go1.13/bin:$PATH
-
 # Don't check mail when opening terminal.
 unset -v MAILCHECK
 
@@ -20,6 +17,7 @@ unset -v MAILCHECK
 for i in nvim vim vi; do
   if [ -x /usr/bin/$i ]; then
     export EDITOR=/usr/bin/$i && break
+    eval "alias vim='$i'"
   fi
 done
 
@@ -51,7 +49,7 @@ export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; histor
 export QT_SELECT=5
 
 # $PATH
-for directory in .racket .local .yarn .stack .cabal .cargo .config/composer/vendor .local/share/fzf go node_modules /usr/local; do
+for directory in .deno .racket .local .yarn .stack .cabal .cargo .local/share/umake .config/composer/vendor .local/share/fzf go node_modules; do
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
 
@@ -66,10 +64,6 @@ for browser in google-chrome chromium chromium-browser firefox-developer firefox
   done
   [ -x /usr/bin/$browser ] && export BROWSER=/usr/bin/$browser && break
 done
-
-# Java
-# ----
-export JAVA_HOME=/usr/lib/jvm/default
 
 # Rust
 # ----
@@ -106,10 +100,9 @@ else
   export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="[ -f {} ] && command head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
 fi
 
-if [ $0 = zsh ] || [ $0 = $(which zsh 2>/dev/null) ]; then
-  # sh won't ever get here so [[ is fine
-  # not run with -i (interactive) but with TMUX so make interactive anyway
-  [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f $ZDOTDIR/.zshrc ]] && [[ -n $ZDOTDIR ]] && source $ZDOTDIR/.zshrc
-elif [ $0 = bash ] || [ $0 = $(which bash 2>/dev/null) ]; then
+if [ $0 = bash ] || [ $0 = $(which bash 2>/dev/null) ]; then
   [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f ~/.bashrc ]] && source ~/.bashrc
 fi
+# Ubuntu make installation of Ubuntu Make binary symlink
+PATH=/home/mx/.local/share/umake/bin:$PATH
+

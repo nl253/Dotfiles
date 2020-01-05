@@ -21,10 +21,10 @@ fu! utils#bsearch(list, val)
     if l:middle_val == a:val 
         return v:true
 
-    " NOTE: VimScript slices lists inclusively
+        " NOTE: VimScript slices lists inclusively
 
-    " search left half
-    " exclude middle value (checked above)
+        " search left half
+        " exclude middle value (checked above)
     elseif a:val < l:middle_val
         if (l:middle_idx - 1) < 0 
             return v:false
@@ -32,72 +32,72 @@ fu! utils#bsearch(list, val)
             return utils#bsearch(a:list[:(l:middle_idx - 1)], a:val)
         endif
 
-    " search right half
-    " exclude middle value (checked above)
+        " search right half
+        " exclude middle value (checked above)
     else 
         return utils#bsearch(a:list[(l:middle_idx + 1):], a:val)
     endif
 endf
 
 fu! utils#syntax_attr()
-     let synid = ""
-     let guifg = ""
-     let guibg = ""
-     let gui   = ""
+    let synid = ""
+    let guifg = ""
+    let guibg = ""
+    let gui   = ""
 
-     let id1  = synID(line("."), col("."), 1)
-     let tid1 = synIDtrans(id1)
+    let id1  = synID(line("."), col("."), 1)
+    let tid1 = synIDtrans(id1)
 
-     if synIDattr(id1, "name") != ""
-	  let synid = "group: " . synIDattr(id1, "name")
-	  if (tid1 != id1)
-	       let synid = synid . '->' . synIDattr(tid1, "name")
-	  endif
-	  let id0 = synID(line("."), col("."), 0)
-	  if (synIDattr(id1, "name") != synIDattr(id0, "name"))
-	       let synid = synid .  " (" . synIDattr(id0, "name")
-	       let tid0 = synIDtrans(id0)
-	       if (tid0 != id0)
-		    let synid = synid . '->' . synIDattr(tid0, "name")
-	       endif
-	       let synid = synid . ")"
-	  endif
-     endif
+    if synIDattr(id1, "name") != ""
+        let synid = "group: " . synIDattr(id1, "name")
+        if (tid1 != id1)
+            let synid = synid . '->' . synIDattr(tid1, "name")
+        endif
+        let id0 = synID(line("."), col("."), 0)
+        if (synIDattr(id1, "name") != synIDattr(id0, "name"))
+            let synid = synid .  " (" . synIDattr(id0, "name")
+            let tid0 = synIDtrans(id0)
+            if (tid0 != id0)
+                let synid = synid . '->' . synIDattr(tid0, "name")
+            endif
+            let synid = synid . ")"
+        endif
+    endif
 
-     " Use the translated id for all the color & attribute lookups; the linked id yields blank values.
-     if (synIDattr(tid1, "fg") != "" )
-	  let guifg = " guifg=" . synIDattr(tid1, "fg") . "(" . synIDattr(tid1, "fg#") . ")"
-     endif
-     if (synIDattr(tid1, "bg") != "" )
-	  let guibg = " guibg=" . synIDattr(tid1, "bg") . "(" . synIDattr(tid1, "bg#") . ")"
-     endif
-     if (synIDattr(tid1, "bold"     ))
-	  let gui   = gui . ",bold"
-     endif
-     if (synIDattr(tid1, "italic"   ))
-	  let gui   = gui . ",italic"
-     endif
-     if (synIDattr(tid1, "reverse"  ))
-	  let gui   = gui . ",reverse"
-     endif
-     if (synIDattr(tid1, "inverse"  ))
-	  let gui   = gui . ",inverse"
-     endif
-     if (synIDattr(tid1, "underline"))
-	  let gui   = gui . ",underline"
-     endif
-     if (gui != ""                  )
-	  let gui   = substitute(gui, "^,", " gui=", "")
-     endif
+    " Use the translated id for all the color & attribute lookups; the linked id yields blank values.
+    if (synIDattr(tid1, "fg") != "" )
+        let guifg = " guifg=" . synIDattr(tid1, "fg") . "(" . synIDattr(tid1, "fg#") . ")"
+    endif
+    if (synIDattr(tid1, "bg") != "" )
+        let guibg = " guibg=" . synIDattr(tid1, "bg") . "(" . synIDattr(tid1, "bg#") . ")"
+    endif
+    if (synIDattr(tid1, "bold"     ))
+        let gui   = gui . ",bold"
+    endif
+    if (synIDattr(tid1, "italic"   ))
+        let gui   = gui . ",italic"
+    endif
+    if (synIDattr(tid1, "reverse"  ))
+        let gui   = gui . ",reverse"
+    endif
+    if (synIDattr(tid1, "inverse"  ))
+        let gui   = gui . ",inverse"
+    endif
+    if (synIDattr(tid1, "underline"))
+        let gui   = gui . ",underline"
+    endif
+    if (gui != ""                  )
+        let gui   = substitute(gui, "^,", " gui=", "")
+    endif
 
-     echohl MoreMsg
-     let message = synid . guifg . guibg . gui
-     if message == ""
-	  echohl WarningMsg
-	  let message = "<no syntax group here>"
-     endif
-     echo message
-     echohl None
+    echohl MoreMsg
+    let message = synid . guifg . guibg . gui
+    if message == ""
+        echohl WarningMsg
+        let message = "<no syntax group here>"
+    endif
+    echo message
+    echohl None
 endfunction
 
 fu! utils#make_missing_dirs(dir_list)
@@ -233,7 +233,7 @@ endf
 " Helper fu for statusline
 fu! utils#git_status_summary()
     " see if in a git repository
-    call system('command git status') 
+    call system('git status') 
 
     " not in a git repository
     if v:shell_error 
@@ -241,23 +241,27 @@ fu! utils#git_status_summary()
     endif 
 
     " last commit message 
-    let l:msg = systemlist("command git --no-pager log --pretty=format:\"%h %ce %cr '%s'\" -1")[0] . " "
+    let l:xs = systemlist("git --no-pager log --pretty=format:\"%h %ce %cr '%s'\" -1")
+    let l:msg = (len(xs) > 0 ? xs[0] : '') . " "
 
     " modified since last commit
-    if system("command git ls-files -m") =~# expand("%:t")
+    if system("git ls-files -m") =~# expand("%:t")
         let l:msg .= "[M]"
 
-    " not modified
-    elseif system("command git ls-files") =~# expand("%:t")
+        " not modified
+    elseif system("git ls-files") =~# expand("%:t")
         let l:msg .= ""
 
-    " not added 
-    elseif system("git ls-files --others --exclude-standard") =~#  expand('%:p')
-        let l:msg .= "[I]"
+        " not added 
+    else
+        let l:xs = system("git ls-files --others --exclude-standard")
+        if xs && len(xs) > 0 && xs =~# expand('%:p')
+            let l:msg .= "[I]"
 
-    " ignored
-    else 
-        let l:msg .= "[?]"
+            " ignored
+        else 
+            let l:msg .= "[?]"
+        endif
     endif
 
     return l:msg.' | '

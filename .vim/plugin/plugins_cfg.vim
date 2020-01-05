@@ -156,20 +156,19 @@ let g:html5_aria_attributes_complete          = 0
 let g:LanguageClient_autoStart      = 0
 let g:LanguageClient_settingsPath   = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_serverCommands = {
-            \ 'c':              ['/usr/bin/clangd'],
-            \ 'cpp':            ['/usr/bin/clangd'],
-            \ 'css':            ['~/.config/yarn/global/node_modules/.bin/css-languageserver', '--stdio'],
-            \ 'html':           ['~/.config/yarn/global/node_modules/.bin/html-languageserver', '--stdio'],
-            \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
-            \ 'json':           ['~/.config/yarn/global/node_modules/.bin/vscode-json-languageserver', '--stdio'],
             \ 'python':         ['~/.local/bin/pyls'],
             \ 'rust':           ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
-            \ 'sh':             ['~/.config/yarn/global/node_modules/.bin/bash-language-server', 'start'],
             \ 'go':             ['~/go/bin/go-langserver'],
-            \ 'sql':            ['~/.config/yarn/global/node_modules/.bin/sql-language-server', 'up', '--method', 'stdio'],
-            \ 'typescript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
-            \ 'yaml':           ['/usr/bin/node', '~/.config/yarn/global/node_modules/.bin/yaml-language-server', '--stdio'],
             \ }
+
+            " \ 'css':            ['~/.config/yarn/global/node_modules/.bin/css-languageserver', '--stdio'],
+            " \ 'html':           ['~/.config/yarn/global/node_modules/.bin/html-languageserver', '--stdio'],
+            " \ 'javascript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
+            " \ 'json':           ['~/.config/yarn/global/node_modules/.bin/vscode-json-languageserver', '--stdio'],
+            " \ 'sh':             ['~/.config/yarn/global/node_modules/.bin/bash-language-server', 'start'],
+            " \ 'sql':            ['~/.config/yarn/global/node_modules/.bin/sql-language-server', 'up', '--method', 'stdio'],
+            " \ 'typescript':     ['~/.config/yarn/global/node_modules/.bin/javascript-typescript-stdio'],
+            " \ 'yaml':           ['/usr/bin/node', '~/.config/yarn/global/node_modules/.bin/yaml-language-server', '--stdio'],
 
 let g:LanguageClient_rootMarkers = {
             \ 'javascript': ['package.json', '.git'],

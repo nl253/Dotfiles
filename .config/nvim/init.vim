@@ -1,1 +1,1 @@
-/home/mx/.vimrc
+so ~/.vimrc

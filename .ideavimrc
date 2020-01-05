@@ -1,48 +1,34 @@
 let mapleader = " "
-set clipboard=unnamedplus,unnamed
+set clipboard+=ideaput
+set commentary
 set diffopt=filler,vertical
 set foldmethod=marker
 set gdefault
-set scrolloff=11
-set sidescrolloff=30
-set history=100
-set undolevels=1000
 set hidden
-set incsearch
+set history=1000
 set hlsearch
+set ideajoin
+set ideamarks
 set ignorecase
+set incsearch
+set iskeyword=65-90,97-122,$,_
 set lazyredraw
-set matchpairs+=<:>
+set matchpairs=(:),<:>,{:},[:]
 set noerrorbells
 set norelativenumber
 set nospell
 set nostartofline
+set nowrapscan
 set number
+set scrolloff=0
+set selectmode+=template
+set selectmode=mouse,key
+set sidescroll=1
+set sidescrolloff=30
 set spelllang=en_gb
 set surround 
-set mps+=<:>
+set undolevels=9999
 set virtualedit=all
 set visualbell
 set wildmode=full
 set wrap
-
-" preserve ideavim defaults
-nnoremap g<c-o> <c-o>
-nnoremap g<c-i> <c-i>
-
-nnoremap J :action EditorJoinLines<CR>
-
-nnoremap <Esc> <Esc>:action HideSideWindows<CR>
-
-" just like in vim
-nnoremap ]] :action MethodDown<CR>
-nnoremap [[ :action MethodUp<CR>
-
-" just like in vim
-nnoremap g; :action JumpToLastChange<CR>
-nnoremap g, :action JumpToNextChange<CR>
-
-" just like in vim
-nnoremap <c-o> :action Back<CR>
-nnoremap <c-i> :action Forward<CR>
-" vim: noreadonly modifiable

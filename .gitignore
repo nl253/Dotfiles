@@ -1,181 +1,35 @@
-# Source Maps
-
+**/*-log
+**/*.log
 **/*.map
-
-# Password storage
-
-.netrc
-
-# Build
-
-out/
-target/
-build/
-dist/
-
-# Extensions
-
+**/log
+*-lock.*
+*.[xg7]z
+*.backup
 *.bak
+*.bz2
+*.class
 *.ctxt
-*.pdf
-
-# Images
-
-*.png
+*.iml
 *.jpg
-*.svg
-*.xfc
-*.xcf
-
-# Microsoft Office
-
+*.pdf
+*.png
 *.ppt
 *.pptx
-
-# VCS
-
-.git-credentials
-
-# Node.js
-
-.node_repl_history
-.node-gyp/
-.npm/
-
-# Haskell
-
-.stack/
-.ghc/
-
-# Python
-
-.jupyter/
-.python-version
-
-# Version Control Systems
-
-.subversion/
-.git/
-.svn/
-.hg/
-
-# Browsers
-
-.elinks/
-.tor-browser/
-
-# Gnome
-
-.gnome/
-.ICEauthority
-
-# Log
-
-**/log
-**/*.log
-**/*-log
-
-# Java
-
-.java/
-*.bluej
-*.class
-.oracle_jre_usage/
-
-# Maven
-
-.m2/ 
-
-# Binaries
-
-.bin/
-
-# Rust
-
-.rustup/
-.cargo/
-
-# Linters
-
-.proselint/
-
-# Config
-
-
-# History
-
-.bash_history
-.node_repl_history
-
-.pki/
-.ssh/
-
-# Text editors
-
-# Eclipse
-.eclim/
-.eclipse/
-
-# Vim
-*~
-tags
-.viminfo
-.vimtags
-undo/*
-
-# Nvim
-.local/share/nvim/shada
-.local/share/nvim/rplugin.vim
-
-# Jetbrains 
-.idea/
-*.iml
-
-# Emacs
-.emacs.d/
-.emacs.desktop
-
-# Desktop env
-
-.xmonad/
-.xsession-error*
-
-# Dirs
-
-Downloads/
-Pictures/
-Downloads/
-Documents/*
-
-.mozilla/
-.gem/
-
-# PostgreSQL
-
-.pgpass
-
-# Node.js
-
-.yarn/
-.yarnrc
-
-# Rubbish
-
-*.backup
-*-lock.*
-[._]*.s[a-v][a-z]
-[._]*.sw[a-p]
-[._]s[a-v][a-z]
-[._]sw[a-p]
-Empty*
+*.svg
 *.swp
-.wget*
-
-# Jetbrains
-
+*.tar
+*.xcf
+*.xfc
+*.zip
+*history*
+*~
+.*_hist
+.*history
 .CLion*
 .DataGrip*
+.GoLand2019*
 .Gogland*
+.ICEauthority
 .IdeaIC*
 .IntelliJ*
 .PhpStorm*
@@ -183,37 +37,12 @@ Empty*
 .Rider*
 .RubyMine*
 .WebStorm*
-
-# Archives
-
-*.zip
-*.tar
-*.[xg7]z
-*.bz2
-
-# LaTeX
-
-.texlive/
-
-# PHP
-
-.local/share/composer
-
-# Configuration
-
-# Stray scripts
-
-# *.js
-# *.html
-# *.ts
-# *.py
-# *.sh
-*history*
-.*history
-
 .Xauthority
 .aptitude/config
+.bash_history
+.bin/
 .cache/
+.cargo/
 .cinnamon
 .config/autostart/mintupdate.desktop
 .config/autostart/mintwelcome.desktop
@@ -229,10 +58,12 @@ Empty*
 .config/enchant
 .config/evolution
 .config/goa-1.0
+.config/google-chrome
 .config/gtk-2.0/gtkfilechooser.ini
 .config/gtk-3.0/bookmarks
 .config/hexchat/
 .config/htop/htoprc
+.config/kdenliverc
 .config/libreoffice/
 .config/menus/
 .config/mimeapps.list
@@ -243,6 +74,7 @@ Empty*
 .config/pix/active_filter.xml
 .config/pulse/
 .config/qt5ct/
+.config/session
 .config/sh/.history
 .config/spotify/
 .config/transmission
@@ -252,16 +84,22 @@ Empty*
 .config/xed/xed-print-settings
 .config/xplayer/state.ini
 .config/xviewer/accels
-.deno/bin/deno
-.deno/deps/https/deno.land/welcome.js
+.config/zsh/.zcompdump
+.deno
+.dotnet/
+.gem/
 .gimp-2.8
+.git-credentials
+.git/
 .gnupg/
 .gtkrc-2.0
 .gtkrc-xfce
 .icons/default/index.theme
-.ipython/profile_default/db/dhist
-.ipython/profile_default/startup/README
+.idea/
+.ipython/
+.jupyter/
 .keras/datasets
+.keras/keras.json
 .lesshst
 .local/bin/
 .local/etc/bash_completion.d/youtube-dl.bash-completion
@@ -274,9 +112,11 @@ Empty*
 .local/kitty.app/share
 .local/lib/
 .local/share/JetBrains
+.local/share/Trash
 .local/share/Trash/info/EL561
 .local/share/applications/
 .local/share/cinnamon
+.local/share/composer
 .local/share/desktop-directories
 .local/share/doc/
 .local/share/flatpak
@@ -287,56 +127,66 @@ Empty*
 .local/share/jupyter/kernels/python3/kernel.json
 .local/share/jupyter/nbextensions/jupyter-js-widgets/extension.js
 .local/share/jupyter/notebook_secret
+.local/share/kazam
 .local/share/keyrings/
-.local/share/locale/bg/LC_MESSAGES/googleCalendar@javahelps.com.mo
-.local/share/locale/ca/LC_MESSAGES/diskspace@schorschii.mo
-.local/share/locale/da/LC_MESSAGES/diskspace@schorschii.mo
-.local/share/locale/da/LC_MESSAGES/gTile@shuairan.mo
-.local/share/locale/da/LC_MESSAGES/googleCalendar@javahelps.com.mo
-.local/share/locale/de/LC_MESSAGES/diskspace@schorschii.mo
-.local/share/locale/de/LC_MESSAGES/googleCalendar@javahelps.com.mo
-.local/share/locale/it/LC_MESSAGES/googleCalendar@javahelps.com.mo
-.local/share/locale/ru/LC_MESSAGES/googleCalendar@javahelps.com.mo
-.local/share/locale/sv/LC_MESSAGES/diskspace@schorschii.mo
-.local/share/locale/sv/LC_MESSAGES/gTile@shuairan.mo
-.local/share/locale/tr/LC_MESSAGES/diskspace@schorschii.mo
-.local/share/locale/tr/LC_MESSAGES/gTile@shuairan.mo
-.local/share/locale/zh_CN/LC_MESSAGES/gTile@shuairan.mo
+.local/share/locale
 .local/share/man/
+.local/share/mime
+.local/share/node*
+.local/share/nvim/rplugin.vim
+.local/share/nvim/shada
+.local/share/orca
 .local/share/plantuml.jar
 .local/share/ranger/
 .local/share/recently-used.xbel
 .local/share/rhythmbox
 .local/share/webkitgtk
+.m2/ 
+.mozilla/
+.netrc
+.node-gyp/
+.node_repl_history
+.npm/
 .npmrc
-.opam/
-.processing
+.nuget/
+.pgpass
+.pki/
+.proselint/
+.python-version
+.rustup/
+.rustup/toolchains/
+.rustup/update-hashes/
+.ssh/
 .sudo_as_admin_successful
-.texlive2017
-2018-19
-Assignment
-Class
-Code
+.templateengine/
+.tig_history
+.tor-browser/
+.vim/.netrwhist
+.vim/plugged/
+.viminfo
+.vimtags
+.vscode/
+.vsts/
+.wget*
+.xinputrc
+.xsession-error*
+Documents/
+Downloads/
+Empty*
 Examples
 Image
-Processing
+Pictures/
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+build/
+dist/
 go/
 nltk_data
+out/
 scikit_learn_data
-v2.pdf.trashinfo
+tags
+target/
+undo/*
 wekafiles
-.local/share/Trash
-.octave_hist
-.xinputrc
-.vim/.netrwhist
-.config/kdenliverc
-.config/session
-.keras/keras.json
-.config/zsh/.zcompdump
-.local/share/node*
-.config/google-chrome
-.GoLand2019.2
-.local/share/orca
-.local/share/mime
-.local/share/locale
-.local/share/kazam

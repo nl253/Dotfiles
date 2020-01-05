@@ -1,3 +1,5 @@
+sy keyword goUnderscore _
+
 let s:between_op = escape(join([
             \ ':=', 
             \ '=', 
@@ -9,6 +11,7 @@ let s:between_op = escape(join([
             \ '/', 
             \ '%', 
             \ '+', 
+            \ '-', 
             \ '-=', 
             \ '+=', 
             \ '*=', 
@@ -29,7 +32,8 @@ exe 'sy match goOperatorRight "\v('.s:right_op.')<"'
 
 let s:left_op = escape(join([
             \ '++', 
-            \ '--'
+            \ '--',
+            \ ',',
             \ ], '|'), '+')
 exe 'sy match goOperatorLeft "\v>('.s:left_op.')"'
 
@@ -193,12 +197,13 @@ let s:std_pkgs = join([
             \ 'zlib',  
             \ 'doc', 
             \ ], '|')
-exe 'sy match goStdPackage "\v<('.s:std_pkgs.')>"'
+exe 'sy match goStdPackage "\v<('.s:std_pkgs.')\.@=>"'
 
-sy match goFunction "\v([A-Za-z][a-z]+)+\@=\("
-sy match goFunction "\v\)"
+sy match goFunction "\v([A-Za-z_]+[_a-z0-9A-Z]*)+\(@="
+" sy match goFunction "\v\)"
 sy keyword goSwitch case default
 
+hi link goUnderscore      Operator
 hi link goOperator        Operator
 hi link goOperatorBetween Operator
 hi link goOperatorRight   Operator
@@ -207,4 +212,4 @@ hi link goOperatorSticky  Operator
 hi link goOperator        Operator
 hi link goDelim           Delimiter
 hi link goSwitch          Conditional
-"hi link goStdPackage Include
+hi link goStdPackage      Include

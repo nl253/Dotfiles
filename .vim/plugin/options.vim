@@ -1,7 +1,7 @@
 " Options that need to be set globally (i.e. only once on Vim start-up).
 
+if !has('win32') && !exists(":Man") | ru! ftplugin/man.vim | endif
 if has('gui_running') | call opts#gui()      | endif
-if !exists(":Man")    | ru! ftplugin/man.vim | endif
 pa justify
 
 for s:dir in filter(map([
@@ -53,12 +53,13 @@ fu! GetTemplateVars()
     endif
 endf
 
-for s:pair in items({
-            \ 'rg':   'rg --hidden --maxdepth=5 --color=never --threads=4 --vimgrep $*', 
-            \ 'grep': 'grepprg=grep -n -r $*',
-            \ })
+for s:pair in [
+			\ [ 'rg',   'rg --hidden --maxdepth=5 --color=never --threads=4 --vimgrep $*'], 
+			\ [ 'grep', 'grepprg=grep -n -r $*'],
+			\ ]
     if executable(s:pair[0])
         exe 'setg grepprg='.escape(s:pair[1], ' ')
+		break
     endif
 endfor
 

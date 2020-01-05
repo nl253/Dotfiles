@@ -138,12 +138,7 @@ if builtin dirs 1>/dev/null 2>/dev/null; then
   # set ls colors
   builtin eval $(command dircolors -b)
 
-  # zsh
-  if [[ -n "$ZSH_VERSION" ]]; then
-    export PS1="${git_basic_info} "$'\n'"${non_git_prompt}"
-  else # bash
-    export PS1="${git_basic_info} \n${non_git_prompt}"
-  fi
+  export PS1="${git_basic_info} \n${non_git_prompt}"
 
 else # dash
   export PS1="${git_basic_info} ${non_git_prompt}"

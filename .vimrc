@@ -1,9 +1,4 @@
 " vim: nospell foldmethod=marker foldlevel=1 formatoptions=o
-if !has('unix') || !has('nvim') 
-    setg rtp-=~/.vim
-    finish 
-endif
-
 exe 'let $MYVIMRC = '.string(expand('<sfile>'))
 
 setg rtp-=~/.vim
@@ -13,8 +8,6 @@ setg rtp^=~/.vim
 setg rtp-=~/.vim/after
 exe 'setg rtp-='.expand('~/.vim/after')
 setg rtp+=~/.vim/after
-
-let &packpath = &runtimepath
 
 " Variables: (these need to be global)
 let g:mapleader      = ' '

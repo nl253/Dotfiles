@@ -15,6 +15,7 @@
   compression  = 9
   abbrev       = 9
   whitespace   = cr-at-eol
+	pager = delta --dark
 
 [diff]
   renames    = copies  # Detect copies as well as renames

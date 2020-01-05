@@ -25,7 +25,7 @@ aug VariousAutoCmds
     au DirChanged * if (fnamemodify(".", ":p") =~? $HOME) && (!filereadable(fnamemodify('tags', ':p')) || ((localtime() - getftime(fnamemodify("tags", ":p"))) >= g:MAX_AGE_TAGS)) | silent! call system('bash -c "ctags -R . &"') | endif
 
     au FileType xml,html,htmldjango call inits#emmet() | if line("$") <= 1000 | syntax sync fromstart | endif
-    au FileType c{pp,},python,sh,rust,{java,type}script,json,go call inits#lang_server()
+    " au FileType c{pp,},python,sh,rust,{java,type}script,json,go call inits#lang_server()
 
     au Syntax              * if &completefunc == '' | setl completefunc=syntaxcomplete#Complete | endif
 
