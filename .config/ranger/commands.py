@@ -88,20 +88,23 @@ of ranger.
 from __future__ import absolute_import, division, print_function
 
 # Standard Library
-import fnmatch
 import re
-from copy import deepcopy
 from glob import iglob
-from json import load as json_load
 from os import environ, makedirs, mknod, getenv
-from os.path import exists, expanduser, isfile, join, lexists, relpath
+from os.path import exists, expanduser, isfile, join, lexists
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen, run
-from typing import Iterable, List, Optional, Pattern, Set, Text
+from typing import Iterable, List, Optional, Pattern, Set
 
 # 3rd Party
 # You always need to import ranger.api.commands here to get the Command class:
 from ranger.api.commands import Command
+
+
+def get_flags(cmd: str) -> Set[str]:
+    help = run([cmd, '--help'], stderr=DEVNULL, stdout=PIPE).stdout
+    flags = run(['grep', '-E', '-o'], input=help, stdout=PIPE, stderr=DEVNULL).stdout.decode('utf-8').split('\n')
+    return set(flags)
 
 
 class git(Command):
@@ -110,7 +113,7 @@ class git(Command):
     Wrapper for git commands. Good completion.
     """
 
-    non_i_cmds: Set[Text] = {
+    non_i_cmds: Set[str] = {
         'add',
         'archive',
         'clean',
@@ -123,7 +126,7 @@ class git(Command):
         'rm',
     }
 
-    opts: Set[Text] = {
+    opts: Set[str] = {
         '--bare',
         '--exec-path',
         '--git-dir',
@@ -142,7 +145,7 @@ class git(Command):
         '-p',
     }
 
-    refs: Set[Text] = {
+    refs: Set[str] = {
         'HEAD',
         'HEAD^1',
         'HEAD^2',
@@ -155,7 +158,7 @@ class git(Command):
         'master',
     }
 
-    cmds: Set[Text] = {
+    cmds: Set[str] = {
         'am',
         'apply',
         'bisect',
@@ -210,7 +213,7 @@ class git(Command):
         'write-tree',
     }
 
-    def _get_subcmd(self) -> Optional[Text]:
+    def _get_subcmd(self) -> Optional[str]:
         if not self.args or len(self.args) == 1:
             return None
         for word in self.args[1:]:
@@ -223,7 +226,7 @@ class git(Command):
         if len(self.args) < 2:
             return
 
-        sub_cmd: Optional[Text] = self._get_subcmd()
+        sub_cmd: Optional[str] = self._get_subcmd()
 
         if sub_cmd is None:
             return
@@ -233,8 +236,8 @@ class git(Command):
 
         is_i: bool = sub_cmd in git.cmds
 
-        cmd: List[Text] = ['git'] + \
-                          (['--paginate'] if is_i else []) + self.args[1:]
+        cmd: List[str] = ['git'] + \
+                         (['--paginate'] if is_i else []) + self.args[1:]
 
         # if any files marked add them to args
         if len(self.fm.thistab.get_selection()) > 1:
@@ -270,16 +273,16 @@ class git(Command):
             # complete flags
             if self.args[-1].startswith('-'):
 
-                subcmd: Optional[Text] = self._get_subcmd()
+                subcmd: Optional[str] = self._get_subcmd()
 
-                flags: Iterable[Text] = None
+                flags: Iterable[str] = None
 
                 if subcmd:
-                    pat: Pattern[Text] = re.compile(
+                    pat: Pattern[str] = re.compile(
                         r'--[a-z][-a-z_]+|-[a-zA-Z]')
-                    s: Text = run(['git', '--no-pager', subcmd, '-h'],
-                                  stdout=PIPE,
-                                  stderr=DEVNULL).stdout.decode('utf-8')
+                    s: str = run(['git', '--no-pager', subcmd, '-h'],
+                                 stdout=PIPE,
+                                 stderr=DEVNULL).stdout.decode('utf-8')
                     flags = (
                         (" ".join(self.args[:-1]) +
                          ' ' + match.group(0)).strip()
@@ -305,21 +308,21 @@ class git(Command):
 
             else:
 
-                pat: Pattern[Text] = re.compile(r'\w+')
-                stdout: Text = run(
+                pat: Pattern[str] = re.compile(r'\w+')
+                stdout: str = run(
                     ['git', '--no-pager', 'branch'], stdout=PIPE, stderr=DEVNULL).stdout.decode('utf-8')
 
-                branches: Iterable[Text] = {match.group(0) for match in pat.finditer(stdout)}
+                branches: Iterable[str] = {match.group(0) for match in pat.finditer(stdout)}
 
-                commit_SHAs: Set[Text] = {line.split(' ')[0] for line in
-                                          run(['git', 'log', '--format=oneline'], stdout=PIPE).stdout.decode(
-                                              'utf-8').split('\n')}
+                commit_SHAs: Set[str] = {line.split(' ')[0] for line in
+                                         run(['git', 'log', '--format=oneline'], stdout=PIPE).stdout.decode(
+                                             'utf-8').split('\n')}
 
                 return (
                     (" ".join(self.args[:-1]) + " " + cmd)
                     for cmd in
-                git.cmds | git.non_i_cmds | git.refs | commit_SHAs | branches | {f'origin/{ref}' for ref in
-                                                                                 (git.refs | branches)}
+                    git.cmds | git.non_i_cmds | git.refs | commit_SHAs | branches | {f'origin/{ref}' for ref in
+                                                                                     (git.refs | branches)}
                     if self.args[-1].startswith(cmd) or cmd.startswith(self.args[-1])
                 )
 
@@ -377,17 +380,17 @@ class vim(Command):
 
     def tab(self, tabnum):
 
-        opts: Set[Text] = {'-t',
-                           '+',
-                           '-S',
-                           '--cmd',
-                           '-d',
-                           '-M',
-                           '-m',
-                           '-o',
-                           '-O',
-                           '-p',
-                           '-R'}
+        opts: Set[str] = {'-t',
+                          '+',
+                          '-S',
+                          '--cmd',
+                          '-d',
+                          '-M',
+                          '-m',
+                          '-o',
+                          '-O',
+                          '-p',
+                          '-R'}
 
         if len(self.args) > 1:
             if self.args[-1].startswith('-'):
@@ -416,7 +419,9 @@ class lines_of_code(Command):
     }
 
     def execute(self):
-        return run(['less'], input=run(['tokei'] if len(self.args) == 1 else ['tokei', '--type', self.args[1]], stdout=PIPE, stderr=DEVNULL).stdout)
+        return run(['less'],
+                   input=run(['tokei'] if len(self.args) == 1 else ['tokei', '--type', self.args[1]], stdout=PIPE,
+                             stderr=DEVNULL).stdout)
 
     def tab(self, tabnum):
         return {
@@ -510,61 +515,6 @@ class tracked(Command):
         self.fm.ui.redraw_main_column()
 
 
-class yarn(Command):
-    """:yarn <subcommand>
-    """
-
-    def execute(self):
-        run(['yarn'] + self.args[1:])
-
-    def tab(self, tabnum):
-
-        if len(self.args) > 2 and self.args[1] == 'run':
-
-            if not isfile('package.json'):
-                self.fm.notify('No package.json in this dir.', bad=True)
-                return
-
-            with open('./package.json', mode='r', encoding='utf-8') as f:
-                text = f.read()
-
-            x: dict = json_load(open('./package.json', encoding='utf-8'))
-
-            if x.get('scripts', None) == None:
-                return
-
-            return {
-                'yarn run ' + i
-                for i in x['scripts']
-                if self.args[2] in i
-                or len(self.args[-1]) == 1 and i.startswith(self.args[-1])
-            }
-
-        elif len(self.args) == 1 or self.args[1] != 'run':
-            return (
-                f'yarn {i}'
-                for i in (
-                'install',
-                'update',
-                'upgrade',
-                'remove',
-                'pack',
-                'run',
-                'unlink',
-                'generate-lock-entry',
-                'import',
-                'access',
-                'add',
-                'autoclean',
-                'create',
-                'exec',
-                'publish'
-            ) if self.args[-1] in i or len(self.args) == 1
-            )
-        else:
-            return
-
-
 class mkdir(Command):
     """:mkdir [<dirname>, ...]
 
@@ -631,7 +581,7 @@ class make(Command):
             return
 
         with open('./Makefile', mode='r', encoding='utf-8') as f:
-            text: Text = f.read()
+            text: str = f.read()
 
         pat = re.compile(r'^(\w+):', flags=re.M)
 
