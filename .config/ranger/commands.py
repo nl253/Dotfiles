@@ -88,15 +88,16 @@ of ranger.
 from __future__ import absolute_import, division, print_function
 
 # Standard Library
-import re, os, fnmatch
+import fnmatch
+import re
 from copy import deepcopy
 from glob import iglob
-from json import load as jsonLoad
+from json import load as json_load
 from os import environ, makedirs, mknod, getenv
 from os.path import exists, expanduser, isfile, join, lexists, relpath
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen, run
-from typing import Any, Iterable, List, Optional, Pattern, Set, Text, Tuple
+from typing import Iterable, List, Optional, Pattern, Set, Text
 
 # 3rd Party
 # You always need to import ranger.api.commands here to get the Command class:
@@ -142,11 +143,17 @@ class git(Command):
     }
 
     refs: Set[Text] = {
-        'HEAD',
-        'FETCH_HEAD',
-        'ORIG_HEAD',
-        'master',
-    }
+                          'HEAD',
+                          'HEAD^1',
+                          'HEAD^2',
+                          'HEAD^3',
+                          'HEAD~1',
+                          'HEAD~2',
+                          'HEAD~3',
+                          'FETCH_HEAD',
+                          'ORIG_HEAD',
+                          'master',
+                      }
 
     cmds: Set[Text] = {
         'am',
@@ -216,18 +223,18 @@ class git(Command):
         if len(self.args) < 2:
             return
 
-        subcmd: Optional[Text] = self._get_subcmd()
+        sub_cmd: Optional[Text] = self._get_subcmd()
 
-        if subcmd is None:
+        if sub_cmd is None:
             return
 
-        elif (subcmd not in git.cmds) and (subcmd not in git.non_i_cmds):
+        elif (sub_cmd not in git.cmds) and (sub_cmd not in git.non_i_cmds):
             return
 
-        is_i: bool = subcmd in git.cmds
+        is_i: bool = sub_cmd in git.cmds
 
         cmd: List[Text] = ['git'] + \
-            (['--paginate'] if is_i else []) + self.args[1:]
+                          (['--paginate'] if is_i else []) + self.args[1:]
 
         # if any files marked add them to args
         if len(self.fm.thistab.get_selection()) > 1:
@@ -241,7 +248,7 @@ class git(Command):
             # async
             else:
                 from threading import Thread
-                thread: Thread = Thread(target=Popen, name=f"git-{subcmd}", kwargs={
+                thread: Thread = Thread(target=Popen, name=f"git-{sub_cmd}", kwargs={
                     'args': cmd, 'stdout': DEVNULL, 'stderr': DEVNULL})
                 thread.start()
                 self.fm.notify(f'{" ".join(cmd)} spawned')
@@ -301,12 +308,15 @@ class git(Command):
                 pat: Pattern[Text] = re.compile(r'\w+')
                 stdout: Text = run(
                     ['git', '--no-pager', 'branch'], stdout=PIPE, stderr=DEVNULL).stdout.decode('utf-8')
-                branches: Iterable[Text] = set((match.group(0)
-                                                for match in pat.finditer(stdout)))
+
+                branches: Iterable[Text] = {match.group(0) for match in pat.finditer(stdout)}
+
+                commit_SHAs: Set[Text] = {line.split(' ')[0] for line in
+                                          run(['git', 'log', '--format=oneline'], stdout=PIPE).stdout.decode('utf-8').split('\n')}
 
                 return (
                     (" ".join(self.args[:-1]) + " " + cmd)
-                    for cmd in (git.cmds | git.non_i_cmds | git.refs | deepcopy(branches) | {f'origin/{ref}' for ref in (git.refs | deepcopy(branches))})
+                    for cmd in git.cmds | git.non_i_cmds | git.refs | commit_SHAs | branches | {f'origin/{ref}' for ref in (git.refs | branches)}
                     if self.args[-1].startswith(cmd) or cmd.startswith(self.args[-1])
                 )
 
@@ -317,6 +327,7 @@ class toPDF(Command):
 
     NOTE requires libreoffice
     """
+
     def execute(self):
         d = Path('.')
         did_files = []
@@ -340,7 +351,6 @@ class toPDF(Command):
             self.fm.notify('no *.{doc,docx,ppt,pptx} files', bad=True)
         else:
             self.fm.notify(f'converted {", ".join(did_files)}')
-
 
     def tab(self, tabnum):
         return self._tab_directory_content()
@@ -428,7 +438,6 @@ class lines_of_code(Command):
     }
 
     def execute(self):
-
         pattern = re.compile(r'^\s*([1-9]\d*)\s+.*')
 
         files = iglob(join(self.fm.thisdir.path, '**'), recursive=True)
@@ -439,7 +448,8 @@ class lines_of_code(Command):
         files = filter(pattern.search, filter(isfile, files))
 
         files = sorted((f for f in map(lambda i: relpath(i, self.fm.thisdir.path), files)
-                        if not 'node_modules' in f.strip()), key=(lambda x: pattern.search(x.lstrip()).group(1)), reverse=True)
+                        if not 'node_modules' in f.strip()), key=(lambda x: pattern.search(x.lstrip()).group(1)),
+                       reverse=True)
 
         return run(['less'], input=run(['wc', '-l'] + files, stdout=PIPE, stderr=DEVNULL).stdout)
 
@@ -472,30 +482,30 @@ class grep(Command):
             if exists(expanduser('~/.cargo/bin/rg')):
 
                 x = run([
-                    'rg', '--pretty', '--smart-case', '--threads=4',
-                    '--after-context=1', '--before-context=1', '--regexp'
-                ] + self.args[1:],
-                    stdout=PIPE)
+                            'rg', '--pretty', '--smart-case', '--threads=4',
+                            '--after-context=1', '--before-context=1', '--regexp'
+                        ] + self.args[1:],
+                        stdout=PIPE)
 
             # try git grep if in a git repo
             elif exists(
-                run(['git', 'rev-parse', '--show-toplevel'],
-                    PIPE).stdout.decode('utf-8')
+                    run(['git', 'rev-parse', '--show-toplevel'],
+                        PIPE).stdout.decode('utf-8')
             ):
 
                 x = run([
-                    'git', 'grep', '--line-number', '--color=always', '-I',
-                    '--after-context=3', '--threads=4', '--extended-regexp',
-                    '--heading', '--break', '-e'
-                ] + self.args[1:],
-                    stdout=PIPE)
+                            'git', 'grep', '--line-number', '--color=always', '-I',
+                            '--after-context=3', '--threads=4', '--extended-regexp',
+                            '--heading', '--break', '-e'
+                        ] + self.args[1:],
+                        stdout=PIPE)
 
             # fallback on grep
             else:
                 x = run([
-                    'grep', '--line-number', '--extended-regexp',
-                    '--color=always', '--with-filename', '-r', '-e'
-                ] + self.args[1:])
+                            'grep', '--line-number', '--extended-regexp',
+                            '--color=always', '--with-filename', '-r', '-e'
+                        ] + self.args[1:])
 
             if x.stdout:
                 run(['less', '-R', '-X', '-I'], input=x.stdout)
@@ -504,9 +514,13 @@ class grep(Command):
             else:
                 self.fm.notify('no matches', bad=True)
 
-
     def tab(self, tabnum):
-        for flag in ('--after-context', '--basic-regexp', '--before-context', '--binary-files', '--byte-offset', '--dereference-recursive', '--exclude-dir', '--exclude-from', '--extended-regexp', '--files-with', '--files-without', '--fixed-strings', '--ignore-case', '--initial-tab', '--invert-match', '--line-buffered', '--line-number', '--line-regexp', '--max-count', '--no-filename', '--no-messages', '--null-data', '--only-matching', '--perl-regexp', '--unix-byte', '--with-filename', '--word-regexp'):
+        for flag in ('--after-context', '--basic-regexp', '--before-context', '--binary-files', '--byte-offset',
+                     '--dereference-recursive', '--exclude-dir', '--exclude-from', '--extended-regexp', '--files-with',
+                     '--files-without', '--fixed-strings', '--ignore-case', '--initial-tab', '--invert-match',
+                     '--line-buffered', '--line-number', '--line-regexp', '--max-count', '--no-filename',
+                     '--no-messages', '--null-data', '--only-matching', '--perl-regexp', '--unix-byte',
+                     '--with-filename', '--word-regexp'):
             if self.args[-1] in flag or flag in self.args[-1]:
                 yield f'{" ".join(self.args[:-1])} {flag}'
 
@@ -555,7 +569,7 @@ class yarn(Command):
             with open('./package.json', mode='r', encoding='utf-8') as f:
                 text = f.read()
 
-            x: dict = jsonLoad(open('./package.json', encoding='utf-8'))
+            x: dict = json_load(open('./package.json', encoding='utf-8'))
 
             if x.get('scripts', None) == None:
                 return
@@ -571,22 +585,22 @@ class yarn(Command):
             return (
                 f'yarn {i}'
                 for i in (
-                    'install',
-                    'update',
-                    'upgrade',
-                    'remove',
-                    'pack',
-                    'run',
-                    'unlink',
-                    'generate-lock-entry',
-                    'import',
-                    'access',
-                    'add',
-                    'autoclean',
-                    'create',
-                    'exec',
-                    'publish'
-                ) if self.args[-1] in i or len(self.args) == 1
+                'install',
+                'update',
+                'upgrade',
+                'remove',
+                'pack',
+                'run',
+                'unlink',
+                'generate-lock-entry',
+                'import',
+                'access',
+                'add',
+                'autoclean',
+                'create',
+                'exec',
+                'publish'
+            ) if self.args[-1] in i or len(self.args) == 1
             )
         else:
             return
@@ -653,7 +667,6 @@ class make(Command):
         run(['make'] + self.args[1:], stdout=DEVNULL)
 
     def tab(self, tabnum):
-
         if not isfile('Makefile'):
             self.fm.notify('No Makefile in this dir', bad=True)
             return
@@ -664,7 +677,6 @@ class make(Command):
         pat = re.compile(r'^(\w+):', flags=re.M)
 
         return (f'make {match.group(1)}' for match in pat.finditer(text))
-
 
 
 class modified(Command):

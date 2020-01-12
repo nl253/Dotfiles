@@ -13,155 +13,155 @@
 
 # Allows us to read user input below, assigns STDIN to keyboard
 # Close STDIN again with 'exec <&-'
-exec </dev/tty
+# exec </dev/tty
 
-if [[ ! $BASH_VERSION =~ ^[45] ]]; then
-  builtin echo "Your bash(1) is out of date. Install bash 4 or 5 to and re-run this script."
-  builtin builtin exit 0
-fi
+# if [[ ! $BASH_VERSION =~ ^[45] ]]; then
+  # builtin echo "Your bash(1) is out of date. Install bash 4 or 5 to and re-run this script."
+  # builtin builtin exit 0
+# fi
 
-_fmt_error() {
-  command cat <<EOF
-$(command tput setaf 1)[ERROR] $*.$(command tput sgr0)
-EOF
-}
+# _fmt_error() {
+  # command cat <<EOF
+# $(command tput setaf 1)[ERROR] $*.$(command tput sgr0)
+# EOF
+# }
 
-# Check for necessary executables
-for i in mktemp fmt sed grep cat; do
-  if [[ ! -x $(builtin type -P $i) ]]; then
-    _fmt_error "$i is not installed, cannot validate the commit message"
-    builtin exit 0 # don't prevent committing
-  fi
-done
+# # Check for necessary executables
+# for i in mktemp fmt sed grep cat; do
+  # if [[ ! -x $(builtin type -P $i) ]]; then
+    # _fmt_error "$i is not installed, cannot validate the commit message"
+    # builtin exit 0 # don't prevent committing
+  # fi
+# done
 
-_fmt_heading() {
-  command cat <<EOF
-$(command tput bold)$(command tput setaf 3)$*$(command tput sgr0)
-EOF
-}
+# _fmt_heading() {
+  # command cat <<EOF
+# $(command tput bold)$(command tput setaf 3)$*$(command tput sgr0)
+# EOF
+# }
 
-_get_consent() {
-  _fmt_heading $*
-  # Save response to variable $response.
-  builtin read -n 1 -r -p "Is this OK? Type [Y/N] ~> " response
-  builtin echo ""
-  [[ ${response^^} =~ ^N ]] && _fmt_error "You disagreed. Aborting commit" && return 1 || return 0
-}
+# _get_consent() {
+  # _fmt_heading $*
+  # # Save response to variable $response.
+  # builtin read -n 1 -r -p "Is this OK? Type [Y/N] ~> " response
+  # builtin echo ""
+  # [[ ${response^^} =~ ^N ]] && _fmt_error "You disagreed. Aborting commit" && return 1 || return 0
+# }
 
-commit_msg_file=$1
+# commit_msg_file=$1
 
-subject_line() { command head -n 1 $commit_msg_file; }
+# subject_line() { command head -n 1 $commit_msg_file; }
 
-line_count() { command cat $commit_msg_file | command grep --count .; }
+# line_count() { command cat $commit_msg_file | command grep --count .; }
 
-second_line() { command head -n 2 $commit_msg_file; }
+# second_line() { command head -n 2 $commit_msg_file; }
 
-# the main message
-message() { command sed -n "2,$(command grep --count $commit_msg_file)p" $commit_msg_file; }
+# # the main message
+# message() { command sed -n "2,$(command grep --count $commit_msg_file)p" $commit_msg_file; }
 
-error_msg() {
-  command cat <<EOF
-$(_fmt_error "The commit message does not adhere to git style guide")
+# error_msg() {
+  # command cat <<EOF
+# $(_fmt_error "The commit message does not adhere to git style guide")
 
-$(_fmt_heading "THE RULES")
-- the summary line should be descriptive yet succinct (max. 50 characters)
-- use imperative, present tense in the summary
-- capitalize the subject 
-- use printable characters
-- don't use fullstops (periods) at the end (it's a title and not a sentence)
+# $(_fmt_heading "THE RULES")
+# - the summary line should be descriptive yet succinct (max. 50 characters)
+# - use imperative, present tense in the summary
+# - capitalize the subject 
+# - use printable characters
+# - don't use fullstops (periods) at the end (it's a title and not a sentence)
 
-For details see <https://github.com/agis/git-style-guide#messages>
+# For details see <https://github.com/agis/git-style-guide#messages>
 
-$(_fmt_heading "THE MESSAGE")
-"$(command cat "$commit_msg_file" | command grep -Ev '^#')"
+# $(_fmt_heading "THE MESSAGE")
+# "$(command cat "$commit_msg_file" | command grep -Ev '^#')"
 
-$(_fmt_heading "ISSUE")
->> ${1}.
+# $(_fmt_heading "ISSUE")
+# >> ${1}.
 
-$(command tput bold)Please fix it before re-comitting.$(command tput sgr0)
-EOF
-}
+# $(command tput bold)Please fix it before re-comitting.$(command tput sgr0)
+# EOF
+# }
 
-# CHECK SUBJECT LINE
-if [[ $(subject_line) =~ ^[[:space:]]+ ]]; then
-  error_msg "Leading spaces in the subject" && builtin exit 1
-fi
+# # CHECK SUBJECT LINE
+# if [[ $(subject_line) =~ ^[[:space:]]+ ]]; then
+  # error_msg "Leading spaces in the subject" && builtin exit 1
+# fi
 
-if [[ $(subject_line) =~ [[:space:]]+$ ]]; then
-  error_msg "Trailing spaces in the subject" && builtin exit 1
-fi
+# if [[ $(subject_line) =~ [[:space:]]+$ ]]; then
+  # error_msg "Trailing spaces in the subject" && builtin exit 1
+# fi
 
-if [[ $(subject_line) =~ ^[a-z] ]]; then
-  error_msg "Uncapitalised subject" && builtin exit 1
-fi
+# if [[ $(subject_line) =~ ^[a-z] ]]; then
+  # error_msg "Uncapitalised subject" && builtin exit 1
+# fi
 
-if [[ ! $(subject_line) =~ ^[[:print:][:space:]]+$ ]]; then
-  error_msg "Use of unprintable characters" && builtin exit 1
-fi
+# if [[ ! $(subject_line) =~ ^[[:print:][:space:]]+$ ]]; then
+  # error_msg "Use of unprintable characters" && builtin exit 1
+# fi
 
-if [[ $(subject_line) =~ [a-zA-Z]{3,}ed([^a-z]|$) ]]; then
-  if ! _get_consent "Past tense detected \"$(subject_line | command grep -Eo '[a-zA-Z]{3,}ed([^a-z]|$)')\""; then
-    builtin exit 1
-  fi
-fi
+# if [[ $(subject_line) =~ [a-zA-Z]{3,}ed([^a-z]|$) ]]; then
+  # if ! _get_consent "Past tense detected \"$(subject_line | command grep -Eo '[a-zA-Z]{3,}ed([^a-z]|$)')\""; then
+    # builtin exit 1
+  # fi
+# fi
 
-if [[ $(subject_line) =~ \.$ ]]; then
-  error_msg "The subject ends with a fullstop (period)" && builtin exit 1
-fi
+# if [[ $(subject_line) =~ \.$ ]]; then
+  # error_msg "The subject ends with a fullstop (period)" && builtin exit 1
+# fi
 
-if [[ $(subject_line) =~ ^.{51,}$ ]]; then
-  if ! _get_consent "More than 51 chars"; then
-    builtin exit 1
-  fi
-fi
+# if [[ $(subject_line) =~ ^.{51,}$ ]]; then
+  # if ! _get_consent "More than 51 chars"; then
+    # builtin exit 1
+  # fi
+# fi
 
-if [[ $(subject_line) =~ ^.{,3}$ ]]; then
-  error_msg "The subject is too short - min. is 3 chars" && builtin exit 1
-fi
+# if [[ $(subject_line) =~ ^.{,3}$ ]]; then
+  # error_msg "The subject is too short - min. is 3 chars" && builtin exit 1
+# fi
 
-if [[ $(subject_line) =~ \\t ]]; then
-  error_msg "Use of the tab character \\t" && builtin exit 1
-fi
+# if [[ $(subject_line) =~ \\t ]]; then
+  # error_msg "Use of the tab character \\t" && builtin exit 1
+# fi
 
-if [[ $(subject_line) == $(command git --no-pager log -1 --format='%s') ]]; then
-  error_msg "Identical commit msg to previous commit $(command git --no-pager log -1 --format='%h')" && builtin exit 1
-fi
+# if [[ $(subject_line) == $(command git --no-pager log -1 --format='%s') ]]; then
+  # error_msg "Identical commit msg to previous commit $(command git --no-pager log -1 --format='%h')" && builtin exit 1
+# fi
 
-# BANNED FIRST WORDS
-for w in Update Modify Work Push Init Tweak Forgot Sync; do
-  builtin eval "[[ \$(subject_line) =~ ^$w([^a-zA-Z0-9]|$) ]] && error_msg 'Vague wording, dont use ${w}' && builtin exit 1" 
-done
+# # BANNED FIRST WORDS
+# for w in Update Modify Work Push Init Tweak Forgot Sync; do
+  # builtin eval "[[ \$(subject_line) =~ ^$w([^a-zA-Z0-9]|$) ]] && error_msg 'Vague wording, dont use ${w}' && builtin exit 1" 
+# done
 
-# AVOID ADJECTIVES BUT ASK
-if [[ $(subject_line) =~ [a-zA-Z]{2,}ly([^a-zA-Z0-9]|$) ]]; then
-  if ! _get_consent "Adjective detected \"$(subject_line | command grep -Eo '[a-zA-Z]+ly')\""; then
-    builtin exit 1
-  fi
-fi
+# # AVOID ADJECTIVES BUT ASK
+# if [[ $(subject_line) =~ [a-zA-Z]{2,}ly([^a-zA-Z0-9]|$) ]]; then
+  # if ! _get_consent "Adjective detected \"$(subject_line | command grep -Eo '[a-zA-Z]+ly')\""; then
+    # builtin exit 1
+  # fi
+# fi
 
-# CHECK MESSAGE BODY
-if (($(line_count) > 1)); then
+# # CHECK MESSAGE BODY
+# if (($(line_count) > 1)); then
 
-  # if more than just the subject, check for blank line
-  if [[ ! $(second_line) =~ [[:space:]]* ]]; then
-    error_msg "The second line needs to be blank" && builtin exit 1
-  elif [[ $(message) =~ ^[[:space:]]+ ]]; then
-    error_msg "Leading spaces in the message body" && builtin exit 1
-  elif [[ $(message) =~ \\t ]]; then
-    error_msg "Use of the tab character \\t in the message body" && builtin exit 1
-  elif [[ ! $(message) =~ ^[[:print:][:space:]]+$ ]]; then
-    error_msg "Use of unprintable characters in the message body" && builtin exit 1
-  fi
+  # # if more than just the subject, check for blank line
+  # if [[ ! $(second_line) =~ [[:space:]]* ]]; then
+    # error_msg "The second line needs to be blank" && builtin exit 1
+  # elif [[ $(message) =~ ^[[:space:]]+ ]]; then
+    # error_msg "Leading spaces in the message body" && builtin exit 1
+  # elif [[ $(message) =~ \\t ]]; then
+    # error_msg "Use of the tab character \\t in the message body" && builtin exit 1
+  # elif [[ ! $(message) =~ ^[[:print:][:space:]]+$ ]]; then
+    # error_msg "Use of unprintable characters in the message body" && builtin exit 1
+  # fi
 
-  # All lines must be shorter than 72 chars
-  for i in $(message); do
-    if [[ $i =~ .{72} ]]; then
-      error_msg "Over 72 characters on line:\n'$i'" && builtin exit 1
-    fi
-  done
-fi
+  # # All lines must be shorter than 72 chars
+  # for i in $(message); do
+    # if [[ $i =~ .{72} ]]; then
+      # error_msg "Over 72 characters on line:\n'$i'" && builtin exit 1
+    # fi
+  # done
+# fi
 
-# ------------------------------------------------------------------------
-tmp_file=$(command mktemp)
-command cat $commit_msg_file | command grep -E -v '^#' > $tmp_file
-command cat $tmp_file > $commit_msg_file
+# # ------------------------------------------------------------------------
+# tmp_file=$(command mktemp)
+# command cat $commit_msg_file | command grep -E -v '^#' > $tmp_file
+# command cat $tmp_file > $commit_msg_file

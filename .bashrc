@@ -41,11 +41,9 @@ for file in completions; do
   [[ -f ~/.config/bash/$file.sh ]] && . ~/.config/bash/$file.sh
 done
 
-non_git_prompt='$(command basename $0):/$PWD :: '
 
 # set ls colors
 builtin eval $(command dircolors -b)
-export PS1="${non_git_prompt}"
 
 if [[ -f /usr/share/bash-completion/bash_completion ]]; then
   . /usr/share/bash-completion/bash_completion 
@@ -59,3 +57,25 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
 [[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion" 
+
+br() {
+  f=$(mktemp)
+  (
+  set +e
+  broot --outcmd "$f" "$@"
+  code=$?
+  if [ "$code" != 0 ]; then
+    rm -f "$f"
+    exit "$code"
+  fi
+  )
+  code=$?
+  if [ "$code" != 0 ]; then
+    return "$code"
+  fi
+  d=$(<"$f")
+  rm -f "$f"
+  eval "$d"
+}
+
+eval "$(starship init bash)"

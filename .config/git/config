@@ -15,7 +15,6 @@
   compression  = 9
   abbrev       = 9
   whitespace   = cr-at-eol
-	pager = delta --dark
 
 [diff]
   renames    = copies  # Detect copies as well as renames
@@ -199,3 +198,5 @@
 
     # recursively update repos
   rec-pull = "!for i in $(find -type d -name '.git' -exec readlink  -f {} \\;); do git --no-pager -C \"$(dirname $i)\" pull; done"
+[commit]
+	gpgsign = true

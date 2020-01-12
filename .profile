@@ -58,12 +58,13 @@ for directory in .config/yarn/global/node_modules/.bin; do
 done
 
 # $BROWSER
-for browser in google-chrome chromium chromium-browser firefox-developer firefox vivaldi brave palemoon; do
-  for channel in snapshot nightly unstable beta stable; do
-    [ -x /usr/bin/${browser}-${channel} ] && export BROWSER=/usr/bin/${browser}-${channel} && break 2
-  done
-  [ -x /usr/bin/$browser ] && export BROWSER=/usr/bin/$browser && break
-done
+export BROWSER=firefox
+# for browser in firefox-developer firefox google-chrome chromium chromium-browser vivaldi brave palemoon; do
+  # for channel in snapshot nightly unstable beta stable; do
+    # [ -x /usr/bin/${browser}-${channel} ] && export BROWSER=/usr/bin/${browser}-${channel} && break 2
+  # done
+  # [ -x /usr/bin/$browser ] && export BROWSER=/usr/bin/$browser && break
+# done
 
 # Rust
 # ----
