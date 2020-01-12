@@ -143,17 +143,17 @@ class git(Command):
     }
 
     refs: Set[Text] = {
-                          'HEAD',
-                          'HEAD^1',
-                          'HEAD^2',
-                          'HEAD^3',
-                          'HEAD~1',
-                          'HEAD~2',
-                          'HEAD~3',
-                          'FETCH_HEAD',
-                          'ORIG_HEAD',
-                          'master',
-                      }
+        'HEAD',
+        'HEAD^1',
+        'HEAD^2',
+        'HEAD^3',
+        'HEAD~1',
+        'HEAD~2',
+        'HEAD~3',
+        'FETCH_HEAD',
+        'ORIG_HEAD',
+        'master',
+    }
 
     cmds: Set[Text] = {
         'am',
@@ -312,11 +312,14 @@ class git(Command):
                 branches: Iterable[Text] = {match.group(0) for match in pat.finditer(stdout)}
 
                 commit_SHAs: Set[Text] = {line.split(' ')[0] for line in
-                                          run(['git', 'log', '--format=oneline'], stdout=PIPE).stdout.decode('utf-8').split('\n')}
+                                          run(['git', 'log', '--format=oneline'], stdout=PIPE).stdout.decode(
+                                              'utf-8').split('\n')}
 
                 return (
                     (" ".join(self.args[:-1]) + " " + cmd)
-                    for cmd in git.cmds | git.non_i_cmds | git.refs | commit_SHAs | branches | {f'origin/{ref}' for ref in (git.refs | branches)}
+                    for cmd in
+                git.cmds | git.non_i_cmds | git.refs | commit_SHAs | branches | {f'origin/{ref}' for ref in
+                                                                                 (git.refs | branches)}
                     if self.args[-1].startswith(cmd) or cmd.startswith(self.args[-1])
                 )
 
@@ -402,67 +405,23 @@ class vim(Command):
 
 
 class lines_of_code(Command):
-    """:lines_of_code
+    """:lines_of_code [<extension>]
 
     Counts lines of code recursively from the current directory.
     Optionally accepts an extension.
     """
 
     extensions = {
-        'vim',
-        'sh',
-        'java',
-        'c',
-        'cpp',
-        'py',
-        'rs',
-        'hs',
-        'pl',
-        'rb',
-        'tex',
-        'txt',
-        'md',
-        'rst',
-        'js',
-        'xml',
-        'html',
-        'css',
-        'php',
-        'yml',
-        'ini',
-        'zsh',
-        'json',
-        'toml',
-        'cfg',
-        'conf',
+        t for t in run(['tokei', '-l'], stderr=DEVNULL, stdout=PIPE).stdout.decode('utf-8').split('\n') if ' ' not in t
     }
 
     def execute(self):
-        pattern = re.compile(r'^\s*([1-9]\d*)\s+.*')
-
-        files = iglob(join(self.fm.thisdir.path, '**'), recursive=True)
-
-        if self.args[1:]:
-            files = fnmatch.filter(files, '*.' + self.args[1])
-
-        files = filter(pattern.search, filter(isfile, files))
-
-        files = sorted((f for f in map(lambda i: relpath(i, self.fm.thisdir.path), files)
-                        if not 'node_modules' in f.strip()), key=(lambda x: pattern.search(x.lstrip()).group(1)),
-                       reverse=True)
-
-        return run(['less'], input=run(['wc', '-l'] + files, stdout=PIPE, stderr=DEVNULL).stdout)
-
-    def _pred(self, extension):
-        return any({
-            self.args[-1] in extension, extension in self.args[-1],
-            len(self.args) == 1
-        })
+        return run(['less'], input=run(['tokei'] if len(self.args) == 1 else ['tokei', '--type', self.args[1]], stdout=PIPE, stderr=DEVNULL).stdout)
 
     def tab(self, tabnum):
         return {
-            "lines_of_code " + i
-            for i in filter(self._pred, lines_of_code.extensions)
+            "lines_of_code {0}".format(ext) for ext in lines_of_code.extensions
+            if self.args[-1].lower() in ext.lower() or ext.lower() in self.args[-1].lower()
         }
 
 
