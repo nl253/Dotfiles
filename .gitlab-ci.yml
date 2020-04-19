@@ -1,4 +1,8 @@
+default:
+  image: alpine:latest
+
 test:
   script:
     - . .bashrc
     - . .profile
+    - for i in *.sh; do . $i; done
