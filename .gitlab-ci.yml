@@ -1,4 +1,7 @@
+default:
+  image: ubuntu:latest
+
 test:
   script:
-    - . .bashrc
-    - . .profile
+    - '. .bashrc'
+    - '. .profile'
