@@ -1,7 +1,17 @@
 default:
   image: ubuntu:latest
 
-test:
+test-dash:
   script:
-    - '. .bashrc'
-    - '. .profile'
+    - dash -c ". .profile"
+
+test-bash:
+  script:
+    - bash -c ". .profile"
+    - bash -c ". .bashrc"
+
+test-zsh:
+  image: zshusers/zsh
+  script:
+    - zsh -c ". .profile"
+    - zsh -c ". .bashrc"
