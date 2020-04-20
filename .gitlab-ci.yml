@@ -1,18 +1,14 @@
-test-dash:
+test-ubuntu:
   image: ubuntu:latest
   script:
     - dash -c ". $PWD/.config/sh/init.sh"
     - dash -c ". $PWD/.profile"
-
-test-bash:
-  image: ubuntu:latest
-  script:
-    - dash -c ". $PWD/.config/sh/init.sh"
+    - bash -c ". $PWD/.config/sh/init.sh"
     - bash -c ". $PWD/.bashrc"
     - bash -c ". $PWD/.profile"
 
 test-zsh:
   image: zshusers/zsh
   script:
-    - dash -c ". $PWD/.config/sh/init.sh"
+    - zsh -c ". $PWD/.config/sh/init.sh"
     - zsh -c ". $PWD/.profile"
