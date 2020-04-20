@@ -12,8 +12,8 @@ test-bash:
     - bash -c "env"
     - bash -c "pwd"
     - bash -c "ls -a"
-    - bash -c ". .profile"
-    - bash -c ". .bashrc"
+    - bash -c ". $PWD/.profile"
+    - bash -c ". $PWD/.bashrc"
 
 test-zsh:
   image: zshusers/zsh
@@ -21,5 +21,5 @@ test-zsh:
     - zsh -c "env"
     - zsh -c "pwd"
     - zsh -c "ls -a"
-    - zsh -c ". .profile"
-    - zsh -c ". .bashrc"
+    - zsh -c ". $PWD/.profile"
+    - zsh -c ". $PWD/.bashrc"
