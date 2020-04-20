@@ -8,10 +8,27 @@ case $- in
   *) return ;;
 esac
 
+export NVM_DIR="$HOME/.nvm"
+
+alias vim=nvim
+alias grep='command grep -E -I --color=auto'
+alias rg='command rg --hidden --pretty --no-heading --threads $(grep -c ^processor /proc/cpuinfo) --context 1 --max-count 3 --no-search-zip'
 alias emacs='emacs -nw'
 
+for i in dash; do
+  alias dash="rlwrap $i"
+done
+
+export EDITOR=nvim
+for i in ls diff grep; do
+  eval "alias $i='$i --color=always'"
+done
+
+# set ls colors
+eval $(command dircolors -b)
+
 # normalise prompt in case somthing goes wrong
-export PS1="${USER}@"$(hostname)" ${0} >> "
+PS1=' >> '
 
 # reset
 export CDPATH="${HOME}:"

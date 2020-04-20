@@ -4,12 +4,12 @@ if !(&filetype =~# 'html') | finish | endif
 
 setl foldmethod=indent shiftwidth=2 tabstop=4 expandtab makeprg=$BROWSER\ %
 
-for s:pair in items({ 
-            \ 'js-beautify': 'html-beautify',
-            \ 'prettier':    'prettier --stdin --parser markdown',
-            \ })
+for s:pair in [
+            \ ['js-beautify', 'html-beautify'],
+            \ ['prettier',    'prettier --parser markdown'],
+            \ ]
     if executable(s:pair[0])
-        exe 'setl formatprg='.s:pair[1]
+        exe 'setl formatprg='.escape(s:pair[1], ' ')
         break
     endif
 endfor

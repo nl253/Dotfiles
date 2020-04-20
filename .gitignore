@@ -283,3 +283,11 @@ wekafiles
 .local/share/fonts
 Sync
 Books
+snap
+Takeout
+.config/Microsoft/
+.minikube/
+.kube/
+.aws*
+.config/Jet*
+.config/Virtual*

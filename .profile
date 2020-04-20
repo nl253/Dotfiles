@@ -1,6 +1,6 @@
 # ~/.profile sourced by all login shells
 
-export PATH=/usr/bin:/usr/local/bin:/bin:/sbin:/usr/sbin
+export PATH=/usr/bin:/usr/local/bin:/bin:/sbin:/usr/sbin:/snap/bin:/home/linuxbrew/.linuxbrew/bin
 export ENV=$HOME/.config/sh/init.sh
 export NODE_REPL_HISTORY=$HOME/.config/node/.history
 export ELINKS_CONFDIR=$HOME/.config/elinks
@@ -49,7 +49,7 @@ export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; histor
 export QT_SELECT=5
 
 # $PATH
-for directory in .deno .racket .local .yarn .stack .cabal .cargo .local/share/umake .config/composer/vendor .local/share/fzf go node_modules; do
+for directory in /home/linuxbrew/.linuxbrew .deno .racket .local .yarn .stack .cabal .cargo .local/share/umake .config/composer/vendor .local/share/fzf go node_modules; do
   [ -d "${HOME}/${directory}/bin" ] && export PATH="${HOME}/${directory}/bin:${PATH}:" 2>/dev/null
 done
 
@@ -69,41 +69,7 @@ export BROWSER=firefox
 # Rust
 # ----
 export DEFAULT_TOOLCHAIN=nightly
+# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-# Python
-# ------
-mkdir -p /tmp/python/bytecode
-# don't store __pycache__ in ~/
-export PYTHONPYCACHEPREFIX=/tmp/python/bytecode
-# Warn once per Python process
-# export PYTHONWARNINGS=once
-
-# FZF (keymap)
-# ------------------------
-#  enter   print to STDOUT
-#  ctrl-d  scroll down
-#  ctrl-u  scroll up
-#  alt-e   edit with $EDITOR
-#  alt-d   cd
-#  alt-p   preview toggle
-#  alt-l   open in  less`
-export FZF_DEFAULT_COMMAND='command git ls-tree -r --name-only HEAD || command rg --files || command find . -path "*/\.*" -prune -o -type d -print -type f -print -o -type l -print | command sed s/^..//\ 2> /dev/null'
-export FZF_DEFAULT_OPTS=" --filepath-word --history-size=10000 --history=$HOME/.config/fzf/.history --preview-window=right:hidden --tiebreak=end --no-mouse --multi --ansi --margin 3% --filepath-word --prompt=' >> ' --reverse --tiebreak=end,length"
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-y:yank,alt-c:execute(cd {})' --bind='alt-b:backward-word,alt-f:forward-word' --bind='alt-v:half-page-up,ctrl-v:half-page-down,ctrl-d:half-page-down,ctrl-u:half-page-up,alt-p:toggle-preview,ctrl-n:down,ctrl-p:up'"
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='alt-e:execute(\$EDITOR {})' --bind='alt-l:execute:(\$PAGER {})'"
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=hl:160,fg+:11,border:0,spinner:0,header:0,bg+:0,info:0"
-
-if [ -e ~/.config/ranger/scope.sh ]; then
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="command bash ~/.config/ranger/scope.sh {} $(command tput cols) $(command tput lines) /tmp/ False"'
-elif [ -x $(command which pygmentize 2>/dev/null) ]; then
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="([ -f {} ] && command head -n $(tput lines) {} | command pygmentize -l $(pygmentize -N {})) || ([ -d {} ] && command tree -l -a --prune -L 4 -F --sort=mtime {})"'
-else
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"' --preview="[ -f {} ] && command head -n $(tput lines) {} || [ -d {} ] && tree -l -a --prune -L 4 -F --sort=mtime {}"'
-fi
-
-if [ $0 = bash ] || [ $0 = $(which bash 2>/dev/null) ]; then
-  [[ ! $- =~ i ]] && [[ -n $TMUX ]] && [[ -f ~/.bashrc ]] && source ~/.bashrc
-fi
-# Ubuntu make installation of Ubuntu Make binary symlink
-PATH=/home/mx/.local/share/umake/bin:$PATH
-
+# test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+# test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
