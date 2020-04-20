@@ -1,17 +1,25 @@
-default:
-  image: ubuntu:latest
-
 test-dash:
+  image: ubuntu:latest
   script:
+    - dash -c "env"
+    - dash -c "pwd"
+    - dash -c "ls -a"
     - dash -c ". .profile"
 
 test-bash:
+  image: ubuntu:latest
   script:
+    - bash -c "env"
+    - bash -c "pwd"
+    - bash -c "ls -a"
     - bash -c ". .profile"
     - bash -c ". .bashrc"
 
 test-zsh:
   image: zshusers/zsh
   script:
+    - zsh -c "env"
+    - zsh -c "pwd"
+    - zsh -c "ls -a"
     - zsh -c ". .profile"
     - zsh -c ". .bashrc"
