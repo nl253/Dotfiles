@@ -25,7 +25,7 @@ for file in completions vars; do
   [[ -f ~/.config/bash/$file.sh ]] && . ~/.config/bash/$file.sh
 done
 
-eval "$(starship init bash)"
+eval "$(starship init bash)" || echo '[ERROR] starship is not installed'
 
 if ((BASH_VERSINFO < 4)); then
   echo "[ERROR] your bash is outdated, install bash >= 4"

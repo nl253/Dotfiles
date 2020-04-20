@@ -1,25 +1,18 @@
 test-dash:
   image: ubuntu:latest
   script:
-    - dash -c "env"
-    - dash -c "pwd"
-    - dash -c "ls -a"
-    - dash -c ". .profile"
+    - dash -c ". $PWD/.config/sh/init.sh"
+    - dash -c ". $PWD/.profile"
 
 test-bash:
   image: ubuntu:latest
   script:
-    - bash -c "env"
-    - bash -c "pwd"
-    - bash -c "ls -a"
-    - bash -c ". $PWD/.profile"
+    - dash -c ". $PWD/.config/sh/init.sh"
     - bash -c ". $PWD/.bashrc"
+    - bash -c ". $PWD/.profile"
 
 test-zsh:
   image: zshusers/zsh
   script:
-    - zsh -c "env"
-    - zsh -c "pwd"
-    - zsh -c "ls -a"
+    - dash -c ". $PWD/.config/sh/init.sh"
     - zsh -c ". $PWD/.profile"
-    - zsh -c ". $PWD/.bashrc"
