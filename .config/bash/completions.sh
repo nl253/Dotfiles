@@ -4,8 +4,8 @@
 # [[ -x $(builtin type -P pandoc 2>/dev/null) ]] && builtin eval "$(command pandoc --bash-completion)"
 [[ -x $(builtin type -P node 2>/dev/null) ]] && builtin eval "$(command node --completion-bash)" && builtin eval "$(command npm completion)"
 [[ -x $(builtin type -P pip3 2>/dev/null) ]] && builtin eval "$(command python3 -m pip completion --bash)"
-[[ -x $(builtin type -P kubectl 2>/dev/null) ]] && builtin eval "$(kubectl completion bash)"
-[[ -x $(builtin type -P minikube 2>/dev/null) ]] && builtin eval "$(minikube completion bash)"
+# [[ -x $(builtin type -P kubectl 2>/dev/null) ]] && builtin eval "$(kubectl completion bash)"
+# [[ -x $(builtin type -P minikube 2>/dev/null) ]] && builtin eval "$(minikube completion bash)"
 
 _vim() {
   local cur="${COMP_WORDS[COMP_CWORD]}"

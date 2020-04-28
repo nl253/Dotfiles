@@ -2,37 +2,56 @@
 
 [[ -n $ENV ]] && . $ENV
 
-[[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
-[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion" 
+nvm () {
+  if builtin command nvm &>/dev/null; then
+    builtin command nvm $@
+  else
+    [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
+    [[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"
+    nvm $@
+  fi
+}
 
-if [[ -f /usr/share/bash-completion/bash_completion ]]; then
-  . /usr/share/bash-completion/bash_completion 
-  for c in pgrep psql 7z man gzip curl pdftotext apt{,titude,-get} aspell chown chgrp dot feh find file git host{,name} kill{,all} python{,3} ssh sqlite3 whatis; do
-    if ([[ -f /usr/bin/$c ]] || [[ -f /usr/local/bin/$c ]] || [[ -f /bin/$c ]]) && [[ -f /usr/share/bash-completion/completions/$c ]]; then 
-      . /usr/share/bash-completion/completions/$c
-    fi
-  done
-fi
+for dir in /usr/share/bash-completion /etc; do
+  if [[ -f "${dir}/bash_completion" ]]; then
+    . "${dir}/bash_completion"
+    builtin break
+  fi
+done
 
 PROMPT_COMMAND="history -a"
 
 aws() { 
-  local result=$(command aws "$@")
-  echo "$result" | jq . || echo "$result"
+  builtin local result=$(builtin command aws "$@")
+  builtin echo "$result" | jq . || builtin echo "$result"
 }
 
-for file in completions vars; do
-  [[ -f ~/.config/bash/$file.sh ]] && . ~/.config/bash/$file.sh
+for base in ~/.config/bash; do
+  for file in completions vars; do
+    [[ -f ${base}/${file}.sh ]] && . "${base}/${file}.sh"
+  done
 done
 
-eval "$(starship init bash)" || echo '[ERROR] starship is not installed'
+builtin eval "$(starship init bash)" || builtin echo '[ERROR] starship is not installed'
 
 if ((BASH_VERSINFO < 4)); then
-  echo "[ERROR] your bash is outdated, install bash >= 4"
-  return 0
+  builtin echo "[ERROR] your bash is outdated, install bash >= 4"
+  builtin return 0
 else
-  shopt -s xpg_echo globasciiranges histappend checkjobs checkwinsize \
-    globstar extglob dotglob nocasematch nocaseglob cdspell dirspell \
-    checkhash cdable_vars
+  builtin shopt -s \
+    xpg_echo \
+    globasciiranges \
+    histappend \
+    checkjobs \
+    checkwinsize \
+    globstar \
+    extglob \
+    dotglob \
+    nocasematch \
+    nocaseglob \
+    cdspell \
+    dirspell \
+    checkhash \
+    cdable_vars
 fi
 
