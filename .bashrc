@@ -32,7 +32,7 @@ for base in ~/.config/bash; do
   done
 done
 
-builtin eval "$(starship init bash)" || builtin echo '[ERROR] starship is not installed'
+# builtin eval "$(starship init bash)" || builtin echo '[ERROR] starship is not installed'
 
 if ((BASH_VERSINFO < 4)); then
   builtin echo "[ERROR] your bash is outdated, install bash >= 4"

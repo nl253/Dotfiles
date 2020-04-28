@@ -135,9 +135,8 @@ for i in nvim vim vi; do
   [ -x /usr/bin/$i ] && [ $i != vim ] && eval "alias vim='command ${i}'" && break
 done
 
-git_basic_info='$(command git branch -vv --no-color | command grep "*" | command head -n 1 | command sed -E -e "s/\\*?\\s+/ /g" -e "s/^ //" -e "s/(.{,$(command expr $(command tput cols) - 3)}).*?/\1/")'
-# git_branch_info='$(command git --no-pager branch --color=never --format "%(refname:lstrip=-1)" 2>/dev/null) -> $(command git --no-pager config --get remote.origin.url 2>/dev/null)@$(command git --no-pager branch --color=never --format="%(upstream:lstrip=3)" 2>/dev/null) ($(command git remote 2>/dev/null))'
-# git_branch_info="[${git_branch_info}]"
+git_basic_info='$(command git branch -vv --no-color 2>/dev/null | command grep "*" | command head -n 1 | command sed -E -e "s/\\*?\\s+/ /g" -e "s/^ //" -e "s/(.{,$(command expr $(command tput cols) - 3)}).*?/\1/")'
+git_modified_info='$(x=$(command git ls-files -m 2>/dev/null | command sed -E "s/\S+/+/g"); x=$(echo $x | sed -E "s/ //g"); echo $x)'
 non_git_prompt='$(command basename $0):/$PWD :: '
 
 # bash and zsh
@@ -146,10 +145,10 @@ if builtin dirs 1>/dev/null 2>/dev/null; then
   # set ls colors
   builtin eval $(command dircolors -b)
 
-  export PS1="${git_basic_info} \n${non_git_prompt}"
+  export PS1="${git_basic_info} ${git_modified_info} \n${non_git_prompt}"
 
 else # dash
-  export PS1="${git_basic_info} ${non_git_prompt}"
+  export PS1="${git_basic_info} ${git_modified_info} ${non_git_prompt}"
 fi
 
 for var in git_basic_info git_branch_info non_git_prompt; do unset -v $var; done
